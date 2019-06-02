@@ -1,0 +1,37 @@
+import { Building, IBuilding } from '../../models/buildings/building';
+import { getPage } from '../../utils/getPage';
+import { isBuildingField} from '../modules/startBuilding';
+import { BuildingType } from '../../enums/BuildingType';
+
+export const parseBuildings = async (): Promise<ReadonlyArray<IBuilding>> => {
+  const page = await getPage();
+  await page.waitForSelector('#village_map');
+
+  const nodes = await page.$$('#village_map > div');
+
+  const buildings = await Promise.all(nodes
+    .map(async node => {
+      const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
+      const fieldId = +/a(\d+)/.exec(className)[1];
+
+      if (!isBuildingField(fieldId)) {
+        return null;
+      }
+
+      const type = +/g(\d+)/.exec(className)[1];
+
+      const level = type > BuildingType.None
+        ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
+        : 0;
+
+      return {
+        level,
+        type,
+      };
+    })
+  );
+
+  return buildings
+    .filter(b => !!b)
+    .map(Building.fromParsed);
+};
