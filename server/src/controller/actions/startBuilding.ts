@@ -1,8 +1,8 @@
-import { logException } from '../../utils/invariantException';
+import { logException } from '../../../../_shared/utils/invariantException';
 import { account } from '../../index';
 import { ensureUrl } from './ensureUrl';
-import { TravianPath } from '../../enums/TravianPath';
-import { getPage } from '../../utils/getPage';
+import { TravianPath } from '../enums/TravianPath';
+import { getPage } from '../browser/getPage';
 
 interface IStartBuildingParams {
   readonly fieldId: number;

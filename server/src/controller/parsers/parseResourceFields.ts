@@ -1,5 +1,5 @@
-import { Building, IBuilding } from '../../models/buildings/building';
-import { getPage } from '../../utils/getPage';
+import { Building, IBuilding } from '../models/buildings/building';
+import { getPage } from '../browser/getPage';
 
 export interface IParsedBuilding {
   readonly level: number;

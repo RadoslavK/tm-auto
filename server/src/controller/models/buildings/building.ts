@@ -1,7 +1,7 @@
 import { BuildingLevel, IBuildingLevel } from './buildingLevel';
 import { BuildingType } from '../../enums/BuildingType';
-import { IParsedBuilding } from '../../controller/parsers/parseResourceFields';
-import { IComparable } from '../../types/IComparable';
+import { IParsedBuilding } from '../../parsers/parseResourceFields';
+import { IComparable } from '../../../../../_shared/types/IComparable';
 
 interface IParams {
   readonly level: IBuildingLevel;

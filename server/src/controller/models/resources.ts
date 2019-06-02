@@ -1,4 +1,4 @@
-import { IComparable } from '../types/IComparable';
+import { IComparable } from '../../../../_shared/types/IComparable';
 
 interface IParams {
   readonly wood: number;

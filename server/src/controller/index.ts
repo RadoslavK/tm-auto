@@ -1,6 +1,6 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { startBuilding } from './actions/startBuilding';
-import { killBrowser } from '../utils/getPage';
+import { killBrowser } from './browser/getPage';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;

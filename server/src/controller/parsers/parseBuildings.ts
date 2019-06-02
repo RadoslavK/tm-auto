@@ -1,7 +1,7 @@
-import { Building, IBuilding } from '../../models/buildings/building';
-import { getPage } from '../../utils/getPage';
-import { isBuildingField} from '../modules/startBuilding';
-import { BuildingType } from '../../enums/BuildingType';
+import { Building, IBuilding } from '../models/buildings/building';
+import { getPage } from '../browser/getPage';
+import { isBuildingField } from '../actions/startBuilding';
+import { BuildingType } from '../enums/BuildingType';
 
 export const parseBuildings = async (): Promise<ReadonlyArray<IBuilding>> => {
   const page = await getPage();

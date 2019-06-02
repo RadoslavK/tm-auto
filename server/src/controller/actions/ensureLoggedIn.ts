@@ -1,6 +1,6 @@
 import { account } from '../../index';
-import { TravianPath } from '../../enums/TravianPath';
-import { getPage } from '../../utils/getPage';
+import { TravianPath } from '../enums/TravianPath';
+import { getPage } from '../browser/getPage';
 
 export const ensureLoggedIn = async () => {
   const page = await getPage();

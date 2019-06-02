@@ -1,6 +1,5 @@
-import { Page } from 'puppeteer';
 import { account } from '../../index';
-import { getPage } from '../../utils/getPage';
+import { getPage } from '../browser/getPage';
 
 export const ensureUrl = async (path: string, exact = false) => {
   const page = await getPage();
