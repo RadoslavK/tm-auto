@@ -1,18 +1,26 @@
+import express from 'express';
 import { Account, IAccount } from './models/account';
-import { TravianPath } from './enums/TravianPath';
-import { ensureLoggedIn } from './controller/modules/ensureLoggedIn';
-import { ensureUrl } from './controller/modules/ensureUrl';
-import { parseBuildings } from './controller/parsers/parseBuildings';
+import { getPage } from './utils/getPage';
+import { Controller } from './controller';
+
+const app = express();
+const port = 3000;
 
 export const account: IAccount = new Account({
   username: 'Buckyx',
   password: 'Speedas11',
-  url: 'https://tx3.czsk.travian.com',
+  url: 'https://ts5.travian.com',
 });
 
-(async function main() {
-  await ensureLoggedIn();
-  await ensureUrl(TravianPath.BuildingsOverview);
+const controller: Controller = new Controller();
 
-  await parseBuildings();
+app.post('/start', async (req, res) => {
+  controller.start();
+  res.status(200).send('Started');
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+(async function init() {
+  await getPage();
 })();
