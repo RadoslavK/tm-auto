@@ -29,7 +29,11 @@ module.exports = (env) => {
         // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
         { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 
-        { test: /\.html$/, loader: "html-loader" }
+        { test: /\.html$/, loader: "html-loader" },
+
+        {
+          test: /\.css$/, use: [ 'style-loader', 'css-loader' ]
+        }
       ]
     },
 
@@ -40,7 +44,7 @@ module.exports = (env) => {
       }),
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(env),
-      }),
+      })
     ],
 
     devServer: {

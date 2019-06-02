@@ -1,0 +1,10 @@
+.navigation {
+    background-color: darkcyan;
+}
+
+.navigation-link {
+    font-size: 2rem;
+    margin-left: 1rem;
+    text-decoration: none;
+    color: black;
+}

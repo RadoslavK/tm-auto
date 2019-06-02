@@ -2,18 +2,25 @@ import * as React from 'react';
 import { IVillage } from '../../../../_shared/contract/models/IVillage';
 import { gql } from 'apollo-boost';
 import { EnsuredQuery } from '../_shared/EnsuredQuery';
+import { Building } from '../buildings/Building';
 
 const villageQuery = gql`
   query GetVillageById($id: Int!) {
     village(id: $id) {
-      id,
-      name
+      name,
+      buildings {
+        type,
+        level {
+          actual
+          ongoing,
+        }
+      }
     }
   }
 `;
 
 interface IQueryData {
-  readonly village: Pick<IVillage, 'name'>;
+  readonly village: Pick<IVillage, 'name' | 'buildings'>;
 }
 
 interface IQueryVariables {
@@ -34,9 +41,23 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
       query={villageQuery}
       variables={{ id }}
     >
-      {({ data }) => (
-        <h1>{data.village && data.village.name}</h1>
-      )}
+      {({ data }) => {
+        const {
+          village,
+        } = data;
+
+        return (
+          <>
+            <h1>{village.name}</h1>
+
+            <div>
+              {village.buildings.map((building, index) => (
+                <Building key={index} building={building} />
+              ))}
+            </div>
+          </>
+        )
+      }}
     </EnsuredQuery>
   );
 };

@@ -10,7 +10,7 @@ export class EnsuredQuery<TData extends {} = any, TVariables = OperationVariable
 
     return <Query {...props}>
       {(result) => {
-        if (!result.data) {
+        if (!result.data || result.loading) {
           return null;
         }
 

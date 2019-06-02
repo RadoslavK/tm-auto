@@ -6,7 +6,7 @@ interface IState {
   readonly started: boolean;
 }
 
-export class Main extends React.Component<{}, IState> {
+export class Home extends React.Component<{}, IState> {
   readonly state = {
     started: false,
   };
@@ -32,7 +32,6 @@ export class Main extends React.Component<{}, IState> {
 
     return (
       <div>
-        <h1>Travian App</h1>
         <button
           onClick={started ? this._stop : this._start}
         >

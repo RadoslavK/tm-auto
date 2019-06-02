@@ -7,13 +7,33 @@ import { IVillage } from '../../../../_shared/contract/models/IVillage';
 
 const villages: readonly IVillage[] = [
   new Village({
-    id: 3,
+    id: 1,
     name: 'first village',
     buildings: [
       new Building({
         type: BuildingType.Wood,
         level: new BuildingLevel({
           actual: 3,
+          ongoing: 2,
+        }),
+      }),
+    ],
+  }),
+
+  new Village({
+    id: 2,
+    name: 'second village',
+    buildings: [
+      new Building({
+        type: BuildingType.Wood,
+        level: new BuildingLevel({
+          actual: 3,
+          ongoing: 2,
+        }),
+      }),
+      new Building({
+        type: BuildingType.Clay,
+        level: new BuildingLevel({
           ongoing: 2,
         }),
       }),
