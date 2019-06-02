@@ -1,13 +1,12 @@
-import { Building } from '../models/buildings/building';
+import { Building, IBuildingRecord } from '../models/buildings/building';
 import { getPage } from '../browser/getPage';
-import { IBuilding } from '../../../../_shared/contract/models/buildings/IBuilding';
 
 export interface IParsedBuilding {
   readonly level: number;
   readonly type: number;
 }
 
-export const parseResourceFields = async (): Promise<ReadonlyArray<IBuilding>> => {
+export const parseResourceFields = async (): Promise<IBuildingRecord[]> => {
   const page = await getPage();
   await page.waitForSelector('#village_map');
 

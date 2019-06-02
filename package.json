@@ -1,0 +1,10 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "dependencies": {
+    "immutable": "3.8.2"
+  },
+  "devDependencies": {
+    "@types/immutable": "^3.8.7"
+  }
+}

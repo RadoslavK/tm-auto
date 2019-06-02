@@ -1,10 +1,11 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
-import { killBrowser } from './browser/getPage';
+import { getPage, killBrowser } from './browser/getPage';
 import { ensureUrl } from './actions/ensureUrl';
 import { TravianPath } from '../../../_shared/contract/enums/TravianPath';
 import { parseResourceFields } from './parsers/parseResourceFields';
 import { villageData } from '../graphql/resolvers/village';
 import { parseOngoingQueue } from './parsers/parseOngoingQueue';
+import { account } from '../index';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
@@ -21,20 +22,25 @@ export class Controller {
   };
 
   public build = async () => {
+    const page = await getPage();
     log('checking fields');
-    await ensureUrl(TravianPath.ResourceFieldsOverview);
+    await page.goto(`${account.url}/${TravianPath.ResourceFieldsOverview}`);
     const buildings = await parseResourceFields();
     const queue = await parseOngoingQueue();
 
     queue.buildings.forEach(b => {
-      buildings[b.fieldId - 1].type = b.type;
-      buildings[b.fieldId - 1].level.ongoing++;
+      const building = buildings[b.fieldId - 1];
+
+      buildings[b.fieldId - 1] = building.with({
+        level: building.level.with({ ongoing: b.level }),
+        type: b.type,
+      });
     });
 
-    villageData.villages =villageData.villages.map(village => ({
-      ...village,
-      buildings,
-    }));
+    villageData.villages = villageData.villages.map(village =>
+      village.with({
+        buildings,
+      }));
 
     // log('building...');
     // await startBuilding({ fieldId: 7 });

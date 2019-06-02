@@ -23,7 +23,6 @@ export const parseOngoingQueue = async (): Promise<IOngoingQueueResult> => {
     match = re.exec(content);
 
     if (match) {
-      console.log('matched');
       const level = +match[1];
       const type = +match[2];
       const fieldId = +match[3];
