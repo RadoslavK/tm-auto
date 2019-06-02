@@ -1,6 +1,6 @@
 import { Query } from 'react-apollo';
 import React from 'react';
-import { getPosts } from '../queries/getPosts';
+import { getPosts } from '../graphql/queries/getPosts';
 
 export interface IWithPosts {
   readonly posts: { readonly title: string; readonly content: string; }[];

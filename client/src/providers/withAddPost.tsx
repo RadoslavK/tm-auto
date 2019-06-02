@@ -1,7 +1,7 @@
 import { Mutation } from 'react-apollo';
 import React from 'react';
-import { addPost } from '../mutations/addPost';
-import { getPosts } from '../queries/getPosts';
+import { addPost } from '../graphql/mutations/addPost';
+import { getPosts } from '../graphql/queries/getPosts';
 
 export interface IWithAddPost {
   readonly addPost: (post: { readonly title: string; readonly content: string; }) => void;

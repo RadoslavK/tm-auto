@@ -54,7 +54,6 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
 app.use(cors());
-app.use(express.static(clientPath));
 
 export const account: IAccount = new Account({
   username: 'Buckyx',
@@ -64,14 +63,22 @@ export const account: IAccount = new Account({
 
 const controller: Controller = new Controller();
 
-app.get('', (req, res) => {
-  res.sendFile(path.join(clientPath, 'index.html'));
-});
-
-app.post('/start', async (req, res) => {
+app.post('/api/start', async (req, res) => {
   controller.start();
   res.statusCode = 200;
   res.send('Started');
+});
+
+app.get(['', '/'], (req, res) => {
+  res.redirect('/app/');
+});
+
+app.get('*/app.js', (req, res) => {
+  res.sendFile(path.join(clientPath, 'app.js'));
+});
+
+app.get(['/app/*', '/app'], (req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
 });
 
 app.listen(port, () => {

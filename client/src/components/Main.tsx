@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { backend } from '../constants/backend';
 
 interface IState {
   readonly started: boolean;
@@ -11,7 +12,7 @@ export class Main extends React.Component<{}, IState> {
   };
 
   private _start = async () => {
-    const url = 'http://localhost:3000/start';
+    const url = `${backend.url}/api/start`;
     await axios.post(url);
 
     this.setState(() => ({ started: true }));

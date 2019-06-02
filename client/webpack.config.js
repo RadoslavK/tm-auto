@@ -1,36 +1,49 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: "./src/index.tsx",
-  output: {
-    filename: "app.js",
-    path: __dirname + "/dist"
-  },
+module.exports = (env) => {
+  return {
+    entry: "./src/index.tsx",
 
-  // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
+    mode: env.NODE_ENV,
 
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"]
-  },
+    output: {
+      filename: "app.js",
+      path: __dirname + "/dist"
+    },
 
-  module: {
-    rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
 
-      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+    resolve: {
+      // Add '.ts' and '.tsx' as resolvable extensions.
+      extensions: [".ts", ".tsx", ".js", ".json"]
+    },
 
-      {test: /\.html$/, loader: "html-loader" }
-    ]
-  },
+    module: {
+      rules: [
+        // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+        { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
-  plugins: [
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
-      filename: "./index.html"
-    })
-  ]
+        // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+        { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+
+        { test: /\.html$/, loader: "html-loader" }
+      ]
+    },
+
+    plugins: [
+      new HtmlWebPackPlugin({
+        template: "./src/index.html",
+        filename: "./index.html",
+      }),
+      new webpack.DefinePlugin({
+        'process.env': JSON.stringify(env),
+      }),
+    ],
+
+    devServer: {
+      historyApiFallback: true
+    }
+  };
 };
