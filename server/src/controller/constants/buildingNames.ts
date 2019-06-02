@@ -1,4 +1,4 @@
-import { BuildingType } from '../enums/BuildingType';
+import { BuildingType } from '../../../../_shared/contract/enums/BuildingType';
 
 export const buildingNames: Record<BuildingType, string> = Object.freeze({
   [BuildingType.None]: 'Building site',

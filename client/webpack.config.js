@@ -9,6 +9,7 @@ module.exports = (env) => {
 
     output: {
       filename: "app.js",
+      publicPath: '/',
       path: __dirname + "/dist"
     },
 

@@ -1,16 +1,8 @@
-import { BuildingLevel, IBuildingLevel } from './buildingLevel';
-import { BuildingType } from '../../enums/BuildingType';
+import { BuildingLevel } from './buildingLevel';
+import { BuildingType } from '../../../../../_shared/contract/enums/BuildingType';
 import { IParsedBuilding } from '../../parsers/parseResourceFields';
-import { IComparable } from '../../../../../_shared/types/IComparable';
-
-interface IParams {
-  readonly level: IBuildingLevel;
-  readonly type: BuildingType;
-}
-
-export interface IBuilding extends
-  IParams {
-}
+import { IBuilding } from '../../../../../_shared/contract/models/buildings/IBuilding';
+import { IBuildingLevel } from '../../../../../_shared/contract/models/buildings/IBuildingLevel';
 
 export class Building implements IBuilding {
   readonly level: IBuildingLevel = new BuildingLevel();

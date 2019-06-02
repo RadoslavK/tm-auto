@@ -2,10 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
-import { Account, IAccount } from './controller/models/account';
+import { Account } from './controller/models/account';
 import { api } from './api';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
+import { IAccount } from '../../_shared/contract/models/IAccount';
 
 const app = express();
 const port = 3000;
@@ -15,6 +16,7 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app });
 
 app.use(cors());
+app.use(express.static(clientPath));
 
 export const account: IAccount = new Account({
   username: 'Buckyx',
@@ -24,16 +26,12 @@ export const account: IAccount = new Account({
 
 app.use('/api', api);
 
-app.get(['', '/'], (req, res) => {
-  res.redirect('/app/');
-});
-
-app.get('*/app.js', (req, res) => {
-  res.sendFile(path.join(clientPath, 'app.js'));
-});
-
 app.get(['/app/*', '/app'], (req, res) => {
   res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+app.get('*', (req, res) => {
+  res.redirect('/app/');
 });
 
 app.listen(port, () => {

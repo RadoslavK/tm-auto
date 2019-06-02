@@ -1,16 +1,24 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-  type Post {
-    title: String,
-    content: String
+  type BuildingLevel {
+    actual: Int,
+    ongoing: Int,
+  },
+  
+  type Building {
+    level: BuildingLevel,
+    type: Int,
+  },
+  
+  type Village {
+    id: Int,
+    name: String,
+    buildings: [Building],
   },
   
   type Query {
-    posts: [Post]
+    villages: [Village],
+    village(id: Int): Village
   },
-  
-  type Mutation {
-    addPost(title: String!, content: String!): Post,
-  }
 `;

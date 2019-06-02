@@ -1,18 +1,7 @@
 import { IComparable } from '../../../../_shared/types/IComparable';
+import { IResources } from '../../../../_shared/contract/models/IResources';
 
-interface IParams {
-  readonly wood: number;
-  readonly clay: number;
-  readonly iron: number;
-  readonly crop: number;
-}
-
-export interface IResources extends
-  IParams,
-  IComparable<IParams> {
-}
-
-export class Resources implements IResources {
+export class Resources implements IResources, IComparable<IResources> {
   readonly wood: number = 0;
   readonly clay: number = 0;
   readonly iron: number = 0;

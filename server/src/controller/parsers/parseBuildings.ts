@@ -1,7 +1,8 @@
-import { Building, IBuilding } from '../models/buildings/building';
+import { Building } from '../models/buildings/building';
 import { getPage } from '../browser/getPage';
 import { isBuildingField } from '../actions/startBuilding';
-import { BuildingType } from '../enums/BuildingType';
+import { BuildingType } from '../../../../_shared/contract/enums/BuildingType';
+import { IBuilding } from '../../../../_shared/contract/models/buildings/IBuilding';
 
 export const parseBuildings = async (): Promise<ReadonlyArray<IBuilding>> => {
   const page = await getPage();
