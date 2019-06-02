@@ -18,21 +18,25 @@ export class Main extends React.Component<{}, IState> {
     this.setState(() => ({ started: true }));
   };
 
-  render() {
-    const style = { color: 'green' };
+  private _stop = async () => {
+    const url = `${backend.url}/api/stop`;
+    await axios.post(url);
 
-    if (this.state.started) {
-      return <h1 style={style}>Started</h1>;
-    }
+    this.setState(() => ({ started: false }));
+  };
+
+  render() {
+    const {
+      started,
+    } = this.state;
 
     return (
       <div>
         <h1>Travian App</h1>
         <button
-          onClick={this._start}
-          disabled={this.state.started}
+          onClick={started ? this._stop : this._start}
         >
-          Start
+          {started ? 'Stop' : 'Start'}
         </button>
       </div>
     );

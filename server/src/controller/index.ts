@@ -1,18 +1,26 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { startBuilding } from './actions/startBuilding';
+import { killBrowser } from '../utils/getPage';
 
 export class Controller {
+  private _buildTimer: NodeJS.Timeout;
+
   public start = async () => {
     await ensureLoggedIn();
 
     await this.build();
   };
 
+  public stop = async () => {
+    clearTimeout(this._buildTimer);
+    await killBrowser();
+  };
+
   public build = async () => {
     log('building...');
     await startBuilding({ fieldId: 7 });
 
-    setTimeout(this.build, 20 * 1000);
+    this._buildTimer = setTimeout(this.build, 20 * 1000);
     log('gonna build next in 20 seconds');
   };
 }

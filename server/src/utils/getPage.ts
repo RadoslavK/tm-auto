@@ -41,7 +41,13 @@ export const getPage = async (): Promise<Page> => {
 };
 
 export const killBrowser = async (): Promise<void> => {
+  if (!page) {
+    await page.close();
+    page = null;
+  }
+
   if (!!browser) {
     await browser.close();
+    browser = null;
   }
 };

@@ -69,6 +69,12 @@ app.post('/api/start', async (req, res) => {
   res.send('Started');
 });
 
+app.post('/api/stop', async (req, res) => {
+  controller.stop();
+  res.statusCode = 200;
+  res.send('Stopped');
+});
+
 app.get(['', '/'], (req, res) => {
   res.redirect('/app/');
 });
