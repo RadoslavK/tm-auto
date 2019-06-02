@@ -5,7 +5,7 @@ interface IState {
   readonly started: boolean;
 }
 
-export class App extends React.Component<{}, IState> {
+export class Main extends React.Component<{}, IState> {
   readonly state = {
     started: false,
   };

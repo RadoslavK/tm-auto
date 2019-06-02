@@ -9,8 +9,10 @@
     "start-watch": "nodemon"
   },
   "dependencies": {
+    "apollo-server-express": "^2.6.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "graphql": "^14.3.1",
     "puppeteer": "^1.17.0",
     "puppeteer-core": "^1.17.0",
     "puppeteer-extra": "^2.1.3",
