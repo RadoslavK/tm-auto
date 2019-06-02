@@ -3,7 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { Account, IAccount } from './models/account';
-import { Controller } from './controller';
+import { api } from './api';
 
 const app = express();
 const port = 3000;
@@ -61,19 +61,7 @@ export const account: IAccount = new Account({
   url: 'https://ts5.travian.com',
 });
 
-const controller: Controller = new Controller();
-
-app.post('/api/start', async (req, res) => {
-  controller.start();
-  res.statusCode = 200;
-  res.send('Started');
-});
-
-app.post('/api/stop', async (req, res) => {
-  controller.stop();
-  res.statusCode = 200;
-  res.send('Stopped');
-});
+app.use('/api', api);
 
 app.get(['', '/'], (req, res) => {
   res.redirect('/app/');

@@ -12,14 +12,14 @@ export class Main extends React.Component<{}, IState> {
   };
 
   private _start = async () => {
-    const url = `${backend.url}/api/start`;
+    const url = `${backend.url}/api/bot/start`;
     await axios.post(url);
 
     this.setState(() => ({ started: true }));
   };
 
   private _stop = async () => {
-    const url = `${backend.url}/api/stop`;
+    const url = `${backend.url}/api/bot/stop`;
     await axios.post(url);
 
     this.setState(() => ({ started: false }));
