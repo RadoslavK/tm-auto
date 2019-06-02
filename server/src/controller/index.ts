@@ -1,6 +1,10 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
-import { startBuilding } from './actions/startBuilding';
 import { killBrowser } from './browser/getPage';
+import { ensureUrl } from './actions/ensureUrl';
+import { TravianPath } from '../../../_shared/contract/enums/TravianPath';
+import { parseResourceFields } from './parsers/parseResourceFields';
+import { villageData } from '../graphql/resolvers/village';
+import { parseOngoingQueue } from './parsers/parseOngoingQueue';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
@@ -17,8 +21,23 @@ export class Controller {
   };
 
   public build = async () => {
-    log('building...');
-    await startBuilding({ fieldId: 7 });
+    log('checking fields');
+    await ensureUrl(TravianPath.ResourceFieldsOverview);
+    const buildings = await parseResourceFields();
+    const queue = await parseOngoingQueue();
+
+    queue.buildings.forEach(b => {
+      buildings[b.fieldId - 1].type = b.type;
+      buildings[b.fieldId - 1].level.ongoing++;
+    });
+
+    villageData.villages =villageData.villages.map(village => ({
+      ...village,
+      buildings,
+    }));
+
+    // log('building...');
+    // await startBuilding({ fieldId: 7 });
 
     this._buildTimer = setTimeout(this.build, 20 * 1000);
     log('gonna build next in 20 seconds');

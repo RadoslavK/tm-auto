@@ -47,15 +47,11 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
         } = data;
 
         return (
-          <>
-            <h1>{village.name}</h1>
-
-            <div>
-              {village.buildings.map((building, index) => (
-                <Building key={index} building={building} />
-              ))}
-            </div>
-          </>
+          <div>
+            {village.buildings.map((building, index) => (
+              <Building key={index} building={building} />
+            ))}
+          </div>
         )
       }}
     </EnsuredQuery>
