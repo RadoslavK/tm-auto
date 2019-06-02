@@ -1,10 +1,15 @@
 import express from 'express';
+import cors from 'cors';
+import path from 'path';
 import { Account, IAccount } from './models/account';
-import { getPage } from './utils/getPage';
 import { Controller } from './controller';
 
 const app = express();
 const port = 3000;
+const clientPath = path.join(__dirname, '..', '..', 'client/dist');
+
+app.use(cors());
+app.use(express.static(clientPath));
 
 export const account: IAccount = new Account({
   username: 'Buckyx',
@@ -14,13 +19,14 @@ export const account: IAccount = new Account({
 
 const controller: Controller = new Controller();
 
+app.get('', (req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
+});
+
 app.post('/start', async (req, res) => {
   controller.start();
-  res.status(200).send('Started');
+  res.statusCode = 200;
+  res.send('Started');
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-(async function init() {
-  await getPage();
-})();

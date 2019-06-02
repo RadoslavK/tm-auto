@@ -10,7 +10,7 @@ export class Controller {
 
   public build = async () => {
     log('building...');
-    await startBuilding({ fieldId: 6 });
+    await startBuilding({ fieldId: 7 });
 
     setTimeout(this.build, 20 * 1000);
     log('gonna build next in 20 seconds');
