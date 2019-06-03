@@ -1,6 +1,6 @@
+import { TravianPath } from '../_enums/TravianPath';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
-import { TravianPath } from './enums/TravianPath';
 import { parseResourceFields } from './parsers/parseResourceFields';
 import { villageData } from '../villageData';
 import { parseOngoingQueue } from './parsers/parseOngoingQueue';

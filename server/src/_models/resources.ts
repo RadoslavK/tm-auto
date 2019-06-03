@@ -1,4 +1,4 @@
-import { IComparable } from '../../../../_shared/types/IComparable';
+import { IComparable } from '../../../_shared/_types/IComparable';
 
 export interface IResources {
   wood: number;

@@ -1,7 +1,7 @@
 import { logException } from '../../../../_shared/utils/invariantException';
 import { account } from '../../index';
 import { ensureUrl } from './ensureUrl';
-import { TravianPath } from '../enums/TravianPath';
+import { TravianPath } from '../../_enums/TravianPath';
 import { getPage } from '../browser/getPage';
 
 interface IStartBuildingParams {

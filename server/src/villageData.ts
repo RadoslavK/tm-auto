@@ -1,9 +1,10 @@
-import { IVillage, Village } from './controller/models/village';
+import { Village } from './_models/village';
+import { IVillage } from './_types/graphql';
 
 export const villageData: { villages: IVillage[] } = {
   villages: [
     new Village({
-      id: 1,
+      id: '1',
       name: 'Village',
     }),
   ],

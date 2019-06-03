@@ -1,12 +1,12 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { IVillage } from '../../../../server/src/controller/models/village';
+import { GetVillages } from './_types/GetVillages';
 import { Village } from './Village';
 import { EnsuredQuery } from '../_shared/EnsuredQuery';
 import { SideMenu } from '../_shared/SideMenu';
 
-const villagesQuery = gql`
+const getVillagesQuery = gql`
   query GetVillages {
     villages {
       id,
@@ -15,13 +15,9 @@ const villagesQuery = gql`
   }
 `;
 
-interface IQueryData {
-  readonly villages: readonly Pick<IVillage, 'id' | 'name'>[];
-}
-
 export const Villages: React.FunctionComponent = () => {
   return (
-    <EnsuredQuery<IQueryData> query={villagesQuery}>
+    <EnsuredQuery<GetVillages> query={getVillagesQuery}>
       {({ data }) => {
         const navigationItems = data.villages.map(village => ({
           text: village.name,
@@ -33,7 +29,7 @@ export const Villages: React.FunctionComponent = () => {
             <SideMenu items={navigationItems} />
 
             <Switch>
-              <Route path='/villages/:id' render={(props) => <Village id={+props.match.params.id} />} />
+              <Route path='/villages/:id' render={(props) => <Village id={props.match.params.id} />} />
               {navigationItems.length > 0 && (
                 <Redirect to={navigationItems[0].path} />
               )}

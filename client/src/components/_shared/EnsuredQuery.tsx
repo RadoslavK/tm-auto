@@ -8,9 +8,9 @@ export class EnsuredQuery<TData extends {} = any, TVariables = OperationVariable
       ...props
     } = this.props;
 
-    return <Query {...props}>
+    return <Query {...props} fetchPolicy="network-only">
       {(result) => {
-        if (!result.data || result.loading) {
+        if (result.loading) {
           return null;
         }
 

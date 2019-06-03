@@ -1,9 +1,9 @@
 import React from 'react';
-import { IBuilding } from '../../../../server/src/controller/models/buildings/building';
 import { buildingNames } from '../../../../server/src/controller/constants/buildingNames';
+import { GetVillageById_village_buildings } from '../villages/_types/GetVillageById';
 
 interface IParams {
-  readonly building: IBuilding;
+  readonly building: GetVillageById_village_buildings;
 }
 
 export const Building: React.FunctionComponent<IParams> = (props) => {

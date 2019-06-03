@@ -1,12 +1,7 @@
+import { IBuilding, IBuildingLevel } from '../../_types/graphql';
 import { BuildingLevel } from './buildingLevel';
-import { BuildingType } from '../../enums/BuildingType';
-import { IParsedBuilding } from '../../parsers/parseResourceFields';
-import { IBuildingLevel } from './buildingLevel';
-
-export interface IBuilding {
-  level: IBuildingLevel;
-  type: BuildingType;
-}
+import { BuildingType } from '../../_enums/BuildingType';
+import { IParsedBuilding } from '../../controller/parsers/parseResourceFields';
 
 export class Building implements IBuilding {
   level: IBuildingLevel = new BuildingLevel();

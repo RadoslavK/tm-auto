@@ -1,7 +1,4 @@
-export interface IBuildingLevel {
-  actual: number;
-  ongoing: number;
-}
+import { IBuildingLevel } from '../../_types/graphql';
 
 export class BuildingLevel implements IBuildingLevel {
   actual: number = 0;

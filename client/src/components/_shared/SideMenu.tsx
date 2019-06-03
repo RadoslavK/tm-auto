@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { INavigationItem } from '../../types/INavigationItem';
+import { INavigationItem } from '../../_types/INavigationItem';
 
 interface IParams {
     readonly items: readonly INavigationItem[];

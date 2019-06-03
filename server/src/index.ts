@@ -2,11 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
-import { Account } from './controller/models/account';
+import { Account, IAccount } from './_models/account';
 import { api } from './api';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
-import { IAccount } from './controller/models/account';
 
 const app = express();
 const port = 3000;

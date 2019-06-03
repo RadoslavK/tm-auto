@@ -1,10 +1,10 @@
+import { IResolvers } from '../../_types/graphql';
 import { villageData } from '../../villageData';
-import { IVillage } from '../../controller/models/village';
 
-export const villageResolvers = {
+export const villageResolvers: IResolvers = {
   Query: {
-    villages: (): readonly IVillage[] => villageData.villages,
+    villages: () => villageData.villages,
 
-    village: (parent, args): IVillage => villageData.villages.find(village => village.id === args.id),
+    village: (parent, args) => villageData.villages.find(village => village.id === args.id),
   },
 };
