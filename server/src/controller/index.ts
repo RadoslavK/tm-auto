@@ -1,6 +1,6 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
-import { TravianPath } from '../../../_shared/contract/enums/TravianPath';
+import { TravianPath } from './enums/TravianPath';
 import { parseResourceFields } from './parsers/parseResourceFields';
 import { villageData } from '../villageData';
 import { parseOngoingQueue } from './parsers/parseOngoingQueue';
@@ -30,16 +30,13 @@ export class Controller {
     queue.buildings.forEach(b => {
       const building = buildings[b.fieldId - 1];
 
-      buildings[b.fieldId - 1] = building.with({
-        level: building.level.with({ ongoing: b.level }),
-        type: b.type,
-      });
+      building.level.ongoing = b.level;
+      building.type = b.type;
     });
 
-    villageData.villages = villageData.villages.map(village =>
-      village.with({
-        buildings,
-      }));
+    villageData.villages.forEach(village => {
+      village.buildings = buildings;
+    });
 
     // log('building...');
     // await startBuilding({ fieldId: 7 });

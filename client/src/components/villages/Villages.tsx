@@ -1,13 +1,13 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { IVillage } from '../../../../_shared/contract/models/IVillage';
+import { IVillage } from '../../../../server/src/controller/models/village';
 import { Village } from './Village';
 import { EnsuredQuery } from '../_shared/EnsuredQuery';
 import { SideMenu } from '../_shared/SideMenu';
 
 const villagesQuery = gql`
-  query GetAllVillages {
+  query GetVillages {
     villages {
       id,
       name

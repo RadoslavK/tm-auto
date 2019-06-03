@@ -1,25 +1,24 @@
 import { IComparable } from '../../../../_shared/types/IComparable';
-import { IResources } from '../../../../_shared/contract/models/IResources';
-import { ITypedRecord, TypedRecord } from '../../../../_shared/types/typedRecord';
 
-const defaultParams: IResources = {
-  wood: 0,
-  iron: 0,
-  clay: 0,
-  crop: 0,
-};
+export interface IResources {
+  wood: number;
+  clay: number;
+  iron: number;
+  crop: number;
 
-interface IResourcesRecord extends
-  ITypedRecord<IResources>,
-  IResources,
-  IComparable<IResources> {
+  readonly isGreaterOrEqualThan: (other: IResources) => boolean;
+  readonly isLowerThan: (other: IResources) => boolean;
 }
 
-export class Resources extends TypedRecord<IResources>(defaultParams) implements IResourcesRecord {
-  readonly wood: number;
-  readonly clay: number;
-  readonly iron: number;
-  readonly crop: number;
+export class Resources implements IResources, IComparable<IResources> {
+  wood: number = 0;
+  clay: number = 0;
+  iron: number = 0;
+  crop: number = 0;
+
+  constructor(params: Partial<IResources> = {}) {
+    Object.assign(this, params);
+  }
 
   isGreaterOrEqualThan(other: IResources): boolean {
     return this.wood >= other.wood

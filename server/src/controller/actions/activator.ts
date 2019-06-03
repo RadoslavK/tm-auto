@@ -1,5 +1,5 @@
 import { Page } from "puppeteer";
-import { Tribe } from "../../../../_shared/contract/enums/Tribe";
+import { Tribe } from "../enums/Tribe";
 
 const chooseTribe = async (page: Page, tribe: Tribe) => {
   await page.waitForSelector('#tribeSelectors input');

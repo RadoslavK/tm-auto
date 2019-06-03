@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { IVillage } from '../../../../_shared/contract/models/IVillage';
+import React from 'react';
+import { IVillage } from '../../../../server/src/controller/models/village';
 import { gql } from 'apollo-boost';
 import { EnsuredQuery } from '../_shared/EnsuredQuery';
 import { Building } from '../buildings/Building';
 
 const villageQuery = gql`
-  query GetVillageById($id: Int!) {
+  query GetVillageById($id: ID!) {
     village(id: $id) {
       name,
       buildings {

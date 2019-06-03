@@ -5,5 +5,7 @@ client/dist
 server/yarn-error.log
 server/node_modules
 
+yarn-error.log
+node_modules
 user_data
 .idea

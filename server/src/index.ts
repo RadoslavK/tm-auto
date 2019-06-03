@@ -6,7 +6,7 @@ import { Account } from './controller/models/account';
 import { api } from './api';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
-import { IAccount } from '../../_shared/contract/models/IAccount';
+import { IAccount } from './controller/models/account';
 
 const app = express();
 const port = 3000;

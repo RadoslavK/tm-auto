@@ -1,5 +1,5 @@
-import { IBuilding } from '../../../../_shared/contract/models/buildings/IBuilding';
-import * as React from 'react';
+import React from 'react';
+import { IBuilding } from '../../../../server/src/controller/models/buildings/building';
 import { buildingNames } from '../../../../server/src/controller/constants/buildingNames';
 
 interface IParams {

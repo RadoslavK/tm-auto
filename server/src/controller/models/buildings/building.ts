@@ -1,28 +1,22 @@
-import { BuildingLevel, IBuildingLevelRecord } from './buildingLevel';
-import { BuildingType } from '../../../../../_shared/contract/enums/BuildingType';
+import { BuildingLevel } from './buildingLevel';
+import { BuildingType } from '../../enums/BuildingType';
 import { IParsedBuilding } from '../../parsers/parseResourceFields';
-import { IBuilding } from '../../../../../_shared/contract/models/buildings/IBuilding';
-import { ITypedRecord, TypedRecord } from '../../../../../_shared/types/typedRecord';
+import { IBuildingLevel } from './buildingLevel';
 
-interface IParams extends IBuilding {
-  readonly level: IBuildingLevelRecord;
+export interface IBuilding {
+  level: IBuildingLevel;
+  type: BuildingType;
 }
 
-const defaultParams: IParams = {
-  type: BuildingType.None,
-  level: new BuildingLevel(),
-};
+export class Building implements IBuilding {
+  level: IBuildingLevel = new BuildingLevel();
+  type: BuildingType = BuildingType.None;
 
-export interface IBuildingRecord extends
-  ITypedRecord<IParams>,
-  IParams {
-}
+  constructor(params: Partial<IBuilding> = {}) {
+    Object.assign(this, params);
+  }
 
-export class Building extends TypedRecord<IParams>(defaultParams) implements IBuildingRecord {
-  readonly level: IBuildingLevelRecord;
-  readonly type: BuildingType;
-
-  static fromParsed = (building: IParsedBuilding): IBuildingRecord => new Building({
+  static fromParsed = (building: IParsedBuilding): IBuilding => ({
     level: new BuildingLevel({ actual: building.level }),
     type: building.type,
   });

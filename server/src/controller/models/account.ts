@@ -1,19 +1,15 @@
-import { IAccount } from '../../../../_shared/contract/models/IAccount';
-import { ITypedRecord, TypedRecord } from '../../../../_shared/types/typedRecord';
-
-const defaultParams: IAccount = {
-  url: '',
-  password: '',
-  username: '',
-};
-
-export interface IAccountRecord extends
-  ITypedRecord<IAccount>,
-  IAccount {
+export interface IAccount {
+  username: string;
+  password: string;
+  url: string;
 }
 
-export class Account extends TypedRecord<IAccount>(defaultParams) implements IAccountRecord {
-  readonly username: string;
-  readonly password: string;
-  readonly url: string;
+export class Account implements IAccount {
+  username: string = '';
+  password: string = '';
+  url: string = '';
+
+  constructor(params: Partial<IAccount> = {}) {
+    Object.assign(this, params);
+  }
 }

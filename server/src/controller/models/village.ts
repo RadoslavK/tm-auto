@@ -1,24 +1,17 @@
-import { IVillage } from '../../../../_shared/contract/models/IVillage';
-import { ITypedRecord, TypedRecord } from '../../../../_shared/types/typedRecord';
-import { IBuildingRecord } from './buildings/building';
+import { IBuilding } from './buildings/building';
 
-interface IParams extends IVillage {
-  readonly buildings: readonly IBuildingRecord[];
+export interface IVillage {
+  id: number;
+  name: string;
+  buildings: readonly IBuilding[];
 }
 
-const defaultParams: IParams = {
-  buildings: [],
-  id: 0,
-  name: '',
-};
+export class Village implements IVillage {
+  id: number = 0;
+  name: string = '';
+  buildings: readonly IBuilding[] = [];
 
-export interface IVillageRecord extends
-  ITypedRecord<IParams>,
-  IParams {
-}
-
-export class Village extends TypedRecord<IParams>(defaultParams) implements IVillageRecord {
-  readonly id: number;
-  readonly name: string;
-  readonly buildings: readonly IBuildingRecord[];
+  constructor(params: Partial<IVillage> = {}) {
+    Object.assign(this, params);
+  }
 }

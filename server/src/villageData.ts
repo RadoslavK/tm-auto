@@ -1,6 +1,6 @@
-import { IVillageRecord, Village } from './controller/models/village';
+import { IVillage, Village } from './controller/models/village';
 
-export const villageData: { villages: IVillageRecord[] } = {
+export const villageData: { villages: IVillage[] } = {
   villages: [
     new Village({
       id: 1,

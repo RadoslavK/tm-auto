@@ -1,13 +1,10 @@
-import { IVillageRecord } from '../../controller/models/village';
 import { villageData } from '../../villageData';
-import { IVillage } from '../../../../_shared/contract/models/IVillage';
-
-const mapVillage = (village: IVillageRecord): IVillage => village.toJS();
+import { IVillage } from '../../controller/models/village';
 
 export const villageResolvers = {
   Query: {
-    villages: (): readonly IVillage[] => villageData.villages.map(mapVillage),
+    villages: (): readonly IVillage[] => villageData.villages,
 
-    village: (parent, args): IVillage => mapVillage(villageData.villages.find(village => village.id === args.id)),
+    village: (parent, args): IVillage => villageData.villages.find(village => village.id === args.id),
   },
 };

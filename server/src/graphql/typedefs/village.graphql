@@ -6,5 +6,5 @@ type Village {
 
 type Query {
     villages: [Village!]!,
-    village(id: Int!): Village!
+    village(id: ID!): Village!
 }
