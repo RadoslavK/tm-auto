@@ -11,8 +11,8 @@ const villageQuery = gql`
       buildings {
         type,
         level {
-          actual
-          ongoing,
+          actual,
+          ongoing
         }
       }
     }

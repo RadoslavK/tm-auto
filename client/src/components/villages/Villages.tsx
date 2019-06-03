@@ -7,7 +7,7 @@ import { EnsuredQuery } from '../_shared/EnsuredQuery';
 import { SideMenu } from '../_shared/SideMenu';
 
 const villagesQuery = gql`
-  {
+  query GetAllVillages {
     villages {
       id,
       name

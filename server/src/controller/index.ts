@@ -1,9 +1,8 @@
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
-import { ensureUrl } from './actions/ensureUrl';
 import { TravianPath } from '../../../_shared/contract/enums/TravianPath';
 import { parseResourceFields } from './parsers/parseResourceFields';
-import { villageData } from '../graphql/resolvers/village';
+import { villageData } from '../villageData';
 import { parseOngoingQueue } from './parsers/parseOngoingQueue';
 import { account } from '../index';
 

@@ -1,0 +1,10 @@
+type Village {
+    id: ID!,
+    name: String!,
+    buildings: [Building!]!,
+}
+
+type Query {
+    villages: [Village!]!,
+    village(id: Int!): Village!
+}

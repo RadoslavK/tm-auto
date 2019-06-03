@@ -1,14 +1,4 @@
-import { village } from './village';
+import { mergeResolvers } from 'merge-graphql-schemas';
+import { villageResolvers } from './villageResolvers';
 
-export const resolvers = [village].reduce((reduced, resolver) => {
-  return {
-    Query: {
-      ...reduced.Query,
-      ...resolver.Query,
-    },
-    Mutation: {
-      ...reduced.Mutation,
-      ...resolver.Mutation,
-    }
-  }
-});
+export const resolvers = mergeResolvers([villageResolvers]);

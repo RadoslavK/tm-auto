@@ -1,0 +1,9 @@
+type BuildingLevel {
+    actual: Int!,
+    ongoing: Int!,
+}
+
+type Building {
+    level: BuildingLevel!,
+    type: Int!,
+}
