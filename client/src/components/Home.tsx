@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { backend } from '../constants/backend';
@@ -21,11 +22,13 @@ export const Home: React.FunctionComponent<{}> = () => {
 
   return (
     <div>
-      <button
+      <Button
+        variant="contained"
+        color="primary"
         onClick={started ? stopBot : startBot}
       >
-        {started ? 'Stop' : 'Start'}
-      </button>
+        {started ? 'Stop bot' : 'Start bot'}
+      </Button>
     </div>
   );
 };

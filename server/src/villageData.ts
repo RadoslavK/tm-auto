@@ -7,5 +7,9 @@ export const villageData: { villages: IVillage[] } = {
       id: '1',
       name: 'Village',
     }),
+    new Village({
+      id: '2',
+      name: 'Village 2',
+    }),
   ],
 };

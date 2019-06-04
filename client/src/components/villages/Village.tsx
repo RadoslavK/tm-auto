@@ -34,7 +34,7 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
     },
   );
 
-  if (loading) {
+  if (loading || !data.village) {
     return null;
   }
 
