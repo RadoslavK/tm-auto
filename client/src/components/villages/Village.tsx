@@ -1,6 +1,6 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
-import { EnsuredQuery } from '../_shared/EnsuredQuery';
+import { useQuery } from 'react-apollo-hooks';
 import { Building } from '../buildings/Building';
 import { GetVillageById, GetVillageByIdVariables } from './_types/GetVillageById';
 
@@ -28,24 +28,21 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
     id,
   } = props;
 
-  return (
-    <EnsuredQuery<GetVillageById, GetVillageByIdVariables>
-      query={getVillageByIdQuery}
-      variables={{ id }}
-    >
-      {({ data }) => {
-        const {
-          village,
-        } = data;
+  const { data, loading } = useQuery<GetVillageById, GetVillageByIdVariables>(getVillageByIdQuery,
+    { variables: { id },
+      fetchPolicy: 'network-only',
+    },
+  );
 
-        return (
-          <div>
-            {village.buildings.map((building, index) => (
-              <Building key={index} building={building} />
-            ))}
-          </div>
-        )
-      }}
-    </EnsuredQuery>
+  if (loading) {
+    return null;
+  }
+
+  return (
+    <div>
+      {data.village.buildings.map((building, index) => (
+        <Building key={index} building={building} />
+      ))}
+    </div>
   );
 };

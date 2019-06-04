@@ -1,43 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { backend } from '../constants/backend';
 
-interface IState {
-  readonly started: boolean;
-}
+export const Home: React.FunctionComponent<{}> = () => {
+  const [started, setStarted] = useState(false);
 
-export class Home extends React.Component<{}, IState> {
-  readonly state = {
-    started: false,
-  };
-
-  private _start = async () => {
+  const startBot = async () => {
     const url = `${backend.url}/api/bot/start`;
     await axios.post(url);
 
-    this.setState(() => ({ started: true }));
+    setStarted(true);
   };
 
-  private _stop = async () => {
+  const stopBot = async () => {
     const url = `${backend.url}/api/bot/stop`;
     await axios.post(url);
 
-    this.setState(() => ({ started: false }));
+    setStarted(false);
   };
 
-  render() {
-    const {
-      started,
-    } = this.state;
-
-    return (
-      <div>
-        <button
-          onClick={started ? this._stop : this._start}
-        >
-          {started ? 'Stop' : 'Start'}
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <button
+        onClick={started ? stopBot : startBot}
+      >
+        {started ? 'Stop' : 'Start'}
+      </button>
+    </div>
+  );
+};
