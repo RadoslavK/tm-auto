@@ -18,7 +18,10 @@ module.exports = (env) => {
 
     resolve: {
       // Add '.ts' and '.tsx' as resolvable extensions.
-      extensions: [".ts", ".tsx", ".js", ".json"]
+      extensions: [".ts", ".tsx", ".js", ".json", ".graphql"],
+      alias: {
+        '*/graphql_operations': __dirname + '/src/graphql'
+      }
     },
 
     module: {
@@ -33,6 +36,12 @@ module.exports = (env) => {
 
         {
           test: /\.css$/, use: [ 'style-loader', 'css-loader' ]
+        },
+
+        {
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader'
         }
       ]
     },
@@ -44,7 +53,7 @@ module.exports = (env) => {
       }),
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(env),
-      })
+      }),
     ],
 
     devServer: {

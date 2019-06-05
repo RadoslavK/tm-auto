@@ -1,0 +1,19 @@
+query GetVillageById($id: ID!) {
+    village(id: $id) {
+        name,
+        buildings {
+            type,
+            level {
+                actual,
+                ongoing
+            }
+        }
+    }
+}
+
+query GetVillages {
+    villages {
+        id,
+        name
+    }
+}

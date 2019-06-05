@@ -1,0 +1,19 @@
+query IsSignedIn{
+    isSignedIn
+}
+
+query IsBotRunning {
+    isBotRunning
+}
+
+mutation SignIn($account: SignInInput!) {
+    signIn(account: $account)
+}
+
+mutation StartBot {
+    startBot
+}
+
+mutation StopBot {
+    stopBot
+}

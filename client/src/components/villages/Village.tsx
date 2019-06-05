@@ -1,23 +1,8 @@
+import { GetVillageById } from '*/graphql_operations/village.graphql';
 import React from 'react';
-import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import { IGetVillageByIdQuery, IGetVillageByIdQueryVariables } from '../../_types/graphql';
 import { Building } from '../buildings/Building';
-import { GetVillageById, GetVillageByIdVariables } from './_types/GetVillageById';
-
-const getVillageByIdQuery = gql`
-  query GetVillageById($id: ID!) {
-    village(id: $id) {
-      name,
-      buildings {
-        type,
-        level {
-          actual,
-          ongoing
-        }
-      }
-    }
-  }
-`;
 
 interface IParams {
   readonly id: string;
@@ -28,7 +13,7 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
     id,
   } = props;
 
-  const { data, loading } = useQuery<GetVillageById, GetVillageByIdVariables>(getVillageByIdQuery,
+  const { data, loading } = useQuery<IGetVillageByIdQuery, IGetVillageByIdQueryVariables>(GetVillageById,
     { variables: { id },
       fetchPolicy: 'network-only',
     },

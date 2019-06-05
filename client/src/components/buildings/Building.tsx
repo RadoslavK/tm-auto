@@ -1,9 +1,14 @@
 import React from 'react';
 import { buildingNames } from '../../../../server/src/controller/constants/buildingNames';
-import { GetVillageById_village_buildings } from '../villages/_types/GetVillageById';
 
 interface IParams {
-  readonly building: GetVillageById_village_buildings;
+  readonly building: {
+    readonly type: number;
+    readonly level: {
+      readonly actual: number;
+      readonly ongoing: number;
+    }
+  };
 }
 
 export const Building: React.FunctionComponent<IParams> = (props) => {

@@ -1,23 +1,14 @@
+import { GetVillages } from '*/graphql_operations/village.graphql';
 import React, { useContext, useEffect } from 'react';
-import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { ISideMenuContext, SideMenuContext } from '../_shared/SideMenu/context/SideMenuContext';
-import { GetVillages } from './_types/GetVillages';
+import { IGetVillagesQuery } from '../../_types/graphql';
+import { ISideMenuContext, SideMenuContext } from '../sideMenu/context/SideMenuContext';
 import { Village } from './Village';
-
-const getVillagesQuery = gql`
-  query GetVillages {
-    villages {
-      id,
-      name
-    }
-  }
-`;
 
 export const Villages: React.FunctionComponent = () => {
   const { setItems } = useContext<ISideMenuContext>(SideMenuContext);
-  const { data, loading } = useQuery<GetVillages>(getVillagesQuery,
+  const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages,
     {
       fetchPolicy: 'network-only',
     });

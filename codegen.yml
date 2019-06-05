@@ -1,0 +1,23 @@
+overwrite: true
+schema: 'server/src/graphql/typedefs/*.graphql'
+documents: 'client/src/graphql/*.graphql'
+generates:
+  server/src/_types/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      typesPrefix: I
+  client/src/_types/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+    config:
+      typesPrefix: I
+      skipTypename: true
+      immutableTypes : true
+  client/src/_types/graphql_modules.d.ts:
+    plugins:
+      - "typescript-graphql-files-modules"
+    config:
+      modulePathPrefix: "graphql_operations/"

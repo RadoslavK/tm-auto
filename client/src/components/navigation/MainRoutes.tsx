@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home } from '../Home';
+import { Home
+} from '../Home';
 import { Villages } from '../villages/Villages';
 
 const NotFound = () => <h1>Not Found</h1>;

@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import { IsSignedIn, SignIn } from '*/graphql_operations/controller.graphql';
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,10 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useMutation } from 'react-apollo-hooks';
-import { SignInInput } from '../../_types/grapql.global';
-import { IsSignedInQuery } from './_types/IsSignedInQuery';
-import { SignInMutation, SignInMutationVariables } from './_types/SignInMutation';
-import { isSignedInQuery } from './EnsureSignedIn';
+import { ISignInInput, ISignInMutation, ISignInMutationVariables } from '../../_types/graphql';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -33,28 +30,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const signInMutation = gql`
-  mutation SignInMutation($account: SignInInput!) {
-    signIn(account: $account)
-  }
-`;
-
 export const SignInForm = () => {
   const classes = useStyles({});
   const [username, setUsername] = useState('Buckyx');
   const [password, setPassword] = useState('Speedas11');
   const [server, setServer] = useState('https://ts5.travian.com');
 
-  const account: SignInInput = {
+  const account: ISignInInput = {
     username,
     password,
     server,
   };
 
-  const signIn = useMutation<SignInMutation, SignInMutationVariables>(signInMutation, {
+  const signIn = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
     variables: { account },
     refetchQueries: [
-      { query: isSignedInQuery },
+      { query: IsSignedIn },
     ]
   });
 
