@@ -24,15 +24,18 @@ export type IBuildingLevel = {
 
 export type IMutation = {
   __typename?: "Mutation";
+  startBot: Scalars["Boolean"];
+  stopBot: Scalars["Boolean"];
   signIn: Scalars["Boolean"];
 };
 
 export type IMutationSignInArgs = {
-  account?: Maybe<ISignInInput>;
+  account: ISignInInput;
 };
 
 export type IQuery = {
   __typename?: "Query";
+  isBotRunning: Scalars["Boolean"];
   isSignedIn: Scalars["Boolean"];
   villages: Array<IVillage>;
   village: IVillage;
@@ -164,6 +167,8 @@ export type IMutationResolvers<
   ContextType = any,
   ParentType = IResolversTypes["Mutation"]
 > = {
+  startBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  stopBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   signIn?: Resolver<
     IResolversTypes["Boolean"],
     ParentType,
@@ -176,6 +181,7 @@ export type IQueryResolvers<
   ContextType = any,
   ParentType = IResolversTypes["Query"]
 > = {
+  isBotRunning?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   villages?: Resolver<
     Array<IResolversTypes["Village"]>,

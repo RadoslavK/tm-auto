@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
-import { api } from './api';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
 
@@ -15,8 +14,6 @@ server.applyMiddleware({ app });
 
 app.use(cors());
 app.use(express.static(clientPath));
-
-app.use('/api', api);
 
 app.get(['/app/*', '/app'], (req, res) => {
   res.sendFile(path.join(clientPath, 'index.html'));

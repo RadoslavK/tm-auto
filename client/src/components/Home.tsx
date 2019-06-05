@@ -1,32 +1,57 @@
 import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { backend } from '../constants/backend';
+import { gql } from 'apollo-boost';
+import React from 'react';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import { IsBotRunningQuery } from './_types/IsBotRunningQuery';
+import { StartBotMutation } from './_types/StartBotMutation';
+import { StopBotMutation } from './_types/StopBotMutation';
 
-export const Home: React.FunctionComponent<{}> = () => {
-  const [started, setStarted] = useState(false);
+const isBotRunningQuery = gql`
+  query IsBotRunningQuery {
+      isBotRunning
+  }
+`;
 
-  const startBot = async () => {
-    const url = `${backend.url}/api/bot/start`;
-    await axios.post(url);
+const startBotMutation = gql`
+  mutation StartBotMutation {
+      startBot
+  }
+`;
 
-    setStarted(true);
-  };
+const stopBotMutation = gql`
+    mutation StopBotMutation {
+        stopBot
+    }
+`;
 
-  const stopBot = async () => {
-    const url = `${backend.url}/api/bot/stop`;
-    await axios.post(url);
+export const Home: React.FunctionComponent = () => {
+  const { data, loading } = useQuery<IsBotRunningQuery>(isBotRunningQuery);
+  const startBot = useMutation<StartBotMutation>(startBotMutation, {
+    refetchQueries: [{ query: isBotRunningQuery }],
+  });
+  const stopBot = useMutation<StopBotMutation>(stopBotMutation, {
+    refetchQueries: [{ query: isBotRunningQuery }],
+  });
 
-    setStarted(false);
-  };
+  if (loading) {
+    return null;
+  }
+
+  const {
+    isBotRunning,
+  } = data;
 
   return (
     <Button
       variant="contained"
       color="primary"
-      onClick={started ? stopBot : startBot}
+      onClick={async e => {
+        e.preventDefault();
+
+        await isBotRunning ? stopBot() : startBot();
+      }}
     >
-      {started ? 'Stop bot' : 'Start bot'}
+      {isBotRunning ? 'Stop bot' : 'Start bot'}
     </Button>
   );
 };
