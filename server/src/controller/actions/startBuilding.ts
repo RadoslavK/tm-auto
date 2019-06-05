@@ -1,5 +1,5 @@
 import { logException } from '../../../../_shared/utils/invariantException';
-import { account } from '../../index';
+import { userService } from '../../services/userService';
 import { ensureUrl } from './ensureUrl';
 import { TravianPath } from '../../_enums/TravianPath';
 import { getPage } from '../browser/getPage';
@@ -19,6 +19,7 @@ export const startBuilding = async (params: IStartBuildingParams) => {
   } = params;
 
   const page = await getPage();
+  const account = userService.getAccount();
 
   if (!isValidField(fieldId)) {
     logException(`Tried to build at invalid field id: ${fieldId}`);
@@ -30,7 +31,7 @@ export const startBuilding = async (params: IStartBuildingParams) => {
     await ensureUrl(TravianPath.BuildingsOverview)
   }
 
-  await page.goto(`${account.url}/build.php?id=${fieldId}`);
+  await page.goto(`${account.server}/build.php?id=${fieldId}`);
 
   const submit = await page.$x(`//button[contains(@onclick, "${fieldId}")]`);
   await submit[0].click();

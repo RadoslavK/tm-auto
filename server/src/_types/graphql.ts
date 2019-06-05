@@ -1,8 +1,4 @@
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig
-} from "graphql";
+import { GraphQLResolveInfo } from "graphql";
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -12,8 +8,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
 export type IBuilding = {
@@ -28,19 +22,37 @@ export type IBuildingLevel = {
   ongoing: Scalars["Int"];
 };
 
-export enum ICacheControlScope {
-  Public = "PUBLIC",
-  Private = "PRIVATE"
-}
+export type IMutation = {
+  __typename?: "Mutation";
+  signIn: Scalars["Boolean"];
+};
+
+export type IMutationSignInArgs = {
+  account?: Maybe<ISignInInput>;
+};
 
 export type IQuery = {
   __typename?: "Query";
+  isSignedIn: Scalars["Boolean"];
   villages: Array<IVillage>;
   village: IVillage;
 };
 
 export type IQueryVillageArgs = {
   id: Scalars["ID"];
+};
+
+export type ISignInInput = {
+  username: Scalars["String"];
+  password: Scalars["String"];
+  server: Scalars["String"];
+};
+
+export type IUserAccount = {
+  __typename?: "UserAccount";
+  username: Scalars["String"];
+  password: Scalars["String"];
+  server: Scalars["String"];
 };
 
 export type IVillage = {
@@ -120,26 +132,17 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: {};
+  Boolean: Scalars["Boolean"];
   Village: IVillage;
   ID: Scalars["ID"];
   String: Scalars["String"];
   Building: IBuilding;
   BuildingLevel: IBuildingLevel;
   Int: Scalars["Int"];
-  Boolean: Scalars["Boolean"];
-  CacheControlScope: ICacheControlScope;
-  Upload: Scalars["Upload"];
+  Mutation: {};
+  SignInInput: ISignInInput;
+  UserAccount: IUserAccount;
 };
-
-export type ICacheControlDirectiveResolver<
-  Result,
-  Parent,
-  ContextType = any,
-  Args = {
-    maxAge?: Maybe<Maybe<Scalars["Int"]>>;
-    scope?: Maybe<Maybe<ICacheControlScope>>;
-  }
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type IBuildingResolvers<
   ContextType = any,
@@ -157,10 +160,23 @@ export type IBuildingLevelResolvers<
   ongoing?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
+export type IMutationResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["Mutation"]
+> = {
+  signIn?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationSignInArgs
+  >;
+};
+
 export type IQueryResolvers<
   ContextType = any,
   ParentType = IResolversTypes["Query"]
 > = {
+  isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   villages?: Resolver<
     Array<IResolversTypes["Village"]>,
     ParentType,
@@ -174,10 +190,14 @@ export type IQueryResolvers<
   >;
 };
 
-export interface IUploadScalarConfig
-  extends GraphQLScalarTypeConfig<IResolversTypes["Upload"], any> {
-  name: "Upload";
-}
+export type IUserAccountResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["UserAccount"]
+> = {
+  username?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  password?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  server?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+};
 
 export type IVillageResolvers<
   ContextType = any,
@@ -195,11 +215,8 @@ export type IVillageResolvers<
 export type IResolvers<ContextType = any> = {
   Building?: IBuildingResolvers<ContextType>;
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
+  Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
+  UserAccount?: IUserAccountResolvers<ContextType>;
   Village?: IVillageResolvers<ContextType>;
-};
-
-export type IDirectiveResolvers<ContextType = any> = {
-  cacheControl?: ICacheControlDirectiveResolver<any, any, ContextType>;
 };

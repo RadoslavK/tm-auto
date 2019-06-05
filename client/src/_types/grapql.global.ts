@@ -6,6 +6,12 @@
 // START Enums and Input Objects
 //==============================================================
 
+export interface SignInInput {
+  readonly username: string;
+  readonly password: string;
+  readonly server: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

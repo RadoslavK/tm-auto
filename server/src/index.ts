@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
-import { Account, IAccount } from './_models/account';
 import { api } from './api';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
@@ -16,12 +15,6 @@ server.applyMiddleware({ app });
 
 app.use(cors());
 app.use(express.static(clientPath));
-
-export const account: IAccount = new Account({
-  username: 'Buckyx',
-  password: 'Speedas11',
-  url: 'https://ts5.travian.com',
-});
 
 app.use('/api', api);
 

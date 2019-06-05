@@ -1,10 +1,11 @@
-import { account } from '../../index';
 import { TravianPath } from '../../_enums/TravianPath';
+import { userService } from '../../services/userService';
 import { getPage } from '../browser/getPage';
 
 export const ensureLoggedIn = async () => {
   const page = await getPage();
-  await page.goto(`${account.url}/${TravianPath.ResourceFieldsOverview}`);
+  const account = userService.getAccount();
+  await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
 
   const loginForm = await page.$('form[name=login');
 

@@ -1,0 +1,19 @@
+type UserAccount {
+    username: String!
+    password: String!
+    server: String!
+}
+
+input SignInInput {
+    username: String!
+    password: String!
+    server: String!
+}
+
+type Query {
+    isSignedIn: Boolean!
+}
+
+type Mutation {
+    signIn(account: SignInInput!): Boolean!
+}

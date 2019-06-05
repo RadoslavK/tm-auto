@@ -21,14 +21,12 @@ export const Home: React.FunctionComponent<{}> = () => {
   };
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={started ? stopBot : startBot}
-      >
-        {started ? 'Stop bot' : 'Start bot'}
-      </Button>
-    </div>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={started ? stopBot : startBot}
+    >
+      {started ? 'Stop bot' : 'Start bot'}
+    </Button>
   );
 };

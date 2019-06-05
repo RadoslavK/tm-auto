@@ -4,7 +4,7 @@ type Village {
     buildings: [Building!]!,
 }
 
-type Query {
+extend type Query {
     villages: [Village!]!,
     village(id: ID!): Village!
 }

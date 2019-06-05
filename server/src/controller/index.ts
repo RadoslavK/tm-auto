@@ -1,10 +1,10 @@
 import { TravianPath } from '../_enums/TravianPath';
+import { userService } from '../services/userService';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
 import { parseResourceFields } from './parsers/parseResourceFields';
 import { villageData } from '../villageData';
 import { parseOngoingQueue } from './parsers/parseOngoingQueue';
-import { account } from '../index';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
@@ -22,8 +22,9 @@ export class Controller {
 
   public build = async () => {
     const page = await getPage();
+    const account = userService.getAccount();
     log('checking fields');
-    await page.goto(`${account.url}/${TravianPath.ResourceFieldsOverview}`);
+    await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
     const buildings = await parseResourceFields();
     const queue = await parseOngoingQueue();
 
