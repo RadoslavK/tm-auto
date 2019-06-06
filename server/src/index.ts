@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ApolloServer } from 'apollo-server-express';
+import { context } from './graphql/context';
 import { typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
 
@@ -9,7 +10,11 @@ const app = express();
 const port = 3000;
 const clientPath = path.join(__dirname, '..', '..', 'client/dist');
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context,
+});
 server.applyMiddleware({ app });
 
 app.use(cors());

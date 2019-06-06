@@ -8,6 +8,8 @@ generates:
       - "typescript-resolvers"
     config:
       typesPrefix: I
+      immutableTypes : true
+      contextType: ../graphql/context#IGraphQLContext
   client/src/_types/graphql.ts:
     plugins:
       - "typescript"

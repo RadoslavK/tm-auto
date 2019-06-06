@@ -1,10 +1,10 @@
-import { userService } from '../../services/userService';
+import { context } from '../../graphql/context';
 import { getPage } from '../browser/getPage';
 
 export const ensureUrl = async (path: string, exact = false) => {
   const page = await getPage();
-  const account = userService.getAccount();
-  const url = `${account.server}/${path}`;
+  const { userAccount } = context.userService;
+  const url = `${userAccount.server}/${path}`;
 
   const isAtUrl = (exact && page.url() === url)
     || (!exact && page.url().includes(url));

@@ -1,0 +1,16 @@
+query GetVillageBuildings($villageId: ID!) {
+    buildings(villageId: $villageId) {
+        type
+        level {
+            actual
+            ongoing
+        }
+    }
+}
+
+query GetVillageBuildingQueue($villageId: ID!) {
+    buildingQueue(villageId: $villageId) {
+        buildingType
+        fieldId
+    }
+}

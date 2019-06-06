@@ -32,7 +32,7 @@ export const Villages: React.FunctionComponent = () => {
 
   return (
     <Switch>
-      <Route path='/villages/:id' render={(props) => <Village id={props.match.params.id} />} />
+      <Route path='/villages/:id' render={(props) => <Village villageId={props.match.params.id} />} />
       {navigationItems.length > 0 && (
         <Redirect to={navigationItems[0].path} />
       )}

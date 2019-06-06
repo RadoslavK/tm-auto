@@ -1,10 +1,9 @@
 import { IResolvers } from '../../_types/graphql';
-import { villageData } from '../../villageData';
 
 export const villageResolvers: IResolvers = {
   Query: {
-    villages: () => villageData.villages,
+    villageExists: (_, args, context) => context.villageService.hasVillage(args.villageId),
 
-    village: (parent, args) => villageData.villages.find(village => village.id === args.id),
+    villages: (_, __, context) => context.villageService.getVillages(),
   },
 };

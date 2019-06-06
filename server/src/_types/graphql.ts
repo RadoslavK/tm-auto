@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
+import { IGraphQLContext } from "../graphql/context";
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -12,21 +13,42 @@ export type Scalars = {
 
 export type IBuilding = {
   __typename?: "Building";
-  level: IBuildingLevel;
-  type: Scalars["Int"];
+  readonly level: IBuildingLevel;
+  readonly type: Scalars["Int"];
 };
 
 export type IBuildingLevel = {
   __typename?: "BuildingLevel";
-  actual: Scalars["Int"];
-  ongoing: Scalars["Int"];
+  readonly actual: Scalars["Int"];
+  readonly ongoing: Scalars["Int"];
+};
+
+export type IDequeueBuildingInput = {
+  readonly villageId: Scalars["ID"];
+  readonly fieldId: Scalars["Int"];
+};
+
+export type IEnqueueBuildingInput = {
+  readonly buildingType: Scalars["Int"];
+  readonly fieldId: Scalars["Int"];
+  readonly villageId: Scalars["ID"];
 };
 
 export type IMutation = {
   __typename?: "Mutation";
-  startBot: Scalars["Boolean"];
-  stopBot: Scalars["Boolean"];
-  signIn: Scalars["Boolean"];
+  readonly enqueueBuilding: Scalars["Boolean"];
+  readonly dequeueBuilding: Scalars["Boolean"];
+  readonly startBot: Scalars["Boolean"];
+  readonly stopBot: Scalars["Boolean"];
+  readonly signIn: Scalars["Boolean"];
+};
+
+export type IMutationEnqueueBuildingArgs = {
+  input?: Maybe<IEnqueueBuildingInput>;
+};
+
+export type IMutationDequeueBuildingArgs = {
+  input?: Maybe<IDequeueBuildingInput>;
 };
 
 export type IMutationSignInArgs = {
@@ -35,34 +57,49 @@ export type IMutationSignInArgs = {
 
 export type IQuery = {
   __typename?: "Query";
-  isBotRunning: Scalars["Boolean"];
-  isSignedIn: Scalars["Boolean"];
-  villages: Array<IVillage>;
-  village: IVillage;
+  readonly buildings: ReadonlyArray<IBuilding>;
+  readonly buildingQueue: ReadonlyArray<IQueuedBuilding>;
+  readonly isBotRunning: Scalars["Boolean"];
+  readonly isSignedIn: Scalars["Boolean"];
+  readonly villages: ReadonlyArray<IVillage>;
+  readonly villageExists: Scalars["Boolean"];
 };
 
-export type IQueryVillageArgs = {
-  id: Scalars["ID"];
+export type IQueryBuildingsArgs = {
+  villageId: Scalars["ID"];
+};
+
+export type IQueryBuildingQueueArgs = {
+  villageId: Scalars["ID"];
+};
+
+export type IQueryVillageExistsArgs = {
+  villageId: Scalars["ID"];
+};
+
+export type IQueuedBuilding = {
+  __typename?: "QueuedBuilding";
+  readonly fieldId: Scalars["Int"];
+  readonly buildingType: Scalars["Int"];
 };
 
 export type ISignInInput = {
-  username: Scalars["String"];
-  password: Scalars["String"];
-  server: Scalars["String"];
+  readonly username: Scalars["String"];
+  readonly password: Scalars["String"];
+  readonly server: Scalars["String"];
 };
 
 export type IUserAccount = {
   __typename?: "UserAccount";
-  username: Scalars["String"];
-  password: Scalars["String"];
-  server: Scalars["String"];
+  readonly username: Scalars["String"];
+  readonly password: Scalars["String"];
+  readonly server: Scalars["String"];
 };
 
 export type IVillage = {
   __typename?: "Village";
-  id: Scalars["ID"];
-  name: Scalars["String"];
-  buildings: Array<IBuilding>;
+  readonly id: Scalars["ID"];
+  readonly name: Scalars["String"];
 };
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -135,20 +172,23 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: {};
-  Boolean: Scalars["Boolean"];
-  Village: IVillage;
   ID: Scalars["ID"];
-  String: Scalars["String"];
   Building: IBuilding;
   BuildingLevel: IBuildingLevel;
   Int: Scalars["Int"];
+  QueuedBuilding: IQueuedBuilding;
+  Boolean: Scalars["Boolean"];
+  Village: IVillage;
+  String: Scalars["String"];
   Mutation: {};
+  EnqueueBuildingInput: IEnqueueBuildingInput;
+  DequeueBuildingInput: IDequeueBuildingInput;
   SignInInput: ISignInInput;
   UserAccount: IUserAccount;
 };
 
 export type IBuildingResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Building"]
 > = {
   level?: Resolver<IResolversTypes["BuildingLevel"], ParentType, ContextType>;
@@ -156,7 +196,7 @@ export type IBuildingResolvers<
 };
 
 export type IBuildingLevelResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["BuildingLevel"]
 > = {
   actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -164,9 +204,21 @@ export type IBuildingLevelResolvers<
 };
 
 export type IMutationResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Mutation"]
 > = {
+  enqueueBuilding?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationEnqueueBuildingArgs
+  >;
+  dequeueBuilding?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationDequeueBuildingArgs
+  >;
   startBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   stopBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   signIn?: Resolver<
@@ -178,26 +230,46 @@ export type IMutationResolvers<
 };
 
 export type IQueryResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Query"]
 > = {
+  buildings?: Resolver<
+    ReadonlyArray<IResolversTypes["Building"]>,
+    ParentType,
+    ContextType,
+    IQueryBuildingsArgs
+  >;
+  buildingQueue?: Resolver<
+    ReadonlyArray<IResolversTypes["QueuedBuilding"]>,
+    ParentType,
+    ContextType,
+    IQueryBuildingQueueArgs
+  >;
   isBotRunning?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   villages?: Resolver<
-    Array<IResolversTypes["Village"]>,
+    ReadonlyArray<IResolversTypes["Village"]>,
     ParentType,
     ContextType
   >;
-  village?: Resolver<
-    IResolversTypes["Village"],
+  villageExists?: Resolver<
+    IResolversTypes["Boolean"],
     ParentType,
     ContextType,
-    IQueryVillageArgs
+    IQueryVillageExistsArgs
   >;
 };
 
+export type IQueuedBuildingResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["QueuedBuilding"]
+> = {
+  fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  buildingType?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
 export type IUserAccountResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["UserAccount"]
 > = {
   username?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
@@ -206,23 +278,19 @@ export type IUserAccountResolvers<
 };
 
 export type IVillageResolvers<
-  ContextType = any,
+  ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Village"]
 > = {
   id?: Resolver<IResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
-  buildings?: Resolver<
-    Array<IResolversTypes["Building"]>,
-    ParentType,
-    ContextType
-  >;
 };
 
-export type IResolvers<ContextType = any> = {
+export type IResolvers<ContextType = IGraphQLContext> = {
   Building?: IBuildingResolvers<ContextType>;
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
+  QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
   UserAccount?: IUserAccountResolvers<ContextType>;
   Village?: IVillageResolvers<ContextType>;
 };

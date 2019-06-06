@@ -1,4 +1,3 @@
-import { IBuilding } from '../../_types/graphql';
 import { Building } from '../../_models/buildings/building';
 import { getPage } from '../browser/getPage';
 
@@ -7,7 +6,7 @@ export interface IParsedBuilding {
   readonly type: number;
 }
 
-export const parseResourceFields = async (): Promise<IBuilding[]> => {
+export const parseResourceFields = async (): Promise<Building[]> => {
   const page = await getPage();
   await page.waitForSelector('#village_map');
 

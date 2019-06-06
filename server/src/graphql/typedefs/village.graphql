@@ -1,10 +1,9 @@
 type Village {
     id: ID!,
-    name: String!,
-    buildings: [Building!]!,
+    name: String!
 }
 
 extend type Query {
     villages: [Village!]!,
-    village(id: ID!): Village!
+    villageExists(villageId: ID!): Boolean!
 }

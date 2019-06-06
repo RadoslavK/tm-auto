@@ -7,3 +7,29 @@ type Building {
     level: BuildingLevel!,
     type: Int!,
 }
+
+type QueuedBuilding {
+    fieldId: Int!
+    buildingType: Int!
+}
+
+extend type Query {
+    buildings(villageId: ID!): [Building!]!
+    buildingQueue(villageId: ID!): [QueuedBuilding!]!
+}
+
+input EnqueueBuildingInput {
+    buildingType: Int!
+    fieldId: Int!
+    villageId: ID!
+}
+
+input DequeueBuildingInput {
+    villageId: ID!
+    fieldId: Int!
+}
+
+extend type Mutation {
+    enqueueBuilding(input: EnqueueBuildingInput): Boolean!
+    dequeueBuilding(input: DequeueBuildingInput): Boolean!
+}
