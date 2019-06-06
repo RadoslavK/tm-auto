@@ -1,13 +1,12 @@
 import { TravianPath } from '../_enums/TravianPath';
-import { Building } from '../_models/buildings/building';
+import { BuildingSpot } from '../_models/buildings/buildingSpot';
 import { Village } from '../_models/village';
-import { IBuilding, IVillage } from '../_types/graphql';
 import { context } from '../graphql/context';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
-import { parseBuildings } from './parsers/parseBuildings';
-import { parseResourceFields } from './parsers/parseResourceFields';
-import { parseOngoingQueue } from './parsers/parseOngoingQueue';
+import { parseInfrastructureSpots } from './parsers/parseInfrastructureSpots';
+import { parseFieldSpots } from './parsers/parseFieldSpots';
+import { parseBuildingsInProgress } from './parsers/parseBuildingsInProgress';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
@@ -28,32 +27,26 @@ export class Controller {
     const { userAccount } = context.userService;
     log('checking fields');
     await page.goto(`${userAccount.server}/${TravianPath.ResourceFieldsOverview}`);
-    const resFields = await parseResourceFields();
-    const queue = await parseOngoingQueue();
+    const fieldSpots = await parseFieldSpots();
+    const buildingsInProgress = await parseBuildingsInProgress();
 
     await page.goto(`${userAccount.server}/${TravianPath.BuildingsOverview}`);
-    const buildingFields = await parseBuildings();
+    const infrastructureSpots = await parseInfrastructureSpots();
 
-    const buildings: readonly Building[] = resFields.concat(buildingFields);
-
-    queue.buildings.forEach(b => {
-      const building = buildings[b.fieldId - 1];
-
-      building.level.ongoing = b.level;
-      building.type = b.type;
-    });
+    const buildings: readonly BuildingSpot[] = fieldSpots.concat(infrastructureSpots);
 
     if (context.villageService.getVillages().length == 0) {
-      const villages: readonly IVillage[] = [
+      const villages: readonly Village[] = [
         new Village({
-          id: '1',
+          id: 1,
           name: 'Village 1',
         }),
       ];
 
       context.villageService.setVillages(villages);
     }
-    context.buildingsService.setVillageBuildings('1', buildings);
+    context.buildingsService.setBuildingSpots(1, buildings);
+    context.buildingsService.setBuildingsInProgress(1, buildingsInProgress);
 
     // log('building...');
     // await startBuilding({ fieldId: 7 });

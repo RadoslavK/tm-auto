@@ -1,16 +1,16 @@
-import { GetVillageBuildings } from '*/graphql_operations/building.graphql';
+import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import {
-  IGetVillageBuildingsQuery,
-  IGetVillageBuildingsQueryVariables,
+  IGetBuildingSpotsQuery,
+  IGetBuildingSpotsQueryVariables,
 } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingSpot } from './BuildingSpot';
 
 const BuildingSpots: React.FunctionComponent = () => {
   const villageContext = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetVillageBuildingsQuery, IGetVillageBuildingsQueryVariables>(GetVillageBuildings, {
+  const { data, loading } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: {
       villageId: villageContext.villageId,
     },
@@ -21,11 +21,11 @@ const BuildingSpots: React.FunctionComponent = () => {
     return null;
   }
 
-  const { buildings } = data;
+  const { buildingSpots } = data;
 
   return (
     <div>
-      {buildings.map((building, index) => (
+      {buildingSpots.map((building, index) => (
         <BuildingSpot key={index} building={building} />
       ))}
     </div>

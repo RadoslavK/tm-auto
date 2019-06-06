@@ -1,49 +1,68 @@
+import { BuildingSpot } from '../_models/buildings/buildingSpot';
+import { BuildingInProgress } from '../_models/buildings/buildingInProgress';
 import { QueuedBuilding } from '../_models/buildings/queuedBuilding';
-import { IBuilding, IDequeueBuildingInput, IEnqueueBuildingInput, IQueuedBuilding } from '../_types/graphql';
+import { IDequeueBuildingInput, IEnqueueBuildingInput } from '../_types/graphql';
 
 export class BuildingsService {
-  private readonly _buildings: Record<string, readonly IBuilding[]> = {};
-  private readonly _buildingQueue: Record<string, IQueuedBuilding[]> = {};
+  private readonly _buildingSpots: Record<number, readonly BuildingSpot[]> = {};
+  private readonly _buildingsInProgress: Record<number, BuildingInProgress[]> = {};
+  private readonly _queuedBuildings: Record<number, QueuedBuilding[]> = {};
 
-  public getVillageBuildings(villageId: string): readonly IBuilding[] {
-    return this._buildings[villageId];
+  public getBuildingSpots(villageId: number): readonly BuildingSpot[] {
+    return this._buildingSpots[villageId];
   }
 
-  public setVillageBuildings(villageId: string, buildings: readonly IBuilding[]) {
-    this._buildings[villageId] = buildings;
+  public setBuildingSpots(villageId: number, buildings: Iterable<BuildingSpot>) {
+    this._buildingSpots[villageId] = [...buildings];
   }
 
-  public getVillageBuildingQueue(villageId: string): readonly IQueuedBuilding[] {
-    return this._buildingQueue[villageId] || [];
+  public getBuildingQueue(villageId: number): readonly QueuedBuilding[] {
+    return this._queuedBuildings[villageId] || [];
+  }
+
+  public getBuildingsInProgress(villageId: number): readonly BuildingInProgress[] {
+    return this._buildingsInProgress[villageId] || [];
+  }
+
+  public setBuildingsInProgress(villageId: number, buildings: Iterable<BuildingInProgress>): void {
+    this._buildingsInProgress[villageId] = [...buildings];
+  }
+
+  public clearQueue(villageId: number): void {
+    const buildings = this._queuedBuildings[villageId];
+
+    if (buildings) {
+      delete this._queuedBuildings[villageId];
+    }
   }
 
   public enqueueBuilding(input: IEnqueueBuildingInput): void {
     const {
-      buildingType,
+      type,
       fieldId,
       villageId,
     } = input;
 
-    const buildings = this._buildingQueue[villageId];
-    const building: IQueuedBuilding = new QueuedBuilding({
+    const buildings = this._queuedBuildings[villageId];
+    const building: QueuedBuilding = new QueuedBuilding({
       fieldId,
-      buildingType,
+      type,
     });
 
     if (buildings) {
       buildings.push(building);
     } else {
-      this._buildingQueue[villageId] = [building];
+      this._queuedBuildings[villageId] = [building];
     }
   }
 
   public dequeueBuilding(input: IDequeueBuildingInput): void {
     const {
-      fieldId,
+      queueIndex,
       villageId,
     } = input;
 
-    const buildings = this._buildingQueue[villageId];
-    buildings.filter(building => building.fieldId === fieldId);
+    const buildings = this._queuedBuildings[villageId];
+    delete buildings[queueIndex];
   }
 }

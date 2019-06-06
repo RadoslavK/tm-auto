@@ -1,11 +1,13 @@
-import { IBuilding, IVillage } from '../_types/graphql';
+interface IParams {
+  id: number;
+  name: string;
+}
 
-export class Village implements IVillage {
-  id: string = '';
+export class Village implements IParams {
+  id: number = 0;
   name: string = '';
-  buildings: IBuilding[] = [];
 
-  constructor(params: Partial<IVillage> = {}) {
+  constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
   }
 }

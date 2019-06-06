@@ -1,7 +1,7 @@
 import React from 'react';
 import { BuildingQueue } from './queue/BuildingQueue';
 import { BuildingSpots } from './spots/BuildingSpots';
-import { BuildingsInProgress } from './BuildingsInProgress';
+import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
 
 const Buildings: React.FunctionComponent = () => {
   return (

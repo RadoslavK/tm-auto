@@ -1,10 +1,9 @@
-import { Building } from '../../_models/buildings/building';
+import { BuildingSpot } from '../../_models/buildings/buildingSpot';
 import { getPage } from '../browser/getPage';
 import { isBuildingField } from '../actions/startBuilding';
 import { BuildingType } from '../../_enums/BuildingType';
-import { IBuilding } from '../../_types/graphql';
 
-export const parseBuildings = async (): Promise<ReadonlyArray<IBuilding>> => {
+export const parseInfrastructureSpots = async (): Promise<readonly BuildingSpot[]> => {
   const page = await getPage();
   await page.waitForSelector('#village_map');
 
@@ -25,14 +24,13 @@ export const parseBuildings = async (): Promise<ReadonlyArray<IBuilding>> => {
         ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
         : 0;
 
-      return {
+      return new BuildingSpot({
         level,
         type,
-      };
+      });
     })
   );
 
   return buildings
     .filter(b => !!b)
-    .map(Building.fromParsed);
 };

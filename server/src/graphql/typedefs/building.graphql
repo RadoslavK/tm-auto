@@ -1,35 +1,50 @@
 type BuildingLevel {
-    actual: Int!,
-    ongoing: Int!,
+    actual: Int!
+    inProgress: Int!
+    queued: Int!
 }
 
-type Building {
-    level: BuildingLevel!,
-    type: Int!,
+type BuildingSpot {
+    fieldId: Int!
+    level: BuildingLevel!
+    type: Int!
 }
 
 type QueuedBuilding {
     fieldId: Int!
-    buildingType: Int!
+    type: Int!
+    queueIndex: Int!
+}
+
+type BuildingInProgress {
+    level: Int!
+    timer: Int!
+    type: Int!
 }
 
 extend type Query {
-    buildings(villageId: ID!): [Building!]!
-    buildingQueue(villageId: ID!): [QueuedBuilding!]!
+    buildingSpots(villageId: ID!): [BuildingSpot!]!
+    buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
+    queuedBuildings(villageId: ID!): [QueuedBuilding!]!
+}
+
+input ClearQueueInput {
+    villageId: ID!
 }
 
 input EnqueueBuildingInput {
-    buildingType: Int!
     fieldId: Int!
+    type: Int!
     villageId: ID!
 }
 
 input DequeueBuildingInput {
     villageId: ID!
-    fieldId: Int!
+    queueIndex: Int!
 }
 
 extend type Mutation {
-    enqueueBuilding(input: EnqueueBuildingInput): Boolean!
+    clearQueue(input: ClearQueueInput): Boolean!
     dequeueBuilding(input: DequeueBuildingInput): Boolean!
+    enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }

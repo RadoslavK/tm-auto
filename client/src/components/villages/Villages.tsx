@@ -24,7 +24,7 @@ export const Villages: React.FunctionComponent = () => {
     setItems(navigationItems);
 
     return () => setItems([]);
-  });
+  }, [ data ]);
 
   if (loading) {
     return null;

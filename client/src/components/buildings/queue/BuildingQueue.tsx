@@ -1,17 +1,33 @@
-import { GetVillageBuildingQueue } from '*/graphql_operations/building.graphql';
+import { ClearQueue, GetBuildingSpots, GetQueuedBuildings } from '*/graphql_operations/building.graphql';
 import React, { useContext } from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { IGetVillageBuildingQueueQuery, IGetVillageBuildingQueueQueryVariables } from '../../../_types/graphql';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import {
+  IClearQueueMutation, IClearQueueMutationVariables,
+  IGetQueuedBuildingsQuery,
+  IGetQueuedBuildingsQueryVariables,
+} from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { QueuedBuilding } from './QueuedBuilding';
 
 const BuildingQueue: React.FunctionComponent = () => {
   const villageContext = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetVillageBuildingQueueQuery, IGetVillageBuildingQueueQueryVariables>(GetVillageBuildingQueue, {
+  const { data, loading } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
     variables: {
       villageId: villageContext.villageId,
     },
     fetchPolicy: 'network-only',
+  });
+
+  const clearQueue = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
+    variables: {
+      input: {
+        villageId: villageContext.villageId,
+      },
+    },
+    refetchQueries: [
+      { query: GetBuildingSpots, variables: { villageId: villageContext.villageId  } },
+      { query: GetQueuedBuildings, variables: { villageId: villageContext.villageId  } },
+    ],
   });
 
   if (loading) {
@@ -19,13 +35,20 @@ const BuildingQueue: React.FunctionComponent = () => {
   }
 
   const {
-    buildingQueue,
+    queuedBuildings,
   } = data;
 
   return (
     <div>
-      {buildingQueue.map((queuedBuilding, index) => (
-        <QueuedBuilding key={index} queuedBuilding={queuedBuilding}/>
+      <button onClick={async e => {
+        e.preventDefault();
+
+        await clearQueue();
+      }}>
+        Clear queue
+      </button>
+      {queuedBuildings.map((building, index) => (
+        <QueuedBuilding key={index} building={building}/>
       ))}
     </div>
   )

@@ -1,6 +1,6 @@
 query GetVillages {
     villages {
-        id,
+        id
         name
     }
 }

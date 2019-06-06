@@ -1,18 +1,18 @@
-import { IVillage } from '../_types/graphql';
+import { Village } from '../_models/village';
 
 export class VillageService {
-  private _villages: readonly IVillage[] = [];
+  private _villages: readonly Village[] = [];
 
-  public hasVillage(villageId: string): boolean {
+  public hasVillage(villageId: number): boolean {
     const result = this._villages.find(village => village.id === villageId);
     return !!result;
   }
 
-  public setVillages(villages: readonly IVillage[]): void {
+  public setVillages(villages: readonly Village[]): void {
     this._villages = villages;
   }
 
-  public getVillages(): readonly IVillage[] {
+  public getVillages(): readonly Village[] {
     return this._villages;
   }
 }

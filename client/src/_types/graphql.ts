@@ -8,41 +8,58 @@ export type Scalars = {
   Float: number;
 };
 
-export type IBuilding = {
-  readonly level: IBuildingLevel;
+export type IBuildingInProgress = {
+  readonly level: Scalars["Int"];
+  readonly timer: Scalars["Int"];
   readonly type: Scalars["Int"];
 };
 
 export type IBuildingLevel = {
   readonly actual: Scalars["Int"];
-  readonly ongoing: Scalars["Int"];
+  readonly inProgress: Scalars["Int"];
+  readonly queued: Scalars["Int"];
+};
+
+export type IBuildingSpot = {
+  readonly fieldId: Scalars["Int"];
+  readonly level: IBuildingLevel;
+  readonly type: Scalars["Int"];
+};
+
+export type IClearQueueInput = {
+  readonly villageId: Scalars["ID"];
 };
 
 export type IDequeueBuildingInput = {
   readonly villageId: Scalars["ID"];
-  readonly fieldId: Scalars["Int"];
+  readonly queueIndex: Scalars["Int"];
 };
 
 export type IEnqueueBuildingInput = {
-  readonly buildingType: Scalars["Int"];
   readonly fieldId: Scalars["Int"];
+  readonly type: Scalars["Int"];
   readonly villageId: Scalars["ID"];
 };
 
 export type IMutation = {
-  readonly enqueueBuilding: Scalars["Boolean"];
+  readonly clearQueue: Scalars["Boolean"];
   readonly dequeueBuilding: Scalars["Boolean"];
+  readonly enqueueBuilding: Scalars["Boolean"];
   readonly startBot: Scalars["Boolean"];
   readonly stopBot: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
 };
 
-export type IMutationEnqueueBuildingArgs = {
-  input?: Maybe<IEnqueueBuildingInput>;
+export type IMutationClearQueueArgs = {
+  input?: Maybe<IClearQueueInput>;
 };
 
 export type IMutationDequeueBuildingArgs = {
   input?: Maybe<IDequeueBuildingInput>;
+};
+
+export type IMutationEnqueueBuildingArgs = {
+  input?: Maybe<IEnqueueBuildingInput>;
 };
 
 export type IMutationSignInArgs = {
@@ -50,19 +67,24 @@ export type IMutationSignInArgs = {
 };
 
 export type IQuery = {
-  readonly buildings: ReadonlyArray<IBuilding>;
-  readonly buildingQueue: ReadonlyArray<IQueuedBuilding>;
+  readonly buildingSpots: ReadonlyArray<IBuildingSpot>;
+  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
+  readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
   readonly villages: ReadonlyArray<IVillage>;
   readonly villageExists: Scalars["Boolean"];
 };
 
-export type IQueryBuildingsArgs = {
+export type IQueryBuildingSpotsArgs = {
   villageId: Scalars["ID"];
 };
 
-export type IQueryBuildingQueueArgs = {
+export type IQueryBuildingsInProgressArgs = {
+  villageId: Scalars["ID"];
+};
+
+export type IQueryQueuedBuildingsArgs = {
   villageId: Scalars["ID"];
 };
 
@@ -72,7 +94,8 @@ export type IQueryVillageExistsArgs = {
 
 export type IQueuedBuilding = {
   readonly fieldId: Scalars["Int"];
-  readonly buildingType: Scalars["Int"];
+  readonly type: Scalars["Int"];
+  readonly queueIndex: Scalars["Int"];
 };
 
 export type ISignInInput = {
@@ -91,27 +114,55 @@ export type IVillage = {
   readonly id: Scalars["ID"];
   readonly name: Scalars["String"];
 };
-export type IGetVillageBuildingsQueryVariables = {
+export type IGetBuildingSpotsQueryVariables = {
   villageId: Scalars["ID"];
 };
 
-export type IGetVillageBuildingsQuery = {
-  readonly buildings: ReadonlyArray<
-    Pick<IBuilding, "type"> & {
-      readonly level: Pick<IBuildingLevel, "actual" | "ongoing">;
+export type IGetBuildingSpotsQuery = {
+  readonly buildingSpots: ReadonlyArray<
+    Pick<IBuildingSpot, "fieldId" | "type"> & {
+      readonly level: Pick<IBuildingLevel, "actual" | "inProgress" | "queued">;
     }
   >;
 };
 
-export type IGetVillageBuildingQueueQueryVariables = {
+export type IGetQueuedBuildingsQueryVariables = {
   villageId: Scalars["ID"];
 };
 
-export type IGetVillageBuildingQueueQuery = {
-  readonly buildingQueue: ReadonlyArray<
-    Pick<IQueuedBuilding, "buildingType" | "fieldId">
+export type IGetQueuedBuildingsQuery = {
+  readonly queuedBuildings: ReadonlyArray<
+    Pick<IQueuedBuilding, "fieldId" | "type" | "queueIndex">
   >;
 };
+
+export type IGetBuildingsInProgressQueryVariables = {
+  villageId: Scalars["ID"];
+};
+
+export type IGetBuildingsInProgressQuery = {
+  readonly buildingsInProgress: ReadonlyArray<
+    Pick<IBuildingInProgress, "level" | "timer" | "type">
+  >;
+};
+
+export type IClearQueueMutationVariables = {
+  input?: Maybe<IClearQueueInput>;
+};
+
+export type IClearQueueMutation = Pick<IMutation, "clearQueue">;
+
+export type IEnqueueBuildingMutationVariables = {
+  input?: Maybe<IEnqueueBuildingInput>;
+};
+
+export type IEnqueueBuildingMutation = Pick<IMutation, "enqueueBuilding">;
+
+export type IDequeueBuildingMutationVariables = {
+  input?: Maybe<IDequeueBuildingInput>;
+};
+
+export type IDequeueBuildingMutation = Pick<IMutation, "dequeueBuilding">;
 
 export type IIsSignedInQueryVariables = {};
 

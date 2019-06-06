@@ -1,16 +1,39 @@
-query GetVillageBuildings($villageId: ID!) {
-    buildings(villageId: $villageId) {
-        type
+query GetBuildingSpots($villageId: ID!) {
+    buildingSpots(villageId: $villageId) {
+        fieldId
         level {
             actual
-            ongoing
+            inProgress
+            queued
         }
+        type
     }
 }
 
-query GetVillageBuildingQueue($villageId: ID!) {
-    buildingQueue(villageId: $villageId) {
-        buildingType
+query GetQueuedBuildings($villageId: ID!) {
+    queuedBuildings(villageId: $villageId) {
         fieldId
+        type
+        queueIndex
     }
+}
+
+query GetBuildingsInProgress($villageId: ID!) {
+    buildingsInProgress(villageId: $villageId) {
+        level
+        timer
+        type
+    }
+}
+
+mutation ClearQueue($input: ClearQueueInput) {
+    clearQueue(input: $input)
+}
+
+mutation EnqueueBuilding($input: EnqueueBuildingInput) {
+    enqueueBuilding(input: $input)
+}
+
+mutation DequeueBuilding($input: DequeueBuildingInput) {
+    dequeueBuilding(input: $input)
 }

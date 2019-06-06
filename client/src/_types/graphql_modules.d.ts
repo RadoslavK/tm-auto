@@ -1,8 +1,12 @@
 declare module "*/graphql_operations/building.graphql" {
   import { DocumentNode } from "graphql";
   const defaultDocument: DocumentNode;
-  export const GetVillageBuildings: DocumentNode;
-  export const GetVillageBuildingQueue: DocumentNode;
+  export const GetBuildingSpots: DocumentNode;
+  export const GetQueuedBuildings: DocumentNode;
+  export const GetBuildingsInProgress: DocumentNode;
+  export const ClearQueue: DocumentNode;
+  export const EnqueueBuilding: DocumentNode;
+  export const DequeueBuilding: DocumentNode;
 
   export default defaultDocument;
 }
