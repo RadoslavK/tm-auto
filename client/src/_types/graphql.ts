@@ -51,7 +51,7 @@ export type IMutation = {
 };
 
 export type IMutationClearQueueArgs = {
-  input?: Maybe<IClearQueueInput>;
+  villageId: Scalars["Int"];
 };
 
 export type IMutationDequeueBuildingArgs = {
@@ -168,7 +168,7 @@ export type IGetAvailableNewBuildingsQuery = {
 };
 
 export type IClearQueueMutationVariables = {
-  input?: Maybe<IClearQueueInput>;
+  villageId: Scalars["Int"];
 };
 
 export type IClearQueueMutation = Pick<IMutation, "clearQueue">;

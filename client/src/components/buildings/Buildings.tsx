@@ -7,7 +7,15 @@ import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
 const useStyles = makeStyles({
   buildings: {
     display: 'flex',
-    flexDirection: 'column',
+  },
+  buildingSpots: {
+    flex: 3,
+  },
+  queuedBuildings: {
+    flex: 1,
+  },
+  buildingsOngoing: {
+    flex: 1,
   },
 });
 
@@ -16,9 +24,9 @@ const Buildings: React.FunctionComponent = () => {
 
   return (
     <div className={classes.buildings}>
-      <BuildingSpots />
-      <BuildingsInProgress />
-      <BuildingQueue />
+      <BuildingSpots className={classes.buildingSpots} />
+      <BuildingsInProgress className={classes.buildingsOngoing} />
+      <BuildingQueue className={classes.queuedBuildings} />
     </div>
   );
 };

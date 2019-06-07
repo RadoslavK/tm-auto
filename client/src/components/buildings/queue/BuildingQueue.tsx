@@ -1,4 +1,5 @@
 import { ClearQueue, GetBuildingSpots, GetQueuedBuildings } from '*/graphql_operations/building.graphql';
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import {
@@ -9,24 +10,30 @@ import {
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { QueuedBuilding } from './QueuedBuilding';
 
-const BuildingQueue: React.FunctionComponent = () => {
-  const villageContext = useContext<IVillageContext>(VillageContext);
+interface IProps {
+  readonly className: string;
+}
+
+const propTypes: PropTypesShape<IProps> = {
+  className: PropTypes.string.isRequired,
+};
+
+const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
+  const {
+    className
+  } = props;
+
+  const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
-    variables: {
-      villageId: villageContext.villageId,
-    },
+    variables: { villageId },
     fetchPolicy: 'network-only',
   });
 
   const clearQueue = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
-    variables: {
-      input: {
-        villageId: villageContext.villageId,
-      },
-    },
+    variables: {villageId },
     refetchQueries: [
-      { query: GetBuildingSpots, variables: { villageId: villageContext.villageId  } },
-      { query: GetQueuedBuildings, variables: { villageId: villageContext.villageId  } },
+      { query: GetBuildingSpots, variables: { villageId } },
+      { query: GetQueuedBuildings, variables: { villageId } },
     ],
   });
 
@@ -39,7 +46,7 @@ const BuildingQueue: React.FunctionComponent = () => {
   } = data;
 
   return (
-    <div>
+    <div className={className}>
       <button onClick={async e => {
         e.preventDefault();
 
@@ -55,5 +62,6 @@ const BuildingQueue: React.FunctionComponent = () => {
 };
 
 BuildingQueue.displayName = 'BuildingQueue';
+BuildingQueue.propTypes = propTypes;
 
 export { BuildingQueue };

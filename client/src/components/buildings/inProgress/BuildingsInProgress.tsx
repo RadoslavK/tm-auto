@@ -1,17 +1,29 @@
 import { GetBuildingsInProgress } from '*/graphql_operations/building.graphql';
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingInProgress } from './BuildingInProgress';
 
-const BuildingsInProgress: React.FunctionComponent = () => {
-  const villageContext = useContext<IVillageContext>(VillageContext);
+interface IProps {
+  readonly className: string;
+}
+
+const propTypes: PropTypesShape<IProps> = {
+  className: PropTypes.string.isRequired,
+};
+
+
+const BuildingsInProgress: React.FunctionComponent<IProps> = (props) => {
+  const {
+    className,
+  } = props;
+
+  const { villageId }= useContext<IVillageContext>(VillageContext);
 
   const { data, loading } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, {
-    variables: {
-      villageId: villageContext.villageId,
-    },
+    variables: { villageId },
     fetchPolicy: 'network-only',
   });
 
@@ -20,7 +32,7 @@ const BuildingsInProgress: React.FunctionComponent = () => {
   }
 
   return (
-    <div>
+    <div className={className}>
       {data.buildingsInProgress.map((building, index) => (
         <BuildingInProgress key={index} building={building} />
       ))}
@@ -29,5 +41,6 @@ const BuildingsInProgress: React.FunctionComponent = () => {
 };
 
 BuildingsInProgress.displayName = 'BuildingsInProgress';
+BuildingsInProgress.propTypes = propTypes;
 
 export { BuildingsInProgress };

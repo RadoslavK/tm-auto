@@ -45,7 +45,7 @@ export const buildingResolvers: IResolvers = {
   },
   Mutation: {
     clearQueue: (_, args, context) => {
-      context.buildingsService.clearQueue(+args.input.villageId);
+      context.buildingsService.clearQueue(args.villageId);
       return true;
     },
 

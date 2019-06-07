@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import {
@@ -7,8 +9,29 @@ import {
 } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingSpot } from './BuildingSpot';
+import classNames = require('classnames');
 
-const BuildingSpots: React.FunctionComponent = () => {
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+});
+
+interface IProps {
+  readonly className: string;
+}
+
+const propTypes: PropTypesShape<IProps> = {
+  className: PropTypes.string.isRequired,
+};
+
+const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
+  const {
+    className,
+  } = props;
+
+  const classes = useStyles({});
   const villageContext = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: {
@@ -24,7 +47,7 @@ const BuildingSpots: React.FunctionComponent = () => {
   const { buildingSpots } = data;
 
   return (
-    <div>
+    <div className={classNames(className, classes.root)}>
       {buildingSpots.map((building, index) => (
         <BuildingSpot key={index} building={building} />
       ))}
@@ -33,5 +56,6 @@ const BuildingSpots: React.FunctionComponent = () => {
 };
 
 BuildingSpots.displayName = 'BuildingSpots';
+BuildingSpots.propTypes = propTypes;
 
 export { BuildingSpots };

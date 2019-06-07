@@ -44,7 +44,7 @@ input DequeueBuildingInput {
 }
 
 extend type Mutation {
-    clearQueue(input: ClearQueueInput): Boolean!
+    clearQueue(villageId: Int!): Boolean!
     dequeueBuilding(input: DequeueBuildingInput): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }

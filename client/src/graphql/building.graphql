@@ -34,8 +34,8 @@ query GetAvailableNewBuildings($villageId: Int!) {
     }
 }
 
-mutation ClearQueue($input: ClearQueueInput) {
-    clearQueue(input: $input)
+mutation ClearQueue($villageId: Int!) {
+    clearQueue(villageId: $villageId)
 }
 
 mutation EnqueueBuilding($input: EnqueueBuildingInput) {

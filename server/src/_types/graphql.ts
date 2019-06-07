@@ -58,7 +58,7 @@ export type IMutation = {
 };
 
 export type IMutationClearQueueArgs = {
-  input?: Maybe<IClearQueueInput>;
+  villageId: Scalars["Int"];
 };
 
 export type IMutationDequeueBuildingArgs = {
@@ -218,10 +218,10 @@ export type IResolversTypes = {
   Boolean: Scalars["Boolean"];
   Village: IVillage;
   Mutation: {};
-  ClearQueueInput: IClearQueueInput;
   DequeueBuildingInput: IDequeueBuildingInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
+  ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
 };
 
