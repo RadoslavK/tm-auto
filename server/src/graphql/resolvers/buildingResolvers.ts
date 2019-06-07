@@ -1,5 +1,5 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { IBuildingSpot, IResolvers } from '../../_types/graphql';
+import { IBuildingSpot, IQueuedBuilding, IResolvers } from '../../_types/graphql';
 import { buildingNames } from '../../constants/buildingNames';
 
 export const buildingResolvers: IResolvers = {
@@ -10,7 +10,7 @@ export const buildingResolvers: IResolvers = {
       const queue = context.buildingsService.getBuildingQueue(villageId);
       const inProgress = context.buildingsService.getBuildingsInProgress(villageId);
 
-      return spots.map((b, index): IBuildingSpot => {
+      const normalizedSpots = spots.map((b, index): IBuildingSpot => {
         const queued = queue.buildings().filter(bb => bb.fieldId === index + 1);
 
         return {
@@ -23,17 +23,30 @@ export const buildingResolvers: IResolvers = {
           },
         };
       });
+
+      return {
+        infrastructure: normalizedSpots.filter(s => s.type > BuildingType.Crop),
+        resources: {
+          wood: normalizedSpots.filter(s => s.type === BuildingType.Wood),
+          clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
+          iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
+          crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
+        }
+      }
     },
 
-    queuedBuildings: (_, args, context) => context.buildingsService
-      .getBuildingQueue(args.villageId)
-      .buildings()
-      .map((b, index) => ({
-        ...b,
-        queueIndex: index,
-      })),
+    queuedBuildings: (_, args, context) => {
+      return context.buildingsService
+        .getBuildingQueue(args.villageId)
+        .buildings()
+        .map((b, index): IQueuedBuilding => ({
+          name: buildingNames[b.type],
+          level: b.level,
+          queueIndex: index,
+        }))
+    },
 
-    buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(+args.villageId),
+    buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(args.villageId),
 
     availableNewBuildings: (_, args, context) => {
       return [

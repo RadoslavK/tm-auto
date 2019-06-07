@@ -1,4 +1,5 @@
 import { ClearQueue, GetBuildingSpots, GetQueuedBuildings } from '*/graphql_operations/building.graphql';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
@@ -18,10 +19,19 @@ const propTypes: PropTypesShape<IProps> = {
   className: PropTypes.string.isRequired,
 };
 
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+  }
+});
+
 const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
   const {
     className
   } = props;
+
+  const classes = useStyles({});
 
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
@@ -45,18 +55,18 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
     queuedBuildings,
   } = data;
 
+  const onClear = async () => await clearQueue();
+
   return (
     <div className={className}>
-      <button onClick={async e => {
-        e.preventDefault();
-
-        await clearQueue();
-      }}>
+      <button onClick={onClear}>
         Clear queue
       </button>
-      {queuedBuildings.map((building, index) => (
-        <QueuedBuilding key={index} building={building}/>
-      ))}
+      <div className={classes.root}>
+        {queuedBuildings.map((building, index) => (
+          <QueuedBuilding key={index} building={building}/>
+        ))}
+      </div>
     </div>
   )
 };

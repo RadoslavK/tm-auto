@@ -48,12 +48,18 @@ export class BuildingsService {
       villageId,
     } = input;
 
+    const buildings = this.getBuildingSpots(villageId);
+    const queue = this.getBuildingQueue(villageId);
+    const queued = queue.buildings().filter(b => b.fieldId === fieldId).length;
+    const level = buildings[fieldId - 1].level + queued + 1;
+
     const building: QueuedBuilding = new QueuedBuilding({
       fieldId,
+      level,
       type,
     });
 
-    const queue = this.getBuildingQueue(villageId);
+
     queue.enqueue(building);
   }
 

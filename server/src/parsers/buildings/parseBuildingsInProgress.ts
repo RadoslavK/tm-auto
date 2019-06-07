@@ -20,7 +20,7 @@ export const parseBuildingsInProgress = async (page: Page): Promise<readonly Bui
   }));
 
   let match;
-  const re = /{"stufe":(.*),"gid":"(.*)","aid":"(.*)"}/g;
+  const re = /{"stufe":(.*?),"gid":"(.*?)","aid":"(.*?)"}/g;
 
   do {
     match = re.exec(content);

@@ -26,6 +26,11 @@ export type IBuildingSpot = {
   readonly type: Scalars["Int"];
 };
 
+export type IBuildingSpots = {
+  readonly infrastructure: ReadonlyArray<IBuildingSpot>;
+  readonly resources: IResourceFields;
+};
+
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
 };
@@ -73,7 +78,7 @@ export type INewBuildingInfo = {
 };
 
 export type IQuery = {
-  readonly buildingSpots: ReadonlyArray<IBuildingSpot>;
+  readonly buildingSpots: IBuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
@@ -104,9 +109,16 @@ export type IQueryVillageExistsArgs = {
 };
 
 export type IQueuedBuilding = {
-  readonly fieldId: Scalars["Int"];
-  readonly type: Scalars["Int"];
+  readonly level: Scalars["Int"];
+  readonly name: Scalars["String"];
   readonly queueIndex: Scalars["Int"];
+};
+
+export type IResourceFields = {
+  readonly wood: ReadonlyArray<IBuildingSpot>;
+  readonly clay: ReadonlyArray<IBuildingSpot>;
+  readonly iron: ReadonlyArray<IBuildingSpot>;
+  readonly crop: ReadonlyArray<IBuildingSpot>;
 };
 
 export type ISignInInput = {
@@ -125,16 +137,27 @@ export type IVillage = {
   readonly id: Scalars["Int"];
   readonly name: Scalars["String"];
 };
+export type IBuildingSpotFragmentFragment = Pick<
+  IBuildingSpot,
+  "fieldId" | "type"
+> & {
+  readonly level: Pick<IBuildingLevel, "actual" | "inProgress" | "queued">;
+};
+
 export type IGetBuildingSpotsQueryVariables = {
   villageId: Scalars["Int"];
 };
 
 export type IGetBuildingSpotsQuery = {
-  readonly buildingSpots: ReadonlyArray<
-    Pick<IBuildingSpot, "fieldId" | "type"> & {
-      readonly level: Pick<IBuildingLevel, "actual" | "inProgress" | "queued">;
-    }
-  >;
+  readonly buildingSpots: {
+    readonly infrastructure: ReadonlyArray<IBuildingSpotFragmentFragment>;
+    readonly resources: {
+      readonly wood: ReadonlyArray<IBuildingSpotFragmentFragment>;
+      readonly clay: ReadonlyArray<IBuildingSpotFragmentFragment>;
+      readonly iron: ReadonlyArray<IBuildingSpotFragmentFragment>;
+      readonly crop: ReadonlyArray<IBuildingSpotFragmentFragment>;
+    };
+  };
 };
 
 export type IGetQueuedBuildingsQueryVariables = {
@@ -143,7 +166,7 @@ export type IGetQueuedBuildingsQueryVariables = {
 
 export type IGetQueuedBuildingsQuery = {
   readonly queuedBuildings: ReadonlyArray<
-    Pick<IQueuedBuilding, "fieldId" | "type" | "queueIndex">
+    Pick<IQueuedBuilding, "level" | "name" | "queueIndex">
   >;
 };
 

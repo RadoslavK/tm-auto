@@ -2,7 +2,6 @@ import { DequeueBuilding, GetBuildingSpots, GetQueuedBuildings } from '*/graphql
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
-import { buildingNames } from '../../../../../server/src/constants/buildingNames';
 import { IDequeueBuildingMutation, IDequeueBuildingMutationVariables, IQueuedBuilding } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
@@ -12,8 +11,8 @@ interface IProps {
 
 const propTypes: PropTypesShape<IProps> = {
   building: PropTypes.shape({
-    fieldId: PropTypes.number.isRequired,
-    type: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    level: PropTypes.number.isRequired,
     queueIndex: PropTypes.number.isRequired,
   }).isRequired,
 };
@@ -23,28 +22,27 @@ const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
     building,
   } = props;
 
-  const villageContext = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useContext<IVillageContext>(VillageContext);
 
   const dequeue = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, {
     variables: {
       input: {
-        villageId: villageContext.villageId,
+        villageId,
         queueIndex: building.queueIndex,
       },
     },
     refetchQueries: [
-      { query: GetBuildingSpots, variables: { villageId: villageContext.villageId } },
-      { query: GetQueuedBuildings, variables: { villageId: villageContext.villageId } },
+      { query: GetBuildingSpots, variables: { villageId } },
+      { query: GetQueuedBuildings, variables: { villageId } },
     ],
   });
 
-  return (
-    <button onClick={async (e) => {
-      e.preventDefault();
+  const onDequeue = async () => await dequeue();
 
-      await dequeue();
-    }}>
-      [{props.building.fieldId}]: {buildingNames[props.building.type]}
+  return (
+    <button onClick={onDequeue}>
+      <div>{building.name}</div>
+      <span>Level {building.level}</span>
     </button>
   );
 };

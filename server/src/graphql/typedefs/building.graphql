@@ -10,9 +10,21 @@ type BuildingSpot {
     type: Int!
 }
 
+type ResourceFields {
+    wood: [BuildingSpot!]!
+    clay: [BuildingSpot!]!
+    iron: [BuildingSpot!]!
+    crop: [BuildingSpot!]!
+}
+
+type BuildingSpots {
+    infrastructure: [BuildingSpot!]!
+    resources: ResourceFields!
+}
+
 type QueuedBuilding {
-    fieldId: Int!
-    type: Int!
+    level: Int!
+    name: String!
     queueIndex: Int!
 }
 
@@ -23,7 +35,7 @@ type BuildingInProgress {
 }
 
 extend type Query {
-    buildingSpots(villageId: Int!): [BuildingSpot!]!
+    buildingSpots(villageId: Int!): BuildingSpots!
     buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
     queuedBuildings(villageId: Int!): [QueuedBuilding!]!
 }
@@ -58,4 +70,3 @@ type NewBuildingInfo {
 extend type Query {
     availableNewBuildings(villageId: Int!): [NewBuildingInfo!]!
 }
-

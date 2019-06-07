@@ -1,19 +1,39 @@
+fragment BuildingSpotFragment on BuildingSpot {
+    fieldId
+    level {
+        actual
+        inProgress
+        queued
+    }
+    type
+}
+
 query GetBuildingSpots($villageId: Int!) {
     buildingSpots(villageId: $villageId) {
-        fieldId
-        level {
-            actual
-            inProgress
-            queued
+        infrastructure {
+            ...BuildingSpotFragment
         }
-        type
+        resources {
+            wood {
+                ...BuildingSpotFragment
+            }
+            clay {
+                ...BuildingSpotFragment
+            }
+            iron {
+                ...BuildingSpotFragment
+            }
+            crop {
+                ...BuildingSpotFragment
+            }
+        }
     }
 }
 
 query GetQueuedBuildings($villageId: Int!) {
     queuedBuildings(villageId: $villageId) {
-        fieldId
-        type
+        level
+        name
         queueIndex
     }
 }

@@ -32,6 +32,12 @@ export type IBuildingSpot = {
   readonly type: Scalars["Int"];
 };
 
+export type IBuildingSpots = {
+  __typename?: "BuildingSpots";
+  readonly infrastructure: ReadonlyArray<IBuildingSpot>;
+  readonly resources: IResourceFields;
+};
+
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
 };
@@ -82,7 +88,7 @@ export type INewBuildingInfo = {
 
 export type IQuery = {
   __typename?: "Query";
-  readonly buildingSpots: ReadonlyArray<IBuildingSpot>;
+  readonly buildingSpots: IBuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
@@ -114,9 +120,17 @@ export type IQueryVillageExistsArgs = {
 
 export type IQueuedBuilding = {
   __typename?: "QueuedBuilding";
-  readonly fieldId: Scalars["Int"];
-  readonly type: Scalars["Int"];
+  readonly level: Scalars["Int"];
+  readonly name: Scalars["String"];
   readonly queueIndex: Scalars["Int"];
+};
+
+export type IResourceFields = {
+  __typename?: "ResourceFields";
+  readonly wood: ReadonlyArray<IBuildingSpot>;
+  readonly clay: ReadonlyArray<IBuildingSpot>;
+  readonly iron: ReadonlyArray<IBuildingSpot>;
+  readonly crop: ReadonlyArray<IBuildingSpot>;
 };
 
 export type ISignInInput = {
@@ -209,12 +223,14 @@ export type DirectiveResolverFn<
 export type IResolversTypes = {
   Query: {};
   Int: Scalars["Int"];
+  BuildingSpots: IBuildingSpots;
   BuildingSpot: IBuildingSpot;
   BuildingLevel: IBuildingLevel;
+  ResourceFields: IResourceFields;
   BuildingInProgress: IBuildingInProgress;
   QueuedBuilding: IQueuedBuilding;
-  NewBuildingInfo: INewBuildingInfo;
   String: Scalars["String"];
+  NewBuildingInfo: INewBuildingInfo;
   Boolean: Scalars["Boolean"];
   Village: IVillage;
   Mutation: {};
@@ -250,6 +266,22 @@ export type IBuildingSpotResolvers<
   fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   level?: Resolver<IResolversTypes["BuildingLevel"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
+export type IBuildingSpotsResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["BuildingSpots"]
+> = {
+  infrastructure?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    ParentType,
+    ContextType
+  >;
+  resources?: Resolver<
+    IResolversTypes["ResourceFields"],
+    ParentType,
+    ContextType
+  >;
 };
 
 export type IMutationResolvers<
@@ -298,7 +330,7 @@ export type IQueryResolvers<
   ParentType = IResolversTypes["Query"]
 > = {
   buildingSpots?: Resolver<
-    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    IResolversTypes["BuildingSpots"],
     ParentType,
     ContextType,
     IQueryBuildingSpotsArgs
@@ -340,9 +372,35 @@ export type IQueuedBuildingResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["QueuedBuilding"]
 > = {
-  fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   queueIndex?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
+export type IResourceFieldsResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["ResourceFields"]
+> = {
+  wood?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    ParentType,
+    ContextType
+  >;
+  clay?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    ParentType,
+    ContextType
+  >;
+  iron?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    ParentType,
+    ContextType
+  >;
+  crop?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingSpot"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type IUserAccountResolvers<
@@ -366,10 +424,12 @@ export type IResolvers<ContextType = IGraphQLContext> = {
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
+  BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   NewBuildingInfo?: INewBuildingInfoResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
+  ResourceFields?: IResourceFieldsResolvers<ContextType>;
   UserAccount?: IUserAccountResolvers<ContextType>;
   Village?: IVillageResolvers<ContextType>;
 };
