@@ -1,6 +1,5 @@
 import { TravianPath } from '../_enums/TravianPath';
 import { BuildingSpot } from '../_models/buildings/buildingSpot';
-import { Village } from '../_models/village';
 import { context } from '../graphql/context';
 import { parseBuildingsInProgress } from '../parsers/buildings/parseBuildingsInProgress';
 import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
