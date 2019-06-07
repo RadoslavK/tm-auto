@@ -3,9 +3,9 @@ import { IBuildingSpot, IResolvers } from '../../_types/graphql';
 export const buildingResolvers: IResolvers = {
   Query: {
     buildingSpots: (_, args, context) => {
-      const villageId = +args.villageId;
+      const { villageId } = args;
       const spots = context.buildingsService.getBuildingSpots(villageId);
-      const queued = context.buildingsService.getBuildingQueue(villageId);
+      const queue = context.buildingsService.getBuildingQueue(villageId);
       const inProgress = context.buildingsService.getBuildingsInProgress(villageId);
 
       return spots.map((b, index): IBuildingSpot => ({
@@ -14,13 +14,14 @@ export const buildingResolvers: IResolvers = {
         level: {
           actual: b.level,
           inProgress: inProgress.filter(bb => bb.fieldId === index + 1).length,
-          queued: queued.filter(bb => bb.fieldId === index + 1).length,
+          queued: queue.buildings().filter(bb => bb.fieldId === index + 1).length,
         },
       }));
     },
 
     queuedBuildings: (_, args, context) => context.buildingsService
-      .getBuildingQueue(+args.villageId)
+      .getBuildingQueue(args.villageId)
+      .buildings()
       .map((b, index) => ({
         ...b,
         queueIndex: index,

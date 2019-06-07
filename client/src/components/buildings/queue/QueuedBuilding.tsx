@@ -2,7 +2,7 @@ import { DequeueBuilding, GetBuildingSpots, GetQueuedBuildings } from '*/graphql
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
-import { buildingNames } from '../../../../../server/src/controller/constants/buildingNames';
+import { buildingNames } from '../../../../../server/src/constants/buildingNames';
 import { IDequeueBuildingMutation, IDequeueBuildingMutationVariables, IQueuedBuilding } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 

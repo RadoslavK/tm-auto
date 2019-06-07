@@ -27,18 +27,18 @@ export type IBuildingSpot = {
 };
 
 export type IClearQueueInput = {
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IDequeueBuildingInput = {
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
 };
 
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
   readonly type: Scalars["Int"];
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IMutation = {
@@ -77,19 +77,19 @@ export type IQuery = {
 };
 
 export type IQueryBuildingSpotsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryBuildingsInProgressArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryQueuedBuildingsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryVillageExistsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueuedBuilding = {
@@ -111,11 +111,11 @@ export type IUserAccount = {
 };
 
 export type IVillage = {
-  readonly id: Scalars["ID"];
+  readonly id: Scalars["Int"];
   readonly name: Scalars["String"];
 };
 export type IGetBuildingSpotsQueryVariables = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IGetBuildingSpotsQuery = {
@@ -127,7 +127,7 @@ export type IGetBuildingSpotsQuery = {
 };
 
 export type IGetQueuedBuildingsQueryVariables = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IGetQueuedBuildingsQuery = {
@@ -137,7 +137,7 @@ export type IGetQueuedBuildingsQuery = {
 };
 
 export type IGetBuildingsInProgressQueryVariables = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IGetBuildingsInProgressQuery = {
@@ -193,7 +193,7 @@ export type IGetVillagesQuery = {
 };
 
 export type IVillageExistsQueryVariables = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IVillageExistsQuery = Pick<IQuery, "villageExists">;

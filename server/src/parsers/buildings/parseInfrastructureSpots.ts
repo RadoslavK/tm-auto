@@ -1,7 +1,7 @@
 import { Page } from 'puppeteer';
 import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingSpot } from '../../_models/buildings/buildingSpot';
-import { isBuildingField } from '../../controller/actions/startBuilding';
+import { isBuildingField } from '../../controller/actions/build/startBuilding';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
 

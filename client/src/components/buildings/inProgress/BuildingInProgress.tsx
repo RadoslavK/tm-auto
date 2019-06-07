@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { buildingNames } from '../../../../../server/src/controller/constants/buildingNames';
+import { buildingNames } from '../../../../../server/src/constants/buildingNames';
 import { IBuildingInProgress } from '../../../_types/graphql';
 
 interface IProps {

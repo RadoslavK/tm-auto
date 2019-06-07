@@ -1,10 +1,14 @@
 import { GetVillages } from '*/graphql_operations/village.graphql';
 import React, { useContext, useEffect } from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { IGetVillagesQuery } from '../../_types/graphql';
 import { ISideMenuContext, SideMenuContext } from '../sideMenu/context/SideMenuContext';
 import { Village } from './Village';
+
+interface IVillageRouteParams {
+  readonly id: string;
+}
 
 export const Villages: React.FunctionComponent = () => {
   const { setItems } = useContext<ISideMenuContext>(SideMenuContext);
@@ -32,7 +36,7 @@ export const Villages: React.FunctionComponent = () => {
 
   return (
     <Switch>
-      <Route path='/villages/:id' render={(props) => <Village villageId={props.match.params.id} />} />
+      <Route path='/villages/:id' render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
       {navigationItems.length > 0 && (
         <Redirect to={navigationItems[0].path} />
       )}

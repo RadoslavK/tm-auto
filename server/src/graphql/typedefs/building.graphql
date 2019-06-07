@@ -23,23 +23,23 @@ type BuildingInProgress {
 }
 
 extend type Query {
-    buildingSpots(villageId: ID!): [BuildingSpot!]!
-    buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
-    queuedBuildings(villageId: ID!): [QueuedBuilding!]!
+    buildingSpots(villageId: Int!): [BuildingSpot!]!
+    buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
+    queuedBuildings(villageId: Int!): [QueuedBuilding!]!
 }
 
 input ClearQueueInput {
-    villageId: ID!
+    villageId: Int!
 }
 
 input EnqueueBuildingInput {
     fieldId: Int!
     type: Int!
-    villageId: ID!
+    villageId: Int!
 }
 
 input DequeueBuildingInput {
-    villageId: ID!
+    villageId: Int!
     queueIndex: Int!
 }
 

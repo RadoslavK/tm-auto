@@ -2,17 +2,23 @@ import { TravianPath } from '../_enums/TravianPath';
 import { BuildingSpot } from '../_models/buildings/buildingSpot';
 import { Village } from '../_models/village';
 import { context } from '../graphql/context';
-import { ensureLoggedIn } from './actions/ensureLoggedIn';
-import { getPage, killBrowser } from './browser/getPage';
-import { parseInfrastructureSpots } from '../parsers/buildings/parseInfrastructureSpots';
-import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
 import { parseBuildingsInProgress } from '../parsers/buildings/parseBuildingsInProgress';
+import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
+import { parseInfrastructureSpots } from '../parsers/buildings/parseInfrastructureSpots';
+import { log } from '../utils/log';
+import { startBuilding } from './actions/build/startBuilding';
+import { ensureLoggedIn } from './actions/ensureLoggedIn';
+import { initPlayerInfo } from './actions/init/initPlayerInfo';
+import { getPage, killBrowser } from '../browser/getPage';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
 
   public start = async () => {
-    await ensureLoggedIn();
+    const page = await getPage();
+
+    await ensureLoggedIn(page);
+    await initPlayerInfo(page);
 
     await this.build();
   };
@@ -36,7 +42,7 @@ export class Controller {
 
     const buildings: readonly BuildingSpot[] = fieldSpots.concat(infrastructureSpots);
 
-    if (context.villageService.getVillages().length == 0) {
+    if (context.villageService.villages().length == 0) {
       const villages: readonly Village[] = [
         new Village({
           id: 1,
@@ -49,19 +55,9 @@ export class Controller {
     context.buildingsService.setBuildingSpots(1, buildings);
     context.buildingsService.setBuildingsInProgress(1, buildingsInProgress);
 
-    // log('building...');
-    // await startBuilding({ fieldId: 7 });
+    await startBuilding(page);
 
     this._buildTimer = setTimeout(this.build, 20 * 1000);
     log('gonna build next in 20 seconds');
   };
 }
-
-const log = (message: string) => {
-  const now = new Date();
-  const hours = now.getHours() > 9 ? `${now.getHours()}` : `0${now.getHours()}`;
-  const mins = now.getMinutes() > 9 ? `${now.getMinutes()}` : `0${now.getMinutes()}`;
-  const sec = now.getSeconds() > 9 ? `${now.getSeconds()}` : `0${now.getSeconds()}`;
-  const time = `${hours}:${mins}:${sec}`;
-  console.log(`${time}: ${message}`);
-};

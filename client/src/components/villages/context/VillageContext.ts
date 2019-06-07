@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface IVillageContext {
-  readonly villageId: string;
+  readonly villageId: number;
 }
 
-export const VillageContext = React.createContext<IVillageContext>({ villageId: '' });
+export const VillageContext = React.createContext<IVillageContext>({ villageId: 0 });

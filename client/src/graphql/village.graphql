@@ -5,6 +5,6 @@ query GetVillages {
     }
 }
 
-query VillageExists($villageId: ID!) {
+query VillageExists($villageId: Int!) {
     villageExists(villageId: $villageId)
 }

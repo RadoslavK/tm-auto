@@ -9,7 +9,7 @@ import { Buildings } from '../buildings/Buildings';
 import { IVillageContext, VillageContext } from './context/VillageContext';
 
 interface IParams {
-  readonly villageId: string;
+  readonly villageId: number;
 }
 
 export const Village: React.FunctionComponent<IParams> = (props) => {

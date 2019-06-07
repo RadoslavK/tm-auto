@@ -1,5 +1,5 @@
 import { context } from '../../graphql/context';
-import { getPage } from '../browser/getPage';
+import { getPage } from '../../browser/getPage';
 
 export const ensureUrl = async (path: string, exact = false) => {
   const page = await getPage();

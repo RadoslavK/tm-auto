@@ -1,3 +1,4 @@
+import { Player } from '../_models/player';
 import { BuildingsService } from '../services/buildingsService';
 import { ControllerService } from '../services/controllerService';
 import { UserService } from '../services/userService';
@@ -8,6 +9,8 @@ export interface IGraphQLContext {
   readonly controllerService: ControllerService;
   readonly userService: UserService;
   readonly villageService: VillageService;
+
+  readonly player: Player;
 }
 
 export const context: IGraphQLContext = {
@@ -15,4 +18,6 @@ export const context: IGraphQLContext = {
   controllerService: new ControllerService(),
   userService: new UserService(),
   villageService: new VillageService(),
+
+  player: new Player(),
 };

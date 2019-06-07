@@ -33,18 +33,18 @@ export type IBuildingSpot = {
 };
 
 export type IClearQueueInput = {
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IDequeueBuildingInput = {
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
 };
 
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
   readonly type: Scalars["Int"];
-  readonly villageId: Scalars["ID"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IMutation = {
@@ -85,19 +85,19 @@ export type IQuery = {
 };
 
 export type IQueryBuildingSpotsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryBuildingsInProgressArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryQueuedBuildingsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueryVillageExistsArgs = {
-  villageId: Scalars["ID"];
+  villageId: Scalars["Int"];
 };
 
 export type IQueuedBuilding = {
@@ -122,7 +122,7 @@ export type IUserAccount = {
 
 export type IVillage = {
   __typename?: "Village";
-  readonly id: Scalars["ID"];
+  readonly id: Scalars["Int"];
   readonly name: Scalars["String"];
 };
 
@@ -196,9 +196,8 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: {};
-  ID: Scalars["ID"];
-  BuildingSpot: IBuildingSpot;
   Int: Scalars["Int"];
+  BuildingSpot: IBuildingSpot;
   BuildingLevel: IBuildingLevel;
   BuildingInProgress: IBuildingInProgress;
   QueuedBuilding: IQueuedBuilding;
@@ -331,7 +330,7 @@ export type IVillageResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Village"]
 > = {
-  id?: Resolver<IResolversTypes["ID"], ParentType, ContextType>;
+  id?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
 };
 
