@@ -1,6 +1,9 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { IBuildingSpot, IQueuedBuilding, IResolvers } from '../../_types/graphql';
+import { Cost } from '../../_models/misc/cost';
+import { IBuildingInProgress, IBuildingSpot, IQueuedBuilding, IResolvers } from '../../_types/graphql';
 import { buildingNames } from '../../constants/buildingNames';
+import { buildingInfos } from '../../index';
+import { formatTimeFromSeconds } from '../../utils/formatTime';
 
 export const buildingResolvers: IResolvers = {
   Query: {
@@ -35,18 +38,49 @@ export const buildingResolvers: IResolvers = {
       }
     },
 
-    queuedBuildings: (_, args, context) => {
-      return context.buildingsService
+    buildingQueue: (_, args, context) => {
+      let totalSeconds = 0;
+      const totalCost: Cost = new Cost();
+
+      const buildings = context.buildingsService
         .getBuildingQueue(args.villageId)
         .buildings()
-        .map((b, index): IQueuedBuilding => ({
-          name: buildingNames[b.type],
-          level: b.level,
-          queueIndex: index,
-        }))
+        .map((b, index): IQueuedBuilding => {
+          const buildingInfo = buildingInfos[b.type][b.level - 1];
+          totalSeconds += buildingInfo.buildingTime;
+          totalCost.add(buildingInfo.cost);
+
+          return {
+            cost: {
+              ...buildingInfo.cost.resources,
+              freeCrop: buildingInfo.cost.freeCrop,
+            },
+            level: b.level,
+            name: buildingNames[b.type],
+            queueIndex: index,
+            time: formatTimeFromSeconds(buildingInfo.buildingTime),
+          };
+        });
+
+      const totalBuildingTime = formatTimeFromSeconds(totalSeconds);
+
+      return {
+        buildings,
+        totalBuildingTime,
+        totalCost: {
+          ...totalCost.resources,
+          freeCrop: totalCost.freeCrop,
+        },
+      }
     },
 
-    buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(args.villageId),
+    buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(args.villageId).map((b): IBuildingInProgress => {
+      return {
+        level: b.level,
+        type: b.type,
+        time: formatTimeFromSeconds(b.timer),
+      };
+    }),
 
     availableNewBuildings: (_, args, context) => {
       return [

@@ -1,4 +1,4 @@
-import { IComparable } from '../../../_shared/_types/IComparable';
+import { IComparable } from '../../../../_shared/_types/IComparable';
 
 interface IParams {
   wood: number;
@@ -15,6 +15,13 @@ export class Resources implements IParams, IComparable<IParams> {
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
+  }
+
+  public add(addition: Resources) {
+    this.wood += addition.wood;
+    this.clay += addition.clay;
+    this.iron += addition.iron;
+    this.crop += addition.crop;
   }
 
   isGreaterOrEqualThan(other: Resources): boolean {

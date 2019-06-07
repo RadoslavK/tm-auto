@@ -10,7 +10,7 @@ export type Scalars = {
 
 export type IBuildingInProgress = {
   readonly level: Scalars["Int"];
-  readonly timer: Scalars["Int"];
+  readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
 };
 
@@ -18,6 +18,12 @@ export type IBuildingLevel = {
   readonly actual: Scalars["Int"];
   readonly inProgress: Scalars["Int"];
   readonly queued: Scalars["Int"];
+};
+
+export type IBuildingQueue = {
+  readonly buildings: ReadonlyArray<IQueuedBuilding>;
+  readonly totalCost: ICost;
+  readonly totalBuildingTime: Scalars["String"];
 };
 
 export type IBuildingSpot = {
@@ -33,6 +39,14 @@ export type IBuildingSpots = {
 
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
+};
+
+export type ICost = {
+  readonly wood: Scalars["Int"];
+  readonly clay: Scalars["Int"];
+  readonly iron: Scalars["Int"];
+  readonly crop: Scalars["Int"];
+  readonly freeCrop: Scalars["Int"];
 };
 
 export type IDequeueBuildingInput = {
@@ -80,7 +94,7 @@ export type INewBuildingInfo = {
 export type IQuery = {
   readonly buildingSpots: IBuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
-  readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
+  readonly buildingQueue: IBuildingQueue;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
@@ -96,7 +110,7 @@ export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryQueuedBuildingsArgs = {
+export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -109,8 +123,10 @@ export type IQueryVillageExistsArgs = {
 };
 
 export type IQueuedBuilding = {
+  readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
+  readonly time: Scalars["String"];
   readonly queueIndex: Scalars["Int"];
 };
 
@@ -144,6 +160,11 @@ export type IBuildingSpotFragmentFragment = Pick<
   readonly level: Pick<IBuildingLevel, "actual" | "inProgress" | "queued">;
 };
 
+export type ICostFragmentFragment = Pick<
+  ICost,
+  "wood" | "clay" | "iron" | "crop" | "freeCrop"
+>;
+
 export type IGetBuildingSpotsQueryVariables = {
   villageId: Scalars["Int"];
 };
@@ -165,9 +186,14 @@ export type IGetQueuedBuildingsQueryVariables = {
 };
 
 export type IGetQueuedBuildingsQuery = {
-  readonly queuedBuildings: ReadonlyArray<
-    Pick<IQueuedBuilding, "level" | "name" | "queueIndex">
-  >;
+  readonly buildingQueue: Pick<IBuildingQueue, "totalBuildingTime"> & {
+    readonly buildings: ReadonlyArray<
+      Pick<IQueuedBuilding, "level" | "name" | "time" | "queueIndex"> & {
+        readonly cost: ICostFragmentFragment;
+      }
+    >;
+    readonly totalCost: ICostFragmentFragment;
+  };
 };
 
 export type IGetBuildingsInProgressQueryVariables = {
@@ -176,7 +202,7 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 export type IGetBuildingsInProgressQuery = {
   readonly buildingsInProgress: ReadonlyArray<
-    Pick<IBuildingInProgress, "level" | "timer" | "type">
+    Pick<IBuildingInProgress, "level" | "time" | "type">
   >;
 };
 

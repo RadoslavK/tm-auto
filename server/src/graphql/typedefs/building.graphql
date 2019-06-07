@@ -22,22 +22,38 @@ type BuildingSpots {
     resources: ResourceFields!
 }
 
+type Cost {
+    wood: Int!
+    clay: Int!
+    iron: Int!
+    crop: Int!
+    freeCrop: Int!
+}
+
 type QueuedBuilding {
+    cost: Cost!
     level: Int!
     name: String!
+    time: String!
     queueIndex: Int!
 }
 
 type BuildingInProgress {
     level: Int!
-    timer: Int!
+    time: String!
     type: Int!
+}
+
+type BuildingQueue {
+    buildings: [QueuedBuilding!]!
+    totalCost: Cost!
+    totalBuildingTime: String!
 }
 
 extend type Query {
     buildingSpots(villageId: Int!): BuildingSpots!
     buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
-    queuedBuildings(villageId: Int!): [QueuedBuilding!]!
+    buildingQueue(villageId: Int!): BuildingQueue!
 }
 
 input ClearQueueInput {

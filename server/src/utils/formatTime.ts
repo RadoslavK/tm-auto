@@ -5,3 +5,8 @@ export const formatTime = (date: Date): string => {
 
   return `${hours}:${mins}:${sec}`;
 };
+
+export const formatTimeFromSeconds = (seconds: number): string => {
+  const time = new Date(0, 0, 0, 0, 0, seconds);
+  return formatTime(time);
+};

@@ -14,7 +14,7 @@ export type Scalars = {
 export type IBuildingInProgress = {
   __typename?: "BuildingInProgress";
   readonly level: Scalars["Int"];
-  readonly timer: Scalars["Int"];
+  readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
 };
 
@@ -23,6 +23,13 @@ export type IBuildingLevel = {
   readonly actual: Scalars["Int"];
   readonly inProgress: Scalars["Int"];
   readonly queued: Scalars["Int"];
+};
+
+export type IBuildingQueue = {
+  __typename?: "BuildingQueue";
+  readonly buildings: ReadonlyArray<IQueuedBuilding>;
+  readonly totalCost: ICost;
+  readonly totalBuildingTime: Scalars["String"];
 };
 
 export type IBuildingSpot = {
@@ -40,6 +47,15 @@ export type IBuildingSpots = {
 
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
+};
+
+export type ICost = {
+  __typename?: "Cost";
+  readonly wood: Scalars["Int"];
+  readonly clay: Scalars["Int"];
+  readonly iron: Scalars["Int"];
+  readonly crop: Scalars["Int"];
+  readonly freeCrop: Scalars["Int"];
 };
 
 export type IDequeueBuildingInput = {
@@ -90,7 +106,7 @@ export type IQuery = {
   __typename?: "Query";
   readonly buildingSpots: IBuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
-  readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
+  readonly buildingQueue: IBuildingQueue;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
@@ -106,7 +122,7 @@ export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryQueuedBuildingsArgs = {
+export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -120,8 +136,10 @@ export type IQueryVillageExistsArgs = {
 
 export type IQueuedBuilding = {
   __typename?: "QueuedBuilding";
+  readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
+  readonly time: Scalars["String"];
   readonly queueIndex: Scalars["Int"];
 };
 
@@ -228,8 +246,10 @@ export type IResolversTypes = {
   BuildingLevel: IBuildingLevel;
   ResourceFields: IResourceFields;
   BuildingInProgress: IBuildingInProgress;
-  QueuedBuilding: IQueuedBuilding;
   String: Scalars["String"];
+  BuildingQueue: IBuildingQueue;
+  QueuedBuilding: IQueuedBuilding;
+  Cost: ICost;
   NewBuildingInfo: INewBuildingInfo;
   Boolean: Scalars["Boolean"];
   Village: IVillage;
@@ -246,7 +266,7 @@ export type IBuildingInProgressResolvers<
   ParentType = IResolversTypes["BuildingInProgress"]
 > = {
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  timer?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  time?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -257,6 +277,23 @@ export type IBuildingLevelResolvers<
   actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   inProgress?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   queued?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
+export type IBuildingQueueResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["BuildingQueue"]
+> = {
+  buildings?: Resolver<
+    ReadonlyArray<IResolversTypes["QueuedBuilding"]>,
+    ParentType,
+    ContextType
+  >;
+  totalCost?: Resolver<IResolversTypes["Cost"], ParentType, ContextType>;
+  totalBuildingTime?: Resolver<
+    IResolversTypes["String"],
+    ParentType,
+    ContextType
+  >;
 };
 
 export type IBuildingSpotResolvers<
@@ -282,6 +319,17 @@ export type IBuildingSpotsResolvers<
     ParentType,
     ContextType
   >;
+};
+
+export type ICostResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["Cost"]
+> = {
+  wood?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  clay?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  iron?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  crop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  freeCrop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IMutationResolvers<
@@ -341,11 +389,11 @@ export type IQueryResolvers<
     ContextType,
     IQueryBuildingsInProgressArgs
   >;
-  queuedBuildings?: Resolver<
-    ReadonlyArray<IResolversTypes["QueuedBuilding"]>,
+  buildingQueue?: Resolver<
+    IResolversTypes["BuildingQueue"],
     ParentType,
     ContextType,
-    IQueryQueuedBuildingsArgs
+    IQueryBuildingQueueArgs
   >;
   availableNewBuildings?: Resolver<
     ReadonlyArray<IResolversTypes["NewBuildingInfo"]>,
@@ -372,8 +420,10 @@ export type IQueuedBuildingResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["QueuedBuilding"]
 > = {
+  cost?: Resolver<IResolversTypes["Cost"], ParentType, ContextType>;
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  time?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   queueIndex?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -423,8 +473,10 @@ export type IVillageResolvers<
 export type IResolvers<ContextType = IGraphQLContext> = {
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
+  BuildingQueue?: IBuildingQueueResolvers<ContextType>;
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
   BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
+  Cost?: ICostResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   NewBuildingInfo?: INewBuildingInfoResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;

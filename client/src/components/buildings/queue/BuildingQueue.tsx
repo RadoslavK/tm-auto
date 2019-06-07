@@ -9,7 +9,7 @@ import {
   IGetQueuedBuildingsQueryVariables,
 } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
-import { QueuedBuilding } from './QueuedBuilding';
+import { Cost, QueuedBuilding } from './QueuedBuilding';
 
 interface IProps {
   readonly className: string;
@@ -52,7 +52,11 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
   }
 
   const {
-    queuedBuildings,
+    buildingQueue: {
+      buildings,
+      totalCost,
+      totalBuildingTime,
+    },
   } = data;
 
   const onClear = async () => await clearQueue();
@@ -63,10 +67,12 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
         Clear queue
       </button>
       <div className={classes.root}>
-        {queuedBuildings.map((building, index) => (
+        {buildings.map((building, index) => (
           <QueuedBuilding key={index} building={building}/>
         ))}
       </div>
+      <Cost cost={totalCost} />
+      <div>{totalBuildingTime}</div>
     </div>
   )
 };

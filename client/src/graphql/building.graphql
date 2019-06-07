@@ -8,6 +8,14 @@ fragment BuildingSpotFragment on BuildingSpot {
     type
 }
 
+fragment CostFragment on Cost {
+    wood
+    clay
+    iron
+    crop
+    freeCrop
+}
+
 query GetBuildingSpots($villageId: Int!) {
     buildingSpots(villageId: $villageId) {
         infrastructure {
@@ -31,17 +39,27 @@ query GetBuildingSpots($villageId: Int!) {
 }
 
 query GetQueuedBuildings($villageId: Int!) {
-    queuedBuildings(villageId: $villageId) {
-        level
-        name
-        queueIndex
+    buildingQueue(villageId: $villageId) {
+        buildings {
+            cost {
+                ...CostFragment
+            }
+            level
+            name
+            time
+            queueIndex
+        }
+        totalBuildingTime
+        totalCost {
+            ...CostFragment
+        }
     }
 }
 
 query GetBuildingsInProgress($villageId: Int!) {
     buildingsInProgress(villageId: $villageId) {
         level
-        timer
+        time
         type
     }
 }

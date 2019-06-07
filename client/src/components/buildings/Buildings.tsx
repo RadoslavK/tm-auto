@@ -34,5 +34,3 @@ const Buildings: React.FunctionComponent = () => {
 Buildings.displayName = 'Buildings';
 
 export { Buildings };
-
-
