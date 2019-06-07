@@ -10,7 +10,6 @@ export class VillageService {
   }
 
   public setVillages(villages: readonly Village[]): void {
-    this._currentVillageId = villages[0].id;
     this._villages = villages;
   }
 
@@ -20,5 +19,13 @@ export class VillageService {
 
   public currentVillage() {
     return this._villages.find(village => village.id === this._currentVillageId);
+  }
+
+  public currentVillageId() {
+    return this._currentVillageId;
+  }
+
+  public setActiveVillageId(id: number) {
+    this._currentVillageId = id;
   }
 }

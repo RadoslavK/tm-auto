@@ -5,6 +5,8 @@ import { context } from '../graphql/context';
 import { parseBuildingsInProgress } from '../parsers/buildings/parseBuildingsInProgress';
 import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../parsers/buildings/parseInfrastructureSpots';
+import { parseActiveVillageId } from '../parsers/villages/parseActiveVillageId';
+import { parseVillages } from '../parsers/villages/parseVillages';
 import { log } from '../utils/log';
 import { startBuilding } from './actions/build/startBuilding';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
@@ -19,6 +21,11 @@ export class Controller {
 
     await ensureLoggedIn(page);
     await initPlayerInfo(page);
+
+    const villages = await parseVillages(page);
+    context.villageService.setVillages(villages);
+    const activeVillageId = await parseActiveVillageId(page);
+    context.villageService.setActiveVillageId(activeVillageId);
 
     await this.build();
   };
@@ -42,18 +49,9 @@ export class Controller {
 
     const buildings: readonly BuildingSpot[] = fieldSpots.concat(infrastructureSpots);
 
-    if (context.villageService.villages().length == 0) {
-      const villages: readonly Village[] = [
-        new Village({
-          id: 1,
-          name: 'Village 1',
-        }),
-      ];
-
-      context.villageService.setVillages(villages);
-    }
-    context.buildingsService.setBuildingSpots(1, buildings);
-    context.buildingsService.setBuildingsInProgress(1, buildingsInProgress);
+    const villageId = context.villageService.currentVillageId();
+    context.buildingsService.setBuildingSpots(villageId, buildings);
+    context.buildingsService.setBuildingsInProgress(villageId, buildingsInProgress);
 
     await startBuilding(page);
 
