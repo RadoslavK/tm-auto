@@ -1,6 +1,6 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { Cost } from '../../_models/misc/cost';
-import { IBuildingInProgress, IBuildingSpot, IQueuedBuilding, IResolvers } from '../../_types/graphql';
+import { IBuildingInProgress, IQueuedBuilding, IResolvers } from '../../_types/graphql';
 import { buildingNames } from '../../constants/buildingNames';
 import { buildingInfos } from '../../index';
 import { formatTimeFromSeconds } from '../../utils/formatTime';
@@ -9,24 +9,7 @@ export const buildingResolvers: IResolvers = {
   Query: {
     buildingSpots: (_, args, context) => {
       const { villageId } = args;
-      const spots = context.buildingsService.getBuildingSpots(villageId);
-      const queue = context.buildingsService.getBuildingQueue(villageId);
-      const inProgress = context.buildingsService.getBuildingsInProgress(villageId);
-
-      const normalizedSpots = spots.map((b, index): IBuildingSpot => {
-        const queued = queue.buildings().filter(bb => bb.fieldId === index + 1);
-        const usedType = b.type || (queued.length > 0 ? queued[0].type : b.type);
-
-        return {
-          type:usedType,
-          fieldId: index + 1,
-          level: {
-            actual: b.level,
-            inProgress: inProgress.filter(bb => bb.fieldId === index + 1).length,
-            queued: queued.length,
-          },
-        };
-      });
+      const normalizedSpots = context.buildingsService.normalizedBuildingSpots(villageId);
 
       return {
         infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
@@ -86,11 +69,7 @@ export const buildingResolvers: IResolvers = {
       };
     }),
 
-    availableNewBuildings: (_, args, context) => {
-      return [
-        { type: BuildingType.RallyPoint, name: buildingNames[BuildingType.RallyPoint] },
-      ]
-    },
+    availableNewBuildings: (_, args, context) => context.buildingsService.availableNewBuildings(args.input),
   },
   Mutation: {
     clearQueue: (_, args, context) => {

@@ -8,6 +8,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type IAvailableNewBuildingsInput = {
+  readonly fieldId: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
+};
+
 export type IBuilding = {
   readonly lol?: Maybe<Scalars["Int"]>;
 };
@@ -22,6 +27,7 @@ export type IBuildingLevel = {
   readonly actual: Scalars["Int"];
   readonly inProgress: Scalars["Int"];
   readonly queued: Scalars["Int"];
+  readonly total: Scalars["Int"];
 };
 
 export type IBuildingQueue = {
@@ -119,7 +125,7 @@ export type IQueryBuildingQueueArgs = {
 };
 
 export type IQueryAvailableNewBuildingsArgs = {
-  villageId: Scalars["Int"];
+  input: IAvailableNewBuildingsInput;
 };
 
 export type IQueryVillageExistsArgs = {
@@ -162,7 +168,10 @@ export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
   "fieldId" | "type"
 > & {
-  readonly level: Pick<IBuildingLevel, "actual" | "inProgress" | "queued">;
+  readonly level: Pick<
+    IBuildingLevel,
+    "actual" | "inProgress" | "queued" | "total"
+  >;
 };
 
 export type ICostFragmentFragment = Pick<
@@ -213,7 +222,7 @@ export type IGetBuildingsInProgressQuery = {
 };
 
 export type IGetAvailableNewBuildingsQueryVariables = {
-  villageId: Scalars["Int"];
+  input: IAvailableNewBuildingsInput;
 };
 
 export type IGetAvailableNewBuildingsQuery = {

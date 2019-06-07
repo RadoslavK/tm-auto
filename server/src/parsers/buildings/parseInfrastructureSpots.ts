@@ -15,28 +15,36 @@ export const parseInfrastructureSpots = async (page: Page): Promise<readonly Bui
 
   const nodes = await page.$$('#village_map > div');
 
-  const buildings = await Promise.all(nodes
-    .map(async node => {
-      const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
-      const fieldId = +/a(\d+)/.exec(className)[1];
+  const buildings = await Promise.all(nodes.map(async (node) => {
+    const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
+    const fieldId = +/a(\d+)/.exec(className)[1];
 
-      if (!isBuildingField(fieldId)) {
-        return null;
-      }
+    if (!isBuildingField(fieldId)) {
+      return null;
+    }
 
-      const type = +/g(\d+)/.exec(className)[1];
+    const type = +/g(\d+)/.exec(className)[1];
 
-      const level = type > BuildingType.None
-        ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
-        : 0;
+    const level = type > BuildingType.None
+      ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
+      : 0;
 
-      return new BuildingSpot({
-        level,
-        type,
-      });
-    })
-  );
+    return new BuildingSpot({
+      fieldId,
+      level,
+      type,
+    });
+  }));
+
+  const uniqueFieldIds: number[] = [];
 
   return buildings
-    .filter(b => !!b)
+    .filter(b => {
+      if (!!b && !uniqueFieldIds.includes(b.fieldId)) {
+        uniqueFieldIds.push(b.fieldId);
+        return true;
+      }
+
+      return false;
+    });
 };

@@ -35,7 +35,7 @@ const NewBuildingDialog: React.FunctionComponent<IProps> = React.forwardRef((pro
   const classes = useStyles({});
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetAvailableNewBuildingsQuery, IGetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
-    variables: { villageId },
+    variables: { input: { fieldId, villageId } },
     fetchPolicy: 'network-only',
   });
 

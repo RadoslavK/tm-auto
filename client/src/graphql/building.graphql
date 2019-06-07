@@ -4,6 +4,7 @@ fragment BuildingSpotFragment on BuildingSpot {
         actual
         inProgress
         queued
+        total
     }
     type
 }
@@ -66,8 +67,8 @@ query GetBuildingsInProgress($villageId: Int!) {
     }
 }
 
-query GetAvailableNewBuildings($villageId: Int!) {
-    availableNewBuildings(villageId: $villageId) {
+query GetAvailableNewBuildings($input: AvailableNewBuildingsInput!) {
+    availableNewBuildings(input: $input) {
         name
         type
     }

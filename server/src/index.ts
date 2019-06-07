@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { BuildingType } from './_enums/BuildingType';
+import { allBuildingTypes, BuildingType } from './_enums/BuildingType';
 import { Tribe } from './_enums/Tribe';
 import {
   BuildingConditions,
@@ -54,7 +54,7 @@ const requireBuilding = (type: BuildingType, level: number): IBuildingWithLevelR
   level
 });
 
-const getBuildingConditions = (type: number): BuildingConditions => {
+const getBuildingConditions = (type: BuildingType): BuildingConditions => {
   let capitalCondition: CapitalCondition = CapitalCondition.None;
   let isUnique: boolean = true;
   let playerTribe: Tribe = Tribe.None;
@@ -381,19 +381,19 @@ const getBuildingConditions = (type: number): BuildingConditions => {
   }
 
   return new BuildingConditions({
-    capitalCondition,
+    capital: capitalCondition,
     isUnique,
     playerTribe,
     prohibitedBuildingTypes,
     requiredBuildings,
+    type,
   })
 };
 
 const initBuildingConditions = () => {
-  const types = Object.keys(buildingInfos).map(k => +k);
-
-  for (let i = 0; i < types.length; i++) {
-    buildingsConditions[i] = getBuildingConditions(i);
+  for (let i = 0; i < allBuildingTypes.length; i++) {
+    const type = allBuildingTypes[i];
+    buildingsConditions[type] = getBuildingConditions(type);
   }
 };
 

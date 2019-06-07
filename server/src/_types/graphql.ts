@@ -11,6 +11,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type IAvailableNewBuildingsInput = {
+  readonly fieldId: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
+};
+
 export type IBuilding = {
   __typename?: "Building";
   readonly lol?: Maybe<Scalars["Int"]>;
@@ -28,6 +33,7 @@ export type IBuildingLevel = {
   readonly actual: Scalars["Int"];
   readonly inProgress: Scalars["Int"];
   readonly queued: Scalars["Int"];
+  readonly total: Scalars["Int"];
 };
 
 export type IBuildingQueue = {
@@ -132,7 +138,7 @@ export type IQueryBuildingQueueArgs = {
 };
 
 export type IQueryAvailableNewBuildingsArgs = {
-  villageId: Scalars["Int"];
+  input: IAvailableNewBuildingsInput;
 };
 
 export type IQueryVillageExistsArgs = {
@@ -256,6 +262,7 @@ export type IResolversTypes = {
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
   Cost: ICost;
+  AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
   NewBuildingInfo: INewBuildingInfo;
   Boolean: Scalars["Boolean"];
   Village: IVillage;
@@ -291,6 +298,7 @@ export type IBuildingLevelResolvers<
   actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   inProgress?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   queued?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  total?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IBuildingQueueResolvers<

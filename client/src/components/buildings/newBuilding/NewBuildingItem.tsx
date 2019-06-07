@@ -12,7 +12,6 @@ interface IProps {
 
 const propTypes: PropTypesShape<IProps> = {
   building: PropTypes.shape({
-    imageLink: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.number.isRequired,
   }).isRequired,

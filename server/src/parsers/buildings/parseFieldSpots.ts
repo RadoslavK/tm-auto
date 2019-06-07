@@ -13,7 +13,7 @@ export const parseFieldSpots = async (page: Page): Promise<BuildingSpot[]> => {
 
   const nodes = await page.$$('#village_map > div');
 
-  return await Promise.all(nodes.map(async (node) => {
+  return await Promise.all(nodes.map(async (node, index) => {
     const classNameProperty = await node.getProperty('className');
     const className = await classNameProperty.jsonValue();
 
@@ -21,6 +21,7 @@ export const parseFieldSpots = async (page: Page): Promise<BuildingSpot[]> => {
     const type = +/gid(\d+)/.exec(className)[1];
 
     return new BuildingSpot({
+      fieldId: index + 1,
       level,
       type,
     });
