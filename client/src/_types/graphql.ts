@@ -8,6 +8,10 @@ export type Scalars = {
   Float: number;
 };
 
+export type IBuilding = {
+  readonly lol?: Maybe<Scalars["Int"]>;
+};
+
 export type IBuildingInProgress = {
   readonly level: Scalars["Int"];
   readonly time: Scalars["String"];
@@ -46,6 +50,7 @@ export type ICost = {
   readonly clay: Scalars["Int"];
   readonly iron: Scalars["Int"];
   readonly crop: Scalars["Int"];
+  readonly total: Scalars["Int"];
   readonly freeCrop: Scalars["Int"];
 };
 
@@ -86,7 +91,6 @@ export type IMutationSignInArgs = {
 };
 
 export type INewBuildingInfo = {
-  readonly imageLink: Scalars["String"];
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
@@ -127,6 +131,7 @@ export type IQueuedBuilding = {
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
+  readonly type: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
 };
 
@@ -162,7 +167,7 @@ export type IBuildingSpotFragmentFragment = Pick<
 
 export type ICostFragmentFragment = Pick<
   ICost,
-  "wood" | "clay" | "iron" | "crop" | "freeCrop"
+  "wood" | "clay" | "iron" | "crop" | "total" | "freeCrop"
 >;
 
 export type IGetBuildingSpotsQueryVariables = {
@@ -188,9 +193,10 @@ export type IGetQueuedBuildingsQueryVariables = {
 export type IGetQueuedBuildingsQuery = {
   readonly buildingQueue: Pick<IBuildingQueue, "totalBuildingTime"> & {
     readonly buildings: ReadonlyArray<
-      Pick<IQueuedBuilding, "level" | "name" | "time" | "queueIndex"> & {
-        readonly cost: ICostFragmentFragment;
-      }
+      Pick<
+        IQueuedBuilding,
+        "level" | "name" | "time" | "type" | "queueIndex"
+      > & { readonly cost: ICostFragmentFragment }
     >;
     readonly totalCost: ICostFragmentFragment;
   };
@@ -212,7 +218,7 @@ export type IGetAvailableNewBuildingsQueryVariables = {
 
 export type IGetAvailableNewBuildingsQuery = {
   readonly availableNewBuildings: ReadonlyArray<
-    Pick<INewBuildingInfo, "imageLink" | "name" | "type">
+    Pick<INewBuildingInfo, "name" | "type">
   >;
 };
 

@@ -27,7 +27,12 @@ type Cost {
     clay: Int!
     iron: Int!
     crop: Int!
+    total: Int!
     freeCrop: Int!
+}
+
+type Building {
+    lol: Int
 }
 
 type QueuedBuilding {
@@ -35,6 +40,7 @@ type QueuedBuilding {
     level: Int!
     name: String!
     time: String!
+    type: Int!
     queueIndex: Int!
 }
 
@@ -78,7 +84,6 @@ extend type Mutation {
 }
 
 type NewBuildingInfo {
-    imageLink: String!
     name: String!
     type: Int!
 }

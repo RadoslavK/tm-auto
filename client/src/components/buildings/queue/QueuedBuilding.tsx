@@ -9,6 +9,7 @@ import {
   IDequeueBuildingMutationVariables,
   IQueuedBuilding,
 } from '../../../_types/graphql';
+import { imageLinks } from '../../../utils/imageLinks';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
@@ -26,7 +27,7 @@ const propTypes: PropTypesShape<IProps> = {
 const useStyles = makeStyles({
   root: {
     '& span + span::before': {
-      content: '" | "',
+      marginRight: '5px',
     },
   },
 });
@@ -42,11 +43,12 @@ export const Cost: React.FunctionComponent<{
 
   return (
     <div className={classes.root}>
-      <span>{cost.wood}</span>
-      <span>{cost.clay}</span>
-      <span>{cost.iron}</span>
-      <span>{cost.crop}</span>
-      <span>{cost.freeCrop}</span>
+      <span><img src={imageLinks.resources.wood} /> {cost.wood}</span>
+      <span><img src={imageLinks.resources.clay} />{cost.clay}</span>
+      <span><img src={imageLinks.resources.iron} />{cost.iron}</span>
+      <span><img src={imageLinks.resources.crop} />{cost.crop}</span>
+      <span><img src={imageLinks.resources.total} />{cost.total}</span>
+      <span><img src={imageLinks.resources.freeCrop} />{cost.freeCrop}</span>
     </div>
   );
 };
@@ -77,10 +79,11 @@ const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
 
   return (
     <button onClick={onDequeue}>
+      <img src={imageLinks.getBuilding(building.type)} />
       <div>{building.name}</div>
       <div>Level {building.level}</div>
       <Cost cost={building.cost} />
-      <div>{building.time}</div>
+      <div><img src={imageLinks.time} />{building.time}</div>
     </button>
   );
 };

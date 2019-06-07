@@ -24,6 +24,10 @@ export class Resources implements IParams, IComparable<IParams> {
     this.crop += addition.crop;
   }
 
+  public total() {
+    return this.wood + this.clay + this.iron + this.crop;
+  }
+
   isGreaterOrEqualThan(other: Resources): boolean {
     return this.wood >= other.wood
       && this.clay >= other.clay

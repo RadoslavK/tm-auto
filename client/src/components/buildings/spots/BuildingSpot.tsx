@@ -5,6 +5,7 @@ import { BuildingType } from '../../../../../server/src/_enums/BuildingType';
 import { buildingNames } from '../../../../../server/src/constants/buildingNames';
 import { IBuildingSpot} from '../../../_types/graphql';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
+import { imageLinks } from '../../../utils/imageLinks';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 
 interface IProps {
@@ -47,6 +48,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   return (
     <div>
       <button onClick={onClick}>
+        <img src={imageLinks.getBuilding(building.type)} />
         <span>{buildingNames[building.type]}</span>:
         <span>{building.level.actual}</span> ->
         <span>{building.level.actual + building.level.inProgress + building.level.queued}</span>

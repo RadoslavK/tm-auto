@@ -12,6 +12,8 @@ import { typeDefs } from './graphql/typeDefs';
 const app = express();
 const port = 3000;
 const clientPath = path.join(__dirname, '..', '..', 'client/dist');
+const imagesPath = path.join(__dirname, 'resources', 'images');
+const buildingInfoPath = path.join(__dirname, '..', 'resources', 'buildingInfo');
 
 interface IBuildingInfo {
   readonly buildingTime: number;
@@ -21,10 +23,8 @@ interface IBuildingInfo {
 export const buildingInfos: Record<number, readonly IBuildingInfo[]> = {};
 
 const initBuildingsInfo = () => {
-  const dir = path.join(__dirname, '..', 'resources', 'buildingInfo');
-
-  fs.readdirSync(dir).forEach(file => {
-    const filePath = path.join(dir, file);
+  fs.readdirSync(buildingInfoPath).forEach(file => {
+    const filePath = path.join(buildingInfoPath, file);
     const buildingType = +/(\d+)/.exec(file)[1];
     const text = fs.readFileSync(filePath, { encoding: 'utf-8' });
 
@@ -50,9 +50,14 @@ server.applyMiddleware({ app });
 
 app.use(cors());
 app.use(express.static(clientPath));
+app.use(express.static(imagesPath));
 
 app.get(['/app/*', '/app'], (req, res) => {
   res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+app.get(['/images*', '/images/*'], (req, res) => {
+  res.sendFile( path.join(__dirname, '..', 'resources', req.url));
 });
 
 app.get('*', (req, res) => {

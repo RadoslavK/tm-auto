@@ -13,6 +13,7 @@ fragment CostFragment on Cost {
     clay
     iron
     crop
+    total
     freeCrop
 }
 
@@ -47,6 +48,7 @@ query GetQueuedBuildings($villageId: Int!) {
             level
             name
             time
+            type
             queueIndex
         }
         totalBuildingTime
@@ -66,7 +68,6 @@ query GetBuildingsInProgress($villageId: Int!) {
 
 query GetAvailableNewBuildings($villageId: Int!) {
     availableNewBuildings(villageId: $villageId) {
-        imageLink
         name
         type
     }

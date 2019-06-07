@@ -11,6 +11,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type IBuilding = {
+  __typename?: "Building";
+  readonly lol?: Maybe<Scalars["Int"]>;
+};
+
 export type IBuildingInProgress = {
   __typename?: "BuildingInProgress";
   readonly level: Scalars["Int"];
@@ -55,6 +60,7 @@ export type ICost = {
   readonly clay: Scalars["Int"];
   readonly iron: Scalars["Int"];
   readonly crop: Scalars["Int"];
+  readonly total: Scalars["Int"];
   readonly freeCrop: Scalars["Int"];
 };
 
@@ -97,7 +103,6 @@ export type IMutationSignInArgs = {
 
 export type INewBuildingInfo = {
   __typename?: "NewBuildingInfo";
-  readonly imageLink: Scalars["String"];
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
@@ -140,6 +145,7 @@ export type IQueuedBuilding = {
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
+  readonly type: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
 };
 
@@ -257,8 +263,16 @@ export type IResolversTypes = {
   DequeueBuildingInput: IDequeueBuildingInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
+  Building: IBuilding;
   ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
+};
+
+export type IBuildingResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["Building"]
+> = {
+  lol?: Resolver<Maybe<IResolversTypes["Int"]>, ParentType, ContextType>;
 };
 
 export type IBuildingInProgressResolvers<
@@ -329,6 +343,7 @@ export type ICostResolvers<
   clay?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   iron?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   crop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  total?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   freeCrop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -368,7 +383,6 @@ export type INewBuildingInfoResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["NewBuildingInfo"]
 > = {
-  imageLink?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
@@ -424,6 +438,7 @@ export type IQueuedBuildingResolvers<
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   time?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   queueIndex?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -471,6 +486,7 @@ export type IVillageResolvers<
 };
 
 export type IResolvers<ContextType = IGraphQLContext> = {
+  Building?: IBuildingResolvers<ContextType>;
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
   BuildingQueue?: IBuildingQueueResolvers<ContextType>;

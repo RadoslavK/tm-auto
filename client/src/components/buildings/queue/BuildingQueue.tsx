@@ -8,6 +8,7 @@ import {
   IGetQueuedBuildingsQuery,
   IGetQueuedBuildingsQueryVariables,
 } from '../../../_types/graphql';
+import { imageLinks } from '../../../utils/imageLinks';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { Cost, QueuedBuilding } from './QueuedBuilding';
 
@@ -72,7 +73,7 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
         ))}
       </div>
       <Cost cost={totalCost} />
-      <div>{totalBuildingTime}</div>
+      <div>><img src={imageLinks.time} /> {totalBuildingTime}</div>
     </div>
   )
 };

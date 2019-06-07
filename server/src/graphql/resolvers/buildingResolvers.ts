@@ -15,9 +15,10 @@ export const buildingResolvers: IResolvers = {
 
       const normalizedSpots = spots.map((b, index): IBuildingSpot => {
         const queued = queue.buildings().filter(bb => bb.fieldId === index + 1);
+        const usedType = b.type || (queued.length > 0 ? queued[0].type : b.type);
 
         return {
-          type: b.type || (queued.length > 0 ? queued[0].type : b.type),
+          type:usedType,
           fieldId: index + 1,
           level: {
             actual: b.level,
@@ -28,7 +29,7 @@ export const buildingResolvers: IResolvers = {
       });
 
       return {
-        infrastructure: normalizedSpots.filter(s => s.type > BuildingType.Crop),
+        infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
         resources: {
           wood: normalizedSpots.filter(s => s.type === BuildingType.Wood),
           clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
@@ -53,12 +54,14 @@ export const buildingResolvers: IResolvers = {
           return {
             cost: {
               ...buildingInfo.cost.resources,
+              total: buildingInfo.cost.resources.total(),
               freeCrop: buildingInfo.cost.freeCrop,
             },
             level: b.level,
             name: buildingNames[b.type],
             queueIndex: index,
             time: formatTimeFromSeconds(buildingInfo.buildingTime),
+            type: b.type,
           };
         });
 
@@ -69,6 +72,7 @@ export const buildingResolvers: IResolvers = {
         totalBuildingTime,
         totalCost: {
           ...totalCost.resources,
+          total: totalCost.resources.total(),
           freeCrop: totalCost.freeCrop,
         },
       }
@@ -84,9 +88,7 @@ export const buildingResolvers: IResolvers = {
 
     availableNewBuildings: (_, args, context) => {
       return [
-        { type: BuildingType.RallyPoint, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.RallyPoint] },
-        { type: BuildingType.TownHall, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.TownHall] },
-        { type: BuildingType.Bakery, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.Bakery] },
+        { type: BuildingType.RallyPoint, name: buildingNames[BuildingType.RallyPoint] },
       ]
     },
   },

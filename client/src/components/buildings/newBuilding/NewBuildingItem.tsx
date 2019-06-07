@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { INewBuildingInfo } from '../../../_types/graphql';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
+import { imageLinks } from '../../../utils/imageLinks';
 
 interface IProps {
   readonly building: INewBuildingInfo,
@@ -39,7 +40,7 @@ const NewBuildingItem: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <button onClick={onClick}>
-      <img src={building.imageLink} />
+      <img src={imageLinks.getBuilding(building.type)} />
       {building.name}
     </button>
   )
