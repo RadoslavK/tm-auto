@@ -1,4 +1,6 @@
+import { BuildingType } from '../../_enums/BuildingType';
 import { IBuildingSpot, IResolvers } from '../../_types/graphql';
+import { buildingNames } from '../../constants/buildingNames';
 
 export const buildingResolvers: IResolvers = {
   Query: {
@@ -8,15 +10,19 @@ export const buildingResolvers: IResolvers = {
       const queue = context.buildingsService.getBuildingQueue(villageId);
       const inProgress = context.buildingsService.getBuildingsInProgress(villageId);
 
-      return spots.map((b, index): IBuildingSpot => ({
-        type: b.type,
-        fieldId: index + 1,
-        level: {
-          actual: b.level,
-          inProgress: inProgress.filter(bb => bb.fieldId === index + 1).length,
-          queued: queue.buildings().filter(bb => bb.fieldId === index + 1).length,
-        },
-      }));
+      return spots.map((b, index): IBuildingSpot => {
+        const queued = queue.buildings().filter(bb => bb.fieldId === index + 1);
+
+        return {
+          type: b.type || (queued.length > 0 ? queued[0].type : b.type),
+          fieldId: index + 1,
+          level: {
+            actual: b.level,
+            inProgress: inProgress.filter(bb => bb.fieldId === index + 1).length,
+            queued: queued.length,
+          },
+        };
+      });
     },
 
     queuedBuildings: (_, args, context) => context.buildingsService
@@ -28,6 +34,14 @@ export const buildingResolvers: IResolvers = {
       })),
 
     buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(+args.villageId),
+
+    availableNewBuildings: (_, args, context) => {
+      return [
+        { type: BuildingType.RallyPoint, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.RallyPoint] },
+        { type: BuildingType.TownHall, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.TownHall] },
+        { type: BuildingType.Bakery, imageLink: 'https://t4.answers.travian.com/images/gp/g/big/g11-ltr.png', name: buildingNames[BuildingType.Bakery] },
+      ]
+    },
   },
   Mutation: {
     clearQueue: (_, args, context) => {

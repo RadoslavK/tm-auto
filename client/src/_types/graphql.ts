@@ -66,10 +66,17 @@ export type IMutationSignInArgs = {
   account: ISignInInput;
 };
 
+export type INewBuildingInfo = {
+  readonly imageLink: Scalars["String"];
+  readonly name: Scalars["String"];
+  readonly type: Scalars["Int"];
+};
+
 export type IQuery = {
   readonly buildingSpots: ReadonlyArray<IBuildingSpot>;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
+  readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
   readonly villages: ReadonlyArray<IVillage>;
@@ -85,6 +92,10 @@ export type IQueryBuildingsInProgressArgs = {
 };
 
 export type IQueryQueuedBuildingsArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type IQueryAvailableNewBuildingsArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -143,6 +154,16 @@ export type IGetBuildingsInProgressQueryVariables = {
 export type IGetBuildingsInProgressQuery = {
   readonly buildingsInProgress: ReadonlyArray<
     Pick<IBuildingInProgress, "level" | "timer" | "type">
+  >;
+};
+
+export type IGetAvailableNewBuildingsQueryVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IGetAvailableNewBuildingsQuery = {
+  readonly availableNewBuildings: ReadonlyArray<
+    Pick<INewBuildingInfo, "imageLink" | "name" | "type">
   >;
 };
 

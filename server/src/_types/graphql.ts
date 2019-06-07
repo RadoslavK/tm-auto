@@ -73,11 +73,19 @@ export type IMutationSignInArgs = {
   account: ISignInInput;
 };
 
+export type INewBuildingInfo = {
+  __typename?: "NewBuildingInfo";
+  readonly imageLink: Scalars["String"];
+  readonly name: Scalars["String"];
+  readonly type: Scalars["Int"];
+};
+
 export type IQuery = {
   __typename?: "Query";
   readonly buildingSpots: ReadonlyArray<IBuildingSpot>;
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly queuedBuildings: ReadonlyArray<IQueuedBuilding>;
+  readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
   readonly villages: ReadonlyArray<IVillage>;
@@ -93,6 +101,10 @@ export type IQueryBuildingsInProgressArgs = {
 };
 
 export type IQueryQueuedBuildingsArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type IQueryAvailableNewBuildingsArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -201,9 +213,10 @@ export type IResolversTypes = {
   BuildingLevel: IBuildingLevel;
   BuildingInProgress: IBuildingInProgress;
   QueuedBuilding: IQueuedBuilding;
+  NewBuildingInfo: INewBuildingInfo;
+  String: Scalars["String"];
   Boolean: Scalars["Boolean"];
   Village: IVillage;
-  String: Scalars["String"];
   Mutation: {};
   ClearQueueInput: IClearQueueInput;
   DequeueBuildingInput: IDequeueBuildingInput;
@@ -271,6 +284,15 @@ export type IMutationResolvers<
   >;
 };
 
+export type INewBuildingInfoResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["NewBuildingInfo"]
+> = {
+  imageLink?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
 export type IQueryResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["Query"]
@@ -292,6 +314,12 @@ export type IQueryResolvers<
     ParentType,
     ContextType,
     IQueryQueuedBuildingsArgs
+  >;
+  availableNewBuildings?: Resolver<
+    ReadonlyArray<IResolversTypes["NewBuildingInfo"]>,
+    ParentType,
+    ContextType,
+    IQueryAvailableNewBuildingsArgs
   >;
   isBotRunning?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
@@ -339,6 +367,7 @@ export type IResolvers<ContextType = IGraphQLContext> = {
   BuildingLevel?: IBuildingLevelResolvers<ContextType>;
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
+  NewBuildingInfo?: INewBuildingInfoResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
   UserAccount?: IUserAccountResolvers<ContextType>;

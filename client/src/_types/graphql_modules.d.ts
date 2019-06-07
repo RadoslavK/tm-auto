@@ -4,6 +4,7 @@ declare module "*/graphql_operations/building.graphql" {
   export const GetBuildingSpots: DocumentNode;
   export const GetQueuedBuildings: DocumentNode;
   export const GetBuildingsInProgress: DocumentNode;
+  export const GetAvailableNewBuildings: DocumentNode;
   export const ClearQueue: DocumentNode;
   export const EnqueueBuilding: DocumentNode;
   export const DequeueBuilding: DocumentNode;

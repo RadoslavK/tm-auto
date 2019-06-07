@@ -1,10 +1,11 @@
-import { EnqueueBuilding, GetQueuedBuildings, GetBuildingSpots } from '*/graphql_operations/building.graphql';
-import React, { useContext } from 'react';
+import { Modal } from '@material-ui/core';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { BuildingType } from '../../../../../server/src/_enums/BuildingType';
 import { buildingNames } from '../../../../../server/src/constants/buildingNames';
-import { IBuildingSpot, IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables } from '../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
+import { IBuildingSpot} from '../../../_types/graphql';
+import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
+import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 
 interface IProps {
   readonly building: IBuildingSpot;
@@ -27,32 +28,35 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
     building,
   } = props;
 
-  const villageContext = useContext<IVillageContext>(VillageContext);
-  const enqueue = useMutation<IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables>(EnqueueBuilding, {
-    variables: {
-      input: {
-        villageId: villageContext.villageId,
-        type: building.type,
-        fieldId: building.fieldId,
-      },
-    },
-    refetchQueries: [
-      { query: GetBuildingSpots, variables: { villageId: villageContext.villageId } },
-      { query: GetQueuedBuildings, variables: { villageId: villageContext.villageId } },
-    ]
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const enqueue = useEnqueueBuildingMutation({
+    buildingType: building.type,
+    fieldId: building.fieldId,
   });
+
+  const onClick = async () => {
+    if (building.type !== BuildingType.None) {
+      await enqueue();
+    } else {
+      setIsDialogOpened(true);
+    }
+  };
+
+  const onSelect = () => setIsDialogOpened(false);
 
   return (
     <div>
-      <button onClick={async (e) => {
-        e.preventDefault();
-
-        await enqueue();
-      }}>
+      <button onClick={onClick}>
         <span>{buildingNames[building.type]}</span>:
         <span>{building.level.actual}</span> ->
         <span>{building.level.actual + building.level.inProgress + building.level.queued}</span>
       </button>
+      <Modal
+        open={isDialogOpened}
+        onClose={onSelect}
+      >
+        <NewBuildingDialog fieldId={building.fieldId} onSelect={onSelect}/>
+      </Modal>
     </div>
   );
 };

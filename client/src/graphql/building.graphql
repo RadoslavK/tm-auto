@@ -26,6 +26,14 @@ query GetBuildingsInProgress($villageId: Int!) {
     }
 }
 
+query GetAvailableNewBuildings($villageId: Int!) {
+    availableNewBuildings(villageId: $villageId) {
+        imageLink
+        name
+        type
+    }
+}
+
 mutation ClearQueue($input: ClearQueueInput) {
     clearQueue(input: $input)
 }

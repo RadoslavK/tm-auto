@@ -48,3 +48,14 @@ extend type Mutation {
     dequeueBuilding(input: DequeueBuildingInput): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }
+
+type NewBuildingInfo {
+    imageLink: String!
+    name: String!
+    type: Int!
+}
+
+extend type Query {
+    availableNewBuildings(villageId: Int!): [NewBuildingInfo!]!
+}
+
