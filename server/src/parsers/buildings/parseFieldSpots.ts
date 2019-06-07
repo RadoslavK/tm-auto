@@ -1,8 +1,14 @@
+import { Page } from 'puppeteer';
+import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingSpot } from '../../_models/buildings/buildingSpot';
-import { getPage } from '../browser/getPage';
+import { validateUrl } from '../../utils/validateUrl';
 
-export const parseFieldSpots = async (): Promise<BuildingSpot[]> => {
-  const page = await getPage();
+const acceptedUrls: readonly string[] = [
+  TravianPath.ResourceFieldsOverview,
+];
+
+export const parseFieldSpots = async (page: Page): Promise<BuildingSpot[]> => {
+  validateUrl(page, acceptedUrls);
   await page.waitForSelector('#village_map');
 
   const nodes = await page.$$('#village_map > div');

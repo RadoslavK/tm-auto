@@ -1,10 +1,16 @@
+import { Page } from 'puppeteer';
+import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingSpot } from '../../_models/buildings/buildingSpot';
-import { getPage } from '../browser/getPage';
-import { isBuildingField } from '../actions/startBuilding';
+import { isBuildingField } from '../../controller/actions/startBuilding';
 import { BuildingType } from '../../_enums/BuildingType';
+import { validateUrl } from '../../utils/validateUrl';
 
-export const parseInfrastructureSpots = async (): Promise<readonly BuildingSpot[]> => {
-  const page = await getPage();
+const acceptedUrls: readonly string[] = [
+  TravianPath.InfrastructureOverview,
+];
+
+export const parseInfrastructureSpots = async (page: Page): Promise<readonly BuildingSpot[]> => {
+  validateUrl(page,acceptedUrls);
   await page.waitForSelector('#village_map');
 
   const nodes = await page.$$('#village_map > div');

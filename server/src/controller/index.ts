@@ -4,9 +4,9 @@ import { Village } from '../_models/village';
 import { context } from '../graphql/context';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { getPage, killBrowser } from './browser/getPage';
-import { parseInfrastructureSpots } from './parsers/parseInfrastructureSpots';
-import { parseFieldSpots } from './parsers/parseFieldSpots';
-import { parseBuildingsInProgress } from './parsers/parseBuildingsInProgress';
+import { parseInfrastructureSpots } from '../parsers/buildings/parseInfrastructureSpots';
+import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
+import { parseBuildingsInProgress } from '../parsers/buildings/parseBuildingsInProgress';
 
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
@@ -25,13 +25,14 @@ export class Controller {
   public build = async () => {
     const page = await getPage();
     const { userAccount } = context.userService;
+
     log('checking fields');
     await page.goto(`${userAccount.server}/${TravianPath.ResourceFieldsOverview}`);
-    const fieldSpots = await parseFieldSpots();
-    const buildingsInProgress = await parseBuildingsInProgress();
+    const fieldSpots = await parseFieldSpots(page);
+    const buildingsInProgress = await parseBuildingsInProgress(page);
 
-    await page.goto(`${userAccount.server}/${TravianPath.BuildingsOverview}`);
-    const infrastructureSpots = await parseInfrastructureSpots();
+    await page.goto(`${userAccount.server}/${TravianPath.InfrastructureOverview}`);
+    const infrastructureSpots = await parseInfrastructureSpots(page);
 
     const buildings: readonly BuildingSpot[] = fieldSpots.concat(infrastructureSpots);
 

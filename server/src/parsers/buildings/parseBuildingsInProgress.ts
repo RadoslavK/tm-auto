@@ -1,8 +1,15 @@
+import { Page } from 'puppeteer';
+import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingInProgress } from '../../_models/buildings/buildingInProgress';
-import { getPage } from '../browser/getPage';
+import { validateUrl } from '../../utils/validateUrl';
 
-export const parseBuildingsInProgress = async (): Promise<readonly BuildingInProgress[]> => {
-  const page = await getPage();
+const acceptedUrls: readonly string[] = [
+  TravianPath.ResourceFieldsOverview,
+  TravianPath.InfrastructureOverview,
+];
+
+export const parseBuildingsInProgress = async (page: Page): Promise<readonly BuildingInProgress[]> => {
+  validateUrl(page, acceptedUrls);
 
   const content = await page.$eval('#content', content => content.innerHTML);
   const buildings: BuildingInProgress[] = [];

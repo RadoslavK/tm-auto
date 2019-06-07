@@ -28,7 +28,7 @@ export const startBuilding = async (params: IStartBuildingParams) => {
   if (isResourceField(fieldId)) {
     await ensureUrl(TravianPath.ResourceFieldsOverview)
   } else if (isBuildingField(fieldId)) {
-    await ensureUrl(TravianPath.BuildingsOverview)
+    await ensureUrl(TravianPath.InfrastructureOverview)
   }
 
   await page.goto(`${userAccount.server}/build.php?id=${fieldId}`);
