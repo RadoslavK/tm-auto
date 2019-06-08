@@ -10,16 +10,22 @@ import {
   IBuildingSpot,
   IQueuedBuildingManipulationInput,
   IEnqueueBuildingInput,
-  INewBuildingInfo,
+  INewBuildingInfo
 } from '../_types/graphql';
 import { buildingNames } from '../constants/buildingNames';
 import { context } from '../graphql/context';
 import { buildingInfos, buildingsConditions } from '../index';
+import { getWithMaximum } from '../utils/getWithMaximum';
 
 const fieldIds = Object.freeze({
   RallyPoint: 39,
   Wall: 40,
 });
+
+export enum MovingDirection {
+  Up = -1,
+  Down = 1,
+}
 
 export class BuildingsService {
   private readonly _buildingSpots: Record<number, readonly BuildingSpot[]> = {};
@@ -262,16 +268,133 @@ export class BuildingsService {
     });
   }
 
-  public canMoveQueuedBuildingDown(input: IQueuedBuildingManipulationInput): boolean {
-    return true;
+
+
+  public canMoveQueuedBuilding(input: IQueuedBuildingManipulationInput, direction: MovingDirection): boolean {
+    const {
+      villageId,
+      queueIndex,
+    } = input;
+
+    const queue = this.getBuildingQueue(villageId);
+
+    const newIndex = queueIndex + direction;
+    if (newIndex < 0 || newIndex >= queue.buildings().length) {
+     return false;
+    }
+
+    const building = queue.buildings()[queueIndex];
+    const buildingInTheWay = queue.buildings()[queueIndex + direction];
+
+    const isMovingUp = direction == MovingDirection.Up;
+
+    //moving up/down and its same id/type as next/previous level too so cant move more up
+    if (buildingInTheWay.fieldId == building.fieldId
+      && buildingInTheWay.level == building.level + direction) {
+      return false;
+    }
+
+    let qBuildingWithPossiblyAffectedRequirements: QueuedBuilding;
+    let theOtherBuilding: IBuildingSpot;
+
+    const normalizedBuildings = this.normalizedBuildingSpots(villageId);
+
+    if (isMovingUp) {
+      qBuildingWithPossiblyAffectedRequirements = building;
+      theOtherBuilding = normalizedBuildings.find(b => b.fieldId === buildingInTheWay.fieldId);
+    } else {
+      qBuildingWithPossiblyAffectedRequirements = buildingInTheWay;
+      theOtherBuilding = normalizedBuildings.find(b => b.fieldId == building.fieldId);
+    }
+
+    return this.willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(
+      villageId,
+      qBuildingWithPossiblyAffectedRequirements,
+      theOtherBuilding.fieldId,
+    );
   }
 
-  public canMoveQueuedBuildingUp(input: IQueuedBuildingManipulationInput): boolean {
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(villageId: number, checkedBuilding: QueuedBuilding, reducedOffsetBuildingIngameId: number): boolean {
+    // need to calculate offset till its position
+    const offsets: Record<number, number> = {};
+    const queuedBuildings = this.getBuildingQueue(villageId).buildings();
+
+    for (let i = 0; i < queuedBuildings.length; i++) {
+      const qBuilding = queuedBuildings[i];
+      if (!offsets[qBuilding.fieldId]) {
+        offsets[qBuilding.fieldId] = 1;
+      } else {
+        offsets[qBuilding.fieldId]++;
+      }
+
+      if (qBuilding === checkedBuilding) {
+        break;
+      }
+    }
+
+    return this.willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(
+      villageId,
+      checkedBuilding,
+      offsets,
+      reducedOffsetBuildingIngameId);
+  }
+
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(villagId: number, checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingIngameId?: number): boolean {
+    const getTemporaryTotalLevel = (building: IBuildingSpot): number =>
+      building.level.actual
+      + building.level.ongoing
+      + (building.fieldId == reducedOffsetBuildingIngameId
+          ? offsets[building.fieldId] - 1
+          : offsets[building.fieldId]);
+
+    const normalizedBuildings = this.normalizedBuildingSpots(villagId);
+    const conditions = buildingsConditions[checkedBuilding.type];
+
+    if (conditions.type > BuildingType.Crop) {
+      const maxLevel = buildingInfos[checkedBuilding.type].length;
+
+      const anyCompleted = normalizedBuildings
+        .filter(b => b.type === checkedBuilding.type)
+        .some(b => getTemporaryTotalLevel(b) >= maxLevel);
+
+      if (!anyCompleted) {
+        // if not unique, but at least 1 is not fully completed
+        // it can break down on queue switch
+        const highestLevelBuildingOfSameType = getWithMaximum(
+          normalizedBuildings.filter(b => b.type === checkedBuilding.type),
+          getTemporaryTotalLevel,
+        );
+
+        if (!highestLevelBuildingOfSameType) {
+          return false;
+        }
+
+        const itsTemporaryLevel = getTemporaryTotalLevel(highestLevelBuildingOfSameType);
+
+        //if they are not the same building spot or its level is not preceding to this then theres a problem
+        if (highestLevelBuildingOfSameType.fieldId !== checkedBuilding.fieldId || (itsTemporaryLevel < checkedBuilding.level - 1)) {
+          return false;
+        }
+      }
+    }
+
+    for (let i = 0; i < conditions.requiredBuildings.length; i++)
+    {
+      const requiredBuilding = conditions.requiredBuildings[i];
+      const requiredBuildingExists = normalizedBuildings.some(
+        b => b.type === requiredBuilding.type
+          && getTemporaryTotalLevel(b) >= requiredBuilding.level);
+
+      if (!requiredBuildingExists) {
+        return false;
+      }
+    }
+
     return true;
   }
 
   public moveQueuedBuildingDown(input: IQueuedBuildingManipulationInput): boolean {
-    if (!this.canMoveQueuedBuildingDown(input)) {
+    if (!this.canMoveQueuedBuilding(input, MovingDirection.Down)) {
       return false;
     }
 
@@ -287,7 +410,7 @@ export class BuildingsService {
   }
 
   public moveQueuedBuildingUp(input: IQueuedBuildingManipulationInput): boolean {
-    if (!this.canMoveQueuedBuildingUp(input)) {
+    if (!this.canMoveQueuedBuilding(input, MovingDirection.Up)) {
       return false;
     }
 

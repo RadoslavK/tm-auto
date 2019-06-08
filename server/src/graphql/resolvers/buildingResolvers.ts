@@ -3,6 +3,7 @@ import { Cost } from '../../_models/misc/cost';
 import { IBuildingInProgress, IQueuedBuilding, IResolvers } from '../../_types/graphql';
 import { buildingNames } from '../../constants/buildingNames';
 import { buildingInfos } from '../../index';
+import { MovingDirection } from '../../services/buildingsService';
 import { formatTimeFromSeconds } from '../../utils/formatTime';
 
 export const buildingResolvers: IResolvers = {
@@ -42,14 +43,14 @@ export const buildingResolvers: IResolvers = {
           totalCost.add(buildingInfo.cost);
 
           return {
-            canMoveDown: context.buildingsService.canMoveQueuedBuildingDown({
+            canMoveDown: context.buildingsService.canMoveQueuedBuilding({
               villageId,
               queueIndex,
-            }),
-            canMoveUp: context.buildingsService.canMoveQueuedBuildingUp({
+            }, MovingDirection.Down),
+            canMoveUp: context.buildingsService.canMoveQueuedBuilding({
               queueIndex,
               villageId,
-            }),
+            }, MovingDirection.Up),
             cost: {
               ...buildingInfo.cost.resources,
               total: buildingInfo.cost.resources.total(),
