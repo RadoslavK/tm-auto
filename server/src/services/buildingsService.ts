@@ -80,23 +80,25 @@ export class BuildingsService {
       return;
     }
 
+    const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8)}`;
     const building: QueuedBuilding = new QueuedBuilding({
       fieldId,
       level,
       type,
+      queueId,
     });
 
-    queue.enqueue(building);
+    queue.add(building);
   }
 
   public dequeueBuilding(input: IQueuedBuildingManipulationInput): void {
     const {
-      queueIndex,
+      queueId,
       villageId,
     } = input;
 
     const queue = this.getBuildingQueue(villageId);
-    queue.dequeueAt(queueIndex);
+    queue.remove(queueId);
 
     this.correctBuildingQueue(villageId);
   }
@@ -260,24 +262,22 @@ export class BuildingsService {
       const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(villageId, qBuilding, offsets);
 
       if (shouldBeRemoved) {
-        const index = queuedBuildings.indexOf(qBuilding);
-        queue.removeAt(index);
+        queue.remove(qBuilding.queueId);
       } else {
         offsets[qBuilding.fieldId]++;
       }
     });
   }
 
-
-
   public canMoveQueuedBuilding(input: IQueuedBuildingManipulationInput, direction: MovingDirection): boolean {
     const {
       villageId,
-      queueIndex,
+      queueId,
     } = input;
 
     const queue = this.getBuildingQueue(villageId);
 
+    const queueIndex = queue.buildings().findIndex(b => b.queueId === queueId);
     const newIndex = queueIndex + direction;
     if (newIndex < 0 || newIndex >= queue.buildings().length) {
      return false;
@@ -399,12 +399,12 @@ export class BuildingsService {
     }
 
     const {
-      queueIndex,
+      queueId,
       villageId,
     } = input;
 
     const queue = this.getBuildingQueue(villageId);
-    queue.moveDown(queueIndex);
+    queue.moveDown(queueId);
 
     return true;
   }
@@ -415,12 +415,12 @@ export class BuildingsService {
     }
 
     const {
-      queueIndex,
+      queueId,
       villageId,
     } = input;
 
     const queue = this.getBuildingQueue(villageId);
-    queue.moveUp(queueIndex);
+    queue.moveUp(queueId);
 
     return true;
   }

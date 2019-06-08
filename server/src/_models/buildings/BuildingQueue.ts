@@ -3,26 +3,16 @@ import { QueuedBuilding } from './queuedBuilding';
 export class BuildingQueue {
   private _buildings: QueuedBuilding[] = [];
 
-  public enqueue(building: QueuedBuilding) {
+  public add(building: QueuedBuilding) {
     this._buildings.push(building);
   }
 
-  public dequeue(): QueuedBuilding | undefined {
+  public popFirst(): QueuedBuilding | undefined {
     return this._buildings.shift();
   }
 
-  public dequeueAt(index: number): QueuedBuilding | undefined {
-    const building = this._buildings[index];
-
-    if (building) {
-      this.removeAt(index);
-    }
-
-    return building;
-  }
-
-  public removeAt(index: number) {
-    delete this._buildings[index];
+  public remove(queueId: string) {
+    this._buildings = this._buildings.filter(b => b.queueId !== queueId);
   }
 
   public clear(): void {
@@ -33,11 +23,12 @@ export class BuildingQueue {
     return this._buildings;
   }
 
-  public moveUp(index: number) {
+  public moveUp(queueId: string) {
     if (this._buildings.length <= 1) {
       return;
     }
 
+    const index = this._buildings.findIndex(b => b.queueId === queueId);
     const newIndex = index - 1;
 
     if (newIndex < 0) {
@@ -47,11 +38,12 @@ export class BuildingQueue {
     this.move(index, newIndex);
   }
 
-  public moveDown(index: number) {
+  public moveDown(queueId: string) {
     if (this._buildings.length === 0) {
       return;
     }
 
+    const index = this._buildings.findIndex(b => b.queueId === queueId);
     const newIndex = index + 1;
 
     if (newIndex >= this._buildings.length) {

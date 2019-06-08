@@ -80,7 +80,7 @@ const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
     variables: {
       input: {
         villageId,
-        queueIndex: building.queueIndex,
+        queueId: building.queueId,
       },
     },
     refetchQueries: [

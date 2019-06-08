@@ -148,11 +148,11 @@ export type IQueuedBuilding = {
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
-  readonly queueIndex: Scalars["Int"];
+  readonly queueId: Scalars["ID"];
 };
 
 export type IQueuedBuildingManipulationInput = {
-  readonly queueIndex: Scalars["Int"];
+  readonly queueId: Scalars["ID"];
   readonly villageId: Scalars["Int"];
 };
 
@@ -224,7 +224,7 @@ export type IGetQueuedBuildingsQuery = {
         | "name"
         | "time"
         | "type"
-        | "queueIndex"
+        | "queueId"
       > & { readonly cost: ICostFragmentFragment }
     >;
     readonly totalCost: ICostFragmentFragment;

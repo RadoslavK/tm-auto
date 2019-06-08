@@ -54,7 +54,7 @@ query GetQueuedBuildings($villageId: Int!) {
             name
             time
             type
-            queueIndex
+            queueId
         }
         totalBuildingTime
         totalCost {

@@ -46,7 +46,7 @@ type QueuedBuilding {
     name: String!
     time: String!
     type: Int!
-    queueIndex: Int!
+    queueId: ID!
 }
 
 type BuildingInProgress {
@@ -99,7 +99,7 @@ extend type Query {
 }
 
 input QueuedBuildingManipulationInput {
-    queueIndex: Int!
+    queueId: ID!
     villageId: Int!
 }
 

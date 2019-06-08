@@ -162,11 +162,11 @@ export type IQueuedBuilding = {
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
-  readonly queueIndex: Scalars["Int"];
+  readonly queueId: Scalars["ID"];
 };
 
 export type IQueuedBuildingManipulationInput = {
-  readonly queueIndex: Scalars["Int"];
+  readonly queueId: Scalars["ID"];
   readonly villageId: Scalars["Int"];
 };
 
@@ -278,6 +278,7 @@ export type IResolversTypes = {
   QueuedBuilding: IQueuedBuilding;
   Boolean: Scalars["Boolean"];
   Cost: ICost;
+  ID: Scalars["ID"];
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
   NewBuildingInfo: INewBuildingInfo;
   Village: IVillage;
@@ -483,7 +484,7 @@ export type IQueuedBuildingResolvers<
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   time?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  queueIndex?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  queueId?: Resolver<IResolversTypes["ID"], ParentType, ContextType>;
 };
 
 export type IResourceFieldsResolvers<

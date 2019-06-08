@@ -37,7 +37,7 @@ export const buildingResolvers: IResolvers = {
       const buildings = context.buildingsService
         .getBuildingQueue(villageId)
         .buildings()
-        .map((b, queueIndex): IQueuedBuilding => {
+        .map((b): IQueuedBuilding => {
           const buildingInfo = buildingInfos[b.type][b.level - 1];
           totalSeconds += buildingInfo.buildingTime;
           totalCost.add(buildingInfo.cost);
@@ -45,10 +45,10 @@ export const buildingResolvers: IResolvers = {
           return {
             canMoveDown: context.buildingsService.canMoveQueuedBuilding({
               villageId,
-              queueIndex,
+              queueId: b.queueId,
             }, MovingDirection.Down),
             canMoveUp: context.buildingsService.canMoveQueuedBuilding({
-              queueIndex,
+              queueId: b.queueId,
               villageId,
             }, MovingDirection.Up),
             cost: {
@@ -58,7 +58,7 @@ export const buildingResolvers: IResolvers = {
             },
             level: b.level,
             name: buildingNames[b.type],
-            queueIndex,
+            queueId: b.queueId,
             time: formatTimeFromSeconds(buildingInfo.buildingTime),
             type: b.type,
           };
