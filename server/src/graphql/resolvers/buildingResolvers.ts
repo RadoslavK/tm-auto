@@ -9,7 +9,10 @@ export const buildingResolvers: IResolvers = {
   Query: {
     buildingSpots: (_, args, context) => {
       const { villageId } = args;
-      const normalizedSpots = context.buildingsService.normalizedBuildingSpots(villageId);
+      const normalizedSpots = context.buildingsService.normalizedBuildingSpots(villageId).map(b => ({
+        ...b,
+        level: b.type === BuildingType.None ? null : b.level,
+      }));
 
       return {
         infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),

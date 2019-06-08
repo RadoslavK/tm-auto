@@ -30,6 +30,8 @@ interface IBuildingInfo {
 export const buildingInfos: Record<number, readonly IBuildingInfo[]> = {};
 
 const initBuildingsInfo = () => {
+  buildingInfos[BuildingType.None] = [];
+
   fs.readdirSync(buildingInfoPath).forEach(file => {
     const filePath = path.join(buildingInfoPath, file);
     const buildingType = +/(\d+)/.exec(file)[1];
@@ -403,6 +405,15 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context,
+  formatError: err => {
+    const errorLinks = err.extensions.exception.stacktrace;
+
+    for (let i = 0; i < errorLinks.length; i++) {
+      console.error(errorLinks[i]);
+    }
+
+    return err;
+  },
 });
 
 server.applyMiddleware({ app });

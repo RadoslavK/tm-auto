@@ -6,6 +6,7 @@ import { IBuildingSpot} from '../../../_types/graphql';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
 import { BuildingImage } from '../../images/BuildingImage';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
+import { BuildingLevelBox } from './BuildingLevelBox';
 
 interface IProps {
   readonly building: IBuildingSpot;
@@ -16,8 +17,6 @@ const propTypes: PropTypesShape<IProps> = {
     fieldId: PropTypes.number.isRequired,
     level: PropTypes.shape({
       actual: PropTypes.number.isRequired,
-      inProgress: PropTypes.number.isRequired,
-      queued: PropTypes.number.isRequired
     }).isRequired,
     type: PropTypes.number.isRequired,
   }).isRequired,
@@ -48,10 +47,9 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
     <div>
       <button onClick={onClick} title={building.name}>
         <BuildingImage buildingType={building.type} />
-        <span>
-          <div>{building.level.actual}</div>
-          <div>{building.level.actual + building.level.inProgress + building.level.queued}</div>
-        </span>
+        {building.level && (
+          <BuildingLevelBox level={building.level}/>
+        )}
       </button>
       <Modal
         open={isDialogOpened}

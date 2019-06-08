@@ -34,7 +34,7 @@ const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
   if (timer <= 0) {
     return null;
   }
-  
+
   const time = formatTimeFromSeconds(timer);
 
   return (

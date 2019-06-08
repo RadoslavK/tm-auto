@@ -2,7 +2,8 @@ fragment BuildingSpotFragment on BuildingSpot {
     fieldId
     level {
         actual
-        inProgress
+        max
+        ongoing
         queued
         total
     }

@@ -1,13 +1,14 @@
-type BuildingLevel {
+type BuildingSpotLevel {
     actual: Int!
-    inProgress: Int!
+    max: Int!
+    ongoing: Int!
     queued: Int!
     total: Int!
 }
 
 type BuildingSpot {
     fieldId: Int!
-    level: BuildingLevel!
+    level: BuildingSpotLevel
     name: String!
     type: Int!
 }

@@ -24,13 +24,6 @@ export type IBuildingInProgress = {
   readonly type: Scalars["Int"];
 };
 
-export type IBuildingLevel = {
-  readonly actual: Scalars["Int"];
-  readonly inProgress: Scalars["Int"];
-  readonly queued: Scalars["Int"];
-  readonly total: Scalars["Int"];
-};
-
 export type IBuildingQueue = {
   readonly buildings: ReadonlyArray<IQueuedBuilding>;
   readonly totalCost: ICost;
@@ -39,9 +32,17 @@ export type IBuildingQueue = {
 
 export type IBuildingSpot = {
   readonly fieldId: Scalars["Int"];
-  readonly level: IBuildingLevel;
+  readonly level?: Maybe<IBuildingSpotLevel>;
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
+};
+
+export type IBuildingSpotLevel = {
+  readonly actual: Scalars["Int"];
+  readonly max: Scalars["Int"];
+  readonly ongoing: Scalars["Int"];
+  readonly queued: Scalars["Int"];
+  readonly total: Scalars["Int"];
 };
 
 export type IBuildingSpots = {
@@ -170,9 +171,8 @@ export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
   "fieldId" | "name" | "type"
 > & {
-  readonly level: Pick<
-    IBuildingLevel,
-    "actual" | "inProgress" | "queued" | "total"
+  readonly level: Maybe<
+    Pick<IBuildingSpotLevel, "actual" | "max" | "ongoing" | "queued" | "total">
   >;
 };
 

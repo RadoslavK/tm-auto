@@ -83,8 +83,8 @@ const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
       <BuildingImage buildingType={building.type} />
       <div>{building.name}</div>
       <div>Level {building.level}</div>
-      <Cost cost={building.cost} />
       <div><img src={imageLinks.time} />{building.time}</div>
+      <Cost cost={building.cost} />
     </button>
   );
 };

@@ -29,14 +29,6 @@ export type IBuildingInProgress = {
   readonly type: Scalars["Int"];
 };
 
-export type IBuildingLevel = {
-  __typename?: "BuildingLevel";
-  readonly actual: Scalars["Int"];
-  readonly inProgress: Scalars["Int"];
-  readonly queued: Scalars["Int"];
-  readonly total: Scalars["Int"];
-};
-
 export type IBuildingQueue = {
   __typename?: "BuildingQueue";
   readonly buildings: ReadonlyArray<IQueuedBuilding>;
@@ -47,9 +39,18 @@ export type IBuildingQueue = {
 export type IBuildingSpot = {
   __typename?: "BuildingSpot";
   readonly fieldId: Scalars["Int"];
-  readonly level: IBuildingLevel;
+  readonly level?: Maybe<IBuildingSpotLevel>;
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
+};
+
+export type IBuildingSpotLevel = {
+  __typename?: "BuildingSpotLevel";
+  readonly actual: Scalars["Int"];
+  readonly max: Scalars["Int"];
+  readonly ongoing: Scalars["Int"];
+  readonly queued: Scalars["Int"];
+  readonly total: Scalars["Int"];
 };
 
 export type IBuildingSpots = {
@@ -257,7 +258,7 @@ export type IResolversTypes = {
   Int: Scalars["Int"];
   BuildingSpots: IBuildingSpots;
   BuildingSpot: IBuildingSpot;
-  BuildingLevel: IBuildingLevel;
+  BuildingSpotLevel: IBuildingSpotLevel;
   String: Scalars["String"];
   ResourceFields: IResourceFields;
   BuildingInProgress: IBuildingInProgress;
@@ -294,16 +295,6 @@ export type IBuildingInProgressResolvers<
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
-export type IBuildingLevelResolvers<
-  ContextType = IGraphQLContext,
-  ParentType = IResolversTypes["BuildingLevel"]
-> = {
-  actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  inProgress?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  queued?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  total?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-};
-
 export type IBuildingQueueResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["BuildingQueue"]
@@ -326,9 +317,24 @@ export type IBuildingSpotResolvers<
   ParentType = IResolversTypes["BuildingSpot"]
 > = {
   fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  level?: Resolver<IResolversTypes["BuildingLevel"], ParentType, ContextType>;
+  level?: Resolver<
+    Maybe<IResolversTypes["BuildingSpotLevel"]>,
+    ParentType,
+    ContextType
+  >;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
+export type IBuildingSpotLevelResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["BuildingSpotLevel"]
+> = {
+  actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  max?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  ongoing?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  queued?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  total?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IBuildingSpotsResolvers<
@@ -500,9 +506,9 @@ export type IVillageResolvers<
 export type IResolvers<ContextType = IGraphQLContext> = {
   Building?: IBuildingResolvers<ContextType>;
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
-  BuildingLevel?: IBuildingLevelResolvers<ContextType>;
   BuildingQueue?: IBuildingQueueResolvers<ContextType>;
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
+  BuildingSpotLevel?: IBuildingSpotLevelResolvers<ContextType>;
   BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
   Cost?: ICostResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;

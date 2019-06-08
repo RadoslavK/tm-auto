@@ -116,7 +116,9 @@ export class BuildingsService {
         fieldId: b.fieldId,
         level: {
           ...level,
+          ongoing: level.inProgress,
           total: level.actual + level.inProgress + level.queued,
+          max: buildingInfos[usedType].length,
         },
         name: buildingNames[usedType],
       };
@@ -275,7 +277,7 @@ export class BuildingsService {
       b.type === queuedBuilding.type
       && b.fieldId == queuedBuilding.fieldId
       && (b.level.actual
-      + b.level.inProgress
+      + b.level.ongoing
       + providedOffsets[queuedBuilding.fieldId]
       + 1)
       === queuedBuilding.level);
@@ -296,7 +298,7 @@ export class BuildingsService {
     if (queuedBuilding.level == 1) {
       //dolezite iba ked sa stava nove
       const prohibitedBuildingExists = normalizedBuildings.some(
-        b => b.level.actual + b.level.inProgress + providedOffsets[b.fieldId] > 0
+        b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId] > 0
           && conditions.prohibitedBuildingTypes.includes(b.type));
 
       if (prohibitedBuildingExists) {
@@ -310,7 +312,7 @@ export class BuildingsService {
         if (conditions.isUnique) {
           // existuje nejaka budova, rozstavana alebo v queue az po tialto
           const existingBuilding = sameTypeBuildings.find(
-            b => b.level.actual + b.level.inProgress + providedOffsets[b.fieldId]
+            b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
               > 0);
 
           if (!!existingBuilding
@@ -324,7 +326,7 @@ export class BuildingsService {
             b => ({
               totalLevel:
                 b.level.actual
-                + b.level.inProgress
+                + b.level.ongoing
                 + providedOffsets[b.fieldId],
               fieldId: b.fieldId,
             }))
@@ -356,7 +358,7 @@ export class BuildingsService {
             const requiredBuilding = conditions.requiredBuildings[i];
             const requiredBuildingExists = normalizedBuildings.some(
               b => b.type == requiredBuilding.type
-                && b.level.actual + b.level.inProgress + providedOffsets[b.fieldId]
+                && b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
                 >= requiredBuilding.level);
 
             if (!requiredBuildingExists) {
