@@ -87,6 +87,8 @@ export class BuildingsService {
 
     const queue = this.getBuildingQueue(villageId);
     queue.dequeueAt(queueIndex);
+
+    this.correctBuildingQueue(villageId);
   }
 
   public normalizedBuildingSpots(villageId: number): readonly IBuildingSpot[] {
@@ -97,7 +99,8 @@ export class BuildingsService {
 
     return spots.map((b): IBuildingSpot => {
       const queued = queue.buildings().filter(bb => bb.fieldId === b.fieldId);
-      const usedType = b.type || (queued.length > 0 ? queued[0].type : b.type);
+      const ongoing = inProgress.filter(bb => bb.fieldId === b.fieldId);
+      const usedType = b.type || (ongoing.length > 0 ? ongoing[0].type : (queued.length > 0 ? queued[0].type : b.type));
       const level = {
         actual: b.level,
         inProgress: inProgress.filter(bb => bb.fieldId === b.fieldId).length,
@@ -231,6 +234,137 @@ export class BuildingsService {
     }));
   }
 
+  public correctBuildingQueue(villageId: number) {
+    const queue = this.getBuildingQueue(villageId);
+    const queuedBuildings = queue.buildings();
+    const offsets: Record<number, number> = {};
+
+    this.getBuildingSpots(villageId).forEach(spot => {
+      offsets[spot.fieldId] = 0;
+    });
+
+    queuedBuildings.forEach(qBuilding => {
+      const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(villageId, qBuilding, offsets);
+
+      if (shouldBeRemoved) {
+        const index = queuedBuildings.indexOf(qBuilding);
+        queue.removeAt(index);
+      } else {
+        offsets[qBuilding.fieldId]++;
+      }
+    });
+  }
+
+  private shouldRemoveBuildingFromQueue(villageId: number, queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean {
+    if (queuedBuilding.type === BuildingType.Palace
+      && context.villageService.villages().some(otherVillage =>
+        otherVillage.id !== villageId
+        && this.normalizedBuildingSpots(otherVillage.id).some(b => b.type === BuildingType.Palace))) {
+      //iba 1 palac
+      return true;
+    }
+
+    const normalizedBuildings = this.normalizedBuildingSpots(villageId);
+
+    const previousLevelBuildingExists = normalizedBuildings.some(b =>
+      b.type === queuedBuilding.type
+      && b.fieldId == queuedBuilding.fieldId
+      && (b.level.actual
+      + b.level.inProgress
+      + providedOffsets[queuedBuilding.fieldId]
+      + 1)
+      === queuedBuilding.level);
+
+    //mala by existovat budova s predoslym lvl
+    if (!previousLevelBuildingExists) {
+      return true;
+    }
+
+    const conditions = buildingsConditions[queuedBuilding.type];
+    const village = context.villageService.villages().find(v => v.id === villageId);
+
+    if ((conditions.capital === CapitalCondition.Prohibited && village.isCapital)
+      || (conditions.capital === CapitalCondition.Required && !village.isCapital)) {
+      return true;
+    }
+
+    if (queuedBuilding.level == 1) {
+      //dolezite iba ked sa stava nove
+      const prohibitedBuildingExists = normalizedBuildings.some(
+        b => b.level.actual + b.level.inProgress + providedOffsets[b.fieldId] > 0
+          && conditions.prohibitedBuildingTypes.includes(b.type));
+
+      if (prohibitedBuildingExists) {
+        return true;
+      }
+
+      if (conditions.type > BuildingType.Crop) {
+        //u resource je jedno
+        const sameTypeBuildings = normalizedBuildings.filter(b => b.type === conditions.type);
+
+        if (conditions.isUnique) {
+          // existuje nejaka budova, rozstavana alebo v queue az po tialto
+          const existingBuilding = sameTypeBuildings.find(
+            b => b.level.actual + b.level.inProgress + providedOffsets[b.fieldId]
+              > 0);
+
+          if (!!existingBuilding
+            && existingBuilding.fieldId != queuedBuilding.fieldId) {
+            return true;
+          }
+        } else {
+          const maxLevel = buildingInfos[conditions.type].length;
+
+          const existingBuildings = sameTypeBuildings.map(
+            b => ({
+              totalLevel:
+                b.level.actual
+                + b.level.inProgress
+                + providedOffsets[b.fieldId],
+              fieldId: b.fieldId,
+            }))
+            .filter(b => b.totalLevel > 0);
+
+
+          if (existingBuildings.length > 0) {
+            const isAnyCompleted =
+              existingBuildings.some(b => b.totalLevel >= maxLevel);
+
+            if (!isAnyCompleted) {
+              //ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon
+              //1 musi zhodovat s tym co stavame
+              const anyExists = existingBuildings.some(
+                b => b.fieldId == queuedBuilding.fieldId);
+
+              if (!anyExists) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+
+      if (queuedBuilding.level == 1) {
+        //dolezite iba ked sa stava nove
+        for (let i = 0; i < conditions.requiredBuildings.length; i++) {
+          {
+            const requiredBuilding = conditions.requiredBuildings[i];
+            const requiredBuildingExists = normalizedBuildings.some(
+              b => b.type == requiredBuilding.type
+                && b.level.actual + b.level.inProgress + providedOffsets[b.fieldId]
+                >= requiredBuilding.level);
+
+            if (!requiredBuildingExists) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
+    }
+  }
+
   private newBuildingMeetsConditions(villageId: number, conditions: BuildingConditions): boolean {
     //TODO detect if artefacts are in village
     if (conditions.type == BuildingType.GreatGranary
@@ -244,8 +378,8 @@ export class BuildingsService {
     }
 
     const { isCapital } = context.villageService.currentVillage();
-    if (conditions.capital === CapitalCondition.Prohibited && isCapital
-      || conditions.capital === CapitalCondition.Required && !isCapital) {
+    if ((conditions.capital === CapitalCondition.Prohibited && isCapital)
+      || (conditions.capital === CapitalCondition.Required && !isCapital)) {
       return false;
     }
 
@@ -269,7 +403,7 @@ export class BuildingsService {
       }
     }
 
-    const hasProhibitedBuildings =normalizedBuildingSpots .some(b => conditions.prohibitedBuildingTypes.includes(b.type));
+    const hasProhibitedBuildings = normalizedBuildingSpots.some(b => conditions.prohibitedBuildingTypes.includes(b.type));
 
     if (hasProhibitedBuildings) {
       return false;
@@ -277,7 +411,7 @@ export class BuildingsService {
 
     for (let i = 0; i < conditions.requiredBuildings.length; i++) {
       const requiredBuilding = conditions.requiredBuildings[i];
-      const requiredBuildingExists =normalizedBuildingSpots.some(
+      const requiredBuildingExists = normalizedBuildingSpots.some(
         b => b.level.total >= requiredBuilding.level
           && b.type === requiredBuilding.type);
 

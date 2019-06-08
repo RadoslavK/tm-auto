@@ -15,10 +15,14 @@ export class BuildingQueue {
     const building = this._buildings[index];
 
     if (building) {
-      delete this._buildings[index];
+      this.removeAt(index);
     }
 
     return building;
+  }
+
+  public removeAt(index: number) {
+    delete this._buildings[index];
   }
 
   public clear(): void {
