@@ -6,7 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "start:watch": "nodemon"
+    "start:watch": "nodemon",
+    "start:debug": "nodemon --watch src/**/* -e ts,json --exec node --inspect -r ts-node/register src/index.ts"
   },
   "dependencies": {
     "apollo-server-express": "^2.6.1",
