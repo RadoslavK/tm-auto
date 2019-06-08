@@ -65,10 +65,14 @@ export class BuildingsService {
       villageId,
     } = input;
 
-    const buildings = this.getBuildingSpots(villageId);
+    const totalLevel = this.normalizedBuildingSpots(villageId).find(spot => spot.fieldId === fieldId).level.total;
     const queue = this.getBuildingQueue(villageId);
-    const queued = queue.buildings().filter(b => b.fieldId === fieldId).length;
-    const level = buildings.find(b => b.fieldId === fieldId).level + queued + 1;
+    const level = totalLevel + 1;
+    const maxLevel = buildingInfos[type].length;
+
+    if (level > maxLevel) {
+      return;
+    }
 
     const building: QueuedBuilding = new QueuedBuilding({
       fieldId,
