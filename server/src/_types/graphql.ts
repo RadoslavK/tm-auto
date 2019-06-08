@@ -73,8 +73,15 @@ export type ICost = {
   readonly freeCrop: Scalars["Int"];
 };
 
+export type IDequeueBuildingAtFieldInput = {
+  readonly deleteAll: Scalars["Boolean"];
+  readonly fieldId: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
+};
+
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
+  readonly levels: Scalars["Int"];
   readonly type: Scalars["Int"];
   readonly villageId: Scalars["Int"];
 };
@@ -83,6 +90,7 @@ export type IMutation = {
   __typename?: "Mutation";
   readonly clearQueue: Scalars["Boolean"];
   readonly dequeueBuilding: Scalars["Boolean"];
+  readonly dequeueBuildingAtField: Scalars["Boolean"];
   readonly enqueueBuilding: Scalars["Boolean"];
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
@@ -97,6 +105,10 @@ export type IMutationClearQueueArgs = {
 
 export type IMutationDequeueBuildingArgs = {
   input?: Maybe<IQueuedBuildingManipulationInput>;
+};
+
+export type IMutationDequeueBuildingAtFieldArgs = {
+  input?: Maybe<IDequeueBuildingAtFieldInput>;
 };
 
 export type IMutationEnqueueBuildingArgs = {
@@ -284,6 +296,7 @@ export type IResolversTypes = {
   Village: IVillage;
   Mutation: {};
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
+  DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
   Building: IBuilding;
@@ -393,6 +406,12 @@ export type IMutationResolvers<
     ParentType,
     ContextType,
     IMutationDequeueBuildingArgs
+  >;
+  dequeueBuildingAtField?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationDequeueBuildingAtFieldArgs
   >;
   enqueueBuilding?: Resolver<
     IResolversTypes["Boolean"],

@@ -10,6 +10,7 @@ declare module "*/graphql_operations/building.graphql" {
   export const ClearQueue: DocumentNode;
   export const EnqueueBuilding: DocumentNode;
   export const DequeueBuilding: DocumentNode;
+  export const DequeueBuildingAtField: DocumentNode;
   export const MoveQueuedBuildingDown: DocumentNode;
   export const MoveQueuedBuildingUp: DocumentNode;
 

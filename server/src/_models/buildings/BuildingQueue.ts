@@ -8,12 +8,20 @@ export class BuildingQueue {
   }
 
   public popFirst(): QueuedBuilding | undefined {
-    return this._buildings.shift();
+    return this._buildings.splice(-1, 1)[0];
   }
 
-  public remove(queueId: string) {
-    this._buildings = this._buildings.filter(b => b.queueId !== queueId);
+  public popFirstAtField(fieldId: number): void {
+    const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
+
+    if (buildingToRemove) {
+      this.remove(buildingToRemove.queueId);
+    }
   }
+
+  public remove = (queueId: string) => {
+    this._buildings = this._buildings.filter(b => b.queueId !== queueId);
+  };
 
   public clear(): void {
     this._buildings = [];

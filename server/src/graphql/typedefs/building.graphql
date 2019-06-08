@@ -74,6 +74,7 @@ input ClearQueueInput {
 
 input EnqueueBuildingInput {
     fieldId: Int!
+    levels: Int!
     type: Int!
     villageId: Int!
 }
@@ -81,6 +82,7 @@ input EnqueueBuildingInput {
 extend type Mutation {
     clearQueue(villageId: Int!): Boolean!
     dequeueBuilding(input: QueuedBuildingManipulationInput): Boolean!
+    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }
 
@@ -100,6 +102,12 @@ extend type Query {
 
 input QueuedBuildingManipulationInput {
     queueId: ID!
+    villageId: Int!
+}
+
+input DequeueBuildingAtFieldInput {
+    deleteAll: Boolean!
+    fieldId: Int!
     villageId: Int!
 }
 

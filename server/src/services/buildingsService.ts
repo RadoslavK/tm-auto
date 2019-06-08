@@ -10,7 +10,7 @@ import {
   IBuildingSpot,
   IQueuedBuildingManipulationInput,
   IEnqueueBuildingInput,
-  INewBuildingInfo
+  INewBuildingInfo, IDequeueBuildingAtFieldInput,
 } from '../_types/graphql';
 import { buildingNames } from '../constants/buildingNames';
 import { context } from '../graphql/context';
@@ -68,27 +68,31 @@ export class BuildingsService {
     const {
       type,
       fieldId,
+      levels,
       villageId,
     } = input;
 
     const totalLevel = this.normalizedBuildingSpots(villageId).find(spot => spot.fieldId === fieldId).level.total;
     const queue = this.getBuildingQueue(villageId);
-    const level = totalLevel + 1;
     const maxLevel = buildingInfos[type].length;
 
-    if (level > maxLevel) {
-      return;
+    for (let i = 1; i <= levels; i++) {
+      const level = totalLevel + i;
+
+      if (level > maxLevel) {
+        return;
+      }
+
+      const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8)}`;
+      const building: QueuedBuilding = new QueuedBuilding({
+        fieldId,
+        level,
+        type,
+        queueId,
+      });
+
+      queue.add(building);
     }
-
-    const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8)}`;
-    const building: QueuedBuilding = new QueuedBuilding({
-      fieldId,
-      level,
-      type,
-      queueId,
-    });
-
-    queue.add(building);
   }
 
   public dequeueBuilding(input: IQueuedBuildingManipulationInput): void {
@@ -99,6 +103,28 @@ export class BuildingsService {
 
     const queue = this.getBuildingQueue(villageId);
     queue.remove(queueId);
+
+    this.correctBuildingQueue(villageId);
+  }
+
+  public dequeueBuildingAtField(input: IDequeueBuildingAtFieldInput): void {
+    const {
+      deleteAll,
+      fieldId,
+      villageId,
+    } = input;
+
+    const queue = this.getBuildingQueue(villageId);
+
+    if (deleteAll) {
+      queue
+        .buildings()
+        .filter(b => b.fieldId === fieldId)
+        .map(b => b.queueId)
+        .forEach(queue.remove);
+    } else {
+      queue.popFirstAtField(fieldId);
+    }
 
     this.correctBuildingQueue(villageId);
   }

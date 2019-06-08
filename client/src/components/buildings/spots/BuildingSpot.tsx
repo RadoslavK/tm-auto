@@ -2,11 +2,19 @@ import { Modal } from '@material-ui/core';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BuildingType } from '../../../../../server/src/_enums/BuildingType';
-import { IBuildingSpot} from '../../../_types/graphql';
+import { IBuildingSpot } from '../../../_types/graphql';
+import { useDequeueBuildingAtFieldMutation } from '../../../hooks/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
 import { BuildingImage } from '../../images/BuildingImage';
+import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 import { BuildingLevelBox } from './BuildingLevelBox';
+
+enum DialogType {
+  None = 'None',
+  NewBuilding = 'NewBuilding',
+  MultiEnqueue = 'MultiEnqueue',
+}
 
 interface IProps {
   readonly building: IBuildingSpot;
@@ -17,7 +25,7 @@ const propTypes: PropTypesShape<IProps> = {
     fieldId: PropTypes.number.isRequired,
     level: PropTypes.shape({
       actual: PropTypes.number.isRequired,
-    }).isRequired,
+    }),
     type: PropTypes.number.isRequired,
   }).isRequired,
 };
@@ -27,36 +35,84 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
     building,
   } = props;
 
-  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
+  const [dialog, setDialog] = useState(DialogType.None);
   const enqueue = useEnqueueBuildingMutation({
     buildingType: building.type,
     fieldId: building.fieldId,
   });
+  const dequeue = useDequeueBuildingAtFieldMutation({
+    deleteAll: false,
+    fieldId: building.fieldId,
 
-  const onClick = async () => {
+  });
+  const dequeueAll = useDequeueBuildingAtFieldMutation({
+    deleteAll: true,
+    fieldId: building.fieldId,
+  });
+
+  const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (building.type !== BuildingType.None) {
-      await enqueue();
+      if (event.ctrlKey) {
+        setDialog(DialogType.MultiEnqueue);
+      } else {
+        await enqueue();
+      }
     } else {
-      setIsDialogOpened(true);
+      setDialog(DialogType.NewBuilding);
     }
   };
 
-  const onSelect = () => setIsDialogOpened(false);
+  const onDequeue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (event.ctrlKey) {
+      await dequeueAll();
+    } else {
+      await dequeue();
+    }
+  };
+
+  const onSelect = () => setDialog(DialogType.None);
 
   return (
     <div>
-      <button onClick={onClick} title={building.name}>
+      <div title={building.name}>
         <BuildingImage buildingType={building.type} />
         {building.level && (
-          <BuildingLevelBox level={building.level}/>
+          <>
+            <BuildingLevelBox level={building.level}/>
+            {building.level.total < building.level.max && (
+              <button onClick={onEnqueue}>
+                Enqueue
+              </button>
+            )}
+            {building.level.queued > 0 && (
+              <button onClick={onDequeue}>
+                Dequeue
+              </button>
+            )}
+          </>
         )}
-      </button>
+      </div>
       <Modal
-        open={isDialogOpened}
+        open={dialog === DialogType.NewBuilding}
         onClose={onSelect}
       >
         <NewBuildingDialog fieldId={building.fieldId} onSelect={onSelect}/>
       </Modal>
+      {building.level && (
+        <Modal
+          open={dialog === DialogType.MultiEnqueue}
+          onClose={onSelect}
+        >
+          <MultiEnqueueDialog
+            totalLevel={building.level.total}
+            buildingType={building.type}
+            fieldId={building.fieldId}
+            maxLevel={building.level.max}
+            onSelect={onSelect}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

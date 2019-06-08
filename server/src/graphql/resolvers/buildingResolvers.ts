@@ -104,6 +104,11 @@ export const buildingResolvers: IResolvers = {
       return true;
     },
 
+    dequeueBuildingAtField: (_, args, context) => {
+      context.buildingsService.dequeueBuildingAtField(args.input);
+      return true;
+    },
+
     moveQueuedBuildingDown: (_, args, context) => context.buildingsService.moveQueuedBuildingDown(args.input),
 
     moveQueuedBuildingUp: (_, args, context) => context.buildingsService.moveQueuedBuildingUp(args.input),

@@ -5,8 +5,9 @@ import { IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables } from '../
 import { IVillageContext, VillageContext } from '../components/villages/context/VillageContext';
 
 interface IParams {
-  readonly buildingType: number;
+  readonly buildingType: number
   readonly fieldId: number;
+  readonly levels?: number;
 }
 
 export const useEnqueueBuildingMutation = (params: IParams) => {
@@ -15,14 +16,16 @@ export const useEnqueueBuildingMutation = (params: IParams) => {
   const {
     buildingType,
     fieldId,
+    levels = 1,
   } = params;
 
   return useMutation<IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables>(EnqueueBuilding, {
     variables: {
       input: {
-        villageId,
         type: buildingType,
         fieldId,
+        levels,
+        villageId,
       },
     },
     refetchQueries: [

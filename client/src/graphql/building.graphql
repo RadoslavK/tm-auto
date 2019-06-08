@@ -91,6 +91,10 @@ mutation DequeueBuilding($input: QueuedBuildingManipulationInput) {
     dequeueBuilding(input: $input)
 }
 
+mutation DequeueBuildingAtField($input: DequeueBuildingAtFieldInput) {
+    dequeueBuildingAtField(input: $input)
+}
+
 mutation MoveQueuedBuildingDown($input: QueuedBuildingManipulationInput!) {
     moveQueuedBuildingDown(input: $input)
 }

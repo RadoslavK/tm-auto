@@ -63,8 +63,15 @@ export type ICost = {
   readonly freeCrop: Scalars["Int"];
 };
 
+export type IDequeueBuildingAtFieldInput = {
+  readonly deleteAll: Scalars["Boolean"];
+  readonly fieldId: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
+};
+
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
+  readonly levels: Scalars["Int"];
   readonly type: Scalars["Int"];
   readonly villageId: Scalars["Int"];
 };
@@ -72,6 +79,7 @@ export type IEnqueueBuildingInput = {
 export type IMutation = {
   readonly clearQueue: Scalars["Boolean"];
   readonly dequeueBuilding: Scalars["Boolean"];
+  readonly dequeueBuildingAtField: Scalars["Boolean"];
   readonly enqueueBuilding: Scalars["Boolean"];
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
@@ -86,6 +94,10 @@ export type IMutationClearQueueArgs = {
 
 export type IMutationDequeueBuildingArgs = {
   input?: Maybe<IQueuedBuildingManipulationInput>;
+};
+
+export type IMutationDequeueBuildingAtFieldArgs = {
+  input?: Maybe<IDequeueBuildingAtFieldInput>;
 };
 
 export type IMutationEnqueueBuildingArgs = {
@@ -268,6 +280,15 @@ export type IDequeueBuildingMutationVariables = {
 };
 
 export type IDequeueBuildingMutation = Pick<IMutation, "dequeueBuilding">;
+
+export type IDequeueBuildingAtFieldMutationVariables = {
+  input?: Maybe<IDequeueBuildingAtFieldInput>;
+};
+
+export type IDequeueBuildingAtFieldMutation = Pick<
+  IMutation,
+  "dequeueBuildingAtField"
+>;
 
 export type IMoveQueuedBuildingDownMutationVariables = {
   input: IQueuedBuildingManipulationInput;
