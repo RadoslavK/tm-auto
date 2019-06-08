@@ -2,10 +2,9 @@ import { Modal } from '@material-ui/core';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BuildingType } from '../../../../../server/src/_enums/BuildingType';
-import { buildingNames } from '../../../../../server/src/constants/buildingNames';
 import { IBuildingSpot} from '../../../_types/graphql';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
-import { imageLinks } from '../../../utils/imageLinks';
+import { BuildingImage } from '../../images/BuildingImage';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 
 interface IProps {
@@ -47,11 +46,12 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <div>
-      <button onClick={onClick}>
-        <img src={imageLinks.getBuilding(building.type)} />
-        <span>{buildingNames[building.type]}</span>:
-        <span>{building.level.actual}</span> ->
-        <span>{building.level.actual + building.level.inProgress + building.level.queued}</span>
+      <button onClick={onClick} title={building.name}>
+        <BuildingImage buildingType={building.type} />
+        <span>
+          <div>{building.level.actual}</div>
+          <div>{building.level.actual + building.level.inProgress + building.level.queued}</div>
+        </span>
       </button>
       <Modal
         open={isDialogOpened}

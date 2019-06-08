@@ -64,8 +64,9 @@ export const buildingResolvers: IResolvers = {
     buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(args.villageId).map((b): IBuildingInProgress => {
       return {
         level: b.level,
+        name: buildingNames[b.type],
         type: b.type,
-        time: formatTimeFromSeconds(b.timer),
+        timer: b.timer,
       };
     }),
 

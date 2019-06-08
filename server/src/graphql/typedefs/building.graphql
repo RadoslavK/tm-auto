@@ -8,6 +8,7 @@ type BuildingLevel {
 type BuildingSpot {
     fieldId: Int!
     level: BuildingLevel!
+    name: String!
     type: Int!
 }
 
@@ -47,7 +48,8 @@ type QueuedBuilding {
 
 type BuildingInProgress {
     level: Int!
-    time: String!
+    name: String!
+    timer: Int!
     type: Int!
 }
 

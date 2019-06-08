@@ -6,6 +6,7 @@ fragment BuildingSpotFragment on BuildingSpot {
         queued
         total
     }
+    name
     type
 }
 
@@ -62,7 +63,8 @@ query GetQueuedBuildings($villageId: Int!) {
 query GetBuildingsInProgress($villageId: Int!) {
     buildingsInProgress(villageId: $villageId) {
         level
-        time
+        name
+        timer
         type
     }
 }

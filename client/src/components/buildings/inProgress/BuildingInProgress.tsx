@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { buildingNames } from '../../../../../server/src/constants/buildingNames';
+import { formatTimeFromSeconds } from '../../../../../server/src/utils/formatTime';
 import { IBuildingInProgress } from '../../../_types/graphql';
-import { imageLinks } from '../../../utils/imageLinks';
+import { BuildingImage } from '../../images/BuildingImage';
 
 interface IProps {
   readonly building: IBuildingInProgress;
@@ -11,16 +11,38 @@ interface IProps {
 const propTypes: PropTypesShape<IProps> = {
   building: PropTypes.shape({
     level: PropTypes.number.isRequired,
-    time: PropTypes.string.isRequired,
     type: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
+  const {
+    building,
+  } = props;
+
+  const [timer, setTimer] = useState(building.timer);
+
+  useEffect(() => {
+    const intervalId = setInterval(
+      () => setTimer(prevTimer => prevTimer - 1),
+      1000,
+    );
+
+    return () => clearInterval(intervalId);
+  }, [ building.timer ]);
+
+  if (timer <= 0) {
+    return null;
+  }
+  
+  const time = formatTimeFromSeconds(timer);
+
   return (
     <div style={{ color: 'blue' }}>
-      <img src={imageLinks.getBuilding(props.building.type)} />
-      {buildingNames[props.building.type]}: {props.building.level} ({props.building.time})
+      <BuildingImage buildingType={building.type} />
+      <div>{building.name}</div>
+      <div>Level {building.level}</div>
+      <div>{time}</div>
     </div>
   );
 };

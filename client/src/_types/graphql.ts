@@ -19,7 +19,8 @@ export type IBuilding = {
 
 export type IBuildingInProgress = {
   readonly level: Scalars["Int"];
-  readonly time: Scalars["String"];
+  readonly name: Scalars["String"];
+  readonly timer: Scalars["Int"];
   readonly type: Scalars["Int"];
 };
 
@@ -39,6 +40,7 @@ export type IBuildingQueue = {
 export type IBuildingSpot = {
   readonly fieldId: Scalars["Int"];
   readonly level: IBuildingLevel;
+  readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
 
@@ -166,7 +168,7 @@ export type IVillage = {
 };
 export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
-  "fieldId" | "type"
+  "fieldId" | "name" | "type"
 > & {
   readonly level: Pick<
     IBuildingLevel,
@@ -217,7 +219,7 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 export type IGetBuildingsInProgressQuery = {
   readonly buildingsInProgress: ReadonlyArray<
-    Pick<IBuildingInProgress, "level" | "time" | "type">
+    Pick<IBuildingInProgress, "level" | "name" | "timer" | "type">
   >;
 };
 

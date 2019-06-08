@@ -118,6 +118,7 @@ export class BuildingsService {
           ...level,
           total: level.actual + level.inProgress + level.queued,
         },
+        name: buildingNames[usedType],
       };
     });
   }

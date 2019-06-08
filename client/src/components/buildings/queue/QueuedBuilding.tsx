@@ -10,6 +10,7 @@ import {
   IQueuedBuilding,
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
+import { BuildingImage } from '../../images/BuildingImage';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
@@ -79,7 +80,7 @@ const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
 
   return (
     <button onClick={onDequeue}>
-      <img src={imageLinks.getBuilding(building.type)} />
+      <BuildingImage buildingType={building.type} />
       <div>{building.name}</div>
       <div>Level {building.level}</div>
       <Cost cost={building.cost} />

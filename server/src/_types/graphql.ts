@@ -24,7 +24,8 @@ export type IBuilding = {
 export type IBuildingInProgress = {
   __typename?: "BuildingInProgress";
   readonly level: Scalars["Int"];
-  readonly time: Scalars["String"];
+  readonly name: Scalars["String"];
+  readonly timer: Scalars["Int"];
   readonly type: Scalars["Int"];
 };
 
@@ -47,6 +48,7 @@ export type IBuildingSpot = {
   __typename?: "BuildingSpot";
   readonly fieldId: Scalars["Int"];
   readonly level: IBuildingLevel;
+  readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
 
@@ -256,9 +258,9 @@ export type IResolversTypes = {
   BuildingSpots: IBuildingSpots;
   BuildingSpot: IBuildingSpot;
   BuildingLevel: IBuildingLevel;
+  String: Scalars["String"];
   ResourceFields: IResourceFields;
   BuildingInProgress: IBuildingInProgress;
-  String: Scalars["String"];
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
   Cost: ICost;
@@ -287,7 +289,8 @@ export type IBuildingInProgressResolvers<
   ParentType = IResolversTypes["BuildingInProgress"]
 > = {
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  time?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  timer?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -324,6 +327,7 @@ export type IBuildingSpotResolvers<
 > = {
   fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   level?: Resolver<IResolversTypes["BuildingLevel"], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
