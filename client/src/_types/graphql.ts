@@ -63,11 +63,6 @@ export type ICost = {
   readonly freeCrop: Scalars["Int"];
 };
 
-export type IDequeueBuildingInput = {
-  readonly villageId: Scalars["Int"];
-  readonly queueIndex: Scalars["Int"];
-};
-
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
   readonly type: Scalars["Int"];
@@ -78,6 +73,8 @@ export type IMutation = {
   readonly clearQueue: Scalars["Boolean"];
   readonly dequeueBuilding: Scalars["Boolean"];
   readonly enqueueBuilding: Scalars["Boolean"];
+  readonly moveQueuedBuildingDown: Scalars["Boolean"];
+  readonly moveQueuedBuildingUp: Scalars["Boolean"];
   readonly startBot: Scalars["Boolean"];
   readonly stopBot: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
@@ -88,11 +85,19 @@ export type IMutationClearQueueArgs = {
 };
 
 export type IMutationDequeueBuildingArgs = {
-  input?: Maybe<IDequeueBuildingInput>;
+  input?: Maybe<IQueuedBuildingManipulationInput>;
 };
 
 export type IMutationEnqueueBuildingArgs = {
   input?: Maybe<IEnqueueBuildingInput>;
+};
+
+export type IMutationMoveQueuedBuildingDownArgs = {
+  input: IQueuedBuildingManipulationInput;
+};
+
+export type IMutationMoveQueuedBuildingUpArgs = {
+  input: IQueuedBuildingManipulationInput;
 };
 
 export type IMutationSignInArgs = {
@@ -136,12 +141,19 @@ export type IQueryVillageExistsArgs = {
 };
 
 export type IQueuedBuilding = {
+  readonly canMoveDown: Scalars["Boolean"];
+  readonly canMoveUp: Scalars["Boolean"];
   readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
+};
+
+export type IQueuedBuildingManipulationInput = {
+  readonly queueIndex: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IResourceFields = {
@@ -206,7 +218,13 @@ export type IGetQueuedBuildingsQuery = {
     readonly buildings: ReadonlyArray<
       Pick<
         IQueuedBuilding,
-        "level" | "name" | "time" | "type" | "queueIndex"
+        | "canMoveDown"
+        | "canMoveUp"
+        | "level"
+        | "name"
+        | "time"
+        | "type"
+        | "queueIndex"
       > & { readonly cost: ICostFragmentFragment }
     >;
     readonly totalCost: ICostFragmentFragment;
@@ -246,10 +264,28 @@ export type IEnqueueBuildingMutationVariables = {
 export type IEnqueueBuildingMutation = Pick<IMutation, "enqueueBuilding">;
 
 export type IDequeueBuildingMutationVariables = {
-  input?: Maybe<IDequeueBuildingInput>;
+  input?: Maybe<IQueuedBuildingManipulationInput>;
 };
 
 export type IDequeueBuildingMutation = Pick<IMutation, "dequeueBuilding">;
+
+export type IMoveQueuedBuildingDownMutationVariables = {
+  input: IQueuedBuildingManipulationInput;
+};
+
+export type IMoveQueuedBuildingDownMutation = Pick<
+  IMutation,
+  "moveQueuedBuildingDown"
+>;
+
+export type IMoveQueuedBuildingUpMutationVariables = {
+  input: IQueuedBuildingManipulationInput;
+};
+
+export type IMoveQueuedBuildingUpMutation = Pick<
+  IMutation,
+  "moveQueuedBuildingUp"
+>;
 
 export type IIsSignedInQueryVariables = {};
 

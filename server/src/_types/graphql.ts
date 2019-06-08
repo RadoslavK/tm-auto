@@ -73,11 +73,6 @@ export type ICost = {
   readonly freeCrop: Scalars["Int"];
 };
 
-export type IDequeueBuildingInput = {
-  readonly villageId: Scalars["Int"];
-  readonly queueIndex: Scalars["Int"];
-};
-
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars["Int"];
   readonly type: Scalars["Int"];
@@ -89,6 +84,8 @@ export type IMutation = {
   readonly clearQueue: Scalars["Boolean"];
   readonly dequeueBuilding: Scalars["Boolean"];
   readonly enqueueBuilding: Scalars["Boolean"];
+  readonly moveQueuedBuildingDown: Scalars["Boolean"];
+  readonly moveQueuedBuildingUp: Scalars["Boolean"];
   readonly startBot: Scalars["Boolean"];
   readonly stopBot: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
@@ -99,11 +96,19 @@ export type IMutationClearQueueArgs = {
 };
 
 export type IMutationDequeueBuildingArgs = {
-  input?: Maybe<IDequeueBuildingInput>;
+  input?: Maybe<IQueuedBuildingManipulationInput>;
 };
 
 export type IMutationEnqueueBuildingArgs = {
   input?: Maybe<IEnqueueBuildingInput>;
+};
+
+export type IMutationMoveQueuedBuildingDownArgs = {
+  input: IQueuedBuildingManipulationInput;
+};
+
+export type IMutationMoveQueuedBuildingUpArgs = {
+  input: IQueuedBuildingManipulationInput;
 };
 
 export type IMutationSignInArgs = {
@@ -150,12 +155,19 @@ export type IQueryVillageExistsArgs = {
 
 export type IQueuedBuilding = {
   __typename?: "QueuedBuilding";
+  readonly canMoveDown: Scalars["Boolean"];
+  readonly canMoveUp: Scalars["Boolean"];
   readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly time: Scalars["String"];
   readonly type: Scalars["Int"];
   readonly queueIndex: Scalars["Int"];
+};
+
+export type IQueuedBuildingManipulationInput = {
+  readonly queueIndex: Scalars["Int"];
+  readonly villageId: Scalars["Int"];
 };
 
 export type IResourceFields = {
@@ -264,13 +276,13 @@ export type IResolversTypes = {
   BuildingInProgress: IBuildingInProgress;
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
+  Boolean: Scalars["Boolean"];
   Cost: ICost;
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
   NewBuildingInfo: INewBuildingInfo;
-  Boolean: Scalars["Boolean"];
   Village: IVillage;
   Mutation: {};
-  DequeueBuildingInput: IDequeueBuildingInput;
+  QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
   Building: IBuilding;
@@ -387,6 +399,18 @@ export type IMutationResolvers<
     ContextType,
     IMutationEnqueueBuildingArgs
   >;
+  moveQueuedBuildingDown?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationMoveQueuedBuildingDownArgs
+  >;
+  moveQueuedBuildingUp?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationMoveQueuedBuildingUpArgs
+  >;
   startBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   stopBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   signIn?: Resolver<
@@ -452,6 +476,8 @@ export type IQueuedBuildingResolvers<
   ContextType = IGraphQLContext,
   ParentType = IResolversTypes["QueuedBuilding"]
 > = {
+  canMoveDown?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  canMoveUp?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   cost?: Resolver<IResolversTypes["Cost"], ParentType, ContextType>;
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;

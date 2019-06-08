@@ -39,6 +39,8 @@ type Building {
 }
 
 type QueuedBuilding {
+    canMoveDown: Boolean!
+    canMoveUp: Boolean!
     cost: Cost!
     level: Int!
     name: String!
@@ -76,14 +78,9 @@ input EnqueueBuildingInput {
     villageId: Int!
 }
 
-input DequeueBuildingInput {
-    villageId: Int!
-    queueIndex: Int!
-}
-
 extend type Mutation {
     clearQueue(villageId: Int!): Boolean!
-    dequeueBuilding(input: DequeueBuildingInput): Boolean!
+    dequeueBuilding(input: QueuedBuildingManipulationInput): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }
 
@@ -99,4 +96,14 @@ input AvailableNewBuildingsInput {
 
 extend type Query {
     availableNewBuildings(input: AvailableNewBuildingsInput!): [NewBuildingInfo!]!
+}
+
+input QueuedBuildingManipulationInput {
+    queueIndex: Int!
+    villageId: Int!
+}
+
+extend type Mutation {
+    moveQueuedBuildingDown(input: QueuedBuildingManipulationInput!): Boolean!
+    moveQueuedBuildingUp(input: QueuedBuildingManipulationInput!): Boolean!
 }

@@ -32,4 +32,36 @@ export class BuildingQueue {
   public buildings(): readonly QueuedBuilding[] {
     return this._buildings;
   }
+
+  public moveUp(index: number) {
+    if (this._buildings.length <= 1) {
+      return;
+    }
+
+    const newIndex = index - 1;
+
+    if (newIndex < 0) {
+      return;
+    }
+
+    this.move(index, newIndex);
+  }
+
+  public moveDown(index: number) {
+    if (this._buildings.length === 0) {
+      return;
+    }
+
+    const newIndex = index + 1;
+
+    if (newIndex >= this._buildings.length) {
+      return;
+    }
+
+    this.move(index, newIndex);
+  }
+
+  private move(oldIndex: number, newIndex: number) {
+    this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0])
+  }
 }

@@ -8,7 +8,7 @@ import { QueuedBuilding } from '../_models/buildings/queuedBuilding';
 import {
   IAvailableNewBuildingsInput,
   IBuildingSpot,
-  IDequeueBuildingInput,
+  IQueuedBuildingManipulationInput,
   IEnqueueBuildingInput,
   INewBuildingInfo,
 } from '../_types/graphql';
@@ -83,7 +83,7 @@ export class BuildingsService {
     queue.enqueue(building);
   }
 
-  public dequeueBuilding(input: IDequeueBuildingInput): void {
+  public dequeueBuilding(input: IQueuedBuildingManipulationInput): void {
     const {
       queueIndex,
       villageId,
@@ -260,6 +260,46 @@ export class BuildingsService {
         offsets[qBuilding.fieldId]++;
       }
     });
+  }
+
+  public canMoveQueuedBuildingDown(input: IQueuedBuildingManipulationInput): boolean {
+    return true;
+  }
+
+  public canMoveQueuedBuildingUp(input: IQueuedBuildingManipulationInput): boolean {
+    return true;
+  }
+
+  public moveQueuedBuildingDown(input: IQueuedBuildingManipulationInput): boolean {
+    if (!this.canMoveQueuedBuildingDown(input)) {
+      return false;
+    }
+
+    const {
+      queueIndex,
+      villageId,
+    } = input;
+
+    const queue = this.getBuildingQueue(villageId);
+    queue.moveDown(queueIndex);
+
+    return true;
+  }
+
+  public moveQueuedBuildingUp(input: IQueuedBuildingManipulationInput): boolean {
+    if (!this.canMoveQueuedBuildingUp(input)) {
+      return false;
+    }
+
+    const {
+      queueIndex,
+      villageId,
+    } = input;
+
+    const queue = this.getBuildingQueue(villageId);
+    queue.moveUp(queueIndex);
+
+    return true;
   }
 
   private shouldRemoveBuildingFromQueue(villageId: number, queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean {

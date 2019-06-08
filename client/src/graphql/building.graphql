@@ -45,6 +45,8 @@ query GetBuildingSpots($villageId: Int!) {
 query GetQueuedBuildings($villageId: Int!) {
     buildingQueue(villageId: $villageId) {
         buildings {
+            canMoveDown
+            canMoveUp
             cost {
                 ...CostFragment
             }
@@ -85,6 +87,14 @@ mutation EnqueueBuilding($input: EnqueueBuildingInput) {
     enqueueBuilding(input: $input)
 }
 
-mutation DequeueBuilding($input: DequeueBuildingInput) {
+mutation DequeueBuilding($input: QueuedBuildingManipulationInput) {
     dequeueBuilding(input: $input)
+}
+
+mutation MoveQueuedBuildingDown($input: QueuedBuildingManipulationInput!) {
+    moveQueuedBuildingDown(input: $input)
+}
+
+mutation MoveQueuedBuildingUp($input: QueuedBuildingManipulationInput!) {
+    moveQueuedBuildingUp(input: $input)
 }

@@ -29,15 +29,27 @@ export const buildingResolvers: IResolvers = {
       let totalSeconds = 0;
       const totalCost: Cost = new Cost();
 
+      const {
+        villageId,
+      } = args;
+
       const buildings = context.buildingsService
-        .getBuildingQueue(args.villageId)
+        .getBuildingQueue(villageId)
         .buildings()
-        .map((b, index): IQueuedBuilding => {
+        .map((b, queueIndex): IQueuedBuilding => {
           const buildingInfo = buildingInfos[b.type][b.level - 1];
           totalSeconds += buildingInfo.buildingTime;
           totalCost.add(buildingInfo.cost);
 
           return {
+            canMoveDown: context.buildingsService.canMoveQueuedBuildingDown({
+              villageId,
+              queueIndex,
+            }),
+            canMoveUp: context.buildingsService.canMoveQueuedBuildingUp({
+              queueIndex,
+              villageId,
+            }),
             cost: {
               ...buildingInfo.cost.resources,
               total: buildingInfo.cost.resources.total(),
@@ -45,7 +57,7 @@ export const buildingResolvers: IResolvers = {
             },
             level: b.level,
             name: buildingNames[b.type],
-            queueIndex: index,
+            queueIndex,
             time: formatTimeFromSeconds(buildingInfo.buildingTime),
             type: b.type,
           };
@@ -90,5 +102,9 @@ export const buildingResolvers: IResolvers = {
       context.buildingsService.dequeueBuilding(args.input);
       return true;
     },
+
+    moveQueuedBuildingDown: (_, args, context) => context.buildingsService.moveQueuedBuildingDown(args.input),
+
+    moveQueuedBuildingUp: (_, args, context) => context.buildingsService.moveQueuedBuildingUp(args.input),
   }
 };
