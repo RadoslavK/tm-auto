@@ -1,0 +1,10 @@
+type BuildingInProgress {
+    level: Int!
+    name: String!
+    timer: Int!
+    type: Int!
+}
+
+extend type Query {
+    buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
+}

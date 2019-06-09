@@ -63,15 +63,6 @@ query GetQueuedBuildings($villageId: Int!) {
     }
 }
 
-query GetBuildingsInProgress($villageId: Int!) {
-    buildingsInProgress(villageId: $villageId) {
-        level
-        name
-        timer
-        type
-    }
-}
-
 query GetAvailableNewBuildings($input: AvailableNewBuildingsInput!) {
     availableNewBuildings(input: $input) {
         name

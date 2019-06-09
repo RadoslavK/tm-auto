@@ -1,4 +1,4 @@
-import { GetBuildingsInProgress } from '*/graphql_operations/building.graphql';
+import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { useQuery } from 'react-apollo-hooks';

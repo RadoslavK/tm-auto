@@ -49,13 +49,6 @@ type QueuedBuilding {
     queueId: ID!
 }
 
-type BuildingInProgress {
-    level: Int!
-    name: String!
-    timer: Int!
-    type: Int!
-}
-
 type BuildingQueue {
     buildings: [QueuedBuilding!]!
     totalCost: Cost!
@@ -64,7 +57,6 @@ type BuildingQueue {
 
 extend type Query {
     buildingSpots(villageId: Int!): BuildingSpots!
-    buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
     buildingQueue(villageId: Int!): BuildingQueue!
 }
 

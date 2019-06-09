@@ -5,7 +5,6 @@ declare module "*/graphql_operations/building.graphql" {
   export const CostFragment: DocumentNode;
   export const GetBuildingSpots: DocumentNode;
   export const GetQueuedBuildings: DocumentNode;
-  export const GetBuildingsInProgress: DocumentNode;
   export const GetAvailableNewBuildings: DocumentNode;
   export const ClearQueue: DocumentNode;
   export const EnqueueBuilding: DocumentNode;
@@ -13,6 +12,14 @@ declare module "*/graphql_operations/building.graphql" {
   export const DequeueBuildingAtField: DocumentNode;
   export const MoveQueuedBuildingDown: DocumentNode;
   export const MoveQueuedBuildingUp: DocumentNode;
+
+  export default defaultDocument;
+}
+
+declare module "*/graphql_operations/buildingInProgress.graphql" {
+  import { DocumentNode } from "graphql";
+  const defaultDocument: DocumentNode;
+  export const GetBuildingsInProgress: DocumentNode;
 
   export default defaultDocument;
 }

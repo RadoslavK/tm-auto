@@ -136,9 +136,9 @@ export type INewBuildingInfo = {
 export type IQuery = {
   __typename?: "Query";
   readonly buildingSpots: IBuildingSpots;
-  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly buildingQueue: IBuildingQueue;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
+  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
   readonly villages: ReadonlyArray<IVillage>;
@@ -149,16 +149,16 @@ export type IQueryBuildingSpotsArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryBuildingsInProgressArgs = {
-  villageId: Scalars["Int"];
-};
-
 export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
 export type IQueryAvailableNewBuildingsArgs = {
   input: IAvailableNewBuildingsInput;
+};
+
+export type IQueryBuildingsInProgressArgs = {
+  villageId: Scalars["Int"];
 };
 
 export type IQueryVillageExistsArgs = {
@@ -285,7 +285,6 @@ export type IResolversTypes = {
   BuildingSpotLevel: IBuildingSpotLevel;
   String: Scalars["String"];
   ResourceFields: IResourceFields;
-  BuildingInProgress: IBuildingInProgress;
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
   Boolean: Scalars["Boolean"];
@@ -293,6 +292,7 @@ export type IResolversTypes = {
   ID: Scalars["ID"];
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
   NewBuildingInfo: INewBuildingInfo;
+  BuildingInProgress: IBuildingInProgress;
   Village: IVillage;
   Mutation: {};
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
@@ -459,12 +459,6 @@ export type IQueryResolvers<
     ContextType,
     IQueryBuildingSpotsArgs
   >;
-  buildingsInProgress?: Resolver<
-    ReadonlyArray<IResolversTypes["BuildingInProgress"]>,
-    ParentType,
-    ContextType,
-    IQueryBuildingsInProgressArgs
-  >;
   buildingQueue?: Resolver<
     IResolversTypes["BuildingQueue"],
     ParentType,
@@ -476,6 +470,12 @@ export type IQueryResolvers<
     ParentType,
     ContextType,
     IQueryAvailableNewBuildingsArgs
+  >;
+  buildingsInProgress?: Resolver<
+    ReadonlyArray<IResolversTypes["BuildingInProgress"]>,
+    ParentType,
+    ContextType,
+    IQueryBuildingsInProgressArgs
   >;
   isBotRunning?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;

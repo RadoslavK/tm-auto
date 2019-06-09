@@ -123,9 +123,9 @@ export type INewBuildingInfo = {
 
 export type IQuery = {
   readonly buildingSpots: IBuildingSpots;
-  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly buildingQueue: IBuildingQueue;
   readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
+  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly isSignedIn: Scalars["Boolean"];
   readonly villages: ReadonlyArray<IVillage>;
@@ -136,16 +136,16 @@ export type IQueryBuildingSpotsArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryBuildingsInProgressArgs = {
-  villageId: Scalars["Int"];
-};
-
 export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
 export type IQueryAvailableNewBuildingsArgs = {
   input: IAvailableNewBuildingsInput;
+};
+
+export type IQueryBuildingsInProgressArgs = {
+  villageId: Scalars["Int"];
 };
 
 export type IQueryVillageExistsArgs = {
@@ -243,16 +243,6 @@ export type IGetQueuedBuildingsQuery = {
   };
 };
 
-export type IGetBuildingsInProgressQueryVariables = {
-  villageId: Scalars["Int"];
-};
-
-export type IGetBuildingsInProgressQuery = {
-  readonly buildingsInProgress: ReadonlyArray<
-    Pick<IBuildingInProgress, "level" | "name" | "timer" | "type">
-  >;
-};
-
 export type IGetAvailableNewBuildingsQueryVariables = {
   input: IAvailableNewBuildingsInput;
 };
@@ -307,6 +297,16 @@ export type IMoveQueuedBuildingUpMutation = Pick<
   IMutation,
   "moveQueuedBuildingUp"
 >;
+
+export type IGetBuildingsInProgressQueryVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IGetBuildingsInProgressQuery = {
+  readonly buildingsInProgress: ReadonlyArray<
+    Pick<IBuildingInProgress, "level" | "name" | "timer" | "type">
+  >;
+};
 
 export type IIsSignedInQueryVariables = {};
 

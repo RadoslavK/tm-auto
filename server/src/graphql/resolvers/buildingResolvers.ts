@@ -82,7 +82,7 @@ export const buildingResolvers: IResolvers = {
         level: b.level,
         name: buildingNames[b.type],
         type: b.type,
-        timer: b.timer,
+        timer: Math.floor((b.finishedAt.valueOf() - new Date().valueOf()) / 1000),
       };
     }),
 

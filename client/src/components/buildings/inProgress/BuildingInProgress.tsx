@@ -20,25 +20,27 @@ const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
     building,
   } = props;
 
-  const [timer, setTimer] = useState(building.timer);
+  const [timer, setTimer] = useState(building.timer > 0 ? building.timer : 0);
 
   useEffect(() => {
     const intervalId = setInterval(
-      () => setTimer(prevTimer => prevTimer - 1),
+      () =>  {
+        if (timer <= 0) {
+          clearInterval(intervalId);
+        } else {
+          setTimer(prevTimer => prevTimer - 1);
+        }
+      },
       1000,
     );
 
     return () => clearInterval(intervalId);
   }, [ building.timer ]);
 
-  if (timer <= 0) {
-    return null;
-  }
-
   const time = formatTimeFromSeconds(timer);
 
   return (
-    <div style={{ color: 'blue' }}>
+    <div>
       <BuildingImage buildingType={building.type} />
       <div>{building.name}</div>
       <div>Level {building.level}</div>

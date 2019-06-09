@@ -30,11 +30,15 @@ export const parseBuildingsInProgress = async (page: Page): Promise<readonly Bui
       const type = +match[2];
       const fieldId = +match[3];
 
+      const timer = timers[buildings.length];
+      const finishedAt = new Date();
+      finishedAt.setSeconds(finishedAt.getSeconds() + timer);
+
       const building = new BuildingInProgress({
+        finishedAt,
         level,
         fieldId,
         type,
-        timer: timers[buildings.length],
       });
 
       buildings.push(building);
