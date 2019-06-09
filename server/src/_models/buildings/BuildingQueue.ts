@@ -11,13 +11,13 @@ export class BuildingQueue {
     return this._buildings.shift();
   }
 
-  public popLastAtField(fieldId: number): void {
+  public popLastAtField = (fieldId: number): void => {
     const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
 
     if (buildingToRemove) {
       this.remove(buildingToRemove.queueId);
     }
-  }
+  };
 
   public remove = (queueId: string) => {
     this._buildings = this._buildings.filter(b => b.queueId !== queueId);

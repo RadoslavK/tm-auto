@@ -1,7 +1,6 @@
 import { Modal } from '@material-ui/core';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { BuildingType } from '../../../../../server/src/_enums/BuildingType';
 import { IBuildingSpot } from '../../../_types/graphql';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
@@ -51,8 +50,12 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
     fieldId: building.fieldId,
   });
 
-  const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (building.type !== BuildingType.None) {
+  const onEnqueue = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (building.level) {
+      if (building.level.total === building.level.max) {
+        return;
+      }
+
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else {
@@ -64,6 +67,8 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   };
 
   const onDequeue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.stopPropagation();
+
     if (event.ctrlKey) {
       await dequeueAll();
     } else {
@@ -75,16 +80,11 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <div>
-      <div title={building.name}>
+      <div title={building.name} onClick={onEnqueue}>
         <BuildingImage buildingType={building.type} />
         {building.level && (
           <>
             <BuildingLevelBox level={building.level}/>
-            {building.level.total < building.level.max && (
-              <button onClick={onEnqueue}>
-                Enqueue
-              </button>
-            )}
             {building.level.queued > 0 && (
               <button onClick={onDequeue}>
                 Dequeue
