@@ -33,15 +33,13 @@ export class BuildingsService {
   private readonly _buildingsInProgress: Record<number, BuildingInProgress[]> = {};
   private readonly _buildingQueues: Record<number, BuildingQueue> = {};
 
-  public buildingSpots(villageId: number): readonly BuildingSpot[] {
-    return this._buildingSpots[villageId] || [];
-  }
+  public buildingSpots = (villageId: number): readonly BuildingSpot[] => this._buildingSpots[villageId] || [];
 
-  public setBuildingSpots(villageId: number, buildings: readonly BuildingSpot[]) {
+  public setBuildingSpots = (villageId: number, buildings: readonly BuildingSpot[]) => {
     this._buildingSpots[villageId] = buildings.slice();
-  }
+  };
 
-  public buildingQueue(villageId: number): BuildingQueue {
+  public buildingQueue = (villageId: number): BuildingQueue => {
     let queue = this._buildingQueues[villageId];
 
     if (!queue) {
@@ -50,22 +48,20 @@ export class BuildingsService {
     }
 
     return queue;
-  }
+  };
 
-  public buildingsInProgress(villageId: number): readonly BuildingInProgress[] {
-    return this._buildingsInProgress[villageId] || [];
-  }
+  public buildingsInProgress = (villageId: number): readonly BuildingInProgress[] => this._buildingsInProgress[villageId] || [];
 
-  public setBuildingsInProgress(villageId: number, buildings: readonly BuildingInProgress[]): void {
+  public setBuildingsInProgress = (villageId: number, buildings: readonly BuildingInProgress[]): void => {
     this._buildingsInProgress[villageId] = buildings.slice();
-  }
+  };
 
-  public clearQueue(villageId: number): void {
+  public clearQueue = (villageId: number): void => {
     const queue = this.buildingQueue(villageId);
     queue.clear();
-  }
+  };
 
-  public enqueueBuilding(input: IEnqueueBuildingInput): void {
+  public enqueueBuilding = (input: IEnqueueBuildingInput): void => {
     const {
       type,
       fieldId,
@@ -94,9 +90,9 @@ export class BuildingsService {
 
       queue.add(building);
     }
-  }
+  };
 
-  public dequeueBuilding(input: IQueuedBuildingManipulationInput): void {
+  public dequeueBuilding = (input: IQueuedBuildingManipulationInput): void => {
     const {
       queueId,
       villageId,
@@ -106,9 +102,9 @@ export class BuildingsService {
     queue.remove(queueId);
 
     this.correctBuildingQueue(villageId);
-  }
+  };
 
-  public dequeueBuildingAtField(input: IDequeueBuildingAtFieldInput): void {
+  public dequeueBuildingAtField = (input: IDequeueBuildingAtFieldInput): void => {
     const {
       deleteAll,
       fieldId,
@@ -128,9 +124,9 @@ export class BuildingsService {
     }
 
     this.correctBuildingQueue(villageId);
-  }
+  };
 
-  public normalizedBuildingSpots(villageId: number): readonly IBuildingSpot[] {
+  public normalizedBuildingSpots = (villageId: number): readonly IBuildingSpot[] => {
     const spots = this.buildingSpots(villageId);
     const queue = this.buildingQueue(villageId);
     const inProgress = this.buildingsInProgress(villageId);
@@ -153,9 +149,9 @@ export class BuildingsService {
         name: buildingNames[type],
       };
     });
-  }
+  };
 
-  public availableNewBuildings(input: IAvailableNewBuildingsInput): readonly INewBuildingInfo[] {
+  public availableNewBuildings = (input: IAvailableNewBuildingsInput): readonly INewBuildingInfo[] => {
     const {
       fieldId,
       villageId,
@@ -269,9 +265,9 @@ export class BuildingsService {
       type,
       name: buildingNames[type],
     }));
-  }
+  };
 
-  public correctBuildingQueue(villageId: number) {
+  public correctBuildingQueue = (villageId: number): void => {
     const queue = this.buildingQueue(villageId);
     const queuedBuildings = queue.buildings();
     const offsets: Record<number, number> = {};
@@ -289,9 +285,9 @@ export class BuildingsService {
         offsets[qBuilding.fieldId]++;
       }
     });
-  }
+  };
 
-  public canMoveQueuedBuilding(input: IQueuedBuildingManipulationInput, direction: MovingDirection): boolean {
+  public canMoveQueuedBuilding = (input: IQueuedBuildingManipulationInput, direction: MovingDirection): boolean => {
     const {
       villageId,
       queueId,
@@ -339,9 +335,9 @@ export class BuildingsService {
       qBuildingWithPossiblyAffectedRequirements,
       theOtherBuilding.fieldId,
     );
-  }
+  };
 
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(villageId: number, checkedBuilding: QueuedBuilding, reducedOffsetBuildingFieldId: number): boolean {
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning = (villageId: number, checkedBuilding: QueuedBuilding, reducedOffsetBuildingFieldId: number): boolean => {
     // need to calculate offset till its position
     const offsets: Record<number, number> = {};
     const queuedBuildings = this.buildingQueue(villageId).buildings();
@@ -366,9 +362,9 @@ export class BuildingsService {
       checkedBuilding,
       offsets,
       reducedOffsetBuildingFieldId);
-  }
+  };
 
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(villageId: number, checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingFieldId?: number): boolean {
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther = (villageId: number, checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingFieldId?: number): boolean => {
     const getTemporaryTotalLevel = (building: IBuildingSpot): number =>
       building.level.actual
       + building.level.ongoing
@@ -420,9 +416,9 @@ export class BuildingsService {
     }
 
     return true;
-  }
+  };
 
-  public moveQueuedBuildingDown(input: IQueuedBuildingManipulationInput): boolean {
+  public moveQueuedBuildingDown = (input: IQueuedBuildingManipulationInput): boolean => {
     if (!this.canMoveQueuedBuilding(input, MovingDirection.Down)) {
       return false;
     }
@@ -436,9 +432,9 @@ export class BuildingsService {
     queue.moveDown(queueId);
 
     return true;
-  }
+  };
 
-  public moveQueuedBuildingUp(input: IQueuedBuildingManipulationInput): boolean {
+  public moveQueuedBuildingUp = (input: IQueuedBuildingManipulationInput): boolean => {
     if (!this.canMoveQueuedBuilding(input, MovingDirection.Up)) {
       return false;
     }
@@ -452,9 +448,9 @@ export class BuildingsService {
     queue.moveUp(queueId);
 
     return true;
-  }
+  };
 
-  private shouldRemoveBuildingFromQueue(villageId: number, queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean {
+  private shouldRemoveBuildingFromQueue = (villageId: number, queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
       && context.villageService.villages().some(otherVillage =>
         otherVillage.id !== villageId
@@ -562,9 +558,9 @@ export class BuildingsService {
 
       return false;
     }
-  }
+  };
 
-  private newBuildingMeetsConditions(villageId: number, conditions: BuildingConditions): boolean {
+  private newBuildingMeetsConditions = (villageId: number, conditions: BuildingConditions): boolean => {
     //TODO detect if artefacts are in village
     if (conditions.type === BuildingType.GreatGranary
       || conditions.type === BuildingType.GreatWarehouse) {
@@ -619,5 +615,5 @@ export class BuildingsService {
     }
 
     return true;
-  }
+  };
 }

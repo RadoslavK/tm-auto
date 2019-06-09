@@ -21,13 +21,13 @@ interface IParams {
   readonly type: BuildingType;
 }
 
-export class BuildingConditions implements IParams {
-  readonly capital: CapitalCondition = CapitalCondition.None;
-  readonly isUnique: boolean = true;
-  readonly playerTribe: Tribe = Tribe.None;
-  readonly requiredBuildings: readonly IBuildingWithLevelRequirement[] = [];
-  readonly prohibitedBuildingTypes: readonly BuildingType[] = [];
-  readonly type: BuildingType = BuildingType.None;
+export class BuildingConditions {
+  public readonly capital: CapitalCondition = CapitalCondition.None;
+  public readonly isUnique: boolean = true;
+  public readonly playerTribe: Tribe = Tribe.None;
+  public readonly requiredBuildings: readonly IBuildingWithLevelRequirement[] = [];
+  public readonly prohibitedBuildingTypes: readonly BuildingType[] = [];
+  public readonly type: BuildingType = BuildingType.None;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

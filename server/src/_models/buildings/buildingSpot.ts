@@ -6,10 +6,10 @@ interface IParams {
   type: BuildingType;
 }
 
-export class BuildingSpot implements IParams {
-  fieldId: number = 0;
-  level: number = 0;
-  type: BuildingType = BuildingType.None;
+export class BuildingSpot {
+  public fieldId: number = 0;
+  public level: number = 0;
+  public type: BuildingType = BuildingType.None;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

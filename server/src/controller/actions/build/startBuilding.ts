@@ -10,7 +10,7 @@ export const isBuildingField = (fieldId: number): boolean => fieldId >= 19 && fi
 
 const isValidField = (fieldId: number): boolean => isResourceField(fieldId) || isBuildingField(fieldId);
 
-export const startBuilding = async (page: Page) => {
+export const startBuilding = async (page: Page): Promise<void> => {
   const villageId = context.villageService.currentVillage().id;
   const queue = context.buildingsService.buildingQueue(villageId);
   const building = queue.popFirst();

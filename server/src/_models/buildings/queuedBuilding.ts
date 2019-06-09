@@ -7,11 +7,11 @@ interface IParams {
   queueId: string;
 }
 
-export class QueuedBuilding implements IParams {
-  fieldId: number = 0;
-  level: number = 0;
-  type: BuildingType = BuildingType.None;
-  queueId: string = '';
+export class QueuedBuilding {
+  public fieldId: number = 0;
+  public level: number = 0;
+  public type: BuildingType = BuildingType.None;
+  public queueId: string = '';
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

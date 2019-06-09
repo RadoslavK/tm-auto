@@ -15,7 +15,7 @@ import { getPage, killBrowser } from '../browser/getPage';
 export class Controller {
   private _buildTimer: NodeJS.Timeout;
 
-  public start = async () => {
+  public start = async (): Promise<void> => {
     const page = await getPage();
 
     await ensureLoggedIn(page);
@@ -23,18 +23,19 @@ export class Controller {
 
     const villages = await parseVillages(page);
     context.villageService.setVillages(villages);
+
     const activeVillageId = await parseActiveVillageId(page);
     context.villageService.setActiveVillageId(activeVillageId);
 
     await this.build();
   };
 
-  public stop = async () => {
+  public stop = async (): Promise<void> => {
     clearTimeout(this._buildTimer);
     await killBrowser();
   };
 
-  public build = async () => {
+  public build = async (): Promise<void> => {
     const page = await getPage();
     const { userAccount } = context.userService;
 

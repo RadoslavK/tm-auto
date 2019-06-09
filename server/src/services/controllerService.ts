@@ -5,13 +5,13 @@ export class ControllerService {
 
   public isRunning: boolean = false;
 
-  public async start(): Promise<void> {
+  public start = async (): Promise<void> => {
     this.isRunning = true;
     await this._controller.start();
-  }
+  };
 
-  public async stop(): Promise<void> {
+  public stop = async (): Promise<void> => {
     this.isRunning = false;
     await this._controller.stop();
-  }
+  };
 }

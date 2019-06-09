@@ -1,4 +1,4 @@
-import { Modal } from '@material-ui/core';
+import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { IBuildingSpot } from '../../../_types/graphql';
@@ -93,16 +93,17 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
           </>
         )}
       </div>
-      <Modal
+      <Dialog
         open={dialog === DialogType.NewBuilding}
         onClose={onSelect}
       >
         <NewBuildingDialog fieldId={building.fieldId} onSelect={onSelect}/>
-      </Modal>
+      </Dialog>
       {building.level && (
-        <Modal
+        <Dialog
           open={dialog === DialogType.MultiEnqueue}
           onClose={onSelect}
+
         >
           <MultiEnqueueDialog
             totalLevel={building.level.total}
@@ -111,7 +112,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
             maxLevel={building.level.max}
             onSelect={onSelect}
           />
-        </Modal>
+        </Dialog>
       )}
     </div>
   );

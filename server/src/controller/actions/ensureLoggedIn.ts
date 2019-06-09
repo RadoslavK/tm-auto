@@ -2,7 +2,7 @@ import { Page } from 'puppeteer';
 import { TravianPath } from '../../_enums/TravianPath';
 import { context } from '../../graphql/context';
 
-export const ensureLoggedIn = async (page: Page) => {
+export const ensureLoggedIn = async (page: Page): Promise<void> => {
   const { userAccount } = context.userService;
   await page.goto(`${userAccount.server}/${TravianPath.ResourceFieldsOverview}`);
 

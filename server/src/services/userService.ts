@@ -5,8 +5,8 @@ export class UserService {
 
   public userAccount: IUserAccount;
 
-  signIn(input: ISignInInput): void {
+  signIn = (input: ISignInInput): void => {
     this.userAccount = { ...input };
     this.isSignedIn = true;
-  }
+  };
 }

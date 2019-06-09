@@ -7,35 +7,30 @@ interface IParams {
   crop: number;
 }
 
-export class Resources implements IParams, IComparable<IParams> {
-  wood: number = 0;
-  clay: number = 0;
-  iron: number = 0;
-  crop: number = 0;
+export class Resources implements IComparable<Resources> {
+  public wood: number = 0;
+  public clay: number = 0;
+  public iron: number = 0;
+  public crop: number = 0;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
   }
 
-  public add(addition: Resources) {
+  public add = (addition: Resources): void => {
     this.wood += addition.wood;
     this.clay += addition.clay;
     this.iron += addition.iron;
     this.crop += addition.crop;
-  }
+  };
 
-  public total() {
-    return this.wood + this.clay + this.iron + this.crop;
-  }
+  public total = (): number => this.wood + this.clay + this.iron + this.crop;
 
-  isGreaterOrEqualThan(other: Resources): boolean {
-    return this.wood >= other.wood
-      && this.clay >= other.clay
-      && this.iron >= other.iron
-      && this.crop >= other.crop;
-  }
+  public isGreaterOrEqualThan = (other: Resources): boolean =>
+    this.wood >= other.wood
+    && this.clay >= other.clay
+    && this.iron >= other.iron
+    && this.crop >= other.crop;
 
-  isLowerThan(other: Resources): boolean {
-    return !this.isGreaterOrEqualThan(other);
-  }
+  public isLowerThan = (other: Resources): boolean => !this.isGreaterOrEqualThan(other)
 }

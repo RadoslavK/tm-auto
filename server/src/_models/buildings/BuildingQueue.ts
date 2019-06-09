@@ -3,13 +3,11 @@ import { QueuedBuilding } from './queuedBuilding';
 export class BuildingQueue {
   private _buildings: QueuedBuilding[] = [];
 
-  public add(building: QueuedBuilding) {
+  public add = (building: QueuedBuilding):  void => {
     this._buildings.push(building);
-  }
+  };
 
-  public popFirst(): QueuedBuilding | undefined {
-    return this._buildings.shift();
-  }
+  public popFirst = (): QueuedBuilding | undefined => this._buildings.shift();
 
   public popLastAtField = (fieldId: number): void => {
     const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
@@ -19,19 +17,17 @@ export class BuildingQueue {
     }
   };
 
-  public remove = (queueId: string) => {
+  public remove = (queueId: string): void => {
     this._buildings = this._buildings.filter(b => b.queueId !== queueId);
   };
 
-  public clear(): void {
+  public clear = (): void => {
     this._buildings = [];
-  }
+  };
 
-  public buildings(): readonly QueuedBuilding[] {
-    return this._buildings;
-  }
+  public buildings = (): readonly QueuedBuilding[] => this._buildings;
 
-  public moveUp(queueId: string) {
+  public moveUp = (queueId: string): void => {
     if (this._buildings.length <= 1) {
       return;
     }
@@ -49,9 +45,9 @@ export class BuildingQueue {
     }
 
     this.move(index, newIndex);
-  }
+  };
 
-  public moveDown(queueId: string) {
+  public moveDown = (queueId: string): void => {
     if (this._buildings.length <= 1) {
       return;
     }
@@ -69,9 +65,9 @@ export class BuildingQueue {
     }
 
     this.move(index, newIndex);
-  }
+  };
 
-  private move(oldIndex: number, newIndex: number) {
+  private move = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0])
-  }
+  };
 }

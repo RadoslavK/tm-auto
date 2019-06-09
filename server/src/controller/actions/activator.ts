@@ -1,7 +1,7 @@
 import { Page } from "puppeteer";
 import { Tribe } from '../../_enums/Tribe';
 
-const chooseTribe = async (page: Page, tribe: Tribe) => {
+const chooseTribe = async (page: Page, tribe: Tribe): Promise<void> => {
   await page.waitForSelector('#tribeSelectors input');
 
   const forms = await page.$$('form');

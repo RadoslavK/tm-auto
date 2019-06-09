@@ -1,20 +1,17 @@
-interface ICoords {
-  readonly x: number;
-  readonly y: number;
-}
+import { Coords } from './coords';
 
 interface IParams {
-  coords: ICoords;
+  coords: Coords;
   id: number;
   isCapital: boolean;
   name: string;
 }
 
-export class Village implements IParams {
-  coords: ICoords = { x: 0, y: 0 };
-  id: number = 0;
-  isCapital: boolean = false;
-  name: string = '';
+export class Village {
+  public coords: Coords = new Coords();
+  public id: number = 0;
+  public isCapital: boolean = false;
+  public name: string = '';
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
