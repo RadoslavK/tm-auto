@@ -8,9 +8,10 @@ import { QueuedBuilding } from '../_models/buildings/queuedBuilding';
 import {
   IAvailableNewBuildingsInput,
   IBuildingSpot,
-  IQueuedBuildingManipulationInput,
+  IDequeueBuildingAtFieldInput,
   IEnqueueBuildingInput,
-  INewBuildingInfo, IDequeueBuildingAtFieldInput,
+  INewBuildingInfo,
+  IQueuedBuildingManipulationInput,
 } from '../_types/graphql';
 import { buildingNames } from '../constants/buildingNames';
 import { context } from '../graphql/context';
@@ -32,15 +33,15 @@ export class BuildingsService {
   private readonly _buildingsInProgress: Record<number, BuildingInProgress[]> = {};
   private readonly _buildingQueues: Record<number, BuildingQueue> = {};
 
-  public getBuildingSpots(villageId: number): readonly BuildingSpot[] {
+  public buildingSpots(villageId: number): readonly BuildingSpot[] {
     return this._buildingSpots[villageId] || [];
   }
 
-  public setBuildingSpots(villageId: number, buildings: Iterable<BuildingSpot>) {
-    this._buildingSpots[villageId] = [...buildings];
+  public setBuildingSpots(villageId: number, buildings: readonly BuildingSpot[]) {
+    this._buildingSpots[villageId] = buildings.slice();
   }
 
-  public getBuildingQueue(villageId: number): BuildingQueue {
+  public buildingQueue(villageId: number): BuildingQueue {
     let queue = this._buildingQueues[villageId];
 
     if (!queue) {
@@ -51,16 +52,16 @@ export class BuildingsService {
     return queue;
   }
 
-  public getBuildingsInProgress(villageId: number): readonly BuildingInProgress[] {
+  public buildingsInProgress(villageId: number): readonly BuildingInProgress[] {
     return this._buildingsInProgress[villageId] || [];
   }
 
-  public setBuildingsInProgress(villageId: number, buildings: Iterable<BuildingInProgress>): void {
-    this._buildingsInProgress[villageId] = [...buildings];
+  public setBuildingsInProgress(villageId: number, buildings: readonly BuildingInProgress[]): void {
+    this._buildingsInProgress[villageId] = buildings.slice();
   }
 
   public clearQueue(villageId: number): void {
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     queue.clear();
   }
 
@@ -73,7 +74,7 @@ export class BuildingsService {
     } = input;
 
     const totalLevel = this.normalizedBuildingSpots(villageId).find(spot => spot.fieldId === fieldId).level.total;
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     const maxLevel = buildingInfos[type].length;
 
     for (let i = 1; i <= levels; i++) {
@@ -101,7 +102,7 @@ export class BuildingsService {
       villageId,
     } = input;
 
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     queue.remove(queueId);
 
     this.correctBuildingQueue(villageId);
@@ -114,7 +115,7 @@ export class BuildingsService {
       villageId,
     } = input;
 
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
 
     if (deleteAll) {
       queue
@@ -123,38 +124,33 @@ export class BuildingsService {
         .map(b => b.queueId)
         .forEach(queue.remove);
     } else {
-      queue.popFirstAtField(fieldId);
+      queue.popLastAtField(fieldId);
     }
 
     this.correctBuildingQueue(villageId);
   }
 
   public normalizedBuildingSpots(villageId: number): readonly IBuildingSpot[] {
-    const spots = this.getBuildingSpots(villageId);
-
-    const queue = this.getBuildingQueue(villageId);
-    const inProgress = this.getBuildingsInProgress(villageId);
+    const spots = this.buildingSpots(villageId);
+    const queue = this.buildingQueue(villageId);
+    const inProgress = this.buildingsInProgress(villageId);
 
     return spots.map((b): IBuildingSpot => {
       const queued = queue.buildings().filter(bb => bb.fieldId === b.fieldId);
       const ongoing = inProgress.filter(bb => bb.fieldId === b.fieldId);
-      const usedType = b.type || (ongoing.length > 0 ? ongoing[0].type : (queued.length > 0 ? queued[0].type : b.type));
-      const level = {
-        actual: b.level,
-        inProgress: inProgress.filter(bb => bb.fieldId === b.fieldId).length,
-        queued: queued.length,
-      };
+      const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
 
       return {
-        type: usedType,
+        type,
         fieldId: b.fieldId,
         level: {
-          ...level,
-          ongoing: level.inProgress,
-          total: level.actual + level.inProgress + level.queued,
-          max: buildingInfos[usedType].length,
+          actual: b.level,
+          queued: queued.length,
+          ongoing: ongoing.length,
+          total: b.level + ongoing.length + queued.length,
+          max: buildingInfos[type].length,
         },
-        name: buildingNames[usedType],
+        name: buildingNames[type],
       };
     });
   }
@@ -242,9 +238,10 @@ export class BuildingsService {
           }
 
           const normalizedBuildingSlots = this.normalizedBuildingSpots(villageId);
+          const spotsOfType = normalizedBuildingSlots.filter(b => b.type === type);
 
           //max count = 1
-          const bAlreadyExists = normalizedBuildingSlots.filter(b => b.type === type).length > 0;
+          const bAlreadyExists = spotsOfType.length > 0;
 
           if (bAlreadyExists) {
             if (type != BuildingType.Granary
@@ -255,8 +252,7 @@ export class BuildingsService {
             }
 
             //requirements for more than 1 building of that type
-
-            if (normalizedBuildingSlots.filter(b => b.type === type && b.level.total === buildingInfos[b.type].length).length == 0) {
+            if (!spotsOfType.some(b => b.level.total === buildingInfos[b.type].length)) {
               continue;
             }
           }
@@ -276,11 +272,11 @@ export class BuildingsService {
   }
 
   public correctBuildingQueue(villageId: number) {
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     const queuedBuildings = queue.buildings();
     const offsets: Record<number, number> = {};
 
-    this.getBuildingSpots(villageId).forEach(spot => {
+    this.buildingSpots(villageId).forEach(spot => {
       offsets[spot.fieldId] = 0;
     });
 
@@ -301,9 +297,14 @@ export class BuildingsService {
       queueId,
     } = input;
 
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
 
     const queueIndex = queue.buildings().findIndex(b => b.queueId === queueId);
+
+    if (queueIndex === -1) {
+      return false;
+    }
+
     const newIndex = queueIndex + direction;
     if (newIndex < 0 || newIndex >= queue.buildings().length) {
      return false;
@@ -312,11 +313,11 @@ export class BuildingsService {
     const building = queue.buildings()[queueIndex];
     const buildingInTheWay = queue.buildings()[queueIndex + direction];
 
-    const isMovingUp = direction == MovingDirection.Up;
+    const isMovingUp = direction === MovingDirection.Up;
 
     //moving up/down and its same id/type as next/previous level too so cant move more up
-    if (buildingInTheWay.fieldId == building.fieldId
-      && buildingInTheWay.level == building.level + direction) {
+    if (buildingInTheWay.fieldId === building.fieldId
+      && buildingInTheWay.level === building.level + direction) {
       return false;
     }
 
@@ -340,20 +341,22 @@ export class BuildingsService {
     );
   }
 
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(villageId: number, checkedBuilding: QueuedBuilding, reducedOffsetBuildingIngameId: number): boolean {
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(villageId: number, checkedBuilding: QueuedBuilding, reducedOffsetBuildingFieldId: number): boolean {
     // need to calculate offset till its position
     const offsets: Record<number, number> = {};
-    const queuedBuildings = this.getBuildingQueue(villageId).buildings();
+    const queuedBuildings = this.buildingQueue(villageId).buildings();
+    const spots = this.buildingSpots(villageId);
+
+    for (let i = 0; i < spots.length; i++) {
+      const spot = spots[i];
+      offsets[spot.fieldId] = 0;
+    }
 
     for (let i = 0; i < queuedBuildings.length; i++) {
       const qBuilding = queuedBuildings[i];
-      if (!offsets[qBuilding.fieldId]) {
-        offsets[qBuilding.fieldId] = 1;
-      } else {
-        offsets[qBuilding.fieldId]++;
-      }
+      offsets[qBuilding.fieldId]++;
 
-      if (qBuilding === checkedBuilding) {
+      if (qBuilding.queueId === checkedBuilding.queueId) {
         break;
       }
     }
@@ -362,18 +365,18 @@ export class BuildingsService {
       villageId,
       checkedBuilding,
       offsets,
-      reducedOffsetBuildingIngameId);
+      reducedOffsetBuildingFieldId);
   }
 
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(villagId: number, checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingIngameId?: number): boolean {
+  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(villageId: number, checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingFieldId?: number): boolean {
     const getTemporaryTotalLevel = (building: IBuildingSpot): number =>
       building.level.actual
       + building.level.ongoing
-      + (building.fieldId == reducedOffsetBuildingIngameId
+      + (building.fieldId === reducedOffsetBuildingFieldId
           ? offsets[building.fieldId] - 1
           : offsets[building.fieldId]);
 
-    const normalizedBuildings = this.normalizedBuildingSpots(villagId);
+    const normalizedBuildings = this.normalizedBuildingSpots(villageId);
     const conditions = buildingsConditions[checkedBuilding.type];
 
     if (conditions.type > BuildingType.Crop) {
@@ -429,7 +432,7 @@ export class BuildingsService {
       villageId,
     } = input;
 
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     queue.moveDown(queueId);
 
     return true;
@@ -445,7 +448,7 @@ export class BuildingsService {
       villageId,
     } = input;
 
-    const queue = this.getBuildingQueue(villageId);
+    const queue = this.buildingQueue(villageId);
     queue.moveUp(queueId);
 
     return true;
@@ -464,7 +467,7 @@ export class BuildingsService {
 
     const previousLevelBuildingExists = normalizedBuildings.some(b =>
       b.type === queuedBuilding.type
-      && b.fieldId == queuedBuilding.fieldId
+      && b.fieldId === queuedBuilding.fieldId
       && (b.level.actual
       + b.level.ongoing
       + providedOffsets[queuedBuilding.fieldId]
@@ -530,7 +533,7 @@ export class BuildingsService {
               //ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon
               //1 musi zhodovat s tym co stavame
               const anyExists = existingBuildings.some(
-                b => b.fieldId == queuedBuilding.fieldId);
+                b => b.fieldId === queuedBuilding.fieldId);
 
               if (!anyExists) {
                 return true;
@@ -540,7 +543,7 @@ export class BuildingsService {
         }
       }
 
-      if (queuedBuilding.level == 1) {
+      if (queuedBuilding.level === 1) {
         //dolezite iba ked sa stava nove
         for (let i = 0; i < conditions.requiredBuildings.length; i++) {
           {
@@ -563,13 +566,13 @@ export class BuildingsService {
 
   private newBuildingMeetsConditions(villageId: number, conditions: BuildingConditions): boolean {
     //TODO detect if artefacts are in village
-    if (conditions.type == BuildingType.GreatGranary
-      || conditions.type == BuildingType.GreatWarehouse) {
+    if (conditions.type === BuildingType.GreatGranary
+      || conditions.type === BuildingType.GreatWarehouse) {
       return false;
     }
 
-    if (conditions.playerTribe != Tribe.None
-      && conditions.playerTribe != context.player.tribe) {
+    if (conditions.playerTribe !== Tribe.None
+      && conditions.playerTribe !== context.player.tribe) {
       return false;
     }
 
@@ -585,15 +588,14 @@ export class BuildingsService {
     const buildings = normalizedBuildingSpots.filter(b => b.type === conditions.type);
 
     if (conditions.isUnique) {
-      if (buildings.some(b => b)) {
+      if (buildings.length) {
         return false;
       }
     }
     else {
       const completedBuildingExists = buildings.some(b => b.level.total === buildingInfos[b.type].length);
 
-      if (buildings.some(b => b)
-        && !completedBuildingExists) {
+      if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level
         return false;
       }

@@ -8,10 +8,10 @@ export class BuildingQueue {
   }
 
   public popFirst(): QueuedBuilding | undefined {
-    return this._buildings.splice(-1, 1)[0];
+    return this._buildings.shift();
   }
 
-  public popFirstAtField(fieldId: number): void {
+  public popLastAtField(fieldId: number): void {
     const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
 
     if (buildingToRemove) {
@@ -37,6 +37,11 @@ export class BuildingQueue {
     }
 
     const index = this._buildings.findIndex(b => b.queueId === queueId);
+
+    if (index === -1) {
+      return;
+    }
+
     const newIndex = index - 1;
 
     if (newIndex < 0) {
@@ -47,11 +52,16 @@ export class BuildingQueue {
   }
 
   public moveDown(queueId: string) {
-    if (this._buildings.length === 0) {
+    if (this._buildings.length <= 1) {
       return;
     }
 
     const index = this._buildings.findIndex(b => b.queueId === queueId);
+
+    if (index === -1) {
+      return;
+    }
+
     const newIndex = index + 1;
 
     if (newIndex >= this._buildings.length) {

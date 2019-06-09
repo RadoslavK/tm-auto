@@ -35,7 +35,7 @@ export const buildingResolvers: IResolvers = {
       } = args;
 
       const buildings = context.buildingsService
-        .getBuildingQueue(villageId)
+        .buildingQueue(villageId)
         .buildings()
         .map((b): IQueuedBuilding => {
           const buildingInfo = buildingInfos[b.type][b.level - 1];
@@ -77,7 +77,7 @@ export const buildingResolvers: IResolvers = {
       }
     },
 
-    buildingsInProgress: (_, args, context) => context.buildingsService.getBuildingsInProgress(args.villageId).map((b): IBuildingInProgress => {
+    buildingsInProgress: (_, args, context) => context.buildingsService.buildingsInProgress(args.villageId).map((b): IBuildingInProgress => {
       return {
         level: b.level,
         name: buildingNames[b.type],

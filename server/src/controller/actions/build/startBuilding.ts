@@ -12,7 +12,7 @@ const isValidField = (fieldId: number): boolean => isResourceField(fieldId) || i
 
 export const startBuilding = async (page: Page) => {
   const villageId = context.villageService.currentVillage().id;
-  const queue = context.buildingsService.getBuildingQueue(villageId);
+  const queue = context.buildingsService.buildingQueue(villageId);
   const building = queue.popFirst();
 
   if (!building) {
