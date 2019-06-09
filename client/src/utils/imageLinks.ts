@@ -10,11 +10,22 @@ export const imageLinks = {
     clay: `${baseUrl}/resources/clay.png`,
     iron: `${baseUrl}/resources/iron.png`,
     crop: `${baseUrl}/resources/crop.png`,
-    freeCrop: `${baseUrl}/resources/free_crop.png`,
     total: `${baseUrl}/resources/total.png`,
   },
 
-  time: `${baseUrl}/resources/time.png`,
+  cost: {
+    resources: this.resources,
+    freeCrop: `${baseUrl}/resources/free_crop.png`,
+    buildingTime: `${baseUrl}/resources/time.png`,
+  },
+
+  actions: {
+    delete: `${baseUrl}/red_cross.png`,
+    queue: {
+      moveUp: `${baseUrl}/arrow_up.png`,
+      moveDown: `${baseUrl}/arrow_down.png`,
+    },
+  },
 };
 
 

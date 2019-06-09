@@ -2,7 +2,7 @@ import { allBuildingTypes, BuildingType } from '../_enums/BuildingType';
 import { Tribe } from '../_enums/Tribe';
 import { BuildingConditions, CapitalCondition } from '../_models/buildings/buildingConditions';
 import { BuildingInProgress } from '../_models/buildings/buildingInProgress';
-import { BuildingQueue } from '../_models/buildings/BuildingQueue';
+import { BuildingQueue } from '../_models/buildings/buildingQueue';
 import { BuildingSpot } from '../_models/buildings/buildingSpot';
 import { QueuedBuilding } from '../_models/buildings/queuedBuilding';
 import {

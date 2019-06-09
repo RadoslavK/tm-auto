@@ -27,7 +27,6 @@ export const buildingResolvers: IResolvers = {
     },
 
     buildingQueue: (_, args, context) => {
-      let totalSeconds = 0;
       const totalCost: Cost = new Cost();
 
       const {
@@ -39,7 +38,6 @@ export const buildingResolvers: IResolvers = {
         .buildings()
         .map((b): IQueuedBuilding => {
           const buildingInfo = buildingInfos[b.type][b.level - 1];
-          totalSeconds += buildingInfo.buildingTime;
           totalCost.add(buildingInfo.cost);
 
           return {
@@ -52,27 +50,27 @@ export const buildingResolvers: IResolvers = {
               villageId,
             }, MovingDirection.Up),
             cost: {
-              ...buildingInfo.cost.resources,
-              total: buildingInfo.cost.resources.total(),
-              freeCrop: buildingInfo.cost.freeCrop,
+              resources: {
+                ...buildingInfo.cost.resources,
+                total: buildingInfo.cost.resources.total(),
+              },
+              buildingTime: formatTimeFromSeconds(buildingInfo.cost.buildingTime),
             },
             level: b.level,
             name: buildingNames[b.type],
             queueId: b.queueId,
-            time: formatTimeFromSeconds(buildingInfo.buildingTime),
             type: b.type,
           };
         });
 
-      const totalBuildingTime = formatTimeFromSeconds(totalSeconds);
-
       return {
         buildings,
-        totalBuildingTime,
         totalCost: {
-          ...totalCost.resources,
-          total: totalCost.resources.total(),
-          freeCrop: totalCost.freeCrop,
+          resources: {
+            ...totalCost.resources,
+            total: totalCost.resources.total(),
+          },
+          buildingTime: formatTimeFromSeconds(totalCost.buildingTime),
         },
       }
     },

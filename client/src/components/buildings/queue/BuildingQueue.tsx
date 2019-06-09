@@ -1,4 +1,5 @@
-import { ClearQueue, GetBuildingSpots, GetQueuedBuildings } from '*/graphql_operations/building.graphql';
+import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
+import { ClearQueue, GetQueuedBuildings } from '*/graphql_operations/queuedBuilding.graphql';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
@@ -8,9 +9,9 @@ import {
   IGetQueuedBuildingsQuery,
   IGetQueuedBuildingsQueryVariables,
 } from '../../../_types/graphql';
-import { imageLinks } from '../../../utils/imageLinks';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
-import { Cost, QueuedBuilding } from './QueuedBuilding';
+import { Cost } from './Cost';
+import { QueuedBuilding } from './QueuedBuilding';
 
 interface IProps {
   readonly className: string;
@@ -21,10 +22,14 @@ const propTypes: PropTypesShape<IProps> = {
 };
 
 const useStyles = makeStyles({
-  root: {
+  action: {
+    width: '100%',
+    marginBottom: '15px',
+  },
+  buildings: {
     display: 'flex',
     flexDirection: 'column',
-  }
+  },
 });
 
 const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
@@ -56,7 +61,6 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
     buildingQueue: {
       buildings,
       totalCost,
-      totalBuildingTime,
     },
   } = data;
 
@@ -64,16 +68,15 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <div className={className}>
-      <button onClick={onClear}>
+      <button onClick={onClear} className={classes.action}>
         Clear queue
       </button>
-      <div className={classes.root}>
+      <Cost cost={totalCost} />
+      <div className={classes.buildings}>
         {buildings.map((building, index) => (
           <QueuedBuilding key={index} building={building}/>
         ))}
       </div>
-      <Cost cost={totalCost} />
-      <div>><img src={imageLinks.time} /> {totalBuildingTime}</div>
     </div>
   )
 };

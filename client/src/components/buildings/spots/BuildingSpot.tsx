@@ -1,13 +1,15 @@
 import { Dialog } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { IBuildingSpot } from '../../../_types/graphql';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
-import { BuildingImage } from '../../images/BuildingImage';
+import { imageLinks } from '../../../utils/imageLinks';
 import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 import { BuildingLevelBox } from './BuildingLevelBox';
+import classNames = require('classnames');
 
 enum DialogType {
   None = 'None',
@@ -17,7 +19,18 @@ enum DialogType {
 
 interface IProps {
   readonly building: IBuildingSpot;
+  readonly className?: string;
 }
+
+const useStyles = makeStyles<unknown, IProps>({
+  root: props => ({
+    height: '108px',
+    width: '108px',
+    border: '1px solid black',
+    backgroundImage: `url(\"${imageLinks.getBuilding(props.building.type)}\")`,
+    backgroundSize: 'contain',
+  }),
+});
 
 const propTypes: PropTypesShape<IProps> = {
   building: PropTypes.shape({
@@ -27,14 +40,16 @@ const propTypes: PropTypesShape<IProps> = {
     }),
     type: PropTypes.number.isRequired,
   }).isRequired,
+  className: PropTypes.string,
 };
 
 const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   const {
     building,
+    className,
   } = props;
 
-
+  const classes = useStyles(props);
   const [dialog, setDialog] = useState(DialogType.None);
   const enqueue = useEnqueueBuildingMutation({
     buildingType: building.type,
@@ -50,7 +65,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
     fieldId: building.fieldId,
   });
 
-  const onEnqueue = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (building.level) {
       if (building.level.total === building.level.max) {
         return;
@@ -79,19 +94,23 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   const onSelect = () => setDialog(DialogType.None);
 
   return (
-    <div>
-      <div title={building.name} onClick={onEnqueue}>
-        <BuildingImage buildingType={building.type} />
+    <>
+      <div className={classNames(className, classes.root)} title={building.name}>
         {building.level && (
-          <>
-            <BuildingLevelBox level={building.level}/>
-            {building.level.queued > 0 && (
-              <button onClick={onDequeue}>
-                Dequeue
-              </button>
-            )}
-          </>
+          <BuildingLevelBox level={building.level}/>
         )}
+        <div>
+          {(!building.level || building.level.total < building.level.max) && (
+            <button onClick={onEnqueue}>
+              +
+            </button>
+          )}
+          {building.level && building.level.queued > 0 && (
+            <button disabled={!building.level.queued} onClick={onDequeue}>
+              -
+            </button>
+          )}
+        </div>
       </div>
       <Dialog
         open={dialog === DialogType.NewBuilding}
@@ -114,7 +133,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
           />
         </Dialog>
       )}
-    </div>
+    </>
   );
 };
 

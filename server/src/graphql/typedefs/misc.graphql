@@ -1,0 +1,13 @@
+type Resources {
+    wood: Int!
+    clay: Int!
+    iron: Int!
+    crop: Int!
+    total: Int!
+    freeCrop: Int!
+}
+
+type Cost {
+    resources: Resources!
+    buildingTime: String!
+}

@@ -3,14 +3,16 @@ import { imageLinks } from '../../utils/imageLinks';
 
 interface IProps {
   readonly buildingType: number;
+  readonly className?: string;
 }
 
 export const BuildingImage: React.FunctionComponent<IProps> = (props) => {
+  const {
+    buildingType,
+    className,
+  } = props;
+
   return (
-    <img
-      height="48 px"
-      width="48 px"
-      src={imageLinks.getBuilding(props.buildingType)}
-    />
+    <img src={imageLinks.getBuilding(buildingType)} className={className} />
   )
 };

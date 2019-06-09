@@ -23,7 +23,7 @@ export const MultiEnqueueDialogItem: React.FunctionComponent<IProps> = (props) =
 
   return (
     <div onClick={onClick}>
-      {props.targetLevel} Level
+      Level {props.targetLevel}
     </div>
   );
 };

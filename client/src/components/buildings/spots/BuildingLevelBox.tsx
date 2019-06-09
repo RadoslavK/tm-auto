@@ -4,69 +4,84 @@ import { IBuildingSpotLevel } from '../../../_types/graphql';
 import classNames = require('classnames');
 
 interface IProps {
+  readonly className?: string;
   readonly level: IBuildingSpotLevel;
 }
 
-const useStyles = makeStyles({
-  actualLevel: {
-    background: '#FFFFFF',
-    color: '#000000',
-    '&--completed': {
-      background: '#b8860b',
-      color: '#FFFFFF',
-    },
-  },
-  ongoingLevel: {
+enum BuildingState {
+  None = 'None',
+  Completed = 'Completed',
+  QueueMaxed = 'QueueMaxed',
+  OngoingMaxed = 'OngoingMaxed',
+}
+
+interface IStyleProps {
+  readonly levelState: BuildingState;
+}
+
+const useStyles = makeStyles<unknown, IStyleProps>({
+  actualLevel: props => ({
+    border: '1px solid black',
+    background: props.levelState === BuildingState.Completed ? '#B8860B' : '#FFFFFF',
+    color: props.levelState === BuildingState.Completed ? '#FFFFFF' : '#000000',
+  }),
+  ongoingLevel: props => ({
+    border: '1px solid black',
     background: '#7FFFD4',
-    color: '#000000',
-    '&--maxed': {
-      foreground: '#b8860b',
-    },
-  },
-  totalLevel: {
+    color: props.levelState === BuildingState.OngoingMaxed ? '#B8860B' : '#000000',
+  }),
+  totalLevel: props => ({
+    border: '1px solid black',
     background: '#0000FF',
-    color: '#FFFFFF',
-    '&--maxed': {
-      color: '#b8860b',
-    },
-  },
+    color: props.levelState === BuildingState.QueueMaxed ? '#B8860B' : '#FFFFFF',
+  }),
 });
 
-export const BuildingLevelBox: React.FunctionComponent<IProps> = (props) => {
-  const {
-    level,
-  } = props;
-
-  const classes = useStyles({});
-
+const getLevelState = (level: IBuildingSpotLevel): BuildingState => {
   const isCompleted = level.actual === level.max;
   const isMaxed = level.total === level.max;
   const totalOngoing = level.total - level.queued;
   const isOngoingMaxed = totalOngoing === level.max;
 
+  if (isCompleted) {
+    return BuildingState.Completed;
+  }
+
+  if (isOngoingMaxed) {
+    return BuildingState.OngoingMaxed;
+  }
+
+  if (isMaxed) {
+    return BuildingState.QueueMaxed;
+  }
+
+  return BuildingState.None;
+};
+
+export const BuildingLevelBox: React.FunctionComponent<IProps> = (props) => {
+  const {
+    className,
+    level,
+  } = props;
+
+  const totalOngoing = level.actual + level.ongoing;
+  const levelState = getLevelState(level);
+  const classes = useStyles({ levelState });
+
   return (
-    <div>
-      <span className={classNames(
-        classes.actualLevel,
-        { [`${classes.actualLevel}--completed`]: isCompleted },
-      )}>
+    <div className={className}>
+      <span className={classes.actualLevel}>
         {level.actual}
       </span>
 
       {level.ongoing > 0 && (
-        <span className={classNames(
-          classes.ongoingLevel,
-          { [`${classes.ongoingLevel}--maxed`]: isOngoingMaxed },
-        )}>
+        <span className={classes.ongoingLevel}>
           {totalOngoing}
         </span>
       )}
 
       {level.queued > 0 && (
-        <span className={classNames(
-          classes.totalLevel,
-          { [`${classes.totalLevel}--maxed`]: isMaxed },
-        )}>
+        <span className={classes.totalLevel}>
           {level.total}
         </span>
       )}

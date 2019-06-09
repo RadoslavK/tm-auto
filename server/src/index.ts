@@ -23,7 +23,6 @@ const imagesPath = path.join(__dirname, 'resources', 'images');
 const buildingInfoPath = path.join(__dirname, '..', 'resources', 'buildingInfo');
 
 interface IBuildingInfo {
-  readonly buildingTime: number;
   readonly cost: Cost;
 }
 
@@ -38,10 +37,12 @@ const initBuildingsInfo = () => {
     const text = fs.readFileSync(filePath, { encoding: 'utf-8' });
 
     buildingInfos[buildingType] = JSON.parse(text).map((info): IBuildingInfo => ({
-      buildingTime: info.buildingTime,
       cost: new Cost({
-        resources: new Resources(info.cost.resources),
-        freeCrop: info.cost.freeCrop,
+        buildingTime: info.buildingTime,
+        resources: new Resources({
+          ...info.cost.resources,
+          freeCrop: info.cost.freeCrop,
+        }),
       }),
     }));
   });

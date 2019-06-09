@@ -1,0 +1,52 @@
+type QueuedBuilding {
+    canMoveDown: Boolean!
+    canMoveUp: Boolean!
+    cost: Cost!
+    level: Int!
+    name: String!
+    type: Int!
+    queueId: ID!
+}
+
+type BuildingQueue {
+    buildings: [QueuedBuilding!]!
+    totalCost: Cost!
+}
+
+extend type Query {
+    buildingQueue(villageId: Int!): BuildingQueue!
+}
+
+input ClearQueueInput {
+    villageId: Int!
+}
+
+input EnqueueBuildingInput {
+    fieldId: Int!
+    levels: Int!
+    type: Int!
+    villageId: Int!
+}
+
+extend type Mutation {
+    clearQueue(villageId: Int!): Boolean!
+    dequeueBuilding(input: QueuedBuildingManipulationInput): Boolean!
+    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput): Boolean!
+    enqueueBuilding(input: EnqueueBuildingInput): Boolean!
+}
+
+input QueuedBuildingManipulationInput {
+    queueId: ID!
+    villageId: Int!
+}
+
+input DequeueBuildingAtFieldInput {
+    deleteAll: Boolean!
+    fieldId: Int!
+    villageId: Int!
+}
+
+extend type Mutation {
+    moveQueuedBuildingDown(input: QueuedBuildingManipulationInput!): Boolean!
+    moveQueuedBuildingUp(input: QueuedBuildingManipulationInput!): Boolean!
+}

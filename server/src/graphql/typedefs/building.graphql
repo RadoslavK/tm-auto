@@ -25,57 +25,12 @@ type BuildingSpots {
     resources: ResourceFields!
 }
 
-type Cost {
-    wood: Int!
-    clay: Int!
-    iron: Int!
-    crop: Int!
-    total: Int!
-    freeCrop: Int!
-}
-
 type Building {
     lol: Int
 }
 
-type QueuedBuilding {
-    canMoveDown: Boolean!
-    canMoveUp: Boolean!
-    cost: Cost!
-    level: Int!
-    name: String!
-    time: String!
-    type: Int!
-    queueId: ID!
-}
-
-type BuildingQueue {
-    buildings: [QueuedBuilding!]!
-    totalCost: Cost!
-    totalBuildingTime: String!
-}
-
 extend type Query {
     buildingSpots(villageId: Int!): BuildingSpots!
-    buildingQueue(villageId: Int!): BuildingQueue!
-}
-
-input ClearQueueInput {
-    villageId: Int!
-}
-
-input EnqueueBuildingInput {
-    fieldId: Int!
-    levels: Int!
-    type: Int!
-    villageId: Int!
-}
-
-extend type Mutation {
-    clearQueue(villageId: Int!): Boolean!
-    dequeueBuilding(input: QueuedBuildingManipulationInput): Boolean!
-    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput): Boolean!
-    enqueueBuilding(input: EnqueueBuildingInput): Boolean!
 }
 
 type NewBuildingInfo {
@@ -90,20 +45,4 @@ input AvailableNewBuildingsInput {
 
 extend type Query {
     availableNewBuildings(input: AvailableNewBuildingsInput!): [NewBuildingInfo!]!
-}
-
-input QueuedBuildingManipulationInput {
-    queueId: ID!
-    villageId: Int!
-}
-
-input DequeueBuildingAtFieldInput {
-    deleteAll: Boolean!
-    fieldId: Int!
-    villageId: Int!
-}
-
-extend type Mutation {
-    moveQueuedBuildingDown(input: QueuedBuildingManipulationInput!): Boolean!
-    moveQueuedBuildingUp(input: QueuedBuildingManipulationInput!): Boolean!
 }

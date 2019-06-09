@@ -11,11 +11,11 @@ const useStyles = makeStyles({
   buildingSpots: {
     flex: 3,
   },
-  queuedBuildings: {
-    flex: 1,
-  },
   buildingsOngoing: {
     flex: 1,
+  },
+  queuedBuildings: {
+    flex: 2,
   },
 });
 

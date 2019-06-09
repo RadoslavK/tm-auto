@@ -1,4 +1,5 @@
-import { DequeueBuildingAtField, GetBuildingSpots, GetQueuedBuildings } from "*/graphql_operations/building.graphql";
+import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
+import { DequeueBuildingAtField, GetQueuedBuildings } from '*/graphql_operations/queuedBuilding.graphql';
 import { useContext } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables } from '../_types/graphql';
