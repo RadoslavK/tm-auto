@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-import { Village } from '../../_models/village';
+import { Village } from '../../_models/village/village';
 
 export const parseVillages = async (page: Page): Promise<readonly Village[]> => {
   const villageNodes = await page.$$('#sidebarBoxVillagelist [href*=newdid]');

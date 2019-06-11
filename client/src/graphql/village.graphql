@@ -1,10 +1,30 @@
+#import "./misc.graphql"
+
+query GetVillageById($villageId: Int!) {
+    village(villageId: $villageId) {
+        coords {
+            ...CoordsFragment
+        }
+        id
+        name
+        resources {
+            amount {
+                ...ResourcesFragment
+            }
+            capacity {
+                granary
+                warehouse
+            }
+            production {
+                ...ResourcesFragment
+            }
+        }
+    }
+}
+
 query GetVillages {
     villages {
         id
         name
     }
-}
-
-query VillageExists($villageId: Int!) {
-    villageExists(villageId: $villageId)
 }

@@ -11,3 +11,8 @@ type Cost {
     resources: Resources!
     buildingTime: String!
 }
+
+type Coords {
+    x: Int!
+    y: Int!
+}

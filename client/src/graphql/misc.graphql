@@ -1,1 +1,20 @@
+fragment ResourcesFragment on Resources {
+    wood
+    clay
+    iron
+    crop
+    total
+    freeCrop
+}
 
+fragment CostFragment on Cost {
+    resources {
+        ...ResourcesFragment
+    }
+    buildingTime
+}
+
+fragment CoordsFragment on Coords {
+    x
+    y
+}

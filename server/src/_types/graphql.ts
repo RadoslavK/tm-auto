@@ -62,6 +62,12 @@ export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
 };
 
+export type ICoords = {
+  __typename?: "Coords";
+  readonly x: Scalars["Int"];
+  readonly y: Scalars["Int"];
+};
+
 export type ICost = {
   __typename?: "Cost";
   readonly resources: IResources;
@@ -136,8 +142,8 @@ export type IQuery = {
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
   readonly isSignedIn: Scalars["Boolean"];
+  readonly village?: Maybe<IVillage>;
   readonly villages: ReadonlyArray<IVillage>;
-  readonly villageExists: Scalars["Boolean"];
 };
 
 export type IQueryBuildingSpotsArgs = {
@@ -156,7 +162,7 @@ export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryVillageExistsArgs = {
+export type IQueryVillageArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -210,7 +216,22 @@ export type IUserAccount = {
 export type IVillage = {
   __typename?: "Village";
   readonly id: Scalars["Int"];
+  readonly coords: ICoords;
   readonly name: Scalars["String"];
+  readonly resources: IVillageResources;
+};
+
+export type IVillageCapacity = {
+  __typename?: "VillageCapacity";
+  readonly granary: Scalars["Int"];
+  readonly warehouse: Scalars["Int"];
+};
+
+export type IVillageResources = {
+  __typename?: "VillageResources";
+  readonly amount: IResources;
+  readonly capacity: IVillageCapacity;
+  readonly production: IResources;
 };
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -299,6 +320,9 @@ export type IResolversTypes = {
   Resources: IResources;
   ID: Scalars["ID"];
   Village: IVillage;
+  Coords: ICoords;
+  VillageResources: IVillageResources;
+  VillageCapacity: IVillageCapacity;
   Mutation: {};
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
@@ -377,6 +401,14 @@ export type IBuildingSpotsResolvers<
     ParentType,
     ContextType
   >;
+};
+
+export type ICoordsResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["Coords"]
+> = {
+  x?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  y?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type ICostResolvers<
@@ -475,16 +507,16 @@ export type IQueryResolvers<
     IQueryBuildingQueueArgs
   >;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  village?: Resolver<
+    Maybe<IResolversTypes["Village"]>,
+    ParentType,
+    ContextType,
+    IQueryVillageArgs
+  >;
   villages?: Resolver<
     ReadonlyArray<IResolversTypes["Village"]>,
     ParentType,
     ContextType
-  >;
-  villageExists?: Resolver<
-    IResolversTypes["Boolean"],
-    ParentType,
-    ContextType,
-    IQueryVillageExistsArgs
   >;
 };
 
@@ -553,7 +585,34 @@ export type IVillageResolvers<
   ParentType = IResolversTypes["Village"]
 > = {
   id?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  coords?: Resolver<IResolversTypes["Coords"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  resources?: Resolver<
+    IResolversTypes["VillageResources"],
+    ParentType,
+    ContextType
+  >;
+};
+
+export type IVillageCapacityResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["VillageCapacity"]
+> = {
+  granary?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  warehouse?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
+export type IVillageResourcesResolvers<
+  ContextType = IGraphQLContext,
+  ParentType = IResolversTypes["VillageResources"]
+> = {
+  amount?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
+  capacity?: Resolver<
+    IResolversTypes["VillageCapacity"],
+    ParentType,
+    ContextType
+  >;
+  production?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
 };
 
 export type IResolvers<ContextType = IGraphQLContext> = {
@@ -563,6 +622,7 @@ export type IResolvers<ContextType = IGraphQLContext> = {
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
   BuildingSpotLevel?: IBuildingSpotLevelResolvers<ContextType>;
   BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
+  Coords?: ICoordsResolvers<ContextType>;
   Cost?: ICostResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   NewBuildingInfo?: INewBuildingInfoResolvers<ContextType>;
@@ -572,4 +632,6 @@ export type IResolvers<ContextType = IGraphQLContext> = {
   Resources?: IResourcesResolvers<ContextType>;
   UserAccount?: IUserAccountResolvers<ContextType>;
   Village?: IVillageResolvers<ContextType>;
+  VillageCapacity?: IVillageCapacityResolvers<ContextType>;
+  VillageResources?: IVillageResourcesResolvers<ContextType>;
 };

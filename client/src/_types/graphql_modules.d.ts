@@ -28,10 +28,19 @@ declare module "*/graphql_operations/controller.graphql" {
   export default defaultDocument;
 }
 
+declare module "*/graphql_operations/misc.graphql" {
+  import { DocumentNode } from "graphql";
+  const defaultDocument: DocumentNode;
+  export const ResourcesFragment: DocumentNode;
+  export const CostFragment: DocumentNode;
+  export const CoordsFragment: DocumentNode;
+
+  export default defaultDocument;
+}
+
 declare module "*/graphql_operations/queuedBuilding.graphql" {
   import { DocumentNode } from "graphql";
   const defaultDocument: DocumentNode;
-  export const CostFragment: DocumentNode;
   export const ClearQueue: DocumentNode;
   export const EnqueueBuilding: DocumentNode;
   export const DequeueBuilding: DocumentNode;
@@ -46,8 +55,8 @@ declare module "*/graphql_operations/queuedBuilding.graphql" {
 declare module "*/graphql_operations/village.graphql" {
   import { DocumentNode } from "graphql";
   const defaultDocument: DocumentNode;
+  export const GetVillageById: DocumentNode;
   export const GetVillages: DocumentNode;
-  export const VillageExists: DocumentNode;
 
   export default defaultDocument;
 }

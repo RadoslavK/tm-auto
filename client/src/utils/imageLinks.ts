@@ -11,11 +11,11 @@ export const imageLinks = {
     iron: `${baseUrl}/resources/iron.png`,
     crop: `${baseUrl}/resources/crop.png`,
     total: `${baseUrl}/resources/total.png`,
+    freeCrop: `${baseUrl}/resources/free_crop.png`,
   },
 
   cost: {
     resources: this.resources,
-    freeCrop: `${baseUrl}/resources/free_crop.png`,
     buildingTime: `${baseUrl}/resources/time.png`,
   },
 

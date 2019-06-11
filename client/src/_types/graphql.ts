@@ -53,6 +53,11 @@ export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
 };
 
+export type ICoords = {
+  readonly x: Scalars["Int"];
+  readonly y: Scalars["Int"];
+};
+
 export type ICost = {
   readonly resources: IResources;
   readonly buildingTime: Scalars["String"];
@@ -123,8 +128,8 @@ export type IQuery = {
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
   readonly isSignedIn: Scalars["Boolean"];
+  readonly village?: Maybe<IVillage>;
   readonly villages: ReadonlyArray<IVillage>;
-  readonly villageExists: Scalars["Boolean"];
 };
 
 export type IQueryBuildingSpotsArgs = {
@@ -143,7 +148,7 @@ export type IQueryBuildingQueueArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryVillageExistsArgs = {
+export type IQueryVillageArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -192,7 +197,20 @@ export type IUserAccount = {
 
 export type IVillage = {
   readonly id: Scalars["Int"];
+  readonly coords: ICoords;
   readonly name: Scalars["String"];
+  readonly resources: IVillageResources;
+};
+
+export type IVillageCapacity = {
+  readonly granary: Scalars["Int"];
+  readonly warehouse: Scalars["Int"];
+};
+
+export type IVillageResources = {
+  readonly amount: IResources;
+  readonly capacity: IVillageCapacity;
+  readonly production: IResources;
 };
 export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
@@ -261,12 +279,16 @@ export type IStopBotMutationVariables = {};
 
 export type IStopBotMutation = Pick<IMutation, "stopBot">;
 
+export type IResourcesFragmentFragment = Pick<
+  IResources,
+  "wood" | "clay" | "iron" | "crop" | "total" | "freeCrop"
+>;
+
 export type ICostFragmentFragment = Pick<ICost, "buildingTime"> & {
-  readonly resources: Pick<
-    IResources,
-    "wood" | "clay" | "iron" | "crop" | "total" | "freeCrop"
-  >;
+  readonly resources: IResourcesFragmentFragment;
 };
+
+export type ICoordsFragmentFragment = Pick<ICoords, "x" | "y">;
 
 export type IClearQueueMutationVariables = {
   villageId: Scalars["Int"];
@@ -329,14 +351,25 @@ export type IGetQueuedBuildingsQuery = {
   };
 };
 
+export type IGetVillageByIdQueryVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IGetVillageByIdQuery = {
+  readonly village: Maybe<
+    Pick<IVillage, "id" | "name"> & {
+      readonly coords: ICoordsFragmentFragment;
+      readonly resources: {
+        readonly amount: IResourcesFragmentFragment;
+        readonly capacity: Pick<IVillageCapacity, "granary" | "warehouse">;
+        readonly production: IResourcesFragmentFragment;
+      };
+    }
+  >;
+};
+
 export type IGetVillagesQueryVariables = {};
 
 export type IGetVillagesQuery = {
   readonly villages: ReadonlyArray<Pick<IVillage, "id" | "name">>;
 };
-
-export type IVillageExistsQueryVariables = {
-  villageId: Scalars["Int"];
-};
-
-export type IVillageExistsQuery = Pick<IQuery, "villageExists">;

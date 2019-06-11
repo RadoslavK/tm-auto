@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     backgroundImage: `url("${imageLinks.resources.total}")`,
   },
   freeCrop: {
-    backgroundImage: `url("${imageLinks.cost.freeCrop}")`,
+    backgroundImage: `url("${imageLinks.resources.freeCrop}")`,
   },
   buildingTime: {
     backgroundImage: `url("${imageLinks.cost.buildingTime}")`,

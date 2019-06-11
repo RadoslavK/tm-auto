@@ -1,13 +1,10 @@
-import { Village } from '../_models/village';
+import { Village } from '../_models/village/village';
 
 export class VillageService {
   private _villages: readonly Village[] = [];
   private _currentVillageId: number = 0;
 
-  public hasVillage= (villageId: number): boolean => {
-    const result = this._villages.find(village => village.id === villageId);
-    return !!result;
-  };
+  public getVillage = (villageId: number): Village | undefined => this._villages.find(village => village.id === villageId);
 
   public setVillages = (villages: readonly Village[]): void => {
     this._villages = villages;

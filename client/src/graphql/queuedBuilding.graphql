@@ -1,14 +1,4 @@
-fragment CostFragment on Cost {
-    resources {
-        wood
-        clay
-        iron
-        crop
-        total
-        freeCrop
-    }
-    buildingTime
-}
+#import "./misc.graphql"
 
 mutation ClearQueue($villageId: Int!) {
     clearQueue(villageId: $villageId)

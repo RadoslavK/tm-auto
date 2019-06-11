@@ -1,12 +1,13 @@
-import { VillageExists } from '*/graphql_operations/village.graphql';
+import { GetVillageById } from '*/graphql_operations/village.graphql';
 import React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import {
-  IVillageExistsQuery,
-  IVillageExistsQueryVariables,
+  IGetVillageByIdQuery,
+  IGetVillageByIdQueryVariables,
 } from '../../_types/graphql';
 import { Buildings } from '../buildings/Buildings';
 import { IVillageContext, VillageContext } from './context/VillageContext';
+import { Resources } from './Resources';
 
 interface IParams {
   readonly villageId: number;
@@ -17,16 +18,18 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
     villageId,
   } = props;
 
-  const { data, loading } = useQuery<IVillageExistsQuery, IVillageExistsQueryVariables>(VillageExists, {
-    variables: {
-      villageId,
-    },
+  const { data, loading } = useQuery<IGetVillageByIdQuery, IGetVillageByIdQueryVariables>(GetVillageById, {
+    variables: { villageId },
     fetchPolicy: 'network-only',
   });
 
-  if (loading || !data.villageExists) {
+  if (loading || !data.village) {
     return null;
   }
+
+  const {
+    resources,
+  } = data.village;
 
   const context: IVillageContext = {
     villageId,
@@ -34,6 +37,7 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
 
   return (
     <VillageContext.Provider value={context}>
+      <Resources resources={resources} />
       <Buildings />
     </VillageContext.Provider>
   );
