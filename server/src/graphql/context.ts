@@ -1,23 +1,11 @@
 import { Player } from '../_models/player';
-import { BuildingsService } from '../services/buildingsService';
-import { ControllerService } from '../services/controllerService';
-import { UserService } from '../services/userService';
-import { VillageService } from '../services/villageService';
+import { Villages } from '../_models/village/villages';
+import { Controller } from '../controller';
+import { User } from '../_models/user';
 
-export interface IGraphQLContext {
-  readonly buildingsService: BuildingsService;
-  readonly controllerService: ControllerService;
-  readonly userService: UserService;
-  readonly villageService: VillageService;
-
-  readonly player: Player;
-}
-
-export const context: IGraphQLContext = {
-  buildingsService: new BuildingsService(),
-  controllerService: new ControllerService(),
-  userService: new UserService(),
-  villageService: new VillageService(),
-
+export const context = {
+  controller: new Controller(),
   player: new Player(),
+  user: new User(),
+  villages: new Villages(),
 };

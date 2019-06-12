@@ -4,7 +4,7 @@ interface IParams {
   server: string;
 }
 
-export class UserAccount {
+export class UserAccount implements IParams {
   public username: string = '';
   public password: string = '';
   public server: string = '';

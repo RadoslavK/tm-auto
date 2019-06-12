@@ -1,3 +1,5 @@
+scalar Date
+
 type Resources {
     wood: Int!
     clay: Int!
@@ -9,10 +11,15 @@ type Resources {
 
 type Cost {
     resources: Resources!
-    buildingTime: String!
+    buildingTime: Int!
 }
 
 type Coords {
     x: Int!
     y: Int!
+}
+
+input BuildingCostInput {
+    buildingType: Int!
+    level: Int!
 }

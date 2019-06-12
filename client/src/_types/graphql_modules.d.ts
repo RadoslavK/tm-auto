@@ -4,6 +4,8 @@ declare module "*/graphql_operations/building.graphql" {
   export const BuildingSpotFragment: DocumentNode;
   export const GetBuildingSpots: DocumentNode;
   export const GetAvailableNewBuildings: DocumentNode;
+  export const GetMaxBuildingLevel: DocumentNode;
+  export const GetBuildingName: DocumentNode;
 
   export default defaultDocument;
 }

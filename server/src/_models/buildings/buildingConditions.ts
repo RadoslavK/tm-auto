@@ -21,7 +21,7 @@ interface IParams {
   readonly type: BuildingType;
 }
 
-export class BuildingConditions {
+export class BuildingConditions implements IParams {
   public readonly capital: CapitalCondition = CapitalCondition.None;
   public readonly isUnique: boolean = true;
   public readonly playerTribe: Tribe = Tribe.None;

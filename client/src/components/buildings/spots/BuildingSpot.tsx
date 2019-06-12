@@ -66,7 +66,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   });
 
   const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (building.level) {
+    if (building.type > 0) {
       if (building.level.total === building.level.max) {
         return;
       }
@@ -96,16 +96,14 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
   return (
     <>
       <div className={classNames(className, classes.root)} title={building.name}>
-        {building.level && (
-          <BuildingLevelBox level={building.level}/>
+        {building.type > 0 && (
+          <BuildingLevelBox level={building.level} />
         )}
         <div>
-          {(!building.level || building.level.total < building.level.max) && (
-            <button onClick={onEnqueue}>
-              +
-            </button>
-          )}
-          {building.level && building.level.queued > 0 && (
+          <button disabled={building.type > 0 && building.level.total === building.level.max} onClick={onEnqueue}>
+            +
+          </button>
+          {building.level.queued > 0 && (
             <button disabled={!building.level.queued} onClick={onDequeue}>
               -
             </button>

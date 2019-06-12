@@ -13,6 +13,11 @@ import { NewBuildingItem } from './NewBuildingItem';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+    flexWrap: 'wrap',
+  },
+  building: {
+    marginLeft: 5,
+    marginRight: 5,
   },
 });
 
@@ -52,7 +57,9 @@ const NewBuildingDialog: React.FunctionComponent<IProps> = React.forwardRef((pro
       {availableNewBuildings.map((building, index) => (
         <NewBuildingItem
           key={index}
-          building={building}
+          className={classes.building}
+          name={building.name}
+          type={building.type}
           fieldId={fieldId}
           onSelect={onSelect}
         />

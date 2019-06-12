@@ -1,12 +1,12 @@
 import { ISignInInput, IUserAccount } from '../_types/graphql';
 
-export class UserService {
+export class User {
   public isSignedIn: boolean = false;
 
-  public userAccount: IUserAccount;
+  public account: IUserAccount;
 
   signIn = (input: ISignInInput): void => {
-    this.userAccount = { ...input };
+    this.account = { ...input };
     this.isSignedIn = true;
   };
 }

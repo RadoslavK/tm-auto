@@ -8,7 +8,7 @@ interface IParams {
   freeCrop: number;
 }
 
-export class Resources implements IComparable<Resources> {
+export class Resources implements IParams, IComparable<Resources> {
   public wood: number = 0;
   public clay: number = 0;
   public iron: number = 0;
@@ -19,6 +19,8 @@ export class Resources implements IComparable<Resources> {
     Object.assign(this, params);
   }
 
+  public total = (): number => this.wood + this.clay + this.iron + this.crop;
+
   public add = (addition: Resources): void => {
     this.wood += addition.wood;
     this.clay += addition.clay;
@@ -26,8 +28,6 @@ export class Resources implements IComparable<Resources> {
     this.crop += addition.crop;
     this.freeCrop += addition.freeCrop;
   };
-
-  public total = (): number => this.wood + this.clay + this.iron + this.crop;
 
   public isGreaterOrEqualThan = (other: Resources): boolean =>
     this.wood >= other.wood

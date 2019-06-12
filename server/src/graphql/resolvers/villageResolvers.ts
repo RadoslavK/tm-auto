@@ -1,25 +1,11 @@
-import { Village } from '../../_models/village/village';
-import { IResolvers, IVillage } from '../../_types/graphql';
-
-const mapVillage = (village: Village | undefined): IVillage => village && {
-  ...village,
-  resources: {
-    ...village.resources,
-    amount: {
-      ...village.resources.amount,
-      total: village.resources.amount.total(),
-    },
-    production: {
-      ...village.resources.production,
-      total: village.resources.production.total(),
-    },
-  },
-};
+import { IResolvers } from '../../_types/graphql';
+import { context } from '../context';
+import { mapVillage } from '../mappers/mapVillage';
 
 export const villageResolvers: IResolvers = {
   Query: {
-    village: (_, args, context) => mapVillage(context.villageService.getVillage(args.villageId)),
+    village: (_, args) => mapVillage(context.villages.village(args.villageId)),
 
-    villages: (_, __, context) => context.villageService.villages().map(mapVillage),
+    villages: () => context.villages.all().map(mapVillage),
   },
 };

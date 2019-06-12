@@ -25,16 +25,16 @@ export const Resources: React.FunctionComponent<IProps> = (props) => {
     },
   } = props;
 
-  const totalCapacity = capacity.granary + capacity.warehouse;
   const classes = useStyles({});
+  const totalCapacity = capacity.granary + capacity.warehouse;
 
   return (
     <div className={classes.root}>
-      <Resource resourceName="wood" amount={amount.wood} capacity={capacity.warehouse} production={production.wood}/>
-      <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay}/>
-      <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron}/>
-      <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop}/>
-      <Resource resourceName="total" amount={amount.total} capacity={totalCapacity} />
+      <Resource resourceName="wood" amount={amount.wood} capacity={capacity.warehouse} production={production.wood} />
+      <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay} />
+      <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron} />
+      <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop} />
+      <Resource resourceName="total"  amount={amount.total} capacity={totalCapacity} />
       <Resource resourceName="freeCrop" amount={amount.freeCrop} />
     </div>
   );

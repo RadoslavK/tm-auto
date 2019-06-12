@@ -1,8 +1,8 @@
 query GetBuildingsInProgress($villageId: Int!) {
     buildingsInProgress(villageId: $villageId) {
         level
+        finishedAt
         name
-        timer
         type
     }
 }

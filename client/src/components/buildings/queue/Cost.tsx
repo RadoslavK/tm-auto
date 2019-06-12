@@ -1,5 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+import { formatTimeFromSeconds } from '../../../../../server/src/utils/formatTime';
 import { ICost } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import classNames = require('classnames');
@@ -61,6 +62,7 @@ const Cost: React.FunctionComponent<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
+  const time = formatTimeFromSeconds(buildingTime);
 
   return (
     <div className={classNames(className, classes.root)}>
@@ -83,7 +85,7 @@ const Cost: React.FunctionComponent<IProps> = (props) => {
       <span className={classes.value}>{resources.freeCrop}</span>
 
       <span className={classNames(classes.image, classes.buildingTime)}/>
-      <span className={classes.value}>{buildingTime}</span>
+      <span className={classes.value}>{time}</span>
     </div>
   );
 };

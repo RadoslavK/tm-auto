@@ -1,8 +1,8 @@
 type BuildingSpotLevel {
     actual: Int!
-    max: Int!
     ongoing: Int!
     queued: Int!
+    max: Int!
     total: Int!
 }
 
@@ -25,24 +25,19 @@ type BuildingSpots {
     resources: ResourceFields!
 }
 
-type Building {
-    lol: Int
-}
-
-extend type Query {
-    buildingSpots(villageId: Int!): BuildingSpots!
-}
-
-type NewBuildingInfo {
-    name: String!
-    type: Int!
-}
-
 input AvailableNewBuildingsInput {
     fieldId: Int!
     villageId: Int!
 }
 
+type AvailableNewBuilding {
+    type: Int!
+    name: String!
+}
+
 extend type Query {
-    availableNewBuildings(input: AvailableNewBuildingsInput!): [NewBuildingInfo!]!
+    availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
+    buildingName(buildingType: Int!): String!
+    buildingSpots(villageId: Int!): BuildingSpots!
+    maxBuildingLevel(buildingType: Int!): Int!
 }

@@ -36,11 +36,9 @@ const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
-  const villageContext = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
-    variables: {
-      villageId: villageContext.villageId,
-    },
+    variables: { villageId },
     fetchPolicy: 'network-only',
   });
 

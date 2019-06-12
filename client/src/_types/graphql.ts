@@ -6,6 +6,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: Date;
+};
+
+export type IAvailableNewBuilding = {
+  readonly type: Scalars["Int"];
+  readonly name: Scalars["String"];
 };
 
 export type IAvailableNewBuildingsInput = {
@@ -13,14 +19,15 @@ export type IAvailableNewBuildingsInput = {
   readonly villageId: Scalars["Int"];
 };
 
-export type IBuilding = {
-  readonly lol?: Maybe<Scalars["Int"]>;
+export type IBuildingCostInput = {
+  readonly buildingType: Scalars["Int"];
+  readonly level: Scalars["Int"];
 };
 
 export type IBuildingInProgress = {
   readonly level: Scalars["Int"];
+  readonly finishedAt: Scalars["Date"];
   readonly name: Scalars["String"];
-  readonly timer: Scalars["Int"];
   readonly type: Scalars["Int"];
 };
 
@@ -38,9 +45,9 @@ export type IBuildingSpot = {
 
 export type IBuildingSpotLevel = {
   readonly actual: Scalars["Int"];
-  readonly max: Scalars["Int"];
   readonly ongoing: Scalars["Int"];
   readonly queued: Scalars["Int"];
+  readonly max: Scalars["Int"];
   readonly total: Scalars["Int"];
 };
 
@@ -60,7 +67,7 @@ export type ICoords = {
 
 export type ICost = {
   readonly resources: IResources;
-  readonly buildingTime: Scalars["String"];
+  readonly buildingTime: Scalars["Int"];
 };
 
 export type IDequeueBuildingAtFieldInput = {
@@ -116,14 +123,11 @@ export type IMutationSignInArgs = {
   account: ISignInInput;
 };
 
-export type INewBuildingInfo = {
-  readonly name: Scalars["String"];
-  readonly type: Scalars["Int"];
-};
-
 export type IQuery = {
+  readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>;
+  readonly buildingName: Scalars["String"];
   readonly buildingSpots: IBuildingSpots;
-  readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
+  readonly maxBuildingLevel: Scalars["Int"];
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
@@ -132,12 +136,20 @@ export type IQuery = {
   readonly villages: ReadonlyArray<IVillage>;
 };
 
+export type IQueryAvailableNewBuildingsArgs = {
+  input: IAvailableNewBuildingsInput;
+};
+
+export type IQueryBuildingNameArgs = {
+  buildingType: Scalars["Int"];
+};
+
 export type IQueryBuildingSpotsArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryAvailableNewBuildingsArgs = {
-  input: IAvailableNewBuildingsInput;
+export type IQueryMaxBuildingLevelArgs = {
+  buildingType: Scalars["Int"];
 };
 
 export type IQueryBuildingsInProgressArgs = {
@@ -155,11 +167,11 @@ export type IQueryVillageArgs = {
 export type IQueuedBuilding = {
   readonly canMoveDown: Scalars["Boolean"];
   readonly canMoveUp: Scalars["Boolean"];
-  readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
   readonly queueId: Scalars["ID"];
+  readonly cost: ICost;
 };
 
 export type IQueuedBuildingManipulationInput = {
@@ -214,10 +226,10 @@ export type IVillageResources = {
 };
 export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
-  "fieldId" | "name" | "type"
+  "fieldId" | "type" | "name"
 > & {
   readonly level: Maybe<
-    Pick<IBuildingSpotLevel, "actual" | "max" | "ongoing" | "queued" | "total">
+    Pick<IBuildingSpotLevel, "actual" | "ongoing" | "queued" | "total" | "max">
   >;
 };
 
@@ -243,9 +255,21 @@ export type IGetAvailableNewBuildingsQueryVariables = {
 
 export type IGetAvailableNewBuildingsQuery = {
   readonly availableNewBuildings: ReadonlyArray<
-    Pick<INewBuildingInfo, "name" | "type">
+    Pick<IAvailableNewBuilding, "name" | "type">
   >;
 };
+
+export type IGetMaxBuildingLevelQueryVariables = {
+  buildingType: Scalars["Int"];
+};
+
+export type IGetMaxBuildingLevelQuery = Pick<IQuery, "maxBuildingLevel">;
+
+export type IGetBuildingNameQueryVariables = {
+  buildingType: Scalars["Int"];
+};
+
+export type IGetBuildingNameQuery = Pick<IQuery, "buildingName">;
 
 export type IGetBuildingsInProgressQueryVariables = {
   villageId: Scalars["Int"];
@@ -253,7 +277,7 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 export type IGetBuildingsInProgressQuery = {
   readonly buildingsInProgress: ReadonlyArray<
-    Pick<IBuildingInProgress, "level" | "name" | "timer" | "type">
+    Pick<IBuildingInProgress, "level" | "finishedAt" | "name" | "type">
   >;
 };
 
@@ -344,7 +368,7 @@ export type IGetQueuedBuildingsQuery = {
     readonly buildings: ReadonlyArray<
       Pick<
         IQueuedBuilding,
-        "canMoveDown" | "canMoveUp" | "level" | "name" | "type" | "queueId"
+        "canMoveDown" | "canMoveUp" | "name" | "level" | "type" | "queueId"
       > & { readonly cost: ICostFragmentFragment }
     >;
     readonly totalCost: ICostFragmentFragment;

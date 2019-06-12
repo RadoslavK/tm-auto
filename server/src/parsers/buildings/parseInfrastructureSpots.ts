@@ -1,6 +1,6 @@
-import { Page } from 'puppeteer';
 import { TravianPath } from '../../_enums/TravianPath';
-import { BuildingSpot } from '../../_models/buildings/buildingSpot';
+import { IActualBuilding } from '../../_models/buildings';
+import { getPage } from '../../browser/getPage';
 import { isBuildingField } from '../../controller/actions/build/startBuilding';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
@@ -9,13 +9,15 @@ const acceptedUrls: readonly string[] = [
   TravianPath.InfrastructureOverview,
 ];
 
-export const parseInfrastructureSpots = async (page: Page): Promise<readonly BuildingSpot[]> => {
-  validateUrl(page,acceptedUrls);
+export const parseInfrastructureSpots = async (): Promise<readonly IActualBuilding[]> => {
+  await validateUrl(acceptedUrls);
+
+  const page = await getPage();
   await page.waitForSelector('#village_map');
 
   const nodes = await page.$$('#village_map > div');
 
-  const buildings = await Promise.all(nodes.map(async (node) => {
+  const buildings = await Promise.all(nodes.map(async (node): Promise<IActualBuilding> => {
     const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
     const fieldId = +/a(\d+)/.exec(className)[1];
 
@@ -29,11 +31,11 @@ export const parseInfrastructureSpots = async (page: Page): Promise<readonly Bui
       ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
       : 0;
 
-    return new BuildingSpot({
+    return {
       fieldId,
       level,
       type,
-    });
+    };
   }));
 
   const uniqueFieldIds: number[] = [];

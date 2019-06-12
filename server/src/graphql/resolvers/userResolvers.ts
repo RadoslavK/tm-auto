@@ -1,12 +1,14 @@
 import { IResolvers } from '../../_types/graphql';
+import { context } from '../context';
 
 export const userResolvers: IResolvers = {
   Query: {
-    isSignedIn: (_, __, context) => context.userService.isSignedIn,
+    isSignedIn: () => context.user.isSignedIn,
   },
+
   Mutation: {
-    signIn: (_, args, context) =>  {
-      context.userService.signIn(args.account);
+    signIn: (_, args) =>  {
+      context.user.signIn(args.account);
       return true;
     },
   }

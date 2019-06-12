@@ -1,11 +1,11 @@
 type QueuedBuilding {
     canMoveDown: Boolean!
     canMoveUp: Boolean!
-    cost: Cost!
     level: Int!
     name: String!
     type: Int!
     queueId: ID!
+    cost: Cost!
 }
 
 type BuildingQueue {

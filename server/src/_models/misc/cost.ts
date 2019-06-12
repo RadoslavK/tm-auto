@@ -5,7 +5,7 @@ interface IParams {
   resources: Resources;
 }
 
-export class Cost {
+export class Cost implements IParams {
   public buildingTime: number = 0;
   public resources: Resources = new Resources();
 

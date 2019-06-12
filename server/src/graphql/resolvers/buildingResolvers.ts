@@ -1,19 +1,19 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { Cost } from '../../_models/misc/cost';
-import { IBuildingInProgress, IQueuedBuilding, IResolvers } from '../../_types/graphql';
-import { buildingNames } from '../../constants/buildingNames';
-import { buildingInfos } from '../../index';
-import { MovingDirection } from '../../services/buildingsService';
-import { formatTimeFromSeconds } from '../../utils/formatTime';
+import { IBuildingQueue, IResolvers } from '../../_types/graphql';
+import { MovingDirection } from '../../services/buildingQueueManager';
+import { BuildingQueueManager } from '../../services/buildingQueueManager';
+import { AvailableBuildingTypesManager } from '../../services/availableBuildingTypesManager';
+import { context } from '../context';
+import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
+import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
+import { mapCost } from '../mappers/mapCost';
+import { mapQueuedBuildingFactory } from '../mappers/mapQueuedBuilding';
 
 export const buildingResolvers: IResolvers = {
   Query: {
-    buildingSpots: (_, args, context) => {
+    buildingSpots: (_, args) => {
       const { villageId } = args;
-      const normalizedSpots = context.buildingsService.normalizedBuildingSpots(villageId).map(b => ({
-        ...b,
-        level: b.type === BuildingType.None ? null : b.level,
-      }));
+      const normalizedSpots = context.villages.village(villageId).buildings.normalizedBuildingSpots();
 
       return {
         infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
@@ -26,89 +26,102 @@ export const buildingResolvers: IResolvers = {
       }
     },
 
-    buildingQueue: (_, args, context) => {
-      const totalCost: Cost = new Cost();
-
+    buildingQueue: (_, args): IBuildingQueue => {
       const {
         villageId,
       } = args;
 
-      const buildings = context.buildingsService
-        .buildingQueue(villageId)
-        .buildings()
-        .map((b): IQueuedBuilding => {
-          const buildingInfo = buildingInfos[b.type][b.level - 1];
-          totalCost.add(buildingInfo.cost);
-
-          return {
-            canMoveDown: context.buildingsService.canMoveQueuedBuilding({
-              villageId,
-              queueId: b.queueId,
-            }, MovingDirection.Down),
-            canMoveUp: context.buildingsService.canMoveQueuedBuilding({
-              queueId: b.queueId,
-              villageId,
-            }, MovingDirection.Up),
-            cost: {
-              resources: {
-                ...buildingInfo.cost.resources,
-                total: buildingInfo.cost.resources.total(),
-              },
-              buildingTime: formatTimeFromSeconds(buildingInfo.cost.buildingTime),
-            },
-            level: b.level,
-            name: buildingNames[b.type],
-            queueId: b.queueId,
-            type: b.type,
-          };
-        });
+      const village = context.villages.village(villageId);
+      const buildings = village.buildings.queue.buildings();
+      const totalCost = village.buildings.queue.totalCost();
+      const queueManager = new BuildingQueueManager(villageId);
+      const mapQueuedBuilding = mapQueuedBuildingFactory(queueManager);
 
       return {
-        buildings,
-        totalCost: {
-          resources: {
-            ...totalCost.resources,
-            total: totalCost.resources.total(),
-          },
-          buildingTime: formatTimeFromSeconds(totalCost.buildingTime),
-        },
-      }
-    },
-
-    buildingsInProgress: (_, args, context) => context.buildingsService.buildingsInProgress(args.villageId).map((b): IBuildingInProgress => {
-      return {
-        level: b.level,
-        name: buildingNames[b.type],
-        type: b.type,
-        timer: Math.floor((b.finishedAt.valueOf() - new Date().valueOf()) / 1000),
+        buildings: buildings.map(mapQueuedBuilding),
+        totalCost: mapCost(totalCost),
       };
-    }),
+    },
 
-    availableNewBuildings: (_, args, context) => context.buildingsService.availableNewBuildings(args.input),
+    buildingsInProgress: (_, args) => context.villages.village(args.villageId).buildings.buildingsInProgress().map(mapBuildingInProgress),
+
+    availableNewBuildings: (_, args) => {
+      const {
+        fieldId,
+        villageId,
+      } = args.input;
+
+      const manager = new AvailableBuildingTypesManager(villageId);
+      return manager.availableBuildingTypes(fieldId).map(mapAvailableNewBuilding);
+    },
   },
+
   Mutation: {
-    clearQueue: (_, args, context) => {
-      context.buildingsService.clearQueue(args.villageId);
+    clearQueue: (_, args) => {
+      const {
+        villageId,
+      } = args;
+
+      const queueManager = new BuildingQueueManager(villageId);
+      queueManager.clearQueue();
+
       return true;
     },
 
-    enqueueBuilding: (_, args, context) => {
-      context.buildingsService.enqueueBuilding(args.input);
+    enqueueBuilding: (_, args) => {
+      const {
+        villageId,
+        ...enqueuedBuilding
+      } = args.input;
+
+      const queueManager = new BuildingQueueManager(villageId);
+      queueManager.enqueueBuilding(enqueuedBuilding);
+
       return true;
     },
 
-    dequeueBuilding: (_, args, context) => {
-      context.buildingsService.dequeueBuilding(args.input);
+    dequeueBuilding: (_, args) => {
+      const {
+        queueId,
+        villageId,
+      } = args.input;
+
+      const queueManager = new BuildingQueueManager(villageId);
+      queueManager.dequeueBuilding(queueId);
+
       return true;
     },
 
-    dequeueBuildingAtField: (_, args, context) => {
-      context.buildingsService.dequeueBuildingAtField(args.input);
+    dequeueBuildingAtField: (_, args) => {
+      const {
+        villageId,
+        ...input
+      } = args.input;
+
+      const queueManager = new BuildingQueueManager(villageId);
+      queueManager.dequeueBuildingAtField(input);
+
       return true;
     },
 
-    moveQueuedBuildingDown: (_, args, context) => context.buildingsService.moveQueuedBuildingDown(args.input),
+    moveQueuedBuildingDown: (_, args) => {
+      const {
+        queueId,
+        villageId,
+      } = args.input;
 
-    moveQueuedBuildingUp: (_, args, context) => context.buildingsService.moveQueuedBuildingUp(args.input),
+      const queueManager = new BuildingQueueManager(villageId);
+      return queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
+    },
+
+    moveQueuedBuildingUp: (_, args) => {
+      const {
+        queueId,
+        villageId,
+      } = args.input;
+
+      const queueManager = new BuildingQueueManager(villageId);
+      return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
+    },
   }
 };

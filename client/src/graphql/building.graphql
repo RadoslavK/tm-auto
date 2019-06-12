@@ -2,13 +2,13 @@ fragment BuildingSpotFragment on BuildingSpot {
     fieldId
     level {
         actual
-        max
         ongoing
         queued
         total
+        max
     }
-    name
     type
+    name
 }
 
 query GetBuildingSpots($villageId: Int!) {
@@ -38,4 +38,12 @@ query GetAvailableNewBuildings($input: AvailableNewBuildingsInput!) {
         name
         type
     }
+}
+
+query GetMaxBuildingLevel($buildingType: Int!) {
+    maxBuildingLevel(buildingType: $buildingType)
+}
+
+query GetBuildingName($buildingType: Int!) {
+    buildingName(buildingType: $buildingType)
 }

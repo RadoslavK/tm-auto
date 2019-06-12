@@ -3,7 +3,7 @@ interface IParams {
   y: number;
 }
 
-export class Coords {
+export class Coords implements IParams {
   public x: number = 0;
   public y: number = 0;
 

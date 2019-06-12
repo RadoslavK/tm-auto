@@ -1,7 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import { IBuildingSpotLevel } from '../../../_types/graphql';
-import classNames = require('classnames');
 
 interface IProps {
   readonly className?: string;
@@ -37,7 +36,11 @@ const useStyles = makeStyles<unknown, IStyleProps>({
   }),
 });
 
-const getLevelState = (level: IBuildingSpotLevel): BuildingState => {
+const getLevelState = (props: IProps): BuildingState => {
+  const {
+    level,
+  } = props;
+
   const isCompleted = level.actual === level.max;
   const isMaxed = level.total === level.max;
   const totalOngoing = level.total - level.queued;
@@ -65,7 +68,7 @@ export const BuildingLevelBox: React.FunctionComponent<IProps> = (props) => {
   } = props;
 
   const totalOngoing = level.actual + level.ongoing;
-  const levelState = getLevelState(level);
+  const levelState = getLevelState(props);
   const classes = useStyles({ levelState });
 
   return (

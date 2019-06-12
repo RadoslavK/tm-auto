@@ -1,3 +1,5 @@
+import { buildingInfos } from '../../../index';
+import { Cost } from '../../misc/cost';
 import { QueuedBuilding } from './queuedBuilding';
 
 export class BuildingQueue {
@@ -9,16 +11,29 @@ export class BuildingQueue {
 
   public popFirst = (): QueuedBuilding | undefined => this._buildings.shift();
 
-  public popLastAtField = (fieldId: number): void => {
+  public removeLastAtField = (fieldId: number): number => {
     const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
 
     if (buildingToRemove) {
       this.remove(buildingToRemove.queueId);
+      return 1;
     }
+
+    return 0;
   };
 
-  public remove = (queueId: string): void => {
+  public removeAllAtField = (fieldId: number): number => {
+    const originalCount = this._buildings.length;
+    this._buildings = this._buildings.filter(b => b.fieldId !== fieldId);
+
+    return originalCount - this._buildings.length;
+  };
+
+  public remove = (queueId: string): number => {
+    const originalCount = this._buildings.length;
     this._buildings = this._buildings.filter(b => b.queueId !== queueId);
+
+    return originalCount - this._buildings.length;
   };
 
   public clear = (): void => {
@@ -26,6 +41,13 @@ export class BuildingQueue {
   };
 
   public buildings = (): readonly QueuedBuilding[] => this._buildings;
+
+  public totalCost = (): Cost =>
+    this._buildings.reduce((reduced, building) => {
+      const cost = buildingInfos[building.fieldId][building.level - 1].cost;
+      reduced.add(cost);
+      return reduced;
+    }, new Cost());
 
   public moveUp = (queueId: string): void => {
     if (this._buildings.length <= 1) {

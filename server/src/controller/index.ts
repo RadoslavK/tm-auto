@@ -1,71 +1,59 @@
 import { TravianPath } from '../_enums/TravianPath';
-import { BuildingSpot } from '../_models/buildings/buildingSpot';
+import { getPage, killBrowser } from '../browser/getPage';
 import { context } from '../graphql/context';
-import { parseBuildingsInProgress } from '../parsers/buildings/parseBuildingsInProgress';
-import { parseFieldSpots } from '../parsers/buildings/parseFieldSpots';
-import { parseInfrastructureSpots } from '../parsers/buildings/parseInfrastructureSpots';
 import { parseActiveVillageId } from '../parsers/villages/parseActiveVillageId';
-import { parseVillageCapacity } from '../parsers/villages/parseVillageCapacity';
-import { parseVillageProduction } from '../parsers/villages/parseVillageProduction';
-import { parseVillageResources } from '../parsers/villages/parseVillageResources';
 import { parseVillages } from '../parsers/villages/parseVillages';
 import { log } from '../utils/log';
 import { startBuilding } from './actions/build/startBuilding';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { initPlayerInfo } from './actions/init/initPlayerInfo';
-import { getPage, killBrowser } from '../browser/getPage';
+import { TaskManager } from './tasks/taskManager';
 
 export class Controller {
+  private _running: boolean = false;
   private _buildTimer: NodeJS.Timeout;
 
+  private _timeout: NodeJS.Timeout;
+  private _taskManager: TaskManager;
+
+  public isRunning = (): boolean => this._running;
+
   public start = async (): Promise<void> => {
-    const page = await getPage();
+    this._running = true;
 
-    await ensureLoggedIn(page);
-    await initPlayerInfo(page);
+    if (!this._taskManager) {
+      this._taskManager = new TaskManager();
+    }
 
-    const villages = await parseVillages(page);
-    context.villageService.setVillages(villages);
+    await ensureLoggedIn();
+    await initPlayerInfo();
 
-    const activeVillageId = await parseActiveVillageId(page);
-    context.villageService.setActiveVillageId(activeVillageId);
+    const villages = await parseVillages();
+    context.villages.set(villages);
+    context.villages.currentVillageId = await parseActiveVillageId();
 
-    await this.build();
+    this._timeout = setTimeout(async () => {
+      await this._taskManager.execute();
+      this._timeout.refresh();
+    }, 10 * 1000);
   };
 
   public stop = async (): Promise<void> => {
-    clearTimeout(this._buildTimer);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
+
+    this._running = false;
     await killBrowser();
   };
 
   public build = async (): Promise<void> => {
+    const { account } = context.user;
+
     const page = await getPage();
-    const { userAccount } = context.userService;
+    await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
 
-    log('checking fields');
-    await page.goto(`${userAccount.server}/${TravianPath.ResourceFieldsOverview}`);
-
-    const resources = await parseVillageResources(page);
-    const capacity = await parseVillageCapacity(page);
-    const production = await parseVillageProduction(page);
-    const village = context.villageService.currentVillage();
-    village.resources.capacity = capacity;
-    village.resources.production = production;
-    village.resources.amount = resources;
-
-    const fieldSpots = await parseFieldSpots(page);
-    const buildingsInProgress = await parseBuildingsInProgress(page);
-
-    await page.goto(`${userAccount.server}/${TravianPath.InfrastructureOverview}`);
-    const infrastructureSpots = await parseInfrastructureSpots(page);
-
-    const buildings: readonly BuildingSpot[] = fieldSpots.concat(infrastructureSpots);
-
-    const villageId = context.villageService.currentVillageId();
-    context.buildingsService.setBuildingSpots(villageId, buildings);
-    context.buildingsService.setBuildingsInProgress(villageId, buildingsInProgress);
-
-    await startBuilding(page);
+    await startBuilding();
 
     this._buildTimer = setTimeout(this.build, 20 * 1000);
     log('gonna build next in 20 seconds');

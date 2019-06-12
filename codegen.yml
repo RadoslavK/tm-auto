@@ -1,6 +1,9 @@
 overwrite: true
 schema: 'server/src/graphql/typedefs/*.graphql'
 documents: 'client/src/graphql/*.graphql'
+config:
+  scalars:
+    Date: Date
 generates:
   server/src/_types/graphql.ts:
     plugins:
@@ -9,7 +12,6 @@ generates:
     config:
       typesPrefix: I
       immutableTypes : true
-      contextType: ../graphql/context#IGraphQLContext
   client/src/_types/graphql.ts:
     plugins:
       - "typescript"

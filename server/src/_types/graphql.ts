@@ -1,5 +1,8 @@
-import { GraphQLResolveInfo } from "graphql";
-import { IGraphQLContext } from "../graphql/context";
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig
+} from "graphql";
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -9,6 +12,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: Date;
+};
+
+export type IAvailableNewBuilding = {
+  __typename?: "AvailableNewBuilding";
+  readonly type: Scalars["Int"];
+  readonly name: Scalars["String"];
 };
 
 export type IAvailableNewBuildingsInput = {
@@ -16,16 +26,16 @@ export type IAvailableNewBuildingsInput = {
   readonly villageId: Scalars["Int"];
 };
 
-export type IBuilding = {
-  __typename?: "Building";
-  readonly lol?: Maybe<Scalars["Int"]>;
+export type IBuildingCostInput = {
+  readonly buildingType: Scalars["Int"];
+  readonly level: Scalars["Int"];
 };
 
 export type IBuildingInProgress = {
   __typename?: "BuildingInProgress";
   readonly level: Scalars["Int"];
+  readonly finishedAt: Scalars["Date"];
   readonly name: Scalars["String"];
-  readonly timer: Scalars["Int"];
   readonly type: Scalars["Int"];
 };
 
@@ -46,9 +56,9 @@ export type IBuildingSpot = {
 export type IBuildingSpotLevel = {
   __typename?: "BuildingSpotLevel";
   readonly actual: Scalars["Int"];
-  readonly max: Scalars["Int"];
   readonly ongoing: Scalars["Int"];
   readonly queued: Scalars["Int"];
+  readonly max: Scalars["Int"];
   readonly total: Scalars["Int"];
 };
 
@@ -71,7 +81,7 @@ export type ICoords = {
 export type ICost = {
   __typename?: "Cost";
   readonly resources: IResources;
-  readonly buildingTime: Scalars["String"];
+  readonly buildingTime: Scalars["Int"];
 };
 
 export type IDequeueBuildingAtFieldInput = {
@@ -128,16 +138,12 @@ export type IMutationSignInArgs = {
   account: ISignInInput;
 };
 
-export type INewBuildingInfo = {
-  __typename?: "NewBuildingInfo";
-  readonly name: Scalars["String"];
-  readonly type: Scalars["Int"];
-};
-
 export type IQuery = {
   __typename?: "Query";
+  readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>;
+  readonly buildingName: Scalars["String"];
   readonly buildingSpots: IBuildingSpots;
-  readonly availableNewBuildings: ReadonlyArray<INewBuildingInfo>;
+  readonly maxBuildingLevel: Scalars["Int"];
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
@@ -146,12 +152,20 @@ export type IQuery = {
   readonly villages: ReadonlyArray<IVillage>;
 };
 
+export type IQueryAvailableNewBuildingsArgs = {
+  input: IAvailableNewBuildingsInput;
+};
+
+export type IQueryBuildingNameArgs = {
+  buildingType: Scalars["Int"];
+};
+
 export type IQueryBuildingSpotsArgs = {
   villageId: Scalars["Int"];
 };
 
-export type IQueryAvailableNewBuildingsArgs = {
-  input: IAvailableNewBuildingsInput;
+export type IQueryMaxBuildingLevelArgs = {
+  buildingType: Scalars["Int"];
 };
 
 export type IQueryBuildingsInProgressArgs = {
@@ -170,11 +184,11 @@ export type IQueuedBuilding = {
   __typename?: "QueuedBuilding";
   readonly canMoveDown: Scalars["Boolean"];
   readonly canMoveUp: Scalars["Boolean"];
-  readonly cost: ICost;
   readonly level: Scalars["Int"];
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
   readonly queueId: Scalars["ID"];
+  readonly cost: ICost;
 };
 
 export type IQueuedBuildingManipulationInput = {
@@ -304,21 +318,22 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: {};
+  AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
   Int: Scalars["Int"];
+  AvailableNewBuilding: IAvailableNewBuilding;
+  String: Scalars["String"];
   BuildingSpots: IBuildingSpots;
   BuildingSpot: IBuildingSpot;
   BuildingSpotLevel: IBuildingSpotLevel;
-  String: Scalars["String"];
   ResourceFields: IResourceFields;
-  AvailableNewBuildingsInput: IAvailableNewBuildingsInput;
-  NewBuildingInfo: INewBuildingInfo;
   BuildingInProgress: IBuildingInProgress;
+  Date: Scalars["Date"];
   Boolean: Scalars["Boolean"];
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
+  ID: Scalars["ID"];
   Cost: ICost;
   Resources: IResources;
-  ID: Scalars["ID"];
   Village: IVillage;
   Coords: ICoords;
   VillageResources: IVillageResources;
@@ -328,30 +343,31 @@ export type IResolversTypes = {
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
-  Building: IBuilding;
+  BuildingCostInput: IBuildingCostInput;
   ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
 };
 
-export type IBuildingResolvers<
-  ContextType = IGraphQLContext,
-  ParentType = IResolversTypes["Building"]
+export type IAvailableNewBuildingResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["AvailableNewBuilding"]
 > = {
-  lol?: Resolver<Maybe<IResolversTypes["Int"]>, ParentType, ContextType>;
+  type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
 };
 
 export type IBuildingInProgressResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["BuildingInProgress"]
 > = {
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  finishedAt?: Resolver<IResolversTypes["Date"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
-  timer?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IBuildingQueueResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["BuildingQueue"]
 > = {
   buildings?: Resolver<
@@ -363,7 +379,7 @@ export type IBuildingQueueResolvers<
 };
 
 export type IBuildingSpotResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["BuildingSpot"]
 > = {
   fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -377,18 +393,18 @@ export type IBuildingSpotResolvers<
 };
 
 export type IBuildingSpotLevelResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["BuildingSpotLevel"]
 > = {
   actual?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-  max?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   ongoing?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   queued?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  max?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   total?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IBuildingSpotsResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["BuildingSpots"]
 > = {
   infrastructure?: Resolver<
@@ -404,7 +420,7 @@ export type IBuildingSpotsResolvers<
 };
 
 export type ICoordsResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Coords"]
 > = {
   x?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -412,15 +428,20 @@ export type ICoordsResolvers<
 };
 
 export type ICostResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Cost"]
 > = {
   resources?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
-  buildingTime?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
+  buildingTime?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
+export interface IDateScalarConfig
+  extends GraphQLScalarTypeConfig<IResolversTypes["Date"], any> {
+  name: "Date";
+}
+
 export type IMutationResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Mutation"]
 > = {
   startBot?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
@@ -469,29 +490,33 @@ export type IMutationResolvers<
   >;
 };
 
-export type INewBuildingInfoResolvers<
-  ContextType = IGraphQLContext,
-  ParentType = IResolversTypes["NewBuildingInfo"]
-> = {
-  name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
-  type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
-};
-
 export type IQueryResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Query"]
 > = {
+  availableNewBuildings?: Resolver<
+    ReadonlyArray<IResolversTypes["AvailableNewBuilding"]>,
+    ParentType,
+    ContextType,
+    IQueryAvailableNewBuildingsArgs
+  >;
+  buildingName?: Resolver<
+    IResolversTypes["String"],
+    ParentType,
+    ContextType,
+    IQueryBuildingNameArgs
+  >;
   buildingSpots?: Resolver<
     IResolversTypes["BuildingSpots"],
     ParentType,
     ContextType,
     IQueryBuildingSpotsArgs
   >;
-  availableNewBuildings?: Resolver<
-    ReadonlyArray<IResolversTypes["NewBuildingInfo"]>,
+  maxBuildingLevel?: Resolver<
+    IResolversTypes["Int"],
     ParentType,
     ContextType,
-    IQueryAvailableNewBuildingsArgs
+    IQueryMaxBuildingLevelArgs
   >;
   buildingsInProgress?: Resolver<
     ReadonlyArray<IResolversTypes["BuildingInProgress"]>,
@@ -521,20 +546,20 @@ export type IQueryResolvers<
 };
 
 export type IQueuedBuildingResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["QueuedBuilding"]
 > = {
   canMoveDown?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   canMoveUp?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
-  cost?: Resolver<IResolversTypes["Cost"], ParentType, ContextType>;
   level?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   name?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   queueId?: Resolver<IResolversTypes["ID"], ParentType, ContextType>;
+  cost?: Resolver<IResolversTypes["Cost"], ParentType, ContextType>;
 };
 
 export type IResourceFieldsResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["ResourceFields"]
 > = {
   wood?: Resolver<
@@ -560,7 +585,7 @@ export type IResourceFieldsResolvers<
 };
 
 export type IResourcesResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Resources"]
 > = {
   wood?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -572,7 +597,7 @@ export type IResourcesResolvers<
 };
 
 export type IUserAccountResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["UserAccount"]
 > = {
   username?: Resolver<IResolversTypes["String"], ParentType, ContextType>;
@@ -581,7 +606,7 @@ export type IUserAccountResolvers<
 };
 
 export type IVillageResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["Village"]
 > = {
   id?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -595,7 +620,7 @@ export type IVillageResolvers<
 };
 
 export type IVillageCapacityResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["VillageCapacity"]
 > = {
   granary?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
@@ -603,7 +628,7 @@ export type IVillageCapacityResolvers<
 };
 
 export type IVillageResourcesResolvers<
-  ContextType = IGraphQLContext,
+  ContextType = any,
   ParentType = IResolversTypes["VillageResources"]
 > = {
   amount?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
@@ -615,8 +640,8 @@ export type IVillageResourcesResolvers<
   production?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
 };
 
-export type IResolvers<ContextType = IGraphQLContext> = {
-  Building?: IBuildingResolvers<ContextType>;
+export type IResolvers<ContextType = any> = {
+  AvailableNewBuilding?: IAvailableNewBuildingResolvers<ContextType>;
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
   BuildingQueue?: IBuildingQueueResolvers<ContextType>;
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
@@ -624,8 +649,8 @@ export type IResolvers<ContextType = IGraphQLContext> = {
   BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
   Coords?: ICoordsResolvers<ContextType>;
   Cost?: ICostResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   Mutation?: IMutationResolvers<ContextType>;
-  NewBuildingInfo?: INewBuildingInfoResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
   ResourceFields?: IResourceFieldsResolvers<ContextType>;

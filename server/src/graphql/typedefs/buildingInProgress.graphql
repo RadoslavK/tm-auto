@@ -1,7 +1,7 @@
 type BuildingInProgress {
     level: Int!
+    finishedAt: Date!
     name: String!
-    timer: Int!
     type: Int!
 }
 

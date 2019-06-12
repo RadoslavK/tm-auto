@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import {
-  IClearQueueMutation, IClearQueueMutationVariables,
-  IGetQueuedBuildingsQuery,
+  IClearQueueMutation, IClearQueueMutationVariables, IGetQueuedBuildingsQuery,
   IGetQueuedBuildingsQueryVariables,
 } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
@@ -58,10 +57,7 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
   }
 
   const {
-    buildingQueue: {
-      buildings,
-      totalCost,
-    },
+    buildingQueue,
   } = data;
 
   const onClear = async () => await clearQueue();
@@ -71,9 +67,9 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
       <button onClick={onClear} className={classes.action}>
         Clear queue
       </button>
-      <Cost cost={totalCost} />
+      <Cost cost={buildingQueue.totalCost} />
       <div className={classes.buildings}>
-        {buildings.map((building, index) => (
+        {buildingQueue.buildings.map((building, index) => (
           <QueuedBuilding key={index} building={building}/>
         ))}
       </div>

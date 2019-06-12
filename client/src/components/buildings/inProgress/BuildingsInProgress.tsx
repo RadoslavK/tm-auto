@@ -14,7 +14,6 @@ const propTypes: PropTypesShape<IProps> = {
   className: PropTypes.string.isRequired,
 };
 
-
 const BuildingsInProgress: React.FunctionComponent<IProps> = (props) => {
   const {
     className,

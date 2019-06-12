@@ -32,8 +32,8 @@ query GetQueuedBuildings($villageId: Int!) {
             cost {
                 ...CostFragment
             }
-            level
             name
+            level
             type
             queueId
         }

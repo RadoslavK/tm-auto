@@ -1,7 +1,8 @@
-import { Page } from 'puppeteer';
 import { Resources } from '../../_models/misc/resources';
+import { getPage } from '../../browser/getPage';
 
-export const parseVillageResources = async (page: Page): Promise<Resources> => {
+export const parseVillageResources = async (): Promise<Resources> => {
+  const page = await getPage();
   const content = await page.content();
 
   const match = / storage: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?)}/.exec(content);

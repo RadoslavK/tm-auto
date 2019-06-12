@@ -1,9 +1,10 @@
-import { Page } from 'puppeteer';
 import { logException } from '../../../_shared/utils/invariantException';
+import { getPage } from '../browser/getPage';
 import { context } from '../graphql/context';
 
-export const validateUrl = (page: Page, acceptedUrls: readonly string[]) => {
-  const regExp = new RegExp(`^${context.userService.userAccount.server}/`);
+export const validateUrl = async (acceptedUrls: readonly string[]): Promise<void> => {
+  const page = await getPage();
+  const regExp = new RegExp(`^${context.user.account.server}/`);
 
   const pageUrl = page.url().replace(regExp, '');
   const isValid = acceptedUrls.some(acceptedUrl => {

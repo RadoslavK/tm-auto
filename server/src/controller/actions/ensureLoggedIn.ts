@@ -1,10 +1,12 @@
-import { Page } from 'puppeteer';
 import { TravianPath } from '../../_enums/TravianPath';
+import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
 
-export const ensureLoggedIn = async (page: Page): Promise<void> => {
-  const { userAccount } = context.userService;
-  await page.goto(`${userAccount.server}/${TravianPath.ResourceFieldsOverview}`);
+export const ensureLoggedIn = async (): Promise<void> => {
+  const { account } = context.user;
+
+  const page = await getPage();
+  await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
 
   const loginForm = await page.$('form[name=login');
 
@@ -14,8 +16,8 @@ export const ensureLoggedIn = async (page: Page): Promise<void> => {
 
   await page.waitForSelector('form[name=login] button[type=submit]');
 
-  await page.type('form[name=login] input[name=name]', userAccount.username);
-  await page.type('form[name=login] input[name=password]', userAccount.password);
+  await page.type('form[name=login] input[name=name]', account.username);
+  await page.type('form[name=login] input[name=password]', account.password);
   await page.click('form[name=login] button[type=submit]');
 
   console.log('Logged in.');
