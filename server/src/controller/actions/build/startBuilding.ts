@@ -6,9 +6,9 @@ import { ensurePage } from '../ensurePage';
 import { TravianPath } from '../../../_enums/TravianPath';
 
 export const isResourceField = (fieldId: number): boolean => fieldId >= 1 && fieldId <= 18;
-export const isBuildingField = (fieldId: number): boolean => fieldId >= 19 && fieldId <= 40;
+export const isInfrastructure = (fieldId: number): boolean => fieldId >= 19 && fieldId <= 40;
 
-export const isFieldValid = (fieldId: number): boolean => isResourceField(fieldId) || isBuildingField(fieldId);
+export const isFieldValid = (fieldId: number): boolean => isResourceField(fieldId) || isInfrastructure(fieldId);
 
 export const startBuilding = async (): Promise<void> => {
   const { queue } = context.villages.village().buildings;
@@ -29,7 +29,7 @@ export const startBuilding = async (): Promise<void> => {
 
   if (isResourceField(fieldId)) {
     await ensurePage(TravianPath.ResourceFieldsOverview)
-  } else if (isBuildingField(fieldId)) {
+  } else if (isInfrastructure(fieldId)) {
     await ensurePage(TravianPath.InfrastructureOverview)
   }
 

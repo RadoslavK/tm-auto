@@ -3,6 +3,7 @@ import { IBuildingSpot } from '../../_types/graphql';
 import { buildingNames } from '../../constants/buildingNames';
 import { buildingInfos } from '../../index';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
+import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
 import { BuildingSpot } from './spots/buildingSpot';
 
@@ -13,7 +14,7 @@ export interface IActualBuilding {
 }
 
 export class Buildings {
-  private ongoing: readonly BuildingInProgress[] = [];
+  public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();
   public readonly spots: Record<number, BuildingSpot> = {};
   public readonly queue: BuildingQueue = new BuildingQueue();
 
@@ -25,8 +26,6 @@ export class Buildings {
 
     Object.freeze(this.spots);
   }
-
-  public buildingsInProgress = (): readonly BuildingInProgress[] => this.ongoing;
 
   public updateActual = (buildings: readonly IActualBuilding[]): void => {
     buildings.forEach(b => {
@@ -43,13 +42,13 @@ export class Buildings {
         spot.level.ongoing = buildingsInProgress.filter(bip => bip.fieldId === spot.fieldId).length;
       });
 
-    this.ongoing = buildingsInProgress;
+    this.ongoing.set(buildingsInProgress);
   };
 
   public normalizedBuildingSpots = (): readonly IBuildingSpot[] => {
     return Object.values(this.spots).map((b): IBuildingSpot => {
       const queued = this.queue.buildings().filter(bb => bb.fieldId === b.fieldId);
-      const ongoing = this.ongoing.filter(bb => bb.fieldId === b.fieldId);
+      const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
       const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
 
       return {

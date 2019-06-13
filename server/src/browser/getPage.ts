@@ -21,21 +21,21 @@ export const getPage = async (): Promise<Page> => {
 
   if (!page) {
     page = await browser.newPage();
+
+    page.on('console', consoleMessageObject => {
+      if (consoleMessageObject.type() !== 'warning') {
+        console.debug(consoleMessageObject.text());
+      }
+    });
+
+    await page.evaluateOnNewDocument(() => {
+      // @ts-ignore
+      const newProto = navigator.__proto__;
+      delete newProto.webdriver;
+      // @ts-ignore
+      navigator.__proto__ = newProto;
+    });
   }
-
-  page.on('console', consoleMessageObject => {
-    if (consoleMessageObject.type() !== 'warning') {
-      console.debug(consoleMessageObject.text());
-    }
-  });
-
-  await page.evaluateOnNewDocument(() => {
-    // @ts-ignore
-    const newProto = navigator.__proto__;
-    delete newProto.webdriver;
-    // @ts-ignore
-    navigator.__proto__ = newProto;
-  });
 
   return page;
 };

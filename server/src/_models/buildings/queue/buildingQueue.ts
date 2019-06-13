@@ -1,3 +1,4 @@
+import { BuildingSpotType, getBuildingSpotType } from '../../../_enums/BuildingSpotType';
 import { buildingInfos } from '../../../index';
 import { Cost } from '../../misc/cost';
 import { QueuedBuilding } from './queuedBuilding';
@@ -7,6 +8,12 @@ export class BuildingQueue {
 
   public add = (building: QueuedBuilding):  void => {
     this._buildings.push(building);
+  };
+
+  public peek = (type: BuildingSpotType): QueuedBuilding | undefined => {
+    return type === BuildingSpotType.Any
+      ? this._buildings[0]
+      : this._buildings.find(x => getBuildingSpotType(x.type) === type);
   };
 
   public popFirst = (): QueuedBuilding | undefined => this._buildings.shift();
@@ -87,6 +94,11 @@ export class BuildingQueue {
     }
 
     this.move(index, newIndex);
+  };
+
+  public pushToTheStart = (qBuilding: QueuedBuilding): void => {
+    this.remove(qBuilding.queueId);
+    this._buildings.splice(0, 0, qBuilding);
   };
 
   private move = (oldIndex: number, newIndex: number): void => {

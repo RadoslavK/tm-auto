@@ -393,6 +393,43 @@ const getBuildingConditions = (type: BuildingType): BuildingConditions => {
   })
 };
 
+export const getBuildingCategory = (type: BuildingType): number => {
+  switch (type) {
+    //RESOURCES
+    case BuildingType.Sawmill:
+    case BuildingType.Brickyard:
+    case BuildingType.IronFoundry:
+    case BuildingType.GrainMill:
+    case BuildingType.Bakery:
+      return 3;
+
+    //MILITARY
+    case BuildingType.Smithy:
+    case BuildingType.TournamentSquare:
+    case BuildingType.Barracks:
+    case BuildingType.Stable:
+    case BuildingType.Workshop:
+    case BuildingType.Academy:
+    case BuildingType.GreatBarracks:
+    case BuildingType.GreatStable:
+    case BuildingType.Trapper:
+    case BuildingType.HerosMansion:
+      return 2;
+
+    //RALLY POINT + WALL
+    case BuildingType.RallyPoint:
+    case BuildingType.CityWall:
+    case BuildingType.EarthWall:
+    case BuildingType.Palisade:
+    case BuildingType.MakeshiftWall:
+    case BuildingType.StoneWall:
+      return 0;
+
+    default:
+      return 1;
+  }
+};
+
 const initBuildingConditions = () => {
   for (let i = 0; i < allBuildingTypes.length; i++) {
     const type = allBuildingTypes[i];

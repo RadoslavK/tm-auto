@@ -2,6 +2,7 @@ import { context } from '../../graphql/context';
 import { updateBuildings } from '../actions/build/updateBuildings';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updateResources } from '../actions/village/updateResources';
+import { AutoBuild } from './autoBuild';
 
 export class TaskManager {
   public execute = async (): Promise<void> => {
@@ -22,6 +23,9 @@ export class TaskManager {
 
       await updateResources();
       await updateBuildings();
+
+      const autoBuild = new AutoBuild(village);
+      await autoBuild.execute();
     });
   };
 

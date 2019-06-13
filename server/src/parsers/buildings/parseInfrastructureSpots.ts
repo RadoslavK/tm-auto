@@ -1,7 +1,7 @@
 import { TravianPath } from '../../_enums/TravianPath';
 import { IActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
-import { isBuildingField } from '../../controller/actions/build/startBuilding';
+import { isInfrastructure } from '../../controller/actions/build/startBuilding';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
 
@@ -21,7 +21,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
     const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
     const fieldId = +/a(\d+)/.exec(className)[1];
 
-    if (!isBuildingField(fieldId)) {
+    if (!isInfrastructure(fieldId)) {
       return null;
     }
 

@@ -17,3 +17,8 @@ export const updateResources = async (): Promise<void> => {
   village.resources.production = production;
   village.resources.amount = resources;
 };
+
+export const updateActualResources = async (): Promise<void> => {
+  const village = context.villages.village();
+  village.resources.amount = await parseVillageResources();
+};

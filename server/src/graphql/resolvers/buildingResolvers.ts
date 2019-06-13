@@ -43,7 +43,7 @@ export const buildingResolvers: IResolvers = {
       };
     },
 
-    buildingsInProgress: (_, args) => context.villages.village(args.villageId).buildings.buildingsInProgress().map(mapBuildingInProgress),
+    buildingsInProgress: (_, args) => context.villages.village(args.villageId).buildings.ongoing.buildings().map(mapBuildingInProgress),
 
     availableNewBuildings: (_, args) => {
       const {

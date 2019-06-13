@@ -4,3 +4,5 @@ export enum TravianPath {
 
   Player = 'spieler.php',
 }
+
+export const getBuildingSpotPath = (fieldId: number) => `build.php?id=${fieldId}`;
