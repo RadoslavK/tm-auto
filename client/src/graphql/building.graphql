@@ -47,3 +47,7 @@ query GetMaxBuildingLevel($buildingType: Int!) {
 query GetBuildingName($buildingType: Int!) {
     buildingName(buildingType: $buildingType)
 }
+
+subscription BuildingsUpdated($villageId: Int!) {
+    buildingsUpdated(villageId: $villageId)
+}

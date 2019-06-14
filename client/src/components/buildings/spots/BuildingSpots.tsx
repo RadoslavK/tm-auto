@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
+import { BuildingsUpdated, GetBuildingSpots } from '*/graphql_operations/building.graphql';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useContext } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useSubscription } from 'react-apollo-hooks';
 import {
+  IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables,
   IGetBuildingSpotsQuery,
   IGetBuildingSpotsQueryVariables,
 } from '../../../_types/graphql';
@@ -37,9 +38,15 @@ const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
 
   const classes = useStyles({});
   const { villageId } = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
+  const { data, loading, refetch } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: { villageId },
     fetchPolicy: 'network-only',
+  });
+
+  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+    variables: { villageId },
+    fetchPolicy: 'network-only',
+    onSubscriptionData: () => refetch({ villageId }),
   });
 
   if (loading) {

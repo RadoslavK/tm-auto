@@ -4,6 +4,8 @@ import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
 import { IBuildingSpot } from '../_types/graphql';
 import { context } from '../graphql/context';
+import { Events } from '../graphql/subscriptions/events';
+import { pubSub } from '../graphql/subscriptions/pubSub';
 import { buildingInfos, buildingsConditions } from '../index';
 import { getWithMaximum } from '../utils/getWithMaximum';
 
@@ -40,6 +42,7 @@ export class BuildingQueueManager {
     const spot = this._village.buildings.spots[fieldId];
     const totalLevel = spot.level.total();
     const maxLevel = buildingInfos[type].length;
+    let enqueued: boolean = false;
 
     for (let i = 1; i <= levels; i++) {
       const level = totalLevel + i;
@@ -58,6 +61,11 @@ export class BuildingQueueManager {
 
       this._village.buildings.queue.add(building);
       spot.level.queued++;
+      enqueued = true;
+    }
+
+    if (enqueued) {
+      pubSub.publish(Events.BuildingsUpdated, null);
     }
   };
 
@@ -68,6 +76,7 @@ export class BuildingQueueManager {
     }
 
     this.correctBuildingQueue();
+    pubSub.publish(Events.BuildingsUpdated, null);
   };
 
   public dequeueBuildingAtField = (input: IDequeueAtFieldInput): void => {
@@ -85,6 +94,7 @@ export class BuildingQueueManager {
     }
 
     this.correctBuildingQueue();
+    pubSub.publish(Events.BuildingsUpdated, null);
   };
 
   public moveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -102,12 +112,18 @@ export class BuildingQueueManager {
   };
 
   public clearQueue = (): void => {
+    if (!this._village.buildings.queue.buildings().length) {
+      return;
+    }
+
     this._village.buildings.queue.clear();
     const spots = Object.values(this._village.buildings.spots);
 
     spots.forEach(spot => {
       spot.level.queued = 0;
     });
+
+    pubSub.publish(Events.BuildingsUpdated, null);
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {

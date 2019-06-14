@@ -1,8 +1,13 @@
+import { BuildingsUpdated } from "*/graphql_operations/building.graphql";
 import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables } from '../../../_types/graphql';
+import { useQuery, useSubscription } from 'react-apollo-hooks';
+import {
+  IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables,
+  IGetBuildingsInProgressQuery,
+  IGetBuildingsInProgressQueryVariables,
+} from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingInProgress } from './BuildingInProgress';
 
@@ -21,9 +26,15 @@ const BuildingsInProgress: React.FunctionComponent<IProps> = (props) => {
 
   const { villageId }= useContext<IVillageContext>(VillageContext);
 
-  const { data, loading } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, {
+  const { data, loading, refetch } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, {
     variables: { villageId },
     fetchPolicy: 'network-only',
+  });
+
+  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+    variables: { villageId },
+    fetchPolicy: 'network-only',
+    onSubscriptionData: () => refetch({ villageId }),
   });
 
   if (loading) {

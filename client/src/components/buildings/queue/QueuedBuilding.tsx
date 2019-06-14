@@ -36,7 +36,7 @@ const useStyles = makeStyles<unknown, IProps>({
   }
 });
 
-const QueuedBuilding:  React.FunctionComponent<IProps> = (props) => {
+const QueuedBuilding: React.FunctionComponent<IProps> = (props) => {
   const {
     building,
   } = props;

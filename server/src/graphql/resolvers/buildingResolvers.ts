@@ -8,6 +8,8 @@ import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapCost } from '../mappers/mapCost';
 import { mapQueuedBuildingFactory } from '../mappers/mapQueuedBuilding';
+import { Events } from '../subscriptions/events';
+import { pubSub } from '../subscriptions/pubSub';
 
 export const buildingResolvers: IResolvers = {
   Query: {
@@ -68,12 +70,13 @@ export const buildingResolvers: IResolvers = {
       return true;
     },
 
-    enqueueBuilding: (_, args) => {
+    enqueueBuilding: async (_, args) => {
       const {
         villageId,
         ...enqueuedBuilding
       } = args.input;
 
+      await pubSub.publish('TEST', {  lolo: 6 });
       const queueManager = new BuildingQueueManager(villageId);
       queueManager.enqueueBuilding(enqueuedBuilding);
 
@@ -123,5 +126,12 @@ export const buildingResolvers: IResolvers = {
       const queueManager = new BuildingQueueManager(villageId);
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
     },
-  }
+  },
+
+  Subscription: {
+    buildingsUpdated: {
+      subscribe: () => pubSub.asyncIterator(Events.BuildingsUpdated),
+      resolve: () => true,
+    },
+  },
 };

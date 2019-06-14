@@ -2,6 +2,7 @@ import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
+import { createServer } from 'http';
 import path from 'path';
 import { allBuildingTypes, BuildingType } from './_enums/BuildingType';
 import { Tribe } from './_enums/Tribe';
@@ -443,6 +444,10 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context,
+  subscriptions: {
+    path: '/subscriptions',
+  },
+  uploads: false,
   formatError: err => {
     const errorLinks = err.extensions.exception.stacktrace;
 
@@ -472,7 +477,12 @@ app.get('*', (req, res) => {
   res.redirect('/app/');
 });
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-  console.log(`GraphQL ready at http://localhost:${port}${server.graphqlPath}`);
+const httpServer = createServer(app);
+server.installSubscriptionHandlers(httpServer);
+
+httpServer.listen(port, () => {
+    console.log(`GraphQL Server ready at http://localhost:${port}${server.graphqlPath}`);
+    console.log(`GraphQL Subscriptions ready at ws://localhost:${port}${server.subscriptionsPath}`);
 });
+
+

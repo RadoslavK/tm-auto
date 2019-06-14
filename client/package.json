@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.0.2",
-    "apollo-boost": "^0.4.0",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.2",
+    "apollo-link": "^1.2.11",
+    "apollo-link-http": "^1.5.14",
+    "apollo-link-ws": "^1.0.17",
     "classnames": "^2.2.6",
     "graphql": "^14.3.1",
     "prop-types": "^15.7.2",
@@ -18,11 +22,10 @@
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
-    "uri-templates": "^0.2.0",
+    "subscriptions-transport-ws": "^0.9.16",
     "use-react-router": "^1.0.7"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/classnames": "^2.2.8",
     "@types/material-ui": "^0.21.6",
     "@types/prop-types": "^15.7.1",

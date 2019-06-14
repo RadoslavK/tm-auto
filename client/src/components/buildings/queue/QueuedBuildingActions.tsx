@@ -73,14 +73,13 @@ export const QueuedBuildingActions: React.FunctionComponent<IProps> = (props) =>
   const options = {
     variables: { input },
     refetchQueries: [
-      { query: GetBuildingSpots, variables: { villageId } },
       { query: GetQueuedBuildings, variables: { villageId } },
     ],
   };
 
   const moveDown = useMutation<IMoveQueuedBuildingDownMutation, IMoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
   const moveUp = useMutation<IMoveQueuedBuildingUpMutation, IMoveQueuedBuildingUpMutationVariables>(MoveQueuedBuildingUp, options);
-  const dequeue = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, options);
+  const dequeue = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, { variables: { input } });
   const classes = useStyles({});
 
   const onMoveDown = canMoveDown ? async () => await moveDown() : undefined;

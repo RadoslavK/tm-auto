@@ -6,6 +6,7 @@ declare module "*/graphql_operations/building.graphql" {
   export const GetAvailableNewBuildings: DocumentNode;
   export const GetMaxBuildingLevel: DocumentNode;
   export const GetBuildingName: DocumentNode;
+  export const BuildingsUpdated: DocumentNode;
 
   export default defaultDocument;
 }
@@ -59,6 +60,7 @@ declare module "*/graphql_operations/village.graphql" {
   const defaultDocument: DocumentNode;
   export const GetVillageById: DocumentNode;
   export const GetVillages: DocumentNode;
+  export const UpdateVillage: DocumentNode;
 
   export default defaultDocument;
 }

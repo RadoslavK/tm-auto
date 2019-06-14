@@ -1,10 +1,11 @@
-import { GetBuildingSpots } from '*/graphql_operations/building.graphql';
+import { BuildingsUpdated, GetBuildingSpots } from '*/graphql_operations/building.graphql';
 import { ClearQueue, GetQueuedBuildings } from '*/graphql_operations/queuedBuilding.graphql';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery, useSubscription } from 'react-apollo-hooks';
 import {
+  IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables,
   IClearQueueMutation, IClearQueueMutationVariables, IGetQueuedBuildingsQuery,
   IGetQueuedBuildingsQueryVariables,
 } from '../../../_types/graphql';
@@ -39,17 +40,19 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
   const classes = useStyles({});
 
   const { villageId } = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
+  const { data, loading, refetch } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
     variables: { villageId },
     fetchPolicy: 'network-only',
   });
 
+  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+    variables: { villageId },
+    fetchPolicy: 'network-only',
+    onSubscriptionData: () => refetch({ villageId }),
+  });
+
   const clearQueue = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
     variables: {villageId },
-    refetchQueries: [
-      { query: GetBuildingSpots, variables: { villageId } },
-      { query: GetQueuedBuildings, variables: { villageId } },
-    ],
   });
 
   if (loading) {

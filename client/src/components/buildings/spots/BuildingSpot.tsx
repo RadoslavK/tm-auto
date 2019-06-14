@@ -43,7 +43,7 @@ const propTypes: PropTypesShape<IProps> = {
   className: PropTypes.string,
 };
 
-const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
+const BuildingSpot: React.FunctionComponent<IProps> = React.memo((props) => {
   const {
     building,
     className,
@@ -133,7 +133,7 @@ const BuildingSpot: React.FunctionComponent<IProps> = (props) => {
       )}
     </>
   );
-};
+});
 
 BuildingSpot.propTypes = propTypes;
 BuildingSpot.displayName = 'BuildingSpot';

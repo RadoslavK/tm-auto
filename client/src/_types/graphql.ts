@@ -201,6 +201,19 @@ export type ISignInInput = {
   readonly server: Scalars["String"];
 };
 
+export type ISubscription = {
+  readonly buildingsUpdated: Scalars["Boolean"];
+  readonly updateVillage: Scalars["Boolean"];
+};
+
+export type ISubscriptionBuildingsUpdatedArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type ISubscriptionUpdateVillageArgs = {
+  villageId: Scalars["Int"];
+};
+
 export type IUserAccount = {
   readonly username: Scalars["String"];
   readonly password: Scalars["String"];
@@ -270,6 +283,15 @@ export type IGetBuildingNameQueryVariables = {
 };
 
 export type IGetBuildingNameQuery = Pick<IQuery, "buildingName">;
+
+export type IBuildingsUpdatedSubscriptionVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IBuildingsUpdatedSubscription = Pick<
+  ISubscription,
+  "buildingsUpdated"
+>;
 
 export type IGetBuildingsInProgressQueryVariables = {
   villageId: Scalars["Int"];
@@ -397,3 +419,9 @@ export type IGetVillagesQueryVariables = {};
 export type IGetVillagesQuery = {
   readonly villages: ReadonlyArray<Pick<IVillage, "id" | "name">>;
 };
+
+export type IUpdateVillageSubscriptionVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IUpdateVillageSubscription = Pick<ISubscription, "updateVillage">;

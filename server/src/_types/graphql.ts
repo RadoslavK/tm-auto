@@ -220,6 +220,20 @@ export type ISignInInput = {
   readonly server: Scalars["String"];
 };
 
+export type ISubscription = {
+  __typename?: "Subscription";
+  readonly buildingsUpdated: Scalars["Boolean"];
+  readonly updateVillage: Scalars["Boolean"];
+};
+
+export type ISubscriptionBuildingsUpdatedArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type ISubscriptionUpdateVillageArgs = {
+  villageId: Scalars["Int"];
+};
+
 export type IUserAccount = {
   __typename?: "UserAccount";
   readonly username: Scalars["String"];
@@ -343,6 +357,7 @@ export type IResolversTypes = {
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
   SignInInput: ISignInInput;
+  Subscription: {};
   BuildingCostInput: IBuildingCostInput;
   ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
@@ -596,6 +611,24 @@ export type IResourcesResolvers<
   freeCrop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
+export type ISubscriptionResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["Subscription"]
+> = {
+  buildingsUpdated?: SubscriptionResolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    ISubscriptionBuildingsUpdatedArgs
+  >;
+  updateVillage?: SubscriptionResolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    ISubscriptionUpdateVillageArgs
+  >;
+};
+
 export type IUserAccountResolvers<
   ContextType = any,
   ParentType = IResolversTypes["UserAccount"]
@@ -655,6 +688,7 @@ export type IResolvers<ContextType = any> = {
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
   ResourceFields?: IResourceFieldsResolvers<ContextType>;
   Resources?: IResourcesResolvers<ContextType>;
+  Subscription?: ISubscriptionResolvers<ContextType>;
   UserAccount?: IUserAccountResolvers<ContextType>;
   Village?: IVillageResolvers<ContextType>;
   VillageCapacity?: IVillageCapacityResolvers<ContextType>;

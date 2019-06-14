@@ -41,3 +41,7 @@ extend type Query {
     buildingSpots(villageId: Int!): BuildingSpots!
     maxBuildingLevel(buildingType: Int!): Int!
 }
+
+type Subscription {
+    buildingsUpdated(villageId: Int!): Boolean!
+}
