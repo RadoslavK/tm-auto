@@ -4,11 +4,9 @@ import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildi
 import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
 import { BuildingQueueManager } from '../../../services/buildingQueueManager';
-import { log } from '../../../utils/log';
 import { ensurePage } from '../ensurePage';
 
 export const updateBuildings = async (): Promise<void> => {
-  log('Updating buildings.');
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
   const village = context.villages.village();

@@ -32,6 +32,8 @@ export class Controller {
     context.villages.set(villages);
     context.villages.currentVillageId = await parseActiveVillageId();
 
+    await this._taskManager.execute();
+
     this._timeout = setTimeout(async () => {
       await this._taskManager.execute();
       this._timeout.refresh();
