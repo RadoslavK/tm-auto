@@ -15,6 +15,15 @@ export type Scalars = {
   Date: Date;
 };
 
+export type IAutoBuildSettings = IIVillageTaskSettings & {
+  __typename?: "AutoBuildSettings";
+  readonly allow: Scalars["Boolean"];
+};
+
+export type IAutoBuildVillageSettingsInput = {
+  readonly allow: Scalars["Boolean"];
+};
+
 export type IAvailableNewBuilding = {
   __typename?: "AvailableNewBuilding";
   readonly type: Scalars["Int"];
@@ -97,6 +106,29 @@ export type IEnqueueBuildingInput = {
   readonly villageId: Scalars["Int"];
 };
 
+export type IGeneralSettings = {
+  __typename?: "GeneralSettings";
+  readonly autoBuild: Scalars["Boolean"];
+};
+
+export type IGeneralSettingsInput = {
+  readonly autoBuild: Scalars["Boolean"];
+};
+
+export type IGeneralVillageSettings = {
+  __typename?: "GeneralVillageSettings";
+  readonly allowTasks: Scalars["Boolean"];
+};
+
+export type IGeneralVillageSettingsInput = {
+  readonly allowTasks: Scalars["Boolean"];
+};
+
+export type IIVillageTaskSettings = {
+  __typename?: "IVillageTaskSettings";
+  readonly allow: Scalars["Boolean"];
+};
+
 export type IMutation = {
   __typename?: "Mutation";
   readonly startBot: Scalars["Boolean"];
@@ -107,6 +139,9 @@ export type IMutation = {
   readonly enqueueBuilding: Scalars["Boolean"];
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
+  readonly updateGeneralSettings: Scalars["Boolean"];
+  readonly updateGeneralVillageSettings: Scalars["Boolean"];
+  readonly updateAutoBuildVillageSettings: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
 };
 
@@ -134,6 +169,18 @@ export type IMutationMoveQueuedBuildingUpArgs = {
   input: IQueuedBuildingManipulationInput;
 };
 
+export type IMutationUpdateGeneralSettingsArgs = {
+  input: IUpdateGeneralSettingsInput;
+};
+
+export type IMutationUpdateGeneralVillageSettingsArgs = {
+  input: IUpdateGeneralVillageSettingsInput;
+};
+
+export type IMutationUpdateAutoBuildVillageSettingsArgs = {
+  input: IUpdateAutoBuildVillageSettingsInput;
+};
+
 export type IMutationSignInArgs = {
   account: ISignInInput;
 };
@@ -147,6 +194,8 @@ export type IQuery = {
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
+  readonly generalSettings: IGeneralSettings;
+  readonly villageSettings: IVillageSettings;
   readonly isSignedIn: Scalars["Boolean"];
   readonly village?: Maybe<IVillage>;
   readonly villages: ReadonlyArray<IVillage>;
@@ -173,6 +222,10 @@ export type IQueryBuildingsInProgressArgs = {
 };
 
 export type IQueryBuildingQueueArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type IQueryVillageSettingsArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -234,6 +287,20 @@ export type ISubscriptionUpdateVillageArgs = {
   villageId: Scalars["Int"];
 };
 
+export type IUpdateAutoBuildVillageSettingsInput = {
+  readonly villageId: Scalars["Int"];
+  readonly settings: IAutoBuildVillageSettingsInput;
+};
+
+export type IUpdateGeneralSettingsInput = {
+  readonly settings: IGeneralSettingsInput;
+};
+
+export type IUpdateGeneralVillageSettingsInput = {
+  readonly villageId: Scalars["Int"];
+  readonly settings: IGeneralVillageSettingsInput;
+};
+
 export type IUserAccount = {
   __typename?: "UserAccount";
   readonly username: Scalars["String"];
@@ -260,6 +327,12 @@ export type IVillageResources = {
   readonly amount: IResources;
   readonly capacity: IVillageCapacity;
   readonly production: IResources;
+};
+
+export type IVillageSettings = {
+  __typename?: "VillageSettings";
+  readonly general: IGeneralVillageSettings;
+  readonly autoBuild: IAutoBuildSettings;
 };
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -348,6 +421,11 @@ export type IResolversTypes = {
   ID: Scalars["ID"];
   Cost: ICost;
   Resources: IResources;
+  GeneralSettings: IGeneralSettings;
+  VillageSettings: IVillageSettings;
+  GeneralVillageSettings: IGeneralVillageSettings;
+  AutoBuildSettings: IAutoBuildSettings;
+  IVillageTaskSettings: IIVillageTaskSettings;
   Village: IVillage;
   Coords: ICoords;
   VillageResources: IVillageResources;
@@ -356,11 +434,24 @@ export type IResolversTypes = {
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
   EnqueueBuildingInput: IEnqueueBuildingInput;
+  UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput;
+  GeneralSettingsInput: IGeneralSettingsInput;
+  UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput;
+  GeneralVillageSettingsInput: IGeneralVillageSettingsInput;
+  UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput;
+  AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput;
   SignInInput: ISignInInput;
   Subscription: {};
   BuildingCostInput: IBuildingCostInput;
   ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
+};
+
+export type IAutoBuildSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["AutoBuildSettings"]
+> = {
+  allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
 };
 
 export type IAvailableNewBuildingResolvers<
@@ -455,6 +546,28 @@ export interface IDateScalarConfig
   name: "Date";
 }
 
+export type IGeneralSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["GeneralSettings"]
+> = {
+  autoBuild?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+};
+
+export type IGeneralVillageSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["GeneralVillageSettings"]
+> = {
+  allowTasks?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+};
+
+export type IIVillageTaskSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["IVillageTaskSettings"]
+> = {
+  __resolveType: TypeResolveFn<"AutoBuildSettings", ParentType, ContextType>;
+  allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+};
+
 export type IMutationResolvers<
   ContextType = any,
   ParentType = IResolversTypes["Mutation"]
@@ -496,6 +609,24 @@ export type IMutationResolvers<
     ParentType,
     ContextType,
     IMutationMoveQueuedBuildingUpArgs
+  >;
+  updateGeneralSettings?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationUpdateGeneralSettingsArgs
+  >;
+  updateGeneralVillageSettings?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationUpdateGeneralVillageSettingsArgs
+  >;
+  updateAutoBuildVillageSettings?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationUpdateAutoBuildVillageSettingsArgs
   >;
   signIn?: Resolver<
     IResolversTypes["Boolean"],
@@ -545,6 +676,17 @@ export type IQueryResolvers<
     ParentType,
     ContextType,
     IQueryBuildingQueueArgs
+  >;
+  generalSettings?: Resolver<
+    IResolversTypes["GeneralSettings"],
+    ParentType,
+    ContextType
+  >;
+  villageSettings?: Resolver<
+    IResolversTypes["VillageSettings"],
+    ParentType,
+    ContextType,
+    IQueryVillageSettingsArgs
   >;
   isSignedIn?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   village?: Resolver<
@@ -673,7 +815,24 @@ export type IVillageResourcesResolvers<
   production?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
 };
 
+export type IVillageSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["VillageSettings"]
+> = {
+  general?: Resolver<
+    IResolversTypes["GeneralVillageSettings"],
+    ParentType,
+    ContextType
+  >;
+  autoBuild?: Resolver<
+    IResolversTypes["AutoBuildSettings"],
+    ParentType,
+    ContextType
+  >;
+};
+
 export type IResolvers<ContextType = any> = {
+  AutoBuildSettings?: IAutoBuildSettingsResolvers<ContextType>;
   AvailableNewBuilding?: IAvailableNewBuildingResolvers<ContextType>;
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
   BuildingQueue?: IBuildingQueueResolvers<ContextType>;
@@ -683,6 +842,9 @@ export type IResolvers<ContextType = any> = {
   Coords?: ICoordsResolvers<ContextType>;
   Cost?: ICostResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  GeneralSettings?: IGeneralSettingsResolvers<ContextType>;
+  GeneralVillageSettings?: IGeneralVillageSettingsResolvers<ContextType>;
+  IVillageTaskSettings?: IIVillageTaskSettingsResolvers;
   Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;
@@ -693,4 +855,5 @@ export type IResolvers<ContextType = any> = {
   Village?: IVillageResolvers<ContextType>;
   VillageCapacity?: IVillageCapacityResolvers<ContextType>;
   VillageResources?: IVillageResourcesResolvers<ContextType>;
+  VillageSettings?: IVillageSettingsResolvers<ContextType>;
 };

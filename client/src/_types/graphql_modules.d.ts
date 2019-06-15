@@ -55,6 +55,18 @@ declare module "*/graphql_operations/queuedBuilding.graphql" {
   export default defaultDocument;
 }
 
+declare module "*/graphql_operations/settings.graphql" {
+  import { DocumentNode } from "graphql";
+  const defaultDocument: DocumentNode;
+  export const GetGeneralSettings: DocumentNode;
+  export const GetVillageSettings: DocumentNode;
+  export const UpdateGeneralSettings: DocumentNode;
+  export const UpdateGeneralVillageSettings: DocumentNode;
+  export const UpdateAutoBuildVillageSettings: DocumentNode;
+
+  export default defaultDocument;
+}
+
 declare module "*/graphql_operations/village.graphql" {
   import { DocumentNode } from "graphql";
   const defaultDocument: DocumentNode;

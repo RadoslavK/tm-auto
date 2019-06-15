@@ -26,7 +26,7 @@ export const Resources: React.FunctionComponent<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
-  const totalCapacity = capacity.granary + capacity.warehouse;
+  const totalCapacity = capacity.granary + capacity.warehouse * 3;
 
   return (
     <div className={classes.root}>

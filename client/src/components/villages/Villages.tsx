@@ -2,6 +2,7 @@ import { GetVillages } from '*/graphql_operations/village.graphql';
 import React, { useContext, useEffect } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import useRouter from 'use-react-router';
 import { IGetVillagesQuery } from '../../_types/graphql';
 import { ISideMenuContext, SideMenuContext } from '../sideMenu/context/SideMenuContext';
 import { Village } from './Village';
@@ -11,6 +12,7 @@ interface IVillageRouteParams {
 }
 
 export const Villages: React.FunctionComponent = () => {
+  const { match } = useRouter();
   const { setItems } = useContext<ISideMenuContext>(SideMenuContext);
   const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages,
     {
@@ -21,7 +23,7 @@ export const Villages: React.FunctionComponent = () => {
     ? []
     : data.villages.map(village => ({
       text: village.name,
-      path: `/villages/${village.id}`,
+      path: `${match.url}/${village.id}`,
     }));
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export const Villages: React.FunctionComponent = () => {
 
   return (
     <Switch>
-      <Route path='/villages/:id' render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
+      <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
       {navigationItems.length > 0 && (
         <Redirect to={navigationItems[0].path} />
       )}

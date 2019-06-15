@@ -1,0 +1,28 @@
+query GetGeneralSettings {
+    generalSettings {
+        autoBuild
+    }
+}
+
+query GetVillageSettings($villageId: Int!) {
+    villageSettings(villageId: $villageId) {
+        general {
+            allowTasks
+        }
+        autoBuild {
+            allow
+        }
+    }
+}
+
+mutation UpdateGeneralSettings($input: UpdateGeneralSettingsInput!) {
+    updateGeneralSettings(input: $input)
+}
+
+mutation UpdateGeneralVillageSettings($input: UpdateGeneralVillageSettingsInput!) {
+    updateGeneralVillageSettings(input: $input)
+}
+
+mutation UpdateAutoBuildVillageSettings($input: UpdateAutoBuildVillageSettingsInput!) {
+    updateAutoBuildVillageSettings(input: $input)
+}

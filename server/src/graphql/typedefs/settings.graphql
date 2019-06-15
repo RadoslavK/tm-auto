@@ -1,0 +1,57 @@
+type GeneralSettings {
+    autoBuild: Boolean!
+}
+
+interface IVillageTaskSettings {
+    allow: Boolean!
+}
+
+type GeneralVillageSettings {
+    allowTasks: Boolean!
+}
+
+type AutoBuildSettings implements IVillageTaskSettings {
+    allow: Boolean!
+}
+
+type VillageSettings {
+    general: GeneralVillageSettings!
+    autoBuild: AutoBuildSettings!
+}
+
+extend type Query {
+    generalSettings: GeneralSettings!
+    villageSettings(villageId: Int!): VillageSettings!
+}
+
+input GeneralVillageSettingsInput {
+    allowTasks: Boolean!
+}
+
+input AutoBuildVillageSettingsInput {
+    allow: Boolean!
+}
+
+input GeneralSettingsInput {
+    autoBuild: Boolean!
+}
+
+input UpdateAutoBuildVillageSettingsInput {
+    villageId: Int!
+    settings: AutoBuildVillageSettingsInput!
+}
+
+input UpdateGeneralVillageSettingsInput {
+    villageId: Int!
+    settings: GeneralVillageSettingsInput!
+}
+
+input UpdateGeneralSettingsInput {
+    settings: GeneralSettingsInput!
+}
+
+extend type Mutation {
+    updateGeneralSettings(input: UpdateGeneralSettingsInput!): Boolean!
+    updateGeneralVillageSettings(input: UpdateGeneralVillageSettingsInput!): Boolean!
+    updateAutoBuildVillageSettings(input: UpdateAutoBuildVillageSettingsInput!): Boolean!
+}

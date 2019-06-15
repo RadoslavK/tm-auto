@@ -24,7 +24,12 @@ interface IProps {
 }
 
 export const Navigation: React.FunctionComponent<IProps> = (props) => {
-  const classes = useStyles(props.drawerWidth)({});
+  const {
+    navigationItems,
+    drawerWidth,
+  } = props;
+
+  const classes = useStyles(drawerWidth)({});
   const { location } = useReactRouter();
   const { data, loading } = useQuery<IIsBotRunningQuery>(IsBotRunning);
   const startBot = useMutation<IStartBotMutation>(StartBot, {
@@ -38,7 +43,8 @@ export const Navigation: React.FunctionComponent<IProps> = (props) => {
     return null;
   }
 
-  const currentItemIndex = location.pathname.startsWith('/villages') ? 1 : 0;
+  // const currentItemIndex = location.pathname.startsWith('/villages') ? 1 : 0;
+  const currentItemIndex = navigationItems.findIndex(item => location.pathname.startsWith(item.path));
 
   const {
     isBotRunning,
@@ -53,7 +59,7 @@ export const Navigation: React.FunctionComponent<IProps> = (props) => {
         indicatorColor="primary"
         centered
       >
-        {props.navigationItems.map((route, index) => (
+        {navigationItems.map((route, index) => (
           <Tab
             key={index}
             label={route.text}

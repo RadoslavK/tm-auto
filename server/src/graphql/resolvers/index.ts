@@ -2,6 +2,7 @@ import { mergeResolvers } from 'merge-graphql-schemas';
 import { buildingResolvers } from './buildingResolvers';
 import { controllerResolvers } from './controllerResolvers';
 import { miscResolvers } from './miscResolvers';
+import { settingsResolvers } from './settingsResolvers';
 import { userResolvers } from './userResolvers';
 import { villageResolvers } from './villageResolvers';
 
@@ -11,4 +12,5 @@ export const resolvers = mergeResolvers([
   controllerResolvers,
   buildingResolvers,
   miscResolvers,
+  settingsResolvers,
 ]);

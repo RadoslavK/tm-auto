@@ -120,7 +120,6 @@ const BuildingSpot: React.FunctionComponent<IProps> = React.memo((props) => {
         <Dialog
           open={dialog === DialogType.MultiEnqueue}
           onClose={onSelect}
-
         >
           <MultiEnqueueDialog
             totalLevel={building.level.total}

@@ -9,6 +9,14 @@ export type Scalars = {
   Date: Date;
 };
 
+export type IAutoBuildSettings = IIVillageTaskSettings & {
+  readonly allow: Scalars["Boolean"];
+};
+
+export type IAutoBuildVillageSettingsInput = {
+  readonly allow: Scalars["Boolean"];
+};
+
 export type IAvailableNewBuilding = {
   readonly type: Scalars["Int"];
   readonly name: Scalars["String"];
@@ -83,6 +91,26 @@ export type IEnqueueBuildingInput = {
   readonly villageId: Scalars["Int"];
 };
 
+export type IGeneralSettings = {
+  readonly autoBuild: Scalars["Boolean"];
+};
+
+export type IGeneralSettingsInput = {
+  readonly autoBuild: Scalars["Boolean"];
+};
+
+export type IGeneralVillageSettings = {
+  readonly allowTasks: Scalars["Boolean"];
+};
+
+export type IGeneralVillageSettingsInput = {
+  readonly allowTasks: Scalars["Boolean"];
+};
+
+export type IIVillageTaskSettings = {
+  readonly allow: Scalars["Boolean"];
+};
+
 export type IMutation = {
   readonly startBot: Scalars["Boolean"];
   readonly stopBot: Scalars["Boolean"];
@@ -92,6 +120,9 @@ export type IMutation = {
   readonly enqueueBuilding: Scalars["Boolean"];
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
+  readonly updateGeneralSettings: Scalars["Boolean"];
+  readonly updateGeneralVillageSettings: Scalars["Boolean"];
+  readonly updateAutoBuildVillageSettings: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
 };
 
@@ -119,6 +150,18 @@ export type IMutationMoveQueuedBuildingUpArgs = {
   input: IQueuedBuildingManipulationInput;
 };
 
+export type IMutationUpdateGeneralSettingsArgs = {
+  input: IUpdateGeneralSettingsInput;
+};
+
+export type IMutationUpdateGeneralVillageSettingsArgs = {
+  input: IUpdateGeneralVillageSettingsInput;
+};
+
+export type IMutationUpdateAutoBuildVillageSettingsArgs = {
+  input: IUpdateAutoBuildVillageSettingsInput;
+};
+
 export type IMutationSignInArgs = {
   account: ISignInInput;
 };
@@ -131,6 +174,8 @@ export type IQuery = {
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
+  readonly generalSettings: IGeneralSettings;
+  readonly villageSettings: IVillageSettings;
   readonly isSignedIn: Scalars["Boolean"];
   readonly village?: Maybe<IVillage>;
   readonly villages: ReadonlyArray<IVillage>;
@@ -157,6 +202,10 @@ export type IQueryBuildingsInProgressArgs = {
 };
 
 export type IQueryBuildingQueueArgs = {
+  villageId: Scalars["Int"];
+};
+
+export type IQueryVillageSettingsArgs = {
   villageId: Scalars["Int"];
 };
 
@@ -214,6 +263,20 @@ export type ISubscriptionUpdateVillageArgs = {
   villageId: Scalars["Int"];
 };
 
+export type IUpdateAutoBuildVillageSettingsInput = {
+  readonly villageId: Scalars["Int"];
+  readonly settings: IAutoBuildVillageSettingsInput;
+};
+
+export type IUpdateGeneralSettingsInput = {
+  readonly settings: IGeneralSettingsInput;
+};
+
+export type IUpdateGeneralVillageSettingsInput = {
+  readonly villageId: Scalars["Int"];
+  readonly settings: IGeneralVillageSettingsInput;
+};
+
 export type IUserAccount = {
   readonly username: Scalars["String"];
   readonly password: Scalars["String"];
@@ -236,6 +299,11 @@ export type IVillageResources = {
   readonly amount: IResources;
   readonly capacity: IVillageCapacity;
   readonly production: IResources;
+};
+
+export type IVillageSettings = {
+  readonly general: IGeneralVillageSettings;
+  readonly autoBuild: IAutoBuildSettings;
 };
 export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
@@ -396,6 +464,50 @@ export type IGetQueuedBuildingsQuery = {
     readonly totalCost: ICostFragmentFragment;
   };
 };
+
+export type IGetGeneralSettingsQueryVariables = {};
+
+export type IGetGeneralSettingsQuery = {
+  readonly generalSettings: Pick<IGeneralSettings, "autoBuild">;
+};
+
+export type IGetVillageSettingsQueryVariables = {
+  villageId: Scalars["Int"];
+};
+
+export type IGetVillageSettingsQuery = {
+  readonly villageSettings: {
+    readonly general: Pick<IGeneralVillageSettings, "allowTasks">;
+    readonly autoBuild: Pick<IAutoBuildSettings, "allow">;
+  };
+};
+
+export type IUpdateGeneralSettingsMutationVariables = {
+  input: IUpdateGeneralSettingsInput;
+};
+
+export type IUpdateGeneralSettingsMutation = Pick<
+  IMutation,
+  "updateGeneralSettings"
+>;
+
+export type IUpdateGeneralVillageSettingsMutationVariables = {
+  input: IUpdateGeneralVillageSettingsInput;
+};
+
+export type IUpdateGeneralVillageSettingsMutation = Pick<
+  IMutation,
+  "updateGeneralVillageSettings"
+>;
+
+export type IUpdateAutoBuildVillageSettingsMutationVariables = {
+  input: IUpdateAutoBuildVillageSettingsInput;
+};
+
+export type IUpdateAutoBuildVillageSettingsMutation = Pick<
+  IMutation,
+  "updateAutoBuildVillageSettings"
+>;
 
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars["Int"];
