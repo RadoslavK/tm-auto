@@ -1,17 +1,35 @@
-type GeneralSettings {
-    autoBuild: Boolean!
+interface ITaskSettings {
+    allow: Boolean!
+    coolDown: CoolDown!
 }
 
-interface IVillageTaskSettings {
-    allow: Boolean!
+type GeneralSettings {
+    autoBuild: Boolean!
 }
 
 type GeneralVillageSettings {
     allowTasks: Boolean!
 }
 
-type AutoBuildSettings implements IVillageTaskSettings {
+type AutoBuildSettings implements ITaskSettings {
     allow: Boolean!
+    coolDown: CoolDown!
+}
+
+type AutoAdventureSettings implements ITaskSettings {
+    allow: Boolean!
+    coolDown: CoolDown!
+
+    adventureCriteria: Int!
+    preferHard: Boolean!
+    normalMinHealth: Int!
+    hardMinHealth: Int!
+    maxTravelTime: Int!
+    preferredVillageId: Int
+}
+
+type HeroSettings {
+    autoAdventure: AutoAdventureSettings!
 }
 
 type VillageSettings {
@@ -21,6 +39,7 @@ type VillageSettings {
 
 extend type Query {
     generalSettings: GeneralSettings!
+    hero: HeroSettings!
     villageSettings(villageId: Int!): VillageSettings!
 }
 
@@ -30,6 +49,19 @@ input GeneralVillageSettingsInput {
 
 input AutoBuildVillageSettingsInput {
     allow: Boolean!
+    coolDown: CoolDownInput!
+}
+
+input AutoAdventureSettingsInput {
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    adventureCriteria: Int!
+    preferHard: Boolean!
+    normalMinHealth: Int!
+    hardMinHealth: Int!
+    maxTravelTime: Int!
+    preferredVillageId: Int
 }
 
 input GeneralSettingsInput {
@@ -50,8 +82,13 @@ input UpdateGeneralSettingsInput {
     settings: GeneralSettingsInput!
 }
 
+input UpdateAutoAdventureSettingsInput {
+    settings: AutoAdventureSettingsInput!
+}
+
 extend type Mutation {
     updateGeneralSettings(input: UpdateGeneralSettingsInput!): Boolean!
+    updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!
     updateGeneralVillageSettings(input: UpdateGeneralVillageSettingsInput!): Boolean!
     updateAutoBuildVillageSettings(input: UpdateAutoBuildVillageSettingsInput!): Boolean!
 }

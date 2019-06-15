@@ -1,4 +1,4 @@
-import { AutoBuildSettings } from './AutoBuildSettings';
+import { AutoBuildSettings } from './tasks/AutoBuildSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
 interface IParams {

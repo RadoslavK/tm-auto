@@ -58,9 +58,12 @@ declare module "*/graphql_operations/queuedBuilding.graphql" {
 declare module "*/graphql_operations/settings.graphql" {
   import { DocumentNode } from "graphql";
   const defaultDocument: DocumentNode;
+  export const TaskSettingsFragment: DocumentNode;
   export const GetGeneralSettings: DocumentNode;
+  export const GetHeroSettings: DocumentNode;
   export const GetVillageSettings: DocumentNode;
   export const UpdateGeneralSettings: DocumentNode;
+  export const UpdateAutoAdventureSettings: DocumentNode;
   export const UpdateGeneralVillageSettings: DocumentNode;
   export const UpdateAutoBuildVillageSettings: DocumentNode;
 

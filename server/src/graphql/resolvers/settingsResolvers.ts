@@ -4,7 +4,7 @@ import { context } from '../context';
 export const settingsResolvers: IResolvers = {
   Query: {
     generalSettings: () => context.settings.general,
-
+    hero: () => context.settings.hero,
     villageSettings: (_, args) => context.settings.village(args.villageId),
   },
 
@@ -31,6 +31,15 @@ export const settingsResolvers: IResolvers = {
       } = args.input;
 
       context.settings.village(villageId).general = settings;
+      return true;
+    },
+
+    updateAutoAdventureSettings: (_, args) => {
+      const {
+        settings,
+      } = args.input;
+
+      context.settings.hero.autoAdventure = settings;
       return true;
     },
   },

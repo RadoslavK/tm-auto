@@ -1,6 +1,28 @@
+fragment TaskSettingsFragment on ITaskSettings {
+    allow
+    coolDown {
+        min
+        max
+    }
+}
+
 query GetGeneralSettings {
     generalSettings {
         autoBuild
+    }
+}
+
+query GetHeroSettings {
+    hero {
+        autoAdventure {
+            ...TaskSettingsFragment
+            adventureCriteria
+            hardMinHealth
+            normalMinHealth
+            maxTravelTime
+            preferHard
+            preferredVillageId
+        }
     }
 }
 
@@ -10,13 +32,17 @@ query GetVillageSettings($villageId: Int!) {
             allowTasks
         }
         autoBuild {
-            allow
+            ...TaskSettingsFragment
         }
     }
 }
 
 mutation UpdateGeneralSettings($input: UpdateGeneralSettingsInput!) {
     updateGeneralSettings(input: $input)
+}
+
+mutation UpdateAutoAdventureSettings($input: UpdateAutoAdventureSettingsInput!) {
+    updateAutoAdventureSettings(input: $input)
 }
 
 mutation UpdateGeneralVillageSettings($input: UpdateGeneralVillageSettingsInput!) {
@@ -26,3 +52,4 @@ mutation UpdateGeneralVillageSettings($input: UpdateGeneralVillageSettingsInput!
 mutation UpdateAutoBuildVillageSettings($input: UpdateAutoBuildVillageSettingsInput!) {
     updateAutoBuildVillageSettings(input: $input)
 }
+

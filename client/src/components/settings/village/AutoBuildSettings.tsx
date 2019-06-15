@@ -3,11 +3,12 @@ import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import {
-  IAutoBuildSettings, IAutoBuildVillageSettingsInput, IUpdateAutoBuildVillageSettingsInput,
+  IAutoBuildSettings, ICoolDown, IUpdateAutoBuildVillageSettingsInput,
   IUpdateAutoBuildVillageSettingsMutation,
   IUpdateAutoBuildVillageSettingsMutationVariables,
-} from '../../_types/graphql';
-import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
+} from '../../../_types/graphql';
+import { CooldDown } from '../../controls/Cooldown';
+import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
   readonly settings: IAutoBuildSettings;
@@ -49,8 +50,16 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
     }));
   };
 
+  const onCooldownChange = (updatedCooldown: ICoolDown) => {
+    setState(prevState => ({
+      ...prevState,
+      coolDown: updatedCooldown,
+    }));
+  };
+
   const {
     allow,
+    coolDown,
   } = state;
 
   return (
@@ -58,6 +67,10 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
       <h2>AutoBuild</h2>
       <label htmlFor="allow">Allow</label>
       <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
+
+      <h3>Cooldown</h3>
+      <label htmlFor="maxTravelTime">Cooldown</label>
+      <CooldDown value={coolDown} onChange={onCooldownChange} />
     </div>
   );
 };

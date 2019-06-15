@@ -1,4 +1,4 @@
-export type Maybe<T> = T | null;
+export type Maybe<T> = T | undefined;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -9,12 +9,36 @@ export type Scalars = {
   Date: Date;
 };
 
-export type IAutoBuildSettings = IIVillageTaskSettings & {
+export type IAutoAdventureSettings = IITaskSettings & {
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
+  readonly adventureCriteria: Scalars["Int"];
+  readonly preferHard: Scalars["Boolean"];
+  readonly normalMinHealth: Scalars["Int"];
+  readonly hardMinHealth: Scalars["Int"];
+  readonly maxTravelTime: Scalars["Int"];
+  readonly preferredVillageId?: Maybe<Scalars["Int"]>;
+};
+
+export type IAutoAdventureSettingsInput = {
+  readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDownInput;
+  readonly adventureCriteria: Scalars["Int"];
+  readonly preferHard: Scalars["Boolean"];
+  readonly normalMinHealth: Scalars["Int"];
+  readonly hardMinHealth: Scalars["Int"];
+  readonly maxTravelTime: Scalars["Int"];
+  readonly preferredVillageId?: Maybe<Scalars["Int"]>;
+};
+
+export type IAutoBuildSettings = IITaskSettings & {
+  readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
 };
 
 export type IAutoBuildVillageSettingsInput = {
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDownInput;
 };
 
 export type IAvailableNewBuilding = {
@@ -25,11 +49,6 @@ export type IAvailableNewBuilding = {
 export type IAvailableNewBuildingsInput = {
   readonly fieldId: Scalars["Int"];
   readonly villageId: Scalars["Int"];
-};
-
-export type IBuildingCostInput = {
-  readonly buildingType: Scalars["Int"];
-  readonly level: Scalars["Int"];
 };
 
 export type IBuildingInProgress = {
@@ -66,6 +85,16 @@ export type IBuildingSpots = {
 
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
+};
+
+export type ICoolDown = {
+  readonly min: Scalars["Int"];
+  readonly max: Scalars["Int"];
+};
+
+export type ICoolDownInput = {
+  readonly min: Scalars["Int"];
+  readonly max: Scalars["Int"];
 };
 
 export type ICoords = {
@@ -107,8 +136,13 @@ export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars["Boolean"];
 };
 
-export type IIVillageTaskSettings = {
+export type IHeroSettings = {
+  readonly autoAdventure: IAutoAdventureSettings;
+};
+
+export type IITaskSettings = {
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
 };
 
 export type IMutation = {
@@ -121,6 +155,7 @@ export type IMutation = {
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
   readonly updateGeneralSettings: Scalars["Boolean"];
+  readonly updateAutoAdventureSettings: Scalars["Boolean"];
   readonly updateGeneralVillageSettings: Scalars["Boolean"];
   readonly updateAutoBuildVillageSettings: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
@@ -154,6 +189,10 @@ export type IMutationUpdateGeneralSettingsArgs = {
   input: IUpdateGeneralSettingsInput;
 };
 
+export type IMutationUpdateAutoAdventureSettingsArgs = {
+  input: IUpdateAutoAdventureSettingsInput;
+};
+
 export type IMutationUpdateGeneralVillageSettingsArgs = {
   input: IUpdateGeneralVillageSettingsInput;
 };
@@ -175,6 +214,7 @@ export type IQuery = {
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
   readonly generalSettings: IGeneralSettings;
+  readonly hero: IHeroSettings;
   readonly villageSettings: IVillageSettings;
   readonly isSignedIn: Scalars["Boolean"];
   readonly village?: Maybe<IVillage>;
@@ -261,6 +301,10 @@ export type ISubscriptionBuildingsUpdatedArgs = {
 
 export type ISubscriptionUpdateVillageArgs = {
   villageId: Scalars["Int"];
+};
+
+export type IUpdateAutoAdventureSettingsInput = {
+  readonly settings: IAutoAdventureSettingsInput;
 };
 
 export type IUpdateAutoBuildVillageSettingsInput = {
@@ -465,10 +509,31 @@ export type IGetQueuedBuildingsQuery = {
   };
 };
 
+export type ITaskSettingsFragmentFragment = Pick<IITaskSettings, "allow"> & {
+  readonly coolDown: Pick<ICoolDown, "min" | "max">;
+};
+
 export type IGetGeneralSettingsQueryVariables = {};
 
 export type IGetGeneralSettingsQuery = {
   readonly generalSettings: Pick<IGeneralSettings, "autoBuild">;
+};
+
+export type IGetHeroSettingsQueryVariables = {};
+
+export type IGetHeroSettingsQuery = {
+  readonly hero: {
+    readonly autoAdventure: Pick<
+      IAutoAdventureSettings,
+      | "adventureCriteria"
+      | "hardMinHealth"
+      | "normalMinHealth"
+      | "maxTravelTime"
+      | "preferHard"
+      | "preferredVillageId"
+    > &
+      ITaskSettingsFragmentFragment;
+  };
 };
 
 export type IGetVillageSettingsQueryVariables = {
@@ -478,7 +543,7 @@ export type IGetVillageSettingsQueryVariables = {
 export type IGetVillageSettingsQuery = {
   readonly villageSettings: {
     readonly general: Pick<IGeneralVillageSettings, "allowTasks">;
-    readonly autoBuild: Pick<IAutoBuildSettings, "allow">;
+    readonly autoBuild: ITaskSettingsFragmentFragment;
   };
 };
 
@@ -489,6 +554,15 @@ export type IUpdateGeneralSettingsMutationVariables = {
 export type IUpdateGeneralSettingsMutation = Pick<
   IMutation,
   "updateGeneralSettings"
+>;
+
+export type IUpdateAutoAdventureSettingsMutationVariables = {
+  input: IUpdateAutoAdventureSettingsInput;
+};
+
+export type IUpdateAutoAdventureSettingsMutation = Pick<
+  IMutation,
+  "updateAutoAdventureSettings"
 >;
 
 export type IUpdateGeneralVillageSettingsMutationVariables = {

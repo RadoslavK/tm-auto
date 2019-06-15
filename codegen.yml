@@ -2,6 +2,7 @@ overwrite: true
 schema: 'server/src/graphql/typedefs/*.graphql'
 documents: 'client/src/graphql/*.graphql'
 config:
+  maybeValue: T | undefined
   scalars:
     Date: Date
 generates:

@@ -1,0 +1,13 @@
+interface IParams {
+  min: number;
+  max: number;
+}
+
+export class Cooldown implements IParams {
+  min: number = 0;
+  max: number = 0;
+
+  constructor(params: Partial<IParams> = {}) {
+    Object.assign(this, params);
+  }
+}

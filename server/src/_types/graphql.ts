@@ -3,7 +3,7 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig
 } from "graphql";
-export type Maybe<T> = T | null;
+export type Maybe<T> = T | undefined;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -15,13 +15,38 @@ export type Scalars = {
   Date: Date;
 };
 
-export type IAutoBuildSettings = IIVillageTaskSettings & {
+export type IAutoAdventureSettings = IITaskSettings & {
+  __typename?: "AutoAdventureSettings";
+  readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
+  readonly adventureCriteria: Scalars["Int"];
+  readonly preferHard: Scalars["Boolean"];
+  readonly normalMinHealth: Scalars["Int"];
+  readonly hardMinHealth: Scalars["Int"];
+  readonly maxTravelTime: Scalars["Int"];
+  readonly preferredVillageId?: Maybe<Scalars["Int"]>;
+};
+
+export type IAutoAdventureSettingsInput = {
+  readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDownInput;
+  readonly adventureCriteria: Scalars["Int"];
+  readonly preferHard: Scalars["Boolean"];
+  readonly normalMinHealth: Scalars["Int"];
+  readonly hardMinHealth: Scalars["Int"];
+  readonly maxTravelTime: Scalars["Int"];
+  readonly preferredVillageId?: Maybe<Scalars["Int"]>;
+};
+
+export type IAutoBuildSettings = IITaskSettings & {
   __typename?: "AutoBuildSettings";
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
 };
 
 export type IAutoBuildVillageSettingsInput = {
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDownInput;
 };
 
 export type IAvailableNewBuilding = {
@@ -33,11 +58,6 @@ export type IAvailableNewBuilding = {
 export type IAvailableNewBuildingsInput = {
   readonly fieldId: Scalars["Int"];
   readonly villageId: Scalars["Int"];
-};
-
-export type IBuildingCostInput = {
-  readonly buildingType: Scalars["Int"];
-  readonly level: Scalars["Int"];
 };
 
 export type IBuildingInProgress = {
@@ -79,6 +99,17 @@ export type IBuildingSpots = {
 
 export type IClearQueueInput = {
   readonly villageId: Scalars["Int"];
+};
+
+export type ICoolDown = {
+  __typename?: "CoolDown";
+  readonly min: Scalars["Int"];
+  readonly max: Scalars["Int"];
+};
+
+export type ICoolDownInput = {
+  readonly min: Scalars["Int"];
+  readonly max: Scalars["Int"];
 };
 
 export type ICoords = {
@@ -124,9 +155,15 @@ export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars["Boolean"];
 };
 
-export type IIVillageTaskSettings = {
-  __typename?: "IVillageTaskSettings";
+export type IHeroSettings = {
+  __typename?: "HeroSettings";
+  readonly autoAdventure: IAutoAdventureSettings;
+};
+
+export type IITaskSettings = {
+  __typename?: "ITaskSettings";
   readonly allow: Scalars["Boolean"];
+  readonly coolDown: ICoolDown;
 };
 
 export type IMutation = {
@@ -140,6 +177,7 @@ export type IMutation = {
   readonly moveQueuedBuildingDown: Scalars["Boolean"];
   readonly moveQueuedBuildingUp: Scalars["Boolean"];
   readonly updateGeneralSettings: Scalars["Boolean"];
+  readonly updateAutoAdventureSettings: Scalars["Boolean"];
   readonly updateGeneralVillageSettings: Scalars["Boolean"];
   readonly updateAutoBuildVillageSettings: Scalars["Boolean"];
   readonly signIn: Scalars["Boolean"];
@@ -173,6 +211,10 @@ export type IMutationUpdateGeneralSettingsArgs = {
   input: IUpdateGeneralSettingsInput;
 };
 
+export type IMutationUpdateAutoAdventureSettingsArgs = {
+  input: IUpdateAutoAdventureSettingsInput;
+};
+
 export type IMutationUpdateGeneralVillageSettingsArgs = {
   input: IUpdateGeneralVillageSettingsInput;
 };
@@ -195,6 +237,7 @@ export type IQuery = {
   readonly isBotRunning: Scalars["Boolean"];
   readonly buildingQueue: IBuildingQueue;
   readonly generalSettings: IGeneralSettings;
+  readonly hero: IHeroSettings;
   readonly villageSettings: IVillageSettings;
   readonly isSignedIn: Scalars["Boolean"];
   readonly village?: Maybe<IVillage>;
@@ -285,6 +328,10 @@ export type ISubscriptionBuildingsUpdatedArgs = {
 
 export type ISubscriptionUpdateVillageArgs = {
   villageId: Scalars["Int"];
+};
+
+export type IUpdateAutoAdventureSettingsInput = {
+  readonly settings: IAutoAdventureSettingsInput;
 };
 
 export type IUpdateAutoBuildVillageSettingsInput = {
@@ -422,10 +469,13 @@ export type IResolversTypes = {
   Cost: ICost;
   Resources: IResources;
   GeneralSettings: IGeneralSettings;
+  HeroSettings: IHeroSettings;
+  AutoAdventureSettings: IAutoAdventureSettings;
+  ITaskSettings: IITaskSettings;
+  CoolDown: ICoolDown;
   VillageSettings: IVillageSettings;
   GeneralVillageSettings: IGeneralVillageSettings;
   AutoBuildSettings: IAutoBuildSettings;
-  IVillageTaskSettings: IIVillageTaskSettings;
   Village: IVillage;
   Coords: ICoords;
   VillageResources: IVillageResources;
@@ -436,15 +486,35 @@ export type IResolversTypes = {
   EnqueueBuildingInput: IEnqueueBuildingInput;
   UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput;
   GeneralSettingsInput: IGeneralSettingsInput;
+  UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput;
+  AutoAdventureSettingsInput: IAutoAdventureSettingsInput;
+  CoolDownInput: ICoolDownInput;
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput;
   GeneralVillageSettingsInput: IGeneralVillageSettingsInput;
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput;
   AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput;
   SignInInput: ISignInInput;
   Subscription: {};
-  BuildingCostInput: IBuildingCostInput;
   ClearQueueInput: IClearQueueInput;
   UserAccount: IUserAccount;
+};
+
+export type IAutoAdventureSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["AutoAdventureSettings"]
+> = {
+  allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  coolDown?: Resolver<IResolversTypes["CoolDown"], ParentType, ContextType>;
+  adventureCriteria?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  preferHard?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  normalMinHealth?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  hardMinHealth?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  maxTravelTime?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  preferredVillageId?: Resolver<
+    Maybe<IResolversTypes["Int"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type IAutoBuildSettingsResolvers<
@@ -452,6 +522,7 @@ export type IAutoBuildSettingsResolvers<
   ParentType = IResolversTypes["AutoBuildSettings"]
 > = {
   allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  coolDown?: Resolver<IResolversTypes["CoolDown"], ParentType, ContextType>;
 };
 
 export type IAvailableNewBuildingResolvers<
@@ -525,6 +596,14 @@ export type IBuildingSpotsResolvers<
   >;
 };
 
+export type ICoolDownResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["CoolDown"]
+> = {
+  min?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  max?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+};
+
 export type ICoordsResolvers<
   ContextType = any,
   ParentType = IResolversTypes["Coords"]
@@ -560,12 +639,28 @@ export type IGeneralVillageSettingsResolvers<
   allowTasks?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
 };
 
-export type IIVillageTaskSettingsResolvers<
+export type IHeroSettingsResolvers<
   ContextType = any,
-  ParentType = IResolversTypes["IVillageTaskSettings"]
+  ParentType = IResolversTypes["HeroSettings"]
 > = {
-  __resolveType: TypeResolveFn<"AutoBuildSettings", ParentType, ContextType>;
+  autoAdventure?: Resolver<
+    IResolversTypes["AutoAdventureSettings"],
+    ParentType,
+    ContextType
+  >;
+};
+
+export type IITaskSettingsResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["ITaskSettings"]
+> = {
+  __resolveType: TypeResolveFn<
+    "AutoAdventureSettings" | "AutoBuildSettings",
+    ParentType,
+    ContextType
+  >;
   allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  coolDown?: Resolver<IResolversTypes["CoolDown"], ParentType, ContextType>;
 };
 
 export type IMutationResolvers<
@@ -615,6 +710,12 @@ export type IMutationResolvers<
     ParentType,
     ContextType,
     IMutationUpdateGeneralSettingsArgs
+  >;
+  updateAutoAdventureSettings?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    IMutationUpdateAutoAdventureSettingsArgs
   >;
   updateGeneralVillageSettings?: Resolver<
     IResolversTypes["Boolean"],
@@ -682,6 +783,7 @@ export type IQueryResolvers<
     ParentType,
     ContextType
   >;
+  hero?: Resolver<IResolversTypes["HeroSettings"], ParentType, ContextType>;
   villageSettings?: Resolver<
     IResolversTypes["VillageSettings"],
     ParentType,
@@ -832,6 +934,7 @@ export type IVillageSettingsResolvers<
 };
 
 export type IResolvers<ContextType = any> = {
+  AutoAdventureSettings?: IAutoAdventureSettingsResolvers<ContextType>;
   AutoBuildSettings?: IAutoBuildSettingsResolvers<ContextType>;
   AvailableNewBuilding?: IAvailableNewBuildingResolvers<ContextType>;
   BuildingInProgress?: IBuildingInProgressResolvers<ContextType>;
@@ -839,12 +942,14 @@ export type IResolvers<ContextType = any> = {
   BuildingSpot?: IBuildingSpotResolvers<ContextType>;
   BuildingSpotLevel?: IBuildingSpotLevelResolvers<ContextType>;
   BuildingSpots?: IBuildingSpotsResolvers<ContextType>;
+  CoolDown?: ICoolDownResolvers<ContextType>;
   Coords?: ICoordsResolvers<ContextType>;
   Cost?: ICostResolvers<ContextType>;
   Date?: GraphQLScalarType;
   GeneralSettings?: IGeneralSettingsResolvers<ContextType>;
   GeneralVillageSettings?: IGeneralVillageSettingsResolvers<ContextType>;
-  IVillageTaskSettings?: IIVillageTaskSettingsResolvers;
+  HeroSettings?: IHeroSettingsResolvers<ContextType>;
+  ITaskSettings?: IITaskSettingsResolvers;
   Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
   QueuedBuilding?: IQueuedBuildingResolvers<ContextType>;

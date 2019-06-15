@@ -19,7 +19,12 @@ type Coords {
     y: Int!
 }
 
-input BuildingCostInput {
-    buildingType: Int!
-    level: Int!
+type CoolDown {
+    min: Int!
+    max: Int!
+}
+
+input CoolDownInput {
+    min: Int!
+    max: Int!
 }

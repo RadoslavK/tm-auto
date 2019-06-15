@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables } from '../../_types/graphql';
 import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
-import { AutoBuildSettings } from './AutoBuildSettings';
+import { AutoBuildSettings } from './village/AutoBuildSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
 const VillageSettings: React.FunctionComponent = () => {

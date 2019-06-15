@@ -8,7 +8,7 @@ import { INavigationItem } from './_types/INavigationItem';
 import { ISideMenuContext, SideMenuContext } from './components/sideMenu/context/SideMenuContext';
 import { SideMenu } from './components/sideMenu/SideMenu';
 import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';
-import { navigationItems } from './constants/paths';
+import { navigationItems } from './constants/navigationItems';
 import { apolloClient } from './graphql/settings/apolloClient';
 import { BrowserRouter } from 'react-router-dom';
 import { Navigation } from './components/navigation/Navigation';
