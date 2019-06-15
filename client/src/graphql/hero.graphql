@@ -1,0 +1,9 @@
+query GetHeroInformation {
+    heroInformation {
+        health
+        village {
+            id
+            name
+        }
+    }
+}

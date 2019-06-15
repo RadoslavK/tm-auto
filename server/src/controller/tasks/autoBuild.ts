@@ -110,7 +110,7 @@ export class AutoBuild {
 
       log("Not enough free crop. Building crop land next");
 
-      const lowestLevelCropLand = Object.values(this._buildings.spots)
+      const lowestLevelCropLand = this._buildings.spots.buildings()
         .filter(b => b.type === BuildingType.Crop)
         .sort((b1, b2) => b1.level.actual - b2.level.actual)
         [0];
@@ -193,7 +193,7 @@ export class AutoBuild {
     if (isQueued) {
       // might be a temporary created object to insta build
       this._buildings.queue.remove(queuedBuilding.queueId);
-      this._buildings.spots[queuedBuilding.fieldId].level.queued--;
+      this._buildings.spots.at(queuedBuilding.fieldId).level.queued--;
     }
   }
 }

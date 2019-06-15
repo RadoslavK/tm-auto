@@ -1,0 +1,8 @@
+type HeroInformation {
+    health: Int!
+    village: Village
+}
+
+extend type Query {
+    heroInformation: HeroInformation!
+}

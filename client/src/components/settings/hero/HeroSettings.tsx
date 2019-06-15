@@ -4,6 +4,7 @@ import { useQuery } from 'react-apollo-hooks';
 import {
   IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables,
 } from '../../../_types/graphql';
+import { HeroInformation } from '../../HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 
 export const HeroSettings: React.FunctionComponent = () => {
@@ -22,6 +23,7 @@ export const HeroSettings: React.FunctionComponent = () => {
   return (
     <div>
       <h1>Hero settings</h1>
+      <HeroInformation />
       <AutoAdventureSettings settings={autoAdventure} />;
     </div>
   );

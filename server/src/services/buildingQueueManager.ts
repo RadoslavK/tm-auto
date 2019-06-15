@@ -39,7 +39,7 @@ export class BuildingQueueManager {
       levels,
     } = building;
 
-    const spot = this._village.buildings.spots[fieldId];
+    const spot = this._village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.total();
     const maxLevel = buildingInfos[type].length;
     let enqueued: boolean = false;
@@ -117,7 +117,7 @@ export class BuildingQueueManager {
     }
 
     this._village.buildings.queue.clear();
-    const spots = Object.values(this._village.buildings.spots);
+    const spots = this._village.buildings.spots.buildings();
 
     spots.forEach(spot => {
       spot.level.queued = 0;
@@ -173,7 +173,7 @@ export class BuildingQueueManager {
     const offsets: Record<number, number> = {};
     const queuedBuildings = this._village.buildings.queue.buildings();
 
-    const spots = Object.values(this._village.buildings.spots);
+    const spots = this._village.buildings.spots.buildings();
     for (let i = 0; i < spots.length; i++) {
       const spot = spots[i];
       offsets[spot.fieldId] = 0;
@@ -252,7 +252,7 @@ export class BuildingQueueManager {
   public correctBuildingQueue = (): void => {
     const offsets: Record<number, number> = {};
 
-    const spots = Object.values(this._village.buildings.spots);
+    const spots = this._village.buildings.spots.buildings();
 
     spots.forEach(spot => {
       offsets[spot.fieldId] = 0;

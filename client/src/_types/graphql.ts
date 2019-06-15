@@ -136,6 +136,11 @@ export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars["Boolean"];
 };
 
+export type IHeroInformation = {
+  readonly health: Scalars["Int"];
+  readonly village?: Maybe<IVillage>;
+};
+
 export type IHeroSettings = {
   readonly autoAdventure: IAutoAdventureSettings;
 };
@@ -212,6 +217,7 @@ export type IQuery = {
   readonly maxBuildingLevel: Scalars["Int"];
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
+  readonly heroInformation: IHeroInformation;
   readonly buildingQueue: IBuildingQueue;
   readonly generalSettings: IGeneralSettings;
   readonly hero: IHeroSettings;
@@ -436,6 +442,14 @@ export type IStartBotMutation = Pick<IMutation, "startBot">;
 export type IStopBotMutationVariables = {};
 
 export type IStopBotMutation = Pick<IMutation, "stopBot">;
+
+export type IGetHeroInformationQueryVariables = {};
+
+export type IGetHeroInformationQuery = {
+  readonly heroInformation: Pick<IHeroInformation, "health"> & {
+    readonly village: Maybe<Pick<IVillage, "id" | "name">>;
+  };
+};
 
 export type IResourcesFragmentFragment = Pick<
   IResources,

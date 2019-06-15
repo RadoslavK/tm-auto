@@ -1,3 +1,4 @@
+import { Hero } from '../_models/hero/hero';
 import { Player } from '../_models/player';
 import { Settings } from '../_models/settings/Settings';
 import { Villages } from '../_models/village/villages';
@@ -10,4 +11,5 @@ export const context = {
   user: new User(),
   villages: new Villages(),
   settings: new Settings(),
+  hero: new Hero(),
 };

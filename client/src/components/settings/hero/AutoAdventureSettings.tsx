@@ -1,21 +1,39 @@
-import { UpdateAutoAdventureSettings} from "*/graphql_operations/settings.graphql";
+import { UpdateAutoAdventureSettings } from "*/graphql_operations/settings.graphql";
 import { GetVillages } from '*/graphql_operations/village.graphql';
-import { useContext, useEffect, useState } from 'react';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
+import { AdventureCriteria } from '../../../../../server/src/_models/settings/tasks/AutoAdventureSettings';
+import { getAllEnumValues } from '../../../../../server/src/utils/enumUtils';
 import {
-  IAutoAdventureSettings, ICoolDown, IGetVillagesQuery, IGetVillagesQueryVariables,
+  IAutoAdventureSettings,
+  ICoolDown,
+  IGetVillagesQuery,
   IUpdateAutoAdventureSettingsInput,
   IUpdateAutoAdventureSettingsMutation,
   IUpdateAutoAdventureSettingsMutationVariables,
-  IUpdateAutoBuildVillageSettingsInput,
 } from '../../../_types/graphql';
 import { CooldDown } from '../../controls/Cooldown';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
   readonly settings: IAutoAdventureSettings;
 }
+
+const getCriteriaString = (criteria: AdventureCriteria): string => {
+  switch (criteria) {
+    case AdventureCriteria.FirstToExpire:
+      return 'First to expire';
+
+    case AdventureCriteria.Random:
+      return 'Random';
+
+    case AdventureCriteria.Closest:
+      return 'Closest';
+
+    case AdventureCriteria.Furthest:
+      return 'Furthest';
+  }
+};
 
 const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
   const {
@@ -23,8 +41,6 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
   } = props;
 
   const [state, setState] = useState(settings);
-
-  const { villageId } = useContext<IVillageContext>(VillageContext);
   const input: IUpdateAutoAdventureSettingsInput = {
     settings: state,
   };
@@ -100,6 +116,7 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
     hardMinHealth,
     coolDown,
     preferredVillageId,
+    adventureCriteria,
   } = state;
 
   const preferredVillageExists = villages.some(x => x.id === preferredVillageId);
@@ -107,43 +124,72 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
     ? villages
     : [{ id: preferredVillageId, name: '' }].concat(villages);
 
+  const criteriaOptions = getAllEnumValues(AdventureCriteria);
+
   return (
     <div>
       <h2>AutoAdventure</h2>
-      <label htmlFor="allow">Allow</label>
-      <input type="checkbox" checked={allow} onChange={onBoolChange} id="allow" name="allow" />
 
-      <label htmlFor="preferHard">Prefer hard</label>
-      <input type="checkbox" checked={preferHard} onChange={onBoolChange} id="preferHard" name="preferHard" />
+      <div>
+        <label htmlFor="allow">Allow</label>
+        <input type="checkbox" checked={allow} onChange={onBoolChange} id="allow" name="allow" />
+      </div>
 
-      <label htmlFor="maxTravelTime">Max travel time</label>
-      <input type="number" value={maxTravelTime} onChange={onNumberChange} id="maxTravelTime" name="maxTravelTime" />
+      <div>
+        <label htmlFor="preferHard">Prefer hard</label>
+        <input type="checkbox" checked={preferHard} onChange={onBoolChange} id="preferHard" name="preferHard" />
+      </div>
 
-      <label htmlFor="normalMinHealth">Normal min health</label>
-      <input type="number" value={normalMinHealth} onChange={onNumberChange} id="normalMinHealth" name="normalMinHealth" />
+      <div>
+        <label htmlFor="maxTravelTime">Max travel time</label>
+        <input type="number" value={maxTravelTime} onChange={onNumberChange} id="maxTravelTime" name="maxTravelTime" />
+      </div>
 
-      <label htmlFor="hardMinHealth">Hard min health</label>
-      <input type="number" value={hardMinHealth} onChange={onNumberChange} id="hardMinHealth" name="hardMinHealth" />
+      <div>
+        <label htmlFor="normalMinHealth">Normal min health</label>
+        <input type="number" value={normalMinHealth} onChange={onNumberChange} id="normalMinHealth" name="normalMinHealth" />
+      </div>
 
-      <h3>Cooldown</h3>
-      <label htmlFor="maxTravelTime">Cooldown</label>
-      <CooldDown value={coolDown} onChange={onCooldownChange} />
+      <div>
+        <label htmlFor="hardMinHealth">Hard min health</label>
+        <input type="number" value={hardMinHealth} onChange={onNumberChange} id="hardMinHealth" name="hardMinHealth" />
+      </div>
 
-      <label htmlFor="preferredVillageId">Preferred village</label>
-      <select value={preferredVillageId} onChange={onNumberOptionChange} id="preferredVillageId" name="preferredVillageId" placeholder="Select village" >
-        {options.map(option => {
-          const villageExists = villages.some(x => x.id === option.id);
-          return (
-            <option
-              key={option.id ? option.id.toString() : ''}
-              value={option.id}
-              hidden={!villageExists}
-            >
-              {option.name}
-            </option>
-          )
-        })}
-      </select>
+      <div>
+        <label htmlFor="adventureCriteria">Adventure criteria</label>
+        <div id="adventureCriteria">
+          {criteriaOptions.map((option, index) => (
+            <>
+              <input id={option.toString()} key={index} type="radio" value={option} checked={option === adventureCriteria} onChange={onNumberChange} name="adventureCriteria" />
+              <label htmlFor={option.toString()}>{getCriteriaString(option)}</label>
+            </>
+            ))}
+        </div>
+      </div>
+
+      <div>
+        <h3>Cooldown</h3>
+        <label htmlFor="maxTravelTime">Cooldown</label>
+        <CooldDown value={coolDown} onChange={onCooldownChange} />
+      </div>
+
+      <div>
+        <label htmlFor="preferredVillageId">Preferred village</label>
+        <select value={preferredVillageId} onChange={onNumberOptionChange} id="preferredVillageId" name="preferredVillageId" placeholder="Select village" >
+          {options.map((option, index) => {
+            const villageExists = villages.some(x => x.id === option.id);
+            return (
+              <option
+                key={index}
+                value={option.id}
+                hidden={!villageExists}
+              >
+                {option.name}
+              </option>
+            )
+          })}
+        </select>
+      </div>
     </div>
   );
 };

@@ -155,6 +155,12 @@ export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars["Boolean"];
 };
 
+export type IHeroInformation = {
+  __typename?: "HeroInformation";
+  readonly health: Scalars["Int"];
+  readonly village?: Maybe<IVillage>;
+};
+
 export type IHeroSettings = {
   __typename?: "HeroSettings";
   readonly autoAdventure: IAutoAdventureSettings;
@@ -235,6 +241,7 @@ export type IQuery = {
   readonly maxBuildingLevel: Scalars["Int"];
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>;
   readonly isBotRunning: Scalars["Boolean"];
+  readonly heroInformation: IHeroInformation;
   readonly buildingQueue: IBuildingQueue;
   readonly generalSettings: IGeneralSettings;
   readonly hero: IHeroSettings;
@@ -463,11 +470,16 @@ export type IResolversTypes = {
   BuildingInProgress: IBuildingInProgress;
   Date: Scalars["Date"];
   Boolean: Scalars["Boolean"];
+  HeroInformation: IHeroInformation;
+  Village: IVillage;
+  Coords: ICoords;
+  VillageResources: IVillageResources;
+  Resources: IResources;
+  VillageCapacity: IVillageCapacity;
   BuildingQueue: IBuildingQueue;
   QueuedBuilding: IQueuedBuilding;
   ID: Scalars["ID"];
   Cost: ICost;
-  Resources: IResources;
   GeneralSettings: IGeneralSettings;
   HeroSettings: IHeroSettings;
   AutoAdventureSettings: IAutoAdventureSettings;
@@ -476,10 +488,6 @@ export type IResolversTypes = {
   VillageSettings: IVillageSettings;
   GeneralVillageSettings: IGeneralVillageSettings;
   AutoBuildSettings: IAutoBuildSettings;
-  Village: IVillage;
-  Coords: ICoords;
-  VillageResources: IVillageResources;
-  VillageCapacity: IVillageCapacity;
   Mutation: {};
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput;
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput;
@@ -639,6 +647,18 @@ export type IGeneralVillageSettingsResolvers<
   allowTasks?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
 };
 
+export type IHeroInformationResolvers<
+  ContextType = any,
+  ParentType = IResolversTypes["HeroInformation"]
+> = {
+  health?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  village?: Resolver<
+    Maybe<IResolversTypes["Village"]>,
+    ParentType,
+    ContextType
+  >;
+};
+
 export type IHeroSettingsResolvers<
   ContextType = any,
   ParentType = IResolversTypes["HeroSettings"]
@@ -772,6 +792,11 @@ export type IQueryResolvers<
     IQueryBuildingsInProgressArgs
   >;
   isBotRunning?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
+  heroInformation?: Resolver<
+    IResolversTypes["HeroInformation"],
+    ParentType,
+    ContextType
+  >;
   buildingQueue?: Resolver<
     IResolversTypes["BuildingQueue"],
     ParentType,
@@ -948,6 +973,7 @@ export type IResolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
   GeneralSettings?: IGeneralSettingsResolvers<ContextType>;
   GeneralVillageSettings?: IGeneralVillageSettingsResolvers<ContextType>;
+  HeroInformation?: IHeroInformationResolvers<ContextType>;
   HeroSettings?: IHeroSettingsResolvers<ContextType>;
   ITaskSettings?: IITaskSettingsResolvers;
   Mutation?: IMutationResolvers<ContextType>;
