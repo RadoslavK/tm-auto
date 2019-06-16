@@ -10,9 +10,9 @@ import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
 import { buildingInfos, getBuildingCategory } from '../../index';
 import { parseBuildingsInProgress } from '../../parsers/buildings/parseBuildingsInProgress';
+import { isInfrastructure } from '../../utils/buildingUtils';
 import { log } from '../../utils/log';
 import { randomElement } from '../../utils/randomElement';
-import { isInfrastructure } from '../actions/build/startBuilding';
 import { ensureBuildingSpotPage, ensurePage } from '../actions/ensurePage';
 import { updateActualResources } from '../actions/village/updateResources';
 

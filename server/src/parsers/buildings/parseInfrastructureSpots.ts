@@ -1,7 +1,7 @@
 import { TravianPath } from '../../_enums/TravianPath';
 import { IActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
-import { isInfrastructure } from '../../controller/actions/build/startBuilding';
+import { isInfrastructure } from '../../utils/buildingUtils';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
 

@@ -1,10 +1,7 @@
-import { TravianPath } from '../_enums/TravianPath';
-import { getPage, killBrowser } from '../browser/getPage';
+import { killBrowser } from '../browser/getPage';
 import { context } from '../graphql/context';
 import { parseActiveVillageId } from '../parsers/villages/parseActiveVillageId';
 import { parseVillages } from '../parsers/villages/parseVillages';
-import { log } from '../utils/log';
-import { startBuilding } from './actions/build/startBuilding';
 import { updateBuildings } from './actions/build/updateBuildings';
 import { ensureLoggedIn } from './actions/ensureLoggedIn';
 import { ensureVillageSelected } from './actions/ensureVillageSelected';
@@ -14,7 +11,6 @@ import { TaskManager } from './tasks/taskManager';
 
 export class Controller {
   private _running: boolean = false;
-  private _buildTimer: NodeJS.Timeout;
 
   private _timeout: NodeJS.Timeout;
   private _taskManager: TaskManager;
@@ -57,17 +53,5 @@ export class Controller {
 
     this._running = false;
     await killBrowser();
-  };
-
-  public build = async (): Promise<void> => {
-    const { account } = context.user;
-
-    const page = await getPage();
-    await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
-
-    await startBuilding();
-
-    this._buildTimer = setTimeout(this.build, 20 * 1000);
-    log('gonna build next in 20 seconds');
   };
 }
