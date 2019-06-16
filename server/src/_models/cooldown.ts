@@ -10,4 +10,8 @@ export class Cooldown implements IParams {
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
   }
+
+  public randomDelay = (): number => {
+    return Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
+  };
 }

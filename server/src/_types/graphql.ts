@@ -42,11 +42,15 @@ export type IAutoBuildSettings = IITaskSettings & {
   __typename?: "AutoBuildSettings";
   readonly allow: Scalars["Boolean"];
   readonly coolDown: ICoolDown;
+  readonly autoCropFields: Scalars["Boolean"];
+  readonly minCrop: Scalars["Int"];
 };
 
 export type IAutoBuildVillageSettingsInput = {
   readonly allow: Scalars["Boolean"];
   readonly coolDown: ICoolDownInput;
+  readonly autoCropFields: Scalars["Boolean"];
+  readonly minCrop: Scalars["Int"];
 };
 
 export type IAvailableNewBuilding = {
@@ -139,10 +143,12 @@ export type IEnqueueBuildingInput = {
 
 export type IGeneralSettings = {
   __typename?: "GeneralSettings";
+  readonly allowTasks: Scalars["Boolean"];
   readonly autoBuild: Scalars["Boolean"];
 };
 
 export type IGeneralSettingsInput = {
+  readonly allowTasks: Scalars["Boolean"];
   readonly autoBuild: Scalars["Boolean"];
 };
 
@@ -531,6 +537,12 @@ export type IAutoBuildSettingsResolvers<
 > = {
   allow?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   coolDown?: Resolver<IResolversTypes["CoolDown"], ParentType, ContextType>;
+  autoCropFields?: Resolver<
+    IResolversTypes["Boolean"],
+    ParentType,
+    ContextType
+  >;
+  minCrop?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type IAvailableNewBuildingResolvers<
@@ -637,6 +649,7 @@ export type IGeneralSettingsResolvers<
   ContextType = any,
   ParentType = IResolversTypes["GeneralSettings"]
 > = {
+  allowTasks?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
   autoBuild?: Resolver<IResolversTypes["Boolean"], ParentType, ContextType>;
 };
 

@@ -50,6 +50,18 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
     }));
   };
 
+  const onNumberChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const {
+      name,
+      value,
+    } = e.currentTarget;
+
+    setState(prevState => ({
+      ...prevState,
+      [name]: +value,
+    }));
+  };
+
   const onCooldownChange = (updatedCooldown: ICoolDown) => {
     setState(prevState => ({
       ...prevState,
@@ -60,6 +72,8 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
   const {
     allow,
     coolDown,
+    autoCropFields,
+    minCrop,
   } = state;
 
   return (
@@ -71,6 +85,12 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
       <h3>Cooldown</h3>
       <label htmlFor="maxTravelTime">Cooldown</label>
       <CooldDown value={coolDown} onChange={onCooldownChange} />
+
+      <label htmlFor="autoCropFields">Auto crop fields</label>
+      <input type="checkbox" checked={autoCropFields} onChange={onChange} id="autoCropFields" name="autoCropFields" />
+
+      <label htmlFor="minCrop">Min crop</label>
+      <input type="number" value={minCrop} onChange={onNumberChange} id="minCrop" name="minCrop" />
     </div>
   );
 };

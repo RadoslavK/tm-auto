@@ -8,6 +8,7 @@ fragment TaskSettingsFragment on ITaskSettings {
 
 query GetGeneralSettings {
     generalSettings {
+        allowTasks
         autoBuild
     }
 }
@@ -33,6 +34,8 @@ query GetVillageSettings($villageId: Int!) {
         }
         autoBuild {
             ...TaskSettingsFragment
+            autoCropFields
+            minCrop
         }
     }
 }

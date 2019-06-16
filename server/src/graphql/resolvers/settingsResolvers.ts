@@ -1,7 +1,7 @@
 import { IResolvers } from '../../_types/graphql';
 import { settingsService } from '../../services/settingsService';
 import { context } from '../context';
-import set = Reflect.set;
+import { mapCoolDown } from '../mappers/settings/mapCoolDown';
 
 export const settingsResolvers: IResolvers = {
   Query: {
@@ -22,7 +22,10 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      settingsService.village(villageId).autoBuild.update(settings);
+      settingsService.village(villageId).autoBuild.update({
+        ...settings,
+        coolDown: mapCoolDown(settings.coolDown),
+      });
       return true;
     },
 
@@ -41,7 +44,10 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      settingsService.hero.autoAdventure.update(settings);
+      settingsService.hero.autoAdventure.update({
+        ...settings,
+        coolDown: mapCoolDown(settings.coolDown),
+      });
       return true;
     },
   },

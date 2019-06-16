@@ -1,23 +1,26 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { AdventureCriteria } from '../../_models/settings/tasks/AutoAdventureSettings';
+import { Cooldown } from '../../_models/cooldown';
+import { AdventureCriteria, AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
 import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
 import { getSecondsFromString } from '../../utils/getSeconds';
 import { getWithMaximum, getWithMinimum } from '../../utils/getWithMaximum';
 import { randomElement } from '../../utils/randomElement';
 import { ensurePage } from '../actions/ensurePage';
+import { IBotTask } from './taskManager';
 
-export class AutoAdventure {
+export class AutoAdventureTask implements IBotTask {
+  private _settings = (): AutoAdventureSettings => context.settings.hero.autoAdventure;
+
+  public coolDown = (): Cooldown => this._settings().coolDown;
+
+  public isExecutionAllowed = (): boolean => this._settings().allow;
+
   public execute = async (): Promise<void> => {
-    const adventureSettings = context.settings.hero.autoAdventure;
-
-    if (!adventureSettings.allow) {
-      return;
-    }
-
     const village = context.villages.village();
+    const settings = this._settings();
 
-    if (adventureSettings.preferredVillageId !== village.id) {
+    if (settings.preferredVillageId !== village.id) {
       return;
     }
 
@@ -41,8 +44,8 @@ export class AutoAdventure {
       page.waitForSelector('#adventureListForm'),
     ]);
 
-    const canDoNormal = hero.health >= adventureSettings.normalMinHealth;
-    const canDoHard = hero.health >= adventureSettings.hardMinHealth;
+    const canDoNormal = hero.health >= settings.normalMinHealth;
+    const canDoHard = hero.health >= settings.hardMinHealth;
 
 
     const adventureNodes = await page.$$('tr[id]');
@@ -58,14 +61,14 @@ export class AutoAdventure {
       }
     }));
     let suitableAdventures = adventures
-      .filter(x => x.duration <= adventureSettings.maxTravelTime)
+      .filter(x => x.duration <= settings.maxTravelTime)
       .filter(x => (x.isHard && canDoHard) || (!x.isHard && canDoNormal));
 
     if (!suitableAdventures.length) {
       return;
     }
 
-    if (adventureSettings.preferHard && canDoHard) {
+    if (settings.preferHard && canDoHard) {
       const hardAdventures = suitableAdventures.filter(x => x.isHard);
 
       if (hardAdventures.length) {
@@ -79,7 +82,7 @@ export class AutoAdventure {
 
     let selectedAdventureUrl: string;
     //if adventures present
-    switch (adventureSettings.adventureCriteria) {
+    switch (settings.adventureCriteria) {
       case AdventureCriteria.Random:
         selectedAdventureUrl = randomElement(suitableAdventures).url;
         break;

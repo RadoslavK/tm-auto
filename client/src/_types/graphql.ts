@@ -34,11 +34,15 @@ export type IAutoAdventureSettingsInput = {
 export type IAutoBuildSettings = IITaskSettings & {
   readonly allow: Scalars["Boolean"];
   readonly coolDown: ICoolDown;
+  readonly autoCropFields: Scalars["Boolean"];
+  readonly minCrop: Scalars["Int"];
 };
 
 export type IAutoBuildVillageSettingsInput = {
   readonly allow: Scalars["Boolean"];
   readonly coolDown: ICoolDownInput;
+  readonly autoCropFields: Scalars["Boolean"];
+  readonly minCrop: Scalars["Int"];
 };
 
 export type IAvailableNewBuilding = {
@@ -121,10 +125,12 @@ export type IEnqueueBuildingInput = {
 };
 
 export type IGeneralSettings = {
+  readonly allowTasks: Scalars["Boolean"];
   readonly autoBuild: Scalars["Boolean"];
 };
 
 export type IGeneralSettingsInput = {
+  readonly allowTasks: Scalars["Boolean"];
   readonly autoBuild: Scalars["Boolean"];
 };
 
@@ -530,7 +536,7 @@ export type ITaskSettingsFragmentFragment = Pick<IITaskSettings, "allow"> & {
 export type IGetGeneralSettingsQueryVariables = {};
 
 export type IGetGeneralSettingsQuery = {
-  readonly generalSettings: Pick<IGeneralSettings, "autoBuild">;
+  readonly generalSettings: Pick<IGeneralSettings, "allowTasks" | "autoBuild">;
 };
 
 export type IGetHeroSettingsQueryVariables = {};
@@ -557,7 +563,8 @@ export type IGetVillageSettingsQueryVariables = {
 export type IGetVillageSettingsQuery = {
   readonly villageSettings: {
     readonly general: Pick<IGeneralVillageSettings, "allowTasks">;
-    readonly autoBuild: ITaskSettingsFragmentFragment;
+    readonly autoBuild: Pick<IAutoBuildSettings, "autoCropFields" | "minCrop"> &
+      ITaskSettingsFragmentFragment;
   };
 };
 

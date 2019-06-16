@@ -1,12 +1,12 @@
 import { file } from 'babel-types';
+import { Cooldown } from '../_models/cooldown';
 import { GeneralSettings } from '../_models/settings/GeneralSettings';
 import { GeneralVillageSettings } from '../_models/settings/GeneralVillageSettings';
 import { AutoAdventureSettings } from '../_models/settings/tasks/AutoAdventureSettings';
 import { AutoBuildSettings } from '../_models/settings/tasks/AutoBuildSettings';
-import { VillageSettings } from '../_models/settings/VillageSettings';
 import { context } from '../graphql/context';
 import { fileUtils } from '../utils/fileUtils';
-import set = Reflect.set;
+
 
 const basePath = 'settings';
 const generalPath = `${basePath}/general.json`;
@@ -23,7 +23,7 @@ const villagePath = (villageId: number) => ({
 export const settingsService = {
   general: {
     load(): GeneralSettings {
-      return fileUtils.load(generalPath, GeneralSettings, new GeneralSettings());
+      return fileUtils.load(generalPath, GeneralSettings);
     },
     update(settings: GeneralSettings): void {
       context.settings.general = settings;
@@ -34,7 +34,7 @@ export const settingsService = {
   hero: {
     autoAdventure: {
       load(): AutoAdventureSettings {
-        return fileUtils.load(heroPath.autoAdventure, AutoAdventureSettings, new AutoAdventureSettings());
+        return fileUtils.load(heroPath.autoAdventure, AutoAdventureSettings);
       },
       update(settings: AutoAdventureSettings): void {
         context.settings.hero.autoAdventure = settings;

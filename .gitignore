@@ -1,12 +1,8 @@
-client/node_modules
-client/yarn-error.log
 client/dist
 
-server/yarn-error.log
-server/node_modules
+server/settings
+server/user_data
 
 yarn-error.log
 node_modules
-user_data
-settings
 .idea

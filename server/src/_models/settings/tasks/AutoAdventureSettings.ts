@@ -31,5 +31,11 @@ export class AutoAdventureSettings implements IParams {
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
+
+    if (this.coolDown instanceof Cooldown) {
+      return;
+    }
+
+    this.coolDown = new Cooldown(this.coolDown);
   }
 }

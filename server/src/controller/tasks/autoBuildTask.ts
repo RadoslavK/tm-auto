@@ -4,7 +4,9 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { Tribe } from '../../_enums/Tribe';
 import { Buildings } from '../../_models/buildings';
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
+import { Cooldown } from '../../_models/cooldown';
 import { Resources } from '../../_models/misc/resources';
+import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { Village } from '../../_models/village/village';
 import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
@@ -15,13 +17,9 @@ import { log } from '../../utils/log';
 import { randomElement } from '../../utils/randomElement';
 import { ensureBuildingSpotPage, ensurePage } from '../actions/ensurePage';
 import { updateActualResources } from '../actions/village/updateResources';
+import { IBotTask } from './taskManager';
 
-interface IAutoBuildSettings {
-  readonly autoCropFields: boolean;
-  readonly minCrop: number;
-}
-
-export class AutoBuild {
+export class AutoBuildTask implements IBotTask {
   private readonly _village: Village;
   private readonly _buildings: Buildings;
 
@@ -31,6 +29,12 @@ export class AutoBuild {
     this._village = village;
     this._buildings = village.buildings;
   }
+
+  private _settings = (): AutoBuildSettings => context.settings.village(this._village.id).autoBuild;
+
+  public isExecutionAllowed = (): boolean => context.settings.general.autoBuild && this._settings().allow;
+
+  public coolDown = (): Cooldown => this._settings().coolDown;
 
   public execute = async (): Promise<void> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
@@ -85,12 +89,7 @@ export class AutoBuild {
       return;
     }
 
-    //  TODO: load!
-    const settings: IAutoBuildSettings = {
-      autoCropFields: false,
-      minCrop: 0,
-    };
-
+    const settings = this._settings();
     const cost = buildingInfos[queuedBuilding.type][queuedBuilding.level - 1].cost;
     const resources = cost.resources;
     resources.add(new Resources({ crop: settings.minCrop }));
