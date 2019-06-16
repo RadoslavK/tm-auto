@@ -1,5 +1,7 @@
 import { IResolvers } from '../../_types/graphql';
+import { settingsService } from '../../services/settingsService';
 import { context } from '../context';
+import set = Reflect.set;
 
 export const settingsResolvers: IResolvers = {
   Query: {
@@ -10,7 +12,7 @@ export const settingsResolvers: IResolvers = {
 
   Mutation: {
     updateGeneralSettings: (_, args) => {
-      context.settings.general = args.input.settings;
+      settingsService.general.update(args.input.settings);
       return true;
     },
 
@@ -20,7 +22,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      context.settings.village(villageId).autoBuild = settings;
+      settingsService.village(villageId).autoBuild.update(settings);
       return true;
     },
 
@@ -30,7 +32,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      context.settings.village(villageId).general = settings;
+      settingsService.village(villageId).general.update(settings);
       return true;
     },
 
@@ -39,7 +41,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      context.settings.hero.autoAdventure = settings;
+      settingsService.hero.autoAdventure.update(settings);
       return true;
     },
   },

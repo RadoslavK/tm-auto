@@ -1,9 +1,11 @@
+import { settingsService } from '../../services/settingsService';
 import { GeneralSettings } from './GeneralSettings';
 import { HeroSettings } from './HeroSettings';
 import { VillageSettings } from './VillageSettings';
+import set = Reflect.set;
 
 export class Settings {
-  public general: GeneralSettings = new GeneralSettings();
+  public general: GeneralSettings = settingsService.general.load();
   public hero: HeroSettings = new HeroSettings();
 
   private readonly _villageSettings: Record<number, VillageSettings> = {};
@@ -17,4 +19,8 @@ export class Settings {
 
     return settings;
   };
+
+  public setVillage = (villageId: number, settings: VillageSettings): void => {
+    this._villageSettings[villageId] = settings;
+  }
 }

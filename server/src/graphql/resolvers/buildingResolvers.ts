@@ -1,8 +1,8 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { IBuildingQueue, IResolvers } from '../../_types/graphql';
-import { MovingDirection } from '../../services/buildingQueueManager';
-import { BuildingQueueManager } from '../../services/buildingQueueManager';
-import { AvailableBuildingTypesManager } from '../../services/availableBuildingTypesManager';
+import { MovingDirection } from '../../services/buildingQueueService';
+import { BuildingQueueService } from '../../services/buildingQueueService';
+import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import { context } from '../context';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
@@ -36,7 +36,7 @@ export const buildingResolvers: IResolvers = {
       const village = context.villages.village(villageId);
       const buildings = village.buildings.queue.buildings();
       const totalCost = village.buildings.queue.totalCost();
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       const mapQueuedBuilding = mapQueuedBuildingFactory(queueManager);
 
       return {
@@ -53,7 +53,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args.input;
 
-      const manager = new AvailableBuildingTypesManager(villageId);
+      const manager = new AvailableBuildingTypesService(villageId);
       return manager.availableBuildingTypes(fieldId).map(mapAvailableNewBuilding);
     },
   },
@@ -64,7 +64,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args;
 
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       queueManager.clearQueue();
 
       return true;
@@ -77,7 +77,7 @@ export const buildingResolvers: IResolvers = {
       } = args.input;
 
       await pubSub.publish('TEST', {  lolo: 6 });
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       queueManager.enqueueBuilding(enqueuedBuilding);
 
       return true;
@@ -89,7 +89,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       queueManager.dequeueBuilding(queueId);
 
       return true;
@@ -101,7 +101,7 @@ export const buildingResolvers: IResolvers = {
         ...input
       } = args.input;
 
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       queueManager.dequeueBuildingAtField(input);
 
       return true;
@@ -113,7 +113,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
     },
 
@@ -123,7 +123,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueManager(villageId);
+      const queueManager = new BuildingQueueService(villageId);
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
     },
   },

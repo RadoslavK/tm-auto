@@ -6,7 +6,7 @@ import { fieldIds } from '../constants/fieldIds';
 import { context } from '../graphql/context';
 import { buildingInfos, buildingsConditions } from '../index';
 
-export class AvailableBuildingTypesManager {
+export class AvailableBuildingTypesService {
   private readonly _village: Village;
 
   constructor(villageId: number) {

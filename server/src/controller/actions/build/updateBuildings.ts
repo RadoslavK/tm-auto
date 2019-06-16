@@ -3,7 +3,7 @@ import { context } from '../../../graphql/context';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
-import { BuildingQueueManager } from '../../../services/buildingQueueManager';
+import { BuildingQueueService } from '../../../services/buildingQueueService';
 import { ensurePage } from '../ensurePage';
 
 export const updateBuildings = async (): Promise<void> => {
@@ -21,5 +21,5 @@ export const updateBuildings = async (): Promise<void> => {
   const infrastructureSpots = await parseInfrastructureSpots();
   village.buildings.updateActual(infrastructureSpots);
 
-  new BuildingQueueManager(village.id).correctBuildingQueue();
+  new BuildingQueueService(village.id).correctBuildingQueue();
 };

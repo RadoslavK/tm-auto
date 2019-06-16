@@ -1,3 +1,4 @@
+import { settingsService } from '../../services/settingsService';
 import { AutoAdventureSettings } from './tasks/AutoAdventureSettings';
 
 interface IParams {
@@ -5,7 +6,7 @@ interface IParams {
 }
 
 export class HeroSettings implements IParams {
-  public autoAdventure: AutoAdventureSettings = new AutoAdventureSettings();
+  public autoAdventure: AutoAdventureSettings = settingsService.hero.autoAdventure.load();
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

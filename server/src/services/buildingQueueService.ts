@@ -25,7 +25,7 @@ export enum MovingDirection {
   Down = 1,
 }
 
-export class BuildingQueueManager {
+export class BuildingQueueService {
   private readonly _village: Village;
 
   constructor(villageId: number) {
