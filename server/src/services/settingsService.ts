@@ -1,5 +1,5 @@
 import { file } from 'babel-types';
-import { Cooldown } from '../_models/cooldown';
+import { CoolDown } from '../_models/coolDown';
 import { GeneralSettings } from '../_models/settings/GeneralSettings';
 import { GeneralVillageSettings } from '../_models/settings/GeneralVillageSettings';
 import { AutoAdventureSettings } from '../_models/settings/tasks/AutoAdventureSettings';

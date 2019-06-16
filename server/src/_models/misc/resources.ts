@@ -29,6 +29,25 @@ export class Resources implements IParams, IComparable<Resources> {
     this.freeCrop += addition.freeCrop;
   };
 
+  public subtract = (subtraction: Resources): Resources => {
+    return new Resources({
+      wood: this.wood - subtraction.wood,
+      clay: this.clay - subtraction.clay,
+      iron: this.iron - subtraction.iron,
+      crop: this.crop - subtraction.crop,
+      freeCrop: this.freeCrop - subtraction.freeCrop,
+    })};
+
+  public multiply = (multiplicator: number): Resources => {
+    return new Resources({
+      wood: this.wood * multiplicator,
+      clay: this.clay * multiplicator,
+      iron: this.iron * multiplicator,
+      crop: this.crop * multiplicator,
+      freeCrop: this.freeCrop * multiplicator,
+    });
+  };
+
   public isGreaterOrEqualThan = (other: Resources): boolean =>
     this.wood >= other.wood
     && this.clay >= other.clay

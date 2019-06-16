@@ -1,12 +1,12 @@
 import { Resources } from './resources';
 
 interface IParams {
-  buildingTime: number;
+  buildTime: number;
   resources: Resources;
 }
 
 export class Cost implements IParams {
-  public buildingTime: number = 0;
+  public buildTime: number = 0;
   public resources: Resources = new Resources();
 
   constructor(params: Partial<IParams> = {}) {
@@ -14,7 +14,7 @@ export class Cost implements IParams {
   }
 
   public add = (addition: Cost): void => {
-    this.buildingTime += addition.buildingTime;
+    this.buildTime += addition.buildTime;
     this.resources.add(addition.resources);
   };
 }

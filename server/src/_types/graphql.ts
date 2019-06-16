@@ -125,7 +125,7 @@ export type ICoords = {
 export type ICost = {
   __typename?: "Cost";
   readonly resources: IResources;
-  readonly buildingTime: Scalars["Int"];
+  readonly buildTime: Scalars["Int"];
 };
 
 export type IDequeueBuildingAtFieldInput = {
@@ -637,7 +637,7 @@ export type ICostResolvers<
   ParentType = IResolversTypes["Cost"]
 > = {
   resources?: Resolver<IResolversTypes["Resources"], ParentType, ContextType>;
-  buildingTime?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
+  buildTime?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export interface IDateScalarConfig

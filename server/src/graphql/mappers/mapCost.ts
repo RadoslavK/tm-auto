@@ -3,6 +3,6 @@ import { ICost } from '../../_types/graphql';
 import { mapResources } from './mapResources';
 
 export const mapCost = (cost: Cost): ICost => ({
-  buildingTime: cost.buildingTime,
+  buildTime: cost.buildTime,
   resources: mapResources(cost.resources),
 });

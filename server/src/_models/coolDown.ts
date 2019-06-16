@@ -3,7 +3,7 @@ interface IParams {
   max: number;
 }
 
-export class Cooldown implements IParams {
+export class CoolDown implements IParams {
   min: number = 0;
   max: number = 0;
 

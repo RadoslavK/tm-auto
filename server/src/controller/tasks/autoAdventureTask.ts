@@ -1,5 +1,5 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { Cooldown } from '../../_models/cooldown';
+import { CoolDown } from '../../_models/coolDown';
 import { AdventureCriteria, AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
 import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
@@ -10,15 +10,11 @@ import { ensurePage } from '../actions/ensurePage';
 import { IBotTask } from './taskManager';
 
 export class AutoAdventureTask implements IBotTask {
-  private _settings = (): AutoAdventureSettings => context.settings.hero.autoAdventure;
-
-  public coolDown = (): Cooldown => this._settings().coolDown;
-
-  public isExecutionAllowed = (): boolean => this._settings().allow;
+  public settings = (): AutoAdventureSettings => context.settings.hero.autoAdventure;
 
   public execute = async (): Promise<void> => {
     const village = context.villages.village();
-    const settings = this._settings();
+    const settings = this.settings();
 
     if (settings.preferredVillageId !== village.id) {
       return;

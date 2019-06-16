@@ -108,7 +108,7 @@ export type ICoords = {
 
 export type ICost = {
   readonly resources: IResources;
-  readonly buildingTime: Scalars["Int"];
+  readonly buildTime: Scalars["Int"];
 };
 
 export type IDequeueBuildingAtFieldInput = {
@@ -462,7 +462,7 @@ export type IResourcesFragmentFragment = Pick<
   "wood" | "clay" | "iron" | "crop" | "total" | "freeCrop"
 >;
 
-export type ICostFragmentFragment = Pick<ICost, "buildingTime"> & {
+export type ICostFragmentFragment = Pick<ICost, "buildTime"> & {
   readonly resources: IResourcesFragmentFragment;
 };
 

@@ -7,7 +7,7 @@ interface IProps {
   readonly value: ICoolDown;
 }
 
-export const CooldDown: React.FunctionComponent<IProps> = (props) => {
+export const CoolDown: React.FunctionComponent<IProps> = (props) => {
   const {
     onChange,
     value,

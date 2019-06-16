@@ -1,5 +1,6 @@
 import { Buildings } from '../buildings';
 import { Coords } from '../coords';
+import { Units } from '../units';
 import { VillageResources } from './villageResources';
 
 interface IParams {
@@ -13,6 +14,7 @@ interface IParams {
 
 export class Village implements IParams {
   public readonly buildings: Buildings = new Buildings();
+  public readonly units: Units = new Units();
   public coords: Coords = new Coords();
   public id: number = 0;
   public isCapital: boolean = false;

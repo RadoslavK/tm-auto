@@ -4,7 +4,7 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { Tribe } from '../../_enums/Tribe';
 import { Buildings } from '../../_models/buildings';
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
-import { Cooldown } from '../../_models/cooldown';
+import { CoolDown } from '../../_models/coolDown';
 import { Resources } from '../../_models/misc/resources';
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { Village } from '../../_models/village/village';
@@ -30,11 +30,7 @@ export class AutoBuildTask implements IBotTask {
     this._buildings = village.buildings;
   }
 
-  private _settings = (): AutoBuildSettings => context.settings.village(this._village.id).autoBuild;
-
-  public isExecutionAllowed = (): boolean => context.settings.general.autoBuild && this._settings().allow;
-
-  public coolDown = (): Cooldown => this._settings().coolDown;
+  public settings = (): AutoBuildSettings => context.settings.village(this._village.id).autoBuild;
 
   public execute = async (): Promise<void> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
@@ -89,7 +85,7 @@ export class AutoBuildTask implements IBotTask {
       return;
     }
 
-    const settings = this._settings();
+    const settings = this.settings();
     const cost = buildingInfos[queuedBuilding.type][queuedBuilding.level - 1].cost;
     const resources = cost.resources;
     resources.add(new Resources({ crop: settings.minCrop }));

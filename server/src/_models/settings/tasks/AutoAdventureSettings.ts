@@ -1,6 +1,6 @@
 import { ITaskSettings } from '../../../_types/ITaskSettings';
 import { getSeconds } from '../../../utils/getSeconds';
-import { Cooldown } from '../../cooldown';
+import { CoolDown } from '../../coolDown';
 
 export enum AdventureCriteria {
   Closest,
@@ -20,7 +20,7 @@ interface IParams extends ITaskSettings {
 
 export class AutoAdventureSettings implements IParams {
   public allow: boolean = true;
-  public coolDown: Cooldown = new Cooldown();
+  public coolDown: CoolDown = new CoolDown();
 
   adventureCriteria: AdventureCriteria = AdventureCriteria.Closest;
   preferHard: boolean = false;
@@ -32,10 +32,10 @@ export class AutoAdventureSettings implements IParams {
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
 
-    if (this.coolDown instanceof Cooldown) {
+    if (this.coolDown instanceof CoolDown) {
       return;
     }
 
-    this.coolDown = new Cooldown(this.coolDown);
+    this.coolDown = new CoolDown(this.coolDown);
   }
 }

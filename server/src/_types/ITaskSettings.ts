@@ -1,6 +1,6 @@
-import { Cooldown } from '../_models/cooldown';
+import { CoolDown } from '../_models/coolDown';
 
 export interface ITaskSettings {
   allow: boolean;
-  coolDown: Cooldown;
+  coolDown: CoolDown;
 }

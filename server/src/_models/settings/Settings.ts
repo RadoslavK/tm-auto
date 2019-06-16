@@ -2,7 +2,6 @@ import { settingsService } from '../../services/settingsService';
 import { GeneralSettings } from './GeneralSettings';
 import { HeroSettings } from './HeroSettings';
 import { VillageSettings } from './VillageSettings';
-import set = Reflect.set;
 
 export class Settings {
   public general: GeneralSettings = settingsService.general.load();

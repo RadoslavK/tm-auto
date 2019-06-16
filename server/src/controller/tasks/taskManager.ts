@@ -1,6 +1,6 @@
 import { TravianPath } from '../../_enums/TravianPath';
-import { Cooldown } from '../../_models/cooldown';
 import { Village } from '../../_models/village/village';
+import { ITaskSettings } from '../../_types/ITaskSettings';
 import { context } from '../../graphql/context';
 import { Events } from '../../graphql/subscriptions/events';
 import { pubSub } from '../../graphql/subscriptions/pubSub';
@@ -11,12 +11,13 @@ import { updateBuildings } from '../actions/build/updateBuildings';
 import { ensurePage } from '../actions/ensurePage';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updateResources } from '../actions/village/updateResources';
+import { updateUnitsInformation } from '../updateUnitsInformation';
 import { AutoAdventureTask } from './autoAdventureTask';
 import { AutoBuildTask } from './autoBuildTask';
+import { AutoUnitsTask } from './autoUnitsTask';
 
 export interface IBotTask {
-  readonly isExecutionAllowed: () => boolean;
-  readonly coolDown: () => Cooldown;
+  readonly settings: () => ITaskSettings;
   readonly execute: () => Promise<void>;
 }
 
@@ -31,13 +32,13 @@ class BotTaskEngine<TArgs = undefined> {
   private _isExecutionReady = (): boolean => this._timeOfNextExecution < new Date();
 
   public execute = async (): Promise<void> => {
-    if (!this._task.isExecutionAllowed() || !this._isExecutionReady()) {
+    if (!this._task.settings().allow || !this._isExecutionReady()) {
       return;
     }
 
     const timeOfStart = new Date();
     await this._task.execute();
-    const coolDown = this._task.coolDown();
+    const coolDown = this._task.settings().coolDown;
     const delay = coolDown.randomDelay();
 
     this._timeOfNextExecution = timeOfStart;
@@ -99,12 +100,14 @@ export class TaskManager {
 
       await updateResources();
       await updateBuildings();
+      await updateUnitsInformation();
 
       let taskEngine = this._villageTasks[village.id];
 
       if (!taskEngine) {
         taskEngine = new VillageBotTasksEngine(village, [
           AutoBuildTask,
+          AutoUnitsTask,
         ]);
         this._villageTasks[village.id] = taskEngine;
       }

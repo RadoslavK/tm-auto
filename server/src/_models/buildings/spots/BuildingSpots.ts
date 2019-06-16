@@ -17,5 +17,7 @@ export class BuildingSpots {
 
   public at = (fieldId: number): BuildingSpot => this._buildings[fieldId];
 
+  public ofType = (type: BuildingType): BuildingSpot => this.buildings().find(x => x.type === type);
+
   public isBuilt = (type: BuildingType): boolean => this.buildings().some(b => b.type === type && b.level.actual > 0);
 }

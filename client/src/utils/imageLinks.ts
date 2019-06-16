@@ -16,7 +16,7 @@ export const imageLinks = {
 
   cost: {
     resources: this.resources,
-    buildingTime: `${baseUrl}/resources/time.png`,
+    buildTime: `${baseUrl}/resources/time.png`,
   },
 
   actions: {

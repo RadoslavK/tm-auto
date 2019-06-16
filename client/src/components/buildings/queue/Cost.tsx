@@ -47,8 +47,8 @@ const useStyles = makeStyles({
   freeCrop: {
     backgroundImage: `url("${imageLinks.resources.freeCrop}")`,
   },
-  buildingTime: {
-    backgroundImage: `url("${imageLinks.cost.buildingTime}")`,
+  buildTime: {
+    backgroundImage: `url("${imageLinks.cost.buildTime}")`,
   },
 });
 
@@ -57,12 +57,12 @@ const Cost: React.FunctionComponent<IProps> = (props) => {
     className,
     cost: {
       resources,
-      buildingTime,
+      buildTime,
     },
   } = props;
 
   const classes = useStyles({});
-  const time = formatTimeFromSeconds(buildingTime);
+  const time = formatTimeFromSeconds(buildTime);
 
   return (
     <div className={classNames(className, classes.root)}>
@@ -84,7 +84,7 @@ const Cost: React.FunctionComponent<IProps> = (props) => {
       <span className={classNames(classes.image, classes.freeCrop)}/>
       <span className={classes.value}>{resources.freeCrop}</span>
 
-      <span className={classNames(classes.image, classes.buildingTime)}/>
+      <span className={classNames(classes.image, classes.buildTime)}/>
       <span className={classes.value}>{time}</span>
     </div>
   );

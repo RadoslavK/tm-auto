@@ -7,7 +7,7 @@ import {
   IUpdateAutoBuildVillageSettingsMutation,
   IUpdateAutoBuildVillageSettingsMutationVariables,
 } from '../../../_types/graphql';
-import { CooldDown } from '../../controls/Cooldown';
+import { CoolDown } from '../../controls/Cooldown';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
@@ -84,7 +84,7 @@ export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
 
       <h3>Cooldown</h3>
       <label htmlFor="maxTravelTime">Cooldown</label>
-      <CooldDown value={coolDown} onChange={onCooldownChange} />
+      <CoolDown value={coolDown} onChange={onCooldownChange} />
 
       <label htmlFor="autoCropFields">Auto crop fields</label>
       <input type="checkbox" checked={autoCropFields} onChange={onChange} id="autoCropFields" name="autoCropFields" />

@@ -22,10 +22,20 @@ const port = 3000;
 const clientPath = path.join(__dirname, '..', '..', 'client/dist');
 const imagesPath = path.join(__dirname, 'resources', 'images');
 const buildingInfoPath = path.join(__dirname, '..', 'resources', 'buildingInfo');
+const unitsInfoPath = path.join(__dirname, '..', 'resources', 'unitsInfo.json');
 
 interface IBuildingInfo {
   readonly cost: Cost;
 }
+
+interface IUnitInfo {
+  readonly buildingType: BuildingType;
+  readonly cost: Cost;
+  readonly name: string;
+  readonly tribe: Tribe;
+}
+
+export const unitInfos: Record<number, IUnitInfo> = JSON.parse(fs.readFileSync(unitsInfoPath).toString());
 
 export const buildingInfos: Record<number, readonly IBuildingInfo[]> = {};
 
@@ -39,7 +49,7 @@ const initBuildingsInfo = () => {
 
     buildingInfos[buildingType] = JSON.parse(text).map((info): IBuildingInfo => ({
       cost: new Cost({
-        buildingTime: info.buildingTime,
+        buildTime: info.buildTime,
         resources: new Resources({
           ...info.cost.resources,
           freeCrop: info.cost.freeCrop,

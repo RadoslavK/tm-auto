@@ -13,7 +13,7 @@ import {
   IUpdateAutoAdventureSettingsMutation,
   IUpdateAutoAdventureSettingsMutationVariables,
 } from '../../../_types/graphql';
-import { CooldDown } from '../../controls/Cooldown';
+import { CoolDown } from '../../controls/Cooldown';
 
 interface IProps {
   readonly settings: IAutoAdventureSettings;
@@ -170,7 +170,7 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
       <div>
         <h3>Cooldown</h3>
         <label htmlFor="maxTravelTime">Cooldown</label>
-        <CooldDown value={coolDown} onChange={onCooldownChange} />
+        <CoolDown value={coolDown} onChange={onCooldownChange} />
       </div>
 
       <div>

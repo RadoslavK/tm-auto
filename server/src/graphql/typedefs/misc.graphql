@@ -11,7 +11,7 @@ type Resources {
 
 type Cost {
     resources: Resources!
-    buildingTime: Int!
+    buildTime: Int!
 }
 
 type Coords {

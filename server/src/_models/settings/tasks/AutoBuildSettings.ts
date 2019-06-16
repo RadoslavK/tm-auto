@@ -1,5 +1,5 @@
 import { ITaskSettings } from '../../../_types/ITaskSettings';
-import { Cooldown } from '../../cooldown';
+import { CoolDown } from '../../coolDown';
 
 interface IParams extends ITaskSettings {
   readonly autoCropFields: boolean;
@@ -8,7 +8,7 @@ interface IParams extends ITaskSettings {
 
 export class AutoBuildSettings implements IParams {
   public allow: boolean = true;
-  public coolDown: Cooldown = new Cooldown();
+  public coolDown: CoolDown = new CoolDown();
 
   readonly autoCropFields: boolean = false;
   readonly minCrop: number = 0;
@@ -16,10 +16,10 @@ export class AutoBuildSettings implements IParams {
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
 
-    if (this.coolDown instanceof Cooldown) {
+    if (this.coolDown instanceof CoolDown) {
       return;
     }
 
-    this.coolDown = new Cooldown(this.coolDown);
+    this.coolDown = new CoolDown(this.coolDown);
   }
 }
