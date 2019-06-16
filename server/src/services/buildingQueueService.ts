@@ -6,7 +6,7 @@ import { IBuildingSpot } from '../_types/graphql';
 import { context } from '../graphql/context';
 import { Events } from '../graphql/subscriptions/events';
 import { pubSub } from '../graphql/subscriptions/pubSub';
-import { buildingInfos, buildingsConditions } from '../index';
+import { buildingInfos } from '../index';
 import { getWithMaximum } from '../utils/getWithMaximum';
 
 export interface IEnqueuedBuilding {
@@ -41,7 +41,7 @@ export class BuildingQueueService {
 
     const spot = this._village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.total();
-    const maxLevel = buildingInfos[type].length;
+    const maxLevel = buildingInfos[type].maxLevel;
     let enqueued: boolean = false;
 
     for (let i = 1; i <= levels; i++) {
@@ -204,10 +204,10 @@ export class BuildingQueueService {
       : offsets[building.fieldId]);
 
     const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
-    const conditions = buildingsConditions[checkedBuilding.type];
+    const conditions = buildingInfos[checkedBuilding.type].conditions;
 
     if (conditions.type > BuildingType.Crop) {
-      const maxLevel = buildingInfos[checkedBuilding.type].length;
+      const maxLevel = buildingInfos[checkedBuilding.type].maxLevel;
 
       const anyCompleted = normalizedBuildings
         .filter(b => b.type === checkedBuilding.type)
@@ -298,7 +298,7 @@ export class BuildingQueueService {
       return true;
     }
 
-    const conditions = buildingsConditions[queuedBuilding.type];
+    const conditions = buildingInfos[queuedBuilding.type].conditions;
 
     if ((conditions.capital === CapitalCondition.Prohibited && this._village.isCapital)
       || (conditions.capital === CapitalCondition.Required && !this._village.isCapital)) {
@@ -330,7 +330,7 @@ export class BuildingQueueService {
             return true;
           }
         } else {
-          const maxLevel = buildingInfos[conditions.type].length;
+          const maxLevel = buildingInfos[conditions.type].maxLevel;
 
           const existingBuildings = sameTypeBuildings.map(
             b => ({

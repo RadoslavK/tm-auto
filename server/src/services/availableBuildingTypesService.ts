@@ -4,7 +4,7 @@ import { BuildingConditions, CapitalCondition } from '../_models/buildings/build
 import { Village } from '../_models/village/village';
 import { fieldIds } from '../constants/fieldIds';
 import { context } from '../graphql/context';
-import { buildingInfos, buildingsConditions } from '../index';
+import { buildingInfos } from '../index';
 
 export class AvailableBuildingTypesService {
   private readonly _village: Village;
@@ -83,7 +83,7 @@ export class AvailableBuildingTypesService {
               continue;
           }
 
-          const buildingConditions = buildingsConditions[type];
+          const buildingConditions = buildingInfos[type].conditions;
           const meetVillageConditions = this.newBuildingMeetsConditions(buildingConditions);
 
           if (!meetVillageConditions) {
@@ -105,7 +105,7 @@ export class AvailableBuildingTypesService {
             }
 
             //requirements for more than 1 building of that type
-            if (!spotsOfType.some(b => b.level.total === buildingInfos[b.type].length)) {
+            if (!spotsOfType.some(b => b.level.total === buildingInfos[b.type].maxLevel)) {
               continue;
             }
           }
@@ -150,7 +150,7 @@ export class AvailableBuildingTypesService {
       }
     }
     else {
-      const completedBuildingExists = buildings.some(b => b.level.total === buildingInfos[b.type].length);
+      const completedBuildingExists = buildings.some(b => b.level.total === buildingInfos[b.type].maxLevel);
 
       if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level

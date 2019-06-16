@@ -1,8 +1,8 @@
 import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress';
 import { IBuildingInProgress } from '../../_types/graphql';
-import { buildingNames } from '../../constants/buildingNames';
+import { buildingInfos } from '../../index';
 
 export const mapBuildingInProgress = (building: BuildingInProgress): IBuildingInProgress => ({
   ...building,
-  name: buildingNames[building.type],
+  name: buildingInfos[building.type].name,
 });

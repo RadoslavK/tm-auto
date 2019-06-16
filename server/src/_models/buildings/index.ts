@@ -1,11 +1,9 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { IBuildingSpot } from '../../_types/graphql';
-import { buildingNames } from '../../constants/buildingNames';
 import { buildingInfos } from '../../index';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
-import { BuildingSpot } from './spots/buildingSpot';
 import { BuildingSpots } from './spots/BuildingSpots';
 
 export interface IActualBuilding {
@@ -49,9 +47,9 @@ export class Buildings {
         level: {
           ...b.level,
           total: b.level.total(),
-          max: buildingInfos[type].length,
+          max: buildingInfos[type].maxLevel,
         },
-        name: buildingNames[type],
+        name: buildingInfos[type].name,
       };
     });
   };

@@ -16,8 +16,6 @@ export class BuildingQueue {
       : this._buildings.find(x => getBuildingSpotType(x.type) === type);
   };
 
-  public popFirst = (): QueuedBuilding | undefined => this._buildings.shift();
-
   public removeLastAtField = (fieldId: number): number => {
     const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
 
@@ -51,9 +49,8 @@ export class BuildingQueue {
 
   public totalCost = (): Cost =>
     this._buildings.reduce((reduced, building) => {
-      const cost = buildingInfos[building.fieldId][building.level - 1].cost;
-      reduced.add(cost);
-      return reduced;
+      const cost = buildingInfos[building.type].costs[building.level];
+      return reduced.add(cost);
     }, new Cost());
 
   public moveUp = (queueId: string): void => {

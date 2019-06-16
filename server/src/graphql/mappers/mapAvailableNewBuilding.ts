@@ -1,8 +1,8 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { IAvailableNewBuilding } from '../../_types/graphql';
-import { buildingNames } from '../../constants/buildingNames';
+import { buildingInfos } from '../../index';
 
 export const mapAvailableNewBuilding = (type: BuildingType): IAvailableNewBuilding => ({
   type,
-  name: buildingNames[type],
+  name: buildingInfos[type].name,
 });

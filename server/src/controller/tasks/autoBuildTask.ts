@@ -4,13 +4,12 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { Tribe } from '../../_enums/Tribe';
 import { Buildings } from '../../_models/buildings';
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
-import { CoolDown } from '../../_models/coolDown';
 import { Resources } from '../../_models/misc/resources';
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { Village } from '../../_models/village/village';
 import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
-import { buildingInfos, getBuildingCategory } from '../../index';
+import { buildingInfos } from '../../index';
 import { parseBuildingsInProgress } from '../../parsers/buildings/parseBuildingsInProgress';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { log } from '../../utils/log';
@@ -86,9 +85,8 @@ export class AutoBuildTask implements IBotTask {
     }
 
     const settings = this.settings();
-    const cost = buildingInfos[queuedBuilding.type][queuedBuilding.level - 1].cost;
-    const resources = cost.resources;
-    resources.add(new Resources({ crop: settings.minCrop }));
+    const cost = buildingInfos[queuedBuilding.type].costs[queuedBuilding.level];
+    const resources = cost.resources.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
     const currentResources = this._village.resources.amount;
@@ -134,7 +132,7 @@ export class AutoBuildTask implements IBotTask {
       this._addedCroplandInQueue = true;
 
       //dost surovin a zaroven prazdna res queue
-      const cropLandResourceCost = buildingInfos[BuildingType.Crop][newCropLandLevel - 1].cost.resources;
+      const cropLandResourceCost = buildingInfos[BuildingType.Crop].costs[newCropLandLevel].resources;
 
       if (this._village.resources.amount.isLowerThan(cropLandResourceCost)
         || !this._village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)) {
@@ -148,7 +146,7 @@ export class AutoBuildTask implements IBotTask {
   private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued: boolean = true): Promise<void> =>{
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
-    const category = getBuildingCategory(queuedBuilding.type);
+    const category = buildingInfos[queuedBuilding.type].category;
 
     if (isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > 0) {
       // need to select correct section for new building

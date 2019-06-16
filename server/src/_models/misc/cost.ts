@@ -11,10 +11,18 @@ export class Cost implements IParams {
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
+
+    if (this.resources instanceof Resources) {
+      return;
+    }
+
+    this.resources = new Resources(this.resources);
   }
 
-  public add = (addition: Cost): void => {
-    this.buildTime += addition.buildTime;
-    this.resources.add(addition.resources);
+  public add = (addition: Cost): Cost => {
+    return new Cost({
+      buildTime: this.buildTime + addition.buildTime,
+      resources: this.resources.add(addition.resources),
+    })
   };
 }

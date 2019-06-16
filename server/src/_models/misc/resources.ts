@@ -21,12 +21,14 @@ export class Resources implements IParams, IComparable<Resources> {
 
   public total = (): number => this.wood + this.clay + this.iron + this.crop;
 
-  public add = (addition: Resources): void => {
-    this.wood += addition.wood;
-    this.clay += addition.clay;
-    this.iron += addition.iron;
-    this.crop += addition.crop;
-    this.freeCrop += addition.freeCrop;
+  public add = (addition: Resources): Resources => {
+    return new Resources({
+      wood: this.wood + addition.wood,
+      clay: this.clay + addition.clay,
+      iron: this.iron + addition.iron,
+      crop: this.crop + addition.crop,
+      freeCrop: this.freeCrop + addition.freeCrop,
+    })
   };
 
   public subtract = (subtraction: Resources): Resources => {
