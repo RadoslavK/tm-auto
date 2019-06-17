@@ -6,8 +6,7 @@ import { AvailableBuildingTypesService } from '../../services/availableBuildingT
 import { context } from '../context';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
-import { mapCost } from '../mappers/mapCost';
-import { mapQueuedBuildingFactory } from '../mappers/mapQueuedBuilding';
+import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
 import { pubSub } from '../subscriptions/pubSub';
 
@@ -34,15 +33,11 @@ export const buildingResolvers: IResolvers = {
       } = args;
 
       const village = context.villages.village(villageId);
-      const buildings = village.buildings.queue.buildings();
-      const totalCost = village.buildings.queue.totalCost();
-      const queueManager = new BuildingQueueService(villageId);
-      const mapQueuedBuilding = mapQueuedBuildingFactory(queueManager);
+      const queue = village.buildings.queue;
+      const queueService = new BuildingQueueService(villageId);
+      const mapBuildingQueue = mapBuildingQueueFactory(queueService);
 
-      return {
-        buildings: buildings.map(mapQueuedBuilding),
-        totalCost: mapCost(totalCost),
-      };
+      return mapBuildingQueue(queue);
     },
 
     buildingsInProgress: (_, args) => context.villages.village(args.villageId).buildings.ongoing.buildings().map(mapBuildingInProgress),

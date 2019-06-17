@@ -1,6 +1,4 @@
 import { BuildingSpotType, getBuildingSpotType } from '../../../_enums/BuildingSpotType';
-import { buildingInfos } from '../../../index';
-import { Cost } from '../../misc/cost';
 import { QueuedBuilding } from './queuedBuilding';
 
 export class BuildingQueue {
@@ -46,12 +44,6 @@ export class BuildingQueue {
   };
 
   public buildings = (): readonly QueuedBuilding[] => this._buildings;
-
-  public totalCost = (): Cost =>
-    this._buildings.reduce((reduced, building) => {
-      const cost = buildingInfos[building.type].costs[building.level];
-      return reduced.add(cost);
-    }, new Cost());
 
   public moveUp = (queueId: string): void => {
     if (this._buildings.length <= 1) {

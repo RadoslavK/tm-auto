@@ -19,7 +19,7 @@ export class Cost implements IParams {
     this.resources = new Resources(this.resources);
   }
 
-  public add = (addition: Cost): Cost => {
+  public add = (addition: IParams): Cost => {
     return new Cost({
       buildTime: this.buildTime + addition.buildTime,
       resources: this.resources.add(addition.resources),

@@ -273,6 +273,25 @@ export class BuildingQueueService {
     })
   };
 
+  public getMainBuildingLevels = (): Record<string, number> => {
+    const buildings = this._village.buildings;
+    const mainBuilding = buildings.spots.ofType(BuildingType.MainBuilding);
+    let baseMbLevel = mainBuilding ? mainBuilding.level.actual + mainBuilding.level.ongoing : 0;
+
+    return buildings.queue
+      .buildings()
+      .reduce((reduced, building) => {
+        const { queueId } = building;
+        reduced[queueId] = baseMbLevel;
+
+        if (building.type === BuildingType.MainBuilding) {
+          baseMbLevel++;
+        }
+
+        return reduced;
+      }, {} as Record<string, number>);
+  };
+
   private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
       && context.villages.all().some(otherVillage =>
