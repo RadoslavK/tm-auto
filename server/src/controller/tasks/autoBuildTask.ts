@@ -71,7 +71,7 @@ export class AutoBuildTask implements IBotTask {
     //  TODO set cooldown
   };
 
-  private   _startBuildingIfQueueIsFree = async (type: BuildingSpotType): Promise<void> => {
+  private _startBuildingIfQueueIsFree = async (type: BuildingSpotType): Promise<void> => {
     const isSpotFree = this._buildings.ongoing.isSpotFree(type);
 
     if (!isSpotFree) {

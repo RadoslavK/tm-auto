@@ -34,7 +34,7 @@ export const SignInForm = () => {
   const classes = useStyles({});
   const [username, setUsername] = useState('Buckyx');
   const [password, setPassword] = useState('Speedas11');
-  const [server, setServer] = useState('https://tx3.czsk.travian.com');
+  const [server, setServer] = useState('https://tx3.travian.com');
 
   const account: ISignInInput = {
     username,

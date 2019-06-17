@@ -6,6 +6,7 @@ import { getPage } from '../../browser/getPage';
 import { context } from '../../graphql/context';
 import { unitInfos } from '../../index';
 import { parseUnitQueue } from '../../parsers/units/parseUnitQueue';
+import { getActualUnitBuildTime } from '../../utils/buildTimeUtils';
 import { ensureBuildingSpotPage } from '../actions/ensurePage';
 import { updateActualResources } from '../actions/village/updateResources';
 import { IBotTask } from './taskManager';
@@ -50,9 +51,6 @@ export class AutoUnitsTask implements IBotTask {
     const unitQueue = await parseUnitQueue();
     this._units.setQueue(type, unitQueue);
 
-    const tribe = context.player.tribe;
-    const tribeBase = (tribe - 1) * 10;
-
     const suitableToBuild: Record<number, number> = {};
     let startingVillageRes = this._village.resources.amount;
 
@@ -94,8 +92,8 @@ export class AutoUnitsTask implements IBotTask {
         continue;
       }
 
-      const key = tribeBase + uIndex;
-      const buildTime = unitInfos[uIndex].cost.buildTime;
+      const speed = context.player.speed;
+      const buildTime = getActualUnitBuildTime(uIndex, speed, unitBuilding.level.actual);
 
       if (type !== BuildingType.Residence
         && type !== BuildingType.Palace) {
