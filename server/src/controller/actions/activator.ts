@@ -7,7 +7,7 @@ const chooseTribe = async (tribe: Tribe): Promise<void> => {
   await page.waitForSelector('#tribeSelectors input');
 
   const forms = await page.$$('form');
-  await forms.forEach(async form => {
+  for (const form of forms) {
     const selectors = await form.$('#tribeSelectors');
 
     if (!selectors) {
@@ -27,7 +27,7 @@ const chooseTribe = async (tribe: Tribe): Promise<void> => {
     // console.log(await button.getProperty('id'));
     // await button.hover();
     // await button.click();
-  });
+  }
 
   return;
 

@@ -119,14 +119,12 @@ export class AutoUnitsTask implements IBotTask {
 
     const page = await getPage();
 
-    await Object
-      .keys(suitableToBuild)
-      .forEach(async (uIndex) => {
-        const amount = suitableToBuild[uIndex];
+    for (const uIndex of Object.keys(suitableToBuild)) {
+      const amount = suitableToBuild[uIndex];
 
-        const input = await page.$(`[name=t${uIndex}]`);
-        await input.type(amount.toString());
-      });
+      const input = await page.$(`[name=t${uIndex}]`);
+      await input.type(amount.toString());
+    }
 
     const submitButton = await page.$('[class="green startTraining"]');
 

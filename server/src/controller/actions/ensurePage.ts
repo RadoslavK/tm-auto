@@ -14,8 +14,7 @@ export const ensurePage = async (path: string, exact: boolean = false): Promise<
   }
 
   let isHrefLink;
-  let link =
-    await page.$(`[href*="${path}"]`);
+  let link = await page.$(`[href*="${path}"]`);
 
   if (!link) {
     //  might be an onclick event

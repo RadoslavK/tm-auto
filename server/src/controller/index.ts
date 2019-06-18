@@ -28,16 +28,15 @@ export class Controller {
     await initPlayerInfo();
 
     const villages = await parseVillages();
+    context.villages.set(villages);
+    context.villages.currentVillageId = await parseActiveVillageId();
 
-    await villages.forEach(async (village) => {
+    for (const village of villages) {
       await ensureVillageSelected(village.id);
 
       await updateResources();
       await updateBuildings();
-    });
-
-    context.villages.set(villages);
-    context.villages.currentVillageId = await parseActiveVillageId();
+    }
 
     await this._taskManager.execute();
     this._timeout = setTimeout(async () => {

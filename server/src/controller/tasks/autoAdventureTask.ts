@@ -37,12 +37,11 @@ export class AutoAdventureTask implements IBotTask {
 
     await Promise.all([
       adventuresButton.click(),
-      page.waitForSelector('#adventureListForm'),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
     const canDoNormal = hero.health >= settings.normalMinHealth;
     const canDoHard = hero.health >= settings.hardMinHealth;
-
 
     const adventureNodes = await page.$$('tr[id]');
     const adventures = await Promise.all(adventureNodes.map(async (node) => {
@@ -56,6 +55,7 @@ export class AutoAdventureTask implements IBotTask {
         url,
       }
     }));
+
     let suitableAdventures = adventures
       .filter(x => x.duration <= settings.maxTravelTime)
       .filter(x => (x.isHard && canDoHard) || (!x.isHard && canDoNormal));
@@ -109,6 +109,9 @@ export class AutoAdventureTask implements IBotTask {
       return;
     }
 
-    await sendToAdventureButton.click();
+    await Promise.all([
+      sendToAdventureButton.click(),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
   };
 }

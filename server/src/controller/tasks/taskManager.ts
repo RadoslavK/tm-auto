@@ -54,7 +54,9 @@ class VillageBotTasksEngine {
   }
 
   public execute = async (): Promise<void> => {
-    await this._tasks.forEach(async (task) => await task.execute());
+    for (const task of this._tasks) {
+      await task.execute()
+    }
   };
 }
 
@@ -85,13 +87,15 @@ export class TaskManager {
     await ensurePage(randomElement(getAllEnumValues(TravianPath)));
     await updateHeroInformation();
 
-    await this._generalTasks.forEach(async (task) => await task.execute());
+    for (const task of this._generalTasks) {
+      await task.execute()
+    }
   };
 
   private doVillageTasks = async (): Promise<void> => {
     const villages = context.villages.all();
 
-    await villages.forEach(async (village) => {
+    for (const village of villages) {
       if (!context.settings.village(village.id).general.allowTasks) {
         return;
       }
@@ -116,10 +120,12 @@ export class TaskManager {
 
       await pubSub.publish(Events.BuildingsUpdated, null);
       await pubSub.publish(Events.VillageUpdated, null);
-    });
+    }
   };
 
   private doFinalTasks = async (): Promise<void> => {
-    await this._finalTasks.forEach(async (task) => await task.execute());
+    for (const task of this._finalTasks) {
+      await task.execute()
+    }
   };
 }
