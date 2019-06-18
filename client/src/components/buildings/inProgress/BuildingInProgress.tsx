@@ -64,6 +64,10 @@ const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
     return () => clearInterval(intervalId);
   }, [ building.finishedAt ]);
 
+  useEffect(() => {
+    setTimer(getInitialTimer(building.finishedAt));
+  }, [building]);
+
   const time = formatTimeFromSeconds(timer);
 
   return (

@@ -81,7 +81,7 @@ export type IBuildingQueue = {
 export type IBuildingSpot = {
   __typename?: "BuildingSpot";
   readonly fieldId: Scalars["Int"];
-  readonly level?: Maybe<IBuildingSpotLevel>;
+  readonly level: IBuildingSpotLevel;
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
@@ -581,7 +581,7 @@ export type IBuildingSpotResolvers<
 > = {
   fieldId?: Resolver<IResolversTypes["Int"], ParentType, ContextType>;
   level?: Resolver<
-    Maybe<IResolversTypes["BuildingSpotLevel"]>,
+    IResolversTypes["BuildingSpotLevel"],
     ParentType,
     ContextType
   >;

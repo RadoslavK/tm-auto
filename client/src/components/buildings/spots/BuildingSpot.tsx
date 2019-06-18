@@ -116,20 +116,18 @@ const BuildingSpot: React.FunctionComponent<IProps> = React.memo((props) => {
       >
         <NewBuildingDialog fieldId={building.fieldId} onSelect={onSelect}/>
       </Dialog>
-      {building.level && (
-        <Dialog
-          open={dialog === DialogType.MultiEnqueue}
-          onClose={onSelect}
-        >
-          <MultiEnqueueDialog
-            totalLevel={building.level.total}
-            buildingType={building.type}
-            fieldId={building.fieldId}
-            maxLevel={building.level.max}
-            onSelect={onSelect}
-          />
-        </Dialog>
-      )}
+      <Dialog
+        open={dialog === DialogType.MultiEnqueue}
+        onClose={onSelect}
+      >
+        <MultiEnqueueDialog
+          totalLevel={building.level.total}
+          buildingType={building.type}
+          fieldId={building.fieldId}
+          maxLevel={building.level.max}
+          onSelect={onSelect}
+        />
+      </Dialog>
     </>
   );
 });

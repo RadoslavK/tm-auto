@@ -1,8 +1,10 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { IBuildingQueue, IResolvers } from '../../_types/graphql';
-import { MovingDirection } from '../../services/buildingQueueService';
-import { BuildingQueueService } from '../../services/buildingQueueService';
+import { Tribe } from '../../_enums/Tribe';
+import { IBuildingQueue, IBuildingSpotLevel, IResolvers } from '../../_types/graphql';
+import { fieldIds } from '../../constants/fieldIds';
+import { buildingInfos } from '../../index';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
+import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
 import { context } from '../context';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
@@ -10,11 +12,56 @@ import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
 import { pubSub } from '../subscriptions/pubSub';
 
+const getWallType = (): BuildingType => {
+  switch (context.player.tribe) {
+    case Tribe.Egyptians:
+      return BuildingType.StoneWall;
+
+    case Tribe.Romans:
+      return BuildingType.CityWall;
+
+    case Tribe.Teutons:
+      return BuildingType.EarthWall;
+
+    case Tribe.Gauls:
+      return BuildingType.Palisade;
+
+    case Tribe.Huns:
+      return BuildingType.MakeshiftWall;
+  }
+};
+
 export const buildingResolvers: IResolvers = {
   Query: {
     buildingSpots: (_, args) => {
       const { villageId } = args;
       const normalizedSpots = context.villages.village(villageId).buildings.normalizedBuildingSpots();
+
+      normalizedSpots.forEach(b => {
+        if (b.type > BuildingType.None) {
+          return;
+        }
+
+        if (b.fieldId === fieldIds.RallyPoint) {
+          (b.type as BuildingType) = BuildingType.RallyPoint;
+          (b.level as IBuildingSpotLevel) = {
+            total: 0,
+            queued: 0,
+            actual: 0,
+            ongoing: 0,
+            max: buildingInfos[b.type].maxLevel,
+          }
+        } else if (b.fieldId === fieldIds.Wall) {
+          (b.type as BuildingType) = getWallType();
+          (b.level as IBuildingSpotLevel) = {
+            total: 0,
+            queued: 0,
+            actual: 0,
+            ongoing: 0,
+            max: buildingInfos[b.type].maxLevel,
+          }
+        }
+      });
 
       return {
         infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),

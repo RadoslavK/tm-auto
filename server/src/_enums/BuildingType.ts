@@ -44,8 +44,8 @@ export enum BuildingType {
   WonderOfTheWorld = 40,
   HorseDrinkingTrough = 41,
   StoneWall = 42,
-  CommandCenter = 43,
-  MakeshiftWall = 44,
+  MakeshiftWall = 43,
+  CommandCenter = 44,
   Waterworks = 45,
 }
 

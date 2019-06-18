@@ -69,7 +69,7 @@ export type IBuildingQueue = {
 
 export type IBuildingSpot = {
   readonly fieldId: Scalars["Int"];
-  readonly level?: Maybe<IBuildingSpotLevel>;
+  readonly level: IBuildingSpotLevel;
   readonly name: Scalars["String"];
   readonly type: Scalars["Int"];
 };
@@ -365,8 +365,9 @@ export type IBuildingSpotFragmentFragment = Pick<
   IBuildingSpot,
   "fieldId" | "type" | "name"
 > & {
-  readonly level: Maybe<
-    Pick<IBuildingSpotLevel, "actual" | "ongoing" | "queued" | "total" | "max">
+  readonly level: Pick<
+    IBuildingSpotLevel,
+    "actual" | "ongoing" | "queued" | "total" | "max"
   >;
 };
 

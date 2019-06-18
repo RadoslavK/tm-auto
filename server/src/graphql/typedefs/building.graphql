@@ -8,7 +8,7 @@ type BuildingSpotLevel {
 
 type BuildingSpot {
     fieldId: Int!
-    level: BuildingSpotLevel
+    level: BuildingSpotLevel!
     name: String!
     type: Int!
 }
