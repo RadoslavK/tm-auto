@@ -11,8 +11,25 @@ export class Villages {
 
   public village = (villageId = this.currentVillageId): Village => this._villages[villageId];
 
-  public set = (villages: readonly Village[]): void => {
-    villages.forEach(village => {
+  public update = (villages: readonly Village[]): void => {
+    const oldVillages = Object
+      .values(this._villages)
+      .filter(v => !villages.some(x => x.id === v.id));
+
+    //  TODO: delete all village related data
+
+    const newVillages = villages
+      .filter(v => !this._villages[v.id]);
+
+    Object
+      .keys(this._villages)
+      .forEach(villageId => {
+        if (oldVillages.some(v => v.id === +villageId)) {
+          delete this._villages[villageId];
+        }
+      });
+
+    newVillages.forEach(village => {
       this._villages[village.id] = village;
       const general = settingsService.village(village.id).general.load();
       const autoBuild = settingsService.village(village.id).autoBuild.load();

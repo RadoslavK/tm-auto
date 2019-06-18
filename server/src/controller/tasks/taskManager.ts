@@ -7,6 +7,7 @@ import { pubSub } from '../../graphql/subscriptions/pubSub';
 import { updateHeroInformation } from '../../parsers/hero/getHeroInformation';
 import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
+import { shuffle } from '../../utils/shuffle';
 import { updateBuildings } from '../actions/build/updateBuildings';
 import { ensurePage } from '../actions/ensurePage';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
@@ -66,10 +67,7 @@ export class TaskManager {
   private readonly _finalTasks: readonly BotTaskEngine[];
 
   constructor() {
-    this._generalTasks = [
-      new BotTaskEngine(AutoAdventureTask),
-    ];
-
+    this._generalTasks = [];
     this._finalTasks = [];
   }
 
@@ -95,7 +93,7 @@ export class TaskManager {
   private doVillageTasks = async (): Promise<void> => {
     const villages = context.villages.all();
 
-    for (const village of villages) {
+    for (const village of shuffle(villages)) {
       if (!context.settings.village(village.id).general.allowTasks) {
         return;
       }
@@ -110,6 +108,9 @@ export class TaskManager {
 
       if (!taskEngine) {
         taskEngine = new VillageBotTasksEngine(village, [
+          AutoAdventureTask,
+          //  TODO: autobuild storage, mozno spojit s autobuildom
+          // AutoBuildStorage,
           AutoBuildTask,
           AutoUnitsTask,
         ]);
