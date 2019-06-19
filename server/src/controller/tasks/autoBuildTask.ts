@@ -58,9 +58,7 @@ export class AutoBuildTask implements IBotTask {
       } else if (!infrastructureFinishedAt) {
         finishedAt = fieldFinishedAt;
       } else {
-        finishedAt = (fieldFinishedAt.valueOf() - infrastructureFinishedAt.valueOf()) > 0
-          ? infrastructureFinishedAt
-          : fieldFinishedAt;
+        finishedAt = fieldFinishedAt >= infrastructureFinishedAt ? fieldFinishedAt : infrastructureFinishedAt;
       }
     } else {
       await this._startBuildingIfQueueIsFree(BuildingSpotType.Any);
