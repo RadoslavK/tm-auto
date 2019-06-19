@@ -14,4 +14,14 @@ export class CoolDown implements IParams {
   public randomDelay = (): number => {
     return Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
   };
+
+  public getMin = (other: CoolDown): CoolDown => new CoolDown({
+    min: Math.min(this.min, other.min),
+    max: Math.min(this.max, other.max),
+  });
+
+  static fromDelay = (delay: number): CoolDown => new CoolDown({
+    min: delay,
+    max: delay,
+  });
 }

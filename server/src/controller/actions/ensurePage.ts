@@ -31,6 +31,7 @@ export const ensurePage = async (path: string, exact: boolean = false): Promise<
 };
 
 export const ensureBuildingSpotPage = async (fieldId: number): Promise<void> => {
+  //  TODO: spravit to efektivnejsie a celkovo ensure navigaciu. ked uz je na tej budove tak sa nemusi davat na resource fieldy atd
   if (isResourceField(fieldId)) {
     await ensurePage(TravianPath.ResourceFieldsOverview);
   } else if (isInfrastructure(fieldId)) {

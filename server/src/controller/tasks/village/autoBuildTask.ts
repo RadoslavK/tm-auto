@@ -1,22 +1,23 @@
-import { BuildingSpotType } from '../../_enums/BuildingSpotType';
-import { BuildingType } from '../../_enums/BuildingType';
-import { TravianPath } from '../../_enums/TravianPath';
-import { Tribe } from '../../_enums/Tribe';
-import { Buildings } from '../../_models/buildings';
-import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
-import { Resources } from '../../_models/misc/resources';
-import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
-import { Village } from '../../_models/village/village';
-import { getPage } from '../../browser/getPage';
-import { context } from '../../graphql/context';
-import { buildingInfos } from '../../index';
-import { parseBuildingsInProgress } from '../../parsers/buildings/parseBuildingsInProgress';
-import { isInfrastructure } from '../../utils/buildingUtils';
-import { log } from '../../utils/log';
-import { randomElement } from '../../utils/randomElement';
-import { ensureBuildingSpotPage, ensurePage } from '../actions/ensurePage';
-import { updateActualResources } from '../actions/village/updateResources';
-import { IBotTask } from './taskManager';
+import { BuildingSpotType } from '../../../_enums/BuildingSpotType';
+import { BuildingType } from '../../../_enums/BuildingType';
+import { TravianPath } from '../../../_enums/TravianPath';
+import { Tribe } from '../../../_enums/Tribe';
+import { Buildings } from '../../../_models/buildings';
+import { QueuedBuilding } from '../../../_models/buildings/queue/queuedBuilding';
+import { CoolDown } from '../../../_models/coolDown';
+import { Resources } from '../../../_models/misc/resources';
+import { AutoBuildSettings } from '../../../_models/settings/tasks/AutoBuildSettings';
+import { Village } from '../../../_models/village/village';
+import { getPage } from '../../../browser/getPage';
+import { context } from '../../../graphql/context';
+import { buildingInfos } from '../../../index';
+import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
+import { isInfrastructure } from '../../../utils/buildingUtils';
+import { log } from '../../../utils/log';
+import { randomElement } from '../../../utils/randomElement';
+import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
+import { updateActualResources } from '../../actions/village/updateResources';
+import { IBotTask, IBotTaskResultParams } from '../taskManager';
 
 export class AutoBuildTask implements IBotTask {
   private readonly _village: Village;
@@ -31,7 +32,7 @@ export class AutoBuildTask implements IBotTask {
 
   public settings = (): AutoBuildSettings => context.settings.village(this._village.id).autoBuild;
 
-  public execute = async (): Promise<void> => {
+  public execute = async (): Promise<IBotTaskResultParams> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
     await ensurePage(path);
 
@@ -66,7 +67,11 @@ export class AutoBuildTask implements IBotTask {
       finishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Any);
     }
 
-    //  TODO set cooldown
+    const delay = finishedAt && Math.floor((<any>new Date() - <any>finishedAt) / 1000);
+
+    return {
+      nextCoolDown: delay && CoolDown.fromDelay(delay),
+    };
   };
 
   private _startBuildingIfQueueIsFree = async (type: BuildingSpotType): Promise<void> => {

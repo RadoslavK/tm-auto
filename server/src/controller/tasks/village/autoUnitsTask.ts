@@ -1,15 +1,15 @@
-import { BuildingType } from '../../_enums/BuildingType';
-import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
-import { Units } from '../../_models/units';
-import { Village } from '../../_models/village/village';
-import { getPage } from '../../browser/getPage';
-import { context } from '../../graphql/context';
-import { unitInfos } from '../../index';
-import { parseUnitQueue } from '../../parsers/units/parseUnitQueue';
-import { getActualUnitBuildTime } from '../../utils/buildTimeUtils';
-import { ensureBuildingSpotPage } from '../actions/ensurePage';
-import { updateActualResources } from '../actions/village/updateResources';
-import { IBotTask } from './taskManager';
+import { BuildingType } from '../../../_enums/BuildingType';
+import { AutoUnitsSettings } from '../../../_models/settings/tasks/AutoUnitsSettings';
+import { Units } from '../../../_models/units';
+import { Village } from '../../../_models/village/village';
+import { getPage } from '../../../browser/getPage';
+import { context } from '../../../graphql/context';
+import { unitInfos } from '../../../index';
+import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
+import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
+import { ensureBuildingSpotPage } from '../../actions/ensurePage';
+import { updateActualResources } from '../../actions/village/updateResources';
+import { IBotTask } from '../taskManager';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly _village: Village;

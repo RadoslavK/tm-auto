@@ -1,13 +1,13 @@
-import { BuildingType } from '../../_enums/BuildingType';
-import { CoolDown } from '../../_models/coolDown';
-import { AdventureCriteria, AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
-import { getPage } from '../../browser/getPage';
-import { context } from '../../graphql/context';
-import { getSecondsFromString } from '../../utils/getSeconds';
-import { getWithMaximum, getWithMinimum } from '../../utils/getWithMaximum';
-import { randomElement } from '../../utils/randomElement';
-import { ensurePage } from '../actions/ensurePage';
-import { IBotTask } from './taskManager';
+import { BuildingType } from '../../../_enums/BuildingType';
+import { CoolDown } from '../../../_models/coolDown';
+import { AdventureCriteria, AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdventureSettings';
+import { getPage } from '../../../browser/getPage';
+import { context } from '../../../graphql/context';
+import { getSecondsFromString } from '../../../utils/getSeconds';
+import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
+import { randomElement } from '../../../utils/randomElement';
+import { ensurePage } from '../../actions/ensurePage';
+import { IBotTask } from '../taskManager';
 
 export class AutoAdventureTask implements IBotTask {
   public settings = (): AutoAdventureSettings => context.settings.hero.autoAdventure;

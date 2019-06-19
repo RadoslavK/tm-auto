@@ -1,4 +1,5 @@
 import { TravianPath } from '../../_enums/TravianPath';
+import { CoolDown } from '../../_models/coolDown';
 import { Village } from '../../_models/village/village';
 import { ITaskSettings } from '../../_types/ITaskSettings';
 import { context } from '../../graphql/context';
@@ -13,13 +14,20 @@ import { ensurePage } from '../actions/ensurePage';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updateResources } from '../actions/village/updateResources';
 import { updateUnitsInformation } from '../updateUnitsInformation';
-import { AutoAdventureTask } from './autoAdventureTask';
-import { AutoBuildTask } from './autoBuildTask';
-import { AutoUnitsTask } from './autoUnitsTask';
+import { AutoAdventureTask } from './village/autoAdventureTask';
+import { AutoBuildTask } from './village/autoBuildTask';
+import { AutoPartyTask } from './village/autoPartyTask';
+import { AutoUnitsTask } from './village/autoUnitsTask';
+
+export interface IBotTaskResultParams {
+  readonly nextCoolDown?: CoolDown;
+}
+
+export type BotTaskResult = Promise<IBotTaskResultParams> | Promise<void>;
 
 export interface IBotTask {
   readonly settings: () => ITaskSettings;
-  readonly execute: () => Promise<void>;
+  readonly execute: () => BotTaskResult;
 }
 
 class BotTaskEngine<TArgs = undefined> {
@@ -38,8 +46,12 @@ class BotTaskEngine<TArgs = undefined> {
     }
 
     const timeOfStart = new Date();
-    await this._task.execute();
-    const coolDown = this._task.settings().coolDown;
+    const result = await this._task.execute() || {};
+
+    const coolDown = result.nextCoolDown
+      ? result.nextCoolDown.getMin(this._task.settings().coolDown)
+      : this._task.settings().coolDown;
+
     const delay = coolDown.randomDelay();
 
     this._timeOfNextExecution = timeOfStart;
@@ -109,6 +121,7 @@ export class TaskManager {
       if (!taskEngine) {
         taskEngine = new VillageBotTasksEngine(village, [
           AutoAdventureTask,
+          AutoPartyTask,
           //  TODO: autobuild storage, mozno spojit s autobuildom
           // AutoBuildStorage,
           AutoBuildTask,
