@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "strict": true,
+    "removeComments": true,
+    "target": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "inlineSources": true,
+    "isolatedModules": true,
+    "strictPropertyInitialization": false
+  },
+  "exclude": [
+    "node_modules",
+    ".webpack"
+  ],
+  "include": ["src"],
+  "lib": ["es2015"]
+}

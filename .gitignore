@@ -1,8 +1,7 @@
-client/dist
-
-server/settings
-server/user_data
+src/server/settings
+src/server/user_data
 
 yarn-error.log
 node_modules
 .idea
+.webpack
