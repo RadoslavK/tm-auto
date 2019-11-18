@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { resolvers } from './graphql/resolvers';
-import { typeDefs } from './graphql/typeDefs';
+import { typeDefs } from './graphql/typedefs';
 import { createIpcExecutor } from './createIpcExecutor';
 import { createSchemaLink } from './createSchemaLink';
 import { loadInfo } from './bootstrap/loadInfo';

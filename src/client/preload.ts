@@ -10,18 +10,18 @@ const socketPromise = new Promise<string>((resolve, reject) => {
   resolveSocketPromise = resolve;
 });
 
-interface IClientWindow {
-  IS_DEV: boolean;
-  getServerSocket: () => Promise<string>;
-  uuid: () => string;
-  ipcConnect: (id: string, callback: (client: any) => void) => void;
+declare global {
+  interface Window {
+    IS_DEV: boolean;
+    getServerSocket: () => Promise<string>;
+    generateId: () => string;
+    ipcConnect: (id: string, callback: (client: any) => void) => void;
+  }
 }
 
-const clientWindow = window as any as IClientWindow;
+window.IS_DEV = isDev;
 
-clientWindow.IS_DEV = isDev;
-
-clientWindow.getServerSocket = async (): Promise<string> => {
+window.getServerSocket = async (): Promise<string> => {
   return socketPromise;
 };
 
@@ -29,11 +29,11 @@ ipcRenderer.on('set-socket', (_event: any, payload: { readonly name: string }) =
   resolveSocketPromise(payload.name);
 });
 
-clientWindow.ipcConnect = (id: string, callback: any) => {
+window.ipcConnect = (id: string, callback: any) => {
   ipc.config.silent = true;
   ipc.connectTo(id, () => {
     callback(ipc.of[id]);
   });
 };
 
-clientWindow.uuid = uuid;
+window.generateId = () => uuid.v4();

@@ -57,6 +57,13 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
     "unicorn/filename-case": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
-    "unicorn/explicit-length-check": "off"
+    "unicorn/explicit-length-check": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+    "no-param-reassign": "off",
+    "unicorn/prefer-text-content": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "import/no-unresolved": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   },
 };

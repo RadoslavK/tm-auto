@@ -1,30 +1,80 @@
-import { render } from 'react-dom';
-import * as React from 'react';
+import { CssBaseline } from '@material-ui/core';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MemoryRouter as Router } from 'react-router-dom';
-import { createIpcLink } from '../graphql/createIpcLink';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+import { INavigationItem } from '../_types/INavigationItem';
+import { ISideMenuContext, SideMenuContext } from './components/sideMenu/context/SideMenuContext';
+import { SideMenu } from './components/sideMenu/SideMenu';
+import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';
+import { navigationItems } from '../constants/navigationItems';
+import { Navigation } from './components/navigation/Navigation';
+import { MainRoutes } from './components/navigation/MainRoutes';
+import { createIpcLink } from '../graphql/utils/createIpcLink';
+import introspectionQueryResultData from '../graphql/fragmentTypes.json';
+
+type NavigationItemsState = readonly INavigationItem[];
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+  },
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(3),
+  },
+}));
 
 const init = async (): Promise<void> => {
   const link = await createIpcLink();
 
-  const client = new ApolloClient({
+  const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
+
+  const apolloClient = new ApolloClient({
     link,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({ fragmentMatcher }),
   });
 
-  const App: React.FC = () => {
+  const App: React.FunctionComponent = () => {
+    const classes = useStyles({});
+    const [items, setItems] = useState<NavigationItemsState>([]);
+    const sideMenuContext: ISideMenuContext = {
+      items,
+      setItems,
+    };
+
     return (
       <Router>
-        <ApolloProvider client={client}>
-
+        <ApolloProvider client={apolloClient}>
+          <EnsureSignedIn>
+            <SideMenuContext.Provider value={sideMenuContext}>
+              <div className={classes.root}>
+                <CssBaseline />
+                <Navigation drawerWidth={drawerWidth} navigationItems={navigationItems}/>
+                <SideMenu width={drawerWidth}/>
+                <main className={classes.content}>
+                  <div className={classes.toolbar} />
+                  <MainRoutes />
+                </main>
+              </div>
+            </SideMenuContext.Provider>
+          </EnsureSignedIn>
         </ApolloProvider>
       </Router>
     );
   };
 
-  render(<App/>, document.querySelector('#app'));
+  ReactDOM.render(<App />, document.querySelector('#app'));
 };
 
 init();

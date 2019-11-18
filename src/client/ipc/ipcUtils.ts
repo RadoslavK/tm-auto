@@ -21,7 +21,6 @@ let socketClient: any | null = null;
 
 const connectSocket = (socketName: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    // @ts-ignore
     window.ipcConnect(socketName, client => {
       client.on('message', (messageData: string) => {
         const message = JSON.parse(messageData) as ServerMessage;
@@ -80,7 +79,6 @@ const connectSocket = (socketName: string): Promise<void> => {
 };
 
 export const init = async (): Promise<void> => {
-  // @ts-ignore
   const socketName = await window.getServerSocket();
   await connectSocket(socketName);
 
@@ -88,8 +86,7 @@ export const init = async (): Promise<void> => {
 };
 
 export const send = <TPayload extends object = {},TResult = void>(name: string, payload: TPayload): Promise<TResult> => new Promise((resolve, reject) => {
-  // @ts-ignore
-  const messageId = window.uuid.v4();
+  const messageId = window.generateId();
   replyHandlers.set(messageId, { resolve, reject });
 
   const messageData: IClientMessage <TPayload> = {

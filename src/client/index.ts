@@ -6,8 +6,10 @@ import {
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   app,
+  protocol,
   BrowserWindow ,
 } from 'electron';
 import isDev from 'electron-is-dev';
@@ -96,6 +98,15 @@ const installDevTools = async (): Promise<void> => {
 };
 
 app.on('ready', async () => {
+  protocol.interceptFileProtocol('file', (request, callback) => {
+    // eslint-disable-next-line unicorn/prefer-string-slice
+    const url = request.url.substr(7);    /* all urls start with 'file://' */
+    // @ts-ignore
+    callback({ path: path.normalize(`${__dirname}/${url}`)});
+  }, (err) => {
+    if (err) console.error('Failed to register protocol')
+  });
+
   await installDevTools();
 
   const serverSocket = await findOpenSocket('tm-auto');

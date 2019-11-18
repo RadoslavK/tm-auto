@@ -1,5 +1,5 @@
-src/server/settings
-src/server/user_data
+settings
+user_data
 
 yarn-error.log
 node_modules

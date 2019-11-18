@@ -1,0 +1,44 @@
+#import "./misc.graphql"
+
+mutation ClearQueue($villageId: Int!) {
+    clearQueue(villageId: $villageId)
+}
+
+mutation EnqueueBuilding($input: EnqueueBuildingInput!) {
+    enqueueBuilding(input: $input)
+}
+
+mutation DequeueBuilding($input: QueuedBuildingManipulationInput!) {
+    dequeueBuilding(input: $input)
+}
+
+mutation DequeueBuildingAtField($input: DequeueBuildingAtFieldInput!) {
+    dequeueBuildingAtField(input: $input)
+}
+
+mutation MoveQueuedBuildingDown($input: QueuedBuildingManipulationInput!) {
+    moveQueuedBuildingDown(input: $input)
+}
+
+mutation MoveQueuedBuildingUp($input: QueuedBuildingManipulationInput!) {
+    moveQueuedBuildingUp(input: $input)
+}
+
+query GetQueuedBuildings($villageId: Int!) {
+    buildingQueue(villageId: $villageId) {
+        buildings {
+            canMoveDown
+            canMoveUp
+            cost {
+                ...CostFragment
+            }
+            name
+            level
+            type
+            queueId
+        }
+        totalCost {
+            ...CostFragment
+        }
+    }
+}
