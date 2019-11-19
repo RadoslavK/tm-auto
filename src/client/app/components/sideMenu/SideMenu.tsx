@@ -41,7 +41,7 @@ interface IProps {
   readonly width: number;
 }
 
-export const SideMenu: React.FunctionComponent<IProps> = (props) => {
+export const SideMenu: React.FC<IProps> = (props) => {
   const {
     width
   } = props;
@@ -61,7 +61,7 @@ export const SideMenu: React.FunctionComponent<IProps> = (props) => {
     >
       <div className={classes.toolbar} />
       <List>
-        {items && items.map((item, index) => {
+        {items.map((item, index) => {
           const isSelected = location.pathname.startsWith(item.path);
 
           return (

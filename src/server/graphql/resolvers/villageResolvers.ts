@@ -1,7 +1,7 @@
 import { IResolvers } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
 import { Events } from '../subscriptions/events';
-import { pubSub } from '../subscriptions/pubSub';
+import { subscribeToEvent } from '../subscriptions/pubSub';
 import { villagesService } from '../../services/villageService';
 
 export const villageResolvers: IResolvers = {
@@ -13,13 +13,13 @@ export const villageResolvers: IResolvers = {
 
   Subscription: {
     updateVillage: {
-      subscribe: () => pubSub.asyncIterator(Events.VillageUpdated),
+      subscribe: subscribeToEvent(Events.VillageUpdated),
       resolve: () => true,
     },
 
-    villages: {
-      subscribe: () => pubSub.asyncIterator(Events.VillagesUpdated),
-      resolve: () => villagesService.get().all().map(mapVillage),
+    updateVillages: {
+      subscribe: subscribeToEvent(Events.VillagesUpdated),
+      resolve: () => true,
     },
   }
 };

@@ -1,6 +1,12 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { Tribe } from '../../_enums/Tribe';
-import { IBuildingQueue, IBuildingSpotLevel, IResolvers } from '../../_types/graphql';
+import {
+  IBuildingQueue,
+  IBuildingSpotLevel,
+  IResolvers,
+  ISubscriptionBuildingsUpdatedArgs,
+  ISubscriptionOnQueueUpdatedArgs,
+} from '../../_types/graphql';
 import { fieldIds } from '../../constants/fieldIds';
 import { buildingInfos } from '../../bootstrap/loadInfo';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
@@ -9,10 +15,10 @@ import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
-import { pubSub } from '../subscriptions/pubSub';
 import { villagesService } from '../../services/villageService';
 import { playerService } from '../../services/playerService';
 import { logException } from '../../../../_shared/utils/logException';
+import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
 
 const getWallType = (): BuildingType => {
   const { tribe } = playerService.get();
@@ -125,7 +131,6 @@ export const buildingResolvers: IResolvers = {
         ...enqueuedBuilding
       } = args.input;
 
-      await pubSub.publish('TEST', {  lolo: 6 });
       const queueManager = new BuildingQueueService(villageId);
       queueManager.enqueueBuilding(enqueuedBuilding);
 
@@ -179,7 +184,16 @@ export const buildingResolvers: IResolvers = {
 
   Subscription: {
     buildingsUpdated: {
-      subscribe: () => pubSub.asyncIterator(Events.BuildingsUpdated),
+      subscribe: subscribeToPayloadEvent(Events.BuildingsUpdated, (payload, variables: ISubscriptionBuildingsUpdatedArgs) => {
+        return payload.villageId === variables.villageId;
+      }),
+      resolve: () => true,
+    },
+
+    onQueueUpdated: {
+      subscribe: subscribeToPayloadEvent(Events.QueuedUpdated, (payload, variables: ISubscriptionOnQueueUpdatedArgs) => {
+        return payload.villageId === variables.villageId;
+      }),
       resolve: () => true,
     },
   },

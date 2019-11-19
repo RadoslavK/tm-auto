@@ -38,7 +38,7 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
   }
 };
 
-const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
+export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   const {
     settings,
   } = props;
@@ -58,7 +58,7 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
     }
   }, [state, settings, updateSettings]);
 
-  const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages, { fetchPolicy: 'network-only' } );
+  const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages);
 
   if (loading || !data) {
     return null;
@@ -196,7 +196,3 @@ const AutoAdventureSettings: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-AutoAdventureSettings.displayName = 'AutoAdventureSettings';
-
-export { AutoAdventureSettings };

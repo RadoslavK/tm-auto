@@ -25,7 +25,7 @@ interface IProps {
   readonly onSelect: () => void;
 }
 
-const NewBuildingDialog: React.FunctionComponent<IProps> = React.forwardRef((props, ref: any) => {
+export const NewBuildingDialog: React.FC<IProps> = React.forwardRef((props, ref: any) => {
   const {
     fieldId,
     onSelect,
@@ -35,7 +35,6 @@ const NewBuildingDialog: React.FunctionComponent<IProps> = React.forwardRef((pro
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetAvailableNewBuildingsQuery, IGetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
     variables: { input: { fieldId, villageId } },
-    fetchPolicy: 'network-only',
   });
 
   if (loading || !data) {
@@ -61,7 +60,3 @@ const NewBuildingDialog: React.FunctionComponent<IProps> = React.forwardRef((pro
     </div>
   )
 });
-
-NewBuildingDialog.displayName = 'NewBuildingDialog';
-
-export { NewBuildingDialog };

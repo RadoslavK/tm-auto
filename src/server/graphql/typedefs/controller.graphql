@@ -6,3 +6,7 @@ extend type Mutation {
     startBot: Boolean!
     stopBot: Boolean!
 }
+
+type Subscription {
+    onBotRunningChanged: Boolean!
+}

@@ -4,9 +4,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import {
+  useMutation,
+  useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
 import { Link, useLocation } from 'react-router-dom';
-import { IsBotRunning, StartBot, StopBot } from "*/graphql_operations/controller.graphql";
+import { IsBotRunning, StartBot, StopBot, OnBotRunningChanged } from "*/graphql_operations/controller.graphql";
 import { IIsBotRunningQuery, IStartBotMutation, IStopBotMutation } from '../../../_types/graphql';
 import { INavigationItem } from '../../../_types/INavigationItem';
 
@@ -40,7 +44,7 @@ const ToggleButton: React.FC<{ readonly isBotRunning: boolean, readonly onClick:
   );
 });
 
-export const Navigation: React.FunctionComponent<IProps> = (props) => {
+export const Navigation: React.FC<IProps> = (props) => {
   const {
     navigationItems,
     drawerWidth,
@@ -48,12 +52,12 @@ export const Navigation: React.FunctionComponent<IProps> = (props) => {
 
   const classes = useStyles(drawerWidth)({});
   const location = useLocation();
-  const { data, loading } = useQuery<IIsBotRunningQuery>(IsBotRunning);
-  const [startBot] = useMutation<IStartBotMutation>(StartBot, {
-    refetchQueries: [{ query: IsBotRunning }],
-  });
-  const [stopBot] = useMutation<IStopBotMutation>(StopBot, {
-    refetchQueries: [{ query: IsBotRunning }],
+  const { data, loading, refetch } = useQuery<IIsBotRunningQuery>(IsBotRunning);
+  const [startBot] = useMutation<IStartBotMutation>(StartBot);
+  const [stopBot] = useMutation<IStopBotMutation>(StopBot);
+
+  useSubscription(OnBotRunningChanged, {
+    onSubscriptionData: () => refetch(),
   });
 
   if (loading || !data) {

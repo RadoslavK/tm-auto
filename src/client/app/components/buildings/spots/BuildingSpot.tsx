@@ -25,13 +25,12 @@ const useStyles = makeStyles<unknown, IProps>({
     height: '108px',
     width: '108px',
     border: '1px solid black',
-    // eslint-disable-next-line no-useless-escape
-    backgroundImage: `url(\"${imageLinks.getBuilding(props.building.type)}\")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundSize: 'contain',
   }),
 });
 
-const BuildingSpot: React.FunctionComponent<IProps> = React.memo((props) => {
+export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
   const {
     building,
     className,
@@ -120,7 +119,3 @@ const BuildingSpot: React.FunctionComponent<IProps> = React.memo((props) => {
     </>
   );
 });
-
-BuildingSpot.displayName = 'BuildingSpot';
-
-export { BuildingSpot };

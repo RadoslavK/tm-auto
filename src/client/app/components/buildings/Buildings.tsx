@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Buildings: React.FunctionComponent = () => {
+export const Buildings: React.FC = () => {
   const classes = useStyles({});
 
   return (
@@ -30,7 +30,3 @@ const Buildings: React.FunctionComponent = () => {
     </div>
   );
 };
-
-Buildings.displayName = 'Buildings';
-
-export { Buildings };

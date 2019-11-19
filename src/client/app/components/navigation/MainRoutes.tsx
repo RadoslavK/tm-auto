@@ -4,7 +4,7 @@ import { GeneralSettings } from '../settings/GeneralSettings';
 import { HeroSettings } from '../settings/hero/HeroSettings';
 import { Villages } from '../villages/Villages';
 
-export const MainRoutes: React.FunctionComponent = () => (
+export const MainRoutes: React.FC = () => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/villages" />} />
     <Route path="/villages" component={Villages} />

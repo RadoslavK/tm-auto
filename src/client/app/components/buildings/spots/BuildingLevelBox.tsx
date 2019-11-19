@@ -61,7 +61,7 @@ const getLevelState = (props: IProps): BuildingState => {
   return BuildingState.None;
 };
 
-export const BuildingLevelBox: React.FunctionComponent<IProps> = (props) => {
+export const BuildingLevelBox: React.FC<IProps> = (props) => {
   const {
     className,
     level,

@@ -9,7 +9,7 @@ interface IProps {
   readonly totalLevel: number;
 }
 
-const MultiEnqueueDialog: React.FunctionComponent<IProps> = (props) => {
+export const MultiEnqueueDialog: React.FC<IProps> = (props) => {
   const {
     buildingType,
     fieldId,
@@ -33,7 +33,3 @@ const MultiEnqueueDialog: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-MultiEnqueueDialog.displayName = 'MultiEnqueueDialog';
-
-export { MultiEnqueueDialog };

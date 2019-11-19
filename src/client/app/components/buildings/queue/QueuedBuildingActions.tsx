@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import {
+  useMutation,
+} from '@apollo/react-hooks';
 import {
   DequeueBuilding,
-  GetQueuedBuildings,
   MoveQueuedBuildingDown,
   MoveQueuedBuildingUp,
 } from '*/graphql_operations/queuedBuilding.graphql';
@@ -55,7 +56,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const QueuedBuildingActions: React.FunctionComponent<IProps> = (props) => {
+export const QueuedBuildingActions: React.FC<IProps> = (props) => {
   const {
     building: {
       canMoveDown,
@@ -70,14 +71,12 @@ export const QueuedBuildingActions: React.FunctionComponent<IProps> = (props) =>
 
   const options = {
     variables: { input },
-    refetchQueries: [
-      { query: GetQueuedBuildings, variables: { villageId } },
-    ],
   };
 
   const [moveDown] = useMutation<IMoveQueuedBuildingDownMutation, IMoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
   const [moveUp] = useMutation<IMoveQueuedBuildingUpMutation, IMoveQueuedBuildingUpMutationVariables>(MoveQueuedBuildingUp, options);
-  const [dequeue] = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, { variables: { input } });
+  const [dequeue] = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, options);
+
   const classes = useStyles({});
 
   const onMoveDown = canMoveDown ? async () => moveDown() : undefined;
@@ -94,5 +93,3 @@ export const QueuedBuildingActions: React.FunctionComponent<IProps> = (props) =>
     </div>
   );
 };
-
-QueuedBuildingActions.displayName = 'QueuedBuildingActions';

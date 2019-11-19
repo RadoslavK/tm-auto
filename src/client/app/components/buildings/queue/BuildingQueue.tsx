@@ -2,11 +2,20 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useContext } from 'react';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
-import { ClearQueue, GetQueuedBuildings } from '*/graphql_operations/queuedBuilding.graphql';
 import {
-  IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables,
-  IClearQueueMutation, IClearQueueMutationVariables, IGetQueuedBuildingsQuery,
+  ClearQueue,
+  GetQueuedBuildings,
+  OnQueueUpdated,
+} from '*/graphql_operations/queuedBuilding.graphql';
+import {
+  IBuildingsUpdatedSubscription,
+  IBuildingsUpdatedSubscriptionVariables,
+  IClearQueueMutation,
+  IClearQueueMutationVariables,
+  IGetQueuedBuildingsQuery,
   IGetQueuedBuildingsQueryVariables,
+  IOnQueueUpdatedSubscription,
+  IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { Cost } from './Cost';
@@ -27,7 +36,7 @@ const useStyles = makeStyles({
   },
 });
 
-const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
+export const BuildingQueue: React.FC<IProps> = (props) => {
   const {
     className
   } = props;
@@ -37,13 +46,18 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading, refetch } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
   });
 
   useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
-    onSubscriptionData: () => refetch({ villageId }),
+    onSubscriptionData: () => {
+      refetch();
+    },
+  });
+
+  useSubscription<IOnQueueUpdatedSubscription, IOnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
+    variables: { villageId },
+    onSubscriptionData: () => refetch(),
   });
 
   const [clearQueue] = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
@@ -76,7 +90,3 @@ const BuildingQueue: React.FunctionComponent<IProps> = (props) => {
     </div>
   )
 };
-
-BuildingQueue.displayName = 'BuildingQueue';
-
-export { BuildingQueue };

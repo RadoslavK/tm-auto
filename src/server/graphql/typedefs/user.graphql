@@ -17,3 +17,7 @@ type Query {
 type Mutation {
     signIn(account: SignInInput!): Boolean!
 }
+
+type Subscription {
+    signedToggled: Boolean!
+}

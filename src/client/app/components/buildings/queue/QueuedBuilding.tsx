@@ -36,7 +36,7 @@ const useStyles = makeStyles<unknown, IProps>({
   }
 });
 
-const QueuedBuilding: React.FunctionComponent<IProps> = (props) => {
+export const QueuedBuilding: React.FC<IProps> = (props) => {
   const {
     building,
   } = props;
@@ -54,7 +54,3 @@ const QueuedBuilding: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-QueuedBuilding.displayName = 'QueuedBuilding';
-
-export { QueuedBuilding };

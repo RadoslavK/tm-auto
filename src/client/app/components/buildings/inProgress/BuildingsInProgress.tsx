@@ -14,22 +14,20 @@ interface IProps {
   readonly className: string;
 }
 
-const BuildingsInProgress: React.FunctionComponent<IProps> = (props) => {
+export const BuildingsInProgress: React.FC<IProps> = (props) => {
   const {
     className,
   } = props;
 
-  const { villageId }= useContext<IVillageContext>(VillageContext);
+  const { villageId } = useContext<IVillageContext>(VillageContext);
 
   const { data, loading, refetch } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
   });
 
   useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
-    onSubscriptionData: () => refetch({ villageId }),
+    onSubscriptionData: () => refetch(),
   });
 
   if (loading || !data) {
@@ -44,7 +42,3 @@ const BuildingsInProgress: React.FunctionComponent<IProps> = (props) => {
     </div>
   )
 };
-
-BuildingsInProgress.displayName = 'BuildingsInProgress';
-
-export { BuildingsInProgress };

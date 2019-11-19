@@ -29,13 +29,10 @@ query GetVillages {
     }
 }
 
-subscription UpdateVillage($villageId: Int!) {
-    updateVillage(villageId: $villageId)
+subscription UpdateVillage {
+    updateVillage
 }
 
 subscription UpdateVillages {
-    villages {
-        id
-        name
-    }
+    updateVillages
 }

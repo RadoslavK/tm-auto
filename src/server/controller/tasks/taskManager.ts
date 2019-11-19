@@ -2,7 +2,7 @@
 import { TravianPath } from '../../_enums/TravianPath';
 import { Village } from '../../_models/village/village';
 import { Events } from '../../graphql/subscriptions/events';
-import { pubSub } from '../../graphql/subscriptions/pubSub';
+import { publishEvent, publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
 import { updateHeroInformation } from '../../parsers/hero/getHeroInformation';
 import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
@@ -127,8 +127,8 @@ export class TaskManager {
 
       await taskEngine.execute();
 
-      await pubSub.publish(Events.BuildingsUpdated, null);
-      await pubSub.publish(Events.VillageUpdated, null);
+      await publishPayloadEvent(Events.BuildingsUpdated, { villageId: village.id });
+      await publishEvent(Events.VillageUpdated);
     }
   };
 

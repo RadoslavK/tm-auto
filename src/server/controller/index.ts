@@ -8,6 +8,8 @@ import { updateNewOldVillages } from './actions/village/updateNewOldVillages';
 import { updateResources } from './actions/village/updateResources';
 import { TaskManager } from './tasks/taskManager';
 import { villagesService } from '../services/villageService';
+import { publishEvent } from '../graphql/subscriptions/pubSub';
+import { Events } from '../graphql/subscriptions/events';
 
 export class Controller {
   private m_running = false;
@@ -19,6 +21,7 @@ export class Controller {
 
   public start = async (): Promise<void> => {
     this.m_running = true;
+    publishEvent(Events.BotRunningChanged);
 
     if (!this.m_taskManager) {
       this.m_taskManager = new TaskManager();
@@ -50,6 +53,7 @@ export class Controller {
     }
 
     this.m_running = false;
+    publishEvent(Events.BotRunningChanged);
     await killBrowser();
   };
 }

@@ -9,7 +9,7 @@ interface IProps {
   readonly totalLevel: number;
 }
 
-export const MultiEnqueueDialogItem: React.FunctionComponent<IProps> = (props) => {
+export const MultiEnqueueDialogItem: React.FC<IProps> = (props) => {
   const [enqueue] = useEnqueueBuildingMutation({
     fieldId: props.fieldId,
     buildingType: props.buildingType,

@@ -13,7 +13,7 @@ interface IProps {
   readonly settings: IAutoBuildSettings;
 }
 
-export const AutoBuildSettings: React.FunctionComponent<IProps> = (props) => {
+export const AutoBuildSettings: React.FC<IProps> = (props) => {
   const {
     settings,
   } = props;

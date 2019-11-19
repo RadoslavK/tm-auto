@@ -33,7 +33,7 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
-const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
+export const BuildingInProgress: React.FC<IProps> = (props) => {
   const {
     building,
   } = props;
@@ -73,7 +73,3 @@ const BuildingInProgress: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-BuildingInProgress.displayName = 'BuildingInProgress';
-
-export { BuildingInProgress };

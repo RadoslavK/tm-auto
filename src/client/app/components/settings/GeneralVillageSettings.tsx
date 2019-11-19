@@ -12,7 +12,7 @@ interface IProps {
   readonly settings: IGeneralVillageSettings;
 }
 
-export const GeneralVillageSettings: React.FunctionComponent<IProps> = (props) => {
+export const GeneralVillageSettings: React.FC<IProps> = (props) => {
   const {
     settings,
   } = props;

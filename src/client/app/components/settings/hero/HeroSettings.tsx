@@ -7,10 +7,8 @@ import {
 import { HeroInformation } from '../../HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 
-export const HeroSettings: React.FunctionComponent = () => {
-  const { loading, data } = useQuery<IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables>(GetHeroSettings, {
-    fetchPolicy: 'network-only',
-  });
+export const HeroSettings: React.FC = () => {
+  const { loading, data } = useQuery<IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables>(GetHeroSettings);
 
   if (loading || !data) {
     return null;

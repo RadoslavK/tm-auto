@@ -8,7 +8,7 @@ interface IProps {
   readonly information: IGetHeroInformationQuery['heroInformation'];
 }
 
-const HeroInformation: React.FunctionComponent<IProps> = (props) => {
+const HeroInformation: React.FC<IProps> = (props) => {
   const {
     information,
   } = props;
@@ -31,7 +31,7 @@ const HeroInformation: React.FunctionComponent<IProps> = (props) => {
   );
 };
 
-const Container: React.FunctionComponent = () => {
+const Container: React.FC = () => {
   const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation, {
     fetchPolicy: 'network-only',
   });

@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Cost: React.FunctionComponent<IProps> = (props) => {
+export const Cost: React.FC<IProps> = (props) => {
   const {
     className,
     cost: {
@@ -89,7 +89,3 @@ const Cost: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-Cost.displayName = 'Cost';
-
-export { Cost };

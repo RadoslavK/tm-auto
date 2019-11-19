@@ -45,7 +45,7 @@ const init = async (): Promise<void> => {
     cache: new InMemoryCache({ fragmentMatcher }),
   });
 
-  const App: React.FunctionComponent = () => {
+  const App: React.FC = () => {
     const classes = useStyles({});
     const [items, setItems] = useState<NavigationItemsState>([]);
     const sideMenuContext: ISideMenuContext = {

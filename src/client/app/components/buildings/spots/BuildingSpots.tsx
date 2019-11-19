@@ -8,9 +8,12 @@ import {
   IBuildingsUpdatedSubscriptionVariables,
   IGetBuildingSpotsQuery,
   IGetBuildingSpotsQueryVariables,
+  IOnQueueUpdatedSubscription,
+  IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingSpot } from './BuildingSpot';
+import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
 
 const useStyles = makeStyles({
   buildingType: {
@@ -28,7 +31,7 @@ const mapBuilding = (building: IBuildingSpotFragmentFragment, index: number): JS
   <BuildingSpot key={index} building={building} />
 );
 
-const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
+export const BuildingSpots: React.FC<IProps> = (props) => {
   const {
     className,
   } = props;
@@ -37,13 +40,20 @@ const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading, refetch } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
   });
 
   useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
-    onSubscriptionData: () => refetch({ villageId }),
+    onSubscriptionData: () => {
+      refetch();
+    },
+  });
+
+  useSubscription<IOnQueueUpdatedSubscription, IOnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
+    variables: { villageId },
+    onSubscriptionData: () => {
+      refetch();
+    },
   });
 
   if (loading || !data) {
@@ -72,7 +82,3 @@ const BuildingSpots: React.FunctionComponent<IProps> = (props) => {
     </div>
   );
 };
-
-BuildingSpots.displayName = 'BuildingSpots';
-
-export { BuildingSpots };

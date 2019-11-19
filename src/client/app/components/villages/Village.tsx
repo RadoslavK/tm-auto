@@ -5,7 +5,7 @@ import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { GetVillageById, UpdateVillage } from '*/graphql_operations/village.graphql';
 import {
   IGetVillageByIdQuery,
-  IGetVillageByIdQueryVariables, IUpdateVillageSubscription, IUpdateVillageSubscriptionVariables,
+  IGetVillageByIdQueryVariables, IUpdateVillageSubscription,
 } from '../../../_types/graphql';
 import { Buildings } from '../buildings/Buildings';
 import { VillageSettings } from '../settings/VillageSettings';
@@ -16,7 +16,7 @@ interface IParams {
   readonly villageId: number;
 }
 
-export const Village: React.FunctionComponent<IParams> = (props) => {
+export const Village: React.FC<IParams> = (props) => {
   const {
     villageId,
   } = props;
@@ -29,13 +29,10 @@ export const Village: React.FunctionComponent<IParams> = (props) => {
 
   const { data, loading, refetch } = useQuery<IGetVillageByIdQuery, IGetVillageByIdQueryVariables>(GetVillageById, {
     variables: { villageId },
-    fetchPolicy: 'network-only',
   });
 
-  useSubscription<IUpdateVillageSubscription, IUpdateVillageSubscriptionVariables>(UpdateVillage, {
-    variables: { villageId },
-    fetchPolicy: 'network-only',
-    onSubscriptionData: () => refetch({ villageId }),
+  useSubscription<IUpdateVillageSubscription>(UpdateVillage, {
+    onSubscriptionData: () => refetch(),
   });
 
   if (loading || !data || !data.village) {

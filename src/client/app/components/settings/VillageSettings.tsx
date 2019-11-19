@@ -6,10 +6,9 @@ import { IVillageContext, VillageContext } from '../villages/context/VillageCont
 import { AutoBuildSettings } from './village/AutoBuildSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
-const VillageSettings: React.FunctionComponent = () => {
+export const VillageSettings: React.FC = () => {
   const { villageId } = useContext<IVillageContext>(VillageContext);
   const { data, loading } = useQuery<IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables>(GetVillageSettings, {
-    fetchPolicy: 'network-only',
     variables: { villageId },
   });
 
@@ -32,7 +31,3 @@ const VillageSettings: React.FunctionComponent = () => {
     </div>
   );
 };
-
-VillageSettings.displayName = 'VillageSettings';
-
-export { VillageSettings };

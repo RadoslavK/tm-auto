@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Resources: React.FunctionComponent<IProps> = (props) => {
+export const Resources: React.FC<IProps> = (props) => {
   const {
     resources: {
       amount,

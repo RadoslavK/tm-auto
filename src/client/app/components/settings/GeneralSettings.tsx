@@ -12,7 +12,7 @@ interface IProps {
   readonly settings: IGeneralSettings;
 }
 
-const GeneralSettings: React.FunctionComponent<IProps> = (props) => {
+const GeneralSettings: React.FC<IProps> = (props) => {
   const {
     settings,
   } = props;
@@ -66,10 +66,8 @@ const GeneralSettings: React.FunctionComponent<IProps> = (props) => {
   );
 };
 
-GeneralSettings.displayName = 'GeneralSettings';
-
-const Container: React.FunctionComponent = () => {
-  const { data, loading } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings, { fetchPolicy: 'network-only' });
+const Container: React.FC = () => {
+  const { data, loading } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
 
   if (loading || !data) {
     return null;

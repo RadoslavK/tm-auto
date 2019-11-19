@@ -1,7 +1,7 @@
 import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId';
 import { parseVillages } from '../../../parsers/villages/parseVillages';
 import { villagesService } from '../../../services/villageService';
-import { pubSub } from '../../../graphql/subscriptions/pubSub';
+import { publishEvent } from '../../../graphql/subscriptions/pubSub';
 import { Events } from '../../../graphql/subscriptions/events';
 
 export const updateNewOldVillages = async (): Promise<void> => {
@@ -10,5 +10,5 @@ export const updateNewOldVillages = async (): Promise<void> => {
   villagesService.get().update(villages);
   villagesService.get().currentVillageId = await parseActiveVillageId();
 
-  pubSub.publish(Events.VillagesUpdated, null);
+  publishEvent(Events.VillagesUpdated);
 };

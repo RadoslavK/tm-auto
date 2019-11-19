@@ -24,7 +24,7 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
-const NewBuildingItem: React.FunctionComponent<IProps> = (props) => {
+export const NewBuildingItem: React.FC<IProps> = (props) => {
   const {
     className,
     name,
@@ -49,7 +49,3 @@ const NewBuildingItem: React.FunctionComponent<IProps> = (props) => {
     </div>
   )
 };
-
-NewBuildingItem.displayName = 'NewBuildingItem';
-
-export { NewBuildingItem };

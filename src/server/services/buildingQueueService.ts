@@ -4,7 +4,7 @@ import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
 import { IBuildingSpot } from '../_types/graphql';
 import { Events } from '../graphql/subscriptions/events';
-import { pubSub } from '../graphql/subscriptions/pubSub';
+import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
 import { villagesService } from './villageService';
@@ -49,7 +49,7 @@ export class BuildingQueueService {
       const level = totalLevel + i;
 
       if (level > maxLevel) {
-        return;
+        break;
       }
 
       const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8)}`;
@@ -66,7 +66,7 @@ export class BuildingQueueService {
     }
 
     if (enqueued) {
-      pubSub.publish(Events.BuildingsUpdated, null);
+      publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
     }
   };
 
@@ -77,7 +77,7 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    pubSub.publish(Events.BuildingsUpdated, null);
+    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
   };
 
   public dequeueBuildingAtField = (input: IDequeueAtFieldInput): void => {
@@ -95,7 +95,7 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    pubSub.publish(Events.BuildingsUpdated, null);
+    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
   };
 
   public moveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -124,7 +124,7 @@ export class BuildingQueueService {
       spot.level.queued = 0;
     });
 
-    pubSub.publish(Events.BuildingsUpdated, null);
+    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {

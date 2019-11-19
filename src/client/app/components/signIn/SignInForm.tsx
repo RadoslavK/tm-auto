@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useMutation } from '@apollo/react-hooks';
-import { IsSignedIn, SignIn } from '*/graphql_operations/controller.graphql';
+import { SignIn } from '*/graphql_operations/user.graphql';
 import { ISignInInput, ISignInMutation, ISignInMutationVariables } from '../../../_types/graphql';
 
 const useStyles = makeStyles(theme => ({
@@ -44,9 +44,6 @@ export const SignInForm: React.FC = () => {
 
   const [executeSignIn] = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
     variables: { account },
-    refetchQueries: [
-      { query: IsSignedIn },
-    ]
   });
 
   const signIn = async (e: React.FormEvent): Promise<void> => {

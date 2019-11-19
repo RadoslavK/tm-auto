@@ -324,8 +324,11 @@ export type ISignInInput = {
 
 export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
+  readonly onBotRunningChanged: Scalars['Boolean'],
+  readonly onQueueUpdated: Scalars['Boolean'],
+  readonly signedToggled: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
-  readonly villages: ReadonlyArray<IVillage>,
+  readonly updateVillages: Scalars['Boolean'],
 };
 
 
@@ -334,7 +337,7 @@ export type ISubscriptionBuildingsUpdatedArgs = {
 };
 
 
-export type ISubscriptionUpdateVillageArgs = {
+export type ISubscriptionOnQueueUpdatedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -432,22 +435,10 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<Pick<IBuildingInProgress, 'level' | 'finishedAt' | 'name' | 'type'>> };
 
-export type IIsSignedInQueryVariables = {};
-
-
-export type IIsSignedInQuery = Pick<IQuery, 'isSignedIn'>;
-
 export type IIsBotRunningQueryVariables = {};
 
 
 export type IIsBotRunningQuery = Pick<IQuery, 'isBotRunning'>;
-
-export type ISignInMutationVariables = {
-  account: ISignInInput
-};
-
-
-export type ISignInMutation = Pick<IMutation, 'signIn'>;
 
 export type IStartBotMutationVariables = {};
 
@@ -458,6 +449,11 @@ export type IStopBotMutationVariables = {};
 
 
 export type IStopBotMutation = Pick<IMutation, 'stopBot'>;
+
+export type IOnBotRunningChangedSubscriptionVariables = {};
+
+
+export type IOnBotRunningChangedSubscription = Pick<ISubscription, 'onBotRunningChanged'>;
 
 export type IGetHeroInformationQueryVariables = {};
 
@@ -533,6 +529,13 @@ export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buil
       & { readonly cost: ICostFragmentFragment }
     )>, readonly totalCost: ICostFragmentFragment } };
 
+export type IOnQueueUpdatedSubscriptionVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type IOnQueueUpdatedSubscription = Pick<ISubscription, 'onQueueUpdated'>;
+
 type ITaskSettingsFragment_AutoAdventureSettings_Fragment = (
   Pick<IAutoAdventureSettings, 'allow'>
   & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
@@ -596,6 +599,23 @@ export type IUpdateAutoBuildVillageSettingsMutationVariables = {
 
 export type IUpdateAutoBuildVillageSettingsMutation = Pick<IMutation, 'updateAutoBuildVillageSettings'>;
 
+export type IIsSignedInQueryVariables = {};
+
+
+export type IIsSignedInQuery = Pick<IQuery, 'isSignedIn'>;
+
+export type ISignInMutationVariables = {
+  account: ISignInInput
+};
+
+
+export type ISignInMutation = Pick<IMutation, 'signIn'>;
+
+export type IOnSignedToggledSubscriptionVariables = {};
+
+
+export type IOnSignedToggledSubscription = Pick<ISubscription, 'signedToggled'>;
+
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars['Int']
 };
@@ -611,9 +631,7 @@ export type IGetVillagesQueryVariables = {};
 
 export type IGetVillagesQuery = { readonly villages: ReadonlyArray<Pick<IVillage, 'id' | 'name'>> };
 
-export type IUpdateVillageSubscriptionVariables = {
-  villageId: Scalars['Int']
-};
+export type IUpdateVillageSubscriptionVariables = {};
 
 
 export type IUpdateVillageSubscription = Pick<ISubscription, 'updateVillage'>;
@@ -621,4 +639,4 @@ export type IUpdateVillageSubscription = Pick<ISubscription, 'updateVillage'>;
 export type IUpdateVillagesSubscriptionVariables = {};
 
 
-export type IUpdateVillagesSubscription = { readonly villages: ReadonlyArray<IVillageFragmentFragment> };
+export type IUpdateVillagesSubscription = Pick<ISubscription, 'updateVillages'>;

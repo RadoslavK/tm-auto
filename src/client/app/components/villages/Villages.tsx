@@ -1,8 +1,6 @@
 import React, {
   useContext,
   useEffect,
-  useMemo,
-  useState,
 } from 'react';
 import {
   useQuery,
@@ -24,44 +22,28 @@ interface IVillageRouteParams {
   readonly id: string;
 }
 
-export const Villages: React.FunctionComponent = () => {
+export const Villages: React.FC = () => {
   const match = useRouteMatch();
-  const { setItems } = useContext<ISideMenuContext>(SideMenuContext);
-  const [villages, setVillages] = useState<IGetVillagesQuery['villages']>([]);
+  const { setItems, items } = useContext<ISideMenuContext>(SideMenuContext);
 
-  const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages,
-  {
-    fetchPolicy: 'network-only',
-  });
-
-  useEffect(() => {
-    if (loading || !data) {
-      return;
-    }
-
-    setVillages(data.villages);
-  }, [loading, data]);
+  const { data, loading, refetch } = useQuery<IGetVillagesQuery>(GetVillages);
 
   useSubscription<IUpdateVillagesSubscription>(UpdateVillages, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (subscriptionData.loading || !subscriptionData.data) {
-        return;
-      }
-
-      setVillages(subscriptionData.data.villages);
-    },
+    onSubscriptionData: () => refetch(),
   });
 
-  const navigationItems = useMemo(() => villages.map(village => ({
-    text: village.name,
-    path: `${match.url}/${village.id}`,
-  })), [villages, match.url]);
-
   useEffect(() => {
+    const navigationItems = data
+      ? data.villages.map(village => ({
+          text: village.name,
+          path: `${match.url}/${village.id}`,
+        }))
+      : [];
+
     setItems(navigationItems);
 
     return () => setItems([]);
-  }, [setItems, navigationItems]);
+  }, [setItems, data, match.url]);
 
   if (loading) {
     return null;
@@ -70,8 +52,8 @@ export const Villages: React.FunctionComponent = () => {
   return (
     <Switch>
       <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
-      {navigationItems.length > 0 && (
-        <Redirect to={navigationItems[0].path} />
+      {items.length > 0 && (
+        <Redirect to={items[0].path} />
       )}
     </Switch>
   );

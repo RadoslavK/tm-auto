@@ -1,5 +1,7 @@
 import { userService } from '../../services/userService';
 import { IResolvers } from '../../_types/graphql';
+import { subscribeToEvent } from '../subscriptions/pubSub';
+import { Events } from '../subscriptions/events';
 
 export const userResolvers: IResolvers = {
   Query: {
@@ -11,5 +13,12 @@ export const userResolvers: IResolvers = {
       userService.get().signIn(args.account);
       return true;
     },
-  }
+  },
+
+  Subscription: {
+    signedToggled: {
+      subscribe: subscribeToEvent(Events.SignedInToggled),
+      resolve: () => true,
+    }
+  },
 };

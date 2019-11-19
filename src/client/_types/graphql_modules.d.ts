@@ -25,11 +25,10 @@ declare module '*/graphql_operations/buildingInProgress.graphql' {
 declare module '*/graphql_operations/controller.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const IsSignedIn: DocumentNode;
-export const IsBotRunning: DocumentNode;
-export const SignIn: DocumentNode;
+  export const IsBotRunning: DocumentNode;
 export const StartBot: DocumentNode;
 export const StopBot: DocumentNode;
+export const OnBotRunningChanged: DocumentNode;
 
   export default defaultDocument;
 }
@@ -66,6 +65,7 @@ export const DequeueBuildingAtField: DocumentNode;
 export const MoveQueuedBuildingDown: DocumentNode;
 export const MoveQueuedBuildingUp: DocumentNode;
 export const GetQueuedBuildings: DocumentNode;
+export const OnQueueUpdated: DocumentNode;
 
   export default defaultDocument;
 }
@@ -82,6 +82,17 @@ export const UpdateGeneralSettings: DocumentNode;
 export const UpdateAutoAdventureSettings: DocumentNode;
 export const UpdateGeneralVillageSettings: DocumentNode;
 export const UpdateAutoBuildVillageSettings: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/graphql_operations/user.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const IsSignedIn: DocumentNode;
+export const SignIn: DocumentNode;
+export const OnSignedToggled: DocumentNode;
 
   export default defaultDocument;
 }

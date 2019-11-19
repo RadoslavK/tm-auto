@@ -1,0 +1,11 @@
+query IsSignedIn{
+    isSignedIn
+}
+
+mutation SignIn($account: SignInInput!) {
+    signIn(account: $account)
+}
+
+subscription OnSignedToggled {
+    signedToggled
+}

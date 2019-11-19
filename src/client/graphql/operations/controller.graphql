@@ -1,13 +1,5 @@
-query IsSignedIn{
-    isSignedIn
-}
-
 query IsBotRunning {
     isBotRunning
-}
-
-mutation SignIn($account: SignInInput!) {
-    signIn(account: $account)
 }
 
 mutation StartBot {
@@ -16,4 +8,8 @@ mutation StartBot {
 
 mutation StopBot {
     stopBot
+}
+
+subscription OnBotRunningChanged {
+    onBotRunningChanged
 }

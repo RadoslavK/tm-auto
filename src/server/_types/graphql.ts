@@ -347,8 +347,11 @@ export type ISignInInput = {
 export type ISubscription = {
   readonly __typename?: 'Subscription',
   readonly buildingsUpdated: Scalars['Boolean'],
+  readonly onBotRunningChanged: Scalars['Boolean'],
+  readonly onQueueUpdated: Scalars['Boolean'],
+  readonly signedToggled: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
-  readonly villages: ReadonlyArray<IVillage>,
+  readonly updateVillages: Scalars['Boolean'],
 };
 
 
@@ -357,7 +360,7 @@ export type ISubscriptionBuildingsUpdatedArgs = {
 };
 
 
-export type ISubscriptionUpdateVillageArgs = {
+export type ISubscriptionOnQueueUpdatedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -743,8 +746,11 @@ export type IResourcesResolvers<ContextType = any, ParentType extends IResolvers
 
 export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
   buildingsUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "buildingsUpdated", ParentType, ContextType, RequireFields<ISubscriptionBuildingsUpdatedArgs, 'villageId'>>,
-  updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType, RequireFields<ISubscriptionUpdateVillageArgs, 'villageId'>>,
-  villages?: SubscriptionResolver<ReadonlyArray<IResolversTypes['Village']>, "villages", ParentType, ContextType>,
+  onBotRunningChanged?: SubscriptionResolver<IResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>,
+  onQueueUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "onQueueUpdated", ParentType, ContextType, RequireFields<ISubscriptionOnQueueUpdatedArgs, 'villageId'>>,
+  signedToggled?: SubscriptionResolver<IResolversTypes['Boolean'], "signedToggled", ParentType, ContextType>,
+  updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
+  updateVillages?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
 };
 
 export type IUserAccountResolvers<ContextType = any, ParentType extends IResolversParentTypes['UserAccount'] = IResolversParentTypes['UserAccount']> = {
