@@ -171,6 +171,7 @@ export type IMutation = {
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
   readonly signIn: Scalars['Boolean'],
+  readonly signOut: Scalars['Boolean'],
 };
 
 
@@ -610,6 +611,11 @@ export type ISignInMutationVariables = {
 
 
 export type ISignInMutation = Pick<IMutation, 'signIn'>;
+
+export type ISignOutMutationVariables = {};
+
+
+export type ISignOutMutation = Pick<IMutation, 'signOut'>;
 
 export type IOnSignedToggledSubscriptionVariables = {};
 

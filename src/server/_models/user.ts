@@ -13,4 +13,10 @@ export class User {
 
     publishEvent(Events.SignedInToggled);
   };
+
+  signOut = (): void => {
+    this.isSignedIn = false;
+
+    publishEvent(Events.SignedInToggled);
+  };
 }

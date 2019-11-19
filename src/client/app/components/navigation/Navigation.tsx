@@ -11,8 +11,14 @@ import {
 } from '@apollo/react-hooks';
 import { Link, useLocation } from 'react-router-dom';
 import { IsBotRunning, StartBot, StopBot, OnBotRunningChanged } from "*/graphql_operations/controller.graphql";
-import { IIsBotRunningQuery, IStartBotMutation, IStopBotMutation } from '../../../_types/graphql';
+import {
+  IIsBotRunningQuery,
+  ISignOutMutation,
+  IStartBotMutation,
+  IStopBotMutation,
+} from '../../../_types/graphql';
 import { INavigationItem } from '../../../_types/INavigationItem';
+import { SignOut } from '*/graphql_operations/user.graphql';
 
 const useStyles = (drawerWidth: number): any => makeStyles({
   appBar: {
@@ -26,32 +32,7 @@ interface IProps {
   readonly navigationItems: readonly INavigationItem[];
 }
 
-const ToggleButton: React.FC<{ readonly isBotRunning: boolean, readonly onClick: () => void; }> = React.forwardRef((props, ref: any) => {
-  const {
-    isBotRunning,
-    onClick,
-  } = props;
-
-  return (
-    <Button
-      ref={ref}
-      variant="contained"
-      color="primary"
-      onClick={onClick}
-    >
-      {isBotRunning ? 'Stop bot' : 'Start bot'}
-    </Button>
-  );
-});
-
-export const Navigation: React.FC<IProps> = (props) => {
-  const {
-    navigationItems,
-    drawerWidth,
-  } = props;
-
-  const classes = useStyles(drawerWidth)({});
-  const location = useLocation();
+const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) => {
   const { data, loading, refetch } = useQuery<IIsBotRunningQuery>(IsBotRunning);
   const [startBot] = useMutation<IStartBotMutation>(StartBot);
   const [stopBot] = useMutation<IStopBotMutation>(StopBot);
@@ -60,11 +41,11 @@ export const Navigation: React.FC<IProps> = (props) => {
     onSubscriptionData: () => refetch(),
   });
 
+  const [signOut] = useMutation<ISignOutMutation>(SignOut);
+
   if (loading || !data) {
     return null;
   }
-
-  const currentItemIndex = navigationItems.findIndex(item => location.pathname.startsWith(item.path));
 
   const {
     isBotRunning,
@@ -77,6 +58,47 @@ export const Navigation: React.FC<IProps> = (props) => {
       await startBot();
     }
   };
+
+  const onSignOut = (): void => {
+    signOut();
+  };
+
+  return (
+    <div ref={ref}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={onClick}
+      >
+        {isBotRunning ? 'Stop bot' : 'Start bot'}
+      </Button>
+      {!isBotRunning && (
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={onSignOut}
+        >
+          Sign out
+        </Button>
+      )}
+    </div>
+  );
+});
+
+export const Navigation: React.FC<IProps> = (props) => {
+  const {
+    navigationItems,
+    drawerWidth,
+  } = props;
+
+  const classes = useStyles(drawerWidth)({});
+  const location = useLocation();
+
+  const currentItemIndex = navigationItems.findIndex(item => location.pathname.startsWith(item.path));
+
+  if (currentItemIndex === -1) {
+    return null;
+  }
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
@@ -93,11 +115,7 @@ export const Navigation: React.FC<IProps> = (props) => {
             to={route.path}
           />
         ))}
-        <Tab
-          component={ToggleButton}
-          onClick={onClick}
-          isBotRunning={isBotRunning}
-        />
+        <Tab component={ToggleButton} />
       </Tabs>
     </AppBar>
   );

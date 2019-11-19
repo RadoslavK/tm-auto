@@ -92,6 +92,7 @@ declare module '*/graphql_operations/user.graphql' {
   const defaultDocument: DocumentNode;
   export const IsSignedIn: DocumentNode;
 export const SignIn: DocumentNode;
+export const SignOut: DocumentNode;
 export const OnSignedToggled: DocumentNode;
 
   export default defaultDocument;

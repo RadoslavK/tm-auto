@@ -6,6 +6,10 @@ mutation SignIn($account: SignInInput!) {
     signIn(account: $account)
 }
 
+mutation SignOut {
+    signOut
+}
+
 subscription OnSignedToggled {
     signedToggled
 }

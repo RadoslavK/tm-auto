@@ -13,6 +13,11 @@ export const userResolvers: IResolvers = {
       userService.get().signIn(args.account);
       return true;
     },
+
+    signOut: () => {
+      userService.get().signOut();
+      return true;
+    },
   },
 
   Subscription: {

@@ -189,6 +189,7 @@ export type IMutation = {
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
   readonly signIn: Scalars['Boolean'],
+  readonly signOut: Scalars['Boolean'],
 };
 
 
@@ -699,6 +700,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateGeneralVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralVillageSettingsArgs, 'input'>>,
   updateAutoBuildVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoBuildVillageSettingsArgs, 'input'>>,
   signIn?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSignInArgs, 'account'>>,
+  signOut?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {

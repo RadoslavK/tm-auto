@@ -24,8 +24,7 @@ let clientWin: null | BrowserWindow;
 
 const createClientWindow = (socketName: string): void => {
   clientWin = new BrowserWindow({
-    width: 800,
-    height: 600,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: false,
       // @ts-ignore
