@@ -348,6 +348,7 @@ export type ISubscription = {
   readonly __typename?: 'Subscription',
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
+  readonly villages: ReadonlyArray<IVillage>,
 };
 
 
@@ -743,6 +744,7 @@ export type IResourcesResolvers<ContextType = any, ParentType extends IResolvers
 export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
   buildingsUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "buildingsUpdated", ParentType, ContextType, RequireFields<ISubscriptionBuildingsUpdatedArgs, 'villageId'>>,
   updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType, RequireFields<ISubscriptionUpdateVillageArgs, 'villageId'>>,
+  villages?: SubscriptionResolver<ReadonlyArray<IResolversTypes['Village']>, "villages", ParentType, ContextType>,
 };
 
 export type IUserAccountResolvers<ContextType = any, ParentType extends IResolversParentTypes['UserAccount'] = IResolversParentTypes['UserAccount']> = {

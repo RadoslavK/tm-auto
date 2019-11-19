@@ -19,6 +19,7 @@ import { AutoUnitsTask } from './village/autoUnitsTask';
 import { settingsService } from '../../services/settingsService';
 import { villagesService } from '../../services/villageService';
 import { IBotTask } from '../../_models/tasks';
+import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;
@@ -88,6 +89,7 @@ export class TaskManager {
 
   private doGeneralTasks = async (): Promise<void> => {
     await ensurePage(randomElement(getAllEnumValues(TravianPath)));
+    await updateNewOldVillages();
     await updateHeroInformation();
 
     for (const task of this.m_generalTasks) {

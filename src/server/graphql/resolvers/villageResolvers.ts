@@ -15,6 +15,11 @@ export const villageResolvers: IResolvers = {
     updateVillage: {
       subscribe: () => pubSub.asyncIterator(Events.VillageUpdated),
       resolve: () => true,
-    }
+    },
+
+    villages: {
+      subscribe: () => pubSub.asyncIterator(Events.VillagesUpdated),
+      resolve: () => villagesService.get().all().map(mapVillage),
+    },
   }
 };

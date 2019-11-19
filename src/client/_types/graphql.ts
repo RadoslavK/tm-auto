@@ -325,6 +325,7 @@ export type ISignInInput = {
 export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
+  readonly villages: ReadonlyArray<IVillage>,
 };
 
 
@@ -475,6 +476,11 @@ export type ICostFragmentFragment = (
 
 export type ICoordsFragmentFragment = Pick<ICoords, 'x' | 'y'>;
 
+export type IVillageFragmentFragment = (
+  Pick<IVillage, 'id' | 'name'>
+  & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly production: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
+);
+
 export type IClearQueueMutationVariables = {
   villageId: Scalars['Int']
 };
@@ -611,3 +617,8 @@ export type IUpdateVillageSubscriptionVariables = {
 
 
 export type IUpdateVillageSubscription = Pick<ISubscription, 'updateVillage'>;
+
+export type IUpdateVillagesSubscriptionVariables = {};
+
+
+export type IUpdateVillagesSubscription = { readonly villages: ReadonlyArray<IVillageFragmentFragment> };

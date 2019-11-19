@@ -50,6 +50,7 @@ declare module '*/graphql_operations/misc.graphql' {
   export const ResourcesFragment: DocumentNode;
 export const CostFragment: DocumentNode;
 export const CoordsFragment: DocumentNode;
+export const VillageFragment: DocumentNode;
 
   export default defaultDocument;
 }
@@ -92,6 +93,7 @@ declare module '*/graphql_operations/village.graphql' {
   export const GetVillageById: DocumentNode;
 export const GetVillages: DocumentNode;
 export const UpdateVillage: DocumentNode;
+export const UpdateVillages: DocumentNode;
 
   export default defaultDocument;
 }

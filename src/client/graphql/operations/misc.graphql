@@ -18,3 +18,23 @@ fragment CoordsFragment on Coords {
     x
     y
 }
+
+fragment VillageFragment on Village {
+    coords {
+        ...CoordsFragment
+    }
+    id
+    name
+    resources {
+        amount {
+            ...ResourcesFragment
+        }
+        production {
+            ...ResourcesFragment
+        }
+        capacity {
+            granary
+            warehouse
+        }
+    }
+}

@@ -23,4 +23,5 @@ extend type Query {
 
 extend type Subscription {
     updateVillage(villageId: Int!): Boolean!
+    villages: [Village!]!
 }
