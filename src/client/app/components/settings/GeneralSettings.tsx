@@ -45,6 +45,7 @@ const GeneralSettings: React.FunctionComponent<IProps> = (props) => {
 
   const {
     autoBuild,
+    allowTasks,
   } = state;
 
   return (
@@ -53,7 +54,7 @@ const GeneralSettings: React.FunctionComponent<IProps> = (props) => {
       <div>
         <div>
           <label htmlFor="allowTasks">Allow tasks</label>
-          <input type="checkbox" checked={autoBuild} onChange={onChange} id="allowTasks" name="allowTasks" />
+          <input type="checkbox" checked={allowTasks} onChange={onChange} id="allowTasks" name="allowTasks" />
         </div>
 
         <div>

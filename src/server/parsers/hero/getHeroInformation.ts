@@ -7,6 +7,22 @@ export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
   const hero = heroService.get();
 
+  hero.villageId = await page.$eval('.heroStatusMessage > a', x => {
+    const heroVillageLink = x.getAttribute('href');
+
+    if (!heroVillageLink) {
+      throw logException('Cant parse current hero village');
+    }
+
+    const villageIdMatch = /newdid=(\d+)/.exec(heroVillageLink);
+
+    if (!villageIdMatch) {
+      throw logException('Cant parse current hero village');
+    }
+
+    return +villageIdMatch[1];
+  });
+
   hero.health = await page.$eval('[class*=heroHealthBar] > *:last-child', x => {
     const style = x.getAttribute('style');
 

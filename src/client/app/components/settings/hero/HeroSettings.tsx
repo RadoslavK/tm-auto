@@ -24,7 +24,7 @@ export const HeroSettings: React.FunctionComponent = () => {
     <div>
       <h1>Hero settings</h1>
       <HeroInformation />
-      <AutoAdventureSettings settings={autoAdventure} />;
+      <AutoAdventureSettings settings={autoAdventure} />
     </div>
   );
 };
