@@ -32,9 +32,7 @@ const HeroInformation: React.FC<IProps> = (props) => {
 };
 
 const Container: React.FC = () => {
-  const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation, {
-    fetchPolicy: 'network-only',
-  });
+  const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation);
 
   if (loading || !data) {
     return null;

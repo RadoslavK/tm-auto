@@ -43,6 +43,14 @@ const init = async (): Promise<void> => {
   const apolloClient = new ApolloClient({
     link,
     cache: new InMemoryCache({ fragmentMatcher }),
+    defaultOptions: {
+      query: {
+        fetchPolicy: 'no-cache',
+      },
+      mutate: {
+        fetchPolicy: 'no-cache',
+      },
+    },
   });
 
   const App: React.FC = () => {

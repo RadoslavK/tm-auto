@@ -34,7 +34,7 @@ export const SignInForm: React.FC = () => {
   const classes = useStyles({});
   const [username, setUsername] = useState('Buckyx');
   const [password, setPassword] = useState('Speedas11');
-  const [server, setServer] = useState('https://ts2.travian.com');
+  const [server, setServer] = useState('https://tx3.travian.com.vn');
 
   const account: ISignInInput = {
     username,
