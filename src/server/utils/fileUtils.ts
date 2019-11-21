@@ -17,13 +17,22 @@ export const fileUtils = {
       }));
   },
 
-  load: <T extends object>(path: string, constructor: { new(params?: Partial<T>): T }, defaultValue: T | undefined = undefined): T => {
+  loadInstance: <T extends object>(path: string, constructor: { new(params?: Partial<T>): T }, defaultValue: T | undefined = undefined): T => {
     try {
       const file = fs.readFileSync(path);
       const params: T = JSON.parse(file.toString());
       return new constructor(params);
     } catch {
       return defaultValue || new constructor();
+    }
+  },
+
+  load: <T extends object>(path: string, defaultValue: T): T => {
+    try {
+      const file = fs.readFileSync(path);
+      return JSON.parse(file.toString()) as T;
+    } catch {
+      return defaultValue;
     }
   },
 };

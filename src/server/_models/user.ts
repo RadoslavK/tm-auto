@@ -1,13 +1,13 @@
-import { ISignInInput, IUserAccount } from '../_types/graphql';
+import { IUserAccountInput, IUserAccount } from '../_types/graphql';
 import { publishEvent } from '../graphql/subscriptions/pubSub';
 import { Events } from '../graphql/subscriptions/events';
 
 export class User {
   public isSignedIn = false;
 
-  public account: IUserAccount;
+  public account: Omit<IUserAccount, 'id'>;
 
-  signIn = (input: ISignInInput): void => {
+  signIn = (input: IUserAccountInput): void => {
     this.account = { ...input };
     this.isSignedIn = true;
 

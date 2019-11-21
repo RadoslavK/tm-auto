@@ -176,6 +176,7 @@ export type IITaskSettings = {
 
 export type IMutation = {
   readonly __typename?: 'Mutation',
+  readonly createAccount?: Maybe<Scalars['ID']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -190,6 +191,11 @@ export type IMutation = {
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
   readonly signIn: Scalars['Boolean'],
   readonly signOut: Scalars['Boolean'],
+};
+
+
+export type IMutationCreateAccountArgs = {
+  account: IUserAccountInput
 };
 
 
@@ -244,11 +250,12 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 
 
 export type IMutationSignInArgs = {
-  account: ISignInInput
+  account: IUserAccountInput
 };
 
 export type IQuery = {
   readonly __typename?: 'Query',
+  readonly accounts: ReadonlyArray<IUserAccount>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -339,12 +346,6 @@ export type IResources = {
   readonly freeCrop: Scalars['Int'],
 };
 
-export type ISignInInput = {
-  readonly username: Scalars['String'],
-  readonly password: Scalars['String'],
-  readonly server: Scalars['String'],
-};
-
 export type ISubscription = {
   readonly __typename?: 'Subscription',
   readonly buildingsUpdated: Scalars['Boolean'],
@@ -385,6 +386,13 @@ export type IUpdateGeneralVillageSettingsInput = {
 
 export type IUserAccount = {
   readonly __typename?: 'UserAccount',
+  readonly id: Scalars['ID'],
+  readonly username: Scalars['String'],
+  readonly password: Scalars['String'],
+  readonly server: Scalars['String'],
+};
+
+export type IUserAccountInput = {
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -489,10 +497,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
+  UserAccount: ResolverTypeWrapper<IUserAccount>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   AvailableNewBuilding: ResolverTypeWrapper<IAvailableNewBuilding>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   BuildingSpots: ResolverTypeWrapper<IBuildingSpots>,
   BuildingSpot: ResolverTypeWrapper<IBuildingSpot>,
   BuildingSpotLevel: ResolverTypeWrapper<IBuildingSpotLevel>,
@@ -508,7 +518,6 @@ export type IResolversTypes = {
   VillageCapacity: ResolverTypeWrapper<IVillageCapacity>,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
   Cost: ResolverTypeWrapper<ICost>,
   GeneralSettings: ResolverTypeWrapper<IGeneralSettings>,
   HeroSettings: ResolverTypeWrapper<IHeroSettings>,
@@ -519,6 +528,7 @@ export type IResolversTypes = {
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
   Mutation: ResolverTypeWrapper<{}>,
+  UserAccountInput: IUserAccountInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
@@ -531,19 +541,19 @@ export type IResolversTypes = {
   GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
   AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput,
-  SignInInput: ISignInInput,
   Subscription: ResolverTypeWrapper<{}>,
   ClearQueueInput: IClearQueueInput,
-  UserAccount: ResolverTypeWrapper<IUserAccount>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type IResolversParentTypes = {
   Query: {},
+  UserAccount: IUserAccount,
+  ID: Scalars['ID'],
+  String: Scalars['String'],
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput,
   Int: Scalars['Int'],
   AvailableNewBuilding: IAvailableNewBuilding,
-  String: Scalars['String'],
   BuildingSpots: IBuildingSpots,
   BuildingSpot: IBuildingSpot,
   BuildingSpotLevel: IBuildingSpotLevel,
@@ -559,7 +569,6 @@ export type IResolversParentTypes = {
   VillageCapacity: IVillageCapacity,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
-  ID: Scalars['ID'],
   Cost: ICost,
   GeneralSettings: IGeneralSettings,
   HeroSettings: IHeroSettings,
@@ -570,6 +579,7 @@ export type IResolversParentTypes = {
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
   Mutation: {},
+  UserAccountInput: IUserAccountInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
@@ -582,10 +592,8 @@ export type IResolversParentTypes = {
   GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
   AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput,
-  SignInInput: ISignInInput,
   Subscription: {},
   ClearQueueInput: IClearQueueInput,
-  UserAccount: IUserAccount,
 };
 
 export type IAutoAdventureSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoAdventureSettings'] = IResolversParentTypes['AutoAdventureSettings']> = {
@@ -687,6 +695,7 @@ export type IITaskSettingsResolvers<ContextType = any, ParentType extends IResol
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
+  createAccount?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
   startBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   clearQueue?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
@@ -704,6 +713,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
+  accounts?: Resolver<ReadonlyArray<IResolversTypes['UserAccount']>, ParentType, ContextType>,
   availableNewBuildings?: Resolver<ReadonlyArray<IResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<IQueryAvailableNewBuildingsArgs, 'input'>>,
   buildingName?: Resolver<IResolversTypes['String'], ParentType, ContextType, RequireFields<IQueryBuildingNameArgs, 'buildingType'>>,
   buildingSpots?: Resolver<IResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<IQueryBuildingSpotsArgs, 'villageId'>>,
@@ -756,6 +766,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
 };
 
 export type IUserAccountResolvers<ContextType = any, ParentType extends IResolversParentTypes['UserAccount'] = IResolversParentTypes['UserAccount']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
   username?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   password?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   server?: Resolver<IResolversTypes['String'], ParentType, ContextType>,

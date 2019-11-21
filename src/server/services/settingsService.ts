@@ -41,7 +41,7 @@ export const settingsService = {
 
   general: {
     load(): GeneralSettings {
-      return fileUtils.load(generalPath, GeneralSettings);
+      return fileUtils.loadInstance(generalPath, GeneralSettings);
     },
     update(settings: GeneralSettings): void {
       mSettings.general = settings;
@@ -52,7 +52,7 @@ export const settingsService = {
   hero: {
     autoAdventure: {
       load(): AutoAdventureSettings {
-        return fileUtils.load(heroPath.autoAdventure, AutoAdventureSettings);
+        return fileUtils.loadInstance(heroPath.autoAdventure, AutoAdventureSettings);
       },
       update(settings: AutoAdventureSettings): void {
         mSettings.hero.autoAdventure = settings;
@@ -67,7 +67,7 @@ export const settingsService = {
     return {
       general: {
         load(): GeneralVillageSettings {
-          return fileUtils.load(localVillagePath.general, GeneralVillageSettings);
+          return fileUtils.loadInstance(localVillagePath.general, GeneralVillageSettings);
         },
         update(settings: GeneralVillageSettings) {
           mSettings.village(villageId).general = settings;
@@ -76,7 +76,7 @@ export const settingsService = {
       },
       autoBuild: {
         load(): AutoBuildSettings {
-          return fileUtils.load(localVillagePath.autoBuild, AutoBuildSettings);
+          return fileUtils.loadInstance(localVillagePath.autoBuild, AutoBuildSettings);
         },
         update(settings: AutoBuildSettings) {
           mSettings.village(villageId).autoBuild = settings;

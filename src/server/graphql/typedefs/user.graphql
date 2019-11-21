@@ -1,10 +1,4 @@
-type UserAccount {
-    username: String!
-    password: String!
-    server: String!
-}
-
-input SignInInput {
+input UserAccountInput {
     username: String!
     password: String!
     server: String!
@@ -15,7 +9,7 @@ type Query {
 }
 
 type Mutation {
-    signIn(account: SignInInput!): Boolean!
+    signIn(account: UserAccountInput!): Boolean!
     signOut: Boolean!
 }
 

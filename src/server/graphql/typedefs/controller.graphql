@@ -7,6 +7,6 @@ extend type Mutation {
     stopBot: Boolean!
 }
 
-type Subscription {
+extend type Subscription {
     onBotRunningChanged: Boolean!
 }

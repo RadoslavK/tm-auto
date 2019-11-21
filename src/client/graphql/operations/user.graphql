@@ -2,7 +2,7 @@ query IsSignedIn{
     isSignedIn
 }
 
-mutation SignIn($account: SignInInput!) {
+mutation SignIn($account: UserAccountInput!) {
     signIn(account: $account)
 }
 

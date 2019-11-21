@@ -1,4 +1,15 @@
 
+declare module '*/graphql_operations/account.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const UserAccountFragment: DocumentNode;
+export const GetAccounts: DocumentNode;
+export const CreateAccount: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/graphql_operations/building.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

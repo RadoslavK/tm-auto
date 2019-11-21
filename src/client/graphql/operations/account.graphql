@@ -1,0 +1,16 @@
+fragment UserAccountFragment on UserAccount {
+    id
+    username
+    password
+    server
+}
+
+query GetAccounts {
+    accounts {
+        ...UserAccountFragment
+    }
+}
+
+mutation CreateAccount($account: UserAccountInput!) {
+    createAccount(account: $account)
+}

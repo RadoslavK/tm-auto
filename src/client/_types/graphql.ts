@@ -158,6 +158,7 @@ export type IITaskSettings = {
 };
 
 export type IMutation = {
+  readonly createAccount?: Maybe<Scalars['ID']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -172,6 +173,11 @@ export type IMutation = {
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
   readonly signIn: Scalars['Boolean'],
   readonly signOut: Scalars['Boolean'],
+};
+
+
+export type IMutationCreateAccountArgs = {
+  account: IUserAccountInput
 };
 
 
@@ -226,10 +232,11 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 
 
 export type IMutationSignInArgs = {
-  account: ISignInInput
+  account: IUserAccountInput
 };
 
 export type IQuery = {
+  readonly accounts: ReadonlyArray<IUserAccount>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -317,12 +324,6 @@ export type IResources = {
   readonly freeCrop: Scalars['Int'],
 };
 
-export type ISignInInput = {
-  readonly username: Scalars['String'],
-  readonly password: Scalars['String'],
-  readonly server: Scalars['String'],
-};
-
 export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
@@ -361,6 +362,13 @@ export type IUpdateGeneralVillageSettingsInput = {
 };
 
 export type IUserAccount = {
+  readonly id: Scalars['ID'],
+  readonly username: Scalars['String'],
+  readonly password: Scalars['String'],
+  readonly server: Scalars['String'],
+};
+
+export type IUserAccountInput = {
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -388,6 +396,20 @@ export type IVillageSettings = {
   readonly general: IGeneralVillageSettings,
   readonly autoBuild: IAutoBuildSettings,
 };
+
+export type IUserAccountFragmentFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
+
+export type IGetAccountsQueryVariables = {};
+
+
+export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragmentFragment> };
+
+export type ICreateAccountMutationVariables = {
+  account: IUserAccountInput
+};
+
+
+export type ICreateAccountMutation = Pick<IMutation, 'createAccount'>;
 
 export type IBuildingSpotFragmentFragment = (
   Pick<IBuildingSpot, 'fieldId' | 'type' | 'name'>
@@ -606,7 +628,7 @@ export type IIsSignedInQueryVariables = {};
 export type IIsSignedInQuery = Pick<IQuery, 'isSignedIn'>;
 
 export type ISignInMutationVariables = {
-  account: ISignInInput
+  account: IUserAccountInput
 };
 
 
