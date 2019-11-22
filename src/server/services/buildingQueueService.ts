@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { BuildingType } from '../_enums/BuildingType';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
@@ -9,6 +10,8 @@ import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
 import { villagesService } from './villageService';
 import { logException } from '../../_shared/utils/logException';
+import { fileUtils } from '../utils/fileUtils';
+import { accountService } from './accountService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -28,10 +31,22 @@ export enum MovingDirection {
 
 export class BuildingQueueService {
   private readonly m_village: Village;
+  private readonly m_filePath: string;
 
   constructor(villageId: number) {
+    const userAccount = accountService.getCurrentAccount();
     this.m_village = villagesService.get().village(villageId);
+    this.m_filePath = path.join('accounts', userAccount.id, 'buildingQueue.json');
   }
+
+  public serializeQueue = async (): Promise<void> => {
+    return fileUtils.save(this.m_filePath, this.m_village.buildings.queue.buildings());
+  };
+
+  public loadQueue = async (): Promise<void> => {
+    const buildings = fileUtils.load<QueuedBuilding[]>(this.m_filePath, []);
+    this.m_village.buildings.queue.set(buildings);
+  };
 
   public enqueueBuilding = (building: IEnqueuedBuilding): void => {
     const {
@@ -67,6 +82,7 @@ export class BuildingQueueService {
 
     if (enqueued) {
       publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+      this.serializeQueue();
     }
   };
 
@@ -78,6 +94,7 @@ export class BuildingQueueService {
 
     this.correctBuildingQueue();
     publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    this.serializeQueue();
   };
 
   public dequeueBuildingAtField = (input: IDequeueAtFieldInput): void => {
@@ -96,6 +113,7 @@ export class BuildingQueueService {
 
     this.correctBuildingQueue();
     publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    this.serializeQueue();
   };
 
   public moveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -109,6 +127,7 @@ export class BuildingQueueService {
       this.m_village.buildings.queue.moveDown(queueId);
     }
 
+    this.serializeQueue();
     return true;
   };
 
@@ -125,6 +144,7 @@ export class BuildingQueueService {
     });
 
     publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    this.serializeQueue();
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {

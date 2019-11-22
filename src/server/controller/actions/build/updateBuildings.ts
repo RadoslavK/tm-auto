@@ -21,5 +21,7 @@ export const updateBuildings = async (): Promise<void> => {
   const infrastructureSpots = await parseInfrastructureSpots();
   village.buildings.updateActual(infrastructureSpots);
 
-  new BuildingQueueService(village.id).correctBuildingQueue();
+  const queueService = new BuildingQueueService(village.id);
+  queueService.correctBuildingQueue();
+  queueService.serializeQueue();
 };

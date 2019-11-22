@@ -11,6 +11,7 @@ import { villagesService } from '../services/villageService';
 import { publishEvent } from '../graphql/subscriptions/pubSub';
 import { Events } from '../graphql/subscriptions/events';
 import { SettingsService } from '../services/settings';
+import { BuildingQueueService } from '../services/buildingQueueService';
 
 export class Controller {
   private m_running = false;
@@ -41,6 +42,7 @@ export class Controller {
     }
 
     for (const village of shuffle(allVillages)) {
+      await new BuildingQueueService(village.id).loadQueue();
       await ensureVillageSelected(village.id);
 
       await updateResources();

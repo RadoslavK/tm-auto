@@ -4,6 +4,10 @@ import { QueuedBuilding } from './queuedBuilding';
 export class BuildingQueue {
   private m_buildings: QueuedBuilding[] = [];
 
+  public set = (buildings: QueuedBuilding[]): void => {
+    this.m_buildings = buildings;
+  };
+
   public add = (building: QueuedBuilding):  void => {
     this.m_buildings.push(building);
   };
