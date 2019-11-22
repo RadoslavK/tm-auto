@@ -6,7 +6,7 @@ import {
   IUserAccount,
 } from '../_types/graphql';
 import { fileUtils } from '../utils/fileUtils';
-import { logException } from '../../../_shared/utils/logException';
+import { logException } from '../../_shared/utils/logException';
 
 const accountsPath = 'accounts.json';
 

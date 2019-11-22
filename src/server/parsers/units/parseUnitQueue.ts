@@ -2,7 +2,7 @@ import { UnitsQueue } from '../../_models/units/unitsQueue';
 import { getPage } from '../../browser/getPage';
 import { getSecondsFromString } from '../../utils/getSeconds';
 import { playerService } from '../../services/playerService';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();

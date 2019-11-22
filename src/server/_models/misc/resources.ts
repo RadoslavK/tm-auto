@@ -1,4 +1,4 @@
-import { IComparable } from '../../../../_shared/_types/IComparable';
+import { IComparable } from '../../../_shared/types';
 
 interface IParams {
   wood: number;
@@ -28,7 +28,7 @@ export class Resources implements IParams, IComparable<Resources> {
       iron: this.iron + addition.iron,
       crop: this.crop + addition.crop,
       freeCrop: this.freeCrop + addition.freeCrop,
-    })
+    });
   };
 
   public subtract = (subtraction: Resources): Resources => {
@@ -38,7 +38,8 @@ export class Resources implements IParams, IComparable<Resources> {
       iron: this.iron - subtraction.iron,
       crop: this.crop - subtraction.crop,
       freeCrop: this.freeCrop - subtraction.freeCrop,
-    })};
+    });
+  };
 
   public multiply = (multiplicator: number): Resources => {
     return new Resources({
@@ -57,5 +58,5 @@ export class Resources implements IParams, IComparable<Resources> {
     && this.crop >= other.crop
     && this.freeCrop >= other.freeCrop;
 
-  public isLowerThan = (other: Resources): boolean => !this.isGreaterOrEqualThan(other)
+  public isLowerThan = (other: Resources): boolean => !this.isGreaterOrEqualThan(other);
 }

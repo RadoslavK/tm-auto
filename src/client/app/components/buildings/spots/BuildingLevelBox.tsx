@@ -89,5 +89,5 @@ export const BuildingLevelBox: React.FC<IProps> = (props) => {
         </span>
       )}
     </div>
-  )
+  );
 };

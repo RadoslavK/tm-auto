@@ -1,4 +1,4 @@
-import { logException } from '../../../_shared/utils/logException';
+import { logException } from '../../_shared/utils/logException';
 import { getPage } from '../browser/getPage';
 import { accountService } from '../services/accountService';
 

@@ -1,6 +1,6 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { UnitsQueue } from './unitsQueue';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export class Units {
   private readonly m_counts: Record<number, number> = {};

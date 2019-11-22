@@ -4,7 +4,7 @@ import { getPage } from '../../browser/getPage';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.InfrastructureOverview,

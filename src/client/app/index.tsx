@@ -9,6 +9,7 @@ import {
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
+import 'typeface-roboto';
 import { INavigationItem } from '../_types/INavigationItem';
 import { ISideMenuContext, SideMenuContext } from './components/sideMenu/context/SideMenuContext';
 import { SideMenu } from './components/sideMenu/SideMenu';

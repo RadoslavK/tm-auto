@@ -6,7 +6,7 @@ import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 import { ensurePage } from '../../actions/ensurePage';
 import { IBotTask } from '../../../_models/tasks';
-import { logException } from '../../../../../_shared/utils/logException';
+import { logException } from '../../../../_shared/utils/logException';
 import { SettingsService } from '../../../services/settings';
 import { villagesService } from '../../../services/villageService';
 import { heroService } from '../../../services/heroService';
@@ -65,7 +65,7 @@ export class AutoAdventureTask implements IBotTask {
         duration: getSecondsFromString(duration),
         isHard: difficulty === 0,
         url,
-      }
+      };
     }));
 
     let suitableAdventures = adventures

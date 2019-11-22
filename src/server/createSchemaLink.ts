@@ -18,7 +18,6 @@ import {
   isAsyncIterable,
 } from 'iterall';
 import { getMainDefinition } from 'apollo-utilities';
-import { stringify } from 'querystring';
 
 type Definition = OperationDefinitionNode | FragmentDefinitionNode;
 

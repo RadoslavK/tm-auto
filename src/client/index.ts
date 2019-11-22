@@ -56,7 +56,7 @@ const createClientWindow = (socketName: string): void => {
     clientWin.webContents.send('set-socket', {
       name: socketName,
     });
-  })
+  });
 };
 
 const createBackgroundProcess = (socketName: string): void => {
@@ -104,7 +104,9 @@ app.on('ready', async () => {
     // @ts-ignore
     callback({ path: path.normalize(`${__dirname}/${url}`)});
   }, (err) => {
-    if (err) console.error('Failed to register protocol')
+    if (err) {
+      console.error('Failed to register protocol');
+    }
   });
 
   await installDevTools();

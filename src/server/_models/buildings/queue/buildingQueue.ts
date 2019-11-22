@@ -91,6 +91,6 @@ export class BuildingQueue {
   };
 
   private move = (oldIndex: number, newIndex: number): void => {
-    this.m_buildings.splice(newIndex, 0, this.m_buildings.splice(oldIndex, 1)[0])
+    this.m_buildings.splice(newIndex, 0, this.m_buildings.splice(oldIndex, 1)[0]);
   };
 }

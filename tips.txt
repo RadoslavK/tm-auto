@@ -1,3 +1,0 @@
-roman - show double queue.. bez operacii, iba delete.
-
-stava mb namiesto city wall. v queue je dobre ulozene

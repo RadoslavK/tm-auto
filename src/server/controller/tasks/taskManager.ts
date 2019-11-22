@@ -62,7 +62,7 @@ class VillageBotTasksEngine {
 
   public execute = async (): Promise<void> => {
     for (const task of this.m_tasks) {
-      await task.execute()
+      await task.execute();
     }
   };
 }
@@ -93,7 +93,7 @@ export class TaskManager {
     await updateHeroInformation();
 
     for (const task of this.m_generalTasks) {
-      await task.execute()
+      await task.execute();
     }
   };
 
@@ -134,7 +134,7 @@ export class TaskManager {
 
   private doFinalTasks = async (): Promise<void> => {
     for (const task of this.m_finalTasks) {
-      await task.execute()
+      await task.execute();
     }
   };
 }

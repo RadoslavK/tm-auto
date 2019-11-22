@@ -13,7 +13,7 @@ import {
   IUpdateAutoAdventureSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
-import { logException } from '../../../../../../_shared/utils/logException';
+import { logException } from '../../../../../_shared/utils/logException';
 
 interface IProps {
   readonly settings: IAutoAdventureSettings;
@@ -189,7 +189,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
               >
                 {option.name}
               </option>
-            )
+            );
           })}
         </select>
       </div>

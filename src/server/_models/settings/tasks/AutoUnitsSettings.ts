@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { logException } from '../../../../../_shared/utils/logException';
+import { logException } from '../../../../_shared/utils/logException';
 import { BuildingType } from '../../../_enums/BuildingType';
 import { ITaskSettings } from '../../../_types/ITaskSettings';
 import { getSeconds } from '../../../utils/getSeconds';

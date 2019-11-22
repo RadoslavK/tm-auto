@@ -1,6 +1,6 @@
 import { VillageCapacity } from '../../_models/village/villageCapacity';
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export const parseVillageCapacity = async (): Promise<VillageCapacity> => {
   const page = await getPage();

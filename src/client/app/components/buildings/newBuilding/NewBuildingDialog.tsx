@@ -58,5 +58,5 @@ export const NewBuildingDialog: React.FC<IProps> = React.forwardRef((props, ref:
         />
       ))}
     </div>
-  )
+  );
 });

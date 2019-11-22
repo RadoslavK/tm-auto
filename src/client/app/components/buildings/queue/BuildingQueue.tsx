@@ -88,5 +88,5 @@ export const BuildingQueue: React.FC<IProps> = (props) => {
         ))}
       </div>
     </div>
-  )
+  );
 };

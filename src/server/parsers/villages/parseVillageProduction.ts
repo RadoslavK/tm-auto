@@ -2,7 +2,7 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { Resources } from '../../_models/misc/resources';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,
@@ -30,5 +30,5 @@ export const parseVillageProduction = async (): Promise<Resources> => {
     clay,
     iron,
     crop,
-  })
+  });
 };

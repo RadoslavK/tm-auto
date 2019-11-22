@@ -18,7 +18,7 @@ import {
 import {
   IGetAccountsQuery,
 } from '../../../_types/graphql';
-import { logException } from '../../../../../_shared/utils/logException';
+import { logException } from '../../../../_shared/utils/logException';
 
 type Props = {
   readonly selectedId: string | undefined;

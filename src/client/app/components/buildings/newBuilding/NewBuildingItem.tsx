@@ -47,5 +47,5 @@ export const NewBuildingItem: React.FC<IProps> = (props) => {
       <div className={classes.image} />
       <span className={classes.name}>{name}</span>
     </div>
-  )
+  );
 };

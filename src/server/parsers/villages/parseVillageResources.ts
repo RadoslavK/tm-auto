@@ -1,6 +1,6 @@
 import { Resources } from '../../_models/misc/resources';
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export const parseVillageResources = async (): Promise<Resources> => {
   const page = await getPage();
@@ -25,5 +25,5 @@ export const parseVillageResources = async (): Promise<Resources> => {
     iron,
     crop,
     freeCrop,
-  })
+  });
 };

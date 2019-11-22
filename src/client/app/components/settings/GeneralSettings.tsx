@@ -73,7 +73,7 @@ const Container: React.FC = () => {
     return null;
   }
 
-  return <GeneralSettings settings={data.generalSettings} />
+  return <GeneralSettings settings={data.generalSettings} />;
 };
 
 export { Container as GeneralSettings };

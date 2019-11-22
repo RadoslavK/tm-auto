@@ -17,7 +17,7 @@ import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
 import { villagesService } from '../../services/villageService';
 import { playerService } from '../../services/playerService';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
 
 const getWallType = (): BuildingType => {
@@ -63,7 +63,7 @@ export const buildingResolvers: IResolvers = {
             actual: 0,
             ongoing: 0,
             max: buildingInfos[b.type].maxLevel,
-          }
+          };
         } else if (b.fieldId === fieldIds.Wall) {
           (b.type as BuildingType) = getWallType();
           (b.level as IBuildingSpotLevel) = {
@@ -72,7 +72,7 @@ export const buildingResolvers: IResolvers = {
             actual: 0,
             ongoing: 0,
             max: buildingInfos[b.type].maxLevel,
-          }
+          };
         }
       });
 
@@ -84,7 +84,7 @@ export const buildingResolvers: IResolvers = {
           iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
           crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
         }
-      }
+      };
     },
 
     buildingQueue: (_, args): IBuildingQueue => {

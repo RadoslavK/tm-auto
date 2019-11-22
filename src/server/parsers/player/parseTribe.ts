@@ -1,6 +1,6 @@
 import { Tribe } from '../../_enums/Tribe';
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export const parseTribe = async (): Promise<Tribe> => {
   const page = await getPage();

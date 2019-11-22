@@ -1,5 +1,5 @@
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 import { villagesService } from '../../services/villageService';
 
 export const ensureVillageSelected = async (villageId: number): Promise<void> => {

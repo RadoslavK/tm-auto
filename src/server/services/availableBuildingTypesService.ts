@@ -6,7 +6,7 @@ import { fieldIds } from '../constants/fieldIds';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { villagesService } from './villageService';
 import { playerService } from './playerService';
-import { logException } from '../../../_shared/utils/logException';
+import { logException } from '../../_shared/utils/logException';
 
 export class AvailableBuildingTypesService {
   private readonly m_village: Village;

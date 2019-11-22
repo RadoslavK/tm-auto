@@ -8,7 +8,7 @@ import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
 import { villagesService } from './villageService';
-import { logException } from '../../../_shared/utils/logException';
+import { logException } from '../../_shared/utils/logException';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -274,7 +274,7 @@ export class BuildingQueueService {
 
     spots.forEach(spot => {
       spot.level.queued = offsets[spot.fieldId];
-    })
+    });
   };
 
   public getMainBuildingLevels = (): Record<string, number> => {

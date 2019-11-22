@@ -2,7 +2,7 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,

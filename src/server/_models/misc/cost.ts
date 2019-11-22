@@ -23,6 +23,6 @@ export class Cost implements IParams {
     return new Cost({
       buildTime: this.buildTime + addition.buildTime,
       resources: this.resources.add(addition.resources),
-    })
+    });
   };
 }

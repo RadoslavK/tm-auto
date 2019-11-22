@@ -1,7 +1,7 @@
 import { HeroState } from '../../_models/hero/hero';
 import { getPage } from '../../browser/getPage';
 import { heroService } from '../../services/heroService';
-import { logException } from '../../../../_shared/utils/logException';
+import { logException } from '../../../_shared/utils/logException';
 
 export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
@@ -36,7 +36,7 @@ export const updateHeroInformation = async (): Promise<void> => {
       throw logException('Failed to parse hero health');
     }
 
-    return +match[1]
+    return +match[1];
   });
 
   const heroStatusClass = await page.$eval('img[class*=heroStatus]', x => x.className);

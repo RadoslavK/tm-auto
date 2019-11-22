@@ -40,5 +40,5 @@ export const BuildingsInProgress: React.FC<IProps> = (props) => {
         <BuildingInProgress key={index} building={building} />
       ))}
     </div>
-  )
+  );
 };

@@ -41,5 +41,13 @@ module.exports = [
     test: /\.(graphql|gql)$/,
     exclude: /node_modules/,
     loader: 'graphql-tag/loader'
+  },
+  {
+    test: /\.(woff|woff2|eot|ttf|svg)$/,
+    loader: 'file-loader',
+    options: {
+      name: '[name].[ext]',
+      outputPath: 'fonts/'
+    }
   }
 ];
