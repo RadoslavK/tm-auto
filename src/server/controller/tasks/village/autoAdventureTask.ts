@@ -7,12 +7,12 @@ import { randomElement } from '../../../utils/randomElement';
 import { ensurePage } from '../../actions/ensurePage';
 import { IBotTask } from '../../../_models/tasks';
 import { logException } from '../../../../../_shared/utils/logException';
-import { settingsService } from '../../../services/settingsService';
+import { SettingsService } from '../../../services/settings';
 import { villagesService } from '../../../services/villageService';
 import { heroService } from '../../../services/heroService';
 
 export class AutoAdventureTask implements IBotTask {
-  public settings = (): AutoAdventureSettings => settingsService.get().hero.autoAdventure;
+  public settings = (): AutoAdventureSettings => SettingsService.instance().hero.autoAdventure.get();
 
   public execute = async (): Promise<void> => {
     const village = villagesService.get().village();

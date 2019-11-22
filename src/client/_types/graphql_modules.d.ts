@@ -5,6 +5,7 @@ declare module '*/graphql_operations/account.graphql' {
   export const UserAccountFragment: DocumentNode;
 export const GetAccounts: DocumentNode;
 export const CreateAccount: DocumentNode;
+export const UpdateAccount: DocumentNode;
 
   export default defaultDocument;
 }

@@ -1,9 +1,9 @@
 import { TravianPath } from '../../_enums/TravianPath';
 import { getPage } from '../../browser/getPage';
-import { userService } from '../../services/userService';
+import { accountService } from '../../services/accountService';
 
 export const ensureLoggedIn = async (): Promise<void> => {
-  const { account } = userService.get();
+  const account = accountService.getAccount();
 
   const page = await getPage();
   await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);

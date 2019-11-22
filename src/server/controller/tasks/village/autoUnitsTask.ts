@@ -9,7 +9,7 @@ import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask } from '../../../_models/tasks';
-import { settingsService } from '../../../services/settingsService';
+import { SettingsService } from '../../../services/settings';
 import { playerService } from '../../../services/playerService';
 
 export class AutoUnitsTask implements IBotTask {
@@ -21,7 +21,7 @@ export class AutoUnitsTask implements IBotTask {
     this.m_units = village.units;
   }
 
-  public settings = (): AutoUnitsSettings => settingsService.get().village(this.m_village.id).autoUnits;
+  public settings = (): AutoUnitsSettings => SettingsService.instance().village(this.m_village.id).autoUnits.get();
 
   public execute = async (): Promise<void> => {
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);

@@ -1,21 +1,21 @@
-import { userService } from '../../services/userService';
+import { accountService } from '../../services/accountService';
 import { IResolvers } from '../../_types/graphql';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Events } from '../subscriptions/events';
 
 export const userResolvers: IResolvers = {
   Query: {
-    isSignedIn: () => userService.get().isSignedIn,
+    isSignedIn: () => accountService.isSignedIn(),
   },
 
   Mutation: {
     signIn: (_, args) =>  {
-      userService.get().signIn(args.account);
+      accountService.signIn(args);
       return true;
     },
 
     signOut: () => {
-      userService.get().signOut();
+      accountService.signOut();
       return true;
     },
   },

@@ -1,5 +1,3 @@
-import { settingsService } from '../../services/settingsService';
-import { VillageSettings } from '../settings/VillageSettings';
 import { Village } from './village';
 
 export class Villages {
@@ -30,12 +28,6 @@ export class Villages {
 
     newVillages.forEach(village => {
       this.m_villages[village.id] = village;
-      const general = settingsService.village(village.id).general.load();
-      const autoBuild = settingsService.village(village.id).autoBuild.load();
-      settingsService.get().setVillage(village.id, new VillageSettings({
-        general,
-        autoBuild,
-      }));
     });
   };
 }

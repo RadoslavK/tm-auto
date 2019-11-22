@@ -1,10 +1,10 @@
 import { logException } from '../../../_shared/utils/logException';
 import { getPage } from '../browser/getPage';
-import { userService } from '../services/userService';
+import { accountService } from '../services/accountService';
 
 export const validateUrl = async (acceptedUrls: readonly string[]): Promise<void> => {
   const page = await getPage();
-  const regExp = new RegExp(`^${userService.get().account.server}/`);
+  const regExp = new RegExp(`^${accountService.getAccount().server}/`);
 
   const pageUrl = page.url().replace(regExp, '');
   const isValid = acceptedUrls.some(acceptedUrl => {

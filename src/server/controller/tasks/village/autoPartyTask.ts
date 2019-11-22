@@ -7,7 +7,7 @@ import { partiesInfo } from '../../../constants/partiesInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { ensureBuildingSpotPage} from '../../actions/ensurePage';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
-import { settingsService } from '../../../services/settingsService';
+import { SettingsService } from '../../../services/settings';
 
 export class AutoPartyTask implements IBotTask {
   private readonly m_village: Village;
@@ -16,7 +16,7 @@ export class AutoPartyTask implements IBotTask {
     this.m_village = village;
   }
 
-  public settings = (): AutoPartySettings => settingsService.get().village(this.m_village.id).autoParty;
+  public settings = (): AutoPartySettings => SettingsService.instance().village(this.m_village.id).autoParty.get();
 
   public execute = async (): Promise<IBotTaskResultParams | undefined> => {
     const {

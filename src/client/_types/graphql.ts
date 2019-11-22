@@ -111,6 +111,12 @@ export type ICost = {
   readonly buildTime: Scalars['Int'],
 };
 
+export type ICreateUserAccountInput = {
+  readonly username: Scalars['String'],
+  readonly password: Scalars['String'],
+  readonly server: Scalars['String'],
+};
+
 
 export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
@@ -158,7 +164,8 @@ export type IITaskSettings = {
 };
 
 export type IMutation = {
-  readonly createAccount?: Maybe<Scalars['ID']>,
+  readonly createAccount: Scalars['ID'],
+  readonly updateAccount?: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -171,13 +178,18 @@ export type IMutation = {
   readonly updateAutoAdventureSettings: Scalars['Boolean'],
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
-  readonly signIn: Scalars['Boolean'],
-  readonly signOut: Scalars['Boolean'],
+  readonly signIn?: Maybe<Scalars['Boolean']>,
+  readonly signOut?: Maybe<Scalars['Boolean']>,
 };
 
 
 export type IMutationCreateAccountArgs = {
-  account: IUserAccountInput
+  account: ICreateUserAccountInput
+};
+
+
+export type IMutationUpdateAccountArgs = {
+  account: IUpdateUserAccountInput
 };
 
 
@@ -232,7 +244,7 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 
 
 export type IMutationSignInArgs = {
-  account: IUserAccountInput
+  accountId: Scalars['ID']
 };
 
 export type IQuery = {
@@ -328,7 +340,7 @@ export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly onQueueUpdated: Scalars['Boolean'],
-  readonly signedToggled: Scalars['Boolean'],
+  readonly signedToggled?: Maybe<Scalars['Boolean']>,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
 };
@@ -361,14 +373,15 @@ export type IUpdateGeneralVillageSettingsInput = {
   readonly settings: IGeneralVillageSettingsInput,
 };
 
-export type IUserAccount = {
+export type IUpdateUserAccountInput = {
   readonly id: Scalars['ID'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
 };
 
-export type IUserAccountInput = {
+export type IUserAccount = {
+  readonly id: Scalars['ID'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -405,11 +418,18 @@ export type IGetAccountsQueryVariables = {};
 export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragmentFragment> };
 
 export type ICreateAccountMutationVariables = {
-  account: IUserAccountInput
+  account: ICreateUserAccountInput
 };
 
 
 export type ICreateAccountMutation = Pick<IMutation, 'createAccount'>;
+
+export type IUpdateAccountMutationVariables = {
+  account: IUpdateUserAccountInput
+};
+
+
+export type IUpdateAccountMutation = Pick<IMutation, 'updateAccount'>;
 
 export type IBuildingSpotFragmentFragment = (
   Pick<IBuildingSpot, 'fieldId' | 'type' | 'name'>
@@ -628,7 +648,7 @@ export type IIsSignedInQueryVariables = {};
 export type IIsSignedInQuery = Pick<IQuery, 'isSignedIn'>;
 
 export type ISignInMutationVariables = {
-  account: IUserAccountInput
+  accountId: Scalars['ID']
 };
 
 

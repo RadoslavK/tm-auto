@@ -1,7 +1,9 @@
-settings
-user_data
+# internally generated files for program execution
+.data
+# IDE files
+.idea
+# produced build
+.webpack
 
 yarn-error.log
 node_modules
-.idea
-.webpack

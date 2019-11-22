@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import classNames from 'classnames';
+import { green } from '@material-ui/core/colors';
 import { SignIn } from '*/graphql_operations/user.graphql';
 import {
   ICreateAccountMutation,
@@ -24,12 +25,16 @@ import {
   IGetAccountsQuery,
   ISignInMutation,
   ISignInMutationVariables,
-  IUserAccountInput,
+  IUpdateAccountMutation,
+  IUpdateAccountMutationVariables,
+  IUpdateUserAccountInput,
+  ICreateUserAccountInput
 } from '../../../_types/graphql';
 import { Accounts } from './Accounts';
 import {
-  CreateAccount,
   GetAccounts,
+  CreateAccount,
+  UpdateAccount,
 } from "*/graphql_operations/account.graphql";
 
 const useStyles = makeStyles(theme => ({
@@ -51,21 +56,21 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-  errorIcon: {
+  icon: {
     fontSize: 20,
   },
-  errorIconVariant: {
+  iconVariant: {
     opacity: 0.9,
     marginRight: theme.spacing(1),
   },
-  errorMessage: {
+  message: {
     display: 'flex',
     alignItems: 'center',
   },
-  errorSnackbarContent: {
-    backgroundColor: theme.palette.error.dark,
+  snackbarContent: {
+    backgroundColor: green[600],
   },
-  errorMargin: {
+  margin: {
     margin: theme.spacing(1),
   },
 }));
@@ -75,24 +80,35 @@ type AccountType = IGetAccountsQuery['accounts'][0];
 export const SignInForm: React.FC = () => {
   const classes = useStyles();
 
-  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>();
-  const [accountExistsError, setAccountExistsError] = useState(false);
+  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>('');
+  const [showSubmitMessage, setShowSubmitMessage] = useState(false);
+
   const [username, setUsername] = useState('Buckyx');
   const [password, setPassword] = useState('Speedas11');
   const [server, setServer] = useState('https://tx3.travian.com.vn');
 
-  const account: IUserAccountInput = {
+  const account: ICreateUserAccountInput = {
     username,
     password,
     server,
   };
 
+  const updatedAccount: IUpdateUserAccountInput = {
+    id: selectedAccountId,
+    ...account,
+  };
+
   const [executeSignIn] = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
-    variables: { account },
+    variables: { accountId: selectedAccountId },
   });
 
   const [createAccount, createAccountResult] = useMutation<ICreateAccountMutation, ICreateAccountMutationVariables>(CreateAccount, {
     variables: { account },
+    refetchQueries: [{ query: GetAccounts }],
+  });
+
+  const [updateAccount, updateAccountResult] = useMutation<IUpdateAccountMutation, IUpdateAccountMutationVariables>(UpdateAccount, {
+    variables: { account: updatedAccount },
     refetchQueries: [{ query: GetAccounts }],
   });
 
@@ -103,13 +119,17 @@ export const SignInForm: React.FC = () => {
 
     const newAccountId = createAccountResult.data.createAccount;
 
-    if(newAccountId) {
-      setSelectedAccountId(newAccountId);
-      setAccountExistsError(false);
-    } else {
-      setAccountExistsError(true);
-    }
+    setSelectedAccountId(newAccountId);
+    setShowSubmitMessage(true);
   }, [createAccountResult]);
+
+  useEffect(() => {
+    if (updateAccountResult.loading) {
+      return;
+    }
+
+    setShowSubmitMessage(true);
+  }, [updateAccountResult]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -184,30 +204,30 @@ export const SignInForm: React.FC = () => {
             variant="contained"
             color="secondary"
             className={classes.submit}
-            onClick={() => createAccount()}
+            onClick={selectedAccountId ? () => updateAccount() : () => createAccount()}
           >
-            Create account
+            {selectedAccountId ? 'Update account' : 'Create account'}
           </Button>
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
             }}
-            open={accountExistsError}
+            open={showSubmitMessage}
             autoHideDuration={3000}
-            onClose={() => setAccountExistsError(false)}
+            onClose={() => setShowSubmitMessage(false)}
           >
             <SnackbarContent
-              className={classNames(classes.errorSnackbarContent, classes.errorMargin)}
+              className={classNames(classes.snackbarContent, classes.margin)}
               message={(
-                <span className={classes.errorMessage}>
-                  <Icon className={classNames(classes.errorIcon, classes.errorIconVariant)} />
-                  Account already exists
+                <span className={classes.message}>
+                  <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                  {selectedAccountId ? 'Account updated' : 'Account created'}
                 </span>
               )}
               action={[
-                <IconButton key="close" color="inherit" onClick={() => setAccountExistsError(false)}>
-                  <CloseIcon className={classes.errorIcon} />
+                <IconButton key="close" color="inherit" onClick={() => setShowSubmitMessage(false)}>
+                  <CloseIcon className={classes.icon} />
                 </IconButton>
               ]}
             />

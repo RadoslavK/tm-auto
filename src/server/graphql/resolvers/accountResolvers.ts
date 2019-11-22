@@ -1,23 +1,20 @@
 import { IResolvers } from "../../_types/graphql";
-import { userService } from '../../services/userService';
+import { accountService } from '../../services/accountService';
 
 export const accountResolvers: IResolvers = {
   Query: {
-    accounts: () => userService.getAccounts(),
+    accounts: () => accountService.getAccounts(),
   },
 
   Mutation: {
     createAccount: async (_, args) => {
-      const {
-        account,
-      } = args;
-
-      if (userService.accountExists(account)) {
-        return undefined;
-      }
-
-      const newAcc = await userService.createAccount(args.account);
+      const newAcc = await accountService.createAccount(args);
       return newAcc.id;
+    },
+
+    updateAccount: async (_, args) => {
+      accountService.updateAccount(args);
+      return true;
     },
   },
 };

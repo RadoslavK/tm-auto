@@ -11,6 +11,10 @@ query GetAccounts {
     }
 }
 
-mutation CreateAccount($account: UserAccountInput!) {
+mutation CreateAccount($account: CreateUserAccountInput!) {
     createAccount(account: $account)
+}
+
+mutation UpdateAccount($account: UpdateUserAccountInput!) {
+    updateAccount(account: $account)
 }

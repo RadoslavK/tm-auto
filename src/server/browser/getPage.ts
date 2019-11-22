@@ -10,7 +10,7 @@ const chromeOptions = {
   headless: false,
   executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
   slowMo: 25,
-  userDataDir: './user_data',
+  userDataDir: './data/browser_data',
 };
 
 let browser: Browser | null;

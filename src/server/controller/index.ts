@@ -10,6 +10,7 @@ import { TaskManager } from './tasks/taskManager';
 import { villagesService } from '../services/villageService';
 import { publishEvent } from '../graphql/subscriptions/pubSub';
 import { Events } from '../graphql/subscriptions/events';
+import { SettingsService } from '../services/settings';
 
 export class Controller {
   private m_running = false;
@@ -32,6 +33,12 @@ export class Controller {
     await updateNewOldVillages();
 
     const allVillages = villagesService.get().all();
+
+    const autoAdventureSettings = SettingsService.instance().hero.autoAdventure.get();
+
+    if (!autoAdventureSettings.preferredVillageId) {
+      autoAdventureSettings.preferredVillageId = allVillages[0].id;
+    }
 
     for (const village of shuffle(allVillages)) {
       await ensureVillageSelected(village.id);

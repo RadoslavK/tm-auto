@@ -17,7 +17,7 @@ import { randomElement } from '../../../utils/randomElement';
 import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
-import { settingsService } from '../../../services/settingsService';
+import { SettingsService } from '../../../services/settings';
 import { playerService } from '../../../services/playerService';
 
 export class AutoBuildTask implements IBotTask {
@@ -31,7 +31,7 @@ export class AutoBuildTask implements IBotTask {
     this.m_buildings = village.buildings;
   }
 
-  public settings = (): AutoBuildSettings => settingsService.get().village(this.m_village.id).autoBuild;
+  public settings = (): AutoBuildSettings => SettingsService.instance().village(this.m_village.id).autoBuild.get();
 
   public execute = async (): Promise<IBotTaskResultParams | void> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);

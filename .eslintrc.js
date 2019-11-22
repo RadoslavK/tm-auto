@@ -64,6 +64,7 @@ module.exports = {
     "unicorn/prefer-text-content": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "import/no-unresolved": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "jsx-a11y/label-has-associated-control": "off",
+    "@typescript-eslint/explicit-function-return-type": "off"
   },
 };

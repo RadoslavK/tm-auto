@@ -2,8 +2,8 @@ query IsSignedIn{
     isSignedIn
 }
 
-mutation SignIn($account: UserAccountInput!) {
-    signIn(account: $account)
+mutation SignIn($accountId: ID!) {
+    signIn(accountId: $accountId)
 }
 
 mutation SignOut {

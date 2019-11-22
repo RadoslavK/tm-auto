@@ -1,4 +1,11 @@
-input UserAccountInput {
+input CreateUserAccountInput {
+    username: String!
+    password: String!
+    server: String!
+}
+
+input UpdateUserAccountInput {
+    id: ID!
     username: String!
     password: String!
     server: String!
@@ -9,10 +16,10 @@ type Query {
 }
 
 type Mutation {
-    signIn(account: UserAccountInput!): Boolean!
-    signOut: Boolean!
+    signIn(accountId: ID!): Boolean
+    signOut: Boolean
 }
 
 extend type Subscription {
-    signedToggled: Boolean!
+    signedToggled: Boolean
 }

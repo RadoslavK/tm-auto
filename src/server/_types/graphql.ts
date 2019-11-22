@@ -124,6 +124,12 @@ export type ICost = {
   readonly buildTime: Scalars['Int'],
 };
 
+export type ICreateUserAccountInput = {
+  readonly username: Scalars['String'],
+  readonly password: Scalars['String'],
+  readonly server: Scalars['String'],
+};
+
 
 export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
@@ -176,7 +182,8 @@ export type IITaskSettings = {
 
 export type IMutation = {
   readonly __typename?: 'Mutation',
-  readonly createAccount?: Maybe<Scalars['ID']>,
+  readonly createAccount: Scalars['ID'],
+  readonly updateAccount?: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -189,13 +196,18 @@ export type IMutation = {
   readonly updateAutoAdventureSettings: Scalars['Boolean'],
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
-  readonly signIn: Scalars['Boolean'],
-  readonly signOut: Scalars['Boolean'],
+  readonly signIn?: Maybe<Scalars['Boolean']>,
+  readonly signOut?: Maybe<Scalars['Boolean']>,
 };
 
 
 export type IMutationCreateAccountArgs = {
-  account: IUserAccountInput
+  account: ICreateUserAccountInput
+};
+
+
+export type IMutationUpdateAccountArgs = {
+  account: IUpdateUserAccountInput
 };
 
 
@@ -250,7 +262,7 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 
 
 export type IMutationSignInArgs = {
-  account: IUserAccountInput
+  accountId: Scalars['ID']
 };
 
 export type IQuery = {
@@ -351,7 +363,7 @@ export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly onQueueUpdated: Scalars['Boolean'],
-  readonly signedToggled: Scalars['Boolean'],
+  readonly signedToggled?: Maybe<Scalars['Boolean']>,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
 };
@@ -384,15 +396,16 @@ export type IUpdateGeneralVillageSettingsInput = {
   readonly settings: IGeneralVillageSettingsInput,
 };
 
-export type IUserAccount = {
-  readonly __typename?: 'UserAccount',
+export type IUpdateUserAccountInput = {
   readonly id: Scalars['ID'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
 };
 
-export type IUserAccountInput = {
+export type IUserAccount = {
+  readonly __typename?: 'UserAccount',
+  readonly id: Scalars['ID'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -528,7 +541,8 @@ export type IResolversTypes = {
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
   Mutation: ResolverTypeWrapper<{}>,
-  UserAccountInput: IUserAccountInput,
+  CreateUserAccountInput: ICreateUserAccountInput,
+  UpdateUserAccountInput: IUpdateUserAccountInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
@@ -579,7 +593,8 @@ export type IResolversParentTypes = {
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
   Mutation: {},
-  UserAccountInput: IUserAccountInput,
+  CreateUserAccountInput: ICreateUserAccountInput,
+  UpdateUserAccountInput: IUpdateUserAccountInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
@@ -695,7 +710,8 @@ export type IITaskSettingsResolvers<ContextType = any, ParentType extends IResol
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  createAccount?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
+  createAccount?: Resolver<IResolversTypes['ID'], ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
+  updateAccount?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
   startBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   clearQueue?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
@@ -708,8 +724,8 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAutoAdventureSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoAdventureSettingsArgs, 'input'>>,
   updateGeneralVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralVillageSettingsArgs, 'input'>>,
   updateAutoBuildVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoBuildVillageSettingsArgs, 'input'>>,
-  signIn?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSignInArgs, 'account'>>,
-  signOut?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  signIn?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationSignInArgs, 'accountId'>>,
+  signOut?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -760,7 +776,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   buildingsUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "buildingsUpdated", ParentType, ContextType, RequireFields<ISubscriptionBuildingsUpdatedArgs, 'villageId'>>,
   onBotRunningChanged?: SubscriptionResolver<IResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>,
   onQueueUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "onQueueUpdated", ParentType, ContextType, RequireFields<ISubscriptionOnQueueUpdatedArgs, 'villageId'>>,
-  signedToggled?: SubscriptionResolver<IResolversTypes['Boolean'], "signedToggled", ParentType, ContextType>,
+  signedToggled?: SubscriptionResolver<Maybe<IResolversTypes['Boolean']>, "signedToggled", ParentType, ContextType>,
   updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
   updateVillages?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
 };
