@@ -184,6 +184,7 @@ export type IMutation = {
   readonly __typename?: 'Mutation',
   readonly createAccount?: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
+  readonly deleteAccount: Scalars['Boolean'],
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -208,6 +209,11 @@ export type IMutationCreateAccountArgs = {
 
 export type IMutationUpdateAccountArgs = {
   account: IUpdateUserAccountInput
+};
+
+
+export type IMutationDeleteAccountArgs = {
+  accountId: Scalars['ID']
 };
 
 
@@ -717,6 +723,7 @@ export type IITaskSettingsResolvers<ContextType = any, ParentType extends IResol
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   createAccount?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
   updateAccount?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
+  deleteAccount?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteAccountArgs, 'accountId'>>,
   startBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   clearQueue?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,

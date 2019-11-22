@@ -7,6 +7,7 @@ export const GetAccounts: DocumentNode;
 export const GetAccount: DocumentNode;
 export const CreateAccount: DocumentNode;
 export const UpdateAccount: DocumentNode;
+export const DeleteAccount: DocumentNode;
 
   export default defaultDocument;
 }

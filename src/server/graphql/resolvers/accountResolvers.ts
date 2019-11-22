@@ -26,5 +26,10 @@ export const accountResolvers: IResolvers = {
         await accountService.updateAccount(args);
       return true;
     },
+
+    deleteAccount: async (_, args) => {
+      accountService.deleteAccount(args.accountId);
+      return true;
+    }
   },
 };

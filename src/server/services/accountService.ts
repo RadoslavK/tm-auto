@@ -29,6 +29,10 @@ class AccountService {
 
   isSignedIn = (): boolean => !!this.currentAccountId;
 
+  private saveAccounts = async (): Promise<void> => {
+    return fileUtils.save(accountsPath, this.accounts);
+  };
+
   public getAccounts = (): readonly IUserAccount[] => {
     if (this.accountsLoaded) {
       return this.accounts;
@@ -49,7 +53,7 @@ class AccountService {
     };
     
     this.accounts.push(newAccount);
-    await fileUtils.save(accountsPath, this.accounts);
+    await this.saveAccounts();
     
     return newAccount;
   };
@@ -63,6 +67,18 @@ class AccountService {
     return this.getAccounts().some(acc => acc.server === args.account.server && acc.username === args.account.username);
   };
 
+  public deleteAccount = async (id: string): Promise<void> => {
+    const accountIndex = this.accounts.findIndex(acc => acc.id === id);
+
+    if (accountIndex === -1) {
+      throw new Error(`Account ${id} was not found`);
+    }
+
+    this.accounts.splice(accountIndex, 1);
+
+    return this.saveAccounts();
+  };
+
   public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {
     const {
       account
@@ -70,7 +86,7 @@ class AccountService {
 
     const accountIndex = this.accounts.findIndex(acc => acc.id === account.id);
     this.accounts[accountIndex] = account;
-    return fileUtils.save(accountsPath, this.accounts);
+    return this.saveAccounts();
   };
 
   public getAccount = (accountId: string): IUserAccount | undefined => {

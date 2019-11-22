@@ -166,6 +166,7 @@ export type IITaskSettings = {
 export type IMutation = {
   readonly createAccount?: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
+  readonly deleteAccount: Scalars['Boolean'],
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -190,6 +191,11 @@ export type IMutationCreateAccountArgs = {
 
 export type IMutationUpdateAccountArgs = {
   account: IUpdateUserAccountInput
+};
+
+
+export type IMutationDeleteAccountArgs = {
+  accountId: Scalars['ID']
 };
 
 
@@ -442,6 +448,13 @@ export type IUpdateAccountMutationVariables = {
 
 
 export type IUpdateAccountMutation = Pick<IMutation, 'updateAccount'>;
+
+export type IDeleteAccountMutationVariables = {
+  accountId: Scalars['ID']
+};
+
+
+export type IDeleteAccountMutation = Pick<IMutation, 'deleteAccount'>;
 
 export type IBuildingSpotFragmentFragment = (
   Pick<IBuildingSpot, 'fieldId' | 'type' | 'name'>

@@ -14,6 +14,10 @@ import {
 } from '@apollo/react-hooks';
 import {
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   Snackbar,
@@ -38,6 +42,8 @@ import {
   ICreateUserAccountInput,
   IGetAccountQuery,
   IGetAccountQueryVariables,
+  IDeleteAccountMutation,
+  IDeleteAccountMutationVariables,
 } from '../../../_types/graphql';
 import { Accounts } from './Accounts';
 import {
@@ -45,6 +51,7 @@ import {
   CreateAccount,
   UpdateAccount,
   GetAccount,
+  DeleteAccount,
 } from "*/graphql_operations/account.graphql";
 
 const useStyles = makeStyles(theme => ({
@@ -91,6 +98,7 @@ enum DialogType {
   None = 'none',
   Create = 'create',
   Update = 'update',
+  Delete = 'delete',
 }
 
 interface IFormDialogProps {
@@ -254,6 +262,21 @@ export const SignInForm: React.FC = () => {
     refetchQueries: [{ query: IsSignedIn }],
   });
 
+  const [deleteAccount, deleteAccountResult] = useMutation<IDeleteAccountMutation, IDeleteAccountMutationVariables>(DeleteAccount, {
+    variables: { accountId: selectedAccountId },
+    refetchQueries: [{ query: GetAccounts }],
+  });
+
+  useEffect(() => {
+    if (deleteAccountResult.loading || !deleteAccountResult.data) {
+      return;
+    }
+
+    setDialogType(DialogType.None);
+    setSubmitMessage('Account deleted');
+    setShowSubmitMessage(true);
+  }, [deleteAccountResult]);
+
   const onUpdate = (success: boolean): void => {
     if (!success) {
       setSubmitError(true);
@@ -322,6 +345,16 @@ export const SignInForm: React.FC = () => {
             >
               Update account
             </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              className={classes.submit}
+              disabled={!selectedAccountId}
+              onClick={() => setDialogType(DialogType.Delete)}
+            >
+              Delete account
+            </Button>
             <Snackbar
               anchorOrigin={{
                 vertical: 'bottom',
@@ -357,7 +390,7 @@ export const SignInForm: React.FC = () => {
         </div>
       </Container>
       <Dialog
-        open={dialogType !== DialogType.None}
+        open={dialogType === DialogType.Create || dialogType === DialogType.Update}
         onClose={() => setDialogType(DialogType.None)}
       >
         <FormDialog
@@ -366,6 +399,25 @@ export const SignInForm: React.FC = () => {
           onUpdate={onUpdate}
           onCreate={onCreate}
         />
+      </Dialog>
+      <Dialog
+        open={dialogType === DialogType.Delete}
+        onClose={() => setDialogType(DialogType.None)}
+      >
+        <DialogTitle>
+          Delete account
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>Do you really want to delete the account?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setDialogType(DialogType.None)} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => deleteAccount()} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   );

@@ -24,3 +24,7 @@ mutation CreateAccount($account: CreateUserAccountInput!) {
 mutation UpdateAccount($account: UpdateUserAccountInput!) {
     updateAccount(account: $account)
 }
+
+mutation DeleteAccount($accountId: ID!) {
+    deleteAccount(accountId: $accountId)
+}
