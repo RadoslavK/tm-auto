@@ -1,8 +1,18 @@
 export enum TravianPath {
   ResourceFieldsOverview = 'dorf1.php',
   InfrastructureOverview = 'dorf2.php',
+  AccountOverview = 'dorf3.php',
+
+  CenterMap = 'karte.php',
+
+  Statistics = 'statistiken.php',
+
+  Reports = 'berichte.php',
+
+  Messages = 'messages.php',
 
   Player = 'spieler.php',
+
   Hero = 'hero.php',
 }
 

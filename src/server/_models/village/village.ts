@@ -18,6 +18,7 @@ export class Village implements IParams {
   public coords: Coords = new Coords();
   public id = 0;
   public isCapital = false;
+  // TODO dynamically update
   public name = '';
   public readonly resources: VillageResources = new VillageResources();
 

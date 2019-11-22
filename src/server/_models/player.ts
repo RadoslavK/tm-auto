@@ -1,5 +1,7 @@
 import { Tribe } from '../_enums/Tribe';
 
+//  TODO ally id + has gold club featury
+
 interface IParams {
   speed: number;
   tribe: Tribe;

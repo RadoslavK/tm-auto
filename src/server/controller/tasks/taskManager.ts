@@ -120,6 +120,7 @@ export class TaskManager {
           //  TODO: autobuild storage, mozno spojit s autobuildom
           // AutoBuildStorage,
           AutoBuildTask,
+          // Update resources - market
           AutoUnitsTask,
         ]);
         this.m_villageTasks[village.id] = taskEngine;

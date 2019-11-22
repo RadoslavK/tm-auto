@@ -1,3 +1,4 @@
+// TODO zistit vsetky mozne stavi a jak sa lisia
 export enum HeroState {
   None,
   InVillage,
