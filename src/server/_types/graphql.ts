@@ -182,8 +182,8 @@ export type IITaskSettings = {
 
 export type IMutation = {
   readonly __typename?: 'Mutation',
-  readonly createAccount: Scalars['ID'],
-  readonly updateAccount?: Maybe<Scalars['Boolean']>,
+  readonly createAccount?: Maybe<Scalars['ID']>,
+  readonly updateAccount: Scalars['Boolean'],
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -268,6 +268,7 @@ export type IMutationSignInArgs = {
 export type IQuery = {
   readonly __typename?: 'Query',
   readonly accounts: ReadonlyArray<IUserAccount>,
+  readonly account?: Maybe<IUserAccount>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -282,6 +283,11 @@ export type IQuery = {
   readonly isSignedIn: Scalars['Boolean'],
   readonly village?: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
+};
+
+
+export type IQueryAccountArgs = {
+  accountId: Scalars['ID']
 };
 
 
@@ -363,7 +369,6 @@ export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly onQueueUpdated: Scalars['Boolean'],
-  readonly signedToggled?: Maybe<Scalars['Boolean']>,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
 };
@@ -710,8 +715,8 @@ export type IITaskSettingsResolvers<ContextType = any, ParentType extends IResol
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  createAccount?: Resolver<IResolversTypes['ID'], ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
-  updateAccount?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
+  createAccount?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
+  updateAccount?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
   startBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   clearQueue?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
@@ -730,6 +735,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   accounts?: Resolver<ReadonlyArray<IResolversTypes['UserAccount']>, ParentType, ContextType>,
+  account?: Resolver<Maybe<IResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<IQueryAccountArgs, 'accountId'>>,
   availableNewBuildings?: Resolver<ReadonlyArray<IResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<IQueryAvailableNewBuildingsArgs, 'input'>>,
   buildingName?: Resolver<IResolversTypes['String'], ParentType, ContextType, RequireFields<IQueryBuildingNameArgs, 'buildingType'>>,
   buildingSpots?: Resolver<IResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<IQueryBuildingSpotsArgs, 'villageId'>>,
@@ -776,7 +782,6 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   buildingsUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "buildingsUpdated", ParentType, ContextType, RequireFields<ISubscriptionBuildingsUpdatedArgs, 'villageId'>>,
   onBotRunningChanged?: SubscriptionResolver<IResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>,
   onQueueUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "onQueueUpdated", ParentType, ContextType, RequireFields<ISubscriptionOnQueueUpdatedArgs, 'villageId'>>,
-  signedToggled?: SubscriptionResolver<Maybe<IResolversTypes['Boolean']>, "signedToggled", ParentType, ContextType>,
   updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
   updateVillages?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
 };

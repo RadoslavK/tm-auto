@@ -5,6 +5,7 @@
   "main": ".webpack/main",
   "license": "MIT",
   "scripts": {
+    "debug": "electron-forge start -- --remote-debugging-port=9222",
     "generate:types": "graphql-codegen --config codegen.yml",
     "check-types": "tsc",
     "lint": "eslint \"**/*\"",

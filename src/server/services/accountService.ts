@@ -6,8 +6,6 @@ import {
   IUserAccount,
 } from '../_types/graphql';
 import { fileUtils } from '../utils/fileUtils';
-import { publishEvent } from '../graphql/subscriptions/pubSub';
-import { Events } from '../graphql/subscriptions/events';
 import { logException } from '../../../_shared/utils/logException';
 
 const accountsPath = 'accounts.json';
@@ -23,14 +21,10 @@ class AccountService {
     } = input;
 
     this.currentAccountId = accountId;
-
-    publishEvent(Events.SignedInToggled);
   };
 
   signOut = (): void => {
     this.currentAccountId = null;
-
-    publishEvent(Events.SignedInToggled);
   };
 
   isSignedIn = (): boolean => !!this.currentAccountId;
@@ -60,6 +54,15 @@ class AccountService {
     return newAccount;
   };
 
+  public accountExists = (args: IMutationCreateAccountArgs | IMutationUpdateAccountArgs): boolean => {
+    if ('id' in args.account) {
+      const accountId = args.account.id;
+      return this.getAccounts().some(acc => acc.id !== accountId &&  acc.server === args.account.server && acc.username === args.account.username);
+    }
+
+    return this.getAccounts().some(acc => acc.server === args.account.server && acc.username === args.account.username);
+  };
+
   public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {
     const {
       account
@@ -67,9 +70,15 @@ class AccountService {
 
     const accountIndex = this.accounts.findIndex(acc => acc.id === account.id);
     this.accounts[accountIndex] = account;
+    return fileUtils.save(accountsPath, this.accounts);
   };
 
-  public getAccount = (): IUserAccount => {
+  public getAccount = (accountId: string): IUserAccount | undefined => {
+    const accounts = this.getAccounts();
+    return accounts.find(x => x.id === accountId);
+  };
+
+  public getCurrentAccount = (): IUserAccount => {
     const accounts = this.getAccounts();
     const account = accounts.find(x => x.id === this.currentAccountId);
 

@@ -3,6 +3,5 @@ export enum Events {
   QueuedUpdated = 'QueueUpdated',
   VillageUpdated = 'VillageUpdated',
   VillagesUpdated = 'VillagesUpdated',
-  SignedInToggled = 'SignedInToggled',
   BotRunningChanged = 'BotRunningChanged',
 }

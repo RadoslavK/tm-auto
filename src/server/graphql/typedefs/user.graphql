@@ -19,7 +19,3 @@ type Mutation {
     signIn(accountId: ID!): Boolean
     signOut: Boolean
 }
-
-extend type Subscription {
-    signedToggled: Boolean
-}

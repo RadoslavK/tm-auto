@@ -19,11 +19,4 @@ export const userResolvers: IResolvers = {
       return true;
     },
   },
-
-  Subscription: {
-    signedToggled: {
-      subscribe: subscribeToEvent(Events.SignedInToggled),
-      resolve: () => true,
-    }
-  },
 };

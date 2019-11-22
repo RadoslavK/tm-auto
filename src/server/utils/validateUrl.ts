@@ -4,7 +4,7 @@ import { accountService } from '../services/accountService';
 
 export const validateUrl = async (acceptedUrls: readonly string[]): Promise<void> => {
   const page = await getPage();
-  const regExp = new RegExp(`^${accountService.getAccount().server}/`);
+  const regExp = new RegExp(`^${accountService.getCurrentAccount().server}/`);
 
   const pageUrl = page.url().replace(regExp, '');
   const isValid = acceptedUrls.some(acceptedUrl => {

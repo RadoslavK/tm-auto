@@ -7,9 +7,10 @@ type UserAccount {
 
 extend type Query {
     accounts: [UserAccount!]!
+    account(accountId: ID!): UserAccount
 }
 
 extend type Mutation {
-    createAccount(account: CreateUserAccountInput!): ID!
-    updateAccount(account: UpdateUserAccountInput!): Boolean
+    createAccount(account: CreateUserAccountInput!): ID
+    updateAccount(account: UpdateUserAccountInput!): Boolean!
 }

@@ -4,6 +4,7 @@ declare module '*/graphql_operations/account.graphql' {
   const defaultDocument: DocumentNode;
   export const UserAccountFragment: DocumentNode;
 export const GetAccounts: DocumentNode;
+export const GetAccount: DocumentNode;
 export const CreateAccount: DocumentNode;
 export const UpdateAccount: DocumentNode;
 
@@ -105,7 +106,6 @@ declare module '*/graphql_operations/user.graphql' {
   export const IsSignedIn: DocumentNode;
 export const SignIn: DocumentNode;
 export const SignOut: DocumentNode;
-export const OnSignedToggled: DocumentNode;
 
   export default defaultDocument;
 }

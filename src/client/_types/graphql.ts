@@ -164,8 +164,8 @@ export type IITaskSettings = {
 };
 
 export type IMutation = {
-  readonly createAccount: Scalars['ID'],
-  readonly updateAccount?: Maybe<Scalars['Boolean']>,
+  readonly createAccount?: Maybe<Scalars['ID']>,
+  readonly updateAccount: Scalars['Boolean'],
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -249,6 +249,7 @@ export type IMutationSignInArgs = {
 
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
+  readonly account?: Maybe<IUserAccount>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -263,6 +264,11 @@ export type IQuery = {
   readonly isSignedIn: Scalars['Boolean'],
   readonly village?: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
+};
+
+
+export type IQueryAccountArgs = {
+  accountId: Scalars['ID']
 };
 
 
@@ -340,7 +346,6 @@ export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly onQueueUpdated: Scalars['Boolean'],
-  readonly signedToggled?: Maybe<Scalars['Boolean']>,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
 };
@@ -416,6 +421,13 @@ export type IGetAccountsQueryVariables = {};
 
 
 export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragmentFragment> };
+
+export type IGetAccountQueryVariables = {
+  accountId: Scalars['ID']
+};
+
+
+export type IGetAccountQuery = { readonly account: Maybe<IUserAccountFragmentFragment> };
 
 export type ICreateAccountMutationVariables = {
   account: ICreateUserAccountInput
@@ -658,11 +670,6 @@ export type ISignOutMutationVariables = {};
 
 
 export type ISignOutMutation = Pick<IMutation, 'signOut'>;
-
-export type IOnSignedToggledSubscriptionVariables = {};
-
-
-export type IOnSignedToggledSubscription = Pick<ISubscription, 'signedToggled'>;
 
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars['Int']

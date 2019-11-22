@@ -18,7 +18,10 @@ import {
   IStopBotMutation,
 } from '../../../_types/graphql';
 import { INavigationItem } from '../../../_types/INavigationItem';
-import { SignOut } from '*/graphql_operations/user.graphql';
+import {
+  IsSignedIn,
+  SignOut,
+} from '*/graphql_operations/user.graphql';
 
 const useStyles = (drawerWidth: number): any => makeStyles({
   appBar: {
@@ -41,7 +44,9 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
     onSubscriptionData: () => refetch(),
   });
 
-  const [signOut] = useMutation<ISignOutMutation>(SignOut);
+  const [signOut] = useMutation<ISignOutMutation>(SignOut, {
+    refetchQueries: [{ query: IsSignedIn }],
+  });
 
   if (loading || !data) {
     return null;
@@ -74,7 +79,7 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
       </Button>
       {!isBotRunning && (
         <Button
-          variant="outlined"
+          variant="contained"
           color="secondary"
           onClick={onSignOut}
         >

@@ -20,16 +20,15 @@ import {
 } from '../../../_types/graphql';
 import { logException } from '../../../../../_shared/utils/logException';
 
-type AccountType = IGetAccountsQuery['accounts'][0];
-
 type Props = {
   readonly selectedId: string | undefined;
-  readonly onSelected: (account: AccountType) => void;
+  readonly onSelectedId: (accountId: string) => void;
 };
 
 const useStyles = makeStyles(theme => ({
-  margin: {
+  formControl: {
     margin: theme.spacing(1),
+    display: 'flex',
   },
 }));
 
@@ -70,21 +69,23 @@ const BootstrapInput = withStyles(theme => ({
 
 export const Accounts: React.FC<Props> = (props) => {
   const {
-    onSelected,
+    onSelectedId,
     selectedId,
   } = props;
 
   const { loading, data } = useQuery<IGetAccountsQuery>(GetAccounts);
 
   useEffect(() => {
-    if (data && data.accounts.length > 0) {
-      onSelected(data.accounts[0]);
+    if (!selectedId && data && data.accounts.length) {
+      onSelectedId(data.accounts[0].id);
+    } else if (selectedId && data && data.accounts && !data.accounts.some(acc => acc.id === selectedId)) {
+      onSelectedId('');
     }
-  }, [data, onSelected]);
+  }, [data, onSelectedId, selectedId]);
 
   const classes = useStyles();
 
-  if (loading || !data || !data.accounts.length) {
+  if (loading || !data) {
     return null;
   }
 
@@ -97,12 +98,12 @@ export const Accounts: React.FC<Props> = (props) => {
       throw logException(`Can not find account with id: ${value}`);
     }
 
-    onSelected(acc);
+    onSelectedId(acc.id);
   };
 
   return (
-    <FormControl className={classes.margin}>
-      <InputLabel>Select account</InputLabel>
+    <FormControl className={classes.formControl}>
+      <InputLabel>Account</InputLabel>
       <NativeSelect
         value={selectedId}
         onChange={onOptionChanged}

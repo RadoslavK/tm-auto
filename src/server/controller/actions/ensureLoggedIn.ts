@@ -3,7 +3,7 @@ import { getPage } from '../../browser/getPage';
 import { accountService } from '../../services/accountService';
 
 export const ensureLoggedIn = async (): Promise<void> => {
-  const account = accountService.getAccount();
+  const account = accountService.getCurrentAccount();
 
   const page = await getPage();
   await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);

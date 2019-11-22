@@ -8,8 +8,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useMutation } from '@apollo/react-hooks';
 import {
+  useMutation,
+  useQuery,
+} from '@apollo/react-hooks';
+import {
+  Dialog,
   Icon,
   IconButton,
   Snackbar,
@@ -18,7 +22,10 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import classNames from 'classnames';
 import { green } from '@material-ui/core/colors';
-import { SignIn } from '*/graphql_operations/user.graphql';
+import {
+  IsSignedIn,
+  SignIn,
+} from '*/graphql_operations/user.graphql';
 import {
   ICreateAccountMutation,
   ICreateAccountMutationVariables,
@@ -28,13 +35,16 @@ import {
   IUpdateAccountMutation,
   IUpdateAccountMutationVariables,
   IUpdateUserAccountInput,
-  ICreateUserAccountInput
+  ICreateUserAccountInput,
+  IGetAccountQuery,
+  IGetAccountQueryVariables,
 } from '../../../_types/graphql';
 import { Accounts } from './Accounts';
 import {
   GetAccounts,
   CreateAccount,
   UpdateAccount,
+  GetAccount,
 } from "*/graphql_operations/account.graphql";
 
 const useStyles = makeStyles(theme => ({
@@ -77,33 +87,58 @@ const useStyles = makeStyles(theme => ({
 
 type AccountType = IGetAccountsQuery['accounts'][0];
 
-export const SignInForm: React.FC = () => {
+enum DialogType {
+  None = 'none',
+  Create = 'create',
+  Update = 'update',
+}
+
+interface IFormDialogProps {
+  readonly type: DialogType;
+  readonly selectedAccountId: string;
+  readonly onUpdate: (success: boolean) => void;
+  readonly onCreate: (newAccountId: string | null) => void;
+}
+
+const FormDialog: React.FC<IFormDialogProps> = (props) => {
+  const {
+    onCreate,
+    onUpdate,
+    selectedAccountId,
+    type,
+  } = props;
+
   const classes = useStyles();
 
-  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>('');
-  const [showSubmitMessage, setShowSubmitMessage] = useState(false);
-
-  const [username, setUsername] = useState('Buckyx');
-  const [password, setPassword] = useState('Speedas11');
-  const [server, setServer] = useState('https://tx3.travian.com.vn');
-
-  const account: ICreateUserAccountInput = {
-    username,
-    password,
-    server,
-  };
-
-  const updatedAccount: IUpdateUserAccountInput = {
-    id: selectedAccountId,
-    ...account,
-  };
-
-  const [executeSignIn] = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
+  const { loading, data } = useQuery<IGetAccountQuery, IGetAccountQueryVariables>(GetAccount, {
     variables: { accountId: selectedAccountId },
   });
 
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [server, setServer] = useState('');
+
+  useEffect(() => {
+    if (!loading && data && data.account && type === DialogType.Update) {
+      setUsername(data.account.username);
+      setPassword(data.account.password);
+      setServer(data.account.server);
+    }
+  }, [data, loading, type]);
+
+  const newAccount: ICreateUserAccountInput = {
+    server,
+    password,
+    username,
+  };
+
+  const updatedAccount: IUpdateUserAccountInput = {
+    ...newAccount,
+    id: selectedAccountId,
+  };
+
   const [createAccount, createAccountResult] = useMutation<ICreateAccountMutation, ICreateAccountMutationVariables>(CreateAccount, {
-    variables: { account },
+    variables: { account: newAccount },
     refetchQueries: [{ query: GetAccounts }],
   });
 
@@ -119,38 +154,36 @@ export const SignInForm: React.FC = () => {
 
     const newAccountId = createAccountResult.data.createAccount;
 
-    setSelectedAccountId(newAccountId);
-    setShowSubmitMessage(true);
-  }, [createAccountResult]);
+    onCreate(newAccountId || null);
+  }, [createAccountResult, onCreate]);
 
   useEffect(() => {
-    if (updateAccountResult.loading) {
+    if (updateAccountResult.loading || !updateAccountResult.data) {
       return;
     }
 
-    setShowSubmitMessage(true);
-  }, [updateAccountResult]);
+    onUpdate(updateAccountResult.data.updateAccount);
+  }, [updateAccountResult, onUpdate]);
+
+  const submitAccount = () => {
+    if (type === DialogType.Update) {
+      updateAccount();
+    } else {
+      createAccount();
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign in
+          {type === DialogType.Update ? 'Update' : 'Create new'}
         </Typography>
         <form
           className={classes.form}
           noValidate
         >
-          <Accounts
-            selectedId={selectedAccountId}
-            onSelected={acc => {
-              setUsername(acc.username);
-              setPassword(acc.password);
-              setServer(acc.server);
-              setSelectedAccountId(acc.id);
-            }}
-          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -195,45 +228,145 @@ export const SignInForm: React.FC = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => executeSignIn()}
+            disabled={!server || !username || !password}
+            onClick={() => submitAccount()}
           >
-            Sign In
+            Submit
           </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-            onClick={selectedAccountId ? () => updateAccount() : () => createAccount()}
-          >
-            {selectedAccountId ? 'Update account' : 'Create account'}
-          </Button>
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            open={showSubmitMessage}
-            autoHideDuration={3000}
-            onClose={() => setShowSubmitMessage(false)}
-          >
-            <SnackbarContent
-              className={classNames(classes.snackbarContent, classes.margin)}
-              message={(
-                <span className={classes.message}>
-                  <Icon className={classNames(classes.icon, classes.iconVariant)} />
-                  {selectedAccountId ? 'Account updated' : 'Account created'}
-                </span>
-              )}
-              action={[
-                <IconButton key="close" color="inherit" onClick={() => setShowSubmitMessage(false)}>
-                  <CloseIcon className={classes.icon} />
-                </IconButton>
-              ]}
-            />
-          </Snackbar>
         </form>
       </div>
     </Container>
+  );
+};
+
+export const SignInForm: React.FC = () => {
+  const classes = useStyles();
+
+  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>('');
+  const [showSubmitMessage, setShowSubmitMessage] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+  const [submitError, setSubmitError] = useState(false);
+
+  const [dialogType, setDialogType] = useState(DialogType.None);
+
+  const [executeSignIn] = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
+    variables: { accountId: selectedAccountId },
+    refetchQueries: [{ query: IsSignedIn }],
+  });
+
+  const onUpdate = (success: boolean): void => {
+    if (!success) {
+      setSubmitError(true);
+    } else {
+      setSubmitMessage('Account updated');
+    }
+
+    setDialogType(DialogType.None);
+    setShowSubmitMessage(true);
+  };
+
+  const onCreate = (newAccountId: string | null): void => {
+    if (!newAccountId) {
+      setSubmitError(true);
+    } else {
+      setSelectedAccountId(newAccountId);
+      setSubmitMessage('Account created');
+    }
+
+    setDialogType(DialogType.None);
+    setShowSubmitMessage(true);
+  };
+
+  return (
+    <>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form
+            className={classes.form}
+            noValidate
+          >
+            <Accounts
+              selectedId={selectedAccountId}
+              onSelectedId={setSelectedAccountId}
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={!selectedAccountId}
+              onClick={() => executeSignIn()}
+            >
+              Sign In
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+              onClick={() => setDialogType(DialogType.Create)}
+            >
+              Create account
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              className={classes.submit}
+              disabled={!selectedAccountId}
+              onClick={() => setDialogType(DialogType.Update)}
+            >
+              Update account
+            </Button>
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              open={showSubmitMessage}
+              autoHideDuration={3000}
+              onClose={() => {
+                setShowSubmitMessage(false);
+                setSubmitError(false);
+              }}
+            >
+              <SnackbarContent
+                className={classNames(classes.snackbarContent, classes.margin)}
+                message={(
+                  <span className={classes.message}>
+                    <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                    {submitError && <span>Account already exists</span>}
+                    {!submitError && <span>{submitMessage}</span>}
+                  </span>
+                )}
+                action={[
+                  <IconButton key="close" color="inherit" onClick={() => {
+                    setShowSubmitMessage(false);
+                    setSubmitError(false);
+                  }}>
+                    <CloseIcon className={classes.icon} />
+                  </IconButton>
+                ]}
+              />
+            </Snackbar>
+          </form>
+        </div>
+      </Container>
+      <Dialog
+        open={dialogType !== DialogType.None}
+        onClose={() => setDialogType(DialogType.None)}
+      >
+        <FormDialog
+          type={dialogType}
+          selectedAccountId={selectedAccountId}
+          onUpdate={onUpdate}
+          onCreate={onCreate}
+        />
+      </Dialog>
+    </>
   );
 };

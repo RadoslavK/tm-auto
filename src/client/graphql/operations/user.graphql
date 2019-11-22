@@ -9,7 +9,3 @@ mutation SignIn($accountId: ID!) {
 mutation SignOut {
     signOut
 }
-
-subscription OnSignedToggled {
-    signedToggled
-}

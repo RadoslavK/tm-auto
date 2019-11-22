@@ -16,7 +16,7 @@ export class SettingsService {
   private readonly basePath: string;
 
   static instance = (): SettingsService => {
-    const userId = accountService.getAccount().id;
+    const userId = accountService.getCurrentAccount().id;
 
     return new SettingsService(userId);
   };
