@@ -1,5 +1,5 @@
-query IsBotRunning {
-    isBotRunning
+query GetBotState {
+    botState
 }
 
 mutation StartBot {
@@ -8,6 +8,14 @@ mutation StartBot {
 
 mutation StopBot {
     stopBot
+}
+
+mutation SignIn($accountId: ID!) {
+    signIn(accountId: $accountId)
+}
+
+mutation SignOut {
+    signOut
 }
 
 subscription OnBotRunningChanged {

@@ -4,24 +4,25 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/react-hooks';
-import { Link, useLocation, useHistory } from 'react-router-dom';
-import { IsBotRunning, StartBot, StopBot, OnBotRunningChanged } from "*/graphql_operations/controller.graphql";
+  Link,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 import {
-  IIsBotRunningQuery,
+  SignOut,
+  StartBot,
+  StopBot,
+} from "*/graphql_operations/controller.graphql";
+import {
+  BotState,
   ISignOutMutation,
   IStartBotMutation,
   IStopBotMutation,
 } from '../../../_types/graphql';
 import { INavigationItem } from '../../../_types/INavigationItem';
-import {
-  IsSignedIn,
-  SignOut,
-} from '*/graphql_operations/user.graphql';
+import { useBotState } from '../../hooks/useBotState';
 
 const useStyles = (drawerWidth: number): any => makeStyles({
   appBar: {
@@ -35,33 +36,37 @@ interface IProps {
   readonly navigationItems: readonly INavigationItem[];
 }
 
+const getToggleText = (botState: BotState): string => {
+  switch (botState) {
+    case BotState.Paused:
+      return 'Start';
+
+    case BotState.Running:
+    case BotState.Stopping:
+      return 'Stop';
+
+    default:
+      throw new Error(`Bot shouldnt be in this state (${BotState[botState]}) while navigation is rendered`);
+  }
+};
+
 const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) => {
-  const { data, loading, refetch } = useQuery<IIsBotRunningQuery>(IsBotRunning);
+  const { loading, botState } = useBotState();
   const [startBot] = useMutation<IStartBotMutation>(StartBot);
   const [stopBot] = useMutation<IStopBotMutation>(StopBot);
 
-  useSubscription(OnBotRunningChanged, {
-    onSubscriptionData: () => refetch(),
-  });
-
-  const [signOut] = useMutation<ISignOutMutation>(SignOut, {
-    refetchQueries: [{ query: IsSignedIn }],
-  });
+  const [signOut] = useMutation<ISignOutMutation>(SignOut);
 
   const history = useHistory();
 
-  if (loading || !data) {
+  if (loading || !botState) {
     return null;
   }
 
-  const {
-    isBotRunning,
-  } = data;
-
   const onClick = async (): Promise<void> => {
-    if (isBotRunning) {
+    if (botState === BotState.Running) {
       await stopBot();
-    } else {
+    } else if (botState === BotState.Paused) {
       await startBot();
     }
   };
@@ -77,10 +82,11 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
         variant="contained"
         color="primary"
         onClick={onClick}
+        disabled={botState === BotState.Stopping}
       >
-        {isBotRunning ? 'Stop bot' : 'Start bot'}
+        {getToggleText(botState)}
       </Button>
-      {!isBotRunning && (
+      {botState === BotState.Paused && (
         <Button
           variant="contained"
           color="secondary"

@@ -77,6 +77,14 @@ export type IAvailableNewBuildingsInput = {
   readonly villageId: Scalars['Int'],
 };
 
+export enum BotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
+
 export type IBuildingInProgress = {
   readonly level: Scalars['Int'],
   readonly finishedAt: Scalars['Date'],
@@ -198,6 +206,8 @@ export type IMutation = {
   readonly createAccount?: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
   readonly deleteAccount: Scalars['Boolean'],
+  readonly signIn?: Maybe<Scalars['Boolean']>,
+  readonly signOut?: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -210,8 +220,6 @@ export type IMutation = {
   readonly updateAutoAdventureSettings: Scalars['Boolean'],
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
-  readonly signIn?: Maybe<Scalars['Boolean']>,
-  readonly signOut?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -226,6 +234,11 @@ export type IMutationUpdateAccountArgs = {
 
 
 export type IMutationDeleteAccountArgs = {
+  accountId: Scalars['ID']
+};
+
+
+export type IMutationSignInArgs = {
   accountId: Scalars['ID']
 };
 
@@ -279,11 +292,6 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
   input: IUpdateAutoBuildVillageSettingsInput
 };
 
-
-export type IMutationSignInArgs = {
-  accountId: Scalars['ID']
-};
-
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account?: Maybe<IUserAccount>,
@@ -292,14 +300,13 @@ export type IQuery = {
   readonly buildingSpots: IBuildingSpots,
   readonly maxBuildingLevel: Scalars['Int'],
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>,
-  readonly isBotRunning: Scalars['Boolean'],
+  readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
   readonly villageSettings: IVillageSettings,
-  readonly isSignedIn: Scalars['Boolean'],
   readonly village?: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
@@ -544,10 +551,10 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<Pick<IBuildingInProgress, 'level' | 'finishedAt' | 'name' | 'type'>> };
 
-export type IIsBotRunningQueryVariables = {};
+export type IGetBotStateQueryVariables = {};
 
 
-export type IIsBotRunningQuery = Pick<IQuery, 'isBotRunning'>;
+export type IGetBotStateQuery = Pick<IQuery, 'botState'>;
 
 export type IStartBotMutationVariables = {};
 
@@ -558,6 +565,18 @@ export type IStopBotMutationVariables = {};
 
 
 export type IStopBotMutation = Pick<IMutation, 'stopBot'>;
+
+export type ISignInMutationVariables = {
+  accountId: Scalars['ID']
+};
+
+
+export type ISignInMutation = Pick<IMutation, 'signIn'>;
+
+export type ISignOutMutationVariables = {};
+
+
+export type ISignOutMutation = Pick<IMutation, 'signOut'>;
 
 export type IOnBotRunningChangedSubscriptionVariables = {};
 
@@ -725,23 +744,6 @@ export type IUpdateAutoBuildVillageSettingsMutationVariables = {
 
 
 export type IUpdateAutoBuildVillageSettingsMutation = Pick<IMutation, 'updateAutoBuildVillageSettings'>;
-
-export type IIsSignedInQueryVariables = {};
-
-
-export type IIsSignedInQuery = Pick<IQuery, 'isSignedIn'>;
-
-export type ISignInMutationVariables = {
-  accountId: Scalars['ID']
-};
-
-
-export type ISignInMutation = Pick<IMutation, 'signIn'>;
-
-export type ISignOutMutationVariables = {};
-
-
-export type ISignOutMutation = Pick<IMutation, 'signOut'>;
 
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars['Int']

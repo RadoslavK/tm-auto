@@ -5,7 +5,7 @@ import { controllerService } from '../../services/controllerService';
 
 export const controllerResolvers: IResolvers = {
   Query: {
-    isBotRunning: () => controllerService.isRunning(),
+    botState: () => controllerService.state(),
   },
 
   Mutation: {
@@ -16,6 +16,16 @@ export const controllerResolvers: IResolvers = {
 
     stopBot: () => {
       controllerService.stop();
+      return true;
+    },
+
+    signIn: (_, args) =>  {
+      controllerService.signIn(args);
+      return true;
+    },
+
+    signOut: () => {
+      controllerService.signOut();
       return true;
     },
   },

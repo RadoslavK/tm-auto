@@ -87,6 +87,14 @@ export type IAvailableNewBuildingsInput = {
   readonly villageId: Scalars['Int'],
 };
 
+export enum IBotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
+
 export type IBuildingInProgress = {
   readonly __typename?: 'BuildingInProgress',
   readonly level: Scalars['Int'],
@@ -222,6 +230,8 @@ export type IMutation = {
   readonly createAccount?: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
   readonly deleteAccount: Scalars['Boolean'],
+  readonly signIn?: Maybe<Scalars['Boolean']>,
+  readonly signOut?: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -234,8 +244,6 @@ export type IMutation = {
   readonly updateAutoAdventureSettings: Scalars['Boolean'],
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
-  readonly signIn?: Maybe<Scalars['Boolean']>,
-  readonly signOut?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -250,6 +258,11 @@ export type IMutationUpdateAccountArgs = {
 
 
 export type IMutationDeleteAccountArgs = {
+  accountId: Scalars['ID']
+};
+
+
+export type IMutationSignInArgs = {
   accountId: Scalars['ID']
 };
 
@@ -303,11 +316,6 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
   input: IUpdateAutoBuildVillageSettingsInput
 };
 
-
-export type IMutationSignInArgs = {
-  accountId: Scalars['ID']
-};
-
 export type IQuery = {
   readonly __typename?: 'Query',
   readonly accounts: ReadonlyArray<IUserAccount>,
@@ -317,14 +325,13 @@ export type IQuery = {
   readonly buildingSpots: IBuildingSpots,
   readonly maxBuildingLevel: Scalars['Int'],
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>,
-  readonly isBotRunning: Scalars['Boolean'],
+  readonly botState: IBotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
   readonly villageSettings: IVillageSettings,
-  readonly isSignedIn: Scalars['Boolean'],
   readonly village?: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
@@ -582,7 +589,7 @@ export type IResolversTypes = {
   ResourceFields: ResolverTypeWrapper<IResourceFields>,
   BuildingInProgress: ResolverTypeWrapper<IBuildingInProgress>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  BotState: IBotState,
   HeroInformation: ResolverTypeWrapper<IHeroInformation>,
   Village: ResolverTypeWrapper<IVillage>,
   Coords: ResolverTypeWrapper<ICoords>,
@@ -599,6 +606,7 @@ export type IResolversTypes = {
   AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<IAutoUnitsLogEntryContentPayload>,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Cost: ResolverTypeWrapper<ICost>,
   GeneralSettings: ResolverTypeWrapper<IGeneralSettings>,
   HeroSettings: ResolverTypeWrapper<IHeroSettings>,
@@ -642,7 +650,7 @@ export type IResolversParentTypes = {
   ResourceFields: IResourceFields,
   BuildingInProgress: IBuildingInProgress,
   Date: Scalars['Date'],
-  Boolean: Scalars['Boolean'],
+  BotState: IBotState,
   HeroInformation: IHeroInformation,
   Village: IVillage,
   Coords: ICoords,
@@ -659,6 +667,7 @@ export type IResolversParentTypes = {
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayload,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
+  Boolean: Scalars['Boolean'],
   Cost: ICost,
   GeneralSettings: IGeneralSettings,
   HeroSettings: IHeroSettings,
@@ -822,6 +831,8 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   createAccount?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
   updateAccount?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
   deleteAccount?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteAccountArgs, 'accountId'>>,
+  signIn?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationSignInArgs, 'accountId'>>,
+  signOut?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   startBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   clearQueue?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
@@ -834,8 +845,6 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAutoAdventureSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoAdventureSettingsArgs, 'input'>>,
   updateGeneralVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralVillageSettingsArgs, 'input'>>,
   updateAutoBuildVillageSettings?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoBuildVillageSettingsArgs, 'input'>>,
-  signIn?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationSignInArgs, 'accountId'>>,
-  signOut?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -846,14 +855,13 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   buildingSpots?: Resolver<IResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<IQueryBuildingSpotsArgs, 'villageId'>>,
   maxBuildingLevel?: Resolver<IResolversTypes['Int'], ParentType, ContextType, RequireFields<IQueryMaxBuildingLevelArgs, 'buildingType'>>,
   buildingsInProgress?: Resolver<ReadonlyArray<IResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<IQueryBuildingsInProgressArgs, 'villageId'>>,
-  isBotRunning?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  botState?: Resolver<IResolversTypes['BotState'], ParentType, ContextType>,
   heroInformation?: Resolver<IResolversTypes['HeroInformation'], ParentType, ContextType>,
   logsEntries?: Resolver<ReadonlyArray<IResolversTypes['LogEntry']>, ParentType, ContextType>,
   buildingQueue?: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings?: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
   hero?: Resolver<IResolversTypes['HeroSettings'], ParentType, ContextType>,
   villageSettings?: Resolver<IResolversTypes['VillageSettings'], ParentType, ContextType, RequireFields<IQueryVillageSettingsArgs, 'villageId'>>,
-  isSignedIn?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   village?: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType, RequireFields<IQueryVillageArgs, 'villageId'>>,
   villages?: Resolver<ReadonlyArray<IResolversTypes['Village']>, ParentType, ContextType>,
 };

@@ -6,29 +6,13 @@ import {
   IUserAccount,
 } from '../_types/graphql';
 import { fileUtils } from '../utils/fileUtils';
-import { accountContext } from '../accountContext';
 
 const accountsPath = 'accounts.json';
 
 class AccountService {
-  private currentAccountId: string | null = null;
+  public currentAccountId: string | null = null;
   private accounts: IUserAccount[] = [];
   private accountsLoaded = false;
-
-  signIn = (input: IMutationSignInArgs): void => {
-    const {
-      accountId,
-    } = input;
-
-    this.currentAccountId = accountId;
-    accountContext.initialize(this.currentAccountId);
-  };
-
-  signOut = (): void => {
-    this.currentAccountId = null;
-  };
-
-  isSignedIn = (): boolean => !!this.currentAccountId;
 
   private saveAccounts = async (): Promise<void> => {
     return fileUtils.save(accountsPath, this.accounts);

@@ -20,6 +20,7 @@ import {
 } from '../../../_types/graphql';
 
 type Props = {
+  readonly disabled?: boolean;
   readonly selectedId: string | undefined;
   readonly onSelectedId: (accountId: string) => void;
 };
@@ -68,6 +69,7 @@ const BootstrapInput = withStyles(theme => ({
 
 export const Accounts: React.FC<Props> = (props) => {
   const {
+    disabled,
     onSelectedId,
     selectedId,
   } = props;
@@ -94,7 +96,7 @@ export const Accounts: React.FC<Props> = (props) => {
   };
 
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={classes.formControl} disabled={disabled}>
       <InputLabel>Account</InputLabel>
       <NativeSelect
         value={selectedId}

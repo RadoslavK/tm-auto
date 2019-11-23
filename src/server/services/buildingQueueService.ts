@@ -126,6 +126,7 @@ export class BuildingQueueService {
       this.m_village.buildings.queue.moveDown(queueId);
     }
 
+    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
     return true;
   };

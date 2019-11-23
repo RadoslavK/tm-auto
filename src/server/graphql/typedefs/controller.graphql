@@ -1,10 +1,33 @@
-extend type Query {
-    isBotRunning: Boolean!
+enum BotState {
+    None
+    Pending
+    Running
+    Stopping
+    Paused
 }
 
-extend type Mutation {
+input CreateUserAccountInput {
+    username: String!
+    password: String!
+    server: String!
+}
+
+input UpdateUserAccountInput {
+    id: ID!
+    username: String!
+    password: String!
+    server: String!
+}
+
+type Mutation {
+    signIn(accountId: ID!): Boolean
+    signOut: Boolean
     startBot: Boolean!
     stopBot: Boolean!
+}
+
+type Query {
+    botState: BotState!
 }
 
 extend type Subscription {

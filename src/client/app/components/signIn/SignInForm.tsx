@@ -27,32 +27,31 @@ import CloseIcon from '@material-ui/icons/Close';
 import classNames from 'classnames';
 import { green } from '@material-ui/core/colors';
 import {
-  IsSignedIn,
-  SignIn,
-} from '*/graphql_operations/user.graphql';
-import {
+  BotState,
   ICreateAccountMutation,
   ICreateAccountMutationVariables,
+  ICreateUserAccountInput,
+  IDeleteAccountMutation,
+  IDeleteAccountMutationVariables,
+  IGetAccountQuery,
+  IGetAccountQueryVariables,
   IGetAccountsQuery,
   ISignInMutation,
   ISignInMutationVariables,
   IUpdateAccountMutation,
   IUpdateAccountMutationVariables,
   IUpdateUserAccountInput,
-  ICreateUserAccountInput,
-  IGetAccountQuery,
-  IGetAccountQueryVariables,
-  IDeleteAccountMutation,
-  IDeleteAccountMutationVariables,
 } from '../../../_types/graphql';
 import { Accounts } from './Accounts';
 import {
-  GetAccounts,
   CreateAccount,
-  UpdateAccount,
-  GetAccount,
   DeleteAccount,
+  GetAccount,
+  GetAccounts,
+  UpdateAccount,
 } from "*/graphql_operations/account.graphql";
+import { SignIn } from '*/graphql_operations/controller.graphql';
+import { useBotState } from '../../hooks/useBotState';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -188,10 +187,7 @@ const FormDialog: React.FC<IFormDialogProps> = (props) => {
         <Typography component="h1" variant="h5">
           {type === DialogType.Update ? 'Update' : 'Create new'}
         </Typography>
-        <form
-          className={classes.form}
-          noValidate
-        >
+        <div className={classes.form}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -241,7 +237,7 @@ const FormDialog: React.FC<IFormDialogProps> = (props) => {
           >
             Submit
           </Button>
-        </form>
+        </div>
       </div>
     </Container>
   );
@@ -255,11 +251,12 @@ export const SignInForm: React.FC = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitError, setSubmitError] = useState(false);
 
+  const { loading, botState } = useBotState();
+
   const [dialogType, setDialogType] = useState(DialogType.None);
 
   const [executeSignIn] = useMutation<ISignInMutation, ISignInMutationVariables>(SignIn, {
     variables: { accountId: selectedAccountId },
-    refetchQueries: [{ query: IsSignedIn }],
   });
 
   const [deleteAccount, deleteAccountResult] = useMutation<IDeleteAccountMutation, IDeleteAccountMutationVariables>(DeleteAccount, {
@@ -300,6 +297,12 @@ export const SignInForm: React.FC = () => {
     setShowSubmitMessage(true);
   };
 
+  if (loading) {
+    return null;
+  }
+
+  const disabled = botState === BotState.Pending;
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -308,11 +311,9 @@ export const SignInForm: React.FC = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form
-            className={classes.form}
-            noValidate
-          >
+          <div className={classes.form}>
             <Accounts
+              disabled={disabled}
               selectedId={selectedAccountId}
               onSelectedId={setSelectedAccountId}
             />
@@ -321,7 +322,7 @@ export const SignInForm: React.FC = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              disabled={!selectedAccountId}
+              disabled={disabled || !selectedAccountId}
               onClick={() => executeSignIn()}
             >
               Sign In
@@ -331,6 +332,7 @@ export const SignInForm: React.FC = () => {
               variant="contained"
               color="secondary"
               className={classes.submit}
+              disabled={disabled}
               onClick={() => setDialogType(DialogType.Create)}
             >
               Create account
@@ -340,7 +342,7 @@ export const SignInForm: React.FC = () => {
               variant="outlined"
               color="secondary"
               className={classes.submit}
-              disabled={!selectedAccountId}
+              disabled={disabled || !selectedAccountId}
               onClick={() => setDialogType(DialogType.Update)}
             >
               Update account
@@ -350,7 +352,7 @@ export const SignInForm: React.FC = () => {
               variant="outlined"
               color="secondary"
               className={classes.submit}
-              disabled={!selectedAccountId}
+              disabled={disabled || !selectedAccountId}
               onClick={() => setDialogType(DialogType.Delete)}
             >
               Delete account
@@ -386,7 +388,7 @@ export const SignInForm: React.FC = () => {
                 ]}
               />
             </Snackbar>
-          </form>
+          </div>
         </div>
       </Container>
       <Dialog

@@ -12,15 +12,16 @@ generates:
       - "typescript-resolvers"
     config:
       typesPrefix: I
-      immutableTypes : true
+      immutableTypes: true
   src/client/_types/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
     config:
       typesPrefix: I
+      enumPrefix: false
       skipTypename: true
-      immutableTypes : true
+      immutableTypes: true
   src/client/_types/graphql_modules.d.ts:
     plugins:
       - "typescript-graphql-files-modules"
