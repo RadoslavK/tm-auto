@@ -35,6 +35,8 @@ export const startIpcServer = async <TPayload = {}, TResult = never>(socketName:
           } catch(error) {
             const errorData = createServerErrorMessage(id);
 
+            console.error(error.stack);
+
             ipc.server.emit(
               socket,
               'message',

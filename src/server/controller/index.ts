@@ -49,11 +49,21 @@ export class Controller {
       await updateBuildings();
     }
 
-    await this.m_taskManager.execute();
+    await this.execute();
+
     this.m_timeout = setTimeout(async () => {
-      await this.m_taskManager.execute();
+      await this.execute();
       this.m_timeout.refresh();
     }, 10 * 1000);
+  };
+
+  private execute = async (): Promise<void> => {
+    try {
+      return await this.m_taskManager.execute();
+    } catch (error) {
+      console.error(error.stack);
+      return undefined;
+    }
   };
 
   public stop = async (): Promise<void> => {

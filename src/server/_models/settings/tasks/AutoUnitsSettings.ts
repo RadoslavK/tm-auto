@@ -1,5 +1,4 @@
 // eslint-disable-next-line max-classes-per-file
-import { logException } from '../../../../_shared/utils/logException';
 import { BuildingType } from '../../../_enums/BuildingType';
 import { ITaskSettings } from '../../../_types/ITaskSettings';
 import { getSeconds } from '../../../utils/getSeconds';
@@ -86,7 +85,7 @@ export class AutoUnitsSettings implements IParams {
         return this.residence;
 
       default:
-        throw logException(`Invalid building type: ${type}`);
+        throw new Error(`Invalid building type: ${type}`);
     }
   };
 }

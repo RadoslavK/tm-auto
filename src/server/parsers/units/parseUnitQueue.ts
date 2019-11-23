@@ -2,7 +2,6 @@ import { UnitsQueue } from '../../_models/units/unitsQueue';
 import { getPage } from '../../browser/getPage';
 import { getSecondsFromString } from '../../utils/getSeconds';
 import { playerService } from '../../services/playerService';
-import { logException } from '../../../_shared/utils/logException';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();
@@ -23,7 +22,7 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
       const unitIndexClass = /unit u(\d+)/.exec(x.className);
 
       if (!unitIndexClass) {
-        throw logException('Failed to parse unit queue');
+        throw new Error('Failed to parse unit queue');
       }
 
       const unitIndex = +unitIndexClass[1];
@@ -35,7 +34,7 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
       const unitCountMatch = /(\d+)/.exec(text);
 
       if (!unitCountMatch) {
-        throw logException('Failed to parse unit queue');
+        throw new Error('Failed to parse unit queue');
       }
 
       return +unitCountMatch[1];

@@ -1,6 +1,5 @@
 import { Village } from '../../_models/village/village';
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../_shared/utils/logException';
 
 export const parseVillages = async (): Promise<readonly Village[]> => {
   const page = await getPage();
@@ -11,7 +10,7 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
     const idMatch = /newdid=(\d+)/.exec(link);
 
     if (!idMatch) {
-      throw logException('Can not parse village id');
+      throw new Error('Failed to parse village id');
     }
 
     const id = +idMatch[1];
@@ -25,7 +24,7 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
     const yMatch = /(\d+)/.exec(yText);
 
     if (!xMatch || !yMatch) {
-      throw logException('Can not parse village coords');
+      throw new Error('Failed to parse village coords');
     }
 
     const x = +xMatch[1];

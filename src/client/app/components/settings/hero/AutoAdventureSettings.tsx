@@ -13,7 +13,6 @@ import {
   IUpdateAutoAdventureSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
-import { logException } from '../../../../../_shared/utils/logException';
 
 interface IProps {
   readonly settings: IAutoAdventureSettings;
@@ -34,7 +33,7 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
       return 'Furthest';
 
     default:
-      throw logException(`Unknown adventure criteria: ${criteria}`);
+      throw new Error(`Unknown adventure criteria: ${criteria}`);
   }
 };
 

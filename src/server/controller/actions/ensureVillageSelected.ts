@@ -1,5 +1,4 @@
 import { getPage } from '../../browser/getPage';
-import { logException } from '../../../_shared/utils/logException';
 import { villagesService } from '../../services/villageService';
 
 export const ensureVillageSelected = async (villageId: number): Promise<void> => {
@@ -15,7 +14,7 @@ export const ensureVillageSelected = async (villageId: number): Promise<void> =>
     });
 
     if (!villageSwitch) {
-      throw logException(`did not find village switch for villageId: ${villageId}`);
+      throw new Error(`Did not find village switch for village id: ${villageId}`);
     }
 
     await Promise.all([

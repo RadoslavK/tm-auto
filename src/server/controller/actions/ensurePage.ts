@@ -19,13 +19,18 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   if (!link) {
     //  might be an onclick event
     link = await page.$(`[onclick*="${path}"]`);
+
+    if (!link) {
+      throw new Error(`Did not find url link nor onclick redirect, requested page: ${path}`);
+    }
+
     isHrefLink = false;
   } else {
     isHrefLink = true;
   }
 
   await Promise.all([
-    isHrefLink ? page.evaluate(el => el.click(), link) : link!.click(),
+    isHrefLink ? page.evaluate(el => el.click(), link) : link.click(),
     page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
   ]);
 };

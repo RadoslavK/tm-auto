@@ -1,4 +1,3 @@
-import { logException } from '../../_shared/utils/logException';
 import { getPage } from '../browser/getPage';
 import { accountService } from '../services/accountService';
 
@@ -13,6 +12,6 @@ export const validateUrl = async (acceptedUrls: readonly string[]): Promise<void
 
   if (!isValid) {
     const urls = acceptedUrls.join(', ');
-    logException(`Invalid url. Excepted one of: [ ${urls} ]. Received: ${pageUrl}`);
+    throw new Error(`Invalid url. Expected one of: [ ${urls} ]. Received: ${pageUrl}`);
   }
 };

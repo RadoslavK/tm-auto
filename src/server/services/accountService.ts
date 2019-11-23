@@ -6,7 +6,6 @@ import {
   IUserAccount,
 } from '../_types/graphql';
 import { fileUtils } from '../utils/fileUtils';
-import { logException } from '../../_shared/utils/logException';
 
 const accountsPath = 'accounts.json';
 
@@ -71,7 +70,7 @@ class AccountService {
     const accountIndex = this.accounts.findIndex(acc => acc.id === id);
 
     if (accountIndex === -1) {
-      throw new Error(`Account ${id} was not found`);
+      throw new Error(`Account with ${id} was not found`);
     }
 
     this.accounts.splice(accountIndex, 1);
@@ -99,7 +98,7 @@ class AccountService {
     const account = accounts.find(x => x.id === this.currentAccountId);
 
     if (!account) {
-      throw logException(`Account not found ${this.currentAccountId}`);
+      throw new Error(`Account with id ${this.currentAccountId} not found`);
     }
 
     return account;

@@ -18,7 +18,6 @@ import {
 import {
   IGetAccountsQuery,
 } from '../../../_types/graphql';
-import { logException } from '../../../../_shared/utils/logException';
 
 type Props = {
   readonly selectedId: string | undefined;
@@ -91,14 +90,7 @@ export const Accounts: React.FC<Props> = (props) => {
 
   const onOptionChanged = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const { value } = e.currentTarget;
-
-    const acc = data.accounts.find(x => x.id === value);
-
-    if (!acc) {
-      throw logException(`Can not find account with id: ${value}`);
-    }
-
-    onSelectedId(acc.id);
+    onSelectedId(value);
   };
 
   return (

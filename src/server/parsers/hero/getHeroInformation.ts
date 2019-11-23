@@ -1,7 +1,6 @@
 import { HeroState } from '../../_models/hero/hero';
 import { getPage } from '../../browser/getPage';
 import { heroService } from '../../services/heroService';
-import { logException } from '../../../_shared/utils/logException';
 
 export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
@@ -11,13 +10,13 @@ export const updateHeroInformation = async (): Promise<void> => {
     const heroVillageLink = x.getAttribute('href');
 
     if (!heroVillageLink) {
-      throw logException('Cant parse current hero village');
+      throw new Error('Failed to parse current hero village');
     }
 
     const villageIdMatch = /newdid=(\d+)/.exec(heroVillageLink);
 
     if (!villageIdMatch) {
-      throw logException('Cant parse current hero village');
+      throw new Error('Failed to parse current hero village');
     }
 
     return +villageIdMatch[1];
@@ -27,13 +26,13 @@ export const updateHeroInformation = async (): Promise<void> => {
     const style = x.getAttribute('style');
 
     if (!style) {
-      throw logException('Did not find hero health bar style');
+      throw new Error('Did not find hero health bar style');
     }
 
     const match = /width:(.*?)%/.exec(style);
 
     if (!match) {
-      throw logException('Failed to parse hero health');
+      throw new Error('Failed to parse hero health');
     }
 
     return +match[1];
@@ -43,7 +42,7 @@ export const updateHeroInformation = async (): Promise<void> => {
   const heroStatusMatch = /heroStatus(\d+)/.exec(heroStatusClass);
 
   if (!heroStatusMatch) {
-    throw logException('Failed to parse hero status');
+    throw new Error('Failed to parse hero status');
   }
 
   const status = +heroStatusMatch[1];
@@ -70,7 +69,7 @@ export const updateHeroInformation = async (): Promise<void> => {
   const adventureCountMatch = /"boxId":"hero",.*?,"speechBubble":"(\d+)"/.exec(pageContent);
 
   if (!adventureCountMatch) {
-    throw logException('Failed to parse adventure count');
+    throw new Error('Failed to parse adventure count');
   }
 
   const adventureCount = +adventureCountMatch[1];

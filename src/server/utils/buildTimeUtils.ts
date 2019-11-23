@@ -1,6 +1,5 @@
 import { BuildingType } from '../_enums/BuildingType';
 import { unitInfos } from '../bootstrap/loadInfo';
-import { logException } from '../../_shared/utils/logException';
 
 const roundToNearest10 = (seconds: number): number => {
   return 10 * Math.round(seconds / 10);
@@ -49,7 +48,7 @@ const getUnitsModifier = (buildingLevel: number): number => {
     case 20:
       return 0.1351;
     default:
-      throw logException(`Unknown building level ${buildingLevel}`);
+      throw new Error(`Invalid unit building level ${buildingLevel}`);
   }
 };
 

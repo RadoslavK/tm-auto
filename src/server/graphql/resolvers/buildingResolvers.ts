@@ -17,7 +17,6 @@ import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
 import { villagesService } from '../../services/villageService';
 import { playerService } from '../../services/playerService';
-import { logException } from '../../../_shared/utils/logException';
 import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
 
 const getWallType = (): BuildingType => {
@@ -40,7 +39,7 @@ const getWallType = (): BuildingType => {
       return BuildingType.MakeshiftWall;
 
     default:
-      throw logException(`Unknown player tribe: ${tribe}`);
+      throw new Error(`Unknown player tribe: ${tribe}`);
   }
 };
 

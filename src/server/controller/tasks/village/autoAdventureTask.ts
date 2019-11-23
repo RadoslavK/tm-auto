@@ -6,7 +6,6 @@ import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 import { ensurePage } from '../../actions/ensurePage';
 import { IBotTask } from '../../../_models/tasks';
-import { logException } from '../../../../_shared/utils/logException';
 import { SettingsService } from '../../../services/settings';
 import { villagesService } from '../../../services/villageService';
 import { heroService } from '../../../services/heroService';
@@ -59,7 +58,7 @@ export class AutoAdventureTask implements IBotTask {
       const url = await node.$eval('[id*=goToAdventure] [href]', x => x.getAttribute('href'));
 
       if (!url) {
-        throw logException('url for adventure not found');
+        throw new Error('Url for adventure not found');
       }
 
       return {

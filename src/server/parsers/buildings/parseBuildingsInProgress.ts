@@ -2,7 +2,6 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,
@@ -20,7 +19,7 @@ export const parseBuildingsInProgress = async (): Promise<readonly BuildingInPro
     const value = timer.getAttribute('value');
 
     if (!value) {
-      throw logException('Failed to parse building in progress timer');
+      throw new Error('Failed to parse building progress timer');
     }
 
     return +value;

@@ -9,7 +9,6 @@ import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
 import { villagesService } from './villageService';
-import { logException } from '../../_shared/utils/logException';
 import { fileUtils } from '../utils/fileUtils';
 import { accountService } from './accountService';
 
@@ -184,7 +183,7 @@ export class BuildingQueueService {
     }
 
     if (!theOtherBuilding) {
-      throw logException('Did not find other building while trying to move in queue');
+      throw new Error('Did not find other building while trying to move in queue');
     }
 
     return this.willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(

@@ -4,7 +4,6 @@ import { getPage } from '../../browser/getPage';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.InfrastructureOverview,
@@ -23,7 +22,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
     const fieldIdMatch = /a(\d+)/.exec(className);
 
     if (!fieldIdMatch) {
-      throw logException('Failed to parse field id');
+      throw new Error('Failed to parse field id');
     }
 
     const fieldId = +fieldIdMatch[1];
@@ -35,7 +34,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
     const typeMatch = /g(\d+)/.exec(className);
 
     if (!typeMatch) {
-      throw logException('Failed to parse field type');
+      throw new Error('Failed to parse building type');
     }
 
     const type = +typeMatch[1];

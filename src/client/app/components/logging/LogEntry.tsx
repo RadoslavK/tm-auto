@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core';
 import { TextLogContent } from './entries/TextLogContent';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
@@ -9,7 +10,6 @@ import {
   ILogEntryFragmentFragment,
   ITextLogEntryContent,
 } from '../../../_types/graphql';
-import { makeStyles } from '@material-ui/core';
 
 type Content = ILogEntryFragmentFragment['content'];
 
@@ -34,7 +34,7 @@ const getContentNode = (content: Content, className: string): JSX.Element => {
     return <AutoUnitsLogContent content={content.autoUnits} className={className} />;
   }
   
-  throw new Error(`Unknown content: ${content}`);
+  throw new Error(`Unknown content: ${JSON.stringify(content)}`);
 };
 
 const useStyles = makeStyles({

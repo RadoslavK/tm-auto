@@ -1,6 +1,5 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { UnitsQueue } from './unitsQueue';
-import { logException } from '../../../_shared/utils/logException';
 
 export class Units {
   private readonly m_counts: Record<number, number> = {};
@@ -30,7 +29,7 @@ export class Units {
         break;
 
       default:
-        throw logException(`Invalid building for queue, type: ${  type}`);
+        throw new Error(`Invalid building for queue, type: ${  type}`);
     }
   };
 

@@ -2,7 +2,6 @@ import { TravianPath } from '../../_enums/TravianPath';
 import { IActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
-import { logException } from '../../../_shared/utils/logException';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,
@@ -23,7 +22,7 @@ export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
     const levelMatch = /level(\d+)/.exec(className);
 
     if (!levelMatch) {
-      throw logException('Failed to parse field level');
+      throw new Error('Failed to parse field level');
     }
 
     const level = +levelMatch[1];
@@ -31,7 +30,7 @@ export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
     const typeMatch = /gid(\d+)/.exec(className);
 
     if (!typeMatch) {
-      throw logException('Failed to parse field type');
+      throw new Error('Failed to parse building type');
     }
 
     const type = +typeMatch[1];
