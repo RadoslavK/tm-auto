@@ -76,6 +76,10 @@ export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink  => {
         await forAwaitEach(iterable, (value: any) => observer.next(value));
         observer.complete();
       } catch (error) {
+        if (error.result && error.result.errors && error.result.data) {
+          observer.next(error.result);
+        }
+
         observer.error(error);
       }
     };

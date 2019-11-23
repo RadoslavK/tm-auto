@@ -11,6 +11,7 @@ import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask } from '../../../_models/tasks';
 import { SettingsService } from '../../../services/settings';
 import { playerService } from '../../../services/playerService';
+import { logsService } from '../../../services/logsService';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -124,6 +125,11 @@ export class AutoUnitsTask implements IBotTask {
     const page = await getPage();
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {
+      logsService.logAutoUnits({
+        amount,
+        index: +uIndex,
+      });
+
       const input = await page.$(`[name=t${uIndex}]`);
 
       if (input) {

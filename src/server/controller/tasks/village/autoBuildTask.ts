@@ -19,6 +19,7 @@ import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { SettingsService } from '../../../services/settings';
 import { playerService } from '../../../services/playerService';
+import { logsService } from '../../../services/logsService';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -148,6 +149,8 @@ export class AutoBuildTask implements IBotTask {
   };
 
   private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> =>{
+    logsService.logAutoBuild(queuedBuilding);
+
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
     const { category } = buildingInfos[queuedBuilding.type];

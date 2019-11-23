@@ -1,0 +1,48 @@
+#import "./misc.graphql"
+
+fragment LogEntryFragment on LogEntry {
+    id
+    timestamp
+    village {
+        id
+        coords {
+            ...CoordsFragment
+        }
+        name
+    }
+    content {
+        ... on TextLogEntryContent {
+            text {
+                message
+            }
+        }
+        ... on AutoBuildLogEntryContent {
+            autoBuild {
+                fieldId
+                level
+                name
+                type
+            }
+        }
+        ... on AutoUnitsLogEntryContent {
+            autoUnits {
+                amount
+                index
+                tribe
+                unitName
+            }
+        }
+    }
+}
+
+query GetLogs {
+    logsEntries {
+        ...LogEntryFragment
+    }
+}
+
+subscription OnLogEntryAdded {
+    onLogEntryAdded {
+        ...LogEntryFragment
+    }
+}

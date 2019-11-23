@@ -66,6 +66,7 @@ module.exports = {
     "import/no-unresolved": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "semi": "error",
+    "react/jsx-key": "error",
     "@typescript-eslint/explicit-function-return-type": "off"
   },
 };

@@ -1,0 +1,46 @@
+type TextLogEntryContentPayload {
+    message: String!
+}
+
+type TextLogEntryContent {
+    text: TextLogEntryContentPayload!
+}
+
+type AutoBuildLogEntryContentPayload {
+    name: String!
+    type: Int!
+    level: Int!
+    fieldId: Int!
+}
+
+type AutoBuildLogEntryContent {
+    autoBuild: AutoBuildLogEntryContentPayload!
+}
+
+type AutoUnitsLogEntryContentPayload {
+    amount: Int!
+    index: Int!
+    tribe: Int!
+    unitName: String!
+}
+
+type AutoUnitsLogEntryContent {
+    autoUnits: AutoUnitsLogEntryContentPayload!
+}
+
+union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent
+
+type LogEntry {
+    id: ID!
+    timestamp: Int!
+    village: Village
+    content: LogEntryContent!
+}
+
+extend type Query {
+    logsEntries: [LogEntry!]!
+}
+
+extend type Subscription  {
+    onLogEntryAdded: LogEntry!
+}

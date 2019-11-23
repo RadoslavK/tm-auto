@@ -6,7 +6,7 @@ interface IPartyInfo {
   readonly cost: Resources;
 }
 
-export const partiesInfo: Record<number, IPartyInfo> = {
+export const partiesInfo: Record<string, IPartyInfo> = {
   [PartyType.Small]: {
     townHallLevel: 1,
     cost: new Resources({ wood: 6400, clay: 6650, iron: 5940, crop: 1340 }),

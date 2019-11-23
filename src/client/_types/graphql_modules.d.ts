@@ -57,6 +57,17 @@ declare module '*/graphql_operations/hero.graphql' {
 }
     
 
+declare module '*/graphql_operations/logs.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const LogEntryFragment: DocumentNode;
+export const GetLogs: DocumentNode;
+export const OnLogEntryAdded: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/graphql_operations/misc.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

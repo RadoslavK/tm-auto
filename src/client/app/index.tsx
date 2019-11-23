@@ -10,6 +10,7 @@ import {
 } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import 'typeface-roboto';
+import { ApolloLink } from 'apollo-link';
 import { INavigationItem } from '../_types/INavigationItem';
 import { ISideMenuContext, SideMenuContext } from './components/sideMenu/context/SideMenuContext';
 import { SideMenu } from './components/sideMenu/SideMenu';
@@ -19,6 +20,7 @@ import { Navigation } from './components/navigation/Navigation';
 import { MainRoutes } from './components/navigation/MainRoutes';
 import { createIpcLink } from '../graphql/utils/createIpcLink';
 import introspectionQueryResultData from '../graphql/fragmentTypes.json';
+import { createErrorLink } from '../../_shared/graphql/createErrorLink';
 
 type NavigationItemsState = readonly INavigationItem[];
 
@@ -37,7 +39,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const init = async (): Promise<void> => {
-  const link = await createIpcLink();
+  const ipcLink = await createIpcLink();
+  const errorLink = createErrorLink();
+
+  const link = ApolloLink.from([errorLink, ipcLink]);
 
   const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
@@ -47,9 +52,14 @@ const init = async (): Promise<void> => {
     defaultOptions: {
       query: {
         fetchPolicy: 'no-cache',
+        errorPolicy: 'none',
       },
       mutate: {
         fetchPolicy: 'no-cache',
+        errorPolicy: 'none',
+      },
+      watchQuery: {
+        errorPolicy: 'none',
       },
     },
   });

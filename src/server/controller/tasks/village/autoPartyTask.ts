@@ -8,6 +8,7 @@ import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { ensureBuildingSpotPage} from '../../actions/ensurePage';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { SettingsService } from '../../../services/settings';
+import { logsService } from '../../../services/logsService';
 
 export class AutoPartyTask implements IBotTask {
   private readonly m_village: Village;
@@ -65,6 +66,8 @@ export class AutoPartyTask implements IBotTask {
     }
 
     const nextCoolDown = CoolDown.fromDelay(partyDuration);
+
+    logsService.logText(`Throwing ${partyType} parties`, true);
 
     return {
       nextCoolDown,

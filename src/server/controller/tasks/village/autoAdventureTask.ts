@@ -10,6 +10,7 @@ import { logException } from '../../../../_shared/utils/logException';
 import { SettingsService } from '../../../services/settings';
 import { villagesService } from '../../../services/villageService';
 import { heroService } from '../../../services/heroService';
+import { logsService } from '../../../services/logsService';
 
 export class AutoAdventureTask implements IBotTask {
   public settings = (): AutoAdventureSettings => SettingsService.instance().hero.autoAdventure.get();
@@ -120,6 +121,8 @@ export class AutoAdventureTask implements IBotTask {
     if (!sendToAdventureButton) {
       return;
     }
+
+    logsService.logText('Sending hero to adventure', true);
 
     await Promise.all([
       sendToAdventureButton.click(),

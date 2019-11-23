@@ -31,6 +31,17 @@ export type IAutoAdventureSettingsInput = {
   readonly preferredVillageId?: Maybe<Scalars['Int']>,
 };
 
+export type IAutoBuildLogEntryContent = {
+  readonly autoBuild: IAutoBuildLogEntryContentPayload,
+};
+
+export type IAutoBuildLogEntryContentPayload = {
+  readonly name: Scalars['String'],
+  readonly type: Scalars['Int'],
+  readonly level: Scalars['Int'],
+  readonly fieldId: Scalars['Int'],
+};
+
 export type IAutoBuildSettings = IITaskSettings & {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
@@ -43,6 +54,17 @@ export type IAutoBuildVillageSettingsInput = {
   readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+};
+
+export type IAutoUnitsLogEntryContent = {
+  readonly autoUnits: IAutoUnitsLogEntryContentPayload,
+};
+
+export type IAutoUnitsLogEntryContentPayload = {
+  readonly amount: Scalars['Int'],
+  readonly index: Scalars['Int'],
+  readonly tribe: Scalars['Int'],
+  readonly unitName: Scalars['String'],
 };
 
 export type IAvailableNewBuilding = {
@@ -163,6 +185,15 @@ export type IITaskSettings = {
   readonly coolDown: ICoolDown,
 };
 
+export type ILogEntry = {
+  readonly id: Scalars['ID'],
+  readonly timestamp: Scalars['Int'],
+  readonly village?: Maybe<IVillage>,
+  readonly content: ILogEntryContent,
+};
+
+export type ILogEntryContent = ITextLogEntryContent | IAutoBuildLogEntryContent | IAutoUnitsLogEntryContent;
+
 export type IMutation = {
   readonly createAccount?: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
@@ -263,6 +294,7 @@ export type IQuery = {
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>,
   readonly isBotRunning: Scalars['Boolean'],
   readonly heroInformation: IHeroInformation,
+  readonly logsEntries: ReadonlyArray<ILogEntry>,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -351,6 +383,7 @@ export type IResources = {
 export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
+  readonly onLogEntryAdded: ILogEntry,
   readonly onQueueUpdated: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
@@ -364,6 +397,14 @@ export type ISubscriptionBuildingsUpdatedArgs = {
 
 export type ISubscriptionOnQueueUpdatedArgs = {
   villageId: Scalars['Int']
+};
+
+export type ITextLogEntryContent = {
+  readonly text: ITextLogEntryContentPayload,
+};
+
+export type ITextLogEntryContentPayload = {
+  readonly message: Scalars['String'],
 };
 
 export type IUpdateAutoAdventureSettingsInput = {
@@ -530,6 +571,24 @@ export type IGetHeroInformationQuery = { readonly heroInformation: (
     Pick<IHeroInformation, 'health'>
     & { readonly village: Maybe<Pick<IVillage, 'id' | 'name'>> }
   ) };
+
+export type ILogEntryFragmentFragment = (
+  Pick<ILogEntry, 'id' | 'timestamp'>
+  & { readonly village: Maybe<(
+    Pick<IVillage, 'id' | 'name'>
+    & { readonly coords: ICoordsFragmentFragment }
+  )>, readonly content: { readonly text: Pick<ITextLogEntryContentPayload, 'message'> } | { readonly autoBuild: Pick<IAutoBuildLogEntryContentPayload, 'fieldId' | 'level' | 'name' | 'type'> } | { readonly autoUnits: Pick<IAutoUnitsLogEntryContentPayload, 'amount' | 'index' | 'tribe' | 'unitName'> } }
+);
+
+export type IGetLogsQueryVariables = {};
+
+
+export type IGetLogsQuery = { readonly logsEntries: ReadonlyArray<ILogEntryFragmentFragment> };
+
+export type IOnLogEntryAddedSubscriptionVariables = {};
+
+
+export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragmentFragment };
 
 export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'total' | 'freeCrop'>;
 

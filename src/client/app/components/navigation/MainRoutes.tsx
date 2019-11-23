@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { GeneralSettings } from '../settings/GeneralSettings';
 import { HeroSettings } from '../settings/hero/HeroSettings';
 import { Villages } from '../villages/Villages';
+import { Logs } from '../logging/Logs';
 
 export const MainRoutes: React.FC = () => (
   <Switch>
@@ -10,5 +11,6 @@ export const MainRoutes: React.FC = () => (
     <Route path="/villages" component={Villages} />
     <Route path="/settings" component={GeneralSettings} />
     <Route path="/hero" component={HeroSettings} />
+    <Route path="/logs" component={Logs} />
   </Switch>
 );

@@ -1,4 +1,4 @@
 export enum PartyType {
-  Small,
-  Large,
+  Small = 'Small',
+  Large = 'Large',
 }

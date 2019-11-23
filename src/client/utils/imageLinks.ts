@@ -12,6 +12,8 @@ const resources = {
 export const imageLinks = {
   getBuilding: (buildingType: number): string => `${baseUrl}/buildings/${buildingType}.png`,
 
+  getUnit: (tribe: number, index: number): string => `${baseUrl}/units/${tribe}/u${(tribe - 1) * 10 + index}.gif`,
+
   resources,
 
   cost: {

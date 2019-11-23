@@ -3,6 +3,7 @@ import {
   withFilter,
 } from 'graphql-subscriptions';
 import { Events } from './events';
+import { ILogEntry } from '../../_types/graphql';
 
 type EventPayloads = {
   [Events.BuildingsUpdated]: {
@@ -11,6 +12,10 @@ type EventPayloads = {
 
   [Events.QueuedUpdated]: {
     readonly villageId: number
+  },
+
+  [Events.LogEntryAdded]: {
+    readonly logEntry: ILogEntry;
   },
 }
 
@@ -36,4 +41,8 @@ export const subscribeToPayloadEvent = <TEvent extends keyof EventPayloads, TPay
   return filter
     ? withFilter(() => pubSub.asyncIterator<TPayload>(event), filter)
     : () => pubSub.asyncIterator<TPayload>(event);
+};
+
+export const resolvePayloadEvent = <TEvent extends keyof EventPayloads, TResult>(processPayload: (payload: EventPayloads[TEvent]) => TResult) => {
+  return processPayload;
 };
