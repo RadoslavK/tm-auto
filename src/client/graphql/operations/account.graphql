@@ -11,6 +11,12 @@ query GetAccounts {
     }
 }
 
+query GetCurrentAccount {
+    currentAccount {
+        ...UserAccountFragment
+    }
+}
+
 query GetAccount($accountId: ID!) {
     account(accountId: $accountId) {
         ...UserAccountFragment

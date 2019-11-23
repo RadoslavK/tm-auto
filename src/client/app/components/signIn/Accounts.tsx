@@ -18,6 +18,7 @@ import {
 import {
   IGetAccountsQuery,
 } from '../../../_types/graphql';
+import { getServerShortcut } from '../../utils/getServerShortcut';
 
 type Props = {
   readonly disabled?: boolean;
@@ -108,7 +109,7 @@ export const Accounts: React.FC<Props> = (props) => {
             key={account.id}
             value={account.id}
           >
-            {account.username} @ {account.server}
+            {account.username} @ {getServerShortcut(account.server)}
           </option>
         ))}
       </NativeSelect>

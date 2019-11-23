@@ -295,6 +295,7 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account?: Maybe<IUserAccount>,
+  readonly currentAccount: IUserAccount,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -475,6 +476,11 @@ export type IGetAccountsQueryVariables = {};
 
 
 export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragmentFragment> };
+
+export type IGetCurrentAccountQueryVariables = {};
+
+
+export type IGetCurrentAccountQuery = { readonly currentAccount: IUserAccountFragmentFragment };
 
 export type IGetAccountQueryVariables = {
   accountId: Scalars['ID']

@@ -6,6 +6,8 @@ export const accountResolvers: IResolvers = {
     accounts: () => accountService.getAccounts(),
 
     account: (_, args) => accountService.getAccount(args.accountId),
+
+    currentAccount: () => accountService.getCurrentAccount(),
   },
 
   Mutation: {

@@ -320,6 +320,7 @@ export type IQuery = {
   readonly __typename?: 'Query',
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account?: Maybe<IUserAccount>,
+  readonly currentAccount: IUserAccount,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -850,6 +851,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   accounts?: Resolver<ReadonlyArray<IResolversTypes['UserAccount']>, ParentType, ContextType>,
   account?: Resolver<Maybe<IResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<IQueryAccountArgs, 'accountId'>>,
+  currentAccount?: Resolver<IResolversTypes['UserAccount'], ParentType, ContextType>,
   availableNewBuildings?: Resolver<ReadonlyArray<IResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<IQueryAvailableNewBuildingsArgs, 'input'>>,
   buildingName?: Resolver<IResolversTypes['String'], ParentType, ContextType, RequireFields<IQueryBuildingNameArgs, 'buildingType'>>,
   buildingSpots?: Resolver<IResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<IQueryBuildingSpotsArgs, 'villageId'>>,

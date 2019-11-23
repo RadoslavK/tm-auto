@@ -21,6 +21,7 @@ import { MainRoutes } from './components/navigation/MainRoutes';
 import { createIpcLink } from '../graphql/utils/createIpcLink';
 import introspectionQueryResultData from '../graphql/fragmentTypes.json';
 import { createErrorLink } from '../../_shared/graphql/createErrorLink';
+import { EnsureTitle } from './components/EnsureTitle';
 
 type NavigationItemsState = readonly INavigationItem[];
 
@@ -77,17 +78,19 @@ const init = async (): Promise<void> => {
       <Router>
         <ApolloProvider client={apolloClient}>
           <EnsureSignedIn>
-            <SideMenuContext.Provider value={sideMenuContext}>
-              <div className={classes.root}>
-                <CssBaseline />
-                <Navigation drawerWidth={drawerWidth} navigationItems={navigationItems}/>
-                <SideMenu width={drawerWidth}/>
-                <main className={classes.content}>
-                  <div className={classes.toolbar} />
-                  <MainRoutes />
-                </main>
-              </div>
-            </SideMenuContext.Provider>
+            <EnsureTitle>
+              <SideMenuContext.Provider value={sideMenuContext}>
+                <div className={classes.root}>
+                  <CssBaseline />
+                  <Navigation drawerWidth={drawerWidth} navigationItems={navigationItems}/>
+                  <SideMenu width={drawerWidth}/>
+                  <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <MainRoutes />
+                  </main>
+                </div>
+              </SideMenuContext.Provider>
+            </EnsureTitle>
           </EnsureSignedIn>
         </ApolloProvider>
       </Router>

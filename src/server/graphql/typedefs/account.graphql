@@ -8,6 +8,7 @@ type UserAccount {
 extend type Query {
     accounts: [UserAccount!]!
     account(accountId: ID!): UserAccount
+    currentAccount: UserAccount!
 }
 
 extend type Mutation {
