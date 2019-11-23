@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 const basePath = '.data';
 
 export const fileUtils = {
-  save(path: string, object: object): Promise<void> {
+  async save(path: string, object: object): Promise<void> {
     const finalPath = join(basePath, path);
     const folder = dirname(finalPath);
     const serializedObject = JSON.stringify(object);
@@ -12,12 +12,9 @@ export const fileUtils = {
       recursive: true,
     };
 
-    return fs.promises.mkdir(folder, options)
-      .then(() => fs.writeFile(finalPath, serializedObject, { flag: 'w' }, err => {
-        if (err) {
-          console.error(err);
-        }
-      }));
+    await fs.promises.mkdir(folder, options);
+
+    return fs.promises.writeFile(finalPath, serializedObject, { flag: 'w' });
   },
 
   loadInstance: <T extends object>(path: string, constructor: { new(params?: Partial<T>): T }, defaultValue: T | undefined = undefined): T => {

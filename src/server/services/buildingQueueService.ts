@@ -8,9 +8,9 @@ import { Events } from '../graphql/subscriptions/events';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
-import { villagesService } from './villageService';
 import { fileUtils } from '../utils/fileUtils';
 import { accountService } from './accountService';
+import { accountContext } from '../accountContext';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -34,7 +34,7 @@ export class BuildingQueueService {
 
   constructor(villageId: number) {
     const userAccount = accountService.getCurrentAccount();
-    this.m_village = villagesService.get().village(villageId);
+    this.m_village = accountContext.villageService.village(villageId);
     this.m_filePath = path.join('accounts', userAccount.id, 'buildingQueue.json');
   }
 
@@ -320,9 +320,9 @@ export class BuildingQueueService {
 
   private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
-      && villagesService.get().all().some(otherVillage =>
+      && accountContext.villageService.allVillages().some(otherVillage =>
         otherVillage.id !== this.m_village.id
-        && villagesService.get().village(otherVillage.id).buildings.normalizedBuildingSpots().some(b => b.type === BuildingType.Palace))) {
+        && accountContext.villageService.village(otherVillage.id).buildings.normalizedBuildingSpots().some(b => b.type === BuildingType.Palace))) {
       // iba 1 palac
       return true;
     }

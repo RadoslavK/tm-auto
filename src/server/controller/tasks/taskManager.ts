@@ -16,10 +16,9 @@ import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';
 import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
-import { SettingsService } from '../../services/settings';
-import { villagesService } from '../../services/villageService';
 import { IBotTask } from '../../_models/tasks';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
+import { accountContext } from '../../accountContext';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;
@@ -78,7 +77,7 @@ export class TaskManager {
   }
 
   public execute = async (): Promise<void> => {
-    if (!SettingsService.instance().general.get().allowTasks) {
+    if (!accountContext.settingsService.general.get().allowTasks) {
       return;
     }
 
@@ -98,10 +97,10 @@ export class TaskManager {
   };
 
   private doVillageTasks = async (): Promise<void> => {
-    const villages = villagesService.get().all();
+    const villages = accountContext.villageService.allVillages();
 
     for (const village of shuffle(villages)) {
-      if (!SettingsService.instance().village(village.id).general.get().allowTasks) {
+      if (!accountContext.settingsService.village(village.id).general.get().allowTasks) {
         return;
       }
 

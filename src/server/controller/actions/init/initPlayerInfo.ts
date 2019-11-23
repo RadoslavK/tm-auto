@@ -1,12 +1,12 @@
 import { parseServerSpeed } from '../../../parsers/player/parseServerSpeed';
 import { parseTribe } from '../../../parsers/player/parseTribe';
-import { playerService } from '../../../services/playerService';
-import { logsService } from '../../../services/logsService';
+import { Tribe } from '../../../_enums/Tribe';
+import { accountContext } from '../../../accountContext';
 
 export const initPlayerInfo = async (): Promise<void> => {
-  const player = playerService.get();
-  player.speed = await parseServerSpeed();
-  player.tribe = await parseTribe();
+  const { gameInfo } = accountContext;
+  gameInfo.speed = await parseServerSpeed();
+  gameInfo.tribe = await parseTribe();
 
-  logsService.logText(`Player info initialized, Tribe: ${player.tribe}, Speed: ${player.speed}x`);
+  accountContext.logsService.logText(`Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${gameInfo.speed}x`);
 };

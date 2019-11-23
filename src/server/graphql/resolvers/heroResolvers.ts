@@ -1,13 +1,12 @@
 import { IHeroInformation, IResolvers } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
-import { villagesService } from '../../services/villageService';
-import { heroService } from '../../services/heroService';
+import { accountContext } from '../../accountContext';
 
 export const heroResolvers: IResolvers = {
   Query: {
     heroInformation: (): IHeroInformation => {
-      const hero = heroService.get();
-      const village = villagesService.get().village(hero.villageId);
+      const { hero } = accountContext;
+      const village = accountContext.villageService.village(hero.villageId);
 
       return {
         health: hero.health,

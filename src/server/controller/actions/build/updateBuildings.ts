@@ -4,12 +4,12 @@ import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
 import { BuildingQueueService } from '../../../services/buildingQueueService';
 import { ensurePage } from '../ensurePage';
-import { villagesService } from '../../../services/villageService';
+import { accountContext } from '../../../accountContext';
 
 export const updateBuildings = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
-  const village = villagesService.get().village();
+  const village = accountContext.villageService.currentVillage();
   const fieldSpots = await parseFieldSpots();
   const buildingsInProgress = await parseBuildingsInProgress();
 

@@ -4,18 +4,14 @@ import { getPage } from '../../../browser/getPage';
 import { getSecondsFromString } from '../../../utils/getSeconds';
 import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
-import { ensurePage } from '../../actions/ensurePage';
 import { IBotTask } from '../../../_models/tasks';
-import { SettingsService } from '../../../services/settings';
-import { villagesService } from '../../../services/villageService';
-import { heroService } from '../../../services/heroService';
-import { logsService } from '../../../services/logsService';
+import { accountContext } from '../../../accountContext';
 
 export class AutoAdventureTask implements IBotTask {
-  public settings = (): AutoAdventureSettings => SettingsService.instance().hero.autoAdventure.get();
+  public settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
 
   public execute = async (): Promise<void> => {
-    const village = villagesService.get().village();
+    const village = accountContext.villageService.currentVillage();
     const settings = this.settings();
 
     if (settings.preferredVillageId !== village.id) {
@@ -23,7 +19,7 @@ export class AutoAdventureTask implements IBotTask {
     }
 
     const { spots } = village.buildings;
-    const hero = heroService.get();
+    const { hero } = accountContext;
 
     if (!spots.isBuilt(BuildingType.RallyPoint)
     || !hero.canGoToAdventure()) {
@@ -55,16 +51,17 @@ export class AutoAdventureTask implements IBotTask {
           ? +difficultyClass[1]
           : null;
       });
-      const url = await node.$eval('[id*=goToAdventure] [href]', x => x.getAttribute('href'));
 
-      if (!url) {
-        throw new Error('Url for adventure not found');
+      const linkElementId = await node.$eval('[id*=goToAdventure]', x => x.getAttribute('id'));
+
+      if (!linkElementId) {
+        throw new Error('Link for adventure not found');
       }
 
       return {
         duration: getSecondsFromString(duration),
         isHard: difficulty === 0,
-        url,
+        linkElementId,
       };
     }));
 
@@ -88,40 +85,50 @@ export class AutoAdventureTask implements IBotTask {
       return;
     }
 
-    let selectedAdventureUrl: string;
+    let selectedLinkElementId: string;
     // if adventures present
     switch (settings.adventureCriteria) {
       case AdventureCriteria.Random:
-        selectedAdventureUrl = randomElement(suitableAdventures).url;
+        selectedLinkElementId = randomElement(suitableAdventures).linkElementId;
         break;
 
       case AdventureCriteria.Furthest: {
         const adventure = getWithMaximum(suitableAdventures, x => x.duration);
-        selectedAdventureUrl = adventure.url;
+        selectedLinkElementId = adventure.linkElementId;
         break;
       }
 
       case AdventureCriteria.FirstToExpire:
-        selectedAdventureUrl = suitableAdventures[0].url;
+        selectedLinkElementId = suitableAdventures[0].linkElementId;
         break;
 
       case AdventureCriteria.Closest:
       default: {
         const adventure = getWithMinimum(suitableAdventures, x => x.duration);
-        selectedAdventureUrl = adventure.url;
+        selectedLinkElementId = adventure.linkElementId;
         break;
       }
     }
 
-    await ensurePage(selectedAdventureUrl, true);
-    const sendToAdventureButton = await page.$('[class="green startAdventure"]');
+    const linkElement = await page.$(`#${selectedLinkElementId}`);
+
+    if (!linkElement) {
+      throw new Error('Link element for selected adventure was not found');
+    }
+
+    await Promise.all([
+      linkElement.click(),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+
+    const sendToAdventureButton = await page.$('[class="adventureSendButton"] [class="green "]');
 
     // cant send. no rally points, cant do yet etc
     if (!sendToAdventureButton) {
       return;
     }
 
-    logsService.logText('Sending hero to adventure', true);
+    accountContext.logsService.logText('Sending hero to adventure', true);
 
     await Promise.all([
       sendToAdventureButton.click(),

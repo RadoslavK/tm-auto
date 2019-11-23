@@ -9,9 +9,7 @@ import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask } from '../../../_models/tasks';
-import { SettingsService } from '../../../services/settings';
-import { playerService } from '../../../services/playerService';
-import { logsService } from '../../../services/logsService';
+import { accountContext } from '../../../accountContext';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -22,7 +20,7 @@ export class AutoUnitsTask implements IBotTask {
     this.m_units = village.units;
   }
 
-  public settings = (): AutoUnitsSettings => SettingsService.instance().village(this.m_village.id).autoUnits.get();
+  public settings = (): AutoUnitsSettings => accountContext.settingsService.village(this.m_village.id).autoUnits.get();
 
   public execute = async (): Promise<void> => {
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
@@ -98,7 +96,7 @@ export class AutoUnitsTask implements IBotTask {
         return;
       }
 
-      const { speed } = playerService.get();
+      const { speed } = accountContext.gameInfo;
       const buildTime = getActualUnitBuildTime(uIndex, speed, unitBuilding.level.actual);
 
       if (maxAllowedBuildingTime) {
@@ -125,7 +123,7 @@ export class AutoUnitsTask implements IBotTask {
     const page = await getPage();
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {
-      logsService.logAutoUnits({
+      accountContext.logsService.logAutoUnits({
         amount,
         index: +uIndex,
       });

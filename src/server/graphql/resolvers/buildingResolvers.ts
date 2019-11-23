@@ -15,12 +15,11 @@ import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { Events } from '../subscriptions/events';
-import { villagesService } from '../../services/villageService';
-import { playerService } from '../../services/playerService';
 import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
+import { accountContext } from '../../accountContext';
 
 const getWallType = (): BuildingType => {
-  const { tribe } = playerService.get();
+  const { tribe } = accountContext.gameInfo;
 
   switch (tribe) {
     case Tribe.Egyptians:
@@ -47,7 +46,7 @@ export const buildingResolvers: IResolvers = {
   Query: {
     buildingSpots: (_, args) => {
       const { villageId } = args;
-      const normalizedSpots = villagesService.get().village(villageId).buildings.normalizedBuildingSpots();
+      const normalizedSpots = accountContext.villageService.village(villageId).buildings.normalizedBuildingSpots();
 
       normalizedSpots.forEach(b => {
         if (b.type > BuildingType.None) {
@@ -91,7 +90,7 @@ export const buildingResolvers: IResolvers = {
         villageId,
       } = args;
 
-      const village = villagesService.get().village(villageId);
+      const village = accountContext.villageService.village(villageId);
       const { queue } = village.buildings;
       const queueService = new BuildingQueueService(villageId);
       const mapBuildingQueue = mapBuildingQueueFactory(queueService);
@@ -99,7 +98,7 @@ export const buildingResolvers: IResolvers = {
       return mapBuildingQueue(queue);
     },
 
-    buildingsInProgress: (_, args) => villagesService.get().village(args.villageId).buildings.ongoing.buildings().map(mapBuildingInProgress),
+    buildingsInProgress: (_, args) => accountContext.villageService.village(args.villageId).buildings.ongoing.buildings().map(mapBuildingInProgress),
 
     availableNewBuildings: (_, args) => {
       const {

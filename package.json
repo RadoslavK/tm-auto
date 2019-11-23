@@ -7,7 +7,7 @@
   "scripts": {
     "debug": "electron-forge start -- --remote-debugging-port=9222",
     "generate:types": "graphql-codegen --config codegen.yml",
-    "check-types": "tsc",
+    "check:types": "tsc",
     "lint": "eslint \"src/**/*\"",
     "start": "electron-forge start",
     "package": "electron-forge package",

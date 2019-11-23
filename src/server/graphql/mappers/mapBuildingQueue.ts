@@ -6,11 +6,11 @@ import { buildingInfos } from '../../bootstrap/loadInfo';
 import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 import { mapCost } from './mapCost';
-import { playerService } from '../../services/playerService';
+import { accountContext } from '../../accountContext';
 
 export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueue) => IBuildingQueue => {
   const mbLevels = queueService.getMainBuildingLevels();
-  const { speed } = playerService.get();
+  const { speed } = accountContext.gameInfo;
   let totalCost = new Cost();
 
   return (queue: BuildingQueue): IBuildingQueue => {

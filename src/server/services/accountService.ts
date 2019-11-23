@@ -6,6 +6,7 @@ import {
   IUserAccount,
 } from '../_types/graphql';
 import { fileUtils } from '../utils/fileUtils';
+import { accountContext } from '../accountContext';
 
 const accountsPath = 'accounts.json';
 
@@ -20,6 +21,7 @@ class AccountService {
     } = input;
 
     this.currentAccountId = accountId;
+    accountContext.initialize(this.currentAccountId);
   };
 
   signOut = (): void => {

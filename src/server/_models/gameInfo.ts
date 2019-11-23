@@ -7,7 +7,7 @@ interface IParams {
   tribe: Tribe;
 }
 
-export class Player implements IParams {
+export class GameInfo implements IParams {
   public speed = 0;
   public tribe: Tribe = Tribe.None;
 

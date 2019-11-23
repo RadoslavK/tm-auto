@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { GeneralSettings } from '../../_models/settings/GeneralSettings';
 import { HeroSettings } from '../../_models/settings/HeroSettings';
-import { accountService } from '../accountService';
 import { VillageSettings } from '../../_models/settings/VillageSettings';
 import { InternalSettingsService } from './internalSettingsService';
 import { ComplexSettingsServiceType } from './_types';
@@ -14,12 +13,6 @@ export class SettingsService {
 
   private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
   private readonly basePath: string;
-
-  static instance = (): SettingsService => {
-    const userId = accountService.getCurrentAccount().id;
-
-    return new SettingsService(userId);
-  };
 
   constructor(private accountId: string) {
     this.basePath = join('accounts', accountId, 'settings');

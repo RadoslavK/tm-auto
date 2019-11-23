@@ -7,8 +7,7 @@ import { partiesInfo } from '../../../constants/partiesInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { ensureBuildingSpotPage} from '../../actions/ensurePage';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
-import { SettingsService } from '../../../services/settings';
-import { logsService } from '../../../services/logsService';
+import { accountContext } from '../../../accountContext';
 
 export class AutoPartyTask implements IBotTask {
   private readonly m_village: Village;
@@ -17,7 +16,7 @@ export class AutoPartyTask implements IBotTask {
     this.m_village = village;
   }
 
-  public settings = (): AutoPartySettings => SettingsService.instance().village(this.m_village.id).autoParty.get();
+  public settings = (): AutoPartySettings => accountContext.settingsService.village(this.m_village.id).autoParty.get();
 
   public execute = async (): Promise<IBotTaskResultParams | undefined> => {
     const {
@@ -53,10 +52,6 @@ export class AutoPartyTask implements IBotTask {
       if (culturePoints < minCulturePoints) {
         return undefined;
       }
-
-      // var townhallPageAfterParty = BuildingManager.SelectBuilding(
-      //   townHall,
-      //   $"&a={(int) partyType}");
     }
 
     const partyDuration = await getPartyDuration();
@@ -67,7 +62,7 @@ export class AutoPartyTask implements IBotTask {
 
     const nextCoolDown = CoolDown.fromDelay(partyDuration);
 
-    logsService.logText(`Throwing ${partyType} parties`, true);
+    accountContext.logsService.logText(`Throwing ${partyType} parties`, true);
 
     return {
       nextCoolDown,

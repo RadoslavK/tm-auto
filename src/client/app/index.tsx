@@ -51,14 +51,15 @@ const init = async (): Promise<void> => {
     cache: new InMemoryCache({ fragmentMatcher }),
     defaultOptions: {
       query: {
-        fetchPolicy: 'no-cache',
+        fetchPolicy: 'network-only',
         errorPolicy: 'none',
       },
       mutate: {
-        fetchPolicy: 'no-cache',
+        fetchPolicy: 'network-only',
         errorPolicy: 'none',
       },
       watchQuery: {
+        fetchPolicy: 'network-only',
         errorPolicy: 'none',
       },
     },

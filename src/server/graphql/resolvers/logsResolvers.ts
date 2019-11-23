@@ -5,12 +5,12 @@ import {
   ISubscription,
   ITextLogEntryContent,
 } from '../../_types/graphql';
-import { logsService } from '../../services/logsService';
 import {
   resolvePayloadEvent,
   subscribeToPayloadEvent,
 } from '../subscriptions/pubSub';
 import { Events } from '../subscriptions/events';
+import { accountContext } from '../../accountContext';
 
 export const logsResolvers: IResolvers = {
   LogEntryContent: {
@@ -32,7 +32,7 @@ export const logsResolvers: IResolvers = {
   },
 
   Query: {
-    logsEntries: () => logsService.logEntries(),
+    logsEntries: () => accountContext.logsService.logEntries(),
   },
 
   Subscription: {

@@ -12,14 +12,11 @@ import { getPage } from '../../../browser/getPage';
 import { buildingInfos } from '../../../bootstrap/loadInfo';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import { isInfrastructure } from '../../../utils/buildingUtils';
-import { log } from '../../../utils/log';
 import { randomElement } from '../../../utils/randomElement';
 import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
-import { SettingsService } from '../../../services/settings';
-import { playerService } from '../../../services/playerService';
-import { logsService } from '../../../services/logsService';
+import { accountContext } from '../../../accountContext';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -32,7 +29,7 @@ export class AutoBuildTask implements IBotTask {
     this.m_buildings = village.buildings;
   }
 
-  public settings = (): AutoBuildSettings => SettingsService.instance().village(this.m_village.id).autoBuild.get();
+  public settings = (): AutoBuildSettings => accountContext.settingsService.village(this.m_village.id).autoBuild.get();
 
   public execute = async (): Promise<IBotTaskResultParams | void> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
@@ -46,7 +43,7 @@ export class AutoBuildTask implements IBotTask {
       return undefined;
     }
 
-    const isRoman = playerService.get().tribe === Tribe.Romans;
+    const isRoman = accountContext.gameInfo.tribe === Tribe.Romans;
 
     let finishedAt: Date | undefined;
     if (isRoman) {
@@ -106,7 +103,7 @@ export class AutoBuildTask implements IBotTask {
         return;
       }
 
-      log("Not enough free crop. Building crop land next");
+      accountContext.logsService.logText("Not enough free crop. Building crop land next", true);
 
       const lowestLevelCropLand = this.m_buildings.spots.buildings()
         .filter(b => b.type === BuildingType.Crop)
@@ -149,7 +146,7 @@ export class AutoBuildTask implements IBotTask {
   };
 
   private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> =>{
-    logsService.logAutoBuild(queuedBuilding);
+    accountContext.logsService.logAutoBuild(queuedBuilding);
 
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);

@@ -6,7 +6,6 @@ import {
   ILogEntryContent,
   ITextLogEntryContent,
 } from '../_types/graphql';
-import { villagesService } from './villageService';
 import { mapVillage } from '../graphql/mappers/mapVillage';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import {
@@ -15,14 +14,14 @@ import {
 } from '../bootstrap/loadInfo';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { Events } from '../graphql/subscriptions/events';
-import { playerService } from './playerService';
+import { accountContext } from '../accountContext';
 
 export interface ILogAutoUnitsParams {
   readonly amount: number;
   readonly index: number;
 }
 
-class LogsService {
+export class LogsService {
   private readonly entries: ILogEntry[] = [];
 
   public logEntries = (): readonly ILogEntry[] => this.entries;
@@ -54,7 +53,7 @@ class LogsService {
       amount,
     } = params;
 
-    const { tribe } = playerService.get();
+    const { tribe } = accountContext.gameInfo;
     const { name } = unitInfos[tribe];
 
     const content: IAutoUnitsLogEntryContent = {
@@ -72,7 +71,7 @@ class LogsService {
   private log = (content: ILogEntryContent, fromVillage: boolean): void => {
     const id = uuid.v4();
     const timestamp = Math.round(Date.now() / 1000);
-    const village = fromVillage ? villagesService.get().village() : undefined;
+    const village = fromVillage ? accountContext.villageService.currentVillage() : undefined;
 
     this.addEntry({
       id,
@@ -87,5 +86,3 @@ class LogsService {
     publishPayloadEvent(Events.LogEntryAdded, { logEntry });
   };
 }
-
-export const logsService = new LogsService();

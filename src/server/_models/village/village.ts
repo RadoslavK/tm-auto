@@ -5,11 +5,12 @@ import { VillageResources } from './villageResources';
 
 interface IParams {
   readonly buildings: Buildings;
+  readonly units: Units;
+  readonly resources: VillageResources;
   coords: Coords;
   id: number;
   isCapital: boolean;
   name: string;
-  readonly resources: VillageResources;
 }
 
 export class Village implements IParams {

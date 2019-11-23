@@ -9,7 +9,7 @@ import {
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { IsBotRunning, StartBot, StopBot, OnBotRunningChanged } from "*/graphql_operations/controller.graphql";
 import {
   IIsBotRunningQuery,
@@ -48,6 +48,8 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
     refetchQueries: [{ query: IsSignedIn }],
   });
 
+  const history = useHistory();
+
   if (loading || !data) {
     return null;
   }
@@ -65,6 +67,7 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
   };
 
   const onSignOut = (): void => {
+    history.push('/');
     signOut();
   };
 

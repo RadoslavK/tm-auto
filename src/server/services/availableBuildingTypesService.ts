@@ -4,20 +4,17 @@ import { BuildingConditions, CapitalCondition } from '../_models/buildings/build
 import { Village } from '../_models/village/village';
 import { fieldIds } from '../constants/fieldIds';
 import { buildingInfos } from '../bootstrap/loadInfo';
-import { villagesService } from './villageService';
-import { playerService } from './playerService';
+import { accountContext } from '../accountContext';
 
 export class AvailableBuildingTypesService {
   private readonly m_village: Village;
 
   constructor(villageId: number) {
-    this.m_village = villagesService.get().village(villageId);
+    this.m_village = accountContext.villageService.village(villageId);
   }
 
   public availableBuildingTypes = (fieldId: number): readonly BuildingType[] => {
-    const {
-      tribe,
-    } = playerService.get();
+    const { tribe } = accountContext.gameInfo;
 
     const buildingTypes: BuildingType[] = [];
 
@@ -133,7 +130,7 @@ export class AvailableBuildingTypesService {
     }
 
     if (conditions.playerTribe !== Tribe.None
-      && conditions.playerTribe !== playerService.get().tribe) {
+      && conditions.playerTribe !== accountContext.gameInfo.tribe) {
       return false;
     }
 

@@ -1,10 +1,10 @@
 import { HeroState } from '../../_models/hero/hero';
 import { getPage } from '../../browser/getPage';
-import { heroService } from '../../services/heroService';
+import { accountContext } from '../../accountContext';
 
 export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
-  const hero = heroService.get();
+  const { hero } = accountContext;
 
   hero.villageId = await page.$eval('.heroStatusMessage > a', x => {
     const heroVillageLink = x.getAttribute('href');

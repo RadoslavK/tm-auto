@@ -1,8 +1,8 @@
 import { getPage } from '../../browser/getPage';
-import { villagesService } from '../../services/villageService';
+import { accountContext } from '../../accountContext';
 
 export const ensureVillageSelected = async (villageId: number): Promise<void> => {
-  const { currentVillageId } = villagesService.get();
+  const { currentVillageId } = accountContext.villageService;
 
   if (currentVillageId !== villageId) {
     const page = await getPage();
@@ -22,6 +22,6 @@ export const ensureVillageSelected = async (villageId: number): Promise<void> =>
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
-    villagesService.get().currentVillageId = villageId;
+    accountContext.villageService.currentVillageId = villageId;
   }
 };

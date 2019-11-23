@@ -2,13 +2,13 @@ import { IResolvers } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
 import { Events } from '../subscriptions/events';
 import { subscribeToEvent } from '../subscriptions/pubSub';
-import { villagesService } from '../../services/villageService';
+import { accountContext } from '../../accountContext';
 
 export const villageResolvers: IResolvers = {
   Query: {
-    village: (_, args) => mapVillage(villagesService.get().village(args.villageId)),
+    village: (_, args) => mapVillage(accountContext.villageService.village(args.villageId)),
 
-    villages: () => villagesService.get().all().map(mapVillage),
+    villages: () => accountContext.villageService.allVillages().map(mapVillage),
   },
 
   Subscription: {

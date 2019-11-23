@@ -4,7 +4,7 @@ import {
 import { mapCoolDown } from '../mappers/settings/mapCoolDown';
 import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
-import { SettingsService } from '../../services/settings';
+import { accountContext } from '../../accountContext';
 
 export const settingsResolvers: IResolvers = {
   ITaskSettings: {
@@ -21,14 +21,14 @@ export const settingsResolvers: IResolvers = {
     },
   },
   Query: {
-    generalSettings: () => SettingsService.instance().general.get(),
-    hero: () => SettingsService.instance().hero.get(),
-    villageSettings: (_, args) => SettingsService.instance().village(args.villageId).get(),
+    generalSettings: () => accountContext.settingsService.general.get(),
+    hero: () => accountContext.settingsService.hero.get(),
+    villageSettings: (_, args) => accountContext.settingsService.village(args.villageId).get(),
   },
 
   Mutation: {
     updateGeneralSettings: (_, args) => {
-      SettingsService.instance().general.update(args.input.settings);
+      accountContext.settingsService.general.update(args.input.settings);
       return true;
     },
 
@@ -38,7 +38,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      SettingsService.instance().village(villageId).autoBuild.update({
+      accountContext.settingsService.village(villageId).autoBuild.update({
         ...settings,
         coolDown: mapCoolDown(settings.coolDown),
       });
@@ -51,7 +51,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      SettingsService.instance().village(villageId).general.update(settings);
+      accountContext.settingsService.village(villageId).general.update(settings);
       return true;
     },
 
@@ -60,7 +60,7 @@ export const settingsResolvers: IResolvers = {
         settings,
       } = args.input;
 
-      SettingsService.instance().hero.autoAdventure.update({
+      accountContext.settingsService.hero.autoAdventure.update({
         ...settings,
         coolDown: mapCoolDown(settings.coolDown),
       });
