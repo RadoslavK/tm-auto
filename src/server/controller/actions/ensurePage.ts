@@ -13,47 +13,49 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
     return;
   }
 
-  let isHrefLink;
   let link = await page.$(`[href*="${path}"]`);
 
-  if (!link) {
-    //  might be an onclick event
-    link = await page.$(`[onclick*="${path}"]`);
+  if (link) {
+    await Promise.all([
+      page.evaluate(el => el.click(), link),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
 
-    if (!link) {
-      //  can be redirect through jquery
-      const pageContent = await page.content();
+    return;
+  }
 
-      const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
-      const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
+  //  might be an onclick event
+  link = await page.$(`[onclick*="${path}"]`);
 
-      if (!redirectElementIdMatch) {
-        throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
-      }
+  if (link) {
+    await Promise.all([
+      link.evaluate(node => node.dispatchEvent(new Event('click'))),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
 
-      const redirectElementId = redirectElementIdMatch[1];
+    return;
+  }
 
-      const redirectElement = await page.$(`#${redirectElementId}`);
+  //  can be redirect through jquery
+  const pageContent = await page.content();
 
-      if (!redirectElement) {
-        throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
-      }
+  const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
+  const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
 
-      await Promise.all([
-        redirectElement.click(),
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-      ]);
+  if (!redirectElementIdMatch) {
+    throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
+  }
 
-      return;
-    }
+  const redirectElementId = redirectElementIdMatch[1];
 
-    isHrefLink = false;
-  } else {
-    isHrefLink = true;
+  const redirectElement = await page.$(`#${redirectElementId}`);
+
+  if (!redirectElement) {
+    throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
   }
 
   await Promise.all([
-    isHrefLink ? page.evaluate(el => el.click(), link) : link.click(),
+    redirectElement.click(),
     page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
   ]);
 };

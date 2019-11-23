@@ -17,6 +17,7 @@ import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
+import { fieldIds } from '../../../constants/fieldIds';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -152,9 +153,13 @@ export class AutoBuildTask implements IBotTask {
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
     const { category } = buildingInfos[queuedBuilding.type];
 
-    if (isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > 0) {
+    //  They have same class but dont have to be selected through category
+    const areSpecialCases = queuedBuilding.fieldId === fieldIds.RallyPoint
+      || queuedBuilding.fieldId === fieldIds.Wall;
+
+    if ((isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > 0) || areSpecialCases) {
       // need to select correct section for new building
-      if (category > 1) {
+      if (category > 1 && !areSpecialCases) {
         // category 1 is preselected
         const path = `build.php?id=${queuedBuilding.fieldId}&category=${category}`;
         await ensurePage(path);
