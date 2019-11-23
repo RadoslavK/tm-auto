@@ -21,7 +21,30 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
     link = await page.$(`[onclick*="${path}"]`);
 
     if (!link) {
-      throw new Error(`Did not find url link nor onclick redirect, requested page: ${path}`);
+      //  can be redirect through jquery
+      const pageContent = await page.content();
+
+      const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
+      const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
+
+      if (!redirectElementIdMatch) {
+        throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
+      }
+
+      const redirectElementId = redirectElementIdMatch[1];
+
+      const redirectElement = await page.$(`#${redirectElementId}`);
+
+      if (!redirectElement) {
+        throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
+      }
+
+      await Promise.all([
+        redirectElement.click(),
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      ]);
+
+      return;
     }
 
     isHrefLink = false;
