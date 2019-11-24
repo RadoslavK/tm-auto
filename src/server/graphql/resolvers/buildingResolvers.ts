@@ -4,8 +4,6 @@ import {
   IBuildingQueue,
   IBuildingSpotLevel,
   IResolvers,
-  ISubscriptionBuildingsUpdatedArgs,
-  ISubscriptionOnQueueUpdatedArgs,
 } from '../../_types/graphql';
 import { fieldIds } from '../../constants/fieldIds';
 import { buildingInfos } from '../../bootstrap/loadInfo';
@@ -15,7 +13,9 @@ import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { BotEvent } from '../subscriptions/botEvent';
-import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
+import {
+  subscribeToEvent,
+} from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
 
 const getWallType = (): BuildingType => {
@@ -181,18 +181,14 @@ export const buildingResolvers: IResolvers = {
   },
 
   Subscription: {
-    buildingsUpdated: {
-      subscribe: subscribeToPayloadEvent(BotEvent.BuildingsUpdated, (payload, variables: ISubscriptionBuildingsUpdatedArgs) => {
-        return payload.villageId === variables.villageId;
-      }),
+    buildingsUpdated: subscribeToEvent(BotEvent.BuildingsUpdated, {
+      filter: (payload, variables) => payload.villageId === variables.villageId,
       resolve: () => true,
-    },
+    }),
 
-    onQueueUpdated: {
-      subscribe: subscribeToPayloadEvent(BotEvent.QueuedUpdated, (payload, variables: ISubscriptionOnQueueUpdatedArgs) => {
-        return payload.villageId === variables.villageId;
-      }),
+    onQueueUpdated: subscribeToEvent(BotEvent.QueuedUpdated, {
+      filter: (payload, variables) => payload.villageId === variables.villageId,
       resolve: () => true,
-    },
+    }),
   },
 };

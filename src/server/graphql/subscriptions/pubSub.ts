@@ -6,6 +6,7 @@ import {
   BotEvent,
   BotEventPayloads,
 } from './botEvent';
+import { SubscriptionSubscribeFn } from '../../_types/graphql';
 
 type Extends<T, X> = T extends X ? true : false;
 
@@ -21,16 +22,27 @@ export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutP
   return pubSub.publish(event, null);
 };
 
-export const subscribeToEvent = <TEvent extends BotEvent>(event: EventWithoutPayload<TEvent>): () => AsyncIterator<void> => {
-  return () => pubSub.asyncIterator<void>(event);
-};
+type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayloads[TEvent] : undefined;
 
-export const subscribeToPayloadEvent = <TEvent extends keyof BotEventPayloads, TPayload extends BotEventPayloads[TEvent], TArgs>(event: TEvent, filter?: (payload: TPayload, variables: TArgs) => boolean | Promise<boolean>): () => AsyncIterator<TPayload> => {
-  return filter
-    ? withFilter(() => pubSub.asyncIterator<TPayload>(event), filter)
-    : () => pubSub.asyncIterator<TPayload>(event);
-};
+interface ISubscribeToEventOptions<TEvent, TArgs, TResult> {
+  readonly filter?: (payload: EventPayload<TEvent>, subscriptionVariables: TArgs) => boolean;
+  readonly resolve: (payload: EventPayload<TEvent>) => TResult;
+}
 
-export const resolvePayloadEvent = <TEvent extends keyof BotEventPayloads, TResult>(processPayload: (payload: BotEventPayloads[TEvent]) => TResult) => {
-  return processPayload;
+export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TKey, TParent, TContext>(
+  event: TEvent,
+  options: ISubscribeToEventOptions<TEvent, TArgs, TResult>,
+) => {
+  const {
+    filter,
+    resolve,
+  } = options;
+
+  const sub = () => pubSub.asyncIterator<EventPayload<TEvent>>(event);
+
+  const subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs> = filter
+    ? withFilter(sub, filter)
+    : sub;
+
+  return { subscribe, resolve };
 };

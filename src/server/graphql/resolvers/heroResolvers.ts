@@ -1,13 +1,11 @@
 import {
   IHeroInformation,
   IResolvers,
-  ISubscription,
 } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
 import { accountContext } from '../../accountContext';
 import {
-  resolvePayloadEvent,
-  subscribeToPayloadEvent,
+  subscribeToEvent,
 } from '../subscriptions/pubSub';
 import { BotEvent } from '../subscriptions/botEvent';
 import { Hero } from '../../_models/hero/hero';
@@ -32,11 +30,8 @@ export const heroResolvers: IResolvers = {
   },
 
   Subscription: {
-    heroInformationUpdated: {
-      subscribe: subscribeToPayloadEvent(BotEvent.HeroInformationUpdated),
-      resolve: resolvePayloadEvent<BotEvent.HeroInformationUpdated, ISubscription['heroInformationUpdated']>(payload => {
-        return mapHeroInformation(payload.heroInformation);
-      }),
-    }
+    heroInformationUpdated: subscribeToEvent(BotEvent.HeroInformationUpdated, {
+      resolve: p => p.heroInformation,
+    }),
   },
 };

@@ -22,6 +22,7 @@ generates:
       enumPrefix: false
       skipTypename: true
       immutableTypes: true
+      avoidOptionals: true
   src/client/_types/graphql_modules.d.ts:
     plugins:
       - "typescript-graphql-files-modules"

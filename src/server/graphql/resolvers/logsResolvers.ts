@@ -2,15 +2,11 @@ import {
   IAutoBuildLogEntryContent,
   IAutoUnitsLogEntryContent,
   IResolvers,
-  ISubscription,
   ITextLogEntryContent,
 } from '../../_types/graphql';
-import {
-  resolvePayloadEvent,
-  subscribeToPayloadEvent,
-} from '../subscriptions/pubSub';
 import { BotEvent } from '../subscriptions/botEvent';
 import { accountContext } from '../../accountContext';
+import { subscribeToEvent } from '../subscriptions/pubSub';
 
 export const logsResolvers: IResolvers = {
   LogEntryContent: {
@@ -36,9 +32,8 @@ export const logsResolvers: IResolvers = {
   },
 
   Subscription: {
-    onLogEntryAdded: {
-      subscribe: subscribeToPayloadEvent(BotEvent.LogEntryAdded),
-      resolve: resolvePayloadEvent<BotEvent.LogEntryAdded, ISubscription['onLogEntryAdded']>(payload => payload.logEntry),
-    },
+    onLogEntryAdded: subscribeToEvent(BotEvent.LogEntryAdded, {
+      resolve: payload => payload.logEntry,
+    }),
   },
 };

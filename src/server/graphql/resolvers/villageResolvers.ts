@@ -12,14 +12,12 @@ export const villageResolvers: IResolvers = {
   },
 
   Subscription: {
-    updateVillage: {
-      subscribe: subscribeToEvent(BotEvent.VillageUpdated),
+    updateVillage: subscribeToEvent(BotEvent.VillageUpdated, {
       resolve: () => true,
-    },
+    }),
 
-    updateVillages: {
-      subscribe: subscribeToEvent(BotEvent.VillagesUpdated),
+    updateVillages: subscribeToEvent(BotEvent.VillagesUpdated, {
       resolve: () => true,
-    },
+    }),
   }
 };

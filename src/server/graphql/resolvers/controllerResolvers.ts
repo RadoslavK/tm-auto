@@ -31,9 +31,8 @@ export const controllerResolvers: IResolvers = {
   },
 
   Subscription: {
-    onBotRunningChanged: {
-      subscribe: subscribeToEvent(BotEvent.BotRunningChanged),
+    onBotRunningChanged: subscribeToEvent(BotEvent.BotRunningChanged, {
       resolve: () => true,
-    },
+    }),
   },
 };

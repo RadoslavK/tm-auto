@@ -17,7 +17,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
   readonly maxTravelTime: Scalars['Int'],
-  readonly preferredVillageId?: Maybe<Scalars['Int']>,
+  readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
 export type IAutoAdventureSettingsInput = {
@@ -28,7 +28,7 @@ export type IAutoAdventureSettingsInput = {
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
   readonly maxTravelTime: Scalars['Int'],
-  readonly preferredVillageId?: Maybe<Scalars['Int']>,
+  readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
 export type IAutoBuildLogEntryContent = {
@@ -182,7 +182,7 @@ export type IGeneralVillageSettingsInput = {
 export type IHeroInformation = {
   readonly health: Scalars['Int'],
   readonly state: HeroState,
-  readonly village?: Maybe<IVillage>,
+  readonly village: Maybe<IVillage>,
 };
 
 export type IHeroSettings = {
@@ -205,18 +205,18 @@ export type IITaskSettings = {
 export type ILogEntry = {
   readonly id: Scalars['ID'],
   readonly timestamp: Scalars['Int'],
-  readonly village?: Maybe<IVillage>,
+  readonly village: Maybe<IVillage>,
   readonly content: ILogEntryContent,
 };
 
 export type ILogEntryContent = ITextLogEntryContent | IAutoBuildLogEntryContent | IAutoUnitsLogEntryContent;
 
 export type IMutation = {
-  readonly createAccount?: Maybe<Scalars['ID']>,
+  readonly createAccount: Maybe<Scalars['ID']>,
   readonly updateAccount: Scalars['Boolean'],
   readonly deleteAccount: Scalars['Boolean'],
-  readonly signIn?: Maybe<Scalars['Boolean']>,
-  readonly signOut?: Maybe<Scalars['Boolean']>,
+  readonly signIn: Maybe<Scalars['Boolean']>,
+  readonly signOut: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
@@ -303,7 +303,7 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
 
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
-  readonly account?: Maybe<IUserAccount>,
+  readonly account: Maybe<IUserAccount>,
   readonly currentAccount: IUserAccount,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
@@ -317,7 +317,7 @@ export type IQuery = {
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
   readonly villageSettings: IVillageSettings,
-  readonly village?: Maybe<IVillage>,
+  readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
 
