@@ -54,7 +54,9 @@ export const OnBotRunningChanged: DocumentNode;
 declare module '*/graphql_operations/hero.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const GetHeroInformation: DocumentNode;
+  export const HeroInformationFragment: DocumentNode;
+export const GetHeroInformation: DocumentNode;
+export const OnHeroInformationUpdated: DocumentNode;
 
   export default defaultDocument;
 }

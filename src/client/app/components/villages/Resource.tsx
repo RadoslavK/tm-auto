@@ -1,14 +1,17 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import { imageLinks } from '../../../utils/imageLinks';
+import { IResources } from '../../../_types/graphql';
+import { createFormatter } from '../../utils/numberFormatting';
 
-type ResourceName = 'wood' | 'clay' | 'iron' | 'crop' | 'total' | 'freeCrop';
+type ResourceName = keyof IResources;
 
 interface IProps {
   readonly amount: number;
   readonly capacity?: number;
   readonly production?: number;
   readonly resourceName: ResourceName;
+  readonly resourceFormatter?: (amount: number) => string;
 }
 
 interface IStyleProps {
@@ -58,20 +61,22 @@ export const Resource: React.FC<IProps> = (props) => {
     capacity,
     production,
     resourceName,
+    resourceFormatter,
   } = props;
 
   const classes = useStyles({ production, resourceName });
+  const formatResources = resourceFormatter || createFormatter();
 
   return (
     <span className={classes.root}>
       <span className={classes.image} />
-      <span>{amount}</span>
+      <span>{formatResources(amount)}</span>
       {capacity !== undefined && (
-        <span>/{capacity}</span>
+        <span>/{formatResources(capacity)}</span>
       )}
       {production !== undefined && (
         <>
-          (<span className={classes.production}>{production}</span>)
+          (<span className={classes.production}>{createFormatter()(production)}</span>)
         </>
       )}
     </span>

@@ -24,15 +24,17 @@ let clientWin: null | BrowserWindow;
 
 const createClientWindow = (socketName: string): void => {
   clientWin = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: false,
       // @ts-ignore
       // eslint-disable-next-line no-undef
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-    }
+    },
+    show: false,
   });
+
+  clientWin.maximize();
+  clientWin.show();
 
   clientWin.webContents.openDevTools();
 

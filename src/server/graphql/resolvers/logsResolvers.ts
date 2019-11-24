@@ -9,7 +9,7 @@ import {
   resolvePayloadEvent,
   subscribeToPayloadEvent,
 } from '../subscriptions/pubSub';
-import { Events } from '../subscriptions/events';
+import { BotEvent } from '../subscriptions/botEvent';
 import { accountContext } from '../../accountContext';
 
 export const logsResolvers: IResolvers = {
@@ -37,8 +37,8 @@ export const logsResolvers: IResolvers = {
 
   Subscription: {
     onLogEntryAdded: {
-      subscribe: subscribeToPayloadEvent(Events.LogEntryAdded),
-      resolve: resolvePayloadEvent<Events.LogEntryAdded, ISubscription['onLogEntryAdded']>(payload => payload.logEntry),
+      subscribe: subscribeToPayloadEvent(BotEvent.LogEntryAdded),
+      resolve: resolvePayloadEvent<BotEvent.LogEntryAdded, ISubscription['onLogEntryAdded']>(payload => payload.logEntry),
     },
   },
 };

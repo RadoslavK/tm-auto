@@ -1,7 +1,10 @@
 import { Dialog } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useRouteMatch, useHistory } from 'react-router-dom';
 import { GetVillageById, UpdateVillage } from '*/graphql_operations/village.graphql';
 import {
   IGetVillageByIdQuery,
@@ -30,6 +33,18 @@ export const Village: React.FC<IParams> = (props) => {
   const { data, loading, refetch } = useQuery<IGetVillageByIdQuery, IGetVillageByIdQueryVariables>(GetVillageById, {
     variables: { villageId },
   });
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (loading || !data) {
+      return;
+    }
+
+    if (!data.village) {
+      history.push('/villages');
+    }
+  }, [data, loading, history]);
 
   useSubscription<IUpdateVillageSubscription>(UpdateVillage, {
     onSubscriptionData: () => refetch(),

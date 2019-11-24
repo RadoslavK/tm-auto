@@ -1,23 +1,65 @@
-import * as React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import {
+  useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import { IGetHeroInformationQuery } from '../../_types/graphql';
-import { GetHeroInformation } from '*/graphql_operations/hero.graphql';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+import {
+  HeroState,
+  IGetHeroInformationQuery,
+  IHeroInformationFragmentFragment,
+  IOnHeroInformationUpdatedSubscription,
+} from '../../_types/graphql';
+import {
+  GetHeroInformation,
+  OnHeroInformationUpdated,
+} from '*/graphql_operations/hero.graphql';
 
-interface IProps {
-  readonly information: IGetHeroInformationQuery['heroInformation'];
-}
+const useHeroInformation = () => {
+  const [heroInformation, setHeroInformation] = useState<IHeroInformationFragmentFragment>();
+  const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation);
 
-const HeroInformation: React.FC<IProps> = (props) => {
-  const {
-    information,
-  } = props;
+  useEffect(() => {
+    if (loading || !data) {
+      return;
+    }
+
+    setHeroInformation(data.heroInformation);
+  }, [data, loading]);
+
+  useSubscription<IOnHeroInformationUpdatedSubscription>(OnHeroInformationUpdated, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (subscriptionData.loading || !subscriptionData.data) {
+        return;
+      }
+
+      setHeroInformation(subscriptionData.data.heroInformationUpdated);
+    },
+  });
+  
+  return heroInformation;
+};
+
+export const HeroInformation: React.FC = () => {
+  const information = useHeroInformation();
+  
+  if (!information) {
+    return null;
+  }
 
   return (
     <div>
       <div>
         <label htmlFor="health">Health: </label>
         <span id="heath">{information.health}</span>
+      </div>
+
+      <div>
+        <label htmlFor="state">State: </label>
+        <span id="state">{HeroState[information.state]}</span>
       </div>
 
       <div>
@@ -30,19 +72,3 @@ const HeroInformation: React.FC<IProps> = (props) => {
     </div>
   );
 };
-
-const Container: React.FC = () => {
-  const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation);
-
-  if (loading || !data) {
-    return null;
-  }
-
-  const {
-    heroInformation,
-  } = data;
-
-  return <HeroInformation information={heroInformation} />;
-};
-
-export { Container as HeroInformation };

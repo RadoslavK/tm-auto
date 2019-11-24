@@ -13,7 +13,7 @@ import {
   unitInfos,
 } from '../bootstrap/loadInfo';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { Events } from '../graphql/subscriptions/events';
+import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { accountContext } from '../accountContext';
 
 export interface ILogAutoUnitsParams {
@@ -83,6 +83,6 @@ export class LogsService {
 
   private addEntry = (logEntry: ILogEntry): void => {
     this.entries.push(logEntry);
-    publishPayloadEvent(Events.LogEntryAdded, { logEntry });
+    publishPayloadEvent(BotEvent.LogEntryAdded, { logEntry });
   };
 }

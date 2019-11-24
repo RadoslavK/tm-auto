@@ -1,8 +1,21 @@
+enum HeroState {
+    Unknown
+    InVillage
+    Dead
+    Reviving
+    OnAdventure
+}
+
 type HeroInformation {
     health: Int!
+    state: HeroState!
     village: Village
 }
 
 extend type Query {
     heroInformation: HeroInformation!
+}
+
+extend type Subscription {
+    heroInformationUpdated: HeroInformation!
 }

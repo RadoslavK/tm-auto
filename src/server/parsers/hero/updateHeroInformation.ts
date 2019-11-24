@@ -1,6 +1,8 @@
-import { HeroState } from '../../_models/hero/hero';
 import { getPage } from '../../browser/getPage';
 import { accountContext } from '../../accountContext';
+import { publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
+import { BotEvent } from '../../graphql/subscriptions/botEvent';
+import { IHeroState } from '../../_types/graphql';
 
 export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
@@ -49,20 +51,20 @@ export const updateHeroInformation = async (): Promise<void> => {
 
   switch(status) {
     case 100:
-      hero.state = HeroState.InVillage;
+      hero.state = IHeroState.InVillage;
       break;
 
     case 101: {
-      hero.state = heroStatusClass.includes('Regenerate') ? HeroState.Reviving : HeroState.Dead;
+      hero.state = heroStatusClass.includes('Regenerate') ? IHeroState.Reviving : IHeroState.Dead;
       break;
     }
 
     case 50:
-      hero.state = HeroState.OnAdventure;
+      hero.state = IHeroState.OnAdventure;
       break;
 
     default:
-      hero.state = HeroState.None;
+      hero.state = IHeroState.Unknown;
   }
 
   const pageContent = await page.content();
@@ -74,4 +76,6 @@ export const updateHeroInformation = async (): Promise<void> => {
 
   const adventureCount = +adventureCountMatch[1];
   hero.hasAvailableAdventures = adventureCount > 0;
+
+  publishPayloadEvent(BotEvent.HeroInformationUpdated, { heroInformation: hero });
 };

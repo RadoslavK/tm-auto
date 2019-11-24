@@ -1,28 +1,22 @@
-// TODO zistit vsetky mozne stavi a jak sa lisia
-export enum HeroState {
-  None,
-  InVillage,
-  Dead,
-  Reviving,
-  OnAdventure,
-}
+import { IHeroState } from '../../_types/graphql';
 
 interface IParams {
   hasAvailableAdventures: boolean;
   health: number;
-  state: HeroState;
+  state: IHeroState;
   villageId: number;
 }
 
 export class Hero implements IParams {
   public hasAvailableAdventures: boolean;
   public health = 0;
-  public state: HeroState = HeroState.None;
+  // TODO zistit vsetky mozne stavi a jak sa lisia
+  public state: IHeroState = IHeroState.Unknown;
   public villageId = 0;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
   }
 
-  public canGoToAdventure = (): boolean => this.state === HeroState.InVillage && this.hasAvailableAdventures;
+  public canGoToAdventure = (): boolean => this.state === IHeroState.InVillage && this.hasAvailableAdventures;
 }

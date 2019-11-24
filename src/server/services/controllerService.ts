@@ -8,7 +8,7 @@ import { updateNewOldVillages } from '../controller/actions/village/updateNewOld
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/tasks/taskManager';
 import { publishEvent } from '../graphql/subscriptions/pubSub';
-import { Events } from '../graphql/subscriptions/events';
+import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { BuildingQueueService } from './buildingQueueService';
 import { accountContext } from '../accountContext';
 import {
@@ -16,6 +16,7 @@ import {
   IMutationSignInArgs,
 } from '../_types/graphql';
 import { accountService } from './accountService';
+import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 
 class ControllerService {
   private m_timeout: NodeJS.Timeout;
@@ -27,7 +28,7 @@ class ControllerService {
 
   private setState = async (state: IBotState): Promise<void> => {
     this.botState = state;
-    return publishEvent(Events.BotRunningChanged);
+    return publishEvent(BotEvent.BotRunningChanged);
   };
 
   public signIn = async (input: IMutationSignInArgs): Promise<void> => {
@@ -47,6 +48,7 @@ class ControllerService {
     await ensureLoggedIn();
     await initPlayerInfo();
     await updateNewOldVillages();
+    await updateHeroInformation();
 
     const allVillages = accountContext.villageService.allVillages();
 
@@ -78,6 +80,8 @@ class ControllerService {
 
   private execute = async (): Promise<void> => {
     try {
+      await ensureLoggedIn();
+
       if (!this.m_taskManager) {
         this.m_taskManager = new TaskManager();
       }

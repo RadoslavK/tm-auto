@@ -1,6 +1,6 @@
 import { IResolvers } from '../../_types/graphql';
 import { subscribeToEvent } from '../subscriptions/pubSub';
-import { Events } from '../subscriptions/events';
+import { BotEvent } from '../subscriptions/botEvent';
 import { controllerService } from '../../services/controllerService';
 
 export const controllerResolvers: IResolvers = {
@@ -32,7 +32,7 @@ export const controllerResolvers: IResolvers = {
 
   Subscription: {
     onBotRunningChanged: {
-      subscribe: subscribeToEvent(Events.BotRunningChanged),
+      subscribe: subscribeToEvent(BotEvent.BotRunningChanged),
       resolve: () => true,
     },
   },

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { ICost } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
+import { createFormatter } from '../../../utils/numberFormatting';
 
 interface IProps {
   readonly className?: string;
@@ -64,25 +65,30 @@ export const Cost: React.FC<IProps> = (props) => {
   const classes = useStyles({});
   const time = formatTimeFromSeconds(buildTime);
 
+  const highestResource = Math.max(resources.wood, resources.clay, resources.iron, resources.crop);
+  const formatResources = createFormatter(highestResource);
+  const formatTotal = createFormatter();
+  const formatFreeCrop = createFormatter();
+
   return (
     <div className={classNames(className, classes.root)}>
       <span className={classNames(classes.image, classes.wood)} />
-      <span className={classes.value}>{resources.wood}</span>
+      <span className={classes.value}>{formatResources(resources.wood)}</span>
 
       <span className={classNames(classes.image, classes.clay)} />
-      <span className={classes.value}>{resources.clay}</span>
+      <span className={classes.value}>{formatResources(resources.clay)}</span>
 
       <span className={classNames(classes.image, classes.iron)} />
-      <span className={classes.value}>{resources.iron}</span>
+      <span className={classes.value}>{formatResources(resources.iron)}</span>
 
       <span className={classNames(classes.image, classes.crop)} />
-      <span className={classes.value}>{resources.crop}</span>
+      <span className={classes.value}>{formatResources(resources.crop)}</span>
 
       <span className={classNames(classes.image, classes.total)} />
-      <span className={classes.value}>{resources.total}</span>
+      <span className={classes.value}>{formatTotal(resources.total)}</span>
 
       <span className={classNames(classes.image, classes.freeCrop)}/>
-      <span className={classes.value}>{resources.freeCrop}</span>
+      <span className={classes.value}>{formatFreeCrop(resources.freeCrop)}</span>
 
       <span className={classNames(classes.image, classes.buildTime)}/>
       <span className={classes.value}>{time}</span>

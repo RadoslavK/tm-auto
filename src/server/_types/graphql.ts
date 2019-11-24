@@ -202,6 +202,7 @@ export type IGeneralVillageSettingsInput = {
 export type IHeroInformation = {
   readonly __typename?: 'HeroInformation',
   readonly health: Scalars['Int'],
+  readonly state: IHeroState,
   readonly village?: Maybe<IVillage>,
 };
 
@@ -209,6 +210,14 @@ export type IHeroSettings = {
   readonly __typename?: 'HeroSettings',
   readonly autoAdventure: IAutoAdventureSettings,
 };
+
+export enum IHeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
 export type IITaskSettings = {
   readonly allow: Scalars['Boolean'],
@@ -420,6 +429,7 @@ export type ISubscription = {
   readonly __typename?: 'Subscription',
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
+  readonly heroInformationUpdated: IHeroInformation,
   readonly onLogEntryAdded: ILogEntry,
   readonly onQueueUpdated: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
@@ -592,6 +602,7 @@ export type IResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>,
   BotState: IBotState,
   HeroInformation: ResolverTypeWrapper<IHeroInformation>,
+  HeroState: IHeroState,
   Village: ResolverTypeWrapper<IVillage>,
   Coords: ResolverTypeWrapper<ICoords>,
   VillageResources: ResolverTypeWrapper<IVillageResources>,
@@ -653,6 +664,7 @@ export type IResolversParentTypes = {
   Date: Scalars['Date'],
   BotState: IBotState,
   HeroInformation: IHeroInformation,
+  HeroState: IHeroState,
   Village: IVillage,
   Coords: ICoords,
   VillageResources: IVillageResources,
@@ -804,6 +816,7 @@ export type IGeneralVillageSettingsResolvers<ContextType = any, ParentType exten
 
 export type IHeroInformationResolvers<ContextType = any, ParentType extends IResolversParentTypes['HeroInformation'] = IResolversParentTypes['HeroInformation']> = {
   health?: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  state?: Resolver<IResolversTypes['HeroState'], ParentType, ContextType>,
   village?: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType>,
 };
 
@@ -897,6 +910,7 @@ export type IResourcesResolvers<ContextType = any, ParentType extends IResolvers
 export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
   buildingsUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "buildingsUpdated", ParentType, ContextType, RequireFields<ISubscriptionBuildingsUpdatedArgs, 'villageId'>>,
   onBotRunningChanged?: SubscriptionResolver<IResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>,
+  heroInformationUpdated?: SubscriptionResolver<IResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>,
   onLogEntryAdded?: SubscriptionResolver<IResolversTypes['LogEntry'], "onLogEntryAdded", ParentType, ContextType>,
   onQueueUpdated?: SubscriptionResolver<IResolversTypes['Boolean'], "onQueueUpdated", ParentType, ContextType, RequireFields<ISubscriptionOnQueueUpdatedArgs, 'villageId'>>,
   updateVillage?: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,

@@ -14,7 +14,7 @@ import { BuildingQueueService, MovingDirection } from '../../services/buildingQu
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
-import { Events } from '../subscriptions/events';
+import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToPayloadEvent } from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
 
@@ -182,14 +182,14 @@ export const buildingResolvers: IResolvers = {
 
   Subscription: {
     buildingsUpdated: {
-      subscribe: subscribeToPayloadEvent(Events.BuildingsUpdated, (payload, variables: ISubscriptionBuildingsUpdatedArgs) => {
+      subscribe: subscribeToPayloadEvent(BotEvent.BuildingsUpdated, (payload, variables: ISubscriptionBuildingsUpdatedArgs) => {
         return payload.villageId === variables.villageId;
       }),
       resolve: () => true,
     },
 
     onQueueUpdated: {
-      subscribe: subscribeToPayloadEvent(Events.QueuedUpdated, (payload, variables: ISubscriptionOnQueueUpdatedArgs) => {
+      subscribe: subscribeToPayloadEvent(BotEvent.QueuedUpdated, (payload, variables: ISubscriptionOnQueueUpdatedArgs) => {
         return payload.villageId === variables.villageId;
       }),
       resolve: () => true,

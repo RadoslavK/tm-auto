@@ -1,9 +1,25 @@
+#import "./misc.graphql"
+
+fragment HeroInformationFragment on HeroInformation {
+    health
+    state
+    village {
+        id
+        coords {
+            ...CoordsFragment
+        }
+        name
+    }
+}
+
 query GetHeroInformation {
     heroInformation {
-        health
-        village {
-            id
-            name
-        }
+        ...HeroInformationFragment
+    }
+}
+
+subscription OnHeroInformationUpdated {
+    heroInformationUpdated {
+        ...HeroInformationFragment
     }
 }

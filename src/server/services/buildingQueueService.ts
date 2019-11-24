@@ -4,7 +4,7 @@ import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
 import { IBuildingSpot } from '../_types/graphql';
-import { Events } from '../graphql/subscriptions/events';
+import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
@@ -80,7 +80,7 @@ export class BuildingQueueService {
     }
 
     if (enqueued) {
-      publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
       this.serializeQueue();
     }
   };
@@ -92,7 +92,7 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
   };
 
@@ -111,7 +111,7 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
   };
 
@@ -126,7 +126,7 @@ export class BuildingQueueService {
       this.m_village.buildings.queue.moveDown(queueId);
     }
 
-    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
     return true;
   };
@@ -143,7 +143,7 @@ export class BuildingQueueService {
       spot.level.queued = 0;
     });
 
-    publishPayloadEvent(Events.QueuedUpdated, { villageId: this.m_village.id });
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
   };
 

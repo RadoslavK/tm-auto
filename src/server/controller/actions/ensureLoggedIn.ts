@@ -6,8 +6,6 @@ import { accountContext } from '../../accountContext';
 export const ensureLoggedIn = async (): Promise<void> => {
   const account = accountService.getCurrentAccount();
 
-  accountContext.logsService.logText(`Logging in as ${account.username}`);
-
   const page = await getPage();
   await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
 
@@ -16,6 +14,8 @@ export const ensureLoggedIn = async (): Promise<void> => {
   if (!loginForm) {
     return;
   }
+
+  accountContext.logsService.logText(`Logging in as ${account.username}`);
 
   await page.waitForSelector('form[name=login] button[type=submit]');
 

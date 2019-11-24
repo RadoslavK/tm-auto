@@ -181,12 +181,21 @@ export type IGeneralVillageSettingsInput = {
 
 export type IHeroInformation = {
   readonly health: Scalars['Int'],
+  readonly state: HeroState,
   readonly village?: Maybe<IVillage>,
 };
 
 export type IHeroSettings = {
   readonly autoAdventure: IAutoAdventureSettings,
 };
+
+export enum HeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
 export type IITaskSettings = {
   readonly allow: Scalars['Boolean'],
@@ -391,6 +400,7 @@ export type IResources = {
 export type ISubscription = {
   readonly buildingsUpdated: Scalars['Boolean'],
   readonly onBotRunningChanged: Scalars['Boolean'],
+  readonly heroInformationUpdated: IHeroInformation,
   readonly onLogEntryAdded: ILogEntry,
   readonly onQueueUpdated: Scalars['Boolean'],
   readonly updateVillage: Scalars['Boolean'],
@@ -589,13 +599,23 @@ export type IOnBotRunningChangedSubscriptionVariables = {};
 
 export type IOnBotRunningChangedSubscription = Pick<ISubscription, 'onBotRunningChanged'>;
 
+export type IHeroInformationFragmentFragment = (
+  Pick<IHeroInformation, 'health' | 'state'>
+  & { readonly village: Maybe<(
+    Pick<IVillage, 'id' | 'name'>
+    & { readonly coords: ICoordsFragmentFragment }
+  )> }
+);
+
 export type IGetHeroInformationQueryVariables = {};
 
 
-export type IGetHeroInformationQuery = { readonly heroInformation: (
-    Pick<IHeroInformation, 'health'>
-    & { readonly village: Maybe<Pick<IVillage, 'id' | 'name'>> }
-  ) };
+export type IGetHeroInformationQuery = { readonly heroInformation: IHeroInformationFragmentFragment };
+
+export type IOnHeroInformationUpdatedSubscriptionVariables = {};
+
+
+export type IOnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: IHeroInformationFragmentFragment };
 
 export type ILogEntryFragmentFragment = (
   Pick<ILogEntry, 'id' | 'timestamp'>

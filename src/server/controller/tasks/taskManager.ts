@@ -1,9 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
 import { TravianPath } from '../../_enums/TravianPath';
 import { Village } from '../../_models/village/village';
-import { Events } from '../../graphql/subscriptions/events';
+import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import { publishEvent, publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
-import { updateHeroInformation } from '../../parsers/hero/getHeroInformation';
 import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
 import { shuffle } from '../../utils/shuffle';
@@ -19,6 +18,7 @@ import { AutoUnitsTask } from './village/autoUnitsTask';
 import { IBotTask } from '../../_models/tasks';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { accountContext } from '../../accountContext';
+import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;
@@ -127,8 +127,8 @@ export class TaskManager {
 
       await taskEngine.execute();
 
-      await publishPayloadEvent(Events.BuildingsUpdated, { villageId: village.id });
-      await publishEvent(Events.VillageUpdated);
+      await publishPayloadEvent(BotEvent.BuildingsUpdated, { villageId: village.id });
+      await publishEvent(BotEvent.VillageUpdated);
     }
   };
 

@@ -21,32 +21,32 @@ export const getPage = async (): Promise<Page> => {
     browser = await puppeteer.launch(chromeOptions);
   }
 
-  if (!page) {
-    page = await browser!.newPage();
+  const pages = await browser!.pages();
 
-    page.on('console', consoleMessageObject => {
-      if (consoleMessageObject.type() !== 'warning') {
-        console.debug(consoleMessageObject.text());
-      }
-    });
+  page = pages.length
+    ? pages[0]
+    : await browser!.newPage();
 
-    await page.evaluateOnNewDocument(() => {
-      // @ts-ignore
-      // eslint-disable-next-line no-proto
-      const newProto = navigator.__proto__;
-      delete newProto.webdriver;
-      // @ts-ignore
-      // eslint-disable-next-line no-proto
-      navigator.__proto__ = newProto;
-    });
-  }
+  page.on('console', consoleMessageObject => {
+    if (consoleMessageObject.type() !== 'warning') {
+      console.debug(consoleMessageObject.text());
+    }
+  });
+
+  await page.evaluateOnNewDocument(() => {
+    // @ts-ignore
+    // eslint-disable-next-line no-proto
+    const newProto = navigator.__proto__;
+    delete newProto.webdriver;
+    // @ts-ignore
+    // eslint-disable-next-line no-proto
+    navigator.__proto__ = newProto;
+  });
 
   return page;
 };
 
 export const killBrowser = async (): Promise<void> => {
-  page = null;
-
   if (browser) {
     await browser.close();
     browser = null;

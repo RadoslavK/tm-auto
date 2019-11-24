@@ -1,6 +1,6 @@
 import { IResolvers } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
-import { Events } from '../subscriptions/events';
+import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
 
@@ -13,12 +13,12 @@ export const villageResolvers: IResolvers = {
 
   Subscription: {
     updateVillage: {
-      subscribe: subscribeToEvent(Events.VillageUpdated),
+      subscribe: subscribeToEvent(BotEvent.VillageUpdated),
       resolve: () => true,
     },
 
     updateVillages: {
-      subscribe: subscribeToEvent(Events.VillagesUpdated),
+      subscribe: subscribeToEvent(BotEvent.VillagesUpdated),
       resolve: () => true,
     },
   }
