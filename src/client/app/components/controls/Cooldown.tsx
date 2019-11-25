@@ -26,6 +26,10 @@ export const CoolDown: React.FC<IProps> = (props) => {
       value: eventValue,
     } = e.currentTarget;
 
+    if (+eventValue < 0) {
+      return;
+    }
+
     setState(prevState => ({
       ...prevState,
       [name]: +eventValue,

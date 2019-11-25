@@ -85,6 +85,10 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
       value,
     } = e.currentTarget;
 
+    if (+value < 0) {
+      return;
+    }
+
     setState(prevState => ({
       ...prevState,
       [name]: +value,
