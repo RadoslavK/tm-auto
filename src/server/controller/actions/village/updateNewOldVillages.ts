@@ -7,7 +7,7 @@ import { accountContext } from '../../../accountContext';
 export const updateNewOldVillages = async (): Promise<void> => {
   const villages = await parseVillages();
 
-  accountContext.villageService.updateVillage(villages);
+  accountContext.villageService.updateVillages(villages);
   accountContext.villageService.currentVillageId = await parseActiveVillageId();
 
   publishEvent(BotEvent.VillagesUpdated);

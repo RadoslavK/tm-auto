@@ -1,4 +1,5 @@
 import { Village } from '../_models/village/village';
+import { Coords } from '../_models/coords';
 
 export class VillageService {
   public currentVillageId: number;
@@ -31,5 +32,28 @@ export class VillageService {
     newVillages.forEach(village => {
       this.m_villages[village.id] = village;
     });
+  };
+
+  public setCapital = (coords: Coords): { readonly capitalChanged: boolean; } => {
+    const villages = this.allVillages();
+    const village = villages.find(x => x.coords.x === coords.x && x.coords.y === coords.y);
+
+    if (!village) {
+      throw new Error(`No village at coords ${coords.toString()} was found`);
+    }
+
+    const previousCapitalVillage = villages.find(x => x.isCapital);
+
+    if (previousCapitalVillage === village) {
+      return { capitalChanged: false };
+    }
+
+    if (previousCapitalVillage) {
+      previousCapitalVillage.isCapital = false;
+    }
+
+    village.isCapital = true;
+
+    return  { capitalChanged: true };
   };
 }

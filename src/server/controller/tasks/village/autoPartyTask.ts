@@ -26,9 +26,7 @@ export class AutoPartyTask implements IBotTask {
 
     const partyInfo = partiesInfo[partyType];
 
-    const { buildings } = this.m_village;
-
-    const townHall = buildings.spots.ofType(BuildingType.TownHall);
+    const townHall = this.m_village.buildings.spots.ofType(BuildingType.TownHall);
 
     if (!townHall
       || townHall.level.actual < partyInfo.townHallLevel

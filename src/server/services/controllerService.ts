@@ -1,9 +1,9 @@
 import { killBrowser } from '../browser/getPage';
 import { shuffle } from '../utils/shuffle';
-import { updateBuildings } from '../controller/actions/build/updateBuildings';
+import { updateBuildings } from '../controller/actions/buildings/updateBuildings';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
-import { initPlayerInfo } from '../controller/actions/init/initPlayerInfo';
+import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/tasks/taskManager';

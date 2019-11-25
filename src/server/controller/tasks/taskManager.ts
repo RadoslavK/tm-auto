@@ -6,7 +6,7 @@ import { publishEvent, publishPayloadEvent } from '../../graphql/subscriptions/p
 import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
 import { shuffle } from '../../utils/shuffle';
-import { updateBuildings } from '../actions/build/updateBuildings';
+import { updateBuildings } from '../actions/buildings/updateBuildings';
 import { ensurePage } from '../actions/ensurePage';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updateResources } from '../actions/village/updateResources';
@@ -19,6 +19,7 @@ import { IBotTask } from '../../_models/tasks';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { accountContext } from '../../accountContext';
 import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
+import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;
@@ -90,6 +91,7 @@ export class TaskManager {
     await ensurePage(randomElement(getAllEnumValues(TravianPath)));
     await updateNewOldVillages();
     await updateHeroInformation();
+    await updatePlayerInfo();
 
     for (const task of this.m_generalTasks) {
       await task.execute();

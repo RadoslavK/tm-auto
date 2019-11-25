@@ -11,7 +11,7 @@ export enum TravianPath {
 
   Messages = 'messages.php',
 
-  Player = 'spieler.php',
+  PlayerProfile = 'spieler.php',
 
   Hero = 'hero.php',
 }

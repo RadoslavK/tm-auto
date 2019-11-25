@@ -1,5 +1,6 @@
 import { Village } from '../../_models/village/village';
 import { getPage } from '../../browser/getPage';
+import { parseNumber } from '../../utils/numberUtils';
 
 export const parseVillages = async (): Promise<readonly Village[]> => {
   const page = await getPage();
@@ -20,15 +21,13 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
     const xText = await villageNode.$eval('[class=coordinateX]', x => (x as HTMLElement).innerText);
     const yText = await villageNode.$eval('[class=coordinateY]', x => (x as HTMLElement).innerText);
 
-    const xMatch = /(\d+)/.exec(xText);
-    const yMatch = /(\d+)/.exec(yText);
+    //  minus symbol correction
+    const x = parseNumber(xText);
+    const y = parseNumber(yText);
 
-    if (!xMatch || !yMatch) {
+    if (!x || !y) {
       throw new Error('Failed to parse village coords');
     }
-
-    const x = +xMatch[1];
-    const y = +yMatch[1];
 
     return new Village({
       id,

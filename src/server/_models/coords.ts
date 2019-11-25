@@ -10,4 +10,6 @@ export class Coords implements IParams {
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);
   }
+
+  public toString = (): string => `[${this.x}|${this.y}]`;
 }
