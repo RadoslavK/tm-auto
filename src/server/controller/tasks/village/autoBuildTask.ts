@@ -30,7 +30,12 @@ export class AutoBuildTask implements IBotTask {
     this.m_buildings = village.buildings;
   }
 
-  public settings = (): AutoBuildSettings => accountContext.settingsService.village(this.m_village.id).autoBuild.get();
+  private settings = (): AutoBuildSettings => accountContext.settingsService.village(this.m_village.id).autoBuild.get();
+
+  public allowExecution = (): boolean => accountContext.settingsService.general.get().autoBuild
+    && this.settings().allow;
+
+  public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<IBotTaskResultParams | void> => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);

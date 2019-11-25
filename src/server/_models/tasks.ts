@@ -1,4 +1,3 @@
-import { ITaskSettings } from '../_types/ITaskSettings';
 import { CoolDown } from './coolDown';
 
 export interface IBotTaskResultParams {
@@ -8,6 +7,7 @@ export interface IBotTaskResultParams {
 export type BotTaskResult = Promise<IBotTaskResultParams | void>;
 
 export interface IBotTask {
-  readonly settings: () => ITaskSettings;
+  readonly allowExecution: () => boolean;
+  readonly coolDown: () => CoolDown;
   readonly execute: () => BotTaskResult;
 }

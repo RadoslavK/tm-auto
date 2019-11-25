@@ -10,6 +10,7 @@ import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
+import { CoolDown } from '../../../_models/coolDown';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -20,7 +21,11 @@ export class AutoUnitsTask implements IBotTask {
     this.m_units = village.units;
   }
 
-  public settings = (): AutoUnitsSettings => accountContext.settingsService.village(this.m_village.id).autoUnits.get();
+  private settings = (): AutoUnitsSettings => accountContext.settingsService.village(this.m_village.id).autoUnits.get();
+
+  public allowExecution = (): boolean => this.settings().allow;
+
+  public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<void> => {
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);

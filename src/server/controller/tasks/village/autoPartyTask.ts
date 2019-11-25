@@ -16,7 +16,11 @@ export class AutoPartyTask implements IBotTask {
     this.m_village = village;
   }
 
-  public settings = (): AutoPartySettings => accountContext.settingsService.village(this.m_village.id).autoParty.get();
+  private settings = (): AutoPartySettings => accountContext.settingsService.village(this.m_village.id).autoParty.get();
+
+  public allowExecution = (): boolean => this.settings().allow;
+
+  public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<IBotTaskResultParams | undefined> => {
     const {

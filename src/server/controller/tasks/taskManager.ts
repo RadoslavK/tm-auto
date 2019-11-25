@@ -32,16 +32,16 @@ class BotTaskEngine<TArgs = undefined> {
   private isExecutionReady = (): boolean => this.m_timeOfNextExecution < new Date();
 
   public execute = async (): Promise<void> => {
-    if (!this.m_task.settings().allow || !this.isExecutionReady()) {
+    if (!this.m_task.allowExecution() || !this.isExecutionReady()) {
       return;
     }
 
     const timeOfStart = new Date();
-    const result = await this.m_task.execute() || {};
+    const result = await this.m_task.execute();
 
-    const coolDown = result.nextCoolDown
-      ? result.nextCoolDown.getMin(this.m_task.settings().coolDown)
-      : this.m_task.settings().coolDown;
+    const coolDown = result && result.nextCoolDown
+      ? result.nextCoolDown.getMin(this.m_task.coolDown())
+      : this.m_task.coolDown();
 
     const delay = coolDown.randomDelay();
 

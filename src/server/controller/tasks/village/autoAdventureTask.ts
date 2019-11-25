@@ -6,9 +6,14 @@ import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
+import { CoolDown } from '../../../_models/coolDown';
 
 export class AutoAdventureTask implements IBotTask {
-  public settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
+  private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
+
+  public allowExecution = (): boolean => this.settings().allow;
+
+  public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<void> => {
     const village = accountContext.villageService.currentVillage();
