@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -19,6 +20,7 @@ import {
   IVillageContext,
   VillageContext,
 } from '../villages/context/VillageContext';
+import { Duration } from '../controls/Duration';
 
 interface IProps {
   readonly buildingType: BuildingType;
@@ -109,6 +111,8 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     }));
   };
 
+  const updateMaxBuildTime = useCallback((newValue: number) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), [setState]);
+
   return (
     <div className={className}>
       <div className={classes.building}>
@@ -118,7 +122,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
         />
         <div className={classes.maxBuildTime}>
           <label htmlFor="maxBuildTime">Max build time:</label>
-          <input type="number" value={maxBuildTime} onChange={onNumberChange} id="maxBuildTime" name="maxBuildTime"/>
+          <Duration onChange={updateMaxBuildTime} value={maxBuildTime}/>
         </div>
       </div>
       {settings.units.map(unitSettings => (

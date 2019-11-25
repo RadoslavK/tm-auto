@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { ICoolDown } from '../../../_types/graphql';
+import { Duration } from './Duration';
 
 interface IProps {
   readonly onChange: (cooldown: ICoolDown) => void;
@@ -20,31 +25,18 @@ export const CoolDown: React.FC<IProps> = (props) => {
     }
   }, [state, value, onChange]);
 
-  const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value: eventValue,
-    } = e.currentTarget;
-
-    if (+eventValue < 0) {
-      return;
-    }
-
-    setState(prevState => ({
-      ...prevState,
-      [name]: +eventValue,
-    }));
-  };
-
   const {
     min,
     max,
   } = state;
 
+  const updateMin = useCallback((newMin: number) => setState(prevState => ({ ...prevState, min: newMin })), [setState]);
+  const updateMax = useCallback((newMax: number) => setState(prevState => ({ ...prevState, max: newMax })), [setState]);
+
   return (
     <div>
-      <input type="number" value={min} onChange={onNumberChange} id="min" name="min" />
-      <input type="number" value={max} onChange={onNumberChange} id="max" name="max" />
+      <Duration onChange={updateMin} value={min}/>
+      <Duration onChange={updateMax} value={max}/>
     </div>
   );
 };
