@@ -14,6 +14,7 @@ import {
 } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
+import which from 'which';
 import { findOpenSocket } from './ipc/findOpenSocket';
 
 let serverProcess: ChildProcess | null = null;
@@ -62,12 +63,23 @@ const createClientWindow = (socketName: string): void => {
 };
 
 const createBackgroundProcess = (socketName: string): void => {
+  //  Electron run renderer in its own version, we want to run the background process with actual system node version
+  const nodePaths = which.sync('node', { nothrow: true, all: true });
+
+  const currentNodePath = nodePaths &&
+    nodePaths.find(x => x.toLowerCase().endsWith('node.exe'));
+
+  if (!currentNodePath) {
+    console.error('No current node path found');
+  }
+
   const options: ForkOptions = {
     execArgv: [
       ...(isDev ? ['--inspect=9220'] : []),
       '-r',
       'ts-node/register',
     ],
+    execPath: currentNodePath || undefined,
     env: {
       TS_NODE_COMPILER_OPTIONS: '{"module":"commonjs"}',
     }

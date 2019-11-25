@@ -22,3 +22,5 @@ debugging - yarn run debug
 ---renderer port: 9222
 ---main port: 9229
 ---server port: 9220
+
+node 13.2 +
