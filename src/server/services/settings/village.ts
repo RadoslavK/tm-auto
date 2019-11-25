@@ -1,4 +1,3 @@
-import { join } from "path";
 import { ComplexSettingsServiceType } from './_types';
 import { VillageSettings } from '../../_models/settings/VillageSettings';
 import { InternalSettingsService } from './internalSettingsService';
@@ -6,6 +5,7 @@ import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSetting
 import { AutoPartySettings } from '../../_models/settings/tasks/AutoPartySettings';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
 import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
+import { dataPathService } from '../dataPathService';
 
 export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
   public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
@@ -13,13 +13,13 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
   public autoUnits: InternalSettingsService<VillageSettings['autoUnits']>;
   public general: InternalSettingsService<VillageSettings['general']>;
 
-  constructor(private villageId: number, private basePath: string) {
-    const path = join(basePath, 'village', villageId.toString());
+  constructor(private villageId: number) {
+    const villageSettingsPath = dataPathService.villagePath(villageId).settings;
 
-    this.autoBuild = new InternalSettingsService(AutoBuildSettings, join(path, 'autoBuild.json'));
-    this.autoParty = new InternalSettingsService(AutoPartySettings, join(path, 'autoParty.json'));
-    this.autoUnits = new InternalSettingsService(AutoUnitsSettings, join(path, 'autoUnits.json'));
-    this.general = new InternalSettingsService(GeneralVillageSettings, join(path, 'general.json'));
+    this.autoBuild = new InternalSettingsService(AutoBuildSettings, villageSettingsPath.autoBuild);
+    this.autoParty = new InternalSettingsService(AutoPartySettings, villageSettingsPath.autoParty);
+    this.autoUnits = new InternalSettingsService(AutoUnitsSettings, villageSettingsPath.autoUnits);
+    this.general = new InternalSettingsService(GeneralVillageSettings, villageSettingsPath.general);
   }
 
   public get = (): VillageSettings => ({

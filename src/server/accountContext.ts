@@ -12,9 +12,9 @@ class AccountContext {
   public gameInfo: GameInfo;
   public hero: Hero;
 
-  public initialize = (accountId: string): void => {
+  public initialize = (): void => {
     this.villageService = new VillageService();
-    this.settingsService = new SettingsService(accountId);
+    this.settingsService = new SettingsService();
     this.logsService = new LogsService();
     this.gameInfo = new GameInfo();
     this.hero = new Hero();

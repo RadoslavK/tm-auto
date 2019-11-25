@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { BuildingType } from '../_enums/BuildingType';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
@@ -8,9 +7,9 @@ import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
-import { fileUtils } from '../utils/fileUtils';
-import { accountService } from './accountService';
 import { accountContext } from '../accountContext';
+import { dataPathService } from './dataPathService';
+import { fileService } from './fileService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -33,17 +32,16 @@ export class BuildingQueueService {
   private readonly m_filePath: string;
 
   constructor(villageId: number) {
-    const userAccount = accountService.getCurrentAccount();
     this.m_village = accountContext.villageService.village(villageId);
-    this.m_filePath = path.join('accounts', userAccount.id, 'buildingQueue.json');
+    this.m_filePath = dataPathService.villagePath(villageId).queue;
   }
 
   public serializeQueue = async (): Promise<void> => {
-    return fileUtils.save(this.m_filePath, this.m_village.buildings.queue.buildings());
+    return fileService.save(this.m_filePath, this.m_village.buildings.queue.buildings());
   };
 
   public loadQueue = async (): Promise<void> => {
-    const buildings = fileUtils.load<QueuedBuilding[]>(this.m_filePath, []);
+    const buildings = fileService.load<QueuedBuilding[]>(this.m_filePath, []);
     this.m_village.buildings.queue.set(buildings);
   };
 

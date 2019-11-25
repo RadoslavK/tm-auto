@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { GeneralSettings } from '../../_models/settings/GeneralSettings';
 import { HeroSettings } from '../../_models/settings/HeroSettings';
 import { VillageSettings } from '../../_models/settings/VillageSettings';
@@ -6,21 +5,21 @@ import { InternalSettingsService } from './internalSettingsService';
 import { ComplexSettingsServiceType } from './_types';
 import { VillageSettingsService } from './village';
 import { HeroSettingsService } from './hero';
+import { dataPathService } from '../dataPathService';
 
 export class SettingsService {
   public general: InternalSettingsService<GeneralSettings>;
   public hero: ComplexSettingsServiceType<HeroSettings>;
 
   private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
-  private readonly basePath: string;
 
-  constructor(private accountId: string) {
-    this.basePath = join('accounts', accountId, 'settings');
+  constructor() {
+    const accountSettingsPath = dataPathService.accountPath().settings;
 
     this.villages = new Map();
 
-    this.general = new InternalSettingsService(GeneralSettings, join(this.basePath, 'general.json'));
-    this.hero = new HeroSettingsService(this.basePath);
+    this.general = new InternalSettingsService(GeneralSettings, accountSettingsPath.general);
+    this.hero = new HeroSettingsService();
   }
 
   public village = (villageId: number): ComplexSettingsServiceType<VillageSettings> => {
@@ -30,7 +29,7 @@ export class SettingsService {
       return settings;
     }
 
-    settings = new VillageSettingsService(villageId, this.basePath);
+    settings = new VillageSettingsService(villageId);
     return settings;
   };
 }

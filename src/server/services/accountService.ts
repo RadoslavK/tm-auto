@@ -1,13 +1,11 @@
 import uuid from 'uuid';
 import {
   IMutationCreateAccountArgs,
-  IMutationSignInArgs,
   IMutationUpdateAccountArgs,
   IUserAccount,
 } from '../_types/graphql';
-import { fileUtils } from '../utils/fileUtils';
-
-const accountsPath = 'accounts.json';
+import { fileService } from './fileService';
+import { dataPathService } from './dataPathService';
 
 class AccountService {
   public currentAccountId: string | null = null;
@@ -15,7 +13,7 @@ class AccountService {
   private accountsLoaded = false;
 
   private saveAccounts = async (): Promise<void> => {
-    return fileUtils.save(accountsPath, this.accounts);
+    return fileService.save(dataPathService.accountsPath, this.accounts);
   };
 
   public getAccounts = (): readonly IUserAccount[] => {
@@ -23,7 +21,7 @@ class AccountService {
       return this.accounts;
     }
 
-    this.accounts = fileUtils.load<IUserAccount[]>(accountsPath, []);
+    this.accounts = fileService.load<IUserAccount[]>(dataPathService.accountsPath, []);
     this.accountsLoaded = true;
 
     return this.accounts;
@@ -61,7 +59,12 @@ class AccountService {
 
     this.accounts.splice(accountIndex, 1);
 
-    return this.saveAccounts();
+    const accountPath = dataPathService.baseAccountPath();
+
+    await Promise.all([
+      this.saveAccounts(),
+      fileService.delete(accountPath),
+    ]);
   };
 
   public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {

@@ -1,5 +1,5 @@
 import { Boxed } from '../../../_shared/types';
-import { fileUtils } from '../../utils/fileUtils';
+import { fileService } from '../fileService';
 
 export class InternalSettingsService<TSettings extends Boxed<TSettings>> {
   private settings: TSettings;
@@ -9,7 +9,7 @@ export class InternalSettingsService<TSettings extends Boxed<TSettings>> {
 
   public get = (): TSettings => {
     if (!this.loaded) {
-      this.settings = fileUtils.loadInstance<TSettings>(this.path, this.SettingsConstructor);
+      this.settings = fileService.loadInstance<TSettings>(this.path, this.SettingsConstructor);
       this.loaded = true;
     }
 
@@ -18,6 +18,6 @@ export class InternalSettingsService<TSettings extends Boxed<TSettings>> {
 
   public update = (settings: TSettings): Promise<void> => {
     this.settings = settings;
-    return fileUtils.save(this.path, this.settings);
+    return fileService.save(this.path, this.settings);
   };
 }

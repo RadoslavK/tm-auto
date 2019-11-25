@@ -43,7 +43,7 @@ class ControllerService {
     this.setState(IBotState.Pending);
 
     accountService.currentAccountId = accountId;
-    accountContext.initialize(accountId);
+    accountContext.initialize();
 
     await ensureLoggedIn();
     await initPlayerInfo();

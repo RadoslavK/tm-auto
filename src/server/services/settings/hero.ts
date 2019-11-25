@@ -1,16 +1,16 @@
-import { join } from "path";
 import { ComplexSettingsServiceType } from './_types';
 import { HeroSettings } from '../../_models/settings/HeroSettings';
 import { InternalSettingsService } from './internalSettingsService';
 import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
+import { dataPathService } from '../dataPathService';
 
 export class HeroSettingsService implements ComplexSettingsServiceType<HeroSettings> {
   public autoAdventure: InternalSettingsService<AutoAdventureSettings>;
 
-  constructor(private basePath: string) {
-    const path = join(basePath, 'hero');
+  constructor() {
+    const heroSettingsPath = dataPathService.accountPath().settings.hero;
 
-    this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(AutoAdventureSettings, join(path, 'autoAdventure.json'));
+    this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(AutoAdventureSettings, heroSettingsPath.autoAdventure);
   }
 
   public get = (): HeroSettings => ({

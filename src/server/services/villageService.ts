@@ -11,7 +11,7 @@ export class VillageService {
 
   public currentVillage = (): Village => this.village(this.currentVillageId);
 
-  public updateVillage = (villages: readonly Village[]): void => {
+  public updateVillages = (villages: readonly Village[]): void => {
     const oldVillages = Object
       .values(this.m_villages)
       .filter(v => !villages.some(x => x.id === v.id));
