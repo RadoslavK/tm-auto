@@ -18,7 +18,7 @@ class DataPathService {
   };
 
   public villagePath = (villageId: number) => {
-    const lPath = path.join(this.baseAccountPath(), 'villages', villageId.toString());
+    const lPath = this.baseVillagePath(villageId);
 
     return {
       settings: this.createVillageSettingsPath(lPath),
@@ -54,7 +54,15 @@ class DataPathService {
     };
   };
 
-  public baseAccountPath = (): string => {
+  public baseVillagePath = (villageId: number): string => {
+    return path.join(this.baseAccountPath(), 'villages', villageId.toString());
+  };
+
+  public baseAccountPath = (id?: string): string => {
+    if (id) {
+      return path.join(this.basePath, 'accounts', id);
+    }
+
     const userAccount = accountService.getCurrentAccount();
 
     return path.join(this.basePath, 'accounts', userAccount.id);

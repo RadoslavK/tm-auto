@@ -3,7 +3,7 @@ export const parseNumber = (text: string): number | null => {
     .replace('−', '-') // replace special minus symbol
     .replace(/[^\d-+.]/gi, ''); // remove special characters
 
-  const match = /(-‭?\d+)/.exec(correctedText);
+  const match = /(-?\d+)/.exec(correctedText);
 
   return match && +match[1];
 };

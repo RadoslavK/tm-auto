@@ -1,5 +1,5 @@
 import fs, { MakeDirectoryOptions } from 'fs';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 
 class FileService {
   public save = async (path: string, object: object): Promise<void> => {
@@ -36,9 +36,13 @@ class FileService {
   public delete = async (path: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       try {
+        if (!fs.existsSync(path)) {
+          return;
+        }
+
         fs.rmdir(path, { recursive: true }, () => resolve());
       } catch (error) {
-        console.error(error);
+        throw new Error(`Failed to delete account at ${path}`);
       }
 
       resolve();

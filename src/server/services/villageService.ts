@@ -1,5 +1,7 @@
 import { Village } from '../_models/village/village';
 import { Coords } from '../_models/coords';
+import { fileService } from './fileService';
+import { dataPathService } from './dataPathService';
 
 export class VillageService {
   public currentVillageId: number;
@@ -16,7 +18,10 @@ export class VillageService {
       .values(this.m_villages)
       .filter(v => !villages.some(x => x.id === v.id));
 
-    //  TODO: delete all village related data
+    oldVillages.forEach(village => {
+      const villageDataPath = dataPathService.baseVillagePath(village.id);
+      fileService.delete(villageDataPath);
+    });
 
     const newVillages = villages
       .filter(v => !this.m_villages[v.id]);

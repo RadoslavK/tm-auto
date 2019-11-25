@@ -57,14 +57,11 @@ class AccountService {
       throw new Error(`Account with ${id} was not found`);
     }
 
+    const accountPath = dataPathService.baseAccountPath(id);
+    await fileService.delete(accountPath);
+
     this.accounts.splice(accountIndex, 1);
-
-    const accountPath = dataPathService.baseAccountPath();
-
-    await Promise.all([
-      this.saveAccounts(),
-      fileService.delete(accountPath),
-    ]);
+    this.saveAccounts();
   };
 
   public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {

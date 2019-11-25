@@ -11,5 +11,7 @@ export const getServerShortcut = (server: string): string => {
     return `${match[2]}${match[1]}`;
   }
 
-  throw new Error(`Could not parse server shortcut, for server: ${server}`);
+  console.error(`Could not parse server shortcut, for server: ${server}`);
+
+  return server;
 };
