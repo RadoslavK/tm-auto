@@ -45,6 +45,7 @@ const GeneralSettings: React.FC<IProps> = (props) => {
 
   const {
     autoBuild,
+    autoUnits,
     allowTasks,
   } = state;
 
@@ -60,6 +61,11 @@ const GeneralSettings: React.FC<IProps> = (props) => {
         <div>
           <label htmlFor="autoBuild">AutoBuild</label>
           <input type="checkbox" checked={autoBuild} onChange={onChange} id="autoBuild" name="autoBuild" />
+        </div>
+
+        <div>
+          <label htmlFor="autoUnits">AutoUnits</label>
+          <input type="checkbox" checked={autoUnits} onChange={onChange} id="autoUnits" name="autoUnits" />
         </div>
       </div>
     </div>

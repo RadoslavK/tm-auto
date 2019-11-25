@@ -1,6 +1,5 @@
 import {
   IHeroInformation,
-  IResolvers,
 } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
 import { accountContext } from '../../accountContext';
@@ -9,6 +8,7 @@ import {
 } from '../subscriptions/pubSub';
 import { BotEvent } from '../subscriptions/botEvent';
 import { Hero } from '../../_models/hero/hero';
+import { Resolvers } from './_types';
 
 const mapHeroInformation = (hero: Hero): IHeroInformation => {
   const village = accountContext.villageService.village(hero.villageId);
@@ -20,7 +20,7 @@ const mapHeroInformation = (hero: Hero): IHeroInformation => {
   };
 };
 
-export const heroResolvers: IResolvers = {
+export const heroResolvers: Resolvers = {
   Query: {
     heroInformation: (): IHeroInformation => {
       const { hero } = accountContext;
@@ -31,7 +31,7 @@ export const heroResolvers: IResolvers = {
 
   Subscription: {
     heroInformationUpdated: subscribeToEvent(BotEvent.HeroInformationUpdated, {
-      resolve: p => p.heroInformation,
+      resolve: p => mapHeroInformation(p.heroInformation),
     }),
   },
 };

@@ -1,7 +1,7 @@
-import { IResolvers } from "../../_types/graphql";
 import { accountService } from '../../services/accountService';
+import { Resolvers } from './_types';
 
-export const accountResolvers: IResolvers = {
+export const accountResolvers: Resolvers = {
   Query: {
     accounts: () => accountService.getAccounts(),
 
@@ -13,7 +13,7 @@ export const accountResolvers: IResolvers = {
   Mutation: {
     createAccount: async (_, args) => {
       if (accountService.accountExists(args)) {
-        return undefined;
+        return null;
       }
 
       const newAcc = await accountService.createAccount(args);

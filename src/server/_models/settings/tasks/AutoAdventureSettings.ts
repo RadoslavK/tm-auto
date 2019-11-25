@@ -15,7 +15,7 @@ interface IParams extends ITaskSettings {
   normalMinHealth: number;
   hardMinHealth: number;
   maxTravelTime: number;
-  preferredVillageId?: number;
+  preferredVillageId: number | null;
 }
 
 export class AutoAdventureSettings implements IParams {
@@ -27,7 +27,7 @@ export class AutoAdventureSettings implements IParams {
   normalMinHealth = 30;
   hardMinHealth = 50;
   maxTravelTime: number = getSeconds({ hours: 1 });
-  preferredVillageId?: number = undefined;
+  preferredVillageId: number | null = null;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

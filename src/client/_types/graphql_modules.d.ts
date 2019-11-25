@@ -85,6 +85,15 @@ export const VillageFragment: DocumentNode;
 }
     
 
+declare module '*/graphql_operations/player.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GetPlayerInfo: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/graphql_operations/queuedBuilding.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -105,13 +114,28 @@ declare module '*/graphql_operations/settings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const TaskSettingsFragment: DocumentNode;
+export const AutoUnitsUnitSettingsFragment: DocumentNode;
+export const AutoUnitsBuildingSettingsFragment: DocumentNode;
 export const GetGeneralSettings: DocumentNode;
 export const GetHeroSettings: DocumentNode;
 export const GetVillageSettings: DocumentNode;
+export const GetAutoUnitsSettings: DocumentNode;
 export const UpdateGeneralSettings: DocumentNode;
 export const UpdateAutoAdventureSettings: DocumentNode;
 export const UpdateGeneralVillageSettings: DocumentNode;
 export const UpdateAutoBuildVillageSettings: DocumentNode;
+export const UpdateAutoUnitsUnitSettings: DocumentNode;
+export const UpdateAutoUnitsBuildingSettings: DocumentNode;
+export const UpdateAutoUnitsSettings: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/graphql_operations/unit.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const GetUnitInfo: DocumentNode;
 
   export default defaultDocument;
 }

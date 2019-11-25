@@ -14,6 +14,7 @@ import { Buildings } from '../buildings/Buildings';
 import { VillageSettings } from '../settings/VillageSettings';
 import { IVillageContext, VillageContext } from './context/VillageContext';
 import { Resources } from './Resources';
+import { Units } from '../units/Units';
 
 interface IParams {
   readonly villageId: number;
@@ -70,9 +71,11 @@ export const Village: React.FC<IParams> = (props) => {
       </button>
       <div>
         <Link to={`${match.url}/buildings`}>Buildings</Link>
+        <Link to={`${match.url}/units`}>Units</Link>
       </div>
       <Switch>
         <Route path={`${match.path}/buildings`} component={Buildings} />
+        <Route path={`${match.path}/units`} component={Units} />
         <Redirect to={`${match.path}/buildings`} />
       </Switch>
       <Dialog

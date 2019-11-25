@@ -74,9 +74,9 @@ class AccountService {
     return this.saveAccounts();
   };
 
-  public getAccount = (accountId: string): IUserAccount | undefined => {
+  public getAccount = (accountId: string): IUserAccount | null => {
     const accounts = this.getAccounts();
-    return accounts.find(x => x.id === accountId);
+    return accounts.find(x => x.id === accountId) || null;
   };
 
   public getCurrentAccount = (): IUserAccount => {

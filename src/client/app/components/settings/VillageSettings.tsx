@@ -5,6 +5,7 @@ import { IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables } from '../
 import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
 import { AutoBuildSettings } from './village/AutoBuildSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
+import { AutoUnitsSettings } from './village/AutoUnitsSettings';
 
 export const VillageSettings: React.FC = () => {
   const { villageId } = useContext<IVillageContext>(VillageContext);
@@ -18,6 +19,7 @@ export const VillageSettings: React.FC = () => {
 
   const {
     autoBuild,
+    autoUnits,
     general,
   } = data.villageSettings;
 
@@ -27,6 +29,7 @@ export const VillageSettings: React.FC = () => {
         <h1>Village settings</h1>
         <GeneralVillageSettings settings={general} />
         <AutoBuildSettings settings={autoBuild} />
+        <AutoUnitsSettings settings={autoUnits} />
       </div>
     </div>
   );

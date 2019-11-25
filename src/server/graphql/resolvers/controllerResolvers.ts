@@ -1,9 +1,9 @@
-import { IResolvers } from '../../_types/graphql';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { BotEvent } from '../subscriptions/botEvent';
 import { controllerService } from '../../services/controllerService';
+import { Resolvers } from './_types';
 
-export const controllerResolvers: IResolvers = {
+export const controllerResolvers: Resolvers = {
   Query: {
     botState: () => controllerService.state(),
   },

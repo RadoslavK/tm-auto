@@ -1,0 +1,5 @@
+query GetPlayerInfo {
+    playerInfo {
+        tribe
+    }
+}

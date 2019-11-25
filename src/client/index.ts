@@ -92,6 +92,23 @@ const createBackgroundProcess = (socketName: string): void => {
     [socketName,],
     options,
   );
+
+  serverProcess.on('close', (code) => {
+    console.log(`server closed with code ${code}`);
+  });
+
+  serverProcess.on('exit', (code, signal) => {
+    console.log(`server exited with code ${code}`);
+  });
+
+  serverProcess.on('disconnect', () => {
+    console.log('server disconnected');
+  });
+
+  serverProcess.on('error', (error) => {
+    console.error('Server crashed with error');
+    console.error(error);
+  });
 };
 
 const installDevTools = async (): Promise<void> => {

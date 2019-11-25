@@ -71,7 +71,7 @@ export class LogsService {
   private log = (content: ILogEntryContent, fromVillage: boolean): void => {
     const id = uuid.v4();
     const timestamp = Math.round(Date.now() / 1000);
-    const village = fromVillage ? accountContext.villageService.currentVillage() : undefined;
+    const village = fromVillage ? accountContext.villageService.currentVillage() : null;
 
     this.addEntry({
       id,

@@ -4,88 +4,84 @@ import { ITaskSettings } from '../../../_types/ITaskSettings';
 import { getSeconds } from '../../../utils/getSeconds';
 import { CoolDown } from '../../coolDown';
 
-interface IUnitSettings {
+interface IAutoUnitsUnitSettings {
   index: number;
   autoBuild: boolean;
   trainForever: boolean;
   targetAmount: number;
 }
 
-class UnitSettings implements IUnitSettings {
+export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettings {
   index = 0;
   autoBuild = false;
   trainForever = false;
   targetAmount = 0;
 
-  constructor(params: Partial<IUnitSettings> = {}) {
+  constructor(params: Partial<IAutoUnitsUnitSettings> = {}) {
     Object.assign(this, params);
   }
 }
 
-interface IBuildingSettings {
-  maxBuildTime: number | null;
-  units: UnitSettings[];
+interface IAutoUnitsBuildingSettings {
+  allow: boolean;
+  maxBuildTime: number;
 }
 
-class BuildingSettings implements IBuildingSettings {
-  maxBuildTime: number | null = getSeconds({ hours: 1 });
-  units: UnitSettings[] = [];
+export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettings {
+  allow = true;
+  maxBuildTime: number = getSeconds({ hours: 1 });
 
-  constructor(params: Partial<IBuildingSettings> = {}) {
+  constructor(params: Partial<IAutoUnitsBuildingSettings> = {}) {
     Object.assign(this, params);
   }
 }
 
 interface IParams extends ITaskSettings {
   minCrop: number;
-
-  barracks: IBuildingSettings;
-  stable: IBuildingSettings;
-  workshop: IBuildingSettings;
-  residence: IBuildingSettings;
+  units: AutoUnitsUnitSettings[];
+  buildings: Record<BuildingType, AutoUnitsBuildingSettings>;
 }
 
 export class AutoUnitsSettings implements IParams {
-  public allow = true;
-  public coolDown: CoolDown = new CoolDown({
-    min: getSeconds({ minutes: 10 }),
-    max: getSeconds({ minutes: 20 }),
-  });
+  public allow: boolean;
+  public coolDown: CoolDown;
 
-  public minCrop = 0;
+  public minCrop: number;
 
-  public barracks: BuildingSettings = new BuildingSettings();
-  public stable: BuildingSettings = new BuildingSettings();
-  public workshop: BuildingSettings = new BuildingSettings();
-  public residence: BuildingSettings = new BuildingSettings({ maxBuildTime: null });
+  public buildings: Record<BuildingType, AutoUnitsBuildingSettings> = {} as Record<BuildingType, AutoUnitsBuildingSettings>;
+
+  public units: AutoUnitsUnitSettings[];
 
   constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+    this.buildings[BuildingType.Barracks] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Barracks]);
+    this.buildings[BuildingType.Stable] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Stable]);
+    this.buildings[BuildingType.Workshop] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Workshop]);
+    this.buildings[BuildingType.Residence] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Residence] || { maxBuildTime: getSeconds({ hours: 12 }) });
 
-    if (this.coolDown instanceof CoolDown) {
-      return;
-    }
+    this.units = params.units
+      ? params.units.map(unitSettings => new AutoUnitsUnitSettings(unitSettings))
+      : [...new Array(10).keys()].map(index => new AutoUnitsUnitSettings({ index: index + 1 }));
 
-    this.coolDown = new CoolDown(this.coolDown);
+    this.allow = params.allow || false;
+    this.minCrop = params.minCrop || 0;
+
+    this.coolDown = params.coolDown
+      ? new CoolDown(this.coolDown)
+      : new CoolDown({
+        min: getSeconds({ minutes: 10 }),
+        max: getSeconds({ minutes: 20 }),
+      });
   }
 
-  public forBuilding = (type: BuildingType): BuildingSettings => {
-    switch (type) {
-      case BuildingType.Barracks:
-        return this.barracks;
+  public forBuilding = (type: BuildingType): AutoUnitsBuildingSettings => {
+    const buildingSettings = Object
+      .entries(this.buildings)
+      .find(([bType]) => (bType as any as BuildingType) === type);
 
-      case BuildingType.Stable:
-        return this.stable;
-
-      case BuildingType.Workshop:
-        return this.workshop;
-
-      case BuildingType.Palace:
-      case BuildingType.Residence:
-        return this.residence;
-
-      default:
-        throw new Error(`Invalid building type: ${type}`);
+    if (!buildingSettings) {
+      throw new Error(`Invalid building type requested: ${BuildingType[type]}`);
     }
+
+    return buildingSettings[1];
   };
 }

@@ -1,8 +1,8 @@
 import { GraphQLScalarType, ValueNode } from 'graphql';
 import { Kind } from 'graphql/language';
-import { IResolvers } from '../../_types/graphql';
+import { Resolvers } from './_types';
 
-export const miscResolvers: IResolvers = {
+export const miscResolvers: Resolvers = {
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Representation of JavaScript Date instance',

@@ -3,7 +3,6 @@ import { Tribe } from '../../_enums/Tribe';
 import {
   IBuildingQueue,
   IBuildingSpotLevel,
-  IResolvers,
 } from '../../_types/graphql';
 import { fieldIds } from '../../constants/fieldIds';
 import { buildingInfos } from '../../bootstrap/loadInfo';
@@ -17,6 +16,7 @@ import {
   subscribeToEvent,
 } from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
+import { Resolvers } from './_types';
 
 const getWallType = (): BuildingType => {
   const { tribe } = accountContext.gameInfo;
@@ -42,7 +42,7 @@ const getWallType = (): BuildingType => {
   }
 };
 
-export const buildingResolvers: IResolvers = {
+export const buildingResolvers: Resolvers = {
   Query: {
     buildingSpots: (_, args) => {
       const { villageId } = args;

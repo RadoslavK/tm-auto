@@ -1,41 +1,52 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { UpdateAutoBuildVillageSettings } from '*/graphql_operations/settings.graphql';
 import {
-  IAutoBuildSettings, ICoolDown, IUpdateAutoBuildVillageSettingsInput,
-  IUpdateAutoBuildVillageSettingsMutation,
-  IUpdateAutoBuildVillageSettingsMutationVariables,
+  ICoolDown,
+  IGetVillageSettingsQuery,
+  IUpdateAutoUnitsSettingsMutation,
+  IUpdateAutoUnitsSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
+import { UpdateAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
+import {
+  IVillageContext,
+  VillageContext,
+} from '../../villages/context/VillageContext';
 
 interface IProps {
-  readonly settings: IAutoBuildSettings;
+  readonly settings: IGetVillageSettingsQuery['villageSettings']['autoUnits'];
 }
 
-export const AutoBuildSettings: React.FC<IProps> = (props) => {
+export const AutoUnitsSettings: React.FC<IProps> = (props) => {
   const {
     settings,
   } = props;
 
-  const [state, setState] = useState(settings);
-
   const { villageId } = useContext<IVillageContext>(VillageContext);
-  const input: IUpdateAutoBuildVillageSettingsInput = {
-    villageId,
-    settings: state,
-  };
 
-  const [updateSettings] = useMutation<IUpdateAutoBuildVillageSettingsMutation, IUpdateAutoBuildVillageSettingsMutationVariables>(
-    UpdateAutoBuildVillageSettings,
-    { variables: { input } },
-    );
+  const [state, setState] = useState(settings);
+  
+  const [updateSettings] = useMutation<IUpdateAutoUnitsSettingsMutation, IUpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
+    variables: {
+      input: { ...state, villageId },
+    },
+  });
 
   useEffect(() => {
     if (state !== settings) {
       updateSettings();
     }
   }, [state, settings, updateSettings]);
+
+  const {
+    allow,
+    coolDown,
+    minCrop,
+  } = state;
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -67,26 +78,16 @@ export const AutoBuildSettings: React.FC<IProps> = (props) => {
       coolDown: updatedCooldown,
     }));
   };
-
-  const {
-    allow,
-    coolDown,
-    autoCropFields,
-    minCrop,
-  } = state;
-
+  
   return (
     <div>
-      <h2>AutoBuild</h2>
+      <h2>AutoUnits</h2>
       <label htmlFor="allow">Allow</label>
       <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
 
       <h3>Cooldown</h3>
       <label>Cooldown</label>
       <CoolDown value={coolDown} onChange={onCooldownChange} />
-
-      <label htmlFor="autoCropFields">Auto crop fields</label>
-      <input type="checkbox" checked={autoCropFields} onChange={onChange} id="autoCropFields" name="autoCropFields" />
 
       <label htmlFor="minCrop">Min crop</label>
       <input type="number" value={minCrop} onChange={onNumberChange} id="minCrop" name="minCrop" />

@@ -6,10 +6,26 @@ fragment TaskSettingsFragment on ITaskSettings {
     }
 }
 
+fragment AutoUnitsUnitSettingsFragment on AutoUnitsUnitSettings {
+    autoBuild
+    index
+    targetAmount
+    trainForever
+}
+
+fragment AutoUnitsBuildingSettingsFragment on AutoUnitsBuildingSettings {
+    allow
+    maxBuildTime
+    units {
+        ...AutoUnitsUnitSettingsFragment
+    }
+}
+
 query GetGeneralSettings {
     generalSettings {
         allowTasks
         autoBuild
+        autoUnits
     }
 }
 
@@ -37,6 +53,29 @@ query GetVillageSettings($villageId: Int!) {
             autoCropFields
             minCrop
         }
+        autoUnits {
+            ...TaskSettingsFragment,
+            minCrop
+        }
+    }
+}
+
+query GetAutoUnitsSettings($villageId: Int!) {
+    autoUnitsSettings(villageId: $villageId) {
+        ...TaskSettingsFragment
+        minCrop
+        barracks {
+            ...AutoUnitsBuildingSettingsFragment
+        }
+        stable {
+            ...AutoUnitsBuildingSettingsFragment
+        }
+        workshop {
+            ...AutoUnitsBuildingSettingsFragment
+        }
+        residence {
+            ...AutoUnitsBuildingSettingsFragment
+        }
     }
 }
 
@@ -56,3 +95,14 @@ mutation UpdateAutoBuildVillageSettings($input: UpdateAutoBuildVillageSettingsIn
     updateAutoBuildVillageSettings(input: $input)
 }
 
+mutation UpdateAutoUnitsUnitSettings($input: UpdateAutoUnitsUnitSettingsInput!) {
+    updateAutoUnitsUnitSettings(input: $input)
+}
+
+mutation UpdateAutoUnitsBuildingSettings($input: UpdateAutoUnitsBuildingSettingsInput!) {
+    updateAutoUnitsBuildingSettings(input: $input)
+}
+
+mutation UpdateAutoUnitsSettings($input: UpdateAutoUnitsSettingsInput!) {
+    updateAutoUnitsSettings(input: $input)
+}

@@ -2,7 +2,7 @@ overwrite: true
 schema: 'src/server/graphql/typedefs/*.graphql'
 documents: 'src/client/graphql/operations/*.graphql'
 config:
-  maybeValue: T | undefined
+  maybeValue: T | null
   scalars:
     Date: Date
 generates:
@@ -13,6 +13,7 @@ generates:
     config:
       typesPrefix: I
       immutableTypes: true
+      avoidOptionals: true
   src/client/_types/graphql.ts:
     plugins:
       - "typescript"

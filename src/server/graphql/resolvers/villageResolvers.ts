@@ -1,10 +1,10 @@
-import { IResolvers } from '../../_types/graphql';
 import { mapVillage } from '../mappers/mapVillage';
 import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
+import { Resolvers } from './_types';
 
-export const villageResolvers: IResolvers = {
+export const villageResolvers: Resolvers = {
   Query: {
     village: (_, args) => mapVillage(accountContext.villageService.village(args.villageId)),
 

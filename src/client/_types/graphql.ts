@@ -1,4 +1,4 @@
-export type Maybe<T> = T | undefined;
+export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string,
@@ -56,6 +56,12 @@ export type IAutoBuildVillageSettingsInput = {
   readonly minCrop: Scalars['Int'],
 };
 
+export type IAutoUnitsBuildingSettings = {
+  readonly allow: Scalars['Boolean'],
+  readonly maxBuildTime: Scalars['Int'],
+  readonly units: ReadonlyArray<IAutoUnitsUnitSettings>,
+};
+
 export type IAutoUnitsLogEntryContent = {
   readonly autoUnits: IAutoUnitsLogEntryContentPayload,
 };
@@ -65,6 +71,23 @@ export type IAutoUnitsLogEntryContentPayload = {
   readonly index: Scalars['Int'],
   readonly tribe: Scalars['Int'],
   readonly unitName: Scalars['String'],
+};
+
+export type IAutoUnitsSettings = IITaskSettings & {
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDown,
+  readonly minCrop: Scalars['Int'],
+  readonly barracks: IAutoUnitsBuildingSettings,
+  readonly stable: IAutoUnitsBuildingSettings,
+  readonly workshop: IAutoUnitsBuildingSettings,
+  readonly residence: IAutoUnitsBuildingSettings,
+};
+
+export type IAutoUnitsUnitSettings = {
+  readonly index: Scalars['Int'],
+  readonly autoBuild: Scalars['Boolean'],
+  readonly trainForever: Scalars['Boolean'],
+  readonly targetAmount: Scalars['Int'],
 };
 
 export type IAvailableNewBuilding = {
@@ -117,6 +140,10 @@ export type IBuildingSpots = {
   readonly resources: IResourceFields,
 };
 
+export enum BuildingType {
+  None = 'None'
+}
+
 export type IClearQueueInput = {
   readonly villageId: Scalars['Int'],
 };
@@ -164,11 +191,13 @@ export type IEnqueueBuildingInput = {
 export type IGeneralSettings = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
+  readonly autoUnits: Scalars['Boolean'],
 };
 
 export type IGeneralSettingsInput = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
+  readonly autoUnits: Scalars['Boolean'],
 };
 
 export type IGeneralVillageSettings = {
@@ -229,6 +258,9 @@ export type IMutation = {
   readonly updateAutoAdventureSettings: Scalars['Boolean'],
   readonly updateGeneralVillageSettings: Scalars['Boolean'],
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
+  readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
+  readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
+  readonly updateAutoUnitsSettings: Scalars['Boolean'],
 };
 
 
@@ -301,6 +333,25 @@ export type IMutationUpdateAutoBuildVillageSettingsArgs = {
   input: IUpdateAutoBuildVillageSettingsInput
 };
 
+
+export type IMutationUpdateAutoUnitsUnitSettingsArgs = {
+  input: IUpdateAutoUnitsUnitSettingsInput
+};
+
+
+export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
+  input: IUpdateAutoUnitsBuildingSettingsInput
+};
+
+
+export type IMutationUpdateAutoUnitsSettingsArgs = {
+  input: IUpdateAutoUnitsSettingsInput
+};
+
+export type IPlayerInfo = {
+  readonly tribe: Scalars['Int'],
+};
+
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account: Maybe<IUserAccount>,
@@ -313,10 +364,13 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly playerInfo: IPlayerInfo,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
   readonly villageSettings: IVillageSettings,
+  readonly autoUnitsSettings: IAutoUnitsSettings,
+  readonly unitInfo: IUnitInfo,
   readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
@@ -359,6 +413,16 @@ export type IQueryBuildingQueueArgs = {
 
 export type IQueryVillageSettingsArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type IQueryAutoUnitsSettingsArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type IQueryUnitInfoArgs = {
+  index: Scalars['Int']
 };
 
 
@@ -425,6 +489,10 @@ export type ITextLogEntryContentPayload = {
   readonly message: Scalars['String'],
 };
 
+export type IUnitInfo = {
+  readonly name: Scalars['String'],
+};
+
 export type IUpdateAutoAdventureSettingsInput = {
   readonly settings: IAutoAdventureSettingsInput,
 };
@@ -432,6 +500,28 @@ export type IUpdateAutoAdventureSettingsInput = {
 export type IUpdateAutoBuildVillageSettingsInput = {
   readonly villageId: Scalars['Int'],
   readonly settings: IAutoBuildVillageSettingsInput,
+};
+
+export type IUpdateAutoUnitsBuildingSettingsInput = {
+  readonly villageId: Scalars['Int'],
+  readonly buildingType: Scalars['Int'],
+  readonly allow: Scalars['Boolean'],
+  readonly maxBuildTime: Scalars['Int'],
+};
+
+export type IUpdateAutoUnitsSettingsInput = {
+  readonly villageId: Scalars['Int'],
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly minCrop: Scalars['Int'],
+};
+
+export type IUpdateAutoUnitsUnitSettingsInput = {
+  readonly villageId: Scalars['Int'],
+  readonly unitIndex: Scalars['Int'],
+  readonly autoBuild: Scalars['Boolean'],
+  readonly trainForever: Scalars['Boolean'],
+  readonly targetAmount: Scalars['Int'],
 };
 
 export type IUpdateGeneralSettingsInput = {
@@ -478,6 +568,7 @@ export type IVillageResources = {
 export type IVillageSettings = {
   readonly general: IGeneralVillageSettings,
   readonly autoBuild: IAutoBuildSettings,
+  readonly autoUnits: IAutoUnitsSettings,
 };
 
 export type IUserAccountFragmentFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
@@ -649,6 +740,11 @@ export type IVillageFragmentFragment = (
   & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly production: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
 );
 
+export type IGetPlayerInfoQueryVariables = {};
+
+
+export type IGetPlayerInfoQuery = { readonly playerInfo: Pick<IPlayerInfo, 'tribe'> };
+
 export type IClearQueueMutationVariables = {
   villageId: Scalars['Int']
 };
@@ -718,12 +814,24 @@ type ITaskSettingsFragment_AutoBuildSettings_Fragment = (
   & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
 );
 
-export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment;
+type ITaskSettingsFragment_AutoUnitsSettings_Fragment = (
+  Pick<IAutoUnitsSettings, 'allow'>
+  & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
+);
+
+export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment | ITaskSettingsFragment_AutoUnitsSettings_Fragment;
+
+export type IAutoUnitsUnitSettingsFragmentFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
+
+export type IAutoUnitsBuildingSettingsFragmentFragment = (
+  Pick<IAutoUnitsBuildingSettings, 'allow' | 'maxBuildTime'>
+  & { readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragmentFragment> }
+);
 
 export type IGetGeneralSettingsQueryVariables = {};
 
 
-export type IGetGeneralSettingsQuery = { readonly generalSettings: Pick<IGeneralSettings, 'allowTasks' | 'autoBuild'> };
+export type IGetGeneralSettingsQuery = { readonly generalSettings: Pick<IGeneralSettings, 'allowTasks' | 'autoBuild' | 'autoUnits'> };
 
 export type IGetHeroSettingsQueryVariables = {};
 
@@ -741,7 +849,21 @@ export type IGetVillageSettingsQueryVariables = {
 export type IGetVillageSettingsQuery = { readonly villageSettings: { readonly general: Pick<IGeneralVillageSettings, 'allowTasks'>, readonly autoBuild: (
       Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
       & ITaskSettingsFragment_AutoBuildSettings_Fragment
+    ), readonly autoUnits: (
+      Pick<IAutoUnitsSettings, 'minCrop'>
+      & ITaskSettingsFragment_AutoUnitsSettings_Fragment
     ) } };
+
+export type IGetAutoUnitsSettingsQueryVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type IGetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: (
+    Pick<IAutoUnitsSettings, 'minCrop'>
+    & { readonly barracks: IAutoUnitsBuildingSettingsFragmentFragment, readonly stable: IAutoUnitsBuildingSettingsFragmentFragment, readonly workshop: IAutoUnitsBuildingSettingsFragmentFragment, readonly residence: IAutoUnitsBuildingSettingsFragmentFragment }
+    & ITaskSettingsFragment_AutoUnitsSettings_Fragment
+  ) };
 
 export type IUpdateGeneralSettingsMutationVariables = {
   input: IUpdateGeneralSettingsInput
@@ -770,6 +892,34 @@ export type IUpdateAutoBuildVillageSettingsMutationVariables = {
 
 
 export type IUpdateAutoBuildVillageSettingsMutation = Pick<IMutation, 'updateAutoBuildVillageSettings'>;
+
+export type IUpdateAutoUnitsUnitSettingsMutationVariables = {
+  input: IUpdateAutoUnitsUnitSettingsInput
+};
+
+
+export type IUpdateAutoUnitsUnitSettingsMutation = Pick<IMutation, 'updateAutoUnitsUnitSettings'>;
+
+export type IUpdateAutoUnitsBuildingSettingsMutationVariables = {
+  input: IUpdateAutoUnitsBuildingSettingsInput
+};
+
+
+export type IUpdateAutoUnitsBuildingSettingsMutation = Pick<IMutation, 'updateAutoUnitsBuildingSettings'>;
+
+export type IUpdateAutoUnitsSettingsMutationVariables = {
+  input: IUpdateAutoUnitsSettingsInput
+};
+
+
+export type IUpdateAutoUnitsSettingsMutation = Pick<IMutation, 'updateAutoUnitsSettings'>;
+
+export type IGetUnitInfoQueryVariables = {
+  index: Scalars['Int']
+};
+
+
+export type IGetUnitInfoQuery = { readonly unitInfo: Pick<IUnitInfo, 'name'> };
 
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars['Int']

@@ -1,14 +1,14 @@
 import {
   IAutoBuildLogEntryContent,
   IAutoUnitsLogEntryContent,
-  IResolvers,
   ITextLogEntryContent,
 } from '../../_types/graphql';
 import { BotEvent } from '../subscriptions/botEvent';
 import { accountContext } from '../../accountContext';
 import { subscribeToEvent } from '../subscriptions/pubSub';
+import { Resolvers } from './_types';
 
-export const logsResolvers: IResolvers = {
+export const logsResolvers: Resolvers = {
   LogEntryContent: {
     __resolveType: (content) => {
       if ((content as ITextLogEntryContent).text !== undefined) {
@@ -23,7 +23,7 @@ export const logsResolvers: IResolvers = {
         return 'AutoUnitsLogEntryContent';
       }
 
-      return undefined;
+      return null;
     },
   },
 

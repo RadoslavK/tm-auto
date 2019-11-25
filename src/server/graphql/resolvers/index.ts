@@ -8,6 +8,8 @@ import { settingsResolvers } from './settingsResolvers';
 import { villageResolvers } from './villageResolvers';
 import { accountResolvers } from './accountResolvers';
 import { logsResolvers } from './logsResolvers';
+import { playerResolvers } from './playerResolvers';
+import { unitResolvers } from './unitResolvers';
 
 export const resolvers = mergeResolvers([
   villageResolvers as IResolvers,
@@ -18,4 +20,6 @@ export const resolvers = mergeResolvers([
   heroResolvers as IResolvers,
   accountResolvers as IResolvers,
   logsResolvers as IResolvers,
+  playerResolvers as IResolvers,
+  unitResolvers as IResolvers,
 ]);

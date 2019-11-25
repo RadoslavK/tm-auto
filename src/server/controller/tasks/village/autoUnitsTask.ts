@@ -11,6 +11,7 @@ import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { CoolDown } from '../../../_models/coolDown';
+import { unitsService } from '../../../services/unitsService';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -36,8 +37,14 @@ export class AutoUnitsTask implements IBotTask {
   };
 
   private analyzeQueueAndBuildUnits = async (type: BuildingType): Promise<void> => {
-    const settings = this.settings().forBuilding(type);
-    const unitsToBuild = settings.units;
+    const settings = this.settings();
+    const buildingSettings = settings.forBuilding(type);
+
+    if (!buildingSettings.allow) {
+      return;
+    }
+
+    const unitsToBuild = settings.units.filter(x => unitsService.getUnitBuildingType(x.index) === type);
 
     const possibleUnitsToBuild = unitsToBuild.filter(unit => unit.autoBuild);
     const buildingSpots = this.m_village.buildings.spots;
@@ -64,7 +71,7 @@ export class AutoUnitsTask implements IBotTask {
     const suitableToBuild: Record<number, number> = {};
     let startingVillageRes = this.m_village.resources.amount;
 
-    const maxAllowedBuildingTime = settings.maxBuildTime;
+    const maxAllowedBuildingTime = buildingSettings.maxBuildTime;
     let ongoingBuildingTime = unitQueue.duration;
 
     possibleUnitsToBuild.forEach(unitToBuild => {

@@ -50,7 +50,7 @@ class BuildingInfo implements IBuildingInfo {
   }
 }
 
-interface IUnitInfo {
+export interface IUnitInfo {
   readonly buildingType: BuildingType;
   readonly cost: Cost;
   readonly name: string;

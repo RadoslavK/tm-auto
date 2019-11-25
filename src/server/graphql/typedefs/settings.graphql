@@ -6,6 +6,7 @@ interface ITaskSettings {
 type GeneralSettings {
     allowTasks: Boolean!
     autoBuild: Boolean!
+    autoUnits: Boolean!
 }
 
 type GeneralVillageSettings {
@@ -36,15 +37,41 @@ type HeroSettings {
     autoAdventure: AutoAdventureSettings!
 }
 
+type AutoUnitsUnitSettings {
+    index: Int!
+    autoBuild: Boolean!
+    trainForever: Boolean!
+    targetAmount: Int!
+}
+
+type AutoUnitsBuildingSettings {
+    allow: Boolean!
+    maxBuildTime: Int!
+    units: [AutoUnitsUnitSettings!]!
+}
+
+type AutoUnitsSettings implements ITaskSettings {
+    allow: Boolean!
+    coolDown: CoolDown!
+
+    minCrop: Int!
+    barracks: AutoUnitsBuildingSettings!
+    stable: AutoUnitsBuildingSettings!
+    workshop: AutoUnitsBuildingSettings!
+    residence: AutoUnitsBuildingSettings!
+}
+
 type VillageSettings {
     general: GeneralVillageSettings!
     autoBuild: AutoBuildSettings!
+    autoUnits: AutoUnitsSettings!
 }
 
 extend type Query {
     generalSettings: GeneralSettings!
     hero: HeroSettings!
     villageSettings(villageId: Int!): VillageSettings!
+    autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
 }
 
 input GeneralVillageSettingsInput {
@@ -74,11 +101,36 @@ input AutoAdventureSettingsInput {
 input GeneralSettingsInput {
     allowTasks: Boolean!
     autoBuild: Boolean!
+    autoUnits: Boolean!
 }
 
 input UpdateAutoBuildVillageSettingsInput {
     villageId: Int!
     settings: AutoBuildVillageSettingsInput!
+}
+
+input UpdateAutoUnitsUnitSettingsInput {
+    villageId: Int!
+    unitIndex: Int!
+    autoBuild: Boolean!
+    trainForever: Boolean!
+    targetAmount: Int!
+}
+
+input UpdateAutoUnitsBuildingSettingsInput {
+    villageId: Int!
+    buildingType: Int!
+    allow: Boolean!
+    maxBuildTime: Int!
+}
+
+input UpdateAutoUnitsSettingsInput {
+    villageId: Int!
+
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    minCrop: Int!
 }
 
 input UpdateGeneralVillageSettingsInput {
@@ -99,4 +151,7 @@ extend type Mutation {
     updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!
     updateGeneralVillageSettings(input: UpdateGeneralVillageSettingsInput!): Boolean!
     updateAutoBuildVillageSettings(input: UpdateAutoBuildVillageSettingsInput!): Boolean!
+    updateAutoUnitsUnitSettings(input: UpdateAutoUnitsUnitSettingsInput!): Boolean!
+    updateAutoUnitsBuildingSettings(input: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
+    updateAutoUnitsSettings(input: UpdateAutoUnitsSettingsInput!): Boolean!
 }
