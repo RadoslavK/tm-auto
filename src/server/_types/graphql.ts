@@ -201,7 +201,7 @@ export type ICoords = {
 export type ICost = {
   readonly __typename?: 'Cost',
   readonly resources: IResources,
-  readonly buildTime: Scalars['Int'],
+  readonly buildTime: IDuration,
 };
 
 export type ICreateUserAccountInput = {
@@ -761,12 +761,12 @@ export type IResolversTypes = {
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Cost: ResolverTypeWrapper<ICost>,
+  Duration: ResolverTypeWrapper<IDuration>,
   GeneralSettings: ResolverTypeWrapper<IGeneralSettings>,
   HeroSettings: ResolverTypeWrapper<IHeroSettings>,
   AutoAdventureSettings: ResolverTypeWrapper<IAutoAdventureSettings>,
   ITaskSettings: ResolverTypeWrapper<IITaskSettings>,
   CoolDown: ResolverTypeWrapper<ICoolDown>,
-  Duration: ResolverTypeWrapper<IDuration>,
   AdventureCriteria: IAdventureCriteria,
   VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
@@ -838,12 +838,12 @@ export type IResolversParentTypes = {
   QueuedBuilding: IQueuedBuilding,
   Boolean: Scalars['Boolean'],
   Cost: ICost,
+  Duration: IDuration,
   GeneralSettings: IGeneralSettings,
   HeroSettings: IHeroSettings,
   AutoAdventureSettings: IAutoAdventureSettings,
   ITaskSettings: IITaskSettings,
   CoolDown: ICoolDown,
-  Duration: IDuration,
   AdventureCriteria: IAdventureCriteria,
   VillageSettings: IVillageSettings,
   GeneralVillageSettings: IGeneralVillageSettings,
@@ -997,7 +997,7 @@ export type ICoordsResolvers<ContextType = any, ParentType extends IResolversPar
 
 export type ICostResolvers<ContextType = any, ParentType extends IResolversParentTypes['Cost'] = IResolversParentTypes['Cost']> = {
   resources: Resolver<IResolversTypes['Resources'], ParentType, ContextType>,
-  buildTime: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  buildTime: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
 };
 
 export interface IDateScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Date'], any> {

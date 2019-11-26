@@ -18,10 +18,10 @@ export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (qu
       const mbLevel = mbLevels[building.queueId];
       const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
 
-      totalCost = totalCost.add({
+      totalCost = totalCost.add(new Cost({
         buildTime: actualBuildTime,
         resources: cost.resources,
-      });
+      }));
 
       return ({
         ...building,

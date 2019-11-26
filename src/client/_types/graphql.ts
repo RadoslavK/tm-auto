@@ -179,7 +179,7 @@ export type ICoords = {
 
 export type ICost = {
   readonly resources: IResources,
-  readonly buildTime: Scalars['Int'],
+  readonly buildTime: IDuration,
 };
 
 export type ICreateUserAccountInput = {
@@ -769,10 +769,7 @@ export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntry
 
 export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
 
-export type ICostFragmentFragment = (
-  Pick<ICost, 'buildTime'>
-  & { readonly resources: IResourcesFragmentFragment }
-);
+export type ICostFragmentFragment = { readonly resources: IResourcesFragmentFragment, readonly buildTime: IDurationFragment };
 
 export type ICoordsFragmentFragment = Pick<ICoords, 'x' | 'y'>;
 

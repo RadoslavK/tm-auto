@@ -10,7 +10,9 @@ fragment CostFragment on Cost {
     resources {
         ...ResourcesFragment
     }
-    buildTime
+    buildTime {
+        ...Duration
+    }
 }
 
 fragment CoordsFragment on Coords {

@@ -1,7 +1,9 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import classNames from 'classnames';
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
+import {
+  formatTimeFromDuration,
+} from '../../../../../server/utils/formatTime';
 import { ICost } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
@@ -64,7 +66,7 @@ export const Cost: React.FC<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
-  const time = formatTimeFromSeconds(buildTime);
+  const time = formatTimeFromDuration(buildTime);
 
   const highestResource = Math.max(resources.wood, resources.clay, resources.iron, resources.crop);
   const formatResources = createFormatter(highestResource);
