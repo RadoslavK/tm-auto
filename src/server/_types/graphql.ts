@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -9,7 +9,6 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  Date: Date,
 };
 
 export enum IAdventureCriteria {
@@ -139,7 +138,7 @@ export enum IBotState {
 export type IBuildingInProgress = {
   readonly __typename?: 'BuildingInProgress',
   readonly level: Scalars['Int'],
-  readonly finishedAt: Scalars['Date'],
+  readonly finishedAt: ITimestamp,
   readonly name: Scalars['String'],
   readonly type: Scalars['Int'],
 };
@@ -209,7 +208,6 @@ export type ICreateUserAccountInput = {
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
 };
-
 
 export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
@@ -556,6 +554,11 @@ export type ITextLogEntryContentPayload = {
   readonly message: Scalars['String'],
 };
 
+export type ITimestamp = {
+  readonly __typename?: 'Timestamp',
+  readonly totalSeconds: Scalars['Int'],
+};
+
 export enum ITribe {
   Romans = 'Romans',
   Teutons = 'Teutons',
@@ -738,7 +741,7 @@ export type IResolversTypes = {
   BuildingSpotLevel: ResolverTypeWrapper<IBuildingSpotLevel>,
   ResourceFields: ResolverTypeWrapper<IResourceFields>,
   BuildingInProgress: ResolverTypeWrapper<IBuildingInProgress>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Timestamp: ResolverTypeWrapper<ITimestamp>,
   BotState: IBotState,
   HeroInformation: ResolverTypeWrapper<IHeroInformation>,
   HeroState: IHeroState,
@@ -815,7 +818,7 @@ export type IResolversParentTypes = {
   BuildingSpotLevel: IBuildingSpotLevel,
   ResourceFields: IResourceFields,
   BuildingInProgress: IBuildingInProgress,
-  Date: Scalars['Date'],
+  Timestamp: ITimestamp,
   BotState: IBotState,
   HeroInformation: IHeroInformation,
   HeroState: IHeroState,
@@ -955,7 +958,7 @@ export type IAvailableNewBuildingResolvers<ContextType = any, ParentType extends
 
 export type IBuildingInProgressResolvers<ContextType = any, ParentType extends IResolversParentTypes['BuildingInProgress'] = IResolversParentTypes['BuildingInProgress']> = {
   level: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  finishedAt: Resolver<IResolversTypes['Date'], ParentType, ContextType>,
+  finishedAt: Resolver<IResolversTypes['Timestamp'], ParentType, ContextType>,
   name: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   type: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
@@ -999,10 +1002,6 @@ export type ICostResolvers<ContextType = any, ParentType extends IResolversParen
   resources: Resolver<IResolversTypes['Resources'], ParentType, ContextType>,
   buildTime: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
 };
-
-export interface IDateScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Date'], any> {
-  name: 'Date'
-}
 
 export type IDurationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Duration'] = IResolversParentTypes['Duration']> = {
   hours: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
@@ -1140,6 +1139,10 @@ export type ITextLogEntryContentPayloadResolvers<ContextType = any, ParentType e
   message: Resolver<IResolversTypes['String'], ParentType, ContextType>,
 };
 
+export type ITimestampResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timestamp'] = IResolversParentTypes['Timestamp']> = {
+  totalSeconds: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+};
+
 export type IUnitInfoResolvers<ContextType = any, ParentType extends IResolversParentTypes['UnitInfo'] = IResolversParentTypes['UnitInfo']> = {
   name: Resolver<IResolversTypes['String'], ParentType, ContextType>,
 };
@@ -1196,7 +1199,6 @@ export type IResolvers<ContextType = any> = {
   CoolDown: ICoolDownResolvers<ContextType>,
   Coords: ICoordsResolvers<ContextType>,
   Cost: ICostResolvers<ContextType>,
-  Date: GraphQLScalarType,
   Duration: IDurationResolvers<ContextType>,
   GameInfo: IGameInfoResolvers<ContextType>,
   GeneralSettings: IGeneralSettingsResolvers<ContextType>,
@@ -1214,6 +1216,7 @@ export type IResolvers<ContextType = any> = {
   Subscription: ISubscriptionResolvers<ContextType>,
   TextLogEntryContent: ITextLogEntryContentResolvers<ContextType>,
   TextLogEntryContentPayload: ITextLogEntryContentPayloadResolvers<ContextType>,
+  Timestamp: ITimestampResolvers<ContextType>,
   UnitInfo: IUnitInfoResolvers<ContextType>,
   UserAccount: IUserAccountResolvers<ContextType>,
   Village: IVillageResolvers<ContextType>,

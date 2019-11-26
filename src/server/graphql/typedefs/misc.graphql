@@ -1,3 +1,7 @@
+type Timestamp {
+    totalSeconds: Int!
+}
+
 type Resources {
     wood: Int!
     clay: Int!

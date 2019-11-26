@@ -6,7 +6,6 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  Date: Date,
 };
 
 export enum AdventureCriteria {
@@ -124,7 +123,7 @@ export enum BotState {
 
 export type IBuildingInProgress = {
   readonly level: Scalars['Int'],
-  readonly finishedAt: Scalars['Date'],
+  readonly finishedAt: ITimestamp,
   readonly name: Scalars['String'],
   readonly type: Scalars['Int'],
 };
@@ -187,7 +186,6 @@ export type ICreateUserAccountInput = {
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
 };
-
 
 export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
@@ -519,6 +517,10 @@ export type ITextLogEntryContentPayload = {
   readonly message: Scalars['String'],
 };
 
+export type ITimestamp = {
+  readonly totalSeconds: Scalars['Int'],
+};
+
 export enum Tribe {
   Romans = 'Romans',
   Teutons = 'Teutons',
@@ -697,7 +699,10 @@ export type IGetBuildingsInProgressQueryVariables = {
 };
 
 
-export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<Pick<IBuildingInProgress, 'level' | 'finishedAt' | 'name' | 'type'>> };
+export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<(
+    Pick<IBuildingInProgress, 'level' | 'name' | 'type'>
+    & { readonly finishedAt: ITimestampFragment }
+  )> };
 
 export type IGetBotStateQueryVariables = {};
 
@@ -766,6 +771,8 @@ export type IOnLogEntryAddedSubscriptionVariables = {};
 
 
 export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragmentFragment };
+
+export type ITimestampFragment = Pick<ITimestamp, 'totalSeconds'>;
 
 export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
 

@@ -5,7 +5,6 @@ import {
   ITribe,
 } from '../../_types/graphql';
 import { fieldIds } from '../../constants/fieldIds';
-import { buildingInfos } from '../../bootstrap/loadInfo';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';

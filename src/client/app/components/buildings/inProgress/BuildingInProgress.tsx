@@ -1,15 +1,18 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
 import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
-import { IBuildingInProgress } from '../../../../_types/graphql';
+import {
+  IBuildingInProgress,
+  ITimestamp,
+} from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 
 interface IProps {
   readonly building: IBuildingInProgress;
 }
 
-const getInitialTimer = (finishedAt: Date): number => {
-  const timer = Math.floor((finishedAt.valueOf() - new Date().valueOf()) / 1000);
+const getInitialTimer = (finishedAt: ITimestamp): number => {
+  const timer = Math.floor(finishedAt.totalSeconds - new Date().valueOf() / 1000);
 
   return timer > 0
     ? timer

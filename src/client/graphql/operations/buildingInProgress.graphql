@@ -1,7 +1,11 @@
+#import "./misc.graphql"
+
 query GetBuildingsInProgress($villageId: Int!) {
     buildingsInProgress(villageId: $villageId) {
         level
-        finishedAt
+        finishedAt {
+            ...Timestamp
+        }
         name
         type
     }

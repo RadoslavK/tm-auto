@@ -76,7 +76,8 @@ export const OnLogEntryAdded: DocumentNode;
 declare module '*/graphql_operations/misc.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const ResourcesFragment: DocumentNode;
+  export const Timestamp: DocumentNode;
+export const ResourcesFragment: DocumentNode;
 export const CostFragment: DocumentNode;
 export const CoordsFragment: DocumentNode;
 export const VillageFragment: DocumentNode;

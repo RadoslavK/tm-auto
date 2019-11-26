@@ -1,6 +1,6 @@
 type BuildingInProgress {
     level: Int!
-    finishedAt: Date!
+    finishedAt: Timestamp!
     name: String!
     type: Int!
 }

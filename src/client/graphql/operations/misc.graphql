@@ -1,3 +1,7 @@
+fragment Timestamp on Timestamp {
+    totalSeconds
+}
+
 fragment ResourcesFragment on Resources {
     wood
     clay
