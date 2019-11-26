@@ -11,17 +11,19 @@ import { CoolDown } from '../../../_models/coolDown';
 export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean => {
+    //  TODO rather generate this task only for the current village when hero can actually do it
+    const settings = this.settings();
+    
+    const { currentVillageId } = accountContext.villageService;
+    return settings.allow && settings.preferredVillageId === currentVillageId;
+  };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<void> => {
     const village = accountContext.villageService.currentVillage();
     const settings = this.settings();
-
-    if (settings.preferredVillageId !== village.id) {
-      return;
-    }
 
     const { spots } = village.buildings;
     const { hero } = accountContext;

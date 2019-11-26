@@ -24,7 +24,8 @@ export class AutoUnitsTask implements IBotTask {
 
   private settings = (): AutoUnitsSettings => accountContext.settingsService.village(this.m_village.id).autoUnits.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean => this.settings().allow
+    && accountContext.settingsService.general.get().autoUnits;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 

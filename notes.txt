@@ -1,0 +1,44 @@
+debouncovat aj napriklad tie graphql update uz na klientovi.
+
+tie eventy by sa dali otypovat podobne jak which lebo ked sa da all: true tak vrati iny typ
+
+dat do serveru check ze nebezi oproti spravnej node verzii a log
+
+ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potom
+
+fragmentom nedavat fragment suffix lebo typ ma pootom meni fragmentfragment a zaroven mozu mat rovnake meno jak typ
+
+todo zjednotit setting server model a graphql a nejak mnormalne s tou servisou nech neni kod na milion miestach
+
+nepouzivat zlozite inputy ale proste 1 input a tam narvat vsetky data aj village id a tak
+
+aj ostatne settingy updatovat ciastocne ale requestovat ked sa da
+
+
+
+
+
+v klientovi nepouzivat referencie zo serveru..  server by mal mat co najviac definicii z graphql ktore sa vygeneruju aj na klientovi a importovat si moze aj tie
+
+v queue ukazovat na spotoch aky je v poradi pokial je v queue
+
+a v queue ukazovat na akom indexe je ta konkretna budova
+
+roman - show double queue.. bez operacii, iba delete.
+
+log filter -> autoBuild, units, hero...
+
+log sort by..
+
+buildings sort..
+v ramci res fields podla levelu napriklad
+
+custom groupping
+
+Filter budov, napr vyhladat konkretnu budovu a tu naklikat
+
+vyzera ze nebuduje dobre budovy ked je naklikanych v queue viac rovnakeho typu alebo minimalne ked viac existuje v dedine alebo kombinacia.. s ukrytami
+
+nejaka retry policy ked zlyha login az po zobrazenie UI
+
+pamatat si posledne zvoleny ucet
