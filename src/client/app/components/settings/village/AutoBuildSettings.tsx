@@ -6,7 +6,11 @@ import {
   UpdateAutoBuildVillageSettings,
 } from '*/graphql_operations/settings.graphql';
 import {
-  IAutoBuildSettings, ICoolDown, IUpdateAutoBuildVillageSettingsInput,
+  IAutoBuildSettings,
+  ICoolDown,
+  IResetAutoBuildSettingsMutation,
+  IResetAutoBuildSettingsMutationVariables,
+  IUpdateAutoBuildVillageSettingsInput,
   IUpdateAutoBuildVillageSettingsMutation,
   IUpdateAutoBuildVillageSettingsMutationVariables,
 } from '../../../../_types/graphql';
@@ -41,8 +45,8 @@ export const AutoBuildSettings: React.FC<IProps> = (props) => {
     }
   }, [state, settings, updateSettings]);
 
-  const [resetSettings] = useMutation(ResetAutoBuildSettings, {
-    variables: { villageId },
+  const [resetSettings] = useMutation<IResetAutoBuildSettingsMutation, IResetAutoBuildSettingsMutationVariables>(ResetAutoBuildSettings, {
+    variables: { input: { villageId } },
   });
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {

@@ -8,6 +8,8 @@ import { Button } from '@material-ui/core';
 import {
   ICoolDown,
   IGetVillageSettingsQuery,
+  IResetAutoUnitsSettingsMutation,
+  IResetAutoUnitsSettingsMutationVariables,
   IUpdateAutoUnitsSettingsMutation,
   IUpdateAutoUnitsSettingsMutationVariables,
 } from '../../../../_types/graphql';
@@ -46,8 +48,8 @@ export const AutoUnitsSettings: React.FC<IProps> = (props) => {
     }
   }, [state, settings, updateSettings]);
   
-  const [resetSettings] = useMutation(ResetAutoUnitsSettings, {
-    variables: { villageId },
+  const [resetSettings] = useMutation<IResetAutoUnitsSettingsMutation, IResetAutoUnitsSettingsMutationVariables>(ResetAutoUnitsSettings, {
+    variables: { input: { villageId } },
   });
 
   const {

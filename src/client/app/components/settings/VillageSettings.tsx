@@ -4,7 +4,7 @@ import { GetVillageSettings } from '*/graphql_operations/settings.graphql';
 import { IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables } from '../../../_types/graphql';
 import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
 import { AutoBuildSettings } from './village/AutoBuildSettings';
-import { GeneralVillageSettings } from './GeneralVillageSettings';
+import { GeneralVillageSettings } from './village/GeneralVillageSettings';
 import { AutoUnitsSettings } from './village/AutoUnitsSettings';
 
 export const VillageSettings: React.FC = () => {

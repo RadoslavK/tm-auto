@@ -6,11 +6,14 @@ import {
   UpdateGeneralVillageSettings,
 } from '*/graphql_operations/settings.graphql';
 import {
-  IGeneralVillageSettings, IUpdateGeneralVillageSettingsInput,
+  IGeneralVillageSettings,
+  IResetGeneralVillageSettingsMutation,
+  IResetGeneralVillageSettingsMutationVariables,
+  IUpdateGeneralVillageSettingsInput,
   IUpdateGeneralVillageSettingsMutation,
   IUpdateGeneralVillageSettingsMutationVariables,
-} from '../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
+} from '../../../../_types/graphql';
+import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 
 interface IProps {
   readonly settings: IGeneralVillageSettings;
@@ -32,8 +35,8 @@ export const GeneralVillageSettings: React.FC<IProps> = (props) => {
     { variables: { input } },
   );
 
-  const [resetSettings] = useMutation(ResetGeneralVillageSettings, {
-    variables: { villageId },
+  const [resetSettings] = useMutation<IResetGeneralVillageSettingsMutation, IResetGeneralVillageSettingsMutationVariables>(ResetGeneralVillageSettings, {
+    variables: { input: { villageId } },
   });
 
   useEffect(() => {
