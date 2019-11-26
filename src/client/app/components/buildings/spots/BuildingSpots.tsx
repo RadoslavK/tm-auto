@@ -11,9 +11,9 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingSpot } from './BuildingSpot';
 import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 const useStyles = makeStyles({
   buildingType: {
@@ -37,7 +37,7 @@ export const BuildingSpots: React.FC<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext()
   const { data, loading, refetch } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: { villageId },
   });

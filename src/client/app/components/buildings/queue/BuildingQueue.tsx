@@ -17,9 +17,9 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { Cost } from './Cost';
 import { QueuedBuilding } from './QueuedBuilding';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
   readonly className: string;
@@ -41,9 +41,9 @@ export const BuildingQueue: React.FC<IProps> = (props) => {
     className
   } = props;
 
-  const classes = useStyles({});
+  const classes = useStyles();
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext();
   const { data, loading, refetch } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
     variables: { villageId },
   });

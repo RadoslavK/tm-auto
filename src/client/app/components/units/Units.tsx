@@ -8,13 +8,10 @@ import {
   IGetAutoUnitsSettingsQueryVariables,
 } from '../../../_types/graphql';
 import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
-import {
-  IVillageContext,
-  VillageContext,
-} from '../villages/context/VillageContext';
+import { useVillageContext } from '../../hooks/useVillageContext';
 
 const useAutoUnitsSettings = () => {
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext()
 
   const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
     variables: { villageId },

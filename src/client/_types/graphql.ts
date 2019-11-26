@@ -419,7 +419,8 @@ export type IQuery = {
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
-  readonly villageSettings: IVillageSettings,
+  readonly generalVillageSettings: IGeneralVillageSettings,
+  readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
   readonly unitInfo: IUnitInfo,
   readonly village: Maybe<IVillage>,
@@ -462,7 +463,12 @@ export type IQueryBuildingQueueArgs = {
 };
 
 
-export type IQueryVillageSettingsArgs = {
+export type IQueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type IQueryAutoBuildSettingsArgs = {
   villageId: Scalars['Int']
 };
 
@@ -920,18 +926,22 @@ export type IGetHeroSettingsQuery = { readonly hero: { readonly autoAdventure: (
       & ITaskSettingsFragment_AutoAdventureSettings_Fragment
     ) } };
 
-export type IGetVillageSettingsQueryVariables = {
+export type IGetGeneralVillageSettingsQueryVariables = {
   villageId: Scalars['Int']
 };
 
 
-export type IGetVillageSettingsQuery = { readonly villageSettings: { readonly general: Pick<IGeneralVillageSettings, 'allowTasks'>, readonly autoBuild: (
-      Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
-      & ITaskSettingsFragment_AutoBuildSettings_Fragment
-    ), readonly autoUnits: (
-      Pick<IAutoUnitsSettings, 'minCrop'>
-      & ITaskSettingsFragment_AutoUnitsSettings_Fragment
-    ) } };
+export type IGetGeneralVillageSettingsQuery = { readonly generalVillageSettings: Pick<IGeneralVillageSettings, 'allowTasks'> };
+
+export type IGetAutoBuildSettingsQueryVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type IGetAutoBuildSettingsQuery = { readonly autoBuildSettings: (
+    Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
+    & ITaskSettingsFragment_AutoBuildSettings_Fragment
+  ) };
 
 export type IGetAutoUnitsSettingsQueryVariables = {
   villageId: Scalars['Int']

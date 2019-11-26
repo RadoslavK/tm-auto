@@ -5,7 +5,7 @@ import {
 } from '@apollo/react-hooks';
 import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
 import { IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables } from '../../_types/graphql';
-import { IVillageContext, VillageContext } from '../components/villages/context/VillageContext';
+import { useVillageContext } from './useVillageContext';
 
 interface IParams {
   readonly deleteAll: boolean;
@@ -18,7 +18,7 @@ export const useDequeueBuildingAtFieldMutation = (params: IParams): MutationTupl
     fieldId,
   } = params;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext();
 
   return useMutation<IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables>(DequeueBuildingAtField, {
     variables: {

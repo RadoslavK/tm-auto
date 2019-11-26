@@ -14,11 +14,13 @@ import {
 } from '../../../_types/graphql';
 
 interface IProps {
+  readonly reload: () => void;
   readonly settings: IGeneralSettings;
 }
 
 const GeneralSettings: React.FC<IProps> = (props) => {
   const {
+    reload,
     settings,
   } = props;
 
@@ -36,7 +38,13 @@ const GeneralSettings: React.FC<IProps> = (props) => {
     }
   },[state, settings, updateSettings]);
   
-  const [resetSettings] = useMutation(ResetGeneralSettings);
+  const [resetSettings, resetSettingsResult] = useMutation(ResetGeneralSettings);
+
+  useEffect(() => {
+    if (resetSettingsResult.called && !resetSettingsResult.loading) {
+      reload();
+    }
+  }, [resetSettingsResult, reload]);
 
   const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const {
@@ -90,13 +98,13 @@ const GeneralSettings: React.FC<IProps> = (props) => {
 };
 
 const Container: React.FC = () => {
-  const { data, loading } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
+  const { data, loading, refetch } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
 
   if (loading || !data) {
     return null;
   }
 
-  return <GeneralSettings settings={data.generalSettings} />;
+  return <GeneralSettings settings={data.generalSettings} reload={refetch} />;
 };
 
 export { Container as GeneralSettings };

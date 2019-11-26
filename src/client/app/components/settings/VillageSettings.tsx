@@ -1,35 +1,16 @@
-import React, { useContext } from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { GetVillageSettings } from '*/graphql_operations/settings.graphql';
-import { IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables } from '../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../villages/context/VillageContext';
+import React from 'react';
 import { AutoBuildSettings } from './village/AutoBuildSettings';
 import { GeneralVillageSettings } from './village/GeneralVillageSettings';
 import { AutoUnitsSettings } from './village/AutoUnitsSettings';
 
 export const VillageSettings: React.FC = () => {
-  const { villageId } = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetVillageSettingsQuery, IGetVillageSettingsQueryVariables>(GetVillageSettings, {
-    variables: { villageId },
-  });
-
-  if (loading || !data) {
-    return null;
-  }
-
-  const {
-    autoBuild,
-    autoUnits,
-    general,
-  } = data.villageSettings;
-
   return (
     <div>
       <div>
         <h1>Village settings</h1>
-        <GeneralVillageSettings settings={general} />
-        <AutoBuildSettings settings={autoBuild} />
-        <AutoUnitsSettings settings={autoUnits} />
+        <GeneralVillageSettings />
+        <AutoBuildSettings />
+        <AutoUnitsSettings />
       </div>
     </div>
   );

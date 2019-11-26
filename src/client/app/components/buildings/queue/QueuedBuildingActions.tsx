@@ -20,7 +20,7 @@ import {
   IQueuedBuildingManipulationInput,
 } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
   readonly building: IQueuedBuilding;
@@ -66,7 +66,7 @@ export const QueuedBuildingActions: React.FC<IProps> = (props) => {
     className,
   } = props;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext()
   const input: IQueuedBuildingManipulationInput = { villageId, queueId };
 
   const options = {

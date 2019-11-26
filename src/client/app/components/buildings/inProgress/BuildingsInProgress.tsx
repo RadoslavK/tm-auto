@@ -7,8 +7,8 @@ import {
   IGetBuildingsInProgressQuery,
   IGetBuildingsInProgressQueryVariables,
 } from '../../../../_types/graphql';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
 import { BuildingInProgress } from './BuildingInProgress';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
   readonly className: string;
@@ -19,7 +19,7 @@ export const BuildingsInProgress: React.FC<IProps> = (props) => {
     className,
   } = props;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext();
 
   const { data, loading, refetch } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, {
     variables: { villageId },

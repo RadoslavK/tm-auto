@@ -1,11 +1,10 @@
-import { useContext } from 'react';
 import {
   MutationTuple,
   useMutation,
 } from '@apollo/react-hooks';
 import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 import { IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables } from '../../_types/graphql';
-import { IVillageContext, VillageContext } from '../components/villages/context/VillageContext';
+import { useVillageContext } from './useVillageContext';
 
 interface IParams {
   readonly buildingType: number
@@ -14,7 +13,7 @@ interface IParams {
 }
 
 export const useEnqueueBuildingMutation = (params: IParams): MutationTuple<IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables> => {
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext();
 
   const {
     buildingType,

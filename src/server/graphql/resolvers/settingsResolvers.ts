@@ -1,9 +1,7 @@
 import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { accountContext } from '../../accountContext';
-import {
-  AutoUnitsSettings,
-} from '../../_models/settings/tasks/AutoUnitsSettings';
+import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
 import { Resolvers } from './_types';
 import { BuildingType } from '../../_enums/BuildingType';
 import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
@@ -40,7 +38,8 @@ export const settingsResolvers: Resolvers = {
   Query: {
     generalSettings: () => accountContext.settingsService.general.get(),
     hero: () => accountContext.settingsService.hero.get(),
-    villageSettings: (_, args) => accountContext.settingsService.village(args.villageId).get(),
+    generalVillageSettings: (_, args) => accountContext.settingsService.village(args.villageId).general.get(),
+    autoBuildSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoBuild.get(),
     autoUnitsSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoUnits.get(),
   },
 

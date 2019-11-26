@@ -20,10 +20,7 @@ import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
 import {
   UpdateAutoUnitsUnitSettings,
 } from '*/graphql_operations/settings.graphql';
-import {
-  IVillageContext,
-  VillageContext,
-} from '../villages/context/VillageContext';
+import { useVillageContext } from '../../hooks/useVillageContext';
 
 interface IProps {
   readonly settings: IAutoUnitsUnitSettings;
@@ -71,7 +68,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
     settings,
   } = props;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext()
 
   const { data, loading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
     variables: { index: settings.index },

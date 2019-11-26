@@ -1,13 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useEffect, useState } from 'react';
+import {
+  useMutation,
+  useQuery,
+} from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import {
+  GetAutoBuildSettings,
   ResetAutoBuildSettings,
   UpdateAutoBuildVillageSettings,
 } from '*/graphql_operations/settings.graphql';
 import {
   IAutoBuildSettings,
   ICoolDown,
+  IGetAutoBuildSettingsQuery,
+  IGetAutoBuildSettingsQueryVariables,
   IResetAutoBuildSettingsMutation,
   IResetAutoBuildSettingsMutationVariables,
   IUpdateAutoBuildVillageSettingsInput,
@@ -15,29 +21,50 @@ import {
   IUpdateAutoBuildVillageSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
-import { IVillageContext, VillageContext } from '../../villages/context/VillageContext';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
+  readonly reload: () => void;
   readonly settings: IAutoBuildSettings;
 }
 
-export const AutoBuildSettings: React.FC<IProps> = (props) => {
+const Container: React.FC = () => {
+  const { villageId } = useVillageContext();
+  const { data, loading, refetch } = useQuery<IGetAutoBuildSettingsQuery, IGetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
+    variables: { villageId },
+  });
+
+  if (loading || !data) {
+    return null;
+  }
+
+  return (
+    <AutoBuildSettings
+      settings={data.autoBuildSettings}
+      reload={refetch}
+    />
+  );
+};
+
+export { Container as AutoBuildSettings };
+
+const AutoBuildSettings: React.FC<IProps> = (props) => {
   const {
+    reload,
     settings,
   } = props;
 
   const [state, setState] = useState(settings);
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext();
   const input: IUpdateAutoBuildVillageSettingsInput = {
     villageId,
     settings: state,
   };
 
-  const [updateSettings] = useMutation<IUpdateAutoBuildVillageSettingsMutation, IUpdateAutoBuildVillageSettingsMutationVariables>(
-    UpdateAutoBuildVillageSettings,
+  const [updateSettings] = useMutation<IUpdateAutoBuildVillageSettingsMutation, IUpdateAutoBuildVillageSettingsMutationVariables>(UpdateAutoBuildVillageSettings,
     { variables: { input } },
-    );
+  );
 
   useEffect(() => {
     if (state !== settings) {
@@ -45,9 +72,15 @@ export const AutoBuildSettings: React.FC<IProps> = (props) => {
     }
   }, [state, settings, updateSettings]);
 
-  const [resetSettings] = useMutation<IResetAutoBuildSettingsMutation, IResetAutoBuildSettingsMutationVariables>(ResetAutoBuildSettings, {
+  const [resetSettings, resetSettingsResult] = useMutation<IResetAutoBuildSettingsMutation, IResetAutoBuildSettingsMutationVariables>(ResetAutoBuildSettings, {
     variables: { input: { villageId } },
   });
+
+  useEffect(() => {
+    if (resetSettingsResult.called && !resetSettingsResult.loading) {
+      reload();
+    }
+  }, [resetSettingsResult, reload]);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {

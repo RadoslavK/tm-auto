@@ -91,7 +91,9 @@ type VillageSettings {
 extend type Query {
     generalSettings: GeneralSettings!
     hero: HeroSettings!
-    villageSettings(villageId: Int!): VillageSettings!
+
+    generalVillageSettings(villageId: Int!): GeneralVillageSettings!
+    autoBuildSettings(villageId: Int!): AutoBuildSettings!
     autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
 }
 
@@ -176,6 +178,7 @@ extend type Mutation {
     updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!
     updateGeneralVillageSettings(input: UpdateGeneralVillageSettingsInput!): Boolean!
     updateAutoBuildVillageSettings(input: UpdateAutoBuildVillageSettingsInput!): Boolean!
+
     updateAutoUnitsUnitSettings(input: UpdateAutoUnitsUnitSettingsInput!): Boolean!
     updateAutoUnitsBuildingSettings(input: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
     updateAutoUnitsSettings(input: UpdateAutoUnitsSettingsInput!): Boolean!

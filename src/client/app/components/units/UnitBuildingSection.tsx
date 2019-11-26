@@ -17,11 +17,8 @@ import {
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { UpdateAutoUnitsBuildingSettings } from '*/graphql_operations/settings.graphql';
-import {
-  IVillageContext,
-  VillageContext,
-} from '../villages/context/VillageContext';
 import { Duration } from '../controls/Duration';
+import { useVillageContext } from '../../hooks/useVillageContext';
 
 interface IProps {
   readonly buildingType: BuildingType;
@@ -53,7 +50,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     className,
   } = props;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
+  const { villageId } = useVillageContext()
 
   const [state, setState] = useState({
     allow: settings.allow,

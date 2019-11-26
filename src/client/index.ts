@@ -121,7 +121,12 @@ const installDevTools = async (): Promise<void> => {
     console.log(`Added Extension(s): ${devTools}`);
 
     const apolloDevtoolsPath = 'C:\\Users\\Radek\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\jdkknkkbebbapilgoeccciglkfbmbnfm\\2.2.5_0';
-    BrowserWindow.addDevToolsExtension(apolloDevtoolsPath);
+    const extensions = BrowserWindow.getDevToolsExtensions();
+
+    const apolloInstalled = Object.values(extensions).some(e => e.name === 'Apollo Client Developer Tools');
+    if (!apolloInstalled) {
+      BrowserWindow.addDevToolsExtension(apolloDevtoolsPath);
+    }
     console.log('Added Apollo Dev tools');
   } catch (error) {
     console.log("An error occurred:", error);

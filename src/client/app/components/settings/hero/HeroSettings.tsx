@@ -8,7 +8,7 @@ import { HeroInformation } from '../../HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 
 export const HeroSettings: React.FC = () => {
-  const { loading, data } = useQuery<IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables>(GetHeroSettings);
+  const { loading, data, refetch } = useQuery<IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables>(GetHeroSettings);
 
   if (loading || !data) {
     return null;
@@ -22,7 +22,7 @@ export const HeroSettings: React.FC = () => {
     <div>
       <h1>Hero settings</h1>
       <HeroInformation />
-      <AutoAdventureSettings settings={autoAdventure} />
+      <AutoAdventureSettings settings={autoAdventure} reload={refetch} />
     </div>
   );
 };

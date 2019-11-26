@@ -25,6 +25,7 @@ import { CoolDown } from '../../controls/Cooldown';
 import { Duration } from '../../controls/Duration';
 
 interface IProps {
+  readonly reload: () => void;
   readonly settings: IAutoAdventureSettings;
 }
 
@@ -49,6 +50,7 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
 
 export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   const {
+    reload,
     settings,
   } = props;
 
@@ -71,7 +73,13 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
 
   const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), [setState]);
 
-  const [resetSettings] = useMutation(ResetAutoAdventureSettings);
+  const [resetSettings, resetSettingsResult] = useMutation(ResetAutoAdventureSettings);
+
+  useEffect(() => {
+    if (resetSettingsResult.called && !resetSettingsResult.loading) {
+      reload();
+    }
+  }, [resetSettingsResult, reload]);
 
   if (loading || !data) {
     return null;

@@ -1,13 +1,17 @@
 import React, {
-  useContext,
   useEffect,
   useState,
 } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import {
+  useMutation,
+  useQuery,
+} from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import {
+  IAutoUnitsSettings,
   ICoolDown,
-  IGetVillageSettingsQuery,
+  IGetAutoUnitsSettingsQuery,
+  IGetAutoUnitsSettingsQueryVariables,
   IResetAutoUnitsSettingsMutation,
   IResetAutoUnitsSettingsMutationVariables,
   IUpdateAutoUnitsSettingsMutation,
@@ -15,25 +19,44 @@ import {
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
 import {
+  GetAutoUnitsSettings,
   ResetAutoUnitsSettings,
   UpdateAutoUnitsSettings,
 } from '*/graphql_operations/settings.graphql';
-import {
-  IVillageContext,
-  VillageContext,
-} from '../../villages/context/VillageContext';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
-  readonly settings: IGetVillageSettingsQuery['villageSettings']['autoUnits'];
+  readonly settings: IAutoUnitsSettings;
+  readonly reload: () => void;
 }
 
-export const AutoUnitsSettings: React.FC<IProps> = (props) => {
+const Container: React.FC = () => {
+  const { villageId } = useVillageContext();
+  const { data, loading, refetch } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
+    variables: { villageId },
+  });
+
+  if (!data || loading) {
+    return null;
+  }
+
+  return (
+    <AutoUnitsSettings
+      settings={data.autoUnitsSettings}
+      reload={refetch}
+    />
+  );
+};
+
+export { Container as AutoUnitsSettings };
+
+const AutoUnitsSettings: React.FC<IProps> = (props) => {
   const {
+    reload,
     settings,
   } = props;
 
-  const { villageId } = useContext<IVillageContext>(VillageContext);
-
+  const { villageId } = useVillageContext();
   const [state, setState] = useState(settings);
   
   const [updateSettings] = useMutation<IUpdateAutoUnitsSettingsMutation, IUpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
@@ -48,9 +71,15 @@ export const AutoUnitsSettings: React.FC<IProps> = (props) => {
     }
   }, [state, settings, updateSettings]);
   
-  const [resetSettings] = useMutation<IResetAutoUnitsSettingsMutation, IResetAutoUnitsSettingsMutationVariables>(ResetAutoUnitsSettings, {
+  const [resetSettings, resetSettingsResult] = useMutation<IResetAutoUnitsSettingsMutation, IResetAutoUnitsSettingsMutationVariables>(ResetAutoUnitsSettings, {
     variables: { input: { villageId } },
   });
+
+  useEffect(() => {
+    if (resetSettingsResult.called && !resetSettingsResult.loading) {
+      reload();
+    }
+  }, [resetSettingsResult, reload]);
 
   const {
     allow,

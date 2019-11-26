@@ -53,20 +53,17 @@ query GetHeroSettings {
     }
 }
 
-query GetVillageSettings($villageId: Int!) {
-    villageSettings(villageId: $villageId) {
-        general {
-            allowTasks
-        }
-        autoBuild {
-            ...TaskSettingsFragment
-            autoCropFields
-            minCrop
-        }
-        autoUnits {
-            ...TaskSettingsFragment,
-            minCrop
-        }
+query GetGeneralVillageSettings($villageId: Int!) {
+    generalVillageSettings(villageId: $villageId) {
+        allowTasks
+    }
+}
+
+query GetAutoBuildSettings($villageId: Int!) {
+    autoBuildSettings(villageId: $villageId) {
+        ...TaskSettingsFragment
+        autoCropFields
+        minCrop
     }
 }
 

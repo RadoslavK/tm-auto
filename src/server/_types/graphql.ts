@@ -450,7 +450,8 @@ export type IQuery = {
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
-  readonly villageSettings: IVillageSettings,
+  readonly generalVillageSettings: IGeneralVillageSettings,
+  readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
   readonly unitInfo: IUnitInfo,
   readonly village: Maybe<IVillage>,
@@ -493,7 +494,12 @@ export type IQueryBuildingQueueArgs = {
 };
 
 
-export type IQueryVillageSettingsArgs = {
+export type IQueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type IQueryAutoBuildSettingsArgs = {
   villageId: Scalars['Int']
 };
 
@@ -797,14 +803,11 @@ export type IResolversTypes = {
   ITaskSettings: ResolverTypeWrapper<IITaskSettings>,
   CoolDown: ResolverTypeWrapper<ICoolDown>,
   AdventureCriteria: IAdventureCriteria,
-  VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
   AutoUnitsSettings: ResolverTypeWrapper<IAutoUnitsSettings>,
   AutoUnitsBuildingSettings: ResolverTypeWrapper<IAutoUnitsBuildingSettings>,
   AutoUnitsUnitSettings: ResolverTypeWrapper<IAutoUnitsUnitSettings>,
-  AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
-  PartyType: IPartyType,
   UnitInfo: ResolverTypeWrapper<IUnitInfo>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -829,6 +832,9 @@ export type IResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>,
   BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
+  PartyType: IPartyType,
+  AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
+  VillageSettings: ResolverTypeWrapper<IVillageSettings>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -875,14 +881,11 @@ export type IResolversParentTypes = {
   ITaskSettings: IITaskSettings,
   CoolDown: ICoolDown,
   AdventureCriteria: IAdventureCriteria,
-  VillageSettings: IVillageSettings,
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
   AutoUnitsSettings: IAutoUnitsSettings,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettings,
   AutoUnitsUnitSettings: IAutoUnitsUnitSettings,
-  AutoPartySettings: IAutoPartySettings,
-  PartyType: IPartyType,
   UnitInfo: IUnitInfo,
   Mutation: {},
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -907,6 +910,9 @@ export type IResolversParentTypes = {
   Subscription: {},
   BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
+  PartyType: IPartyType,
+  AutoPartySettings: IAutoPartySettings,
+  VillageSettings: IVillageSettings,
 };
 
 export type IAutoAdventureSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoAdventureSettings'] = IResolversParentTypes['AutoAdventureSettings']> = {
@@ -1123,7 +1129,8 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   buildingQueue: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
   hero: Resolver<IResolversTypes['HeroSettings'], ParentType, ContextType>,
-  villageSettings: Resolver<IResolversTypes['VillageSettings'], ParentType, ContextType, RequireFields<IQueryVillageSettingsArgs, 'villageId'>>,
+  generalVillageSettings: Resolver<IResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<IQueryGeneralVillageSettingsArgs, 'villageId'>>,
+  autoBuildSettings: Resolver<IResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<IQueryAutoBuildSettingsArgs, 'villageId'>>,
   autoUnitsSettings: Resolver<IResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<IQueryAutoUnitsSettingsArgs, 'villageId'>>,
   unitInfo: Resolver<IResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<IQueryUnitInfoArgs, 'index'>>,
   village: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType, RequireFields<IQueryVillageArgs, 'villageId'>>,
