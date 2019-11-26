@@ -1,7 +1,8 @@
 import { QueuedUnit } from './queuedUnit';
+import { Duration } from '../duration';
 
 export class UnitsQueue {
-  public duration = 0;
+  public duration = new Duration();
 
   private readonly m_units: Record<number, QueuedUnit> = {};
 

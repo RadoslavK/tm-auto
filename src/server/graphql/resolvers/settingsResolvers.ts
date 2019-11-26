@@ -1,14 +1,15 @@
-import { mapCoolDown } from '../mappers/settings/mapCoolDown';
 import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { accountContext } from '../../accountContext';
 import {
+  AutoUnitsBuildingSettings,
   AutoUnitsSettings,
-  AutoUnitsUnitSettings,
 } from '../../_models/settings/tasks/AutoUnitsSettings';
 import { Resolvers } from './_types';
 import { mapAutoUnitsSettings } from '../mappers/settings/mapAutoUnitsSettings';
 import { BuildingType } from '../../_enums/BuildingType';
+import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
+import { GeneralSettings } from '../../_models/settings/GeneralSettings';
 
 export const settingsResolvers: Resolvers = {
   ITaskSettings: {
@@ -45,7 +46,9 @@ export const settingsResolvers: Resolvers = {
 
   Mutation: {
     updateGeneralSettings: (_, args) => {
-      accountContext.settingsService.general.update(args.input.settings);
+      const updatedSettings = new GeneralSettings(args.input.settings);
+
+      accountContext.settingsService.general.update(updatedSettings);
       return true;
     },
 
@@ -55,10 +58,9 @@ export const settingsResolvers: Resolvers = {
         settings,
       } = args.input;
 
-      accountContext.settingsService.village(villageId).autoBuild.update({
-        ...settings,
-        coolDown: mapCoolDown(settings.coolDown),
-      });
+      const updatedSettings = new AutoBuildSettings(settings);
+
+      accountContext.settingsService.village(villageId).autoBuild.update(updatedSettings);
       return true;
     },
 
@@ -68,7 +70,9 @@ export const settingsResolvers: Resolvers = {
         settings,
       } = args.input;
 
-      accountContext.settingsService.village(villageId).general.update(settings);
+      const updatedSettings = new GeneralVillageSettings(settings);
+
+      accountContext.settingsService.village(villageId).general.update(updatedSettings);
       return true;
     },
 
@@ -77,10 +81,9 @@ export const settingsResolvers: Resolvers = {
         settings,
       } = args.input;
 
-      accountContext.settingsService.hero.autoAdventure.update({
-        ...settings,
-        coolDown: mapCoolDown(settings.coolDown),
-      });
+      const updatedSettings = new AutoAdventureSettings(settings);
+
+      accountContext.settingsService.hero.autoAdventure.update(updatedSettings);
       return true;
     },
 
@@ -95,10 +98,10 @@ export const settingsResolvers: Resolvers = {
       const settings = settingsManager.get();
 
       const updatedUnits = [...settings.units];
-      updatedUnits[unitIndex - 1] = new AutoUnitsUnitSettings({
+      updatedUnits[unitIndex - 1] = {
         ...updatedUnitSettings,
         index: unitIndex,
-      });
+      };
 
       const updatedSettings: AutoUnitsSettings = new AutoUnitsSettings({
         ...settings,
@@ -123,10 +126,10 @@ export const settingsResolvers: Resolvers = {
 
       const updatedBuildings = { ...settings.buildings };
 
-      updatedBuildings[buildingType as BuildingType] = {
+      updatedBuildings[buildingType as BuildingType] = new AutoUnitsBuildingSettings({
         allow,
         maxBuildTime,
-      };
+      });
 
       const updatedSettings = new AutoUnitsSettings({
         ...settings,
@@ -150,7 +153,6 @@ export const settingsResolvers: Resolvers = {
       const updatedSettings = new AutoUnitsSettings({
         ...settings,
         ...modifiedSettings,
-        coolDown: mapCoolDown(modifiedSettings.coolDown),
       });
 
       settingsManager.update(updatedSettings);

@@ -29,7 +29,7 @@ type AutoAdventureSettings implements ITaskSettings {
     preferHard: Boolean!
     normalMinHealth: Int!
     hardMinHealth: Int!
-    maxTravelTime: Int!
+    maxTravelTime: Duration!
     preferredVillageId: Int
 }
 
@@ -46,7 +46,7 @@ type AutoUnitsUnitSettings {
 
 type AutoUnitsBuildingSettings {
     allow: Boolean!
-    maxBuildTime: Int!
+    maxBuildTime: Duration!
     units: [AutoUnitsUnitSettings!]!
 }
 
@@ -94,7 +94,7 @@ input AutoAdventureSettingsInput {
     preferHard: Boolean!
     normalMinHealth: Int!
     hardMinHealth: Int!
-    maxTravelTime: Int!
+    maxTravelTime: DurationInput!
     preferredVillageId: Int
 }
 
@@ -121,7 +121,7 @@ input UpdateAutoUnitsBuildingSettingsInput {
     villageId: Int!
     buildingType: Int!
     allow: Boolean!
-    maxBuildTime: Int!
+    maxBuildTime: DurationInput!
 }
 
 input UpdateAutoUnitsSettingsInput {

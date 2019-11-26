@@ -1,7 +1,9 @@
 import { UnitsQueue } from '../../_models/units/unitsQueue';
 import { getPage } from '../../browser/getPage';
-import { getSecondsFromString } from '../../utils/getSeconds';
 import { accountContext } from '../../accountContext';
+import {
+  Duration,
+} from '../../_models/duration';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();
@@ -13,7 +15,8 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   }
 
   const lastUnitNode = queuedUnitNodes[queuedUnitNodes.length - 1];
-  unitQueue.duration = await lastUnitNode.$eval('[class=timer]', x => getSecondsFromString((x as HTMLElement).innerText));
+  const durationText = await lastUnitNode.$eval('[class=timer]', x => (x as HTMLElement).innerText);
+  unitQueue.duration = Duration.fromText(durationText);
 
   const unitIndexDecrement = (accountContext.gameInfo.tribe - 1) * 10;
 

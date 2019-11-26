@@ -1,8 +1,14 @@
+#import "./misc.graphql"
+
 fragment TaskSettingsFragment on ITaskSettings {
     allow
     coolDown {
-        min
-        max
+        min {
+            ...Duration
+        }
+        max {
+            ...Duration
+        }
     }
 }
 
@@ -15,7 +21,9 @@ fragment AutoUnitsUnitSettingsFragment on AutoUnitsUnitSettings {
 
 fragment AutoUnitsBuildingSettingsFragment on AutoUnitsBuildingSettings {
     allow
-    maxBuildTime
+    maxBuildTime {
+        ...Duration
+    }
     units {
         ...AutoUnitsUnitSettingsFragment
     }
@@ -36,7 +44,9 @@ query GetHeroSettings {
             adventureCriteria
             hardMinHealth
             normalMinHealth
-            maxTravelTime
+            maxTravelTime {
+                ...Duration
+            }
             preferHard
             preferredVillageId
         }

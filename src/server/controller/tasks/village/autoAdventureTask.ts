@@ -1,12 +1,12 @@
 import { BuildingType } from '../../../_enums/BuildingType';
 import { AdventureCriteria, AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdventureSettings';
 import { getPage } from '../../../browser/getPage';
-import { getSecondsFromString } from '../../../utils/getSeconds';
 import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { CoolDown } from '../../../_models/coolDown';
+import { Duration } from '../../../_models/duration';
 
 export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
@@ -14,7 +14,7 @@ export class AutoAdventureTask implements IBotTask {
   public allowExecution = (): boolean => {
     //  TODO rather generate this task only for the current village when hero can actually do it
     const settings = this.settings();
-    
+
     const { currentVillageId } = accountContext.villageService;
     return settings.allow && settings.preferredVillageId === currentVillageId;
   };
@@ -49,7 +49,7 @@ export class AutoAdventureTask implements IBotTask {
     const canDoHard = hero.health >= settings.hardMinHealth;
 
     const adventureNodes = await page.$$('tr[id]');
-    const adventures = await Promise.all(adventureNodes.map(async (node) => {
+    const adventures = (await Promise.all(adventureNodes.map(async (node) => {
       const duration = await node.$eval('[id*=walktime]', x => (x as HTMLElement).innerHTML.trim());
       const difficulty = await node.$eval('[class*=adventureDifficulty]', x => {
         const difficultyClass = /adventureDifficulty(\d+)/.exec(x.className);
@@ -66,14 +66,18 @@ export class AutoAdventureTask implements IBotTask {
       }
 
       return {
-        duration: getSecondsFromString(duration),
+        duration,
         isHard: difficulty === 0,
         linkElementId,
       };
-    }));
+    })))
+      .map(adventure => ({
+        ...adventure,
+        duration: Duration.fromText(adventure.duration),
+      }));
 
     let suitableAdventures = adventures
-      .filter(x => x.duration <= settings.maxTravelTime)
+      .filter(x => x.duration.totalSeconds() <= settings.maxTravelTime.totalSeconds())
       .filter(x => (x.isHard && canDoHard) || (!x.isHard && canDoNormal));
 
     if (!suitableAdventures.length) {
@@ -100,7 +104,7 @@ export class AutoAdventureTask implements IBotTask {
         break;
 
       case AdventureCriteria.Furthest: {
-        const adventure = getWithMaximum(suitableAdventures, x => x.duration);
+        const adventure = getWithMaximum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }
@@ -111,7 +115,7 @@ export class AutoAdventureTask implements IBotTask {
 
       case AdventureCriteria.Closest:
       default: {
-        const adventure = getWithMinimum(suitableAdventures, x => x.duration);
+        const adventure = getWithMinimum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }

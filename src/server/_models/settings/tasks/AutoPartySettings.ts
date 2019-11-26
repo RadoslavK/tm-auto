@@ -1,20 +1,32 @@
 import { PartyType } from '../../../_enums/PartyType';
-import { ITaskSettings } from '../../../_types/ITaskSettings';
+import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
+import { Fields } from '../../../../_shared/types';
+import { merge } from '../../../../_shared/merge';
 
-interface IParams extends ITaskSettings {
-  minCulturePoints: number;
-  partyType: PartyType;
+export interface IAutoPartySettingsParams extends ITaskSettingsParams {
+  readonly minCulturePoints: number;
+  readonly partyType: PartyType;
 }
 
-export class AutoPartySettings implements IParams {
-  allow = false;
-  coolDown: CoolDown = new CoolDown();
+const defaults: Fields<AutoPartySettings> = {
+  allow: false,
+  minCulturePoints: 0,
+  coolDown: new CoolDown(),
+  partyType: PartyType.Small,
+};
 
-  minCulturePoints = 0;
-  partyType: PartyType = PartyType.Small;
+export class AutoPartySettings implements IAutoPartySettingsParams {
+  allow: boolean;
+  coolDown: CoolDown;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  minCulturePoints: number;
+  partyType: PartyType;
+
+  constructor(params: Partial<IAutoPartySettingsParams> = {}) {
+    Object.assign(this, merge(defaults, {
+      ...params,
+      coolDown: params.coolDown && new CoolDown(params.coolDown),
+    }));
   }
 }

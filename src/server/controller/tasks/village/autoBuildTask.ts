@@ -18,6 +18,7 @@ import { updateActualResources } from '../../actions/village/updateResources';
 import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { fieldIds } from '../../../constants/fieldIds';
+import { Duration } from '../../../_models/duration';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -72,10 +73,11 @@ export class AutoBuildTask implements IBotTask {
       finishedAt = this.m_buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Any);
     }
 
-    const delay = finishedAt && Math.floor(((new Date() as any) - (finishedAt as any)) / 1000);
+    // seconds
+    const finishedIn = finishedAt && Math.floor(((new Date() as any) - (finishedAt as any)) / 1000);
 
     return {
-      nextCoolDown: delay ? CoolDown.fromDelay(delay) : null,
+      nextCoolDown: finishedIn ? CoolDown.fromDuration(Duration.fromSeconds(finishedIn)) : null,
     };
   };
 

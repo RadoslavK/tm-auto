@@ -80,6 +80,7 @@ declare module '*/graphql_operations/misc.graphql' {
 export const CostFragment: DocumentNode;
 export const CoordsFragment: DocumentNode;
 export const VillageFragment: DocumentNode;
+export const Duration: DocumentNode;
 
   export default defaultDocument;
 }

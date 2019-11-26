@@ -1,25 +1,35 @@
-import { ITaskSettings } from '../../../_types/ITaskSettings';
+import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
+import { Duration } from '../../duration';
+import { Fields } from '../../../../_shared/types';
+import { merge } from '../../../../_shared/merge';
 
-interface IParams extends ITaskSettings {
+export interface IAutoBuildSettingsParams extends ITaskSettingsParams {
   readonly autoCropFields: boolean;
   readonly minCrop: number;
 }
 
-export class AutoBuildSettings implements IParams {
-  public allow = true;
-  public coolDown: CoolDown = new CoolDown();
+const defaults: Fields<AutoBuildSettings> = {
+  allow: true,
+  coolDown: new CoolDown({
+    min: new Duration({ minutes: 4 }),
+    max: new Duration({ minutes: 7 }),
+  }),
+  autoCropFields: false,
+  minCrop: 0,
+};
 
-  readonly autoCropFields: boolean = false;
-  readonly minCrop: number = 0;
+export class AutoBuildSettings implements IAutoBuildSettingsParams {
+  public allow: boolean;
+  public coolDown: CoolDown;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  readonly autoCropFields: boolean;
+  readonly minCrop: number;
 
-    if (this.coolDown instanceof CoolDown) {
-      return;
-    }
-
-    this.coolDown = new CoolDown(this.coolDown);
+  constructor(params: Partial<IAutoBuildSettingsParams> = {}) {
+    Object.assign(this, merge(defaults, {
+      ...params,
+      coolDown: params.coolDown && new CoolDown(params.coolDown),
+    }));
   }
 }

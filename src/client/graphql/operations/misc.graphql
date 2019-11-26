@@ -38,3 +38,9 @@ fragment VillageFragment on Village {
         }
     }
 }
+
+fragment Duration on Duration {
+    hours
+    minutes
+    seconds
+}

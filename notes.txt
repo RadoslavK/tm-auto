@@ -18,6 +18,18 @@ aj ostatne settingy updatovat ciastocne ale requestovat ked sa da
 
 
 
+pridat indikator aktualnej dediny
+
+ked sa prepne dedina ostat v tej istej casti UI
+
+pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
+
+prerobit classe nech defaulty nastavuju az v konstruktore pokial sa nenachadzali v params
+
+napisat nejaku funkciu ktora zmerguje defaults a this
+
+
+
 v klientovi nepouzivat referencie zo serveru..  server by mal mat co najviac definicii z graphql ktore sa vygeneruju aj na klientovi a importovat si moze aj tie
 
 v queue ukazovat na spotoch aky je v poradi pokial je v queue

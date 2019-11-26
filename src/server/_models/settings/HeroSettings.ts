@@ -1,13 +1,25 @@
-import { AutoAdventureSettings } from './tasks/AutoAdventureSettings';
+import {
+  AutoAdventureSettings,
+  IAutoAdventureSettingsParams,
+} from './tasks/AutoAdventureSettings';
+import { Fields } from '../../../_shared/types';
+import { merge } from '../../../_shared/merge';
 
-interface IParams {
-  autoAdventure: AutoAdventureSettings;
+export interface IHeroSettingsParams {
+  readonly autoAdventure: IAutoAdventureSettingsParams;
 }
 
-export class HeroSettings implements IParams {
+const defaults: Fields<HeroSettings> = {
+  autoAdventure: new AutoAdventureSettings(),
+};
+
+export class HeroSettings implements IHeroSettingsParams {
   public autoAdventure: AutoAdventureSettings;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IHeroSettingsParams> = {}) {
+    Object.assign(this, merge(defaults, {
+      ...params,
+      autoAdventure: new AutoAdventureSettings(params.autoAdventure),
+    }));
   }
 }

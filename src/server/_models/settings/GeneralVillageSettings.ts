@@ -1,11 +1,18 @@
-interface IParams {
-  allowTasks: boolean;
+import { Fields } from '../../../_shared/types';
+import { merge } from '../../../_shared/merge';
+
+export interface IGeneralVillageSettingsParams {
+  readonly allowTasks: boolean;
 }
 
-export class GeneralVillageSettings implements IParams {
-  public allowTasks = true;
+const defaults: Fields<GeneralVillageSettings> = {
+  allowTasks: true,
+};
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+export class GeneralVillageSettings implements IGeneralVillageSettingsParams {
+  public allowTasks: boolean;
+
+  constructor(params: Partial<IGeneralVillageSettingsParams> = {}) {
+    Object.assign(this, merge(defaults, params));
   }
 }

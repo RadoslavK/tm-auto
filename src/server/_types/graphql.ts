@@ -20,7 +20,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: Scalars['Int'],
+  readonly maxTravelTime: IDuration,
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
@@ -31,7 +31,7 @@ export type IAutoAdventureSettingsInput = {
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: Scalars['Int'],
+  readonly maxTravelTime: IDurationInput,
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
@@ -66,7 +66,7 @@ export type IAutoBuildVillageSettingsInput = {
 export type IAutoUnitsBuildingSettings = {
   readonly __typename?: 'AutoUnitsBuildingSettings',
   readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: Scalars['Int'],
+  readonly maxBuildTime: IDuration,
   readonly units: ReadonlyArray<IAutoUnitsUnitSettings>,
 };
 
@@ -168,13 +168,13 @@ export type IClearQueueInput = {
 
 export type ICoolDown = {
   readonly __typename?: 'CoolDown',
-  readonly min: Scalars['Int'],
-  readonly max: Scalars['Int'],
+  readonly min: IDuration,
+  readonly max: IDuration,
 };
 
 export type ICoolDownInput = {
-  readonly min: Scalars['Int'],
-  readonly max: Scalars['Int'],
+  readonly min: IDurationInput,
+  readonly max: IDurationInput,
 };
 
 export type ICoords = {
@@ -200,6 +200,19 @@ export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
   readonly fieldId: Scalars['Int'],
   readonly villageId: Scalars['Int'],
+};
+
+export type IDuration = {
+  readonly __typename?: 'Duration',
+  readonly hours: Scalars['Int'],
+  readonly minutes: Scalars['Int'],
+  readonly seconds: Scalars['Int'],
+};
+
+export type IDurationInput = {
+  readonly hours: Scalars['Int'],
+  readonly minutes: Scalars['Int'],
+  readonly seconds: Scalars['Int'],
 };
 
 export type IEnqueueBuildingInput = {
@@ -542,7 +555,7 @@ export type IUpdateAutoUnitsBuildingSettingsInput = {
   readonly villageId: Scalars['Int'],
   readonly buildingType: Scalars['Int'],
   readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: Scalars['Int'],
+  readonly maxBuildTime: IDurationInput,
 };
 
 export type IUpdateAutoUnitsSettingsInput = {
@@ -722,6 +735,7 @@ export type IResolversTypes = {
   AutoAdventureSettings: ResolverTypeWrapper<IAutoAdventureSettings>,
   ITaskSettings: ResolverTypeWrapper<IITaskSettings>,
   CoolDown: ResolverTypeWrapper<ICoolDown>,
+  Duration: ResolverTypeWrapper<IDuration>,
   VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
@@ -740,6 +754,7 @@ export type IResolversTypes = {
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
   AutoAdventureSettingsInput: IAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
+  DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
   GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
@@ -793,6 +808,7 @@ export type IResolversParentTypes = {
   AutoAdventureSettings: IAutoAdventureSettings,
   ITaskSettings: IITaskSettings,
   CoolDown: ICoolDown,
+  Duration: IDuration,
   VillageSettings: IVillageSettings,
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
@@ -811,6 +827,7 @@ export type IResolversParentTypes = {
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
   AutoAdventureSettingsInput: IAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
+  DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
   GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
@@ -830,7 +847,7 @@ export type IAutoAdventureSettingsResolvers<ContextType = any, ParentType extend
   preferHard: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   normalMinHealth: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   hardMinHealth: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  maxTravelTime: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  maxTravelTime: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
   preferredVillageId: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
 };
 
@@ -854,7 +871,7 @@ export type IAutoBuildSettingsResolvers<ContextType = any, ParentType extends IR
 
 export type IAutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoUnitsBuildingSettings'] = IResolversParentTypes['AutoUnitsBuildingSettings']> = {
   allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
-  maxBuildTime: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  maxBuildTime: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
   units: Resolver<ReadonlyArray<IResolversTypes['AutoUnitsUnitSettings']>, ParentType, ContextType>,
 };
 
@@ -924,8 +941,8 @@ export type IBuildingSpotsResolvers<ContextType = any, ParentType extends IResol
 };
 
 export type ICoolDownResolvers<ContextType = any, ParentType extends IResolversParentTypes['CoolDown'] = IResolversParentTypes['CoolDown']> = {
-  min: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  max: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  min: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
+  max: Resolver<IResolversTypes['Duration'], ParentType, ContextType>,
 };
 
 export type ICoordsResolvers<ContextType = any, ParentType extends IResolversParentTypes['Coords'] = IResolversParentTypes['Coords']> = {
@@ -941,6 +958,12 @@ export type ICostResolvers<ContextType = any, ParentType extends IResolversParen
 export interface IDateScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Date'], any> {
   name: 'Date'
 }
+
+export type IDurationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Duration'] = IResolversParentTypes['Duration']> = {
+  hours: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  minutes: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  seconds: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+};
 
 export type IGeneralSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralSettings'] = IResolversParentTypes['GeneralSettings']> = {
   allowTasks: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
@@ -1128,6 +1151,7 @@ export type IResolvers<ContextType = any> = {
   Coords: ICoordsResolvers<ContextType>,
   Cost: ICostResolvers<ContextType>,
   Date: GraphQLScalarType,
+  Duration: IDurationResolvers<ContextType>,
   GeneralSettings: IGeneralSettingsResolvers<ContextType>,
   GeneralVillageSettings: IGeneralVillageSettingsResolvers<ContextType>,
   HeroInformation: IHeroInformationResolvers<ContextType>,

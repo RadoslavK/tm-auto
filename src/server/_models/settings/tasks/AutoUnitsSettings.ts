@@ -1,48 +1,85 @@
 // eslint-disable-next-line max-classes-per-file
 import { BuildingType } from '../../../_enums/BuildingType';
-import { ITaskSettings } from '../../../_types/ITaskSettings';
-import { getSeconds } from '../../../utils/getSeconds';
+import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
+import {
+  Duration,
+  IDurationParams,
+} from '../../duration';
+import { merge } from '../../../../_shared/merge';
+import { Fields } from '../../../../_shared/types';
+import { mapRecord } from '../../../../_shared/objectUtils';
 
-interface IAutoUnitsUnitSettings {
+export interface IAutoUnitsUnitSettingsParams {
+  readonly index: number;
+  readonly autoBuild: boolean;
+  readonly trainForever: boolean;
+  readonly targetAmount: number;
+}
+
+const defaultUnitSettings: Fields<AutoUnitsUnitSettings> = {
+  index: 0,
+  autoBuild: false,
+  trainForever: false,
+  targetAmount: 0,
+};
+
+export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettingsParams {
   index: number;
   autoBuild: boolean;
   trainForever: boolean;
   targetAmount: number;
-}
 
-export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettings {
-  index = 0;
-  autoBuild = false;
-  trainForever = false;
-  targetAmount = 0;
-
-  constructor(params: Partial<IAutoUnitsUnitSettings> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IAutoUnitsUnitSettingsParams> = {}) {
+    Object.assign(this, merge(defaultUnitSettings, params));
   }
 }
 
-interface IAutoUnitsBuildingSettings {
+export interface IAutoUnitsBuildingSettingsParams {
+  readonly allow: boolean;
+  readonly maxBuildTime: IDurationParams;
+}
+
+const defaults: Fields<AutoUnitsBuildingSettings> = {
+  allow: true,
+  maxBuildTime: new Duration({ hours: 1 }),
+};
+
+export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettingsParams {
   allow: boolean;
-  maxBuildTime: number;
-}
+  maxBuildTime: Duration;
 
-export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettings {
-  allow = true;
-  maxBuildTime: number = getSeconds({ hours: 1 });
-
-  constructor(params: Partial<IAutoUnitsBuildingSettings> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IAutoUnitsBuildingSettingsParams> = {}) {
+    Object.assign(this, merge(defaults, {
+      ...params,
+      maxBuildTime: params.maxBuildTime && new Duration(params.maxBuildTime),
+    }));
   }
 }
 
-interface IParams extends ITaskSettings {
-  minCrop: number;
-  units: AutoUnitsUnitSettings[];
-  buildings: Record<BuildingType, AutoUnitsBuildingSettings>;
+export interface IAutoUnitsSettingsParams extends ITaskSettingsParams {
+  readonly minCrop: number;
+  readonly units: IAutoUnitsUnitSettingsParams[];
+  readonly buildings: Record<BuildingType, IAutoUnitsBuildingSettingsParams>;
 }
 
-export class AutoUnitsSettings implements IParams {
+const defaultSettings: Fields<AutoUnitsSettings> = {
+  allow: false,
+  coolDown: new CoolDown({
+    min: new Duration({ minutes: 10 }),
+    max: new Duration({ minutes: 20 }),
+  }),
+  minCrop: 0,
+  units: [...new Array(10).keys()].map(index => new AutoUnitsUnitSettings({ index: index + 1 })),
+  buildings: {
+    [BuildingType.Barracks]: new AutoUnitsBuildingSettings(),
+    [BuildingType.Stable]: new AutoUnitsBuildingSettings(),
+    [BuildingType.Workshop]: new AutoUnitsBuildingSettings(),
+    [BuildingType.Residence]: new AutoUnitsBuildingSettings({ maxBuildTime: new Duration({ hours: 12 }) }),
+  } as Record<BuildingType, AutoUnitsBuildingSettings>,
+};
+
+export class AutoUnitsSettings implements IAutoUnitsSettingsParams {
   public allow: boolean;
   public coolDown: CoolDown;
 
@@ -52,25 +89,12 @@ export class AutoUnitsSettings implements IParams {
 
   public units: AutoUnitsUnitSettings[];
 
-  constructor(params: Partial<IParams> = {}) {
-    this.buildings[BuildingType.Barracks] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Barracks]);
-    this.buildings[BuildingType.Stable] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Stable]);
-    this.buildings[BuildingType.Workshop] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Workshop]);
-    this.buildings[BuildingType.Residence] = new AutoUnitsBuildingSettings(params.buildings && params.buildings[BuildingType.Residence] || { maxBuildTime: getSeconds({ hours: 12 }) });
-
-    this.units = params.units
-      ? params.units.map(unitSettings => new AutoUnitsUnitSettings(unitSettings))
-      : [...new Array(10).keys()].map(index => new AutoUnitsUnitSettings({ index: index + 1 }));
-
-    this.allow = params.allow || false;
-    this.minCrop = params.minCrop || 0;
-
-    this.coolDown = params.coolDown
-      ? new CoolDown(this.coolDown)
-      : new CoolDown({
-        min: getSeconds({ minutes: 10 }),
-        max: getSeconds({ minutes: 20 }),
-      });
+  constructor(params: Partial<IAutoUnitsSettingsParams> = {}) {
+    Object.assign(this, merge(defaultSettings, {
+      ...params,
+      coolDown: params.coolDown && new CoolDown(params.coolDown),
+      buildings: params.buildings && mapRecord(params.buildings, b => new AutoUnitsBuildingSettings(b)),
+    }));
   }
 
   public forBuilding = (type: BuildingType): AutoUnitsBuildingSettings => {

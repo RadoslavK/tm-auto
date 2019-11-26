@@ -16,7 +16,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: Scalars['Int'],
+  readonly maxTravelTime: IDuration,
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
@@ -27,7 +27,7 @@ export type IAutoAdventureSettingsInput = {
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: Scalars['Int'],
+  readonly maxTravelTime: IDurationInput,
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
@@ -58,7 +58,7 @@ export type IAutoBuildVillageSettingsInput = {
 
 export type IAutoUnitsBuildingSettings = {
   readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: Scalars['Int'],
+  readonly maxBuildTime: IDuration,
   readonly units: ReadonlyArray<IAutoUnitsUnitSettings>,
 };
 
@@ -149,13 +149,13 @@ export type IClearQueueInput = {
 };
 
 export type ICoolDown = {
-  readonly min: Scalars['Int'],
-  readonly max: Scalars['Int'],
+  readonly min: IDuration,
+  readonly max: IDuration,
 };
 
 export type ICoolDownInput = {
-  readonly min: Scalars['Int'],
-  readonly max: Scalars['Int'],
+  readonly min: IDurationInput,
+  readonly max: IDurationInput,
 };
 
 export type ICoords = {
@@ -179,6 +179,18 @@ export type IDequeueBuildingAtFieldInput = {
   readonly deleteAll: Scalars['Boolean'],
   readonly fieldId: Scalars['Int'],
   readonly villageId: Scalars['Int'],
+};
+
+export type IDuration = {
+  readonly hours: Scalars['Int'],
+  readonly minutes: Scalars['Int'],
+  readonly seconds: Scalars['Int'],
+};
+
+export type IDurationInput = {
+  readonly hours: Scalars['Int'],
+  readonly minutes: Scalars['Int'],
+  readonly seconds: Scalars['Int'],
 };
 
 export type IEnqueueBuildingInput = {
@@ -506,7 +518,7 @@ export type IUpdateAutoUnitsBuildingSettingsInput = {
   readonly villageId: Scalars['Int'],
   readonly buildingType: Scalars['Int'],
   readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: Scalars['Int'],
+  readonly maxBuildTime: IDurationInput,
 };
 
 export type IUpdateAutoUnitsSettingsInput = {
@@ -740,6 +752,8 @@ export type IVillageFragmentFragment = (
   & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly production: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
 );
 
+export type IDurationFragment = Pick<IDuration, 'hours' | 'minutes' | 'seconds'>;
+
 export type IGetPlayerInfoQueryVariables = {};
 
 
@@ -806,17 +820,17 @@ export type IOnQueueUpdatedSubscription = Pick<ISubscription, 'onQueueUpdated'>;
 
 type ITaskSettingsFragment_AutoAdventureSettings_Fragment = (
   Pick<IAutoAdventureSettings, 'allow'>
-  & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
+  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
 type ITaskSettingsFragment_AutoBuildSettings_Fragment = (
   Pick<IAutoBuildSettings, 'allow'>
-  & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
+  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
 type ITaskSettingsFragment_AutoUnitsSettings_Fragment = (
   Pick<IAutoUnitsSettings, 'allow'>
-  & { readonly coolDown: Pick<ICoolDown, 'min' | 'max'> }
+  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
 export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment | ITaskSettingsFragment_AutoUnitsSettings_Fragment;
@@ -824,8 +838,8 @@ export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureS
 export type IAutoUnitsUnitSettingsFragmentFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
 
 export type IAutoUnitsBuildingSettingsFragmentFragment = (
-  Pick<IAutoUnitsBuildingSettings, 'allow' | 'maxBuildTime'>
-  & { readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragmentFragment> }
+  Pick<IAutoUnitsBuildingSettings, 'allow'>
+  & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragmentFragment> }
 );
 
 export type IGetGeneralSettingsQueryVariables = {};
@@ -837,7 +851,8 @@ export type IGetHeroSettingsQueryVariables = {};
 
 
 export type IGetHeroSettingsQuery = { readonly hero: { readonly autoAdventure: (
-      Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'maxTravelTime' | 'preferHard' | 'preferredVillageId'>
+      Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
+      & { readonly maxTravelTime: IDurationFragment }
       & ITaskSettingsFragment_AutoAdventureSettings_Fragment
     ) } };
 

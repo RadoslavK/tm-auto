@@ -6,26 +6,15 @@ import React, {
 import {
   makeStyles,
 } from '@material-ui/core';
+import { IDuration } from '../../../_types/graphql';
 
 interface IProps {
-  readonly onChange: (value: number) => void;
-  readonly value: number;
+  readonly onChange: (value: IDuration) => void;
+  readonly value: IDuration;
 }
 
 const useStyles = makeStyles({
 });
-
-const getInitialState = (totalSeconds: number) => {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
-  const seconds = totalSeconds - hours * 3600 - minutes * 60;
-
-  return {
-    hours,
-    minutes,
-    seconds,
-  };
-};
 
 export const Duration: React.FC<IProps> = (props) => {
   const {
@@ -35,7 +24,7 @@ export const Duration: React.FC<IProps> = (props) => {
 
   const classes = useStyles();
 
-  const [state, setState] = useState(getInitialState(value));
+  const [state, setState] = useState(value);
 
   const {
     seconds,
@@ -49,10 +38,9 @@ export const Duration: React.FC<IProps> = (props) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      const totalSeconds = ((hours * 60) + minutes) * 60 + seconds;
-      onChange(totalSeconds);
+      onChange(state);
     }
-  }, [hours, minutes, seconds, onChange]);
+  }, [state, onChange]);
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
     const {

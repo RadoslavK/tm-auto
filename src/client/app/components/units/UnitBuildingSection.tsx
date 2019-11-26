@@ -11,6 +11,7 @@ import { BuildingType } from '../../../../server/_enums/BuildingType';
 import { UnitSettings } from './UnitSettings';
 import {
   IAutoUnitsBuildingSettings,
+  IDuration,
   IUpdateAutoUnitsBuildingSettingsMutation,
   IUpdateAutoUnitsBuildingSettingsMutationVariables,
 } from '../../../_types/graphql';
@@ -111,7 +112,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     }));
   };
 
-  const updateMaxBuildTime = useCallback((newValue: number) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), [setState]);
+  const updateMaxBuildTime = useCallback((newValue: IDuration) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), [setState]);
 
   return (
     <div className={className}>

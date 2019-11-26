@@ -113,10 +113,10 @@ export class AutoUnitsTask implements IBotTask {
       const buildTime = getActualUnitBuildTime(uIndex, speed, unitBuilding.level.actual);
 
       if (maxAllowedBuildingTime) {
-        const freeBuildingTimeToFill = maxAllowedBuildingTime - ongoingBuildingTime;
+        const freeBuildingTimeToFill = maxAllowedBuildingTime.totalSeconds() - ongoingBuildingTime.totalSeconds();
 
         // we can ignore this for residence or palace
-        maxPossibleAmountToBuild = Math.min(maxPossibleAmountToBuild, Math.floor(freeBuildingTimeToFill / buildTime));
+        maxPossibleAmountToBuild = Math.min(maxPossibleAmountToBuild, Math.floor(freeBuildingTimeToFill / buildTime.totalSeconds()));
       }
 
       if (maxPossibleAmountToBuild <= 0) {
@@ -125,7 +125,7 @@ export class AutoUnitsTask implements IBotTask {
 
       suitableToBuild[uIndex] = maxPossibleAmountToBuild;
       startingVillageRes = startingVillageRes.subtract(cost.multiply(maxPossibleAmountToBuild));
-      ongoingBuildingTime += buildTime * maxPossibleAmountToBuild;
+      ongoingBuildingTime = ongoingBuildingTime.add(buildTime.multiply(maxPossibleAmountToBuild));
     });
 
     // can build at least 1 with res and fit in queue

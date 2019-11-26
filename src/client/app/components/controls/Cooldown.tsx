@@ -3,7 +3,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { ICoolDown } from '../../../_types/graphql';
+import {
+  ICoolDown,
+  IDuration,
+} from '../../../_types/graphql';
 import { Duration } from './Duration';
 
 interface IProps {
@@ -17,7 +20,7 @@ export const CoolDown: React.FC<IProps> = (props) => {
     value,
   } = props;
 
-  const [state, setState] = useState({ ...value });
+  const [state, setState] = useState(value);
 
   useEffect(() => {
     if (state !== value) {
@@ -30,8 +33,8 @@ export const CoolDown: React.FC<IProps> = (props) => {
     max,
   } = state;
 
-  const updateMin = useCallback((newMin: number) => setState(prevState => ({ ...prevState, min: newMin })), [setState]);
-  const updateMax = useCallback((newMax: number) => setState(prevState => ({ ...prevState, max: newMax })), [setState]);
+  const updateMin = useCallback((newMin: IDuration) => setState(prevState => ({ ...prevState, min: newMin })), [setState]);
+  const updateMax = useCallback((newMax: IDuration) => setState(prevState => ({ ...prevState, max: newMax })), [setState]);
 
   return (
     <div>

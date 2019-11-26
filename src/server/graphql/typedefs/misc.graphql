@@ -19,12 +19,24 @@ type Coords {
     y: Int!
 }
 
+type Duration {
+    hours: Int!
+    minutes: Int!
+    seconds: Int!
+}
+
 type CoolDown {
-    min: Int!
-    max: Int!
+    min: Duration!
+    max: Duration!
 }
 
 input CoolDownInput {
-    min: Int!
-    max: Int!
+    min: DurationInput!
+    max: DurationInput!
+}
+
+input DurationInput {
+    hours: Int!
+    minutes: Int!
+    seconds: Int!
 }

@@ -1,5 +1,9 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { UpdateAutoAdventureSettings } from "*/graphql_operations/settings.graphql";
 import { GetVillages } from '*/graphql_operations/village.graphql';
 import { AdventureCriteria } from '../../../../../server/_models/settings/tasks/AutoAdventureSettings';
@@ -7,12 +11,14 @@ import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
 import {
   IAutoAdventureSettings,
   ICoolDown,
+  IDuration,
   IGetVillagesQuery,
   IUpdateAutoAdventureSettingsInput,
   IUpdateAutoAdventureSettingsMutation,
   IUpdateAutoAdventureSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
+import { Duration } from '../../controls/Duration';
 
 interface IProps {
   readonly settings: IAutoAdventureSettings;
@@ -58,6 +64,8 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   }, [state, settings, updateSettings]);
 
   const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages);
+
+  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), [setState]);
 
   if (loading || !data) {
     return null;
@@ -148,7 +156,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
 
       <div>
         <label htmlFor="maxTravelTime">Max travel time</label>
-        <input type="number" value={maxTravelTime} onChange={onNumberChange} id="maxTravelTime" name="maxTravelTime" />
+        <Duration onChange={onMaxTravelTimeChange} value={maxTravelTime}/>
       </div>
 
       <div>

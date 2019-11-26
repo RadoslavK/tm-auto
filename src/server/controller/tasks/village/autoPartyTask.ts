@@ -62,7 +62,7 @@ export class AutoPartyTask implements IBotTask {
       return undefined;
     }
 
-    const nextCoolDown = CoolDown.fromDelay(partyDuration);
+    const nextCoolDown = CoolDown.fromDuration(partyDuration);
 
     accountContext.logsService.logText(`Throwing ${partyType} parties`, true);
 
