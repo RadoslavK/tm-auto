@@ -14,11 +14,14 @@ import { isInfrastructure } from '../../../utils/buildingUtils';
 import { randomElement } from '../../../utils/randomElement';
 import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
-import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { fieldIds } from '../../../constants/fieldIds';
 import { Duration } from '../../../_models/duration';
 import { ITribe } from '../../../_types/graphql';
+import {
+  BotTaskResult,
+  IBotTask,
+} from '../_types';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -38,7 +41,7 @@ export class AutoBuildTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResultParams | void> => {
+  public execute = async (): BotTaskResult => {
     const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
     await ensurePage(path);
 

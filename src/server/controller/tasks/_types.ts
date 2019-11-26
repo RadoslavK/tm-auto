@@ -1,10 +1,10 @@
-import { CoolDown } from './coolDown';
+import { CoolDown } from '../../_models/coolDown';
 
-export interface IBotTaskResultParams {
+interface IBotTaskResult {
   readonly nextCoolDown?: CoolDown | null;
 }
 
-export type BotTaskResult = Promise<IBotTaskResultParams | void>;
+export type BotTaskResult = Promise<IBotTaskResult | void>;
 
 export interface IBotTask {
   readonly allowExecution: () => boolean;

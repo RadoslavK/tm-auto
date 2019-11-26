@@ -15,11 +15,11 @@ import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';
 import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
-import { IBotTask } from '../../_models/tasks';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { accountContext } from '../../accountContext';
 import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
 import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
+import { IBotTask } from './_types';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;

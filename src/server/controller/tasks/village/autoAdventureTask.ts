@@ -3,11 +3,14 @@ import { AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdven
 import { getPage } from '../../../browser/getPage';
 import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
-import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
 import { IAdventureCriteria } from '../../../_types/graphql';
+import {
+  BotTaskResult,
+  IBotTask,
+} from '../_types';
 
 export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
@@ -23,7 +26,7 @@ export class AutoAdventureTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<void> => {
+  public execute = async (): BotTaskResult => {
     const village = accountContext.villageService.currentVillage();
     const settings = this.settings();
 

@@ -6,8 +6,11 @@ import { getPage } from '../../../browser/getPage';
 import { partiesInfo } from '../../../constants/partiesInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { ensureBuildingSpotPage} from '../../actions/ensurePage';
-import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
+import {
+  BotTaskResult,
+  IBotTask,
+} from '../_types';
 
 export class AutoPartyTask implements IBotTask {
   private readonly m_village: Village;
@@ -22,7 +25,7 @@ export class AutoPartyTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResultParams | undefined> => {
+  public execute = async (): BotTaskResult => {
     const {
       partyType,
       minCulturePoints,

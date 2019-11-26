@@ -8,10 +8,12 @@ import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
-import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { CoolDown } from '../../../_models/coolDown';
-import { unitsService } from '../../../services/unitsService';
+import {
+  BotTaskResult,
+  IBotTask,
+} from '../_types';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -29,7 +31,7 @@ export class AutoUnitsTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<void> => {
+  public execute = async (): BotTaskResult => {
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
     await this.analyzeQueueAndBuildUnits(BuildingType.Stable);
     await this.analyzeQueueAndBuildUnits(BuildingType.Workshop);
