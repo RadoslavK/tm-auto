@@ -130,7 +130,7 @@ export class AvailableBuildingTypesService {
       return false;
     }
 
-    if (conditions.playerTribe !== null
+    if (conditions.playerTribe !== 0
       && getTribeFromIndex(conditions.playerTribe) !== accountContext.gameInfo.tribe) {
       return false;
     }
