@@ -2,28 +2,34 @@ import { Buildings } from '../buildings';
 import { Coords } from '../coords';
 import { Units } from '../units';
 import { VillageResources } from './villageResources';
+import { Fields } from '../../../_shared/types';
+import { merge } from '../../../_shared/merge';
+import { IVillage } from '../../_types/graphql';
 
-interface IParams {
-  readonly buildings: Buildings;
-  readonly units: Units;
-  readonly resources: VillageResources;
-  coords: Coords;
-  id: number;
-  isCapital: boolean;
-  name: string;
-}
+const defaults: Fields<Village> = {
+  buildings: new Buildings(),
+  units: new Units(),
+  coords: new Coords(),
+  id: 0,
+  isCapital: false,
+  name: '',
+  resources: new VillageResources(),
+};
 
-export class Village implements IParams {
-  public readonly buildings: Buildings = new Buildings();
-  public readonly units: Units = new Units();
-  public coords: Coords = new Coords();
-  public id = 0;
-  public isCapital = false;
+export class Village implements IVillage {
+  public buildings: Buildings;
+  public units: Units;
+  public coords: Coords;
+  public id: number;
+  public isCapital: boolean;
   // TODO dynamically update
-  public name = '';
-  public readonly resources: VillageResources = new VillageResources();
+  public name: string;
+  public resources: VillageResources;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IVillage> = {}) {
+    Object.assign(this, merge(defaults, {
+      ...params,
+      resources: params.resources && new VillageResources(params.resources),
+    }));
   }
 }
