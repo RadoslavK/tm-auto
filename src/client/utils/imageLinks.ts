@@ -1,3 +1,6 @@
+import { Tribe } from '../_types/graphql';
+import { getTribeIndex } from '../../_shared/tribeIndex';
+
 const baseUrl = 'images';
 
 const resources = {
@@ -12,7 +15,7 @@ const resources = {
 export const imageLinks = {
   getBuilding: (buildingType: number): string => `${baseUrl}/buildings/${buildingType}.png`,
 
-  getUnit: (tribe: number, index: number): string => `${baseUrl}/units/${tribe}/u${(tribe - 1) * 10 + index}.gif`,
+  getUnit: (tribe: Tribe, index: number): string => `${baseUrl}/units/${getTribeIndex(tribe)}/u${(getTribeIndex(tribe) - 1) * 10 + index}.gif`,
 
   resources,
 

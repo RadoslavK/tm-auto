@@ -1,19 +1,24 @@
-import { Tribe } from '../_enums/Tribe';
+import {
+  IGameInfo,
+  ITribe,
+} from '../_types/graphql';
+import { Fields } from '../../_shared/types';
+import { merge } from '../../_shared/merge';
 
-//  TODO has gold club featury
+//  TODO has gold club feature
 
-interface IParams {
-  speed: number;
-  tribe: Tribe;
-  allyId: number | null;
-}
+const defaults: Fields<GameInfo> = {
+  speed: 0,
+  tribe: ITribe.Romans,
+  allyId: null,
+};
 
-export class GameInfo implements IParams {
-  public speed = 0;
-  public tribe: Tribe = Tribe.None;
-  public allyId: number | null = null;
+export class GameInfo implements IGameInfo {
+  public speed: number;
+  public tribe: ITribe;
+  public allyId: number | null;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IGameInfo> = {}) {
+    Object.assign(this, merge(defaults, params));
   }
 }

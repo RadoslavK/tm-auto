@@ -6,6 +6,7 @@ import {
   IUnitInfo,
   unitInfos,
 } from '../bootstrap/loadInfo';
+import { getTribeIndex } from '../../_shared/tribeIndex';
 
 class UnitsService {
   public getUnitBuildingType = (index: number): BuildingType => {
@@ -17,7 +18,7 @@ class UnitsService {
   public getUnitInfo = (index: number): IUnitInfo => {
     const { tribe } = accountContext.gameInfo;
 
-    const unitInfo = unitInfos[((tribe - 1) * 10) + index];
+    const unitInfo = unitInfos[((getTribeIndex(tribe) - 1) * 10) + index];
 
     if (!unitInfo) {
       throw new Error(`Unit info for unit index ${index} not found, tribe: ${tribe}`);

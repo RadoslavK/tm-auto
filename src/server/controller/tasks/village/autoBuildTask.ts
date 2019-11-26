@@ -1,7 +1,6 @@
 import { BuildingSpotType } from '../../../_enums/BuildingSpotType';
 import { BuildingType } from '../../../_enums/BuildingType';
 import { TravianPath } from '../../../_enums/TravianPath';
-import { Tribe } from '../../../_enums/Tribe';
 import { Buildings } from '../../../_models/buildings';
 import { QueuedBuilding } from '../../../_models/buildings/queue/queuedBuilding';
 import { CoolDown } from '../../../_models/coolDown';
@@ -19,6 +18,7 @@ import { IBotTask, IBotTaskResultParams } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { fieldIds } from '../../../constants/fieldIds';
 import { Duration } from '../../../_models/duration';
+import { ITribe } from '../../../_types/graphql';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -50,7 +50,7 @@ export class AutoBuildTask implements IBotTask {
       return undefined;
     }
 
-    const isRoman = accountContext.gameInfo.tribe === Tribe.Romans;
+    const isRoman = accountContext.gameInfo.tribe === ITribe.Romans;
 
     let finishedAt: Date | undefined;
     if (isRoman) {

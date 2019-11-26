@@ -3,10 +3,6 @@ import { accountContext } from '../../accountContext';
 
 export const playerResolvers: Resolvers = {
   Query: {
-    playerInfo: () => {
-      return {
-        tribe: accountContext.gameInfo.tribe,
-      };
-    },
+    gameInfo: () => accountContext.gameInfo,
   },
 };

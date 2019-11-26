@@ -4,7 +4,7 @@ import { BuildingCategory } from '../_enums/BuildingCategory';
 import { BuildingConditions } from '../_models/buildings/buildingConditions';
 import { Cost } from '../_models/misc/cost';
 import { BuildingType } from '../_enums/BuildingType';
-import { Tribe } from '../_enums/Tribe';
+import { ITribe } from '../_types/graphql';
 
 const unitsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'unitsInfo.json');
 const buildingsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'buildingsInfo.json');
@@ -54,7 +54,7 @@ export interface IUnitInfo {
   readonly buildingType: BuildingType;
   readonly cost: Cost;
   readonly name: string;
-  readonly tribe: Tribe;
+  readonly tribe: ITribe;
 }
 
 export const loadInfo = (): void => {

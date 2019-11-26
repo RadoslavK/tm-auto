@@ -89,7 +89,7 @@ export const Duration: DocumentNode;
 declare module '*/graphql_operations/player.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const GetPlayerInfo: DocumentNode;
+  export const GetGameInfo: DocumentNode;
 
   export default defaultDocument;
 }

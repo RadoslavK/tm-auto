@@ -1,10 +1,11 @@
 import { allBuildingTypes, BuildingType } from '../_enums/BuildingType';
-import { Tribe } from '../_enums/Tribe';
 import { BuildingConditions, CapitalCondition } from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
 import { fieldIds } from '../constants/fieldIds';
 import { buildingInfos } from '../bootstrap/loadInfo';
 import { accountContext } from '../accountContext';
+import { ITribe } from '../_types/graphql';
+import { getTribeFromIndex } from '../../_shared/tribeIndex';
 
 export class AvailableBuildingTypesService {
   private readonly m_village: Village;
@@ -24,33 +25,33 @@ export class AvailableBuildingTypesService {
         let type: BuildingType;
 
         switch (tribe) {
-          case Tribe.Egyptians: {
+          case ITribe.Egyptians: {
             type = BuildingType.StoneWall;
             break;
           }
 
-          case Tribe.Gauls: {
+          case ITribe.Gauls: {
             type = BuildingType.Palisade;
             break;
           }
 
-          case Tribe.Huns: {
+          case ITribe.Huns: {
             type = BuildingType.MakeshiftWall;
             break;
           }
 
-          case Tribe.Romans: {
+          case ITribe.Romans: {
             type = BuildingType.CityWall;
             break;
           }
 
-          case Tribe.Teutons: {
+          case ITribe.Teutons: {
             type = BuildingType.EarthWall;
             break;
           }
 
           default:
-            throw new Error(`Unknown player tribe: ${tribe}`);
+            throw new Error(`Unknown player tribe: ${ITribe[tribe]}`);
         }
 
         buildingTypes.push(type);
@@ -129,8 +130,8 @@ export class AvailableBuildingTypesService {
       return false;
     }
 
-    if (conditions.playerTribe !== Tribe.None
-      && conditions.playerTribe !== accountContext.gameInfo.tribe) {
+    if (conditions.playerTribe !== null
+      && getTribeFromIndex(conditions.playerTribe) !== accountContext.gameInfo.tribe) {
       return false;
     }
 

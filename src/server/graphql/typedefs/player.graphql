@@ -1,7 +1,17 @@
-type PlayerInfo {
-    tribe: Int!
+enum Tribe {
+    Romans
+    Teutons
+    Gauls
+    Nature
+    Natars
+    Egyptians
+    Huns
+}
+
+type GameInfo {
+    tribe: Tribe!
 }
 
 extend type Query {
-    playerInfo: PlayerInfo!
+    gameInfo: GameInfo!
 }

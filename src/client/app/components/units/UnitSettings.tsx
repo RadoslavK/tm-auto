@@ -10,15 +10,15 @@ import {
 import { makeStyles } from '@material-ui/core';
 import {
   IAutoUnitsUnitSettings,
-  IGetPlayerInfoQuery,
+  IGetGameInfoQuery,
   IGetUnitInfoQuery,
   IGetUnitInfoQueryVariables,
   IUpdateAutoUnitsUnitSettingsMutation,
   IUpdateAutoUnitsUnitSettingsMutationVariables,
+  Tribe,
 } from '../../../_types/graphql';
-import { Tribe } from '../../../../server/_enums/Tribe';
 import { imageLinks } from '../../../utils/imageLinks';
-import { GetPlayerInfo } from '*/graphql_operations/player.graphql';
+import { GetGameInfo } from '*/graphql_operations/player.graphql';
 import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
 import {
   UpdateAutoUnitsUnitSettings,
@@ -32,7 +32,7 @@ interface IProps {
   readonly settings: IAutoUnitsUnitSettings;
 }
 
-const useStyles = makeStyles<unknown, [number, boolean, Tribe]>({
+const useStyles = makeStyles<unknown, [number, boolean, Tribe | null]>({
   root: {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
@@ -46,7 +46,7 @@ const useStyles = makeStyles<unknown, [number, boolean, Tribe]>({
   unitImage: ([index, autoBuild, tribe]) => ({
     gridColumn: '1',
     gridRow: '2 / 3',
-    backgroundImage: `url("${imageLinks.getUnit(tribe, index)}")`,
+    backgroundImage: tribe ? `url("${imageLinks.getUnit(tribe, index)}")` : '',
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     filter: autoBuild ? undefined : 'grayscale(100%)',
@@ -69,7 +69,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
   } = props;
 
   const { villageId } = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetPlayerInfoQuery>(GetPlayerInfo);
+  const { data, loading } = useQuery<IGetGameInfoQuery>(GetGameInfo);
 
   const { data: unitInfoData, loading: unitInfoLoading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
     variables: { index: settings.index },
@@ -95,7 +95,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
     },
   });
 
-  const classes = useStyles([settings.index, autoBuild, data ? data.playerInfo.tribe : Tribe.None]);
+  const classes = useStyles([settings.index, autoBuild, data ? data.gameInfo.tribe : null]);
 
   useEffect(() => {
     if (state === settings) {

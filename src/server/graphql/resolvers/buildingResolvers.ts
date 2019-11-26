@@ -1,8 +1,8 @@
 import { BuildingType } from '../../_enums/BuildingType';
-import { Tribe } from '../../_enums/Tribe';
 import {
   IBuildingQueue,
   IBuildingSpotLevel,
+  ITribe,
 } from '../../_types/graphql';
 import { fieldIds } from '../../constants/fieldIds';
 import { buildingInfos } from '../../bootstrap/loadInfo';
@@ -22,19 +22,19 @@ const getWallType = (): BuildingType => {
   const { tribe } = accountContext.gameInfo;
 
   switch (tribe) {
-    case Tribe.Egyptians:
+    case ITribe.Egyptians:
       return BuildingType.StoneWall;
 
-    case Tribe.Romans:
+    case ITribe.Romans:
       return BuildingType.CityWall;
 
-    case Tribe.Teutons:
+    case ITribe.Teutons:
       return BuildingType.EarthWall;
 
-    case Tribe.Gauls:
+    case ITribe.Gauls:
       return BuildingType.Palisade;
 
-    case Tribe.Huns:
+    case ITribe.Huns:
       return BuildingType.MakeshiftWall;
 
     default:

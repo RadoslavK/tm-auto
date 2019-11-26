@@ -79,7 +79,7 @@ export type IAutoUnitsLogEntryContentPayload = {
   readonly __typename?: 'AutoUnitsLogEntryContentPayload',
   readonly amount: Scalars['Int'],
   readonly index: Scalars['Int'],
-  readonly tribe: Scalars['Int'],
+  readonly tribe: ITribe,
   readonly unitName: Scalars['String'],
 };
 
@@ -220,6 +220,11 @@ export type IEnqueueBuildingInput = {
   readonly levels: Scalars['Int'],
   readonly type: Scalars['Int'],
   readonly villageId: Scalars['Int'],
+};
+
+export type IGameInfo = {
+  readonly __typename?: 'GameInfo',
+  readonly tribe: ITribe,
 };
 
 export type IGeneralSettings = {
@@ -388,11 +393,6 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
 };
 
-export type IPlayerInfo = {
-  readonly __typename?: 'PlayerInfo',
-  readonly tribe: Scalars['Int'],
-};
-
 export type IQuery = {
   readonly __typename?: 'Query',
   readonly accounts: ReadonlyArray<IUserAccount>,
@@ -406,7 +406,7 @@ export type IQuery = {
   readonly botState: IBotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
-  readonly playerInfo: IPlayerInfo,
+  readonly gameInfo: IGameInfo,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -536,6 +536,16 @@ export type ITextLogEntryContentPayload = {
   readonly __typename?: 'TextLogEntryContentPayload',
   readonly message: Scalars['String'],
 };
+
+export enum ITribe {
+  Romans = 'Romans',
+  Teutons = 'Teutons',
+  Gauls = 'Gauls',
+  Nature = 'Nature',
+  Natars = 'Natars',
+  Egyptians = 'Egyptians',
+  Huns = 'Huns'
+}
 
 export type IUnitInfo = {
   readonly __typename?: 'UnitInfo',
@@ -725,7 +735,8 @@ export type IResolversTypes = {
   AutoBuildLogEntryContentPayload: ResolverTypeWrapper<IAutoBuildLogEntryContentPayload>,
   AutoUnitsLogEntryContent: ResolverTypeWrapper<IAutoUnitsLogEntryContent>,
   AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<IAutoUnitsLogEntryContentPayload>,
-  PlayerInfo: ResolverTypeWrapper<IPlayerInfo>,
+  Tribe: ITribe,
+  GameInfo: ResolverTypeWrapper<IGameInfo>,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
@@ -798,7 +809,8 @@ export type IResolversParentTypes = {
   AutoBuildLogEntryContentPayload: IAutoBuildLogEntryContentPayload,
   AutoUnitsLogEntryContent: IAutoUnitsLogEntryContent,
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayload,
-  PlayerInfo: IPlayerInfo,
+  Tribe: ITribe,
+  GameInfo: IGameInfo,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
   Boolean: Scalars['Boolean'],
@@ -882,7 +894,7 @@ export type IAutoUnitsLogEntryContentResolvers<ContextType = any, ParentType ext
 export type IAutoUnitsLogEntryContentPayloadResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoUnitsLogEntryContentPayload'] = IResolversParentTypes['AutoUnitsLogEntryContentPayload']> = {
   amount: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   index: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  tribe: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  tribe: Resolver<IResolversTypes['Tribe'], ParentType, ContextType>,
   unitName: Resolver<IResolversTypes['String'], ParentType, ContextType>,
 };
 
@@ -965,6 +977,10 @@ export type IDurationResolvers<ContextType = any, ParentType extends IResolversP
   seconds: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 
+export type IGameInfoResolvers<ContextType = any, ParentType extends IResolversParentTypes['GameInfo'] = IResolversParentTypes['GameInfo']> = {
+  tribe: Resolver<IResolversTypes['Tribe'], ParentType, ContextType>,
+};
+
 export type IGeneralSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralSettings'] = IResolversParentTypes['GeneralSettings']> = {
   allowTasks: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoBuild: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
@@ -1025,10 +1041,6 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsSettingsArgs, 'input'>>,
 };
 
-export type IPlayerInfoResolvers<ContextType = any, ParentType extends IResolversParentTypes['PlayerInfo'] = IResolversParentTypes['PlayerInfo']> = {
-  tribe: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-};
-
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   accounts: Resolver<ReadonlyArray<IResolversTypes['UserAccount']>, ParentType, ContextType>,
   account: Resolver<Maybe<IResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<IQueryAccountArgs, 'accountId'>>,
@@ -1041,7 +1053,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   botState: Resolver<IResolversTypes['BotState'], ParentType, ContextType>,
   heroInformation: Resolver<IResolversTypes['HeroInformation'], ParentType, ContextType>,
   logsEntries: Resolver<ReadonlyArray<IResolversTypes['LogEntry']>, ParentType, ContextType>,
-  playerInfo: Resolver<IResolversTypes['PlayerInfo'], ParentType, ContextType>,
+  gameInfo: Resolver<IResolversTypes['GameInfo'], ParentType, ContextType>,
   buildingQueue: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
   hero: Resolver<IResolversTypes['HeroSettings'], ParentType, ContextType>,
@@ -1152,6 +1164,7 @@ export type IResolvers<ContextType = any> = {
   Cost: ICostResolvers<ContextType>,
   Date: GraphQLScalarType,
   Duration: IDurationResolvers<ContextType>,
+  GameInfo: IGameInfoResolvers<ContextType>,
   GeneralSettings: IGeneralSettingsResolvers<ContextType>,
   GeneralVillageSettings: IGeneralVillageSettingsResolvers<ContextType>,
   HeroInformation: IHeroInformationResolvers<ContextType>,
@@ -1160,7 +1173,6 @@ export type IResolvers<ContextType = any> = {
   LogEntry: ILogEntryResolvers<ContextType>,
   LogEntryContent: ILogEntryContentResolvers,
   Mutation: IMutationResolvers<ContextType>,
-  PlayerInfo: IPlayerInfoResolvers<ContextType>,
   Query: IQueryResolvers<ContextType>,
   QueuedBuilding: IQueuedBuildingResolvers<ContextType>,
   ResourceFields: IResourceFieldsResolvers<ContextType>,

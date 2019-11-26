@@ -4,6 +4,7 @@ import { accountContext } from '../../accountContext';
 import {
   Duration,
 } from '../../_models/duration';
+import { getTribeIndex } from '../../../_shared/tribeIndex';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();
@@ -18,7 +19,7 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const durationText = await lastUnitNode.$eval('[class=timer]', x => (x as HTMLElement).innerText);
   unitQueue.duration = Duration.fromText(durationText);
 
-  const unitIndexDecrement = (accountContext.gameInfo.tribe - 1) * 10;
+  const unitIndexDecrement = (getTribeIndex(accountContext.gameInfo.tribe) - 1) * 10;
 
   const units = await Promise.all(queuedUnitNodes.map(async (node) => {
     const index = await node.$eval('img[class*=unit]', x => {

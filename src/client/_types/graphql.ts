@@ -69,7 +69,7 @@ export type IAutoUnitsLogEntryContent = {
 export type IAutoUnitsLogEntryContentPayload = {
   readonly amount: Scalars['Int'],
   readonly index: Scalars['Int'],
-  readonly tribe: Scalars['Int'],
+  readonly tribe: Tribe,
   readonly unitName: Scalars['String'],
 };
 
@@ -198,6 +198,10 @@ export type IEnqueueBuildingInput = {
   readonly levels: Scalars['Int'],
   readonly type: Scalars['Int'],
   readonly villageId: Scalars['Int'],
+};
+
+export type IGameInfo = {
+  readonly tribe: Tribe,
 };
 
 export type IGeneralSettings = {
@@ -360,10 +364,6 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
 };
 
-export type IPlayerInfo = {
-  readonly tribe: Scalars['Int'],
-};
-
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account: Maybe<IUserAccount>,
@@ -376,7 +376,7 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
-  readonly playerInfo: IPlayerInfo,
+  readonly gameInfo: IGameInfo,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -500,6 +500,16 @@ export type ITextLogEntryContent = {
 export type ITextLogEntryContentPayload = {
   readonly message: Scalars['String'],
 };
+
+export enum Tribe {
+  Romans = 'Romans',
+  Teutons = 'Teutons',
+  Gauls = 'Gauls',
+  Nature = 'Nature',
+  Natars = 'Natars',
+  Egyptians = 'Egyptians',
+  Huns = 'Huns'
+}
 
 export type IUnitInfo = {
   readonly name: Scalars['String'],
@@ -754,10 +764,10 @@ export type IVillageFragmentFragment = (
 
 export type IDurationFragment = Pick<IDuration, 'hours' | 'minutes' | 'seconds'>;
 
-export type IGetPlayerInfoQueryVariables = {};
+export type IGetGameInfoQueryVariables = {};
 
 
-export type IGetPlayerInfoQuery = { readonly playerInfo: Pick<IPlayerInfo, 'tribe'> };
+export type IGetGameInfoQuery = { readonly gameInfo: Pick<IGameInfo, 'tribe'> };
 
 export type IClearQueueMutationVariables = {
   villageId: Scalars['Int']
