@@ -3,7 +3,6 @@ fragment ResourcesFragment on Resources {
     clay
     iron
     crop
-    total
     freeCrop
 }
 

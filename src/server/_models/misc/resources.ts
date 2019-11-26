@@ -1,25 +1,28 @@
-import { IComparable } from '../../../_shared/types';
+import {
+  Fields,
+  IComparable,
+} from '../../../_shared/types';
+import { IResources } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
 
-interface IParams {
-  wood: number;
-  clay: number;
-  iron: number;
-  crop: number;
-  freeCrop: number;
-}
+const defaults: Fields<Resources> = {
+  clay: 0,
+  crop: 0,
+  freeCrop: 0,
+  iron: 0,
+  wood: 0,
+};
 
-export class Resources implements IParams, IComparable<Resources> {
-  public wood = 0;
-  public clay = 0;
-  public iron = 0;
-  public crop = 0;
-  public freeCrop = 0;
+export class Resources implements IResources, IComparable<Resources> {
+  public wood: number;
+  public clay: number;
+  public iron: number;
+  public crop: number;
+  public freeCrop: number;
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+  constructor(params: Partial<IResources> = {}) {
+    Object.assign(this, merge(defaults, params));
   }
-
-  public total = (): number => this.wood + this.clay + this.iron + this.crop;
 
   public add = (addition: Resources): Resources => {
     return new Resources({

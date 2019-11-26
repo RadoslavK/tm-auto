@@ -5,6 +5,7 @@ import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { ICost } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
+import { getTotalResources } from '../../../utils/resources';
 
 interface IProps {
   readonly className?: string;
@@ -70,6 +71,8 @@ export const Cost: React.FC<IProps> = (props) => {
   const formatTotal = createFormatter();
   const formatFreeCrop = createFormatter();
 
+  const totalResources = getTotalResources(resources);
+
   return (
     <div className={classNames(className, classes.root)}>
       <span className={classNames(classes.image, classes.wood)} />
@@ -85,7 +88,7 @@ export const Cost: React.FC<IProps> = (props) => {
       <span className={classes.value}>{formatResources(resources.crop)}</span>
 
       <span className={classNames(classes.image, classes.total)} />
-      <span className={classes.value}>{formatTotal(resources.total)}</span>
+      <span className={classes.value}>{formatTotal(totalResources)}</span>
 
       <span className={classNames(classes.image, classes.freeCrop)}/>
       <span className={classes.value}>{formatFreeCrop(resources.freeCrop)}</span>

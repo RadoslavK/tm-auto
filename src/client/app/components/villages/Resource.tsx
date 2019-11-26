@@ -1,10 +1,9 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import { imageLinks } from '../../../utils/imageLinks';
-import { IResources } from '../../../_types/graphql';
 import { createFormatter } from '../../utils/numberFormatting';
 
-type ResourceName = keyof IResources;
+type ResourceName = keyof typeof imageLinks.resources;
 
 interface IProps {
   readonly amount: number;

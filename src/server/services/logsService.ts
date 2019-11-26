@@ -6,7 +6,6 @@ import {
   ILogEntryContent,
   ITextLogEntryContent,
 } from '../_types/graphql';
-import { mapVillage } from '../graphql/mappers/mapVillage';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import {
   buildingInfos,
@@ -77,7 +76,7 @@ export class LogsService {
       id,
       timestamp,
       content,
-      village: village && mapVillage(village),
+      village,
     });
   };
 

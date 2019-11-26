@@ -5,7 +5,6 @@ import { IBuildingQueue, IQueuedBuilding } from '../../_types/graphql';
 import { buildingInfos } from '../../bootstrap/loadInfo';
 import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
-import { mapCost } from './mapCost';
 import { accountContext } from '../../accountContext';
 
 export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueue) => IBuildingQueue => {
@@ -29,16 +28,16 @@ export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (qu
         canMoveDown: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Down),
         canMoveUp: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Up),
         name: buildingInfos[building.type].name,
-        cost: mapCost({
+        cost: {
           ...cost,
           buildTime: actualBuildTime,
-        }),
+        },
       });
     });
 
     return {
       buildings,
-      totalCost: mapCost(totalCost),
+      totalCost,
     };
   };
 };

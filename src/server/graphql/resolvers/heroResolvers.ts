@@ -1,7 +1,6 @@
 import {
   IHeroInformation,
 } from '../../_types/graphql';
-import { mapVillage } from '../mappers/mapVillage';
 import { accountContext } from '../../accountContext';
 import {
   subscribeToEvent,
@@ -16,7 +15,7 @@ const mapHeroInformation = (hero: Hero): IHeroInformation => {
   return {
     health: hero.health,
     state: hero.state,
-    village: village && mapVillage(village),
+    village,
   };
 };
 

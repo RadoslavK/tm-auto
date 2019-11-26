@@ -3,6 +3,7 @@ import React from 'react';
 import { IVillageResources } from '../../../_types/graphql';
 import { Resource } from './Resource';
 import { createFormatter } from '../../utils/numberFormatting';
+import { getTotalResources } from '../../utils/resources';
 
 interface IProps {
   readonly resources: IVillageResources;
@@ -31,13 +32,15 @@ export const Resources: React.FC<IProps> = (props) => {
 
   const resourceFormatter = createFormatter(Math.max(capacity.granary, capacity.warehouse, amount.wood, amount.clay, amount.iron, amount.crop));
 
+  const totalAmount = getTotalResources(amount);
+
   return (
     <div className={classes.root}>
       <Resource resourceName="wood" amount={amount.wood} capacity={capacity.warehouse} production={production.wood} resourceFormatter={resourceFormatter} />
       <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay} resourceFormatter={resourceFormatter} />
       <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron} resourceFormatter={resourceFormatter} />
       <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="total"  amount={amount.total} capacity={totalCapacity} />
+      <Resource resourceName="total"  amount={totalAmount} capacity={totalCapacity} />
       <Resource resourceName="freeCrop" amount={amount.freeCrop} />
     </div>
   );

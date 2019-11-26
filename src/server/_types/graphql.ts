@@ -522,7 +522,6 @@ export type IResources = {
   readonly clay: Scalars['Int'],
   readonly iron: Scalars['Int'],
   readonly crop: Scalars['Int'],
-  readonly total: Scalars['Int'],
   readonly freeCrop: Scalars['Int'],
 };
 
@@ -1120,7 +1119,6 @@ export type IResourcesResolvers<ContextType = any, ParentType extends IResolvers
   clay: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   iron: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   crop: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  total: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   freeCrop: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 

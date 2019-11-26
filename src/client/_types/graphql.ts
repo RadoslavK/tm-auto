@@ -488,7 +488,6 @@ export type IResources = {
   readonly clay: Scalars['Int'],
   readonly iron: Scalars['Int'],
   readonly crop: Scalars['Int'],
-  readonly total: Scalars['Int'],
   readonly freeCrop: Scalars['Int'],
 };
 
@@ -768,7 +767,7 @@ export type IOnLogEntryAddedSubscriptionVariables = {};
 
 export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragmentFragment };
 
-export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'total' | 'freeCrop'>;
+export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
 
 export type ICostFragmentFragment = (
   Pick<ICost, 'buildTime'>

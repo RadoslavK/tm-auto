@@ -5,7 +5,6 @@ type Resources {
     clay: Int!
     iron: Int!
     crop: Int!
-    total: Int!
     freeCrop: Int!
 }
 
