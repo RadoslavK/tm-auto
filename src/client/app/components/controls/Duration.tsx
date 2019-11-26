@@ -90,6 +90,13 @@ export const Duration: React.FC<IProps> = (props) => {
 
         break;
 
+      case 'days':
+        if (numValue < 0) {
+          return;
+        }
+
+        break;
+
       default:
         throw new Error(`Invalid value changed, name: ${name}`);
     }
