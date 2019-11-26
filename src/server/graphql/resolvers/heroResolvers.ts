@@ -11,7 +11,7 @@ import { Hero } from '../../_models/hero/hero';
 import { Resolvers } from './_types';
 
 const mapHeroInformation = (hero: Hero): IHeroInformation => {
-  const village = accountContext.villageService.village(hero.villageId);
+  const village = hero.villageId ? accountContext.villageService.village(hero.villageId) : null;
 
   return {
     health: hero.health,

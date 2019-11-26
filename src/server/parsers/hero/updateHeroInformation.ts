@@ -8,21 +8,28 @@ export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();
   const { hero } = accountContext;
 
-  hero.villageId = await page.$eval('.heroStatusMessage > a', x => {
-    const heroVillageLink = x.getAttribute('href');
+  const heroStatusMessage = await page.$('.heroStatusMessage > a');
 
-    if (!heroVillageLink) {
-      throw new Error('Failed to parse current hero village');
-    }
+  if (heroStatusMessage) {
+    // Dead hero does not have status message, so no village can be recognized
+    hero.villageId = await heroStatusMessage.evaluate(x => {
+      const heroVillageLink = x.getAttribute('href');
 
-    const villageIdMatch = /newdid=(\d+)/.exec(heroVillageLink);
+      if (!heroVillageLink) {
+        throw new Error('Failed to parse current hero village');
+      }
 
-    if (!villageIdMatch) {
-      throw new Error('Failed to parse current hero village');
-    }
+      const villageIdMatch = /newdid=(\d+)/.exec(heroVillageLink);
 
-    return +villageIdMatch[1];
-  });
+      if (!villageIdMatch) {
+        throw new Error('Failed to parse current hero village');
+      }
+
+      return +villageIdMatch[1];
+    });
+  } else {
+    hero.villageId = null;
+  }
 
   hero.health = await page.$eval('[class*=heroHealthBar] > *:last-child', x => {
     const style = x.getAttribute('style');

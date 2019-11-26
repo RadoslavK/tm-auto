@@ -4,7 +4,7 @@ interface IParams {
   hasAvailableAdventures: boolean;
   health: number;
   state: IHeroState;
-  villageId: number;
+  villageId: number | null;
 }
 
 export class Hero implements IParams {
@@ -12,7 +12,7 @@ export class Hero implements IParams {
   public health = 0;
   // TODO zistit vsetky mozne stavi a jak sa lisia
   public state: IHeroState = IHeroState.Unknown;
-  public villageId = 0;
+  public villageId: number | null = null;
 
   constructor(params: Partial<IParams> = {}) {
     Object.assign(this, params);

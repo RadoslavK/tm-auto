@@ -14,9 +14,10 @@ export class AutoAdventureTask implements IBotTask {
   public allowExecution = (): boolean => {
     //  TODO rather generate this task only for the current village when hero can actually do it
     const settings = this.settings();
+    const { hero } = accountContext;
 
     const { currentVillageId } = accountContext.villageService;
-    return settings.allow && settings.preferredVillageId === currentVillageId;
+    return settings.allow && settings.preferredVillageId === currentVillageId && settings.preferredVillageId === hero.villageId;
   };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
