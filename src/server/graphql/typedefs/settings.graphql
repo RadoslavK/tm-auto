@@ -167,6 +167,10 @@ input UpdateAutoAdventureSettingsInput {
     settings: AutoAdventureSettingsInput!
 }
 
+input ResetVillageInput {
+    villageId: Int!
+}
+
 extend type Mutation {
     updateGeneralSettings(input: UpdateGeneralSettingsInput!): Boolean!
     updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!
@@ -175,4 +179,10 @@ extend type Mutation {
     updateAutoUnitsUnitSettings(input: UpdateAutoUnitsUnitSettingsInput!): Boolean!
     updateAutoUnitsBuildingSettings(input: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
     updateAutoUnitsSettings(input: UpdateAutoUnitsSettingsInput!): Boolean!
+
+    resetGeneralSettings: Boolean!
+    resetAutoAdventureSettings: Boolean!
+    resetGeneralVillageSettings(input: ResetVillageInput!): Boolean!
+    resetAutoBuildSettings(input: ResetVillageInput!): Boolean!
+    resetAutoUnitsSettings(input: ResetVillageInput!): Boolean!
 }

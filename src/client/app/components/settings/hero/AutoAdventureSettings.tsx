@@ -4,7 +4,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { UpdateAutoAdventureSettings } from "*/graphql_operations/settings.graphql";
+import { Button } from '@material-ui/core';
+import {
+  ResetAutoAdventureSettings,
+  UpdateAutoAdventureSettings,
+} from "*/graphql_operations/settings.graphql";
 import { GetVillages } from '*/graphql_operations/village.graphql';
 import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
 import {
@@ -66,6 +70,8 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages);
 
   const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), [setState]);
+
+  const [resetSettings] = useMutation(ResetAutoAdventureSettings);
 
   if (loading || !data) {
     return null;
@@ -143,6 +149,15 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h2>AutoAdventure</h2>
+
+      <Button
+        onClick={() => resetSettings()}
+        type="button"
+        variant="contained"
+        color="primary"
+      >
+        Reset to default
+      </Button>
 
       <div>
         <label htmlFor="allow">Allow</label>

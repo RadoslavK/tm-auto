@@ -4,6 +4,7 @@ import React, {
   useState,
 } from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import { Button } from '@material-ui/core';
 import {
   ICoolDown,
   IGetVillageSettingsQuery,
@@ -11,7 +12,10 @@ import {
   IUpdateAutoUnitsSettingsMutationVariables,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
-import { UpdateAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
+import {
+  ResetAutoUnitsSettings,
+  UpdateAutoUnitsSettings,
+} from '*/graphql_operations/settings.graphql';
 import {
   IVillageContext,
   VillageContext,
@@ -41,6 +45,10 @@ export const AutoUnitsSettings: React.FC<IProps> = (props) => {
       updateSettings();
     }
   }, [state, settings, updateSettings]);
+  
+  const [resetSettings] = useMutation(ResetAutoUnitsSettings, {
+    variables: { villageId },
+  });
 
   const {
     allow,
@@ -86,6 +94,16 @@ export const AutoUnitsSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h2>AutoUnits</h2>
+
+      <Button
+        onClick={() => resetSettings()}
+        variant="contained"
+        color="primary"
+        type="button"
+      >
+        Reset to default
+      </Button>
+
       <label htmlFor="allow">Allow</label>
       <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
 

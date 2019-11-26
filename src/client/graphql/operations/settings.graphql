@@ -116,3 +116,23 @@ mutation UpdateAutoUnitsBuildingSettings($input: UpdateAutoUnitsBuildingSettings
 mutation UpdateAutoUnitsSettings($input: UpdateAutoUnitsSettingsInput!) {
     updateAutoUnitsSettings(input: $input)
 }
+
+mutation ResetGeneralSettings {
+    resetGeneralSettings
+}
+
+mutation ResetAutoAdventureSettings {
+    resetAutoAdventureSettings
+}
+
+mutation ResetGeneralVillageSettings($input: ResetVillageInput!) {
+    resetGeneralVillageSettings(input: $input)
+}
+
+mutation ResetAutoBuildSettings($input: ResetVillageInput!) {
+    resetAutoBuildSettings(input: $input)
+}
+
+mutation ResetAutoUnitsSettings($input: ResetVillageInput!) {
+    resetAutoUnitsSettings(input: $input)
+}

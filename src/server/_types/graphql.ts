@@ -321,6 +321,11 @@ export type IMutation = {
   readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
   readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
   readonly updateAutoUnitsSettings: Scalars['Boolean'],
+  readonly resetGeneralSettings: Scalars['Boolean'],
+  readonly resetAutoAdventureSettings: Scalars['Boolean'],
+  readonly resetGeneralVillageSettings: Scalars['Boolean'],
+  readonly resetAutoBuildSettings: Scalars['Boolean'],
+  readonly resetAutoUnitsSettings: Scalars['Boolean'],
 };
 
 
@@ -406,6 +411,21 @@ export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
 
 export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
+};
+
+
+export type IMutationResetGeneralVillageSettingsArgs = {
+  input: IResetVillageInput
+};
+
+
+export type IMutationResetAutoBuildSettingsArgs = {
+  input: IResetVillageInput
+};
+
+
+export type IMutationResetAutoUnitsSettingsArgs = {
+  input: IResetVillageInput
 };
 
 export enum IPartyType {
@@ -505,6 +525,10 @@ export type IQueuedBuilding = {
 
 export type IQueuedBuildingManipulationInput = {
   readonly queueId: Scalars['ID'],
+  readonly villageId: Scalars['Int'],
+};
+
+export type IResetVillageInput = {
   readonly villageId: Scalars['Int'],
 };
 
@@ -801,6 +825,7 @@ export type IResolversTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
+  ResetVillageInput: IResetVillageInput,
   Subscription: ResolverTypeWrapper<{}>,
   BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
@@ -878,6 +903,7 @@ export type IResolversParentTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
+  ResetVillageInput: IResetVillageInput,
   Subscription: {},
   BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
@@ -1074,6 +1100,11 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAutoUnitsUnitSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsUnitSettingsArgs, 'input'>>,
   updateAutoUnitsBuildingSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsBuildingSettingsArgs, 'input'>>,
   updateAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsSettingsArgs, 'input'>>,
+  resetGeneralSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  resetAutoAdventureSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  resetGeneralVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetGeneralVillageSettingsArgs, 'input'>>,
+  resetAutoBuildSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetAutoBuildSettingsArgs, 'input'>>,
+  resetAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetAutoUnitsSettingsArgs, 'input'>>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {

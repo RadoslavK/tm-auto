@@ -175,6 +175,36 @@ export const settingsResolvers: Resolvers = {
       settingsManager.update(updatedSettings);
 
       return true;
-    }
+    },
+
+    resetGeneralSettings: () => {
+      const settingsManager = accountContext.settingsService.general;
+      settingsManager.update(new GeneralSettings());
+      return true;
+    },
+
+    resetAutoAdventureSettings: () => {
+      const settingsManager = accountContext.settingsService.hero.autoAdventure;
+      settingsManager.update(new AutoAdventureSettings());
+      return true;
+    },
+
+    resetGeneralVillageSettings: (_, args) => {
+      const settingsManager = accountContext.settingsService.village(args.input.villageId).general;
+      settingsManager.update(new GeneralVillageSettings());
+      return true;
+    },
+
+    resetAutoBuildSettings: (_, args) => {
+      const settingsManager = accountContext.settingsService.village(args.input.villageId).autoBuild;
+      settingsManager.update(new AutoBuildSettings());
+      return true;
+    },
+
+    resetAutoUnitsSettings: (_, args) => {
+      const settingsManager = accountContext.settingsService.village(args.input.villageId).autoUnits;
+      settingsManager.update(new AutoUnitsSettings());
+      return true;
+    },
   },
 };

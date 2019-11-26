@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { GetGeneralSettings, UpdateGeneralSettings } from '*/graphql_operations/settings.graphql';
+import { Button } from '@material-ui/core';
+import {
+  GetGeneralSettings,
+  ResetGeneralSettings,
+  UpdateGeneralSettings,
+} from '*/graphql_operations/settings.graphql';
 import {
   IGeneralSettings,
   IGetGeneralSettingsQuery, IUpdateGeneralSettingsInput,
@@ -30,6 +35,8 @@ const GeneralSettings: React.FC<IProps> = (props) => {
       updateSettings();
     }
   },[state, settings, updateSettings]);
+  
+  const [resetSettings] = useMutation(ResetGeneralSettings);
 
   const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const {
@@ -52,6 +59,16 @@ const GeneralSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h1>General settings</h1>
+      <div>
+        <Button
+          type="button"
+          onClick={() => resetSettings()}
+          variant="contained"
+          color="primary"
+        >
+          Reset to default
+        </Button>
+      </div>
       <div>
         <div>
           <label htmlFor="allowTasks">Allow tasks</label>

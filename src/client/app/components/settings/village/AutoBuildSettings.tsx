@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { UpdateAutoBuildVillageSettings } from '*/graphql_operations/settings.graphql';
+import { Button } from '@material-ui/core';
+import {
+  ResetAutoBuildSettings,
+  UpdateAutoBuildVillageSettings,
+} from '*/graphql_operations/settings.graphql';
 import {
   IAutoBuildSettings, ICoolDown, IUpdateAutoBuildVillageSettingsInput,
   IUpdateAutoBuildVillageSettingsMutation,
@@ -36,6 +40,10 @@ export const AutoBuildSettings: React.FC<IProps> = (props) => {
       updateSettings();
     }
   }, [state, settings, updateSettings]);
+
+  const [resetSettings] = useMutation(ResetAutoBuildSettings, {
+    variables: { villageId },
+  });
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -82,6 +90,16 @@ export const AutoBuildSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h2>AutoBuild</h2>
+
+      <Button
+        onClick={() => resetSettings()}
+        variant="contained"
+        color="primary"
+        type="button"
+      >
+        Reset to default
+      </Button>
+
       <label htmlFor="allow">Allow</label>
       <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
 

@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { UpdateGeneralVillageSettings } from '*/graphql_operations/settings.graphql';
+import { Button } from '@material-ui/core';
+import {
+  ResetGeneralVillageSettings,
+  UpdateGeneralVillageSettings,
+} from '*/graphql_operations/settings.graphql';
 import {
   IGeneralVillageSettings, IUpdateGeneralVillageSettingsInput,
   IUpdateGeneralVillageSettingsMutation,
@@ -28,6 +32,10 @@ export const GeneralVillageSettings: React.FC<IProps> = (props) => {
     { variables: { input } },
   );
 
+  const [resetSettings] = useMutation(ResetGeneralVillageSettings, {
+    variables: { villageId },
+  });
+
   useEffect(() => {
     if (state !== settings) {
       updateSettings();
@@ -53,6 +61,14 @@ export const GeneralVillageSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h2>General</h2>
+      <Button
+        onClick={() => resetSettings()}
+        variant="contained"
+        color="primary"
+        type="button"
+      >
+        Reset to default
+      </Button>
       <label htmlFor="allowTasks">Allow tasks</label>
       <input type="checkbox" checked={allowTasks} onChange={onChange} id="allowTasks" name="allowTasks" />
     </div>

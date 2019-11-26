@@ -129,6 +129,11 @@ export const UpdateAutoBuildVillageSettings: DocumentNode;
 export const UpdateAutoUnitsUnitSettings: DocumentNode;
 export const UpdateAutoUnitsBuildingSettings: DocumentNode;
 export const UpdateAutoUnitsSettings: DocumentNode;
+export const ResetGeneralSettings: DocumentNode;
+export const ResetAutoAdventureSettings: DocumentNode;
+export const ResetGeneralVillageSettings: DocumentNode;
+export const ResetAutoBuildSettings: DocumentNode;
+export const ResetAutoUnitsSettings: DocumentNode;
 
   export default defaultDocument;
 }

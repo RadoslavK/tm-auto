@@ -52,6 +52,7 @@ export const HeroInformation: React.FC = () => {
 
   return (
     <div>
+      <h2>Stats</h2>
       <div>
         <label htmlFor="health">Health: </label>
         <span id="heath">{information.health}</span>

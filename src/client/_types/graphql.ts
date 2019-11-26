@@ -291,6 +291,11 @@ export type IMutation = {
   readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
   readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
   readonly updateAutoUnitsSettings: Scalars['Boolean'],
+  readonly resetGeneralSettings: Scalars['Boolean'],
+  readonly resetAutoAdventureSettings: Scalars['Boolean'],
+  readonly resetGeneralVillageSettings: Scalars['Boolean'],
+  readonly resetAutoBuildSettings: Scalars['Boolean'],
+  readonly resetAutoUnitsSettings: Scalars['Boolean'],
 };
 
 
@@ -376,6 +381,21 @@ export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
 
 export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
+};
+
+
+export type IMutationResetGeneralVillageSettingsArgs = {
+  input: IResetVillageInput
+};
+
+
+export type IMutationResetAutoBuildSettingsArgs = {
+  input: IResetVillageInput
+};
+
+
+export type IMutationResetAutoUnitsSettingsArgs = {
+  input: IResetVillageInput
 };
 
 export enum PartyType {
@@ -473,6 +493,10 @@ export type IQueuedBuilding = {
 
 export type IQueuedBuildingManipulationInput = {
   readonly queueId: Scalars['ID'],
+  readonly villageId: Scalars['Int'],
+};
+
+export type IResetVillageInput = {
   readonly villageId: Scalars['Int'],
 };
 
@@ -968,6 +992,37 @@ export type IUpdateAutoUnitsSettingsMutationVariables = {
 
 
 export type IUpdateAutoUnitsSettingsMutation = Pick<IMutation, 'updateAutoUnitsSettings'>;
+
+export type IResetGeneralSettingsMutationVariables = {};
+
+
+export type IResetGeneralSettingsMutation = Pick<IMutation, 'resetGeneralSettings'>;
+
+export type IResetAutoAdventureSettingsMutationVariables = {};
+
+
+export type IResetAutoAdventureSettingsMutation = Pick<IMutation, 'resetAutoAdventureSettings'>;
+
+export type IResetGeneralVillageSettingsMutationVariables = {
+  input: IResetVillageInput
+};
+
+
+export type IResetGeneralVillageSettingsMutation = Pick<IMutation, 'resetGeneralVillageSettings'>;
+
+export type IResetAutoBuildSettingsMutationVariables = {
+  input: IResetVillageInput
+};
+
+
+export type IResetAutoBuildSettingsMutation = Pick<IMutation, 'resetAutoBuildSettings'>;
+
+export type IResetAutoUnitsSettingsMutationVariables = {
+  input: IResetVillageInput
+};
+
+
+export type IResetAutoUnitsSettingsMutation = Pick<IMutation, 'resetAutoUnitsSettings'>;
 
 export type IGetUnitInfoQueryVariables = {
   index: Scalars['Int']
