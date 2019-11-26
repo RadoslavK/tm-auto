@@ -5,11 +5,15 @@ import {
   IAutoPartySettings,
   IPartyType,
 } from '../../../_types/graphql';
+import { Duration } from '../../duration';
 
 const defaults: Fields<AutoPartySettings> = {
   allow: false,
   minCulturePoints: 0,
-  coolDown: new CoolDown(),
+  coolDown: new CoolDown({
+    min: new Duration({ minutes: 30 }),
+    max: new Duration({ minutes: 55 }),
+  }),
   partyType: IPartyType.Small,
 };
 

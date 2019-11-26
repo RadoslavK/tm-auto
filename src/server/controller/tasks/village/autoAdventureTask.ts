@@ -144,7 +144,7 @@ export class AutoAdventureTask implements IBotTask {
       return;
     }
 
-    accountContext.logsService.logText('Sending hero to adventure', true);
+    accountContext.logsService.logText('Sending hero to adventure');
 
     await Promise.all([
       sendToAdventureButton.click(),

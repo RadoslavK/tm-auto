@@ -11,7 +11,10 @@ import { Fields } from '../../../../_shared/types';
 
 const defaults: Fields<AutoAdventureSettings> = {
   allow: true,
-  coolDown: new CoolDown(),
+  coolDown: new CoolDown({
+    min: new Duration({ minutes: 8 }),
+    max: new Duration({ minutes: 13 }),
+  }),
 
   adventureCriteria: IAdventureCriteria.Closest,
   preferHard: false,

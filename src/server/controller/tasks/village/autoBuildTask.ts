@@ -8,7 +8,6 @@ import { Resources } from '../../../_models/misc/resources';
 import { AutoBuildSettings } from '../../../_models/settings/tasks/AutoBuildSettings';
 import { Village } from '../../../_models/village/village';
 import { getPage } from '../../../browser/getPage';
-import { buildingInfos } from '../../../bootstrap/loadInfo';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import { isInfrastructure } from '../../../utils/buildingUtils';
 import { randomElement } from '../../../utils/randomElement';

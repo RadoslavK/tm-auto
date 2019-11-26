@@ -1,7 +1,5 @@
 autostart po prihlaseni
 
-prejst vsetky tasky v c# a porovnat
-
 allow hero revive 
 
 pridat tam vsetkym taskom ze sa nastavi next execution.. + reset to default
@@ -26,13 +24,9 @@ pri prepnuti uctu este asi obdrzi informacie z predchadazajuceho lebo graphql na
 pokial spadne na strane klienta.. napr poslalo sa malo dat kvoli chybajecemu fragment importu v operacii na klientovi sa nastavi errors ale pristupne je az v onError funkcii pre konkretnu query a nie v tom apollo link errors handleri
 
 default cooldowny	
--autobuild: 4-7 minut
--autoadventure: 8-13 minut
 -revive: 30-90 minut
 -market: 5-8 minut
 -tasks: 10-35 sekund
--autoparty: 30-55 minut
--autounits: 7-12 minut
 -check unit amounts: 5-20 minut
 
 proxy.. cookies overit

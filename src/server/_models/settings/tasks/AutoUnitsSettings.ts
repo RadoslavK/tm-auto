@@ -84,8 +84,8 @@ const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] =>
 const defaultSettings = (): Fields<AutoUnitsSettings> => ({
   allow: false,
   coolDown: new CoolDown({
-    min: new Duration({ minutes: 10 }),
-    max: new Duration({ minutes: 20 }),
+    min: new Duration({ minutes: 7 }),
+    max: new Duration({ minutes: 12 }),
   }),
   minCrop: 0,
   barracks: new AutoUnitsBuildingSettings({
