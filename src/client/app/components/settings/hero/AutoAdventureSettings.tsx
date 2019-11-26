@@ -109,6 +109,18 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
     }));
   };
 
+  const onAdventureCriteriaChange = (e: React.FocusEvent<HTMLInputElement>): void => {
+    const {
+      name,
+      value,
+    } = e.currentTarget;
+
+    setState(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   const onNumberOptionChange = (e: React.FocusEvent<HTMLSelectElement>): void => {
     const {
       name,
@@ -189,8 +201,8 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
         <div id="adventureCriteria">
           {criteriaOptions.map((option, index) => (
             <React.Fragment key={index}>
-              <input id={option.toString()} type="radio" value={option} checked={option === adventureCriteria} onChange={onNumberChange} name="adventureCriteria" />
-              <label htmlFor={option.toString()}>{getCriteriaString(option)}</label>
+              <input id={option} type="radio" value={option} checked={option === adventureCriteria} onChange={onAdventureCriteriaChange} name="adventureCriteria" />
+              <label htmlFor={option}>{getCriteriaString(option)}</label>
             </React.Fragment>
             ))}
         </div>
