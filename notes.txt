@@ -24,9 +24,11 @@ ked sa prepne dedina ostat v tej istej casti UI
 
 pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
 
-prerobit classe nech defaulty nastavuju az v konstruktore pokial sa nenachadzali v params
+tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr
 
-napisat nejaku funkciu ktora zmerguje defaults a this
+ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je videt aj s ongoing a queued 
+
+a toto iste pridat aj pre kapacitu - warehouse/granary
 
 
 

@@ -194,12 +194,14 @@ export type IDequeueBuildingAtFieldInput = {
 };
 
 export type IDuration = {
+  readonly days: Scalars['Int'],
   readonly hours: Scalars['Int'],
   readonly minutes: Scalars['Int'],
   readonly seconds: Scalars['Int'],
 };
 
 export type IDurationInput = {
+  readonly days: Scalars['Int'],
   readonly hours: Scalars['Int'],
   readonly minutes: Scalars['Int'],
   readonly seconds: Scalars['Int'],
@@ -785,7 +787,7 @@ export type IVillageFragmentFragment = (
   & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly production: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
 );
 
-export type IDurationFragment = Pick<IDuration, 'hours' | 'minutes' | 'seconds'>;
+export type IDurationFragment = Pick<IDuration, 'days' | 'hours' | 'minutes' | 'seconds'>;
 
 export type IGetGameInfoQueryVariables = {};
 

@@ -45,6 +45,7 @@ fragment VillageFragment on Village {
 }
 
 fragment Duration on Duration {
+    days
     hours
     minutes
     seconds

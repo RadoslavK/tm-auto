@@ -6,18 +6,20 @@ const defaults: Fields<Duration> = {
   seconds: 0,
   minutes: 0,
   hours: 0,
+  days: 0,
 };
 
 export class Duration implements IDuration {
   public seconds: number;
   public minutes: number;
   public hours: number;
+  public days: number;
 
   constructor(params: Partial<IDuration> = {}) {
     Object.assign(this, merge(defaults, params));
   }
 
-  public totalSeconds = (): number => ((this.hours * 60) + this.minutes) * 60 + this.seconds;
+  public totalSeconds = (): number => (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
 
   public getMin = (other: Duration): Duration => {
     return this.totalSeconds() <= other.totalSeconds()
@@ -40,11 +42,16 @@ export class Duration implements IDuration {
   };
 
   public static fromSeconds = (totalSeconds: number): Duration => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
-    const seconds = totalSeconds - hours * 3600 - minutes * 60;
+    const days = Math.floor(totalSeconds / 86400);
+    const daySeconds = days * 86400;
+    const hours = Math.floor((totalSeconds - daySeconds) / 3600);
+    const hourSeconds = hours * 3600;
+    const minutes = Math.floor((totalSeconds - daySeconds - hourSeconds) / 60);
+    const minuteSeconds = minutes * 60;
+    const seconds = totalSeconds - daySeconds - hourSeconds - minuteSeconds;
 
     return new Duration({
+      days,
       hours,
       minutes,
       seconds

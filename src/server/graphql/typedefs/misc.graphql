@@ -21,6 +21,7 @@ type Coords {
 }
 
 type Duration {
+    days: Int!
     hours: Int!
     minutes: Int!
     seconds: Int!
@@ -37,6 +38,7 @@ input CoolDownInput {
 }
 
 input DurationInput {
+    days: Int!
     hours: Int!
     minutes: Int!
     seconds: Int!

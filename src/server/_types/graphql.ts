@@ -217,12 +217,14 @@ export type IDequeueBuildingAtFieldInput = {
 
 export type IDuration = {
   readonly __typename?: 'Duration',
+  readonly days: Scalars['Int'],
   readonly hours: Scalars['Int'],
   readonly minutes: Scalars['Int'],
   readonly seconds: Scalars['Int'],
 };
 
 export type IDurationInput = {
+  readonly days: Scalars['Int'],
   readonly hours: Scalars['Int'],
   readonly minutes: Scalars['Int'],
   readonly seconds: Scalars['Int'],
@@ -1004,6 +1006,7 @@ export type ICostResolvers<ContextType = any, ParentType extends IResolversParen
 };
 
 export type IDurationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Duration'] = IResolversParentTypes['Duration']> = {
+  days: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   hours: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   minutes: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   seconds: Resolver<IResolversTypes['Int'], ParentType, ContextType>,

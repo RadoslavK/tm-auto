@@ -30,6 +30,7 @@ export const Duration: React.FC<IProps> = (props) => {
     seconds,
     minutes,
     hours,
+    days,
   } = state;
 
   const isInitialMount = useRef(true);
@@ -78,9 +79,15 @@ export const Duration: React.FC<IProps> = (props) => {
         break;
 
       case 'hours':
+        if (numValue >= 24) {
+          setState(prevState => ({ ...prevState, days: 0 }));
+        }
+
         if (numValue < 0) {
+          setState(prevState => ({ ...prevState, hours: 23 }));
           return;
         }
+
         break;
 
       default:
@@ -95,6 +102,7 @@ export const Duration: React.FC<IProps> = (props) => {
 
   return (
     <div>
+      <input type="number" value={days} onChange={onNumberChange} id="days" name="days" />
       <input type="number" value={hours} onChange={onNumberChange} id="hours" name="hours" />
       <input type="number" value={minutes} onChange={onNumberChange} id="minutes" name="minutes" />
       <input type="number" value={seconds} onChange={onNumberChange} id="seconds" name="seconds" />
