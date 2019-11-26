@@ -1,22 +1,18 @@
 import {
   AutoAdventureSettings,
-  IAutoAdventureSettingsParams,
 } from './tasks/AutoAdventureSettings';
 import { Fields } from '../../../_shared/types';
 import { merge } from '../../../_shared/merge';
-
-export interface IHeroSettingsParams {
-  readonly autoAdventure: IAutoAdventureSettingsParams;
-}
+import { IHeroSettings } from '../../_types/graphql';
 
 const defaults: Fields<HeroSettings> = {
   autoAdventure: new AutoAdventureSettings(),
 };
 
-export class HeroSettings implements IHeroSettingsParams {
+export class HeroSettings implements IHeroSettings {
   public autoAdventure: AutoAdventureSettings;
 
-  constructor(params: Partial<IHeroSettingsParams> = {}) {
+  constructor(params: Partial<IHeroSettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       autoAdventure: new AutoAdventureSettings(params.autoAdventure),

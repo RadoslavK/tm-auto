@@ -1,13 +1,17 @@
-interface IParams {
-  granary: number;
-  warehouse: number;
-}
+import { IVillageCapacity } from '../../_types/graphql';
+import { Fields } from '../../../_shared/types';
+import { merge } from '../../../_shared/merge';
 
-export class VillageCapacity implements IParams {
-  public granary = 0;
-  public warehouse = 0;
+const defaults: Fields<VillageCapacity> = {
+  granary: 0,
+  warehouse: 0,
+};
 
-  constructor(params: Partial<IParams> = {}) {
-    Object.assign(this, params);
+export class VillageCapacity implements IVillageCapacity {
+  public granary: number;
+  public warehouse: number;
+
+  constructor(params: Partial<IVillageCapacity> = {}) {
+    Object.assign(this, merge(defaults, params));
   }
 }

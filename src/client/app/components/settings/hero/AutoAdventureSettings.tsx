@@ -6,9 +6,9 @@ import React, {
 } from 'react';
 import { UpdateAutoAdventureSettings } from "*/graphql_operations/settings.graphql";
 import { GetVillages } from '*/graphql_operations/village.graphql';
-import { AdventureCriteria } from '../../../../../server/_models/settings/tasks/AutoAdventureSettings';
 import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
 import {
+  AdventureCriteria,
   IAutoAdventureSettings,
   ICoolDown,
   IDuration,

@@ -12,11 +12,18 @@ export type Scalars = {
   Date: Date,
 };
 
+export enum IAdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random',
+  FirstToExpire = 'FirstToExpire'
+}
+
 export type IAutoAdventureSettings = IITaskSettings & {
   readonly __typename?: 'AutoAdventureSettings',
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
-  readonly adventureCriteria: Scalars['Int'],
+  readonly adventureCriteria: IAdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -27,7 +34,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
 export type IAutoAdventureSettingsInput = {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: Scalars['Int'],
+  readonly adventureCriteria: IAdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -61,6 +68,14 @@ export type IAutoBuildVillageSettingsInput = {
   readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+};
+
+export type IAutoPartySettings = IITaskSettings & {
+  readonly __typename?: 'AutoPartySettings',
+  readonly coolDown: ICoolDown,
+  readonly allow: Scalars['Boolean'],
+  readonly minCulturePoints: Scalars['Int'],
+  readonly partyType: IPartyType,
 };
 
 export type IAutoUnitsBuildingSettings = {
@@ -393,6 +408,11 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
 };
 
+export enum IPartyType {
+  Small = 'Small',
+  Large = 'Large'
+}
+
 export type IQuery = {
   readonly __typename?: 'Query',
   readonly accounts: ReadonlyArray<IUserAccount>,
@@ -633,6 +653,7 @@ export type IVillageSettings = {
   readonly general: IGeneralVillageSettings,
   readonly autoBuild: IAutoBuildSettings,
   readonly autoUnits: IAutoUnitsSettings,
+  readonly autoParty: IAutoPartySettings,
 };
 
 
@@ -747,12 +768,15 @@ export type IResolversTypes = {
   ITaskSettings: ResolverTypeWrapper<IITaskSettings>,
   CoolDown: ResolverTypeWrapper<ICoolDown>,
   Duration: ResolverTypeWrapper<IDuration>,
+  AdventureCriteria: IAdventureCriteria,
   VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
   AutoUnitsSettings: ResolverTypeWrapper<IAutoUnitsSettings>,
   AutoUnitsBuildingSettings: ResolverTypeWrapper<IAutoUnitsBuildingSettings>,
   AutoUnitsUnitSettings: ResolverTypeWrapper<IAutoUnitsUnitSettings>,
+  AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
+  PartyType: IPartyType,
   UnitInfo: ResolverTypeWrapper<IUnitInfo>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -821,12 +845,15 @@ export type IResolversParentTypes = {
   ITaskSettings: IITaskSettings,
   CoolDown: ICoolDown,
   Duration: IDuration,
+  AdventureCriteria: IAdventureCriteria,
   VillageSettings: IVillageSettings,
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
   AutoUnitsSettings: IAutoUnitsSettings,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettings,
   AutoUnitsUnitSettings: IAutoUnitsUnitSettings,
+  AutoPartySettings: IAutoPartySettings,
+  PartyType: IPartyType,
   UnitInfo: IUnitInfo,
   Mutation: {},
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -855,7 +882,7 @@ export type IResolversParentTypes = {
 export type IAutoAdventureSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoAdventureSettings'] = IResolversParentTypes['AutoAdventureSettings']> = {
   allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   coolDown: Resolver<IResolversTypes['CoolDown'], ParentType, ContextType>,
-  adventureCriteria: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  adventureCriteria: Resolver<IResolversTypes['AdventureCriteria'], ParentType, ContextType>,
   preferHard: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   normalMinHealth: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   hardMinHealth: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
@@ -879,6 +906,13 @@ export type IAutoBuildSettingsResolvers<ContextType = any, ParentType extends IR
   coolDown: Resolver<IResolversTypes['CoolDown'], ParentType, ContextType>,
   autoCropFields: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   minCrop: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+};
+
+export type IAutoPartySettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoPartySettings'] = IResolversParentTypes['AutoPartySettings']> = {
+  coolDown: Resolver<IResolversTypes['CoolDown'], ParentType, ContextType>,
+  allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  minCulturePoints: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  partyType: Resolver<IResolversTypes['PartyType'], ParentType, ContextType>,
 };
 
 export type IAutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoUnitsBuildingSettings'] = IResolversParentTypes['AutoUnitsBuildingSettings']> = {
@@ -1002,7 +1036,7 @@ export type IHeroSettingsResolvers<ContextType = any, ParentType extends IResolv
 };
 
 export type IITaskSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['ITaskSettings'] = IResolversParentTypes['ITaskSettings']> = {
-  __resolveType: TypeResolveFn<'AutoAdventureSettings' | 'AutoBuildSettings' | 'AutoUnitsSettings', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'AutoAdventureSettings' | 'AutoBuildSettings' | 'AutoUnitsSettings' | 'AutoPartySettings', ParentType, ContextType>,
   allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   coolDown: Resolver<IResolversTypes['CoolDown'], ParentType, ContextType>,
 };
@@ -1141,6 +1175,7 @@ export type IVillageSettingsResolvers<ContextType = any, ParentType extends IRes
   general: Resolver<IResolversTypes['GeneralVillageSettings'], ParentType, ContextType>,
   autoBuild: Resolver<IResolversTypes['AutoBuildSettings'], ParentType, ContextType>,
   autoUnits: Resolver<IResolversTypes['AutoUnitsSettings'], ParentType, ContextType>,
+  autoParty: Resolver<IResolversTypes['AutoPartySettings'], ParentType, ContextType>,
 };
 
 export type IResolvers<ContextType = any> = {
@@ -1148,6 +1183,7 @@ export type IResolvers<ContextType = any> = {
   AutoBuildLogEntryContent: IAutoBuildLogEntryContentResolvers<ContextType>,
   AutoBuildLogEntryContentPayload: IAutoBuildLogEntryContentPayloadResolvers<ContextType>,
   AutoBuildSettings: IAutoBuildSettingsResolvers<ContextType>,
+  AutoPartySettings: IAutoPartySettingsResolvers<ContextType>,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettingsResolvers<ContextType>,
   AutoUnitsLogEntryContent: IAutoUnitsLogEntryContentResolvers<ContextType>,
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayloadResolvers<ContextType>,

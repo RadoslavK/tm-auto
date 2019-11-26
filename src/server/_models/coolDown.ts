@@ -1,25 +1,20 @@
 import {
   Duration,
-  IDurationParams,
 } from './duration';
 import { Fields } from '../../_shared/types';
 import { merge } from '../../_shared/merge';
-
-export interface ICoolDownParams {
-  readonly min: IDurationParams;
-  readonly max: IDurationParams;
-}
+import { ICoolDown } from '../_types/graphql';
 
 const defaults: Fields<CoolDown> = {
   max: new Duration(),
   min: new Duration(),
 };
 
-export class CoolDown implements ICoolDownParams {
-  min: Duration;
-  max: Duration;
+export class CoolDown implements ICoolDown {
+  public min: Duration;
+  public max: Duration;
 
-  constructor(params: Partial<ICoolDownParams> = {}) {
+  constructor(params: Partial<ICoolDown> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       min: params.min && new Duration(params.min),

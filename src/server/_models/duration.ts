@@ -1,11 +1,6 @@
 import { Fields } from '../../_shared/types';
 import { merge } from '../../_shared/merge';
-
-export interface IDurationParams {
-  readonly seconds: number;
-  readonly minutes: number;
-  readonly hours: number;
-}
+import { IDuration } from '../_types/graphql';
 
 const defaults: Fields<Duration> = {
   seconds: 0,
@@ -13,12 +8,12 @@ const defaults: Fields<Duration> = {
   hours: 0,
 };
 
-export class Duration implements IDurationParams {
+export class Duration implements IDuration {
   public seconds: number;
   public minutes: number;
   public hours: number;
 
-  constructor(params: Partial<IDurationParams> = {}) {
+  constructor(params: Partial<IDuration> = {}) {
     Object.assign(this, merge(defaults, params));
   }
 

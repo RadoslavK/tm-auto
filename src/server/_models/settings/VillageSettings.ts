@@ -1,28 +1,18 @@
 import {
   AutoBuildSettings,
-  IAutoBuildSettingsParams,
 } from './tasks/AutoBuildSettings';
 import {
   GeneralVillageSettings,
-  IGeneralVillageSettingsParams,
 } from './GeneralVillageSettings';
 import {
   AutoPartySettings,
-  IAutoPartySettingsParams,
 } from './tasks/AutoPartySettings';
 import {
   AutoUnitsSettings,
-  IAutoUnitsSettingsParams,
 } from './tasks/AutoUnitsSettings';
 import { Fields } from '../../../_shared/types';
 import { merge } from '../../../_shared/merge';
-
-interface IVillageSettingsParams {
-  readonly general: IGeneralVillageSettingsParams;
-  readonly autoBuild: IAutoBuildSettingsParams;
-  readonly autoParty: IAutoPartySettingsParams;
-  readonly autoUnits: IAutoUnitsSettingsParams;
-}
+import { IVillageSettings } from '../../_types/graphql';
 
 const defaults: Fields<VillageSettings> = {
   general: new GeneralVillageSettings(),
@@ -31,13 +21,13 @@ const defaults: Fields<VillageSettings> = {
   autoUnits: new AutoUnitsSettings(),
 };
 
-export class VillageSettings implements IVillageSettingsParams {
+export class VillageSettings implements IVillageSettings {
   public general: GeneralVillageSettings;
   public autoBuild: AutoBuildSettings;
   public autoParty: AutoPartySettings;
   public autoUnits: AutoUnitsSettings;
 
-  constructor(params: Partial<IVillageSettingsParams> = {}) {
+  constructor(params: Partial<IVillageSettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       general: params.general && new GeneralVillageSettings(params.general),

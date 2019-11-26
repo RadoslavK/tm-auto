@@ -6,12 +6,13 @@ import { AutoPartySettings } from '../../_models/settings/tasks/AutoPartySetting
 import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
 import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
 import { dataPathService } from '../dataPathService';
+import { IVillageSettings } from '../../_types/graphql';
 
-export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
-  public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
-  public autoParty: InternalSettingsService<VillageSettings['autoParty']>;
-  public autoUnits: InternalSettingsService<VillageSettings['autoUnits']>;
-  public general: InternalSettingsService<VillageSettings['general']>;
+export class VillageSettingsService implements ComplexSettingsServiceType<IVillageSettings, VillageSettings> {
+  public autoBuild: InternalSettingsService<IVillageSettings['autoBuild'], VillageSettings['autoBuild']>;
+  public autoParty: InternalSettingsService<IVillageSettings['autoParty'], VillageSettings['autoParty']>;
+  public autoUnits: InternalSettingsService<IVillageSettings['autoUnits'], VillageSettings['autoUnits']>;
+  public general: InternalSettingsService<IVillageSettings['general'], VillageSettings['general']>;
 
   constructor(private villageId: number) {
     const villageSettingsPath = dataPathService.villagePath(villageId).settings;

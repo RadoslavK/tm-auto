@@ -1,5 +1,5 @@
 import { BuildingType } from '../../../_enums/BuildingType';
-import { AdventureCriteria, AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdventureSettings';
+import { AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdventureSettings';
 import { getPage } from '../../../browser/getPage';
 import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
@@ -7,6 +7,7 @@ import { IBotTask } from '../../../_models/tasks';
 import { accountContext } from '../../../accountContext';
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
+import { IAdventureCriteria } from '../../../_types/graphql';
 
 export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
@@ -100,21 +101,21 @@ export class AutoAdventureTask implements IBotTask {
     let selectedLinkElementId: string;
     // if adventures present
     switch (settings.adventureCriteria) {
-      case AdventureCriteria.Random:
+      case IAdventureCriteria.Random:
         selectedLinkElementId = randomElement(suitableAdventures).linkElementId;
         break;
 
-      case AdventureCriteria.Furthest: {
+      case IAdventureCriteria.Furthest: {
         const adventure = getWithMaximum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }
 
-      case AdventureCriteria.FirstToExpire:
+      case IAdventureCriteria.FirstToExpire:
         selectedLinkElementId = suitableAdventures[0].linkElementId;
         break;
 
-      case AdventureCriteria.Closest:
+      case IAdventureCriteria.Closest:
       default: {
         const adventure = getWithMinimum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;

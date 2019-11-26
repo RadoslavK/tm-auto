@@ -6,12 +6,17 @@ import { ComplexSettingsServiceType } from './_types';
 import { VillageSettingsService } from './village';
 import { HeroSettingsService } from './hero';
 import { dataPathService } from '../dataPathService';
+import {
+  IGeneralSettings,
+  IHeroSettings,
+  IVillageSettings,
+} from '../../_types/graphql';
 
 export class SettingsService {
-  public general: InternalSettingsService<GeneralSettings>;
-  public hero: ComplexSettingsServiceType<HeroSettings>;
+  public general: InternalSettingsService<IGeneralSettings, GeneralSettings>;
+  public hero: ComplexSettingsServiceType<IHeroSettings, HeroSettings>;
 
-  private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
+  private villages: Map<number, ComplexSettingsServiceType<IVillageSettings, VillageSettings>>;
 
   constructor() {
     const accountSettingsPath = dataPathService.accountPath().settings;
@@ -22,7 +27,7 @@ export class SettingsService {
     this.hero = new HeroSettingsService();
   }
 
-  public village = (villageId: number): ComplexSettingsServiceType<VillageSettings> => {
+  public village = (villageId: number): ComplexSettingsServiceType<IVillageSettings, VillageSettings> => {
     let settings = this.villages.get(villageId);
 
     if (settings) {

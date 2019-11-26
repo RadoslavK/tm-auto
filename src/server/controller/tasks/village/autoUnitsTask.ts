@@ -45,7 +45,7 @@ export class AutoUnitsTask implements IBotTask {
       return;
     }
 
-    const unitsToBuild = settings.units.filter(x => unitsService.getUnitBuildingType(x.index) === type);
+    const unitsToBuild = buildingSettings.units;
 
     const possibleUnitsToBuild = unitsToBuild.filter(unit => unit.autoBuild);
     const buildingSpots = this.m_village.buildings.spots;

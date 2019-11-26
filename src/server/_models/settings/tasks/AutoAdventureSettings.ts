@@ -1,32 +1,19 @@
-import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
 import {
   Duration,
-  IDurationParams,
 } from '../../duration';
 import { merge } from '../../../../_shared/merge';
+import {
+  IAdventureCriteria,
+  IAutoAdventureSettings,
+} from '../../../_types/graphql';
+import { Fields } from '../../../../_shared/types';
 
-export enum AdventureCriteria {
-  Closest,
-  Furthest,
-  Random,
-  FirstToExpire,
-}
-
-export interface IAutoAdventureSettingsParams extends ITaskSettingsParams {
-  readonly adventureCriteria: AdventureCriteria;
-  readonly preferHard: boolean;
-  readonly normalMinHealth: number;
-  readonly hardMinHealth: number;
-  readonly maxTravelTime: IDurationParams;
-  readonly preferredVillageId: number | null;
-}
-
-const defaults: AutoAdventureSettings = {
+const defaults: Fields<AutoAdventureSettings> = {
   allow: true,
   coolDown: new CoolDown(),
 
-  adventureCriteria: AdventureCriteria.Closest,
+  adventureCriteria: IAdventureCriteria.Closest,
   preferHard: false,
   normalMinHealth: 30,
   hardMinHealth: 50,
@@ -34,18 +21,18 @@ const defaults: AutoAdventureSettings = {
   preferredVillageId: null,
 };
 
-export class AutoAdventureSettings implements IAutoAdventureSettingsParams {
+export class AutoAdventureSettings implements IAutoAdventureSettings {
   public allow: boolean;
   public coolDown: CoolDown;
 
-  adventureCriteria: AdventureCriteria;
-  preferHard: boolean;
-  normalMinHealth: number;
-  hardMinHealth: number;
-  maxTravelTime: Duration;
-  preferredVillageId: number | null;
+  public adventureCriteria: IAdventureCriteria;
+  public preferHard: boolean;
+  public normalMinHealth: number;
+  public hardMinHealth: number;
+  public maxTravelTime: Duration;
+  public preferredVillageId: number | null;
 
-  constructor(params: Partial<IAutoAdventureSettingsParams> = {}) {
+  constructor(params: Partial<IAutoAdventureSettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),

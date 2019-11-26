@@ -1,11 +1,6 @@
 import { Fields } from '../../../_shared/types';
 import { merge } from '../../../_shared/merge';
-
-export interface IGeneralSettingsParams {
-  readonly allowTasks: boolean;
-  readonly autoBuild: boolean;
-  readonly autoUnits: boolean;
-}
+import { IGeneralSettings } from '../../_types/graphql';
 
 const defaults: Fields<GeneralSettings> = {
   autoUnits: true,
@@ -13,12 +8,12 @@ const defaults: Fields<GeneralSettings> = {
   allowTasks: true,
 };
 
-export class GeneralSettings implements IGeneralSettingsParams {
-  allowTasks: boolean;
-  autoBuild: boolean;
-  autoUnits: boolean;
+export class GeneralSettings implements IGeneralSettings {
+  public allowTasks: boolean;
+  public autoBuild: boolean;
+  public autoUnits: boolean;
 
-  constructor(params: Partial<IGeneralSettingsParams> = {}) {
+  constructor(params: Partial<IGeneralSettings> = {}) {
     Object.assign(this, merge(defaults, params));
   }
 }

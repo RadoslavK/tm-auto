@@ -2,14 +2,18 @@ import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventur
 import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
 import { accountContext } from '../../accountContext';
 import {
-  AutoUnitsBuildingSettings,
   AutoUnitsSettings,
 } from '../../_models/settings/tasks/AutoUnitsSettings';
 import { Resolvers } from './_types';
-import { mapAutoUnitsSettings } from '../mappers/settings/mapAutoUnitsSettings';
 import { BuildingType } from '../../_enums/BuildingType';
 import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
 import { GeneralSettings } from '../../_models/settings/GeneralSettings';
+import { AutoPartySettings } from '../../_models/settings/tasks/AutoPartySettings';
+import { unitsService } from '../../services/unitsService';
+import {
+  IAutoUnitsBuildingSettings,
+  IAutoUnitsSettings,
+} from '../../_types/graphql';
 
 export const settingsResolvers: Resolvers = {
   ITaskSettings: {
@@ -26,22 +30,18 @@ export const settingsResolvers: Resolvers = {
         return 'AutoUnitsSettings';
       }
 
+      if (settings instanceof AutoPartySettings) {
+        return 'AutoPartySettings';
+      }
+
       return null;
     },
   },
   Query: {
     generalSettings: () => accountContext.settingsService.general.get(),
     hero: () => accountContext.settingsService.hero.get(),
-    villageSettings: (_, args) => {
-      const villageSettings = accountContext.settingsService.village(args.villageId).get();
-
-      return {
-        general: villageSettings.general,
-        autoBuild: villageSettings.autoBuild,
-        autoUnits: mapAutoUnitsSettings(villageSettings.autoUnits),
-      };
-    },
-    autoUnitsSettings: (_, args) => mapAutoUnitsSettings(accountContext.settingsService.village(args.villageId).autoUnits.get()),
+    villageSettings: (_, args) => accountContext.settingsService.village(args.villageId).get(),
+    autoUnitsSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoUnits.get(),
   },
 
   Mutation: {
@@ -97,15 +97,17 @@ export const settingsResolvers: Resolvers = {
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();
 
-      const updatedUnits = [...settings.units];
-      updatedUnits[unitIndex - 1] = {
+      const unitInfo = unitsService.getUnitInfo(unitIndex);
+      const buildingSettings = settings.forBuilding(unitInfo.buildingType);
+
+      const collectionIndex = buildingSettings.units.findIndex(u => u.index === unitIndex);
+      buildingSettings.units[collectionIndex] = {
         ...updatedUnitSettings,
         index: unitIndex,
       };
 
       const updatedSettings: AutoUnitsSettings = new AutoUnitsSettings({
         ...settings,
-        units: updatedUnits,
       });
 
       settingsManager.update(updatedSettings);
@@ -124,19 +126,34 @@ export const settingsResolvers: Resolvers = {
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();
 
-      const updatedBuildings = { ...settings.buildings };
+      const buildingSettings = settings.forBuilding(buildingType);
 
-      updatedBuildings[buildingType as BuildingType] = new AutoUnitsBuildingSettings({
+      const updatedBuildingSettings: IAutoUnitsBuildingSettings = {
+        ...buildingSettings,
         allow,
         maxBuildTime,
-      });
+      };
 
-      const updatedSettings = new AutoUnitsSettings({
-        ...settings,
-        buildings: updatedBuildings,
-      });
+      const getUpdatedSettings = (): IAutoUnitsSettings => {
+        switch (buildingType) {
+          case BuildingType.Barracks:
+            return { ...settings, barracks: updatedBuildingSettings };
 
-      settingsManager.update(updatedSettings);
+          case BuildingType.Stable:
+            return { ...settings, stable: updatedBuildingSettings };
+
+          case BuildingType.Workshop:
+            return { ...settings, workshop: updatedBuildingSettings };
+
+          case BuildingType.Residence:
+            return { ...settings, residence: updatedBuildingSettings };
+
+          default:
+            throw new Error(`Unknown building type: ${buildingType}`);
+        }
+      };
+
+      settingsManager.update(new AutoUnitsSettings(getUpdatedSettings()));
 
       return true;
     },

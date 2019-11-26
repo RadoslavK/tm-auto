@@ -9,10 +9,17 @@ export type Scalars = {
   Date: Date,
 };
 
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random',
+  FirstToExpire = 'FirstToExpire'
+}
+
 export type IAutoAdventureSettings = IITaskSettings & {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
-  readonly adventureCriteria: Scalars['Int'],
+  readonly adventureCriteria: AdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -23,7 +30,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
 export type IAutoAdventureSettingsInput = {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: Scalars['Int'],
+  readonly adventureCriteria: AdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -54,6 +61,13 @@ export type IAutoBuildVillageSettingsInput = {
   readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+};
+
+export type IAutoPartySettings = IITaskSettings & {
+  readonly coolDown: ICoolDown,
+  readonly allow: Scalars['Boolean'],
+  readonly minCulturePoints: Scalars['Int'],
+  readonly partyType: PartyType,
 };
 
 export type IAutoUnitsBuildingSettings = {
@@ -364,6 +378,11 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
   input: IUpdateAutoUnitsSettingsInput
 };
 
+export enum PartyType {
+  Small = 'Small',
+  Large = 'Large'
+}
+
 export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account: Maybe<IUserAccount>,
@@ -591,6 +610,7 @@ export type IVillageSettings = {
   readonly general: IGeneralVillageSettings,
   readonly autoBuild: IAutoBuildSettings,
   readonly autoUnits: IAutoUnitsSettings,
+  readonly autoParty: IAutoPartySettings,
 };
 
 export type IUserAccountFragmentFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
@@ -843,7 +863,12 @@ type ITaskSettingsFragment_AutoUnitsSettings_Fragment = (
   & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
-export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment | ITaskSettingsFragment_AutoUnitsSettings_Fragment;
+type ITaskSettingsFragment_AutoPartySettings_Fragment = (
+  Pick<IAutoPartySettings, 'allow'>
+  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
+);
+
+export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment | ITaskSettingsFragment_AutoUnitsSettings_Fragment | ITaskSettingsFragment_AutoPartySettings_Fragment;
 
 export type IAutoUnitsUnitSettingsFragmentFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
 

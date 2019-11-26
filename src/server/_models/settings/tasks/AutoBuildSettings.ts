@@ -1,13 +1,8 @@
-import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 import { Fields } from '../../../../_shared/types';
 import { merge } from '../../../../_shared/merge';
-
-export interface IAutoBuildSettingsParams extends ITaskSettingsParams {
-  readonly autoCropFields: boolean;
-  readonly minCrop: number;
-}
+import { IAutoBuildSettings } from '../../../_types/graphql';
 
 const defaults: Fields<AutoBuildSettings> = {
   allow: true,
@@ -19,14 +14,14 @@ const defaults: Fields<AutoBuildSettings> = {
   minCrop: 0,
 };
 
-export class AutoBuildSettings implements IAutoBuildSettingsParams {
+export class AutoBuildSettings implements IAutoBuildSettings {
   public allow: boolean;
   public coolDown: CoolDown;
 
   readonly autoCropFields: boolean;
   readonly minCrop: number;
 
-  constructor(params: Partial<IAutoBuildSettingsParams> = {}) {
+  constructor(params: Partial<IAutoBuildSettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),

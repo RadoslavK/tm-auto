@@ -21,11 +21,18 @@ type AutoBuildSettings implements ITaskSettings {
     minCrop: Int!
 }
 
+enum AdventureCriteria {
+    Closest
+    Furthest
+    Random
+    FirstToExpire
+}
+
 type AutoAdventureSettings implements ITaskSettings {
     allow: Boolean!
     coolDown: CoolDown!
 
-    adventureCriteria: Int!
+    adventureCriteria: AdventureCriteria!
     preferHard: Boolean!
     normalMinHealth: Int!
     hardMinHealth: Int!
@@ -61,10 +68,24 @@ type AutoUnitsSettings implements ITaskSettings {
     residence: AutoUnitsBuildingSettings!
 }
 
+enum PartyType {
+    Small
+    Large
+}
+
+type AutoPartySettings implements ITaskSettings {
+    coolDown: CoolDown!
+    allow: Boolean!
+
+    minCulturePoints: Int!
+    partyType: PartyType!
+}
+
 type VillageSettings {
     general: GeneralVillageSettings!
     autoBuild: AutoBuildSettings!
     autoUnits: AutoUnitsSettings!
+    autoParty: AutoPartySettings!
 }
 
 extend type Query {
@@ -90,7 +111,7 @@ input AutoAdventureSettingsInput {
     allow: Boolean!
     coolDown: CoolDownInput!
 
-    adventureCriteria: Int!
+    adventureCriteria: AdventureCriteria!
     preferHard: Boolean!
     normalMinHealth: Int!
     hardMinHealth: Int!

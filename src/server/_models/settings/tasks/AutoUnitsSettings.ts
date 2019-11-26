@@ -1,21 +1,14 @@
 // eslint-disable-next-line max-classes-per-file
 import { BuildingType } from '../../../_enums/BuildingType';
-import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
-import {
-  Duration,
-  IDurationParams,
-} from '../../duration';
+import { Duration } from '../../duration';
 import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
-import { mapRecord } from '../../../../_shared/objectUtils';
-
-export interface IAutoUnitsUnitSettingsParams {
-  readonly index: number;
-  readonly autoBuild: boolean;
-  readonly trainForever: boolean;
-  readonly targetAmount: number;
-}
+import {
+  IAutoUnitsBuildingSettings,
+  IAutoUnitsSettings,
+  IAutoUnitsUnitSettings,
+} from '../../../_types/graphql';
 
 const defaultUnitSettings: Fields<AutoUnitsUnitSettings> = {
   index: 0,
@@ -24,43 +17,35 @@ const defaultUnitSettings: Fields<AutoUnitsUnitSettings> = {
   targetAmount: 0,
 };
 
-export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettingsParams {
+export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettings {
   index: number;
   autoBuild: boolean;
   trainForever: boolean;
   targetAmount: number;
 
-  constructor(params: Partial<IAutoUnitsUnitSettingsParams> = {}) {
+  constructor(params: Partial<IAutoUnitsUnitSettings> = {}) {
     Object.assign(this, merge(defaultUnitSettings, params));
   }
-}
-
-export interface IAutoUnitsBuildingSettingsParams {
-  readonly allow: boolean;
-  readonly maxBuildTime: IDurationParams;
 }
 
 const defaults: Fields<AutoUnitsBuildingSettings> = {
   allow: true,
   maxBuildTime: new Duration({ hours: 1 }),
+  units: [],
 };
 
-export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettingsParams {
+export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettings {
   allow: boolean;
   maxBuildTime: Duration;
+  units: AutoUnitsUnitSettings[];
 
-  constructor(params: Partial<IAutoUnitsBuildingSettingsParams> = {}) {
+  constructor(params: Partial<IAutoUnitsBuildingSettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       maxBuildTime: params.maxBuildTime && new Duration(params.maxBuildTime),
+      units: params.units && params.units.map(u => new AutoUnitsUnitSettings(u)),
     }));
   }
-}
-
-export interface IAutoUnitsSettingsParams extends ITaskSettingsParams {
-  readonly minCrop: number;
-  readonly units: IAutoUnitsUnitSettingsParams[];
-  readonly buildings: Record<BuildingType, IAutoUnitsBuildingSettingsParams>;
 }
 
 const defaultSettings: Fields<AutoUnitsSettings> = {
@@ -70,42 +55,51 @@ const defaultSettings: Fields<AutoUnitsSettings> = {
     max: new Duration({ minutes: 20 }),
   }),
   minCrop: 0,
-  units: [...new Array(10).keys()].map(index => new AutoUnitsUnitSettings({ index: index + 1 })),
-  buildings: {
-    [BuildingType.Barracks]: new AutoUnitsBuildingSettings(),
-    [BuildingType.Stable]: new AutoUnitsBuildingSettings(),
-    [BuildingType.Workshop]: new AutoUnitsBuildingSettings(),
-    [BuildingType.Residence]: new AutoUnitsBuildingSettings({ maxBuildTime: new Duration({ hours: 12 }) }),
-  } as Record<BuildingType, AutoUnitsBuildingSettings>,
+  barracks: new AutoUnitsBuildingSettings(),
+  stable: new AutoUnitsBuildingSettings(),
+  workshop: new AutoUnitsBuildingSettings(),
+  residence: new AutoUnitsBuildingSettings({ maxBuildTime: new Duration({ hours: 12 }) }),
 };
 
-export class AutoUnitsSettings implements IAutoUnitsSettingsParams {
+export class AutoUnitsSettings implements IAutoUnitsSettings {
   public allow: boolean;
   public coolDown: CoolDown;
 
   public minCrop: number;
 
-  public buildings: Record<BuildingType, AutoUnitsBuildingSettings> = {} as Record<BuildingType, AutoUnitsBuildingSettings>;
+  public barracks: AutoUnitsBuildingSettings;
+  public stable: AutoUnitsBuildingSettings;
+  public workshop: AutoUnitsBuildingSettings;
+  public residence: AutoUnitsBuildingSettings;
 
-  public units: AutoUnitsUnitSettings[];
-
-  constructor(params: Partial<IAutoUnitsSettingsParams> = {}) {
+  constructor(params: Partial<IAutoUnitsSettings> = {}) {
     Object.assign(this, merge(defaultSettings, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
-      buildings: params.buildings && mapRecord(params.buildings, b => new AutoUnitsBuildingSettings(b)),
+      barracks: params.barracks && new AutoUnitsBuildingSettings(params.barracks),
+      stable: params.stable && new AutoUnitsBuildingSettings(params.stable),
+      workshop: params.workshop && new AutoUnitsBuildingSettings(params.workshop),
+      residence: params.residence && new AutoUnitsBuildingSettings(params.residence),
     }));
   }
 
   public forBuilding = (type: BuildingType): AutoUnitsBuildingSettings => {
-    const buildingSettings = Object
-      .entries(this.buildings)
-      .find(([bType]) => (bType as any as BuildingType) === type);
+    switch (type) {
+      case BuildingType.Barracks:
+        return this.barracks;
 
-    if (!buildingSettings) {
-      throw new Error(`Invalid building type requested: ${BuildingType[type]}`);
+      case BuildingType.Stable:
+        return this.stable;
+
+      case BuildingType.Workshop:
+        return this.workshop;
+
+      case BuildingType.Palace:
+      case BuildingType.Residence:
+        return this.residence;
+
+      default:
+        throw new Error(`Invalid building type requested: ${BuildingType[type]}`);
     }
-
-    return buildingSettings[1];
   };
 }

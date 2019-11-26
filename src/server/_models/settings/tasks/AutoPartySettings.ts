@@ -1,29 +1,26 @@
-import { PartyType } from '../../../_enums/PartyType';
-import { ITaskSettingsParams } from '../../../_types/ITaskSettingsParams';
 import { CoolDown } from '../../coolDown';
 import { Fields } from '../../../../_shared/types';
 import { merge } from '../../../../_shared/merge';
-
-export interface IAutoPartySettingsParams extends ITaskSettingsParams {
-  readonly minCulturePoints: number;
-  readonly partyType: PartyType;
-}
+import {
+  IAutoPartySettings,
+  IPartyType,
+} from '../../../_types/graphql';
 
 const defaults: Fields<AutoPartySettings> = {
   allow: false,
   minCulturePoints: 0,
   coolDown: new CoolDown(),
-  partyType: PartyType.Small,
+  partyType: IPartyType.Small,
 };
 
-export class AutoPartySettings implements IAutoPartySettingsParams {
-  allow: boolean;
-  coolDown: CoolDown;
+export class AutoPartySettings implements IAutoPartySettings {
+  public allow: boolean;
+  public coolDown: CoolDown;
 
-  minCulturePoints: number;
-  partyType: PartyType;
+  public minCulturePoints: number;
+  public partyType: IPartyType;
 
-  constructor(params: Partial<IAutoPartySettingsParams> = {}) {
+  constructor(params: Partial<IAutoPartySettings> = {}) {
     Object.assign(this, merge(defaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
