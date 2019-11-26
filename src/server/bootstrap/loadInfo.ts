@@ -1,53 +1,26 @@
 import fs from "fs";
 import path from "path";
 import { BuildingCategory } from '../_enums/BuildingCategory';
-import { BuildingConditions } from '../_models/buildings/buildingConditions';
+import { IBuildingConditions } from '../_models/buildings/buildingConditions';
 import { Cost } from '../_models/misc/cost';
 import { BuildingType } from '../_enums/BuildingType';
 import { ITribe } from '../_types/graphql';
+import { mapRecord } from '../../_shared/objectUtils';
 
-const unitsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'unitsInfo.json');
-const buildingsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'buildingsInfo.json');
+//  TODO nejaky resource loader
 
-export const unitInfos: Record<string, IUnitInfo> = {};
-export const buildingInfos: Record<string, IBuildingInfo> = {};
+const unitsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'unit-infos.json');
+const buildingsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'building-infos.json');
 
-interface IBuildingInfo {
+export const unitInfos: Map<number, IUnitInfo> = new Map();
+export const buildingInfos: Map<BuildingType, IBuildingInfo> = new Map();
+
+export interface IBuildingInfo {
   readonly category: BuildingCategory;
-  readonly conditions: BuildingConditions;
+  readonly conditions: IBuildingConditions;
   readonly costs: Record<string, Cost>;
   readonly maxLevel: number;
   readonly name: string;
-}
-
-class BuildingInfo implements IBuildingInfo {
-  readonly category: BuildingCategory;
-  readonly conditions: BuildingConditions;
-  readonly costs: Record<string, Cost>;
-  readonly maxLevel: number;
-  readonly name: string;
-
-  constructor(params: IBuildingInfo) {
-    Object.assign(this, params);
-
-    if (!(this.conditions instanceof BuildingConditions)) {
-      this.conditions = new BuildingConditions(this.conditions);
-    }
-
-    const costsByLevel = Object.keys(this.costs);
-    const zeroLevelCost = this.costs[costsByLevel[0]];
-
-    if (costsByLevel.length && !(zeroLevelCost instanceof Cost)) {
-      this.costs = costsByLevel.reduce((reduced, level) => {
-        const cost = this.costs[level];
-
-        return {
-          ...reduced,
-          [level]: new Cost(cost),
-        };
-      }, {} as Record<string, Cost>);
-    }
-  }
 }
 
 export interface IUnitInfo {
@@ -58,29 +31,31 @@ export interface IUnitInfo {
 }
 
 export const loadInfo = (): void => {
-  const loadedIUnitInfos = JSON.parse(fs.readFileSync(unitsInfoPath).toString()) as typeof unitInfos;
+  const loadedIUnitInfos = JSON.parse(fs.readFileSync(unitsInfoPath).toString()) as Record<string, IUnitInfo>;
 
   Object
     .entries(loadedIUnitInfos)
     .forEach(([key, value]) => {
-      unitInfos[key] = value;
+      //  internally there are not classes so we need to create them
+      const correctValue: IUnitInfo = {
+        ...value,
+        cost: new Cost(value.cost),
+      };
+
+      unitInfos.set(+key, correctValue);
     });
 
-  const bInfos = JSON.parse(fs.readFileSync(buildingsInfoPath).toString());
-  const loadedBuildingInfos = Object
-    .keys(bInfos)
-    .reduce((reduced, bType) => {
-      const buildingInfo = bInfos[bType];
-
-      return {
-        ...reduced,
-        [bType]: new BuildingInfo(buildingInfo),
-      };
-    }, {} as Record<string, IBuildingInfo>);
+  const loadedBuildingInfos = JSON.parse(fs.readFileSync(buildingsInfoPath).toString()) as Record<string, IBuildingInfo>;
 
   Object
     .entries(loadedBuildingInfos)
     .forEach(([key, value]) => {
-      buildingInfos[key] = value;
+      //  correct classes
+      const buildingInfo: IBuildingInfo = {
+        ...value,
+        costs: mapRecord(value.costs, c => new Cost(c)),
+      };
+
+      buildingInfos.set(+key, buildingInfo);
     });
 };

@@ -17,6 +17,7 @@ import {
 } from '../subscriptions/pubSub';
 import { accountContext } from '../../accountContext';
 import { Resolvers } from './_types';
+import { buildingsService } from '../../services/buildingsService';
 
 const getWallType = (): BuildingType => {
   const { tribe } = accountContext.gameInfo;
@@ -60,7 +61,7 @@ export const buildingResolvers: Resolvers = {
             queued: 0,
             actual: 0,
             ongoing: 0,
-            max: buildingInfos[b.type].maxLevel,
+            max: buildingsService.getBuildingInfo(b.type).maxLevel,
           };
         } else if (b.fieldId === fieldIds.Wall) {
           (b.type as BuildingType) = getWallType();
@@ -69,7 +70,7 @@ export const buildingResolvers: Resolvers = {
             queued: 0,
             actual: 0,
             ongoing: 0,
-            max: buildingInfos[b.type].maxLevel,
+            max: buildingsService.getBuildingInfo(b.type).maxLevel,
           };
         }
       });

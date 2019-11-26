@@ -1,5 +1,3 @@
-
-
 export const mapRecord = <TKey extends keyof any, TValue, TNewValue>(record: Record<TKey, TValue>, mapper: (value: TValue) => TNewValue): Record<TKey, TNewValue> => {
   return Object
     .entries(record)

@@ -10,6 +10,7 @@ import { getWithMaximum } from '../utils/getWithMaximum';
 import { accountContext } from '../accountContext';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
+import { buildingsService } from './buildingsService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -54,7 +55,7 @@ export class BuildingQueueService {
 
     const spot = this.m_village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.total();
-    const { maxLevel } = buildingInfos[type];
+    const { maxLevel } = buildingsService.getBuildingInfo(type);
     let enqueued = false;
 
     for (let i = 1; i <= levels; i++) {
@@ -226,10 +227,10 @@ export class BuildingQueueService {
       : offsets[building.fieldId]);
 
     const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
-    const { conditions } = buildingInfos[checkedBuilding.type];
+    const { conditions } = buildingsService.getBuildingInfo(checkedBuilding.type);
 
-    if (conditions.type > BuildingType.Crop) {
-      const { maxLevel } = buildingInfos[checkedBuilding.type];
+    if (checkedBuilding.type > BuildingType.Crop) {
+      const { maxLevel } = buildingsService.getBuildingInfo(checkedBuilding.type);
 
       const anyCompleted = normalizedBuildings
         .filter(b => b.type === checkedBuilding.type)
@@ -342,7 +343,7 @@ export class BuildingQueueService {
       return true;
     }
 
-    const { conditions } = buildingInfos[queuedBuilding.type];
+    const { conditions, maxLevel } = buildingsService.getBuildingInfo(queuedBuilding.type);
 
     if ((conditions.capital === CapitalCondition.Prohibited && this.m_village.isCapital)
       || (conditions.capital === CapitalCondition.Required && !this.m_village.isCapital)) {
@@ -359,9 +360,9 @@ export class BuildingQueueService {
         return true;
       }
 
-      if (conditions.type > BuildingType.Crop) {
+      if (queuedBuilding.type > BuildingType.Crop) {
         // u resource je jedno
-        const sameTypeBuildings = normalizedBuildings.filter(b => b.type === conditions.type);
+        const sameTypeBuildings = normalizedBuildings.filter(b => b.type === queuedBuilding.type);
 
         if (conditions.isUnique) {
           // existuje nejaka budova, rozstavana alebo v queue az po tialto
@@ -374,8 +375,6 @@ export class BuildingQueueService {
             return true;
           }
         } else {
-          const { maxLevel } = buildingInfos[conditions.type];
-
           const existingBuildings = sameTypeBuildings.map(
             b => ({
               totalLevel:

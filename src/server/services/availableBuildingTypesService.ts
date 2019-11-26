@@ -1,11 +1,13 @@
 import { allBuildingTypes, BuildingType } from '../_enums/BuildingType';
-import { BuildingConditions, CapitalCondition } from '../_models/buildings/buildingConditions';
+import {
+  CapitalCondition,
+  IBuildingConditions,
+} from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
 import { fieldIds } from '../constants/fieldIds';
-import { buildingInfos } from '../bootstrap/loadInfo';
 import { accountContext } from '../accountContext';
 import { ITribe } from '../_types/graphql';
-import { getTribeFromIndex } from '../../_shared/tribeIndex';
+import { buildingsService } from './buildingsService';
 
 export class AvailableBuildingTypesService {
   private readonly m_village: Village;
@@ -85,8 +87,8 @@ export class AvailableBuildingTypesService {
               break;
           }
 
-          const buildingConditions = buildingInfos[type].conditions;
-          const meetVillageConditions = this.newBuildingMeetsConditions(buildingConditions);
+          const buildingConditions = buildingsService.getBuildingInfo(type).conditions;
+          const meetVillageConditions = this.newBuildingMeetsConditions(type, buildingConditions);
 
           if (!meetVillageConditions) {
             return;
@@ -107,7 +109,7 @@ export class AvailableBuildingTypesService {
             }
 
             // requirements for more than 1 building of that type
-            if (!spotsOfType.some(b => b.level.total === buildingInfos[b.type].maxLevel)) {
+            if (!spotsOfType.some(b => b.level.total === buildingsService.getBuildingInfo(b.type).maxLevel)) {
               return;
             }
           }
@@ -123,15 +125,15 @@ export class AvailableBuildingTypesService {
     return buildingTypes;
   };
 
-  private newBuildingMeetsConditions = (conditions: BuildingConditions): boolean => {
+  private newBuildingMeetsConditions = (type: BuildingType, conditions: IBuildingConditions): boolean => {
     // TODO detect if artefacts are in village
-    if (conditions.type === BuildingType.GreatGranary
-      || conditions.type === BuildingType.GreatWarehouse) {
+    if (type === BuildingType.GreatGranary
+      || type === BuildingType.GreatWarehouse) {
       return false;
     }
 
-    if (conditions.playerTribe !== 0
-      && getTribeFromIndex(conditions.playerTribe) !== accountContext.gameInfo.tribe) {
+    if (conditions.playerTribe !== null
+      && conditions.playerTribe !== accountContext.gameInfo.tribe) {
       return false;
     }
 
@@ -144,7 +146,7 @@ export class AvailableBuildingTypesService {
     const normalizedBuildingSpots = this.m_village.buildings.normalizedBuildingSpots();
 
     // vsetky budovy aj v queue
-    const buildings = normalizedBuildingSpots.filter(b => b.type === conditions.type);
+    const buildings = normalizedBuildingSpots.filter(b => b.type === type);
 
     if (conditions.isUnique) {
       if (buildings.length) {
@@ -152,7 +154,7 @@ export class AvailableBuildingTypesService {
       }
     }
     else {
-      const completedBuildingExists = buildings.some(b => b.level.total === buildingInfos[b.type].maxLevel);
+      const completedBuildingExists = buildings.some(b => b.level.total === buildingsService.getBuildingInfo(b.type).maxLevel);
 
       if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level

@@ -17,7 +17,7 @@ const useStyles = makeStyles<unknown, IProps>({
   image: props => ({
     height: '18px',
     width: '18px',
-    backgroundImage: `url("${imageLinks.getUnit(props.content.tribe, props.content.index)}")`,
+    backgroundImage: `url("${imageLinks.getUnit(props.content.index)}")`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat'
   }),

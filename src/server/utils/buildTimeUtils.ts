@@ -1,5 +1,4 @@
 import { BuildingType } from '../_enums/BuildingType';
-import { unitInfos } from '../bootstrap/loadInfo';
 import { Duration } from '../_models/duration';
 
 const roundToNearest10 = (seconds: number): number => {
@@ -68,9 +67,8 @@ export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpee
   return Duration.fromSeconds(totalSeconds);
 };
 
-export const getActualUnitBuildTime = (unitIndex: number, gameSpeed: number, buildingLevel: number): Duration => {
+export const getActualUnitBuildTime = (originalBuildTime: Duration, gameSpeed: number, buildingLevel: number): Duration => {
   //  TODO do unit infos ulozit duration ale v subore radsej nechat total seconds
-  const originalBuildTime = unitInfos[unitIndex].cost.buildTime;
   const modifier = getUnitsModifier(buildingLevel);
   const buildTime = originalBuildTime.totalSeconds() / gameSpeed * modifier;
   const actualBuildTimeInSeconds = Math.round(buildTime);

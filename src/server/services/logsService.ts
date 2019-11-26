@@ -7,13 +7,11 @@ import {
   ITextLogEntryContent,
 } from '../_types/graphql';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
-import {
-  buildingInfos,
-  unitInfos,
-} from '../bootstrap/loadInfo';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { accountContext } from '../accountContext';
+import { unitsService } from './unitsService';
+import { buildingsService } from './buildingsService';
 
 export interface ILogAutoUnitsParams {
   readonly amount: number;
@@ -39,7 +37,7 @@ export class LogsService {
         fieldId: building.fieldId,
         level: building.level,
         type: building.type,
-        name: buildingInfos[building.type].name,
+        name: buildingsService.getBuildingInfo(building.type).name,
       },
     };
 
@@ -53,7 +51,7 @@ export class LogsService {
     } = params;
 
     const { tribe } = accountContext.gameInfo;
-    const { name } = unitInfos[tribe];
+    const { name } = unitsService.getUnitInfo(index);
 
     const content: IAutoUnitsLogEntryContent = {
       autoUnits: {

@@ -96,22 +96,6 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     }));
   };
 
-  const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
-
-    if (+value < 0) {
-      return;
-    }
-
-    setState(prevState => ({
-      ...prevState,
-      [name]: +value,
-    }));
-  };
-
   const updateMaxBuildTime = useCallback((newValue: IDuration) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), [setState]);
 
   return (

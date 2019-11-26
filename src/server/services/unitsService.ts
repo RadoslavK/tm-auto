@@ -1,27 +1,16 @@
 //  TODO unit infos a loading presunut sem a spravit podobne aj building info servisu
 
-import { BuildingType } from '../_enums/BuildingType';
-import { accountContext } from '../accountContext';
 import {
   IUnitInfo,
   unitInfos,
 } from '../bootstrap/loadInfo';
-import { getTribeIndex } from '../../_shared/tribeIndex';
 
 class UnitsService {
-  public getUnitBuildingType = (index: number): BuildingType => {
-    const unitInfo = this.getUnitInfo(index);
-
-    return unitInfo.buildingType;
-  };
-
-  public getUnitInfo = (index: number): IUnitInfo => {
-    const { tribe } = accountContext.gameInfo;
-
-    const unitInfo = unitInfos[((getTribeIndex(tribe) - 1) * 10) + index];
+  public getUnitInfo = (unitIndex: number): IUnitInfo => {
+    const unitInfo = unitInfos.get(unitIndex);
 
     if (!unitInfo) {
-      throw new Error(`Unit info for unit index ${index} not found, tribe: ${tribe}`);
+      throw new Error(`Unit info for unit index ${unitIndex} not found`);
     }
 
     return unitInfo;

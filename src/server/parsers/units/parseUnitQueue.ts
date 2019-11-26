@@ -1,10 +1,8 @@
 import { UnitsQueue } from '../../_models/units/unitsQueue';
 import { getPage } from '../../browser/getPage';
-import { accountContext } from '../../accountContext';
 import {
   Duration,
 } from '../../_models/duration';
-import { getTribeIndex } from '../../../_shared/tribeIndex';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();
@@ -19,8 +17,6 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const durationText = await lastUnitNode.$eval('[class=timer]', x => (x as HTMLElement).innerText);
   unitQueue.duration = Duration.fromText(durationText);
 
-  const unitIndexDecrement = (getTribeIndex(accountContext.gameInfo.tribe) - 1) * 10;
-
   const units = await Promise.all(queuedUnitNodes.map(async (node) => {
     const index = await node.$eval('img[class*=unit]', x => {
       const unitIndexClass = /unit u(\d+)/.exec(x.className);
@@ -29,8 +25,7 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
         throw new Error('Failed to parse unit queue');
       }
 
-      const unitIndex = +unitIndexClass[1];
-      return unitIndex - unitIndexDecrement;
+      return +unitIndexClass[1];
     });
 
     const count = await node.$eval('[class=desc]', x => {

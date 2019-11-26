@@ -5,6 +5,7 @@ import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
 import { BuildingSpots } from './spots/BuildingSpots';
+import { buildingsService } from '../../services/buildingsService';
 
 export interface IActualBuilding {
   readonly fieldId: number;
@@ -41,6 +42,7 @@ export class Buildings {
       const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
       // eslint-disable-next-line unicorn/no-nested-ternary
       const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
+      const info = buildingsService.getBuildingInfo(type);
 
       return {
         type,
@@ -48,9 +50,9 @@ export class Buildings {
         level: {
           ...b.level,
           total: b.level.total(),
-          max: buildingInfos[type].maxLevel,
+          max: info.maxLevel,
         },
-        name: buildingInfos[type].name,
+        name: info.name,
       };
     });
   };

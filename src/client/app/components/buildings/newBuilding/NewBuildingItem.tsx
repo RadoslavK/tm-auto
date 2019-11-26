@@ -18,6 +18,7 @@ const useStyles = makeStyles<unknown, IProps>({
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     backgroundImage: `url("${imageLinks.getBuilding(props.type)}")`,
+    margin: '0 auto',
   }),
   name: {
     textAlign: 'center',
@@ -45,7 +46,7 @@ export const NewBuildingItem: React.FC<IProps> = (props) => {
   return (
     <div className={className} onClick={onClick}>
       <div className={classes.image} />
-      <span className={classes.name}>{name}</span>
+      <div className={classes.name}>{name}</div>
     </div>
   );
 };

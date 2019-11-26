@@ -1,23 +1,19 @@
-import { QueuedUnit } from './queuedUnit';
 import { Duration } from '../duration';
 
 export class UnitsQueue {
   public duration = new Duration();
 
-  private readonly m_units: Record<number, QueuedUnit> = {};
+  private readonly m_amountsByIndex: Record<number, number> = {};
 
-  public units = (): readonly QueuedUnit[] => Object.values(this.m_units);
+  public add = (unitIndex: number, amount: number): void => {
+    const queuedAmount: number | undefined = this.m_amountsByIndex[unitIndex];
 
-  public add = (index: number, amount: number): void => {
-    let queuedUnit: QueuedUnit = this.m_units[index];
-
-    if (!queuedUnit) {
-      queuedUnit = new QueuedUnit({ index, amount });
-      this.m_units[index] = queuedUnit;
+    if (queuedAmount) {
+      this.m_amountsByIndex[unitIndex] = queuedAmount + amount;
+    } else {
+      this.m_amountsByIndex[unitIndex] = amount;
     }
-
-    queuedUnit.amount += amount;
   };
 
-  public getQueuedCount = (index: number): number => this.m_units[index].amount;
+  public getQueuedCount = (unitIndex: number): number => this.m_amountsByIndex[unitIndex] || 0;
 }

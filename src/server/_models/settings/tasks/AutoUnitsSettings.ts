@@ -9,6 +9,8 @@ import {
   IAutoUnitsSettings,
   IAutoUnitsUnitSettings,
 } from '../../../_types/graphql';
+import { accountContext } from '../../../accountContext';
+import { unitInfos } from '../../../bootstrap/loadInfo';
 
 const defaultUnitSettings: Fields<AutoUnitsUnitSettings> = {
   index: 0,
@@ -48,18 +50,58 @@ export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettings {
   }
 }
 
-const defaultSettings: Fields<AutoUnitsSettings> = {
+const unitsMap: Map<BuildingType, IAutoUnitsUnitSettings[]> = new Map();
+
+const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] => {
+  let units = unitsMap.get(buildingType);
+
+  if (units) {
+    return units;
+  }
+
+  const { tribe } = accountContext.gameInfo;
+
+  units = [...unitInfos.keys()]
+    .reduce((reduced, k): IAutoUnitsUnitSettings[] => {
+      const info = unitInfos.get(k);
+
+      if (!info || info.tribe !== tribe || info.buildingType !== buildingType) {
+        return reduced;
+      }
+
+      const s: IAutoUnitsUnitSettings = new AutoUnitsUnitSettings({
+        index: k,
+      });
+
+      return [...reduced, s];
+    }, [] as IAutoUnitsUnitSettings[]);
+
+  unitsMap.set(buildingType, units);
+
+  return units;
+};
+
+const defaultSettings = (): Fields<AutoUnitsSettings> => ({
   allow: false,
   coolDown: new CoolDown({
     min: new Duration({ minutes: 10 }),
     max: new Duration({ minutes: 20 }),
   }),
   minCrop: 0,
-  barracks: new AutoUnitsBuildingSettings(),
-  stable: new AutoUnitsBuildingSettings(),
-  workshop: new AutoUnitsBuildingSettings(),
-  residence: new AutoUnitsBuildingSettings({ maxBuildTime: new Duration({ hours: 12 }) }),
-};
+  barracks: new AutoUnitsBuildingSettings({
+    units: getUnitsOfType(BuildingType.Barracks),
+  }),
+  stable: new AutoUnitsBuildingSettings({
+    units: getUnitsOfType(BuildingType.Stable),
+  }),
+  workshop: new AutoUnitsBuildingSettings({
+    units: getUnitsOfType(BuildingType.Workshop),
+  }),
+  residence: new AutoUnitsBuildingSettings({
+    maxBuildTime: new Duration({ hours: 12 }),
+    units: getUnitsOfType(BuildingType.Residence),
+  }),
+});
 
 export class AutoUnitsSettings implements IAutoUnitsSettings {
   public allow: boolean;
@@ -73,7 +115,7 @@ export class AutoUnitsSettings implements IAutoUnitsSettings {
   public residence: AutoUnitsBuildingSettings;
 
   constructor(params: Partial<IAutoUnitsSettings> = {}) {
-    Object.assign(this, merge(defaultSettings, {
+    Object.assign(this, merge(defaultSettings(), {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
       barracks: params.barracks && new AutoUnitsBuildingSettings(params.barracks),

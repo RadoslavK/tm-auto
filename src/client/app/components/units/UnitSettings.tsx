@@ -10,15 +10,12 @@ import {
 import { makeStyles } from '@material-ui/core';
 import {
   IAutoUnitsUnitSettings,
-  IGetGameInfoQuery,
   IGetUnitInfoQuery,
   IGetUnitInfoQueryVariables,
   IUpdateAutoUnitsUnitSettingsMutation,
   IUpdateAutoUnitsUnitSettingsMutationVariables,
-  Tribe,
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
-import { GetGameInfo } from '*/graphql_operations/player.graphql';
 import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
 import {
   UpdateAutoUnitsUnitSettings,
@@ -32,7 +29,13 @@ interface IProps {
   readonly settings: IAutoUnitsUnitSettings;
 }
 
-const useStyles = makeStyles<unknown, [number, boolean, Tribe | null]>({
+interface IStyleProps {
+  readonly unitIndex: number;
+  readonly autoBuild: boolean;
+  readonly trainForever: boolean;
+}
+
+const useStyles = makeStyles<unknown, IStyleProps>({
   root: {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
@@ -43,23 +46,23 @@ const useStyles = makeStyles<unknown, [number, boolean, Tribe | null]>({
     gridColumn: '1 / 3',
     gridRow: '1',
   },
-  unitImage: ([index, autoBuild, tribe]) => ({
+  unitImage: props => ({
     gridColumn: '1',
     gridRow: '2 / 3',
-    backgroundImage: tribe ? `url("${imageLinks.getUnit(tribe, index)}")` : '',
+    backgroundImage: `url("${imageLinks.getUnit(props.unitIndex)}")`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
-    filter: autoBuild ? undefined : 'grayscale(100%)',
+    filter: props.autoBuild ? undefined : 'grayscale(100%)',
   }),
   trainForever: {
     gridColumn: '2',
     gridRow: '2',
   },
-  targetAmount: ([_, autoBuild]) => ({
+  targetAmount: props => ({
     gridColumn: '2',
     gridRow: '3',
     display: 'flex',
-    visibility: autoBuild ? 'hidden' : undefined,
+    visibility: props.trainForever ? 'hidden' : undefined,
   }),
 });
 
@@ -69,9 +72,8 @@ export const UnitSettings: React.FC<IProps> = (props) => {
   } = props;
 
   const { villageId } = useContext<IVillageContext>(VillageContext);
-  const { data, loading } = useQuery<IGetGameInfoQuery>(GetGameInfo);
 
-  const { data: unitInfoData, loading: unitInfoLoading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
+  const { data, loading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
     variables: { index: settings.index },
   });
 
@@ -88,14 +90,14 @@ export const UnitSettings: React.FC<IProps> = (props) => {
       input: {
         villageId,
         unitIndex: settings.index,
-        autoBuild,
-        targetAmount,
-        trainForever,
+        autoBuild: state.autoBuild,
+        targetAmount: state.targetAmount,
+        trainForever: state.trainForever,
       },
     },
   });
 
-  const classes = useStyles([settings.index, autoBuild, data ? data.gameInfo.tribe : null]);
+  const classes = useStyles({ unitIndex: settings.index, autoBuild, trainForever });
 
   useEffect(() => {
     if (state === settings) {
@@ -105,7 +107,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
     updateSettings();
   }, [state, settings, updateSettings]);
 
-  if (loading || !data || unitInfoLoading || !unitInfoData) {
+  if (loading || !data) {
     return null;
   }
 
@@ -147,7 +149,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.unitName}>
-        {unitInfoData.unitInfo.name}
+        {data.unitInfo.name}
       </div>
       <div
         className={classes.unitImage}

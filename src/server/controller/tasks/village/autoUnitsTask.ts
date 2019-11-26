@@ -3,7 +3,6 @@ import { AutoUnitsSettings } from '../../../_models/settings/tasks/AutoUnitsSett
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
 import { getPage } from '../../../browser/getPage';
-import { unitInfos } from '../../../bootstrap/loadInfo';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
@@ -14,6 +13,7 @@ import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
+import { unitsService } from '../../../services/unitsService';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -79,7 +79,10 @@ export class AutoUnitsTask implements IBotTask {
 
     possibleUnitsToBuild.forEach(unitToBuild => {
       const uIndex = unitToBuild.index;
-      const cost = unitInfos[uIndex].cost.resources;
+      const {
+        resources: cost,
+        buildTime: originalBuildTime,
+      } = unitsService.getUnitInfo(uIndex).cost;
 
       // max by res
       let maxPossibleAmountToBuild = Math.min(
@@ -112,7 +115,7 @@ export class AutoUnitsTask implements IBotTask {
       }
 
       const { speed } = accountContext.gameInfo;
-      const buildTime = getActualUnitBuildTime(uIndex, speed, unitBuilding.level.actual);
+      const buildTime = getActualUnitBuildTime(originalBuildTime, speed, unitBuilding.level.actual);
 
       if (maxAllowedBuildingTime) {
         const freeBuildingTimeToFill = maxAllowedBuildingTime.totalSeconds() - ongoingBuildingTime.totalSeconds();

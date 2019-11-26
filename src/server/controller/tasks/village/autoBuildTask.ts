@@ -22,6 +22,8 @@ import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
+import { BuildingCategory } from '../../../_enums/BuildingCategory';
+import { buildingsService } from '../../../services/buildingsService';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -98,7 +100,7 @@ export class AutoBuildTask implements IBotTask {
     }
 
     const settings = this.settings();
-    const cost = buildingInfos[queuedBuilding.type].costs[queuedBuilding.level];
+    const cost = buildingsService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
     const resources = cost.resources.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
@@ -144,7 +146,7 @@ export class AutoBuildTask implements IBotTask {
       this.m_addedCroplandInQueue = true;
 
       // dost surovin a zaroven prazdna res queue
-      const cropLandResourceCost = buildingInfos[BuildingType.Crop].costs[newCropLandLevel].resources;
+      const cropLandResourceCost = buildingsService.getBuildingInfo(BuildingType.Crop).costs[newCropLandLevel].resources;
 
       if (this.m_village.resources.amount.isLowerThan(cropLandResourceCost)
         || !this.m_village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)) {
@@ -161,16 +163,16 @@ export class AutoBuildTask implements IBotTask {
 
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
-    const { category } = buildingInfos[queuedBuilding.type];
+    const { category } = buildingsService.getBuildingInfo(queuedBuilding.type);
 
     //  They have same class but dont have to be selected through category
     const areSpecialCases = queuedBuilding.fieldId === fieldIds.RallyPoint
       || queuedBuilding.fieldId === fieldIds.Wall;
 
-    if ((isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > 0) || areSpecialCases) {
+    if ((isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > BuildingCategory.None) || areSpecialCases) {
       // need to select correct section for new building
-      if (category > 1 && !areSpecialCases) {
-        // category 1 is preselected
+      if (category > BuildingCategory.Infrastructure && !areSpecialCases) {
+        // infrastructure is preselected
         const path = `build.php?id=${queuedBuilding.fieldId}&category=${category}`;
         await ensurePage(path);
       }

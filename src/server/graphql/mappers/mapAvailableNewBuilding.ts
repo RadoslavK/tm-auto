@@ -1,8 +1,8 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { IAvailableNewBuilding } from '../../_types/graphql';
-import { buildingInfos } from '../../bootstrap/loadInfo';
+import { buildingsService } from '../../services/buildingsService';
 
 export const mapAvailableNewBuilding = (type: BuildingType): IAvailableNewBuilding => ({
   type,
-  name: buildingInfos[type].name,
+  name: buildingsService.getBuildingInfo(type).name,
 });
