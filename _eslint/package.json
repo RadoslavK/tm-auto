@@ -1,0 +1,8 @@
+{
+  "name": "eslint-plugin-tm-auto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "eslint": "^6.7.1"
+  }
+}

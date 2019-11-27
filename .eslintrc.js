@@ -6,6 +6,7 @@ module.exports = {
     "unicorn",
     "react-hooks",
     "simple-import-sort",
+    "tm-auto",
   ],
   extends: [
     "airbnb-typescript",
@@ -113,6 +114,8 @@ module.exports = {
     "max-len": ["warn", { "code": 120 }],
     "comma-spacing": "error",
     "brace-style": "error",
-    "no-console": "off"
+    "no-console": "off",
+    "tm-auto/single-import-per-line": "error",
+    "tm-auto/single-line-per-single-import": "error"
   },
 };
