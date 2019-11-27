@@ -5,7 +5,6 @@ import { Village } from '../_models/village/village';
 import { IBuildingSpot } from '../_types/graphql';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { buildingInfos } from '../bootstrap/loadInfo';
 import { getWithMaximum } from '../utils/getWithMaximum';
 import { accountContext } from '../accountContext';
 import { dataPathService } from './dataPathService';

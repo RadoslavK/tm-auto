@@ -1,5 +1,5 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import { BuildingsUpdated, GetBuildingSpots } from '*/graphql_operations/building.graphql';
 import {
@@ -37,7 +37,7 @@ export const BuildingSpots: React.FC<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({});
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
   const { data, loading, refetch } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: { villageId },
   });

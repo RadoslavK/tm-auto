@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core';
 import { UnitBuildingSection } from './UnitBuildingSection';
@@ -11,7 +11,7 @@ import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
 import { useVillageContext } from '../../hooks/useVillageContext';
 
 const useAutoUnitsSettings = () => {
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
 
   const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
     variables: { villageId },

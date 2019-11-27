@@ -2,7 +2,6 @@ import { BuildingQueue } from '../../_models/buildings/queue/buildingQueue';
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
 import { Cost } from '../../_models/misc/cost';
 import { IBuildingQueue, IQueuedBuilding } from '../../_types/graphql';
-import { buildingInfos } from '../../bootstrap/loadInfo';
 import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 import { accountContext } from '../../accountContext';

@@ -1,5 +1,5 @@
 import { useQuery, useSubscription } from '@apollo/react-hooks';
-import React, { useContext } from 'react';
+import React from 'react';
 import { BuildingsUpdated } from "*/graphql_operations/building.graphql";
 import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
 import {

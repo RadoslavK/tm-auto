@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   useMutation,
 } from '@apollo/react-hooks';
@@ -66,7 +66,7 @@ export const QueuedBuildingActions: React.FC<IProps> = (props) => {
     className,
   } = props;
 
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
   const input: IQueuedBuildingManipulationInput = { villageId, queueId };
 
   const options = {

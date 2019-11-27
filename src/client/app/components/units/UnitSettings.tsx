@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -68,7 +67,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
     settings,
   } = props;
 
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
 
   const { data, loading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
     variables: { index: settings.index },

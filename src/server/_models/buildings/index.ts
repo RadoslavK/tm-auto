@@ -1,6 +1,5 @@
 import { BuildingType } from '../../_enums/BuildingType';
 import { IBuildingSpot } from '../../_types/graphql';
-import { buildingInfos } from '../../bootstrap/loadInfo';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';

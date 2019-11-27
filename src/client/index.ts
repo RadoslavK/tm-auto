@@ -97,7 +97,7 @@ const createBackgroundProcess = (socketName: string): void => {
     console.log(`server closed with code ${code}`);
   });
 
-  serverProcess.on('exit', (code, signal) => {
+  serverProcess.on('exit', (code) => {
     console.log(`server exited with code ${code}`);
   });
 

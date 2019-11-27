@@ -1,5 +1,5 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GetAvailableNewBuildings } from '*/graphql_operations/building.graphql';
 import {
@@ -32,7 +32,7 @@ export const NewBuildingDialog: React.FC<IProps> = React.forwardRef((props, ref:
   } = props;
 
   const classes = useStyles({});
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
   const { data, loading } = useQuery<IGetAvailableNewBuildingsQuery, IGetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
     variables: { input: { fieldId, villageId } },
   });
