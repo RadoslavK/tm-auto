@@ -1,5 +1,9 @@
+import {
+  IBotState,
+  IMutationSignInArgs,
+} from '../_types/graphql';
+import { accountContext } from '../accountContext';
 import { killBrowser } from '../browser/getPage';
-import { shuffle } from '../utils/shuffle';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
@@ -7,16 +11,12 @@ import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/tasks/taskManager';
-import { publishEvent } from '../graphql/subscriptions/pubSub';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
-import { BuildingQueueService } from './buildingQueueService';
-import { accountContext } from '../accountContext';
-import {
-  IBotState,
-  IMutationSignInArgs,
-} from '../_types/graphql';
-import { accountService } from './accountService';
+import { publishEvent } from '../graphql/subscriptions/pubSub';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
+import { shuffle } from '../utils/shuffle';
+import { accountService } from './accountService';
+import { BuildingQueueService } from './buildingQueueService';
 
 class ControllerService {
   private m_timeout: NodeJS.Timeout;

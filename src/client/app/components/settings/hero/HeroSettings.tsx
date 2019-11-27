@@ -1,15 +1,17 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
 import {
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   GetHeroSettings,
   OnAutoAdventureSettingsChanged,
-} from "*/graphql_operations/settings.graphql";
+} from '*/graphql_operations/settings.graphql';
+
 import {
   IAutoAdventureSettings,
   IGetHeroSettingsQuery,

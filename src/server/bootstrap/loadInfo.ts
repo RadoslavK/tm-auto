@@ -1,9 +1,10 @@
-import fs from "fs";
-import path from "path";
-import { BuildingCategory } from '../_enums/BuildingCategory';
+import fs from 'fs';
+import path from 'path';
+
+import { BuildingCategory } from '../_enums/buildingCategory';
+import { BuildingType } from '../_enums/buildingType';
 import { IBuildingConditions } from '../_models/buildings/buildingConditions';
 import { Cost } from '../_models/misc/cost';
-import { BuildingType } from '../_enums/BuildingType';
 import { ITribe } from '../_types/graphql';
 import { mapRecord } from '../../_shared/objectUtils';
 

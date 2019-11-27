@@ -1,16 +1,16 @@
-import { BuildingType } from '../../../_enums/BuildingType';
-import { CoolDown } from '../../../_models/coolDown';
-import { AutoPartySettings } from '../../../_models/settings/tasks/AutoPartySettings';
-import { Village } from '../../../_models/village/village';
-import { getPage } from '../../../browser/getPage';
-import { partiesInfo } from '../../../constants/partiesInfo';
-import { getPartyDuration } from '../../../parsers/getPartyDuration';
-import { ensureBuildingSpotPage} from '../../actions/ensurePage';
-import { accountContext } from '../../../accountContext';
 import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
+import { BuildingType } from '../../../_enums/buildingType';
+import { CoolDown } from '../../../_models/coolDown';
+import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
+import { Village } from '../../../_models/village/village';
+import { accountContext } from '../../../accountContext';
+import { getPage } from '../../../browser/getPage';
+import { partiesInfo } from '../../../constants/partiesInfo';
+import { getPartyDuration } from '../../../parsers/getPartyDuration';
+import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 
 export class AutoPartyTask implements IBotTask {
   private readonly m_village: Village;

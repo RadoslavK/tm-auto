@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import React, { useEffect } from 'react';
+
 import { GetCurrentAccount } from '*/graphql_operations/account.graphql';
+
 import { IGetCurrentAccountQuery } from '../../_types/graphql';
 import { getServerShortcut } from '../utils/getServerShortcut';
 

@@ -1,10 +1,10 @@
-import { CoolDown } from '../../coolDown';
-import { Fields } from '../../../../_shared/types';
-import { merge } from '../../../../_shared/merge';
 import {
   IAutoPartySettings,
   IPartyType,
 } from '../../../_types/graphql';
+import { merge } from '../../../../_shared/merge';
+import { Fields } from '../../../../_shared/types';
+import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
 const defaults: Fields<AutoPartySettings> = {

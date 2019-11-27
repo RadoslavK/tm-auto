@@ -2,11 +2,12 @@ import {
   PubSub,
   withFilter,
 } from 'graphql-subscriptions';
+
+import { SubscriptionSubscribeFn } from '../../_types/graphql';
 import {
   BotEvent,
   BotEventPayloads,
 } from './botEvent';
-import { SubscriptionSubscribeFn } from '../../_types/graphql';
 
 type Extends<T, X> = T extends X ? true : false;
 

@@ -4,6 +4,7 @@ import {
   Observable,
   Operation,
 } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
 import {
   execute,
   ExecutionArgs,
@@ -17,7 +18,6 @@ import {
   forAwaitEach,
   isAsyncIterable,
 } from 'iterall';
-import { getMainDefinition } from 'apollo-utilities';
 
 type Definition = OperationDefinitionNode | FragmentDefinitionNode;
 
@@ -37,20 +37,17 @@ const ensureIterable = (data: any): AsyncIterable<any> => {
     : createAsyncIterator([data]) as any;
 };
 
-export interface SchemaLinkOptions {
+export interface ISchemaLinkOptions {
   readonly schema: GraphQLSchema;
   readonly root?: any;
   readonly context?: (operation: Operation) => any;
 }
 
 const omitTypename = <TValue>(key: string, value: TValue): TValue | undefined =>
-  key === "__typename" ? undefined : value;
+  key === '__typename' ? undefined : value;
 
-export const createSchemaLink = (options: SchemaLinkOptions): ApolloLink  => {
-  return new ApolloLink((
-    operation: Operation,
-    forward: (operation: Operation) => Observable<FetchResult>,
-  ): Observable<FetchResult> | null => {
+export const createSchemaLink = (options: ISchemaLinkOptions): ApolloLink => {
+  return new ApolloLink((operation): Observable<FetchResult> | null => {
     const handleRequest = async (observer: ZenObservable.SubscriptionObserver<FetchResult>): Promise<void> => {
       const context = options.context && await options.context(operation);
       const definition = getMainDefinition(operation.query);

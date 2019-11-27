@@ -1,8 +1,8 @@
+import { IVillageResources } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
+import { Fields } from '../../../_shared/types';
 import { Resources } from '../misc/resources';
 import { VillageCapacity } from './villageCapacity';
-import { IVillageResources } from '../../_types/graphql';
-import { Fields } from '../../../_shared/types';
-import { merge } from '../../../_shared/merge';
 
 const defaults: Fields<VillageResources> = {
   amount: new Resources(),

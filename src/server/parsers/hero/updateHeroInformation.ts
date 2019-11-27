@@ -1,8 +1,8 @@
-import { getPage } from '../../browser/getPage';
-import { accountContext } from '../../accountContext';
-import { publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
-import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import { IHeroState } from '../../_types/graphql';
+import { accountContext } from '../../accountContext';
+import { getPage } from '../../browser/getPage';
+import { BotEvent } from '../../graphql/subscriptions/botEvent';
+import { publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
 
 export const updateHeroInformation = async (): Promise<void> => {
   const page = await getPage();

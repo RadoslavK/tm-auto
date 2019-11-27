@@ -3,8 +3,8 @@ import {
   IAutoUnitsLogEntryContent,
   ITextLogEntryContent,
 } from '../../_types/graphql';
-import { BotEvent } from '../subscriptions/botEvent';
 import { accountContext } from '../../accountContext';
+import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 

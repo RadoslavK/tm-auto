@@ -1,4 +1,5 @@
 import ipc from 'node-ipc';
+
 import { IClientMessage } from '../_shared/ipc/clientMessages';
 import {
   createServerBroadcastMessage,
@@ -11,7 +12,7 @@ export interface IHandler<TPayload = {}, TResult = void> {
 }
 
 export const startIpcServer = async <TPayload = {}, TResult = never>(socketName: string, handlers : Map<string, IHandler<TPayload, TResult>>): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     ipc.config.id = socketName;
     ipc.config.silent = true;
 
@@ -52,7 +53,7 @@ export const startIpcServer = async <TPayload = {}, TResult = never>(socketName:
           ipc.server.emit(
             socket,
             'message',
-            JSON.stringify(replyData)
+            JSON.stringify(replyData),
           );
         }
       });

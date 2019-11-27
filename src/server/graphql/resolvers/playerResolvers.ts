@@ -1,5 +1,5 @@
-import { Resolvers } from './_types';
 import { accountContext } from '../../accountContext';
+import { Resolvers } from './_types';
 
 export const playerResolvers: Resolvers = {
   Query: {

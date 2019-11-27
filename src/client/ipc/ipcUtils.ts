@@ -1,8 +1,8 @@
+import { IClientMessage } from '../../_shared/ipc/clientMessages';
 import {
   ServerMessage,
   ServerMessageType,
 } from '../../_shared/ipc/serverMessages';
-import { IClientMessage } from '../../_shared/ipc/clientMessages';
 
 interface IReplyHandler {
   readonly resolve: (value: any) => void;
@@ -20,7 +20,7 @@ let messageQueue: string[] = [];
 let socketClient: any | null = null;
 
 const connectSocket = (socketName: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     window.ipcConnect(socketName, client => {
       client.on('message', (messageData: string) => {
         const message = JSON.parse(messageData) as ServerMessage;
@@ -85,7 +85,7 @@ export const init = async (): Promise<void> => {
   console.log(`Connected to ${socketName}`);
 };
 
-export const send = <TPayload extends object = {},TResult = void>(name: string, payload: TPayload): Promise<TResult> => new Promise((resolve, reject) => {
+export const send = <TPayload extends object = {}, TResult = void>(name: string, payload: TPayload): Promise<TResult> => new Promise((resolve, reject) => {
   const messageId = window.generateId();
   replyHandlers.set(messageId, { resolve, reject });
 
@@ -134,5 +134,4 @@ export const unsubscribeName = (name: string): void => {
 export const unsubscribeAll = (): void => {
   listenersMap.clear();
 };
-
 

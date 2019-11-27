@@ -1,9 +1,9 @@
+import { IResources } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
 import {
   Fields,
   IComparable,
 } from '../../../_shared/types';
-import { IResources } from '../../_types/graphql';
-import { merge } from '../../../_shared/merge';
 
 const defaults: Fields<Resources> = {
   clay: 0,

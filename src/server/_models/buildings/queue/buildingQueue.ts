@@ -1,4 +1,6 @@
-import { BuildingSpotType, getBuildingSpotType } from '../../../_enums/BuildingSpotType';
+import {
+  BuildingSpotType, getBuildingSpotType,
+} from '../../../_enums/buildingSpotType';
 import { QueuedBuilding } from './queuedBuilding';
 
 export class BuildingQueue {
@@ -8,7 +10,7 @@ export class BuildingQueue {
     this.m_buildings = buildings;
   };
 
-  public add = (building: QueuedBuilding):  void => {
+  public add = (building: QueuedBuilding): void => {
     this.m_buildings.push(building);
   };
 

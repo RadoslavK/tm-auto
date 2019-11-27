@@ -15,6 +15,7 @@ data processed during bot running are stored in .data folder
 				hero
 			
 ked sa zmeni graphql schema treba vygenerovat
+a aj prvy krat, neviem ci z toho nevytvara tne fragmentJson
 -yarn run generate:types
 			
 debugging - yarn run debug

@@ -1,6 +1,6 @@
+import { accountContext } from '../../accountContext';
 import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToEvent } from '../subscriptions/pubSub';
-import { accountContext } from '../../accountContext';
 import { Resolvers } from './_types';
 
 export const villageResolvers: Resolvers = {
@@ -18,5 +18,5 @@ export const villageResolvers: Resolvers = {
     updateVillages: subscribeToEvent(BotEvent.VillagesUpdated, {
       resolve: () => true,
     }),
-  }
+  },
 };

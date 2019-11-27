@@ -1,12 +1,12 @@
+import { Hero } from '../../_models/hero/hero';
 import {
   IHeroInformation,
 } from '../../_types/graphql';
 import { accountContext } from '../../accountContext';
+import { BotEvent } from '../subscriptions/botEvent';
 import {
   subscribeToEvent,
 } from '../subscriptions/pubSub';
-import { BotEvent } from '../subscriptions/botEvent';
-import { Hero } from '../../_models/hero/hero';
 import { Resolvers } from './_types';
 
 const mapHeroInformation = (hero: Hero): IHeroInformation => {

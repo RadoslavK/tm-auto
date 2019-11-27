@@ -1,12 +1,14 @@
-import { allBuildingTypes, BuildingType } from '../_enums/BuildingType';
+import {
+  allBuildingTypes, BuildingType,
+} from '../_enums/buildingType';
 import {
   CapitalCondition,
   IBuildingConditions,
 } from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
-import { fieldIds } from '../constants/fieldIds';
-import { accountContext } from '../accountContext';
 import { ITribe } from '../_types/graphql';
+import { accountContext } from '../accountContext';
+import { fieldIds } from '../constants/fieldIds';
 import { buildingsService } from './buildingsService';
 
 export class AvailableBuildingTypesService {
@@ -152,8 +154,7 @@ export class AvailableBuildingTypesService {
       if (buildings.length) {
         return false;
       }
-    }
-    else {
+    } else {
       const completedBuildingExists = buildings.some(b => b.level.total === buildingsService.getBuildingInfo(b.type).maxLevel);
 
       if (buildings.length && !completedBuildingExists) {

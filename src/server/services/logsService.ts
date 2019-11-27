@@ -1,4 +1,6 @@
 import uuid from 'uuid';
+
+import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import {
   IAutoBuildLogEntryContent,
   IAutoUnitsLogEntryContent,
@@ -6,12 +8,11 @@ import {
   ILogEntryContent,
   ITextLogEntryContent,
 } from '../_types/graphql';
-import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
-import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { accountContext } from '../accountContext';
-import { unitsService } from './unitsService';
+import { BotEvent } from '../graphql/subscriptions/botEvent';
+import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingsService } from './buildingsService';
+import { unitsService } from './unitsService';
 
 export interface ILogAutoUnitsParams {
   readonly amount: number;

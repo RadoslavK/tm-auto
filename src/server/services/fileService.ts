@@ -34,7 +34,7 @@ class FileService {
   };
 
   public delete = async (path: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       try {
         if (!fs.existsSync(path)) {
           return;
@@ -42,6 +42,7 @@ class FileService {
 
         fs.rmdir(path, { recursive: true }, () => resolve());
       } catch (error) {
+        console.error(error);
         throw new Error(`Failed to delete account at ${path}`);
       }
 

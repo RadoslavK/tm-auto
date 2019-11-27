@@ -1,11 +1,12 @@
+import {
+  makeStyles,
+} from '@material-ui/core';
 import React, {
   useEffect,
   useRef,
   useState,
 } from 'react';
-import {
-  makeStyles,
-} from '@material-ui/core';
+
 import { IDuration } from '../../../_types/graphql';
 
 interface IProps {

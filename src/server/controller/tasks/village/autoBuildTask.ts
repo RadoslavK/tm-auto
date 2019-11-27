@@ -1,28 +1,30 @@
-import { BuildingSpotType } from '../../../_enums/BuildingSpotType';
-import { BuildingType } from '../../../_enums/BuildingType';
-import { TravianPath } from '../../../_enums/TravianPath';
-import { Buildings } from '../../../_models/buildings';
-import { QueuedBuilding } from '../../../_models/buildings/queue/queuedBuilding';
-import { CoolDown } from '../../../_models/coolDown';
-import { Resources } from '../../../_models/misc/resources';
-import { AutoBuildSettings } from '../../../_models/settings/tasks/AutoBuildSettings';
-import { Village } from '../../../_models/village/village';
-import { getPage } from '../../../browser/getPage';
-import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
-import { isInfrastructure } from '../../../utils/buildingUtils';
-import { randomElement } from '../../../utils/randomElement';
-import { ensureBuildingSpotPage, ensurePage } from '../../actions/ensurePage';
-import { updateActualResources } from '../../actions/village/updateResources';
-import { accountContext } from '../../../accountContext';
-import { fieldIds } from '../../../constants/fieldIds';
-import { Duration } from '../../../_models/duration';
-import { ITribe } from '../../../_types/graphql';
 import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
-import { BuildingCategory } from '../../../_enums/BuildingCategory';
+import { BuildingCategory } from '../../../_enums/buildingCategory';
+import { BuildingSpotType } from '../../../_enums/buildingSpotType';
+import { BuildingType } from '../../../_enums/buildingType';
+import { TravianPath } from '../../../_enums/travianPath';
+import { Buildings } from '../../../_models/buildings';
+import { QueuedBuilding } from '../../../_models/buildings/queue/queuedBuilding';
+import { CoolDown } from '../../../_models/coolDown';
+import { Duration } from '../../../_models/duration';
+import { Resources } from '../../../_models/misc/resources';
+import { AutoBuildSettings } from '../../../_models/settings/tasks/autoBuildSettings';
+import { Village } from '../../../_models/village/village';
+import { ITribe } from '../../../_types/graphql';
+import { accountContext } from '../../../accountContext';
+import { getPage } from '../../../browser/getPage';
+import { fieldIds } from '../../../constants/fieldIds';
+import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import { buildingsService } from '../../../services/buildingsService';
+import { isInfrastructure } from '../../../utils/buildingUtils';
+import { randomElement } from '../../../utils/randomElement';
+import {
+  ensureBuildingSpotPage, ensurePage,
+} from '../../actions/ensurePage';
+import { updateActualResources } from '../../actions/village/updateResources';
 
 export class AutoBuildTask implements IBotTask {
   private readonly m_village: Village;
@@ -106,7 +108,7 @@ export class AutoBuildTask implements IBotTask {
     const currentResources = this.m_village.resources.amount;
 
     if (currentResources.isGreaterOrEqualThan(resources)) {
-        await this.startBuilding(queuedBuilding);
+      await this.startBuilding(queuedBuilding);
     } else if (currentResources.freeCrop < cost.resources.freeCrop && settings.autoCropFields) {
       // need cropland
       const croplandIsCurrentlyBeingBuilt = this.m_buildings.ongoing.buildings().some(b => b.type === BuildingType.Crop);
@@ -115,7 +117,7 @@ export class AutoBuildTask implements IBotTask {
         return;
       }
 
-      accountContext.logsService.logText("Not enough free crop. Building crop land next", true);
+      accountContext.logsService.logText('Not enough free crop. Building crop land next', true);
 
       const lowestLevelCropLand = this.m_buildings.spots.buildings()
         .filter(b => b.type === BuildingType.Crop)

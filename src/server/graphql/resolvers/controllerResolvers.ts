@@ -1,6 +1,6 @@
-import { subscribeToEvent } from '../subscriptions/pubSub';
-import { BotEvent } from '../subscriptions/botEvent';
 import { controllerService } from '../../services/controllerService';
+import { BotEvent } from '../subscriptions/botEvent';
+import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 
 export const controllerResolvers: Resolvers = {
@@ -19,7 +19,7 @@ export const controllerResolvers: Resolvers = {
       return true;
     },
 
-    signIn: (_, args) =>  {
+    signIn: (_, args) => {
       controllerService.signIn(args);
       return true;
     },

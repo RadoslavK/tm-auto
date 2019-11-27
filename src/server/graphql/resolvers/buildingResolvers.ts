@@ -1,12 +1,16 @@
-import { BuildingType } from '../../_enums/BuildingType';
+import { BuildingType } from '../../_enums/buildingType';
 import {
   IBuildingQueue,
   IBuildingSpotLevel,
   ITribe,
 } from '../../_types/graphql';
+import { accountContext } from '../../accountContext';
 import { fieldIds } from '../../constants/fieldIds';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
-import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
+import {
+  BuildingQueueService, MovingDirection,
+} from '../../services/buildingQueueService';
+import { buildingsService } from '../../services/buildingsService';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
@@ -14,9 +18,7 @@ import { BotEvent } from '../subscriptions/botEvent';
 import {
   subscribeToEvent,
 } from '../subscriptions/pubSub';
-import { accountContext } from '../../accountContext';
 import { Resolvers } from './_types';
-import { buildingsService } from '../../services/buildingsService';
 
 const getWallType = (): BuildingType => {
   const { tribe } = accountContext.gameInfo;
@@ -81,7 +83,7 @@ export const buildingResolvers: Resolvers = {
           clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
           iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
           crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
-        }
+        },
       };
     },
 

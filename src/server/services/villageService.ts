@@ -1,7 +1,7 @@
-import { Village } from '../_models/village/village';
 import { Coords } from '../_models/coords';
-import { fileService } from './fileService';
+import { Village } from '../_models/village/village';
 import { dataPathService } from './dataPathService';
+import { fileService } from './fileService';
 
 export class VillageService {
   public currentVillageId: number;
@@ -59,6 +59,6 @@ export class VillageService {
 
     village.isCapital = true;
 
-    return  { capitalChanged: true };
+    return { capitalChanged: true };
   };
 }

@@ -1,27 +1,31 @@
+import 'typeface-roboto';
+
+import { ApolloProvider } from '@apollo/react-hooks';
 import { CssBaseline } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { MemoryRouter as Router } from 'react-router-dom';
 import {
   InMemoryCache,
   IntrospectionFragmentMatcher,
 } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
-import 'typeface-roboto';
 import { ApolloLink } from 'apollo-link';
-import { INavigationItem } from '../_types/INavigationItem';
-import { ISideMenuContext, SideMenuContext } from './components/sideMenu/context/SideMenuContext';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { MemoryRouter as Router } from 'react-router-dom';
+
+import { INavigationItem } from '../_types/navigationItem';
+import { createErrorLink } from '../../_shared/graphql/createErrorLink';
+import { navigationItems } from '../constants/navigationItems';
+import introspectionQueryResultData from '../graphql/fragmentTypes.json';
+import { createIpcLink } from '../graphql/utils/createIpcLink';
+import { EnsureTitle } from './components/EnsureTitle';
+import { MainRoutes } from './components/navigation/MainRoutes';
+import { Navigation } from './components/navigation/Navigation';
+import {
+  ISideMenuContext, SideMenuContext,
+} from './components/sideMenu/context/sideMenuContext';
 import { SideMenu } from './components/sideMenu/SideMenu';
 import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';
-import { navigationItems } from '../constants/navigationItems';
-import { Navigation } from './components/navigation/Navigation';
-import { MainRoutes } from './components/navigation/MainRoutes';
-import { createIpcLink } from '../graphql/utils/createIpcLink';
-import introspectionQueryResultData from '../graphql/fragmentTypes.json';
-import { createErrorLink } from '../../_shared/graphql/createErrorLink';
-import { EnsureTitle } from './components/EnsureTitle';
 
 type NavigationItemsState = readonly INavigationItem[];
 

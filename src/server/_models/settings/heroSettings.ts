@@ -1,9 +1,9 @@
+import { IHeroSettings } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
+import { Fields } from '../../../_shared/types';
 import {
   AutoAdventureSettings,
-} from './tasks/AutoAdventureSettings';
-import { Fields } from '../../../_shared/types';
-import { merge } from '../../../_shared/merge';
-import { IHeroSettings } from '../../_types/graphql';
+} from './tasks/autoAdventureSettings';
 
 const defaults: Fields<HeroSettings> = {
   autoAdventure: new AutoAdventureSettings(),

@@ -1,10 +1,11 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
+
+import { ICost } from '../../../../_types/graphql';
 import {
   formatTimeFromDuration,
 } from '../../../../../server/utils/formatTime';
-import { ICost } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
 import { getTotalResources } from '../../../utils/resources';

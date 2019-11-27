@@ -13,7 +13,6 @@ export const parseVillageCapacity = async (): Promise<VillageCapacity> => {
   const warehouse = +match[1];
   const granary = +match[2];
 
-
   return new VillageCapacity({
     granary,
     warehouse,

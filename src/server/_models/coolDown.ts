@@ -1,9 +1,9 @@
+import { ICoolDown } from '../_types/graphql';
+import { merge } from '../../_shared/merge';
+import { Fields } from '../../_shared/types';
 import {
   Duration,
 } from './duration';
-import { Fields } from '../../_shared/types';
-import { merge } from '../../_shared/merge';
-import { ICoolDown } from '../_types/graphql';
 
 const defaults: Fields<CoolDown> = {
   max: new Duration(),

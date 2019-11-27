@@ -1,15 +1,16 @@
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
-import { TextLogContent } from './entries/TextLogContent';
-import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
-import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
+
 import {
   IAutoBuildLogEntryContent,
   IAutoUnitsLogEntryContent,
   ILogEntryFragmentFragment,
   ITextLogEntryContent,
 } from '../../../_types/graphql';
+import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
+import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
+import { TextLogContent } from './entries/TextLogContent';
 
 type Content = ILogEntryFragmentFragment['content'];
 
@@ -33,7 +34,7 @@ const getContentNode = (content: Content, className: string): JSX.Element => {
   if (isAutoUnitsEntry(content)) {
     return <AutoUnitsLogContent content={content.autoUnits} className={className} />;
   }
-  
+
   throw new Error(`Unknown content: ${JSON.stringify(content)}`);
 };
 
@@ -59,21 +60,21 @@ export const LogEntry: React.FC<IProps> = (props) => {
   } = props;
 
   const classes = useStyles();
-  
+
   const contentNode = getContentNode(logEntry.content, classes.content);
 
   const getVillageNode = (): JSX.Element | null => {
     if (!logEntry.village) {
       return null;
     }
-    
+
     return (
       <Link to={`/villages/${logEntry.village.id}`} className={classes.village}>
         {logEntry.village.name} [{logEntry.village.coords.x}|{logEntry.village.coords.y}]
       </Link>
     );
   };
-  
+
   return (
     <div className={classes.root}>
       <span className={classes.timestamp}>

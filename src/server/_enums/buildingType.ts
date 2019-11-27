@@ -50,4 +50,4 @@ export enum BuildingType {
 }
 
 export const allBuildingTypes: readonly BuildingType[] = getAllEnumValues(BuildingType)
-    .filter(type => type !== BuildingType.None);
+  .filter(type => type !== BuildingType.None);

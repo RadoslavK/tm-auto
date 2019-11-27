@@ -1,11 +1,12 @@
 import uuid from 'uuid';
+
 import {
   IMutationCreateAccountArgs,
   IMutationUpdateAccountArgs,
   IUserAccount,
 } from '../_types/graphql';
-import { fileService } from './fileService';
 import { dataPathService } from './dataPathService';
+import { fileService } from './fileService';
 
 class AccountService {
   public currentAccountId: string | null = null;
@@ -26,7 +27,7 @@ class AccountService {
 
     return this.accounts;
   };
-  
+
   public createAccount = async (args: IMutationCreateAccountArgs): Promise<IUserAccount> => {
     const id = uuid.v4();
 
@@ -34,17 +35,17 @@ class AccountService {
       ...args.account,
       id,
     };
-    
+
     this.accounts.push(newAccount);
     await this.saveAccounts();
-    
+
     return newAccount;
   };
 
   public accountExists = (args: IMutationCreateAccountArgs | IMutationUpdateAccountArgs): boolean => {
     if ('id' in args.account) {
       const accountId = args.account.id;
-      return this.getAccounts().some(acc => acc.id !== accountId &&  acc.server === args.account.server && acc.username === args.account.username);
+      return this.getAccounts().some(acc => acc.id !== accountId && acc.server === args.account.server && acc.username === args.account.username);
     }
 
     return this.getAccounts().some(acc => acc.server === args.account.server && acc.username === args.account.username);
@@ -66,7 +67,7 @@ class AccountService {
 
   public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {
     const {
-      account
+      account,
     } = args;
 
     const accountIndex = this.accounts.findIndex(acc => acc.id === account.id);

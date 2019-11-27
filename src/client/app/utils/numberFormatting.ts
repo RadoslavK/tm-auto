@@ -1,4 +1,4 @@
-const addCommas = (number: string) => number.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+const addCommas = (number: string) => number.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
 const formatNumber = (num: number, maxDigits?: number): string => {
   return maxDigits

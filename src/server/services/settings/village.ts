@@ -1,12 +1,12 @@
-import { ComplexSettingsServiceType } from './_types';
-import { VillageSettings } from '../../_models/settings/VillageSettings';
-import { InternalSettingsService } from './internalSettingsService';
-import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
-import { AutoPartySettings } from '../../_models/settings/tasks/AutoPartySettings';
-import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
-import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
-import { dataPathService } from '../dataPathService';
+import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
+import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
+import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
+import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
+import { VillageSettings } from '../../_models/settings/villageSettings';
 import { IVillageSettings } from '../../_types/graphql';
+import { dataPathService } from '../dataPathService';
+import { ComplexSettingsServiceType } from './_types';
+import { InternalSettingsService } from './internalSettingsService';
 
 export class VillageSettingsService implements ComplexSettingsServiceType<IVillageSettings, VillageSettings> {
   public autoBuild: InternalSettingsService<IVillageSettings['autoBuild'], VillageSettings['autoBuild']>;

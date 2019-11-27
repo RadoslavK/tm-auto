@@ -2,19 +2,20 @@ import {
   ChildProcess,
   fork,
   ForkOptions,
-} from "child_process";
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
+} from 'child_process';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   app,
+  BrowserWindow,
   protocol,
-  BrowserWindow ,
 } from 'electron';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import which from 'which';
+
 import { findOpenSocket } from './ipc/findOpenSocket';
 
 let serverProcess: ChildProcess | null = null;
@@ -44,7 +45,7 @@ const createClientWindow = (socketName: string): void => {
   clientWin.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Emitted when the window is closed.
-  clientWin.on("closed", () => {
+  clientWin.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -66,8 +67,8 @@ const createBackgroundProcess = (socketName: string): void => {
   //  Electron run renderer in its own version, we want to run the background process with actual system node version
   const nodePaths = which.sync('node', { nothrow: true, all: true });
 
-  const currentNodePath = nodePaths &&
-    nodePaths.find(x => x.toLowerCase().endsWith('node.exe'));
+  const currentNodePath = nodePaths
+    && nodePaths.find(x => x.toLowerCase().endsWith('node.exe'));
 
   if (!currentNodePath) {
     console.error('No current node path found');
@@ -82,14 +83,14 @@ const createBackgroundProcess = (socketName: string): void => {
     execPath: currentNodePath || undefined,
     env: {
       TS_NODE_COMPILER_OPTIONS: '{"module":"commonjs"}',
-    }
+    },
   };
 
   const filePath = path.join(__dirname, '..', 'server', 'index.ts');
 
   serverProcess = fork(
     filePath,
-    [socketName,],
+    [socketName],
     options,
   );
 
@@ -129,16 +130,16 @@ const installDevTools = async (): Promise<void> => {
     }
     console.log('Added Apollo Dev tools');
   } catch (error) {
-    console.log("An error occurred:", error);
+    console.error('An error occurred:', error);
   }
 };
 
 app.on('ready', async () => {
   protocol.interceptFileProtocol('file', (request, callback) => {
     // eslint-disable-next-line unicorn/prefer-string-slice
-    const url = request.url.substr(7);    /* all urls start with 'file://' */
+    const url = request.url.substr(7); /* all urls start with 'file://' */
     // @ts-ignore
-    callback({ path: path.normalize(`${__dirname}/${url}`)});
+    callback({ path: path.normalize(`${__dirname}/${url}`) });
   }, (err) => {
     if (err) {
       console.error('Failed to register protocol');
@@ -154,10 +155,10 @@ app.on('ready', async () => {
 });
 
 // Quit when all windows are closed.
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
@@ -169,7 +170,7 @@ app.on('before-quit', () => {
   }
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   // if (mainWindow === null) {

@@ -1,15 +1,15 @@
-import { BuildingType } from '../_enums/BuildingType';
+import { BuildingType } from '../_enums/buildingType';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
 import { IBuildingSpot } from '../_types/graphql';
+import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { getWithMaximum } from '../utils/getWithMaximum';
-import { accountContext } from '../accountContext';
+import { buildingsService } from './buildingsService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
-import { buildingsService } from './buildingsService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -222,8 +222,8 @@ export class BuildingQueueService {
       building.level.actual
       + building.level.ongoing
       + (building.fieldId === reducedOffsetBuildingFieldId
-      ? offsets[building.fieldId] - 1
-      : offsets[building.fieldId]);
+        ? offsets[building.fieldId] - 1
+        : offsets[building.fieldId]);
 
     const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
     const { conditions } = buildingsService.getBuildingInfo(checkedBuilding.type);
@@ -256,8 +256,7 @@ export class BuildingQueueService {
       }
     }
 
-    for (let i = 0; i < conditions.requiredBuildings.length; i++)
-    {
+    for (let i = 0; i < conditions.requiredBuildings.length; i++) {
       const requiredBuilding = conditions.requiredBuildings[i];
       const requiredBuildingExists = normalizedBuildings.some(
         b => b.type === requiredBuilding.type
@@ -384,10 +383,8 @@ export class BuildingQueueService {
             }))
             .filter(b => b.totalLevel > 0);
 
-
           if (existingBuildings.length > 0) {
-            const isAnyCompleted =
-              existingBuildings.some(b => b.totalLevel >= maxLevel);
+            const isAnyCompleted = existingBuildings.some(b => b.totalLevel >= maxLevel);
 
             if (!isAnyCompleted) {
               // ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon

@@ -1,10 +1,13 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useEffect, useState } from 'react';
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
+import React, {
+  useEffect, useState,
+} from 'react';
+
 import {
   IBuildingInProgress,
   ITimestamp,
 } from '../../../../_types/graphql';
+import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { imageLinks } from '../../../../utils/imageLinks';
 
 interface IProps {
@@ -50,7 +53,7 @@ export const BuildingInProgress: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const intervalId = setInterval(
-      () =>  {
+      () => {
         if (timer <= 0) {
           clearInterval(intervalId);
         } else {

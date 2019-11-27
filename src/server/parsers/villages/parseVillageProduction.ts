@@ -1,4 +1,4 @@
-import { TravianPath } from '../../_enums/TravianPath';
+import { TravianPath } from '../../_enums/travianPath';
 import { Resources } from '../../_models/misc/resources';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';

@@ -1,5 +1,5 @@
-import { IDuration } from '../_types/graphql';
 import { Duration } from '../_models/duration';
+import { IDuration } from '../_types/graphql';
 
 export const formatTimeFromDuration = (duration: IDuration): string => {
   const {

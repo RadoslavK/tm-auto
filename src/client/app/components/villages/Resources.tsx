@@ -1,9 +1,10 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+
 import { IVillageResources } from '../../../_types/graphql';
-import { Resource } from './Resource';
 import { createFormatter } from '../../utils/numberFormatting';
 import { getTotalResources } from '../../utils/resources';
+import { Resource } from './Resource';
 
 interface IProps {
   readonly resources: IVillageResources;
@@ -40,7 +41,7 @@ export const Resources: React.FC<IProps> = (props) => {
       <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay} resourceFormatter={resourceFormatter} />
       <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron} resourceFormatter={resourceFormatter} />
       <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="total"  amount={totalAmount} capacity={totalCapacity} />
+      <Resource resourceName="total" amount={totalAmount} capacity={totalCapacity} />
       <Resource resourceName="freeCrop" amount={amount.freeCrop} />
     </div>
   );

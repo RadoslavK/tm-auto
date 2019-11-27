@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { ITextLogEntryContentPayload } from '../../../../_types/graphql';
 
 interface IProps {

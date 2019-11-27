@@ -1,7 +1,14 @@
+import {
+  useQuery, useSubscription,
+} from '@apollo/react-hooks';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
-import { BuildingsUpdated, GetBuildingSpots } from '*/graphql_operations/building.graphql';
+
+import {
+  BuildingsUpdated, GetBuildingSpots,
+} from '*/graphql_operations/building.graphql';
+import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
+
 import {
   IBuildingSpotFragmentFragment,
   IBuildingsUpdatedSubscription,
@@ -11,9 +18,8 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
-import { BuildingSpot } from './BuildingSpot';
-import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
 import { useVillageContext } from '../../../hooks/useVillageContext';
+import { BuildingSpot } from './BuildingSpot';
 
 const useStyles = makeStyles({
   buildingType: {

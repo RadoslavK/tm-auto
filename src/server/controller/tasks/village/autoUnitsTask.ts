@@ -1,19 +1,19 @@
-import { BuildingType } from '../../../_enums/BuildingType';
-import { AutoUnitsSettings } from '../../../_models/settings/tasks/AutoUnitsSettings';
-import { Units } from '../../../_models/units';
-import { Village } from '../../../_models/village/village';
-import { getPage } from '../../../browser/getPage';
-import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
-import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
-import { ensureBuildingSpotPage } from '../../actions/ensurePage';
-import { updateActualResources } from '../../actions/village/updateResources';
-import { accountContext } from '../../../accountContext';
-import { CoolDown } from '../../../_models/coolDown';
 import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
+import { BuildingType } from '../../../_enums/buildingType';
+import { CoolDown } from '../../../_models/coolDown';
+import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
+import { Units } from '../../../_models/units';
+import { Village } from '../../../_models/village/village';
+import { accountContext } from '../../../accountContext';
+import { getPage } from '../../../browser/getPage';
+import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { unitsService } from '../../../services/unitsService';
+import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
+import { ensureBuildingSpotPage } from '../../actions/ensurePage';
+import { updateActualResources } from '../../actions/village/updateResources';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;

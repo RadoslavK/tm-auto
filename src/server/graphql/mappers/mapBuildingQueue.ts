@@ -1,11 +1,15 @@
 import { BuildingQueue } from '../../_models/buildings/queue/buildingQueue';
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding';
 import { Cost } from '../../_models/misc/cost';
-import { IBuildingQueue, IQueuedBuilding } from '../../_types/graphql';
-import { BuildingQueueService, MovingDirection } from '../../services/buildingQueueService';
-import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
+import {
+  IBuildingQueue, IQueuedBuilding,
+} from '../../_types/graphql';
 import { accountContext } from '../../accountContext';
+import {
+  BuildingQueueService, MovingDirection,
+} from '../../services/buildingQueueService';
 import { buildingsService } from '../../services/buildingsService';
+import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
 export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueue) => IBuildingQueue => {
   const mbLevels = queueService.getMainBuildingLevels();

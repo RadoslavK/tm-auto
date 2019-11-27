@@ -1,10 +1,10 @@
-import { BuildingType } from '../../_enums/BuildingType';
+import { BuildingType } from '../../_enums/buildingType';
 import { IBuildingSpot } from '../../_types/graphql';
+import { buildingsService } from '../../services/buildingsService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
-import { BuildingSpots } from './spots/BuildingSpots';
-import { buildingsService } from '../../services/buildingsService';
+import { BuildingSpots } from './spots/buildingSpots';
 
 export interface IActualBuilding {
   readonly fieldId: number;

@@ -25,13 +25,13 @@ export const accountResolvers: Resolvers = {
         return false;
       }
 
-        await accountService.updateAccount(args);
+      await accountService.updateAccount(args);
       return true;
     },
 
     deleteAccount: async (_, args) => {
       accountService.deleteAccount(args.accountId);
       return true;
-    }
+    },
   },
 };

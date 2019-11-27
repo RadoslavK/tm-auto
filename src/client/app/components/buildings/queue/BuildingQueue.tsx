@@ -1,12 +1,16 @@
+import {
+  useMutation, useQuery, useSubscription,
+} from '@apollo/react-hooks';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
-import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
+
 import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
 import {
   ClearQueue,
   GetQueuedBuildings,
   OnQueueUpdated,
 } from '*/graphql_operations/queuedBuilding.graphql';
+
 import {
   IBuildingsUpdatedSubscription,
   IBuildingsUpdatedSubscriptionVariables,
@@ -17,9 +21,9 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../../_types/graphql';
+import { useVillageContext } from '../../../hooks/useVillageContext';
 import { Cost } from './Cost';
 import { QueuedBuilding } from './QueuedBuilding';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
   readonly className: string;
@@ -38,7 +42,7 @@ const useStyles = makeStyles({
 
 export const BuildingQueue: React.FC<IProps> = (props) => {
   const {
-    className
+    className,
   } = props;
 
   const classes = useStyles();
@@ -61,7 +65,7 @@ export const BuildingQueue: React.FC<IProps> = (props) => {
   });
 
   const [clearQueue] = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
-    variables: {villageId },
+    variables: { villageId },
   });
 
   if (loading || !data) {

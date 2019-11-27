@@ -1,6 +1,3 @@
-import React, {
-  useEffect,
-} from 'react';
 import {
   useQuery,
 } from '@apollo/react-hooks';
@@ -12,9 +9,14 @@ import {
   NativeSelect,
   withStyles,
 } from '@material-ui/core';
+import React, {
+  useEffect,
+} from 'react';
+
 import {
   GetAccounts,
 } from '*/graphql_operations/account.graphql';
+
 import {
   IGetAccountsQuery,
 } from '../../../_types/graphql';

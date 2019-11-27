@@ -1,9 +1,12 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {
+  Redirect, Route, Switch,
+} from 'react-router-dom';
+
+import { Logs } from '../logging/Logs';
 import { GeneralSettings } from '../settings/GeneralSettings';
 import { HeroSettings } from '../settings/hero/HeroSettings';
 import { Villages } from '../villages/Villages';
-import { Logs } from '../logging/Logs';
 
 export const MainRoutes: React.FC = () => (
   <Switch>

@@ -1,8 +1,8 @@
+import { TravianPath } from '../../_enums/travianPath';
 import { Coords } from '../../_models/coords';
 import { getPage } from '../../browser/getPage';
-import { validateUrl } from '../../utils/validateUrl';
-import { TravianPath } from '../../_enums/TravianPath';
 import { parseNumber } from '../../utils/numberUtils';
+import { validateUrl } from '../../utils/validateUrl';
 
 const acceptedUrls = [TravianPath.PlayerProfile];
 

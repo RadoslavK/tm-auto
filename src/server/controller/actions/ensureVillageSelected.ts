@@ -1,5 +1,5 @@
-import { getPage } from '../../browser/getPage';
 import { accountContext } from '../../accountContext';
+import { getPage } from '../../browser/getPage';
 
 export const ensureVillageSelected = async (villageId: number): Promise<void> => {
   const { currentVillageId } = accountContext.villageService;

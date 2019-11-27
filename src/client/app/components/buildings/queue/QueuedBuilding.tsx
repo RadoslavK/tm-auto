@@ -1,5 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+
 import { IQueuedBuilding } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { Cost } from './Cost';
@@ -33,7 +34,7 @@ const useStyles = makeStyles<unknown, IProps>({
     flexDirection: 'column',
     justifyContent: 'center',
     textAlign: 'center',
-  }
+  },
 });
 
 export const QueuedBuilding: React.FC<IProps> = (props) => {

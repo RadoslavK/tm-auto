@@ -2,14 +2,9 @@ import {
   ApolloLink,
   FetchResult,
   Observable,
-  Operation,
 } from 'apollo-link';
 import { print as printQuery } from 'graphql';
-import {
-  init,
-  send,
-  subscribe,
-} from '../../ipc/ipcUtils';
+
 import {
   IGraphqlHandlerPayload,
   ISerializableGraphQLRequest,
@@ -19,16 +14,18 @@ import {
   GraphqlHandlerMessageType,
   IpcHandler,
 } from '../../../_shared/ipc/graphqlHandlerMessages';
+import {
+  init,
+  send,
+  subscribe,
+} from '../../ipc/ipcUtils';
 
 export const createIpcLink = async (): Promise<ApolloLink> => {
   await init();
 
   let counter = 0;
 
-  return new ApolloLink((
-    operation: Operation,
-    forward?: (operation: Operation) => Observable<FetchResult>,
-  ): Observable<FetchResult> | null => {
+  return new ApolloLink((operation): Observable<FetchResult> | null => {
     const handleRequest = async (observer: ZenObservable.SubscriptionObserver<FetchResult>): Promise<void> => {
       const request: ISerializableGraphQLRequest = {
         operationName: operation.operationName,

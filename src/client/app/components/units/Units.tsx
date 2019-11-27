@@ -1,14 +1,16 @@
-import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core';
-import { UnitBuildingSection } from './UnitBuildingSection';
-import { BuildingType } from '../../../../server/_enums/BuildingType';
+import React from 'react';
+
+import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
+
 import {
   IGetAutoUnitsSettingsQuery,
   IGetAutoUnitsSettingsQueryVariables,
 } from '../../../_types/graphql';
-import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
+import { BuildingType } from '../../../../server/_enums/buildingType';
 import { useVillageContext } from '../../hooks/useVillageContext';
+import { UnitBuildingSection } from './UnitBuildingSection';
 
 const useAutoUnitsSettings = () => {
   const { villageId } = useVillageContext();
@@ -16,7 +18,7 @@ const useAutoUnitsSettings = () => {
   const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
     variables: { villageId },
   });
-  
+
   return loading || !data
     ? null
     : data.autoUnitsSettings;
@@ -34,9 +36,9 @@ const useStyles = makeStyles({
 
 export const Units: React.FC = () => {
   const settings = useAutoUnitsSettings();
-  
+
   const classes = useStyles();
-  
+
   if (!settings) {
     return null;
   }

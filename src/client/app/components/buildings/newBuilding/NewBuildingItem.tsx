@@ -1,7 +1,8 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
-import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
+
 import { imageLinks } from '../../../../utils/imageLinks';
+import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
 
 interface IProps {
   readonly className?: string;

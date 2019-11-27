@@ -1,27 +1,29 @@
+import { useMutation } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
-import { useMutation } from '@apollo/react-hooks';
 import {
   Link,
   useHistory,
   useLocation,
 } from 'react-router-dom';
+
 import {
   SignOut,
   StartBot,
   StopBot,
-} from "*/graphql_operations/controller.graphql";
+} from '*/graphql_operations/controller.graphql';
+
 import {
   BotState,
   ISignOutMutation,
   IStartBotMutation,
   IStopBotMutation,
 } from '../../../_types/graphql';
-import { INavigationItem } from '../../../_types/INavigationItem';
+import { INavigationItem } from '../../../_types/navigationItem';
 import { useBotState } from '../../hooks/useBotState';
 
 const useStyles = (drawerWidth: number): any => makeStyles({

@@ -1,20 +1,22 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import {
   useMutation,
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
 import {
   GetGeneralSettings,
   OnGeneralSettingsChanged,
   ResetSettings,
   UpdateGeneralSettings,
 } from '*/graphql_operations/settings.graphql';
+
 import {
   IGeneralSettings,
   IGetGeneralSettingsQuery,
@@ -85,10 +87,10 @@ const GeneralSettings: React.FC<IProps> = (props) => {
     if (state !== settings) {
       updateSettings();
     }
-  },[state, updateSettings]);
-  
+  }, [state, updateSettings]);
+
   const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(ResetSettings,
-  { variables: { type: SettingsType.General } },
+    { variables: { type: SettingsType.General } },
   );
 
   const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {

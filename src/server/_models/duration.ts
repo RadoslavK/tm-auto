@@ -1,6 +1,6 @@
-import { Fields } from '../../_shared/types';
-import { merge } from '../../_shared/merge';
 import { IDuration } from '../_types/graphql';
+import { merge } from '../../_shared/merge';
+import { Fields } from '../../_shared/types';
 
 const defaults: Fields<Duration> = {
   seconds: 0,
@@ -54,7 +54,7 @@ export class Duration implements IDuration {
       days,
       hours,
       minutes,
-      seconds
+      seconds,
     });
   };
 }

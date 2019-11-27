@@ -1,4 +1,4 @@
-import { INavigationItem } from '../_types/INavigationItem';
+import { INavigationItem } from '../_types/navigationItem';
 
 export const navigationItems: readonly INavigationItem[] = [
   { path: '/villages', text: 'Villages' },

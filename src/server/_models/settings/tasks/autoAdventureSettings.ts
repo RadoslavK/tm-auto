@@ -1,13 +1,13 @@
-import { CoolDown } from '../../coolDown';
-import {
-  Duration,
-} from '../../duration';
-import { merge } from '../../../../_shared/merge';
 import {
   IAdventureCriteria,
   IAutoAdventureSettings,
 } from '../../../_types/graphql';
+import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
+import { CoolDown } from '../../coolDown';
+import {
+  Duration,
+} from '../../duration';
 
 const defaults: Fields<AutoAdventureSettings> = {
   allow: true,

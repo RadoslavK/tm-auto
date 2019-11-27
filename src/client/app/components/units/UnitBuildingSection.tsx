@@ -1,23 +1,25 @@
+import { useMutation } from '@apollo/react-hooks';
+import { makeStyles } from '@material-ui/core';
 import React, {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { makeStyles } from '@material-ui/core';
-import { useMutation } from '@apollo/react-hooks';
-import { BuildingType } from '../../../../server/_enums/BuildingType';
-import { UnitSettings } from './UnitSettings';
+
+import { UpdateAutoUnitsBuildingSettings } from '*/graphql_operations/settings.graphql';
+
 import {
   IAutoUnitsBuildingSettings,
   IDuration,
   IUpdateAutoUnitsBuildingSettingsMutation,
   IUpdateAutoUnitsBuildingSettingsMutationVariables,
 } from '../../../_types/graphql';
+import { BuildingType } from '../../../../server/_enums/buildingType';
 import { imageLinks } from '../../../utils/imageLinks';
-import { UpdateAutoUnitsBuildingSettings } from '*/graphql_operations/settings.graphql';
-import { Duration } from '../controls/Duration';
 import { useVillageContext } from '../../hooks/useVillageContext';
+import { Duration } from '../controls/Duration';
+import { UnitSettings } from './UnitSettings';
 
 interface IProps {
   readonly buildingType: BuildingType;

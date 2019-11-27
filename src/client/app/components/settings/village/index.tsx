@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
 import {
   makeStyles,
 } from '@material-ui/core';
-import { GeneralVillageSettings } from './GeneralVillageSettings';
+import React, { useState } from 'react';
+
 import { VillageSettingsType } from '../../../../_types/graphql';
 import { AutoBuildSettings } from './AutoBuildSettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
+import { GeneralVillageSettings } from './GeneralVillageSettings';
 
 interface ILinkProps {
   readonly label: string;

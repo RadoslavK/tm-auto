@@ -1,6 +1,10 @@
-import { getBuildingSpotPath, TravianPath } from '../../_enums/TravianPath';
+import {
+  getBuildingSpotPath, TravianPath,
+} from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
-import { isInfrastructure, isResourceField } from '../../utils/buildingUtils';
+import {
+  isInfrastructure, isResourceField,
+} from '../../utils/buildingUtils';
 
 export const ensurePage = async (path: string, exact = false): Promise<void> => {
   const page = await getPage();

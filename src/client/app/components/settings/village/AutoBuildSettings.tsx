@@ -1,21 +1,23 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import {
   useMutation,
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
 import {
   GetAutoBuildSettings,
   OnAutoBuildSettingsChanged,
   ResetVillageSettings,
   UpdateAutoBuildVillageSettings,
 } from '*/graphql_operations/settings.graphql';
+
 import {
   IAutoBuildSettings,
   ICoolDown,
@@ -30,8 +32,8 @@ import {
   IUpdateAutoBuildVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
-import { CoolDown } from '../../controls/Cooldown';
 import { useVillageContext } from '../../../hooks/useVillageContext';
+import { CoolDown } from '../../controls/Cooldown';
 
 interface IProps {
   readonly settings: IAutoBuildSettings;
@@ -104,7 +106,7 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
   }, [state, updateSettings]);
 
   const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
-    variables: { type: VillageSettingsType.AutoBuild , villageId },
+    variables: { type: VillageSettingsType.AutoBuild, villageId },
   });
 
   const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {

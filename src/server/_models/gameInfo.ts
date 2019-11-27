@@ -2,8 +2,8 @@ import {
   IGameInfo,
   ITribe,
 } from '../_types/graphql';
-import { Fields } from '../../_shared/types';
 import { merge } from '../../_shared/merge';
+import { Fields } from '../../_shared/types';
 
 //  TODO has gold club feature
 

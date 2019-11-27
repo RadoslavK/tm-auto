@@ -1,8 +1,8 @@
-import { UnitsQueue } from '../../_models/units/unitsQueue';
-import { getPage } from '../../browser/getPage';
 import {
   Duration,
 } from '../../_models/duration';
+import { UnitsQueue } from '../../_models/units/unitsQueue';
+import { getPage } from '../../browser/getPage';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();

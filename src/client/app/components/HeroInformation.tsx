@@ -2,21 +2,23 @@ import {
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
-import { Link } from 'react-router-dom';
 import React, {
   useEffect,
   useState,
 } from 'react';
+import { Link } from 'react-router-dom';
+
+import {
+  GetHeroInformation,
+  OnHeroInformationUpdated,
+} from '*/graphql_operations/hero.graphql';
+
 import {
   HeroState,
   IGetHeroInformationQuery,
   IHeroInformationFragmentFragment,
   IOnHeroInformationUpdatedSubscription,
 } from '../../_types/graphql';
-import {
-  GetHeroInformation,
-  OnHeroInformationUpdated,
-} from '*/graphql_operations/hero.graphql';
 
 const useHeroInformation = () => {
   const [heroInformation, setHeroInformation] = useState<IHeroInformationFragmentFragment>();
@@ -39,13 +41,13 @@ const useHeroInformation = () => {
       setHeroInformation(subscriptionData.data.heroInformationUpdated);
     },
   });
-  
+
   return heroInformation;
 };
 
 export const HeroInformation: React.FC = () => {
   const information = useHeroInformation();
-  
+
   if (!information) {
     return null;
   }

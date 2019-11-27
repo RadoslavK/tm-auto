@@ -1,14 +1,15 @@
-import { mergeResolvers } from 'merge-graphql-schemas';
 import { IResolvers } from 'graphql-tools';
+import { mergeResolvers } from 'merge-graphql-schemas';
+
+import { accountResolvers } from './accountResolvers';
 import { buildingResolvers } from './buildingResolvers';
 import { controllerResolvers } from './controllerResolvers';
 import { heroResolvers } from './heroResolvers';
-import { settingsResolvers } from './settingsResolvers';
-import { villageResolvers } from './villageResolvers';
-import { accountResolvers } from './accountResolvers';
 import { logsResolvers } from './logsResolvers';
 import { playerResolvers } from './playerResolvers';
+import { settingsResolvers } from './settingsResolvers';
 import { unitResolvers } from './unitResolvers';
+import { villageResolvers } from './villageResolvers';
 
 export const resolvers = mergeResolvers([
   villageResolvers as IResolvers,

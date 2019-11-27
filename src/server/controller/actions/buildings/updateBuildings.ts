@@ -1,10 +1,10 @@
-import { TravianPath } from '../../../_enums/TravianPath';
+import { TravianPath } from '../../../_enums/travianPath';
+import { accountContext } from '../../../accountContext';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
 import { BuildingQueueService } from '../../../services/buildingQueueService';
 import { ensurePage } from '../ensurePage';
-import { accountContext } from '../../../accountContext';
 
 export const updateBuildings = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);

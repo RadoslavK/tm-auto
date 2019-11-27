@@ -1,8 +1,9 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+
+import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
 import { BuildingQueue } from './queue/BuildingQueue';
 import { BuildingSpots } from './spots/BuildingSpots';
-import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
 
 const useStyles = makeStyles({
   buildings: {

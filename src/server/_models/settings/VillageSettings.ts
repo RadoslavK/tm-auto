@@ -1,18 +1,18 @@
-import {
-  AutoBuildSettings,
-} from './tasks/AutoBuildSettings';
+import { IVillageSettings } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
+import { Fields } from '../../../_shared/types';
 import {
   GeneralVillageSettings,
-} from './GeneralVillageSettings';
+} from './generalVillageSettings';
+import {
+  AutoBuildSettings,
+} from './tasks/autoBuildSettings';
 import {
   AutoPartySettings,
-} from './tasks/AutoPartySettings';
+} from './tasks/autoPartySettings';
 import {
   AutoUnitsSettings,
-} from './tasks/AutoUnitsSettings';
-import { Fields } from '../../../_shared/types';
-import { merge } from '../../../_shared/merge';
-import { IVillageSettings } from '../../_types/graphql';
+} from './tasks/autoUnitsSettings';
 
 const defaults: Fields<VillageSettings> = {
   general: new GeneralVillageSettings(),

@@ -1,4 +1,4 @@
-import { BuildingType } from '../../_enums/BuildingType';
+import { BuildingType } from '../../_enums/buildingType';
 import { IAvailableNewBuilding } from '../../_types/graphql';
 import { buildingsService } from '../../services/buildingsService';
 

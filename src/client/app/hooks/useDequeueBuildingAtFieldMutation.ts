@@ -2,8 +2,12 @@ import {
   MutationTuple,
   useMutation,
 } from '@apollo/react-hooks';
+
 import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
-import { IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables } from '../../_types/graphql';
+
+import {
+  IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables,
+} from '../../_types/graphql';
 import { useVillageContext } from './useVillageContext';
 
 interface IParams {

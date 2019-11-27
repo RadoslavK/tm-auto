@@ -1,6 +1,6 @@
 import ipc from 'node-ipc';
 
-const isSocketTaken = (name: string): Promise<boolean> => new Promise((resolve, reject) => {
+const isSocketTaken = (name: string): Promise<boolean> => new Promise(resolve => {
   ipc.connectTo(name, () => {
     ipc.of[name].on('error', () => {
       ipc.disconnect(name);

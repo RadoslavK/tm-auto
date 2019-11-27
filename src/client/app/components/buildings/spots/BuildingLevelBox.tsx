@@ -1,5 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+
 import { IBuildingSpotLevel } from '../../../../_types/graphql';
 
 interface IProps {

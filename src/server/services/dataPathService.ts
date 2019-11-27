@@ -1,4 +1,5 @@
 import * as path from 'path';
+
 import { accountService } from './accountService';
 
 class DataPathService {

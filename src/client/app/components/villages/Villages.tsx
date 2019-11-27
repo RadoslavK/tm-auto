@@ -1,21 +1,27 @@
+import {
+  useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
 import React, {
   useContext,
   useEffect,
 } from 'react';
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/react-hooks';
-import { Redirect, Route, RouteComponentProps, Switch, useRouteMatch } from 'react-router-dom';
+  Redirect, Route, RouteComponentProps, Switch, useRouteMatch,
+} from 'react-router-dom';
+
 import {
   GetVillages,
   UpdateVillages,
 } from '*/graphql_operations/village.graphql';
+
 import {
   IGetVillagesQuery,
   IUpdateVillagesSubscription,
 } from '../../../_types/graphql';
-import { ISideMenuContext, SideMenuContext } from '../sideMenu/context/SideMenuContext';
+import {
+  ISideMenuContext, SideMenuContext,
+} from '../sideMenu/context/sideMenuContext';
 import { Village } from './Village';
 
 interface IVillageRouteParams {
@@ -35,9 +41,9 @@ export const Villages: React.FC = () => {
   useEffect(() => {
     const navigationItems = data
       ? data.villages.map(village => ({
-          text: village.name,
-          path: `${match.url}/${village.id}`,
-        }))
+        text: village.name,
+        path: `${match.url}/${village.id}`,
+      }))
       : [];
 
     setItems(navigationItems);

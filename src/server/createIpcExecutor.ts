@@ -3,11 +3,7 @@ import {
   execute as executeLink,
 } from 'apollo-link';
 import { parse as parseQuery } from 'graphql';
-import {
-  broadcastMessage,
-  IHandler,
-  startIpcServer,
-} from './ipcUtils';
+
 import { IGraphqlHandlerPayload } from '../_shared/graphql/models';
 import {
   createGraphqlHandlerCompleteMessage,
@@ -16,6 +12,11 @@ import {
   GraphqlHandlerMessage,
   IpcHandler,
 } from '../_shared/ipc/graphqlHandlerMessages';
+import {
+  broadcastMessage,
+  IHandler,
+  startIpcServer,
+} from './ipcUtils';
 
 interface IIpcExecutorOptions {
   readonly link: ApolloLink;

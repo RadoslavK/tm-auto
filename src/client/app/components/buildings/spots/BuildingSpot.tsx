@@ -1,10 +1,13 @@
-import { Dialog, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import {
+  Dialog, makeStyles,
+} from '@material-ui/core';
 import classNames from 'classnames';
+import React, { useState } from 'react';
+
 import { IBuildingSpot } from '../../../../_types/graphql';
+import { imageLinks } from '../../../../utils/imageLinks';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/useEnqueueBuildingMutation';
-import { imageLinks } from '../../../../utils/imageLinks';
 import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 import { BuildingLevelBox } from './BuildingLevelBox';

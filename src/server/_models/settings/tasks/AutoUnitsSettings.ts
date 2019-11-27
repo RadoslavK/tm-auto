@@ -1,16 +1,15 @@
-// eslint-disable-next-line max-classes-per-file
-import { BuildingType } from '../../../_enums/BuildingType';
-import { CoolDown } from '../../coolDown';
-import { Duration } from '../../duration';
-import { merge } from '../../../../_shared/merge';
-import { Fields } from '../../../../_shared/types';
+import { BuildingType } from '../../../_enums/buildingType';
 import {
   IAutoUnitsBuildingSettings,
   IAutoUnitsSettings,
   IAutoUnitsUnitSettings,
 } from '../../../_types/graphql';
+import { merge } from '../../../../_shared/merge';
+import { Fields } from '../../../../_shared/types';
 import { accountContext } from '../../../accountContext';
 import { unitInfos } from '../../../bootstrap/loadInfo';
+import { CoolDown } from '../../coolDown';
+import { Duration } from '../../duration';
 
 const defaultUnitSettings: Fields<AutoUnitsUnitSettings> = {
   index: 0,

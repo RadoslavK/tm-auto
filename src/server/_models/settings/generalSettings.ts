@@ -1,6 +1,6 @@
-import { Fields } from '../../../_shared/types';
-import { merge } from '../../../_shared/merge';
 import { IGeneralSettings } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
+import { Fields } from '../../../_shared/types';
 
 const defaults: Fields<GeneralSettings> = {
   autoUnits: true,

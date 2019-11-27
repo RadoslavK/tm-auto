@@ -1,4 +1,4 @@
-import { BuildingType } from '../../_enums/BuildingType';
+import { BuildingType } from '../../_enums/buildingType';
 import { UnitsQueue } from './unitsQueue';
 
 export class Units {
@@ -29,7 +29,7 @@ export class Units {
         break;
 
       default:
-        throw new Error(`Invalid building for queue, type: ${  type}`);
+        throw new Error(`Invalid building for queue, type: ${BuildingType[type]}`);
     }
   };
 

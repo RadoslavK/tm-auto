@@ -1,16 +1,18 @@
-import { BuildingType } from '../../../_enums/BuildingType';
-import { AutoAdventureSettings } from '../../../_models/settings/tasks/AutoAdventureSettings';
-import { getPage } from '../../../browser/getPage';
-import { getWithMaximum, getWithMinimum } from '../../../utils/getWithMaximum';
-import { randomElement } from '../../../utils/randomElement';
-import { accountContext } from '../../../accountContext';
-import { CoolDown } from '../../../_models/coolDown';
-import { Duration } from '../../../_models/duration';
-import { IAdventureCriteria } from '../../../_types/graphql';
 import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
+import { BuildingType } from '../../../_enums/buildingType';
+import { CoolDown } from '../../../_models/coolDown';
+import { Duration } from '../../../_models/duration';
+import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
+import { IAdventureCriteria } from '../../../_types/graphql';
+import { accountContext } from '../../../accountContext';
+import { getPage } from '../../../browser/getPage';
+import {
+  getWithMaximum, getWithMinimum,
+} from '../../../utils/getWithMaximum';
+import { randomElement } from '../../../utils/randomElement';
 
 export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();

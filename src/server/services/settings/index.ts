@@ -1,16 +1,16 @@
-import { GeneralSettings } from '../../_models/settings/GeneralSettings';
-import { HeroSettings } from '../../_models/settings/HeroSettings';
-import { VillageSettings } from '../../_models/settings/VillageSettings';
-import { InternalSettingsService } from './internalSettingsService';
-import { ComplexSettingsServiceType } from './_types';
-import { VillageSettingsService } from './village';
-import { HeroSettingsService } from './hero';
-import { dataPathService } from '../dataPathService';
+import { GeneralSettings } from '../../_models/settings/generalSettings';
+import { HeroSettings } from '../../_models/settings/heroSettings';
+import { VillageSettings } from '../../_models/settings/villageSettings';
 import {
   IGeneralSettings,
   IHeroSettings,
   IVillageSettings,
 } from '../../_types/graphql';
+import { dataPathService } from '../dataPathService';
+import { ComplexSettingsServiceType } from './_types';
+import { HeroSettingsService } from './hero';
+import { InternalSettingsService } from './internalSettingsService';
+import { VillageSettingsService } from './village';
 
 export class SettingsService {
   public general: InternalSettingsService<IGeneralSettings, GeneralSettings>;

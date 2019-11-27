@@ -1,5 +1,6 @@
 import React from 'react';
-import { INavigationItem } from '../../../../_types/INavigationItem';
+
+import { INavigationItem } from '../../../../_types/navigationItem';
 
 export interface ISideMenuContext {
   readonly items: readonly INavigationItem[];

@@ -6,11 +6,12 @@ import uuid from 'uuid';
 
 let resolveSocketPromise: (name: string) => void;
 
-const socketPromise = new Promise<string>((resolve, reject) => {
+const socketPromise = new Promise<string>(resolve => {
   resolveSocketPromise = resolve;
 });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/interface-name-prefix
   interface Window {
     IS_DEV: boolean;
     getServerSocket: () => Promise<string>;

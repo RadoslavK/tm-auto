@@ -1,8 +1,9 @@
-import * as React from 'react';
 import { makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { imageLinks } from '../../../../utils/imageLinks';
+import * as React from 'react';
+
 import { IAutoUnitsLogEntryContentPayload } from '../../../../_types/graphql';
+import { imageLinks } from '../../../../utils/imageLinks';
 
 interface IProps {
   readonly className?: string;
@@ -19,7 +20,7 @@ const useStyles = makeStyles<unknown, IProps>({
     width: '18px',
     backgroundImage: `url("${imageLinks.getUnit(props.content.index)}")`,
     backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
   }),
 });
 

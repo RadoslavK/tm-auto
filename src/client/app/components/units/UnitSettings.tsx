@@ -1,12 +1,18 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
 import {
   useMutation,
   useQuery,
 } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  UpdateAutoUnitsUnitSettings,
+} from '*/graphql_operations/settings.graphql';
+import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
+
 import {
   IAutoUnitsUnitSettings,
   IGetUnitInfoQuery,
@@ -15,10 +21,6 @@ import {
   IUpdateAutoUnitsUnitSettingsMutationVariables,
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
-import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
-import {
-  UpdateAutoUnitsUnitSettings,
-} from '*/graphql_operations/settings.graphql';
 import { useVillageContext } from '../../hooks/useVillageContext';
 
 interface IProps {

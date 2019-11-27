@@ -1,8 +1,8 @@
-import { Resources } from './resources';
 import { ICost } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
 import { Fields } from '../../../_shared/types';
 import { Duration } from '../duration';
-import { merge } from '../../../_shared/merge';
+import { Resources } from './resources';
 
 const defaults: Fields<Cost> = {
   buildTime: new Duration(),

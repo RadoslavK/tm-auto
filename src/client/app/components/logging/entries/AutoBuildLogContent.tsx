@@ -1,8 +1,9 @@
-import * as React from 'react';
 import { makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { imageLinks } from '../../../../utils/imageLinks';
+import * as React from 'react';
+
 import { IAutoBuildLogEntryContentPayload } from '../../../../_types/graphql';
+import { imageLinks } from '../../../../utils/imageLinks';
 
 interface IProps {
   readonly className?: string;

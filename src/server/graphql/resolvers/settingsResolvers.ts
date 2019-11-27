@@ -1,24 +1,24 @@
-import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
-import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
-import { accountContext } from '../../accountContext';
-import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
-import { Resolvers } from './_types';
-import { BuildingType } from '../../_enums/BuildingType';
-import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
-import { GeneralSettings } from '../../_models/settings/GeneralSettings';
-import { AutoPartySettings } from '../../_models/settings/tasks/AutoPartySettings';
-import { unitsService } from '../../services/unitsService';
+import { BuildingType } from '../../_enums/buildingType';
+import { GeneralSettings } from '../../_models/settings/generalSettings';
+import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
+import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
+import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
+import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
+import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   IAutoUnitsBuildingSettings,
   IAutoUnitsSettings,
   ISettingsType,
   IVillageSettingsType,
 } from '../../_types/graphql';
+import { accountContext } from '../../accountContext';
+import { unitsService } from '../../services/unitsService';
+import { BotEvent } from '../subscriptions/botEvent';
 import {
   publishPayloadEvent,
   subscribeToEvent,
 } from '../subscriptions/pubSub';
-import { BotEvent } from '../subscriptions/botEvent';
+import { Resolvers } from './_types';
 
 export const settingsResolvers: Resolvers = {
   ITaskSettings: {

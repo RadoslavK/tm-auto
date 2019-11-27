@@ -1,25 +1,27 @@
 // eslint-disable-next-line max-classes-per-file
-import { TravianPath } from '../../_enums/TravianPath';
+import { TravianPath } from '../../_enums/travianPath';
 import { Village } from '../../_models/village/village';
+import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
-import { publishEvent, publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
+import {
+  publishEvent, publishPayloadEvent,
+} from '../../graphql/subscriptions/pubSub';
+import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
 import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
 import { shuffle } from '../../utils/shuffle';
 import { updateBuildings } from '../actions/buildings/updateBuildings';
 import { ensurePage } from '../actions/ensurePage';
 import { ensureVillageSelected } from '../actions/ensureVillageSelected';
+import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
+import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { updateResources } from '../actions/village/updateResources';
 import { updateUnitsInformation } from '../updateUnitsInformation';
+import { IBotTask } from './_types';
 import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';
 import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
-import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
-import { accountContext } from '../../accountContext';
-import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
-import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
-import { IBotTask } from './_types';
 
 class BotTaskEngine<TArgs = undefined> {
   private readonly m_task: IBotTask;
@@ -69,7 +71,7 @@ class VillageBotTasksEngine {
 
 export class TaskManager {
   private readonly m_generalTasks: readonly BotTaskEngine[];
-  private readonly m_villageTasks: Record<number, VillageBotTasksEngine>  = {};
+  private readonly m_villageTasks: Record<number, VillageBotTasksEngine> = {};
   private readonly m_finalTasks: readonly BotTaskEngine[];
 
   constructor() {

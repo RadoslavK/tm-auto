@@ -1,15 +1,23 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import {
   useMutation,
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  GetAutoUnitsSettings,
+  OnAutoUnitsSettingsChange,
+  ResetVillageSettings,
+  UpdateAutoUnitsSettings,
+} from '*/graphql_operations/settings.graphql';
+
 import {
   IAutoUnitsSettings,
   ICoolDown,
@@ -24,14 +32,8 @@ import {
   IUpdateAutoUnitsSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
-import { CoolDown } from '../../controls/Cooldown';
-import {
-  GetAutoUnitsSettings,
-  OnAutoUnitsSettingsChange,
-  ResetVillageSettings,
-  UpdateAutoUnitsSettings,
-} from '*/graphql_operations/settings.graphql';
 import { useVillageContext } from '../../../hooks/useVillageContext';
+import { CoolDown } from '../../controls/Cooldown';
 
 interface IProps {
   readonly settings: IAutoUnitsSettings;
@@ -96,7 +98,7 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
       updateSettings();
     }
   }, [state, updateSettings]);
-  
+
   const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
     variables: { type: VillageSettingsType.AutoUnits, villageId },
   });
@@ -151,7 +153,7 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
       [name]: +value,
     }));
   };
-  
+
   return (
     <div>
       <Button

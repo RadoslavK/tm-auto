@@ -1,20 +1,22 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import {
   useMutation,
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
 import {
   GetGeneralVillageSettings,
   OnGeneralVillageSettingsChanged,
   ResetVillageSettings,
   UpdateGeneralVillageSettings,
 } from '*/graphql_operations/settings.graphql';
+
 import {
   IGeneralVillageSettings,
   IGetGeneralVillageSettingsQuery,

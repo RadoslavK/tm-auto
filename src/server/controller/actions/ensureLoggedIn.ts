@@ -1,7 +1,7 @@
-import { TravianPath } from '../../_enums/TravianPath';
+import { TravianPath } from '../../_enums/travianPath';
+import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { accountService } from '../../services/accountService';
-import { accountContext } from '../../accountContext';
 
 export const ensureLoggedIn = async (): Promise<void> => {
   const account = accountService.getCurrentAccount();

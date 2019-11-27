@@ -1,8 +1,8 @@
-import { VillageService } from './services/villageService';
 import { GameInfo } from './_models/gameInfo';
 import { Hero } from './_models/hero/hero';
-import { SettingsService } from './services/settings';
 import { LogsService } from './services/logsService';
+import { SettingsService } from './services/settings';
+import { VillageService } from './services/villageService';
 
 class AccountContext {
   public villageService: VillageService;

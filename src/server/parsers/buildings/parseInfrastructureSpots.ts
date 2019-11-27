@@ -1,8 +1,8 @@
-import { TravianPath } from '../../_enums/TravianPath';
+import { BuildingType } from '../../_enums/buildingType';
+import { TravianPath } from '../../_enums/travianPath';
 import { IActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
 import { isInfrastructure } from '../../utils/buildingUtils';
-import { BuildingType } from '../../_enums/BuildingType';
 import { validateUrl } from '../../utils/validateUrl';
 
 const acceptedUrls: readonly string[] = [

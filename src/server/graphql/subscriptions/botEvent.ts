@@ -1,12 +1,12 @@
+import { Hero } from '../../_models/hero/hero';
+import { GeneralSettings } from '../../_models/settings/generalSettings';
+import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
+import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
+import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
+import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   ILogEntry,
 } from '../../_types/graphql';
-import { Hero } from '../../_models/hero/hero';
-import { GeneralSettings } from '../../_models/settings/GeneralSettings';
-import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
-import { GeneralVillageSettings } from '../../_models/settings/GeneralVillageSettings';
-import { AutoBuildSettings } from '../../_models/settings/tasks/AutoBuildSettings';
-import { AutoUnitsSettings } from '../../_models/settings/tasks/AutoUnitsSettings';
 
 export enum BotEvent {
   BuildingsUpdated = 'BuildingsUpdated',

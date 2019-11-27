@@ -1,10 +1,10 @@
+import { IVillage } from '../../_types/graphql';
+import { merge } from '../../../_shared/merge';
+import { Fields } from '../../../_shared/types';
 import { Buildings } from '../buildings';
 import { Coords } from '../coords';
 import { Units } from '../units';
 import { VillageResources } from './villageResources';
-import { Fields } from '../../../_shared/types';
-import { merge } from '../../../_shared/merge';
-import { IVillage } from '../../_types/graphql';
 
 const defaults: Fields<Village> = {
   buildings: new Buildings(),

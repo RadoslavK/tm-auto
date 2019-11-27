@@ -1,5 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+
 import { imageLinks } from '../../../utils/imageLinks';
 import { createFormatter } from '../../utils/numberFormatting';
 

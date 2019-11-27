@@ -1,4 +1,6 @@
-import { Browser, Page } from 'puppeteer';
+import {
+  Browser, Page,
+} from 'puppeteer';
 // @ts-ignore
 import puppeteer from 'puppeteer-extra';
 // @ts-ignore

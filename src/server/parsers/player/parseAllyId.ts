@@ -1,6 +1,6 @@
-import { validateUrl } from '../../utils/validateUrl';
-import { TravianPath } from '../../_enums/TravianPath';
+import { TravianPath } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
+import { validateUrl } from '../../utils/validateUrl';
 
 const acceptedUrls = [TravianPath.PlayerProfile];
 

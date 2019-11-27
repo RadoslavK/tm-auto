@@ -1,7 +1,7 @@
+import { ITribe } from '../../../_types/graphql';
+import { accountContext } from '../../../accountContext';
 import { parseServerSpeed } from '../../../parsers/player/parseServerSpeed';
 import { parseTribe } from '../../../parsers/player/parseTribe';
-import { accountContext } from '../../../accountContext';
-import { ITribe } from '../../../_types/graphql';
 
 export const initPlayerInfo = async (): Promise<void> => {
   const { gameInfo } = accountContext;

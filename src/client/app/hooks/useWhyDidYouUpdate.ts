@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react';
+import {
+  useEffect, useRef,
+} from 'react';
 
 export const useWhyDidYouUpdate = (name: string, props: any): void => {
   // Get a mutable ref object where we can store props ...
@@ -18,7 +20,7 @@ export const useWhyDidYouUpdate = (name: string, props: any): void => {
           // Add to changesObj
           changesObj[key] = {
             from: previousProps.current[key],
-            to: props[key]
+            to: props[key],
           };
         }
       });

@@ -1,4 +1,4 @@
-import { TravianPath } from '../../_enums/TravianPath';
+import { TravianPath } from '../../_enums/travianPath';
 import { IActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';

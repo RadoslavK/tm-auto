@@ -3,10 +3,15 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
-import { ISideMenuContext, SideMenuContext } from './context/SideMenuContext';
+import React, { useContext } from 'react';
+import {
+  Link, useLocation,
+} from 'react-router-dom';
+
+import {
+  ISideMenuContext, SideMenuContext,
+} from './context/sideMenuContext';
 
 const useStyles = (drawerWidth: number): any => makeStyles(theme => ({
   drawer: {
@@ -43,7 +48,7 @@ interface IProps {
 
 export const SideMenu: React.FC<IProps> = (props) => {
   const {
-    width
+    width,
   } = props;
 
   const classes = useStyles(width)({});

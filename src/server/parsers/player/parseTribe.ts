@@ -1,5 +1,5 @@
-import { getPage } from '../../browser/getPage';
 import { ITribe } from '../../_types/graphql';
+import { getPage } from '../../browser/getPage';
 
 const getTribeFromIndex = (index: number): ITribe => {
   switch (index) {

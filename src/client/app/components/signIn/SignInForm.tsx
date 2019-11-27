@@ -1,13 +1,3 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import {
   useMutation,
   useQuery,
@@ -23,9 +13,29 @@ import {
   Snackbar,
   SnackbarContent,
 } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import { green } from '@material-ui/core/colors';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import classNames from 'classnames';
-import { green } from '@material-ui/core/colors';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  CreateAccount,
+  DeleteAccount,
+  GetAccount,
+  GetAccounts,
+  UpdateAccount,
+} from "*/graphql_operations/account.graphql";
+import { SignIn } from '*/graphql_operations/controller.graphql';
+
 import {
   BotState,
   ICreateAccountMutation,
@@ -42,16 +52,8 @@ import {
   IUpdateAccountMutationVariables,
   IUpdateUserAccountInput,
 } from '../../../_types/graphql';
-import { Accounts } from './Accounts';
-import {
-  CreateAccount,
-  DeleteAccount,
-  GetAccount,
-  GetAccounts,
-  UpdateAccount,
-} from "*/graphql_operations/account.graphql";
-import { SignIn } from '*/graphql_operations/controller.graphql';
 import { useBotState } from '../../hooks/useBotState';
+import { Accounts } from './Accounts';
 
 const useStyles = makeStyles(theme => ({
   '@global': {

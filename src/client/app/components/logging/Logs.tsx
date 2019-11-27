@@ -1,15 +1,17 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
 import {
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   GetLogs,
   OnLogEntryAdded,
 } from '*/graphql_operations/logs.graphql';
+
 import {
   IGetLogsQuery,
   ILogEntryFragmentFragment,

@@ -2,19 +2,20 @@ import {
   useMutation,
   useQuery,
 } from '@apollo/react-hooks';
+import { Button } from '@material-ui/core';
 import React, {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { Button } from '@material-ui/core';
+
 import {
   ResetSettings,
   UpdateAutoAdventureSettings,
-} from "*/graphql_operations/settings.graphql";
+} from '*/graphql_operations/settings.graphql';
 import { GetVillages } from '*/graphql_operations/village.graphql';
-import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
+
 import {
   AdventureCriteria,
   IAutoAdventureSettings,
@@ -28,6 +29,7 @@ import {
   IUpdateAutoAdventureSettingsMutationVariables,
   SettingsType,
 } from '../../../../_types/graphql';
+import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
 import { CoolDown } from '../../controls/Cooldown';
 import { Duration } from '../../controls/Duration';
 
@@ -89,7 +91,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), []);
 
   const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(ResetSettings,
-  { variables: { type: SettingsType.AutoAdventure } },
+    { variables: { type: SettingsType.AutoAdventure } },
   );
 
   const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
@@ -97,7 +99,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
       ...prevState,
       coolDown: updatedCooldown,
     }));
-  },[]);
+  }, []);
 
   if (loading || !data) {
     return null;
@@ -223,7 +225,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
               <input id={option} type="radio" value={option} checked={option === adventureCriteria} onChange={onAdventureCriteriaChange} name="adventureCriteria" />
               <label htmlFor={option}>{getCriteriaString(option)}</label>
             </React.Fragment>
-            ))}
+          ))}
         </div>
       </div>
 

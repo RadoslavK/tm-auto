@@ -1,20 +1,30 @@
+import {
+  useQuery, useSubscription,
+} from '@apollo/react-hooks';
 import { Dialog } from '@material-ui/core';
 import React, {
   useEffect,
   useState,
 } from 'react';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
-import { Link, Redirect, Route, Switch, useRouteMatch, useHistory } from 'react-router-dom';
-import { GetVillageById, UpdateVillage } from '*/graphql_operations/village.graphql';
+import {
+  Link, Redirect, Route, Switch, useHistory, useRouteMatch,
+} from 'react-router-dom';
+
+import {
+  GetVillageById, UpdateVillage,
+} from '*/graphql_operations/village.graphql';
+
 import {
   IGetVillageByIdQuery,
   IGetVillageByIdQueryVariables, IUpdateVillageSubscription,
 } from '../../../_types/graphql';
 import { Buildings } from '../buildings/Buildings';
 import { VillageSettings } from '../settings/village';
-import { IVillageContext, VillageContext } from './context/VillageContext';
-import { Resources } from './Resources';
 import { Units } from '../units/Units';
+import {
+  IVillageContext, VillageContext,
+} from './context/villageContext';
+import { Resources } from './Resources';
 
 interface IParams {
   readonly villageId: number;

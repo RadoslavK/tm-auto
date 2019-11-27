@@ -1,4 +1,4 @@
-import { BuildingType } from './BuildingType';
+import { BuildingType } from './buildingType';
 
 export enum BuildingSpotType {
   Any = 'Any',

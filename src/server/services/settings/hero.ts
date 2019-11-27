@@ -1,12 +1,12 @@
-import { ComplexSettingsServiceType } from './_types';
-import { HeroSettings } from '../../_models/settings/HeroSettings';
-import { InternalSettingsService } from './internalSettingsService';
-import { AutoAdventureSettings } from '../../_models/settings/tasks/AutoAdventureSettings';
-import { dataPathService } from '../dataPathService';
+import { HeroSettings } from '../../_models/settings/heroSettings';
+import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import {
   IAutoAdventureSettings,
   IHeroSettings,
 } from '../../_types/graphql';
+import { dataPathService } from '../dataPathService';
+import { ComplexSettingsServiceType } from './_types';
+import { InternalSettingsService } from './internalSettingsService';
 
 export class HeroSettingsService implements ComplexSettingsServiceType<IHeroSettings, HeroSettings> {
   public autoAdventure: InternalSettingsService<IAutoAdventureSettings, AutoAdventureSettings>;

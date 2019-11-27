@@ -1,7 +1,7 @@
 const removeUndefinedFields = <T extends object>(obj: T): Partial<T> => {
   return Object
     .entries(obj)
-    .filter(([_, value]) => value !== undefined)
+    .filter(([, value]) => value !== undefined)
     .reduce((newObj, [key, value]) => ({
       ...newObj,
       [key]: value,

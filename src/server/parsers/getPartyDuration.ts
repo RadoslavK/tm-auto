@@ -1,5 +1,5 @@
-import { getPage } from '../browser/getPage';
 import { Duration } from '../_models/duration';
+import { getPage } from '../browser/getPage';
 
 //  TODO validate page
 
