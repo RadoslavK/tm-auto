@@ -14,6 +14,9 @@ interface IProps {
 }
 
 const useStyles = makeStyles({
+  input: {
+    width: 40,
+  },
 });
 
 export const Duration: React.FC<IProps> = (props) => {
@@ -109,10 +112,10 @@ export const Duration: React.FC<IProps> = (props) => {
 
   return (
     <div>
-      <input type="number" value={days} onChange={onNumberChange} id="days" name="days" />
-      <input type="number" value={hours} onChange={onNumberChange} id="hours" name="hours" />
-      <input type="number" value={minutes} onChange={onNumberChange} id="minutes" name="minutes" />
-      <input type="number" value={seconds} onChange={onNumberChange} id="seconds" name="seconds" />
+      <input className={classes.input} type="number" value={days} onChange={onNumberChange} id="days" name="days" />
+      <input className={classes.input} type="number" value={hours} onChange={onNumberChange} id="hours" name="hours" />
+      <input className={classes.input} type="number" value={minutes} onChange={onNumberChange} id="minutes" name="minutes" />
+      <input className={classes.input} type="number" value={seconds} onChange={onNumberChange} id="seconds" name="seconds" />
     </div>
   );
 };
