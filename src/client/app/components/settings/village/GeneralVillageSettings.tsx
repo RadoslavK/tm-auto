@@ -121,7 +121,6 @@ const GeneralVillageSettings: React.FC<IProps> = (props) => {
 
   return (
     <div>
-      <h2>General</h2>
       <Button
         onClick={() => resetSettings()}
         variant="contained"

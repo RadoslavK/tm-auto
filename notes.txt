@@ -31,6 +31,8 @@ ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je vi
 
 a toto iste pridat aj pre kapacitu - warehouse/granary
 
+allow creating own defautls
+
 
 
 v klientovi nepouzivat referencie zo serveru..  server by mal mat co najviac definicii z graphql ktore sa vygeneruju aj na klientovi a importovat si moze aj tie

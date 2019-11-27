@@ -151,8 +151,6 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
 
   return (
     <div>
-      <h2>AutoBuild</h2>
-
       <Button
         onClick={() => resetSettings()}
         variant="contained"

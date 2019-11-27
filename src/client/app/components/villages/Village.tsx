@@ -11,7 +11,7 @@ import {
   IGetVillageByIdQueryVariables, IUpdateVillageSubscription,
 } from '../../../_types/graphql';
 import { Buildings } from '../buildings/Buildings';
-import { VillageSettings } from '../settings/VillageSettings';
+import { VillageSettings } from '../settings/village';
 import { IVillageContext, VillageContext } from './context/VillageContext';
 import { Resources } from './Resources';
 import { Units } from '../units/Units';

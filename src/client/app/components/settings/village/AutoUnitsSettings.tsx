@@ -154,8 +154,6 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
   
   return (
     <div>
-      <h2>AutoUnits</h2>
-
       <Button
         onClick={() => resetSettings()}
         variant="contained"
