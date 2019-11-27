@@ -29,60 +29,80 @@ fragment AutoUnitsBuildingSettingsFragment on AutoUnitsBuildingSettings {
     }
 }
 
+fragment GeneralSettings on GeneralSettings {
+    allowTasks
+    autoBuild
+    autoUnits
+}
+
+fragment AutoAdventureSettings on AutoAdventureSettings {
+    ...TaskSettingsFragment
+    adventureCriteria
+    hardMinHealth
+    normalMinHealth
+    maxTravelTime {
+        ...Duration
+    }
+    preferHard
+    preferredVillageId
+}
+
+fragment GeneralVillageSettings on GeneralVillageSettings {
+    allowTasks
+}
+
+fragment AutoBuildSettings on AutoBuildSettings {
+    ...TaskSettingsFragment
+    autoCropFields
+    minCrop
+}
+
+fragment AutoUnitsSettings on AutoUnitsSettings {
+    ...TaskSettingsFragment
+    minCrop
+    barracks {
+        ...AutoUnitsBuildingSettingsFragment
+    }
+    stable {
+        ...AutoUnitsBuildingSettingsFragment
+    }
+    workshop {
+        ...AutoUnitsBuildingSettingsFragment
+    }
+    residence {
+        ...AutoUnitsBuildingSettingsFragment
+    }
+}
+
 query GetGeneralSettings {
     generalSettings {
-        allowTasks
-        autoBuild
-        autoUnits
+        ...GeneralSettings
     }
 }
 
 query GetHeroSettings {
     hero {
         autoAdventure {
-            ...TaskSettingsFragment
-            adventureCriteria
-            hardMinHealth
-            normalMinHealth
-            maxTravelTime {
-                ...Duration
-            }
-            preferHard
-            preferredVillageId
+            ...AutoAdventureSettings
         }
     }
 }
 
 query GetGeneralVillageSettings($villageId: Int!) {
     generalVillageSettings(villageId: $villageId) {
-        allowTasks
+        ...GeneralVillageSettings
     }
 }
 
 query GetAutoBuildSettings($villageId: Int!) {
     autoBuildSettings(villageId: $villageId) {
-        ...TaskSettingsFragment
-        autoCropFields
-        minCrop
+        ...AutoBuildSettings
     }
 }
 
 query GetAutoUnitsSettings($villageId: Int!) {
     autoUnitsSettings(villageId: $villageId) {
-        ...TaskSettingsFragment
-        minCrop
-        barracks {
-            ...AutoUnitsBuildingSettingsFragment
-        }
-        stable {
-            ...AutoUnitsBuildingSettingsFragment
-        }
-        workshop {
-            ...AutoUnitsBuildingSettingsFragment
-        }
-        residence {
-            ...AutoUnitsBuildingSettingsFragment
-        }
+        ...AutoUnitsSettings
     }
 }
 
@@ -114,22 +134,40 @@ mutation UpdateAutoUnitsSettings($input: UpdateAutoUnitsSettingsInput!) {
     updateAutoUnitsSettings(input: $input)
 }
 
-mutation ResetGeneralSettings {
-    resetGeneralSettings
+mutation ResetSettings($type: SettingsType!) {
+    resetSettings(type: $type)
 }
 
-mutation ResetAutoAdventureSettings {
-    resetAutoAdventureSettings
+mutation ResetVillageSettings($villageId: Int!, $type: VillageSettingsType!) {
+    resetVillageSettings(villageId: $villageId, type: $type)
 }
 
-mutation ResetGeneralVillageSettings($input: ResetVillageInput!) {
-    resetGeneralVillageSettings(input: $input)
+subscription OnGeneralSettingsChanged {
+    generalSettingsChanged {
+        ...GeneralSettings
+    }
 }
 
-mutation ResetAutoBuildSettings($input: ResetVillageInput!) {
-    resetAutoBuildSettings(input: $input)
+subscription OnAutoAdventureSettingsChanged {
+    autoAdventureSettingsChanged {
+        ...AutoAdventureSettings
+    }
 }
 
-mutation ResetAutoUnitsSettings($input: ResetVillageInput!) {
-    resetAutoUnitsSettings(input: $input)
+subscription OnGeneralVillageSettingsChanged($villageId: Int!) {
+    generalVillageSettingsChanged(villageId: $villageId) {
+        ...GeneralVillageSettings
+    }
+}
+
+subscription OnAutoBuildSettingsChanged($villageId: Int!) {
+    autoBuildSettingsChanged(villageId: $villageId) {
+        ...AutoBuildSettings
+    }
+}
+
+subscription OnAutoUnitsSettingsChange($villageId: Int!) {
+    autoUnitsSettingsChanged(villageId: $villageId) {
+        ...AutoUnitsSettings
+    }
 }

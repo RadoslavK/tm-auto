@@ -1,26 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  useMutation,
+  useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import {
   GetGeneralSettings,
-  ResetGeneralSettings,
+  OnGeneralSettingsChanged,
+  ResetSettings,
   UpdateGeneralSettings,
 } from '*/graphql_operations/settings.graphql';
 import {
   IGeneralSettings,
-  IGetGeneralSettingsQuery, IUpdateGeneralSettingsInput,
+  IGetGeneralSettingsQuery,
+  IOnGeneralSettingsChangedSubscription,
+  IResetSettingsMutation,
+  IResetSettingsMutationVariables,
+  IUpdateGeneralSettingsInput,
   IUpdateGeneralSettingsMutation,
   IUpdateGeneralSettingsMutationVariables,
+  SettingsType,
 } from '../../../_types/graphql';
 
+const Container: React.FC = () => {
+  const [settings, setSettings] = useState<IGeneralSettings>();
+  const { data, loading } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
+
+  useSubscription<IOnGeneralSettingsChangedSubscription>(OnGeneralSettingsChanged, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (!subscriptionData.loading && subscriptionData.data) {
+        setSettings(subscriptionData.data.generalSettingsChanged);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && data) {
+      setSettings(data.generalSettings);
+    }
+  }, [data, loading]);
+
+  if (!settings) {
+    return null;
+  }
+
+  return <GeneralSettings settings={settings} />;
+};
+
+export { Container as GeneralSettings };
+
 interface IProps {
-  readonly reload: () => void;
   readonly settings: IGeneralSettings;
 }
 
 const GeneralSettings: React.FC<IProps> = (props) => {
   const {
-    reload,
     settings,
   } = props;
 
@@ -32,19 +71,25 @@ const GeneralSettings: React.FC<IProps> = (props) => {
     variables: { input },
   });
 
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setState(settings);
+    }
+  }, [settings]);
+
   useEffect(() => {
     if (state !== settings) {
       updateSettings();
     }
-  },[state, settings, updateSettings]);
+  },[state, updateSettings]);
   
-  const [resetSettings, resetSettingsResult] = useMutation(ResetGeneralSettings);
-
-  useEffect(() => {
-    if (resetSettingsResult.called && !resetSettingsResult.loading) {
-      reload();
-    }
-  }, [resetSettingsResult, reload]);
+  const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(ResetSettings,
+  { variables: { type: SettingsType.General } },
+  );
 
   const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const {
@@ -96,15 +141,3 @@ const GeneralSettings: React.FC<IProps> = (props) => {
     </div>
   );
 };
-
-const Container: React.FC = () => {
-  const { data, loading, refetch } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
-
-  if (loading || !data) {
-    return null;
-  }
-
-  return <GeneralSettings settings={data.generalSettings} reload={refetch} />;
-};
-
-export { Container as GeneralSettings };

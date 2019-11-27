@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -22,19 +23,29 @@ export const CoolDown: React.FC<IProps> = (props) => {
 
   const [state, setState] = useState(value);
 
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setState(value);
+    }
+  }, [value]);
+
   useEffect(() => {
     if (state !== value) {
       onChange(state);
     }
-  }, [state, value, onChange]);
+  }, [state, onChange]);
 
   const {
     min,
     max,
   } = state;
 
-  const updateMin = useCallback((newMin: IDuration) => setState(prevState => ({ ...prevState, min: newMin })), [setState]);
-  const updateMax = useCallback((newMax: IDuration) => setState(prevState => ({ ...prevState, max: newMax })), [setState]);
+  const updateMin = useCallback((newMin: IDuration) => setState(prevState => ({ ...prevState, min: newMin })), []);
+  const updateMax = useCallback((newMax: IDuration) => setState(prevState => ({ ...prevState, max: newMax })), []);
 
   return (
     <div>

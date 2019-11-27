@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -50,7 +49,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     className,
   } = props;
 
-  const { villageId } = useVillageContext()
+  const { villageId } = useVillageContext();
 
   const [state, setState] = useState({
     allow: settings.allow,
@@ -93,7 +92,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
     }));
   };
 
-  const updateMaxBuildTime = useCallback((newValue: IDuration) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), [setState]);
+  const updateMaxBuildTime = useCallback((newValue: IDuration) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), []);
 
   return (
     <div className={className}>

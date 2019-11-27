@@ -1,12 +1,16 @@
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import {
+  useMutation,
+  useQuery,
+} from '@apollo/react-hooks';
 import React, {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { Button } from '@material-ui/core';
 import {
-  ResetAutoAdventureSettings,
+  ResetSettings,
   UpdateAutoAdventureSettings,
 } from "*/graphql_operations/settings.graphql";
 import { GetVillages } from '*/graphql_operations/village.graphql';
@@ -17,15 +21,17 @@ import {
   ICoolDown,
   IDuration,
   IGetVillagesQuery,
+  IResetSettingsMutation,
+  IResetSettingsMutationVariables,
   IUpdateAutoAdventureSettingsInput,
   IUpdateAutoAdventureSettingsMutation,
   IUpdateAutoAdventureSettingsMutationVariables,
+  SettingsType,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
 import { Duration } from '../../controls/Duration';
 
 interface IProps {
-  readonly reload: () => void;
   readonly settings: IAutoAdventureSettings;
 }
 
@@ -50,7 +56,6 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
 
 export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   const {
-    reload,
     settings,
   } = props;
 
@@ -63,23 +68,36 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
     variables: { input },
   });
 
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setState(settings);
+    }
+  }, [settings]);
+
   useEffect(() => {
     if (state !== settings) {
       updateSettings();
     }
-  }, [state, settings, updateSettings]);
+  }, [state, updateSettings]);
 
   const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages);
 
-  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), [setState]);
+  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), []);
 
-  const [resetSettings, resetSettingsResult] = useMutation(ResetAutoAdventureSettings);
+  const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(ResetSettings,
+  { variables: { type: SettingsType.AutoAdventure } },
+  );
 
-  useEffect(() => {
-    if (resetSettingsResult.called && !resetSettingsResult.loading) {
-      reload();
-    }
-  }, [resetSettingsResult, reload]);
+  const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
+    setState(prevState => ({
+      ...prevState,
+      coolDown: updatedCooldown,
+    }));
+  },[]);
 
   if (loading || !data) {
     return null;
@@ -138,13 +156,6 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
     setState(prevState => ({
       ...prevState,
       [name]: +value,
-    }));
-  };
-
-  const onCooldownChange = (updatedCooldown: ICoolDown): void => {
-    setState(prevState => ({
-      ...prevState,
-      coolDown: updatedCooldown,
     }));
   };
 

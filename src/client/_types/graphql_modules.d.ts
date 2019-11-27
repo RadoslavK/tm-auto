@@ -118,6 +118,11 @@ declare module '*/graphql_operations/settings.graphql' {
   export const TaskSettingsFragment: DocumentNode;
 export const AutoUnitsUnitSettingsFragment: DocumentNode;
 export const AutoUnitsBuildingSettingsFragment: DocumentNode;
+export const GeneralSettings: DocumentNode;
+export const AutoAdventureSettings: DocumentNode;
+export const GeneralVillageSettings: DocumentNode;
+export const AutoBuildSettings: DocumentNode;
+export const AutoUnitsSettings: DocumentNode;
 export const GetGeneralSettings: DocumentNode;
 export const GetHeroSettings: DocumentNode;
 export const GetGeneralVillageSettings: DocumentNode;
@@ -130,11 +135,13 @@ export const UpdateAutoBuildVillageSettings: DocumentNode;
 export const UpdateAutoUnitsUnitSettings: DocumentNode;
 export const UpdateAutoUnitsBuildingSettings: DocumentNode;
 export const UpdateAutoUnitsSettings: DocumentNode;
-export const ResetGeneralSettings: DocumentNode;
-export const ResetAutoAdventureSettings: DocumentNode;
-export const ResetGeneralVillageSettings: DocumentNode;
-export const ResetAutoBuildSettings: DocumentNode;
-export const ResetAutoUnitsSettings: DocumentNode;
+export const ResetSettings: DocumentNode;
+export const ResetVillageSettings: DocumentNode;
+export const OnGeneralSettingsChanged: DocumentNode;
+export const OnAutoAdventureSettingsChanged: DocumentNode;
+export const OnGeneralVillageSettingsChanged: DocumentNode;
+export const OnAutoBuildSettingsChanged: DocumentNode;
+export const OnAutoUnitsSettingsChange: DocumentNode;
 
   export default defaultDocument;
 }

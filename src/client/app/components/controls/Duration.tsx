@@ -39,12 +39,18 @@ export const Duration: React.FC<IProps> = (props) => {
   const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
+    if (state !== value) {
       onChange(state);
     }
   }, [state, onChange]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setState(value);
+    }
+  }, [value]);
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
     const {

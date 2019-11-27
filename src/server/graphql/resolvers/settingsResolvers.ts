@@ -11,7 +11,14 @@ import { unitsService } from '../../services/unitsService';
 import {
   IAutoUnitsBuildingSettings,
   IAutoUnitsSettings,
+  ISettingsType,
+  IVillageSettingsType,
 } from '../../_types/graphql';
+import {
+  publishPayloadEvent,
+  subscribeToEvent,
+} from '../subscriptions/pubSub';
+import { BotEvent } from '../subscriptions/botEvent';
 
 export const settingsResolvers: Resolvers = {
   ITaskSettings: {
@@ -176,34 +183,82 @@ export const settingsResolvers: Resolvers = {
       return true;
     },
 
-    resetGeneralSettings: () => {
-      const settingsManager = accountContext.settingsService.general;
-      settingsManager.update(new GeneralSettings());
+    resetSettings: async (_, args): Promise<boolean> => {
+      switch (args.type) {
+        case ISettingsType.General: {
+          const settings = new GeneralSettings();
+          await accountContext.settingsService.general.update(settings);
+          await publishPayloadEvent(BotEvent.GeneralSettingsChanged, { settings });
+          break;
+        }
+
+        case ISettingsType.AutoAdventure: {
+          const settings = new AutoAdventureSettings();
+          await accountContext.settingsService.hero.autoAdventure.update(settings);
+          await publishPayloadEvent(BotEvent.AutoAdventureSettingsChanged, { settings });
+          break;
+        }
+
+        default:
+          throw new Error(`Invalid settings type: ${ISettingsType[args.type]}`);
+      }
+
       return true;
     },
 
-    resetAutoAdventureSettings: () => {
-      const settingsManager = accountContext.settingsService.hero.autoAdventure;
-      settingsManager.update(new AutoAdventureSettings());
-      return true;
-    },
+    resetVillageSettings: async (_, { type, villageId }): Promise<boolean> => {
+      switch (type) {
+        case IVillageSettingsType.General: {
+          const settings = new GeneralVillageSettings();
+          await accountContext.settingsService.village(villageId).general.update(settings);
+          await publishPayloadEvent(BotEvent.GeneralVillageSettingsChanged, { villageId, settings });
+          break;
+        }
 
-    resetGeneralVillageSettings: (_, args) => {
-      const settingsManager = accountContext.settingsService.village(args.input.villageId).general;
-      settingsManager.update(new GeneralVillageSettings());
-      return true;
-    },
+        case IVillageSettingsType.AutoBuild: {
+          const settings = new AutoBuildSettings();
+          await accountContext.settingsService.village(villageId).autoBuild.update(settings);
+          await publishPayloadEvent(BotEvent.AutoBuildSettingsChanged, { villageId, settings });
+          break;
+        }
 
-    resetAutoBuildSettings: (_, args) => {
-      const settingsManager = accountContext.settingsService.village(args.input.villageId).autoBuild;
-      settingsManager.update(new AutoBuildSettings());
-      return true;
-    },
+        case IVillageSettingsType.AutoUnits: {
+          const settings = new AutoUnitsSettings();
+          await accountContext.settingsService.village(villageId).autoUnits.update(settings);
+          await publishPayloadEvent(BotEvent.AutoUnitsSettingsChanged, { villageId, settings });
+          break;
+        }
 
-    resetAutoUnitsSettings: (_, args) => {
-      const settingsManager = accountContext.settingsService.village(args.input.villageId).autoUnits;
-      settingsManager.update(new AutoUnitsSettings());
+        default:
+          throw new Error(`Invalid village settings type: ${IVillageSettingsType[type]}`);
+      }
+
       return true;
     },
+  },
+
+  Subscription: {
+    generalSettingsChanged: subscribeToEvent(BotEvent.GeneralSettingsChanged, {
+      resolve: payload => payload.settings,
+    }),
+
+    autoAdventureSettingsChanged: subscribeToEvent(BotEvent.AutoAdventureSettingsChanged, {
+      resolve: payload => payload.settings,
+    }),
+
+    generalVillageSettingsChanged: subscribeToEvent(BotEvent.GeneralVillageSettingsChanged, {
+      filter: (payload, args) => payload.villageId === args.villageId,
+      resolve: payload => payload.settings,
+    }),
+
+    autoBuildSettingsChanged: subscribeToEvent(BotEvent.AutoBuildSettingsChanged, {
+      filter: (payload, args) => payload.villageId === args.villageId,
+      resolve: payload => payload.settings,
+    }),
+
+    autoUnitsSettingsChanged: subscribeToEvent(BotEvent.AutoUnitsSettingsChanged, {
+      filter: (payload, args) => payload.villageId === args.villageId,
+      resolve: payload => payload.settings,
+    }),
   },
 };

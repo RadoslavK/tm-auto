@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   useMutation,
   useQuery,
+  useSubscription,
 } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import {
   GetAutoBuildSettings,
-  ResetAutoBuildSettings,
+  OnAutoBuildSettingsChanged,
+  ResetVillageSettings,
   UpdateAutoBuildVillageSettings,
 } from '*/graphql_operations/settings.graphql';
 import {
@@ -14,35 +21,50 @@ import {
   ICoolDown,
   IGetAutoBuildSettingsQuery,
   IGetAutoBuildSettingsQueryVariables,
-  IResetAutoBuildSettingsMutation,
-  IResetAutoBuildSettingsMutationVariables,
+  IOnAutoBuildSettingsChangedSubscription,
+  IOnAutoBuildSettingsChangedSubscriptionVariables,
+  IResetVillageSettingsMutation,
+  IResetVillageSettingsMutationVariables,
   IUpdateAutoBuildVillageSettingsInput,
   IUpdateAutoBuildVillageSettingsMutation,
   IUpdateAutoBuildVillageSettingsMutationVariables,
+  VillageSettingsType,
 } from '../../../../_types/graphql';
 import { CoolDown } from '../../controls/Cooldown';
 import { useVillageContext } from '../../../hooks/useVillageContext';
 
 interface IProps {
-  readonly reload: () => void;
   readonly settings: IAutoBuildSettings;
 }
 
 const Container: React.FC = () => {
   const { villageId } = useVillageContext();
-  const { data, loading, refetch } = useQuery<IGetAutoBuildSettingsQuery, IGetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
+  const [settings, setSettings] = useState<IAutoBuildSettings>();
+  const { data, loading } = useQuery<IGetAutoBuildSettingsQuery, IGetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
     variables: { villageId },
   });
 
-  if (loading || !data) {
+  useSubscription<IOnAutoBuildSettingsChangedSubscription, IOnAutoBuildSettingsChangedSubscriptionVariables>(OnAutoBuildSettingsChanged, {
+    variables: { villageId },
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (!subscriptionData.loading && subscriptionData.data) {
+        setSettings(subscriptionData.data.autoBuildSettingsChanged);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && data) {
+      setSettings(data.autoBuildSettings);
+    }
+  }, [loading, data]);
+
+  if (!settings) {
     return null;
   }
 
   return (
-    <AutoBuildSettings
-      settings={data.autoBuildSettings}
-      reload={refetch}
-    />
+    <AutoBuildSettings settings={settings} />
   );
 };
 
@@ -50,7 +72,6 @@ export { Container as AutoBuildSettings };
 
 const AutoBuildSettings: React.FC<IProps> = (props) => {
   const {
-    reload,
     settings,
   } = props;
 
@@ -66,21 +87,32 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
     { variables: { input } },
   );
 
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setState(settings);
+    }
+  }, [settings]);
+
   useEffect(() => {
     if (state !== settings) {
       updateSettings();
     }
-  }, [state, settings, updateSettings]);
+  }, [state, updateSettings]);
 
-  const [resetSettings, resetSettingsResult] = useMutation<IResetAutoBuildSettingsMutation, IResetAutoBuildSettingsMutationVariables>(ResetAutoBuildSettings, {
-    variables: { input: { villageId } },
+  const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
+    variables: { type: VillageSettingsType.AutoBuild , villageId },
   });
 
-  useEffect(() => {
-    if (resetSettingsResult.called && !resetSettingsResult.loading) {
-      reload();
-    }
-  }, [resetSettingsResult, reload]);
+  const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
+    setState(prevState => ({
+      ...prevState,
+      coolDown: updatedCooldown,
+    }));
+  }, []);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -107,13 +139,6 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
     setState(prevState => ({
       ...prevState,
       [name]: +value,
-    }));
-  };
-
-  const onCooldownChange = (updatedCooldown: ICoolDown): void => {
-    setState(prevState => ({
-      ...prevState,
-      coolDown: updatedCooldown,
     }));
   };
 

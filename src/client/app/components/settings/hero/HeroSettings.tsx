@@ -1,28 +1,50 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { GetHeroSettings } from "*/graphql_operations/settings.graphql";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
-  IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables,
+  useQuery,
+  useSubscription,
+} from '@apollo/react-hooks';
+import {
+  GetHeroSettings,
+  OnAutoAdventureSettingsChanged,
+} from "*/graphql_operations/settings.graphql";
+import {
+  IAutoAdventureSettings,
+  IGetHeroSettingsQuery,
+  IOnAutoAdventureSettingsChangedSubscription,
 } from '../../../../_types/graphql';
 import { HeroInformation } from '../../HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 
 export const HeroSettings: React.FC = () => {
-  const { loading, data, refetch } = useQuery<IGetHeroSettingsQuery, IGetHeroSettingsQueryVariables>(GetHeroSettings);
+  const [settings, setSettings] = useState<IAutoAdventureSettings>();
+  const { loading, data } = useQuery<IGetHeroSettingsQuery>(GetHeroSettings);
 
-  if (loading || !data) {
+  useSubscription<IOnAutoAdventureSettingsChangedSubscription>(OnAutoAdventureSettingsChanged, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (!subscriptionData.loading && subscriptionData.data) {
+        setSettings(subscriptionData.data.autoAdventureSettingsChanged);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && data) {
+      setSettings(data.hero.autoAdventure);
+    }
+  }, [data, loading]);
+
+  if (!settings) {
     return null;
   }
-
-  const {
-    autoAdventure,
-  } = data.hero;
 
   return (
     <div>
       <h1>Hero settings</h1>
       <HeroInformation />
-      <AutoAdventureSettings settings={autoAdventure} reload={refetch} />
+      <AutoAdventureSettings settings={settings} />
     </div>
   );
 };
