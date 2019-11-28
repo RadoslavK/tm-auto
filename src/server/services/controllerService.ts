@@ -1,3 +1,4 @@
+import fs from "fs";
 import {
   IBotState,
   IMutationSignInArgs,
@@ -20,6 +21,7 @@ import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
+import { fileService } from './fileService';
 
 class ControllerService {
   private m_timeout: NodeJS.Timeout;
@@ -97,9 +99,10 @@ class ControllerService {
         const page = await getPage();
         const now = new Date();
         const format = `${now.getDate()}-${now.getMonth()}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
-        await page.screenshot({ path: `.screenshots/${format}.png` });
+        await page.screenshot({ path: `.screenshots/${format}.png`, fullPage: true });
+        await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack, { flag: 'w' });
       } catch(screenshotError) {
-        console.error(screenshotError);
+        console.error(screenshotError.stack);
       }
 
       await killBrowser();

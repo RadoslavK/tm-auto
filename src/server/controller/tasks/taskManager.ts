@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import { TravianPath } from '../../_enums/travianPath';
 import { Village } from '../../_models/village/village';
 import { accountContext } from '../../accountContext';
@@ -17,7 +16,6 @@ import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { updateResources } from '../actions/village/updateResources';
-import { updateUnitsInformation } from '../updateUnitsInformation';
 import { IBotTask } from './_types';
 import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';

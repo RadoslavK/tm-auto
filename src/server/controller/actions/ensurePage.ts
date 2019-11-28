@@ -22,9 +22,14 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   let link = await page.$(`[href*="${path}"]`);
 
   if (link) {
-    await Promise.all([
-      page.evaluate(el => el.click(), link), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    ]);
+    try {
+      await Promise.all([
+        page.evaluate(el => el.click(), link),
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      ]);
+    } catch {
+      throw new Error(`Failed to load page: ${path}`);
+    }
 
     return;
   }
@@ -33,9 +38,14 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   link = await page.$(`[onclick*="${path}"]`);
 
   if (link) {
-    await Promise.all([
-      link.evaluate(node => node.dispatchEvent(new Event('click'))), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    ]);
+    try {
+      await Promise.all([
+        link.evaluate(node => node.dispatchEvent(new Event('click'))),
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      ]);
+    } catch {
+      throw new Error(`Failed to load page: ${path}`);
+    }
 
     return;
   }
@@ -58,9 +68,14 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
     throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
   }
 
-  await Promise.all([
-    redirectElement.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-  ]);
+  try {
+    await Promise.all([
+      redirectElement.click(),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+  } catch {
+    throw new Error(`Failed to load page: ${path}`);
+  }
 };
 
 export const ensureBuildingSpotPage = async (fieldId: number, tabIndex: number | undefined = undefined): Promise<void> => {
