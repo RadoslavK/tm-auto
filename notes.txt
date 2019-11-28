@@ -33,6 +33,26 @@ a toto iste pridat aj pre kapacitu - warehouse/granary
 
 allow creating own defautls
 
+ulozit si aj next execution do suboru a nacitat potom
+
+pouzit nove trav ikonky na suroviny a  tak
+
+lepsi inidikator ze jednotka ma zapnuty autobuild lebo ked to ma ciernu farbu sa to tazko rozozna
+
+unit indexy nesedia lebo napisal ze stava senatora namiesto settler
+
+pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
+
+queued building put as high as possible button
+dragging?
+
+
+eslint:
+-objects new line
+-aj na funkcie argumenty
+
+
+
 
 
 v klientovi nepouzivat referencie zo serveru..  server by mal mat co najviac definicii z graphql ktore sa vygeneruju aj na klientovi a importovat si moze aj tie

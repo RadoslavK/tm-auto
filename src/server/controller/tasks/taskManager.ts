@@ -113,7 +113,7 @@ export class TaskManager {
 
       await updateResources();
       await updateBuildings();
-      await updateUnitsInformation();
+      // await updateUnitsInformation();
 
       let taskEngine = this.m_villageTasks[village.id];
 

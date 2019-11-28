@@ -16,7 +16,10 @@ export enum TravianPath {
   Hero = 'hero.php',
 }
 
-export const getBuildingSpotPath = (fieldId: number): string => `build.php?id=${fieldId}`;
+export const getBuildingSpotPath = (fieldId: number, tabIndex: number | undefined = undefined): string =>
+  tabIndex === undefined
+    ? `build.php?id=${fieldId}`
+    : `build.php?s=${tabIndex}&id=${fieldId}`;
 
 export const getPath = {
   buildingSpot: (fieldId: number) => `build.php?id=${fieldId}`,

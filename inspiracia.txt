@@ -1,0 +1,9 @@
+https://travibot.com/en/travian-bot-5-1-0-0/
+
+travian codex and v4.5
+
+do building info pridat cp
+
+do troops info pridat carry capacity, defense, move speed
+
+market - great warehouse, granary sa pocita ale neviem ci treba cele kombo alebo lubovolne

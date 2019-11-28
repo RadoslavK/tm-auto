@@ -19,5 +19,5 @@ export class BuildingSpots {
 
   public ofType = (type: BuildingType): BuildingSpot | undefined => this.buildings().find(x => x.type === type);
 
-  public isBuilt = (type: BuildingType): boolean => this.buildings().some(b => b.type === type && b.level.actual > 0);
+  public isBuilt = (type: BuildingType): boolean => this.buildings().some(b => b.type === type && b.isBuilt());
 }

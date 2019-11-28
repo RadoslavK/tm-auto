@@ -64,8 +64,12 @@ export class AutoUnitsTask implements IBotTask {
       return;
     }
 
+    const tabIndex = type === BuildingType.Residence || type === BuildingType.Palace
+      ? 1
+      : undefined;
+
     // select appropriate building
-    await ensureBuildingSpotPage(unitBuilding.fieldId);
+    await ensureBuildingSpotPage(unitBuilding.fieldId, tabIndex);
     await updateActualResources();
 
     const unitQueue = await parseUnitQueue();
@@ -93,6 +97,11 @@ export class AutoUnitsTask implements IBotTask {
           startingVillageRes.iron / cost.iron),
         startingVillageRes.crop / cost.crop);
 
+      if (maxPossibleAmountToBuild < 1) {
+        return;
+      }
+
+      //  max by count
       if (!unitToBuild.trainForever) {
         // TODO if no unitCounts then check rally point
         const totalAmount = unitQueue.getQueuedCount(uIndex) + this.m_units.getCount(uIndex);
@@ -100,6 +109,10 @@ export class AutoUnitsTask implements IBotTask {
         maxPossibleAmountToBuild = Math.min(
           maxPossibleAmountToBuild,
           unitToBuild.targetAmount - totalAmount);
+      }
+
+      if (maxPossibleAmountToBuild < 1) {
+        return;
       }
 
       // check crop balance
@@ -110,24 +123,22 @@ export class AutoUnitsTask implements IBotTask {
           : 0);
 
       // have res for at least 1
-      if (maxPossibleAmountToBuild <= 0) {
+      if (maxPossibleAmountToBuild < 1) {
         return;
       }
 
       const { speed } = accountContext.gameInfo;
       const buildTime = getActualUnitBuildTime(originalBuildTime, speed, unitBuilding.level.actual);
 
-      if (maxAllowedBuildingTime) {
-        const freeBuildingTimeToFill = maxAllowedBuildingTime.totalSeconds() - ongoingBuildingTime.totalSeconds();
+      // by queue time
+      const freeBuildingTimeToFill = maxAllowedBuildingTime.totalSeconds() - ongoingBuildingTime.totalSeconds();
+      maxPossibleAmountToBuild = Math.min(maxPossibleAmountToBuild, freeBuildingTimeToFill / buildTime.totalSeconds());
 
-        // we can ignore this for residence or palace
-        maxPossibleAmountToBuild = Math.min(maxPossibleAmountToBuild, Math.floor(freeBuildingTimeToFill / buildTime.totalSeconds()));
-      }
-
-      if (maxPossibleAmountToBuild <= 0) {
+      if (maxPossibleAmountToBuild < 1) {
         return;
       }
 
+      maxPossibleAmountToBuild = Math.floor(maxPossibleAmountToBuild);
       suitableToBuild[uIndex] = maxPossibleAmountToBuild;
       startingVillageRes = startingVillageRes.subtract(cost.multiply(maxPossibleAmountToBuild));
       ongoingBuildingTime = ongoingBuildingTime.add(buildTime.multiply(maxPossibleAmountToBuild));

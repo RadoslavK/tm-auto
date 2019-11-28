@@ -4,19 +4,19 @@ import { getPage } from '../../browser/getPage';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
   const page = await getPage();
-  const queuedUnitNodes = await page.$$('tr [class=dur] [class=timer]');
-  const unitQueue = new UnitsQueue();
+  const unitNodes = await page.$x('//tr[.//*[@class="dur"]//*[@class="timer"]]');
 
-  if (!queuedUnitNodes.length) {
-    return unitQueue;
-  }
+  const queuedUnits = await Promise.all(unitNodes.map(async (unitNode) => {
+    const timerNode = await unitNode.$('[class=dur] [class=timer]');
 
-  const lastUnitNode = queuedUnitNodes[queuedUnitNodes.length - 1];
-  const durationText = await lastUnitNode.$eval('[class=timer]', x => (x as HTMLElement).innerText);
-  unitQueue.duration = Duration.fromText(durationText);
+    if (!timerNode) {
+      throw new Error('Did not find timer node for unit');
+    }
 
-  const units = await Promise.all(queuedUnitNodes.map(async (node) => {
-    const index = await node.$eval('img[class*=unit]', x => {
+    const durationText = await timerNode.evaluate(x => (x as HTMLElement).innerText);
+    const duration = Duration.fromText(durationText);
+
+    const unitIndex = await unitNode.$eval('img[class*=unit]', x => {
       const unitIndexClass = /unit u(\d+)/.exec(x.className);
 
       if (!unitIndexClass) {
@@ -26,24 +26,34 @@ export const parseUnitQueue = async (): Promise<UnitsQueue> => {
       return +unitIndexClass[1];
     });
 
-    const count = await node.$eval('[class=desc]', x => {
+    const count = await unitNode.$eval('[class=desc]', x => {
       const text = (x as HTMLElement).innerText.trim();
       const unitCountMatch = /(\d+)/.exec(text);
 
       if (!unitCountMatch) {
-        throw new Error('Failed to parse unit queue');
+        throw new Error('Failed to parse unit count');
       }
 
       return +unitCountMatch[1];
     });
 
     return {
-      index,
       count,
+      duration,
+      unitIndex,
     };
   }));
 
-  units.forEach(unit => unitQueue.add(unit.index, unit.count));
+  const unitQueue = new UnitsQueue();
+
+  if (!queuedUnits.length) {
+    return unitQueue;
+  }
+
+  const lastUnit = queuedUnits[queuedUnits.length - 1];
+  unitQueue.duration = lastUnit.duration;
+
+  queuedUnits.forEach(unit => unitQueue.add(unit.unitIndex, unit.count));
 
   return unitQueue;
 };
