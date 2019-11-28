@@ -3,7 +3,10 @@ import {
   IMutationSignInArgs,
 } from '../_types/graphql';
 import { accountContext } from '../accountContext';
-import { killBrowser } from '../browser/getPage';
+import {
+  getPage,
+  killBrowser,
+} from '../browser/getPage';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
@@ -89,6 +92,16 @@ class ControllerService {
       return await this.m_taskManager.execute();
     } catch (error) {
       console.error(error.stack);
+      // try to make screenshot
+      try {
+        const page = await getPage();
+        const now = new Date();
+        const format = `${now.getDate()}-${now.getMonth()}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+        await page.screenshot({ path: `.screenshots/${format}.png` });
+      } catch(screenshotError) {
+        console.error(screenshotError);
+      }
+
       await killBrowser();
       return undefined;
     }

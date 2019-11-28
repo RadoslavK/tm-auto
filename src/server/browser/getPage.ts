@@ -30,6 +30,8 @@ export const getPage = async (): Promise<Page> => {
     ? pages[0]
     : await browser!.newPage();
 
+  //  TODO zaregistrovat iba ked to tam este neni
+
   page.on('console', consoleMessageObject => {
     if (consoleMessageObject.type() !== 'warning') {
       console.debug(consoleMessageObject.text());
