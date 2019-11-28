@@ -1,5 +1,6 @@
 import {
-  Browser, Page,
+  Browser,
+  Page,
 } from 'puppeteer';
 // @ts-ignore
 import puppeteer from 'puppeteer-extra';

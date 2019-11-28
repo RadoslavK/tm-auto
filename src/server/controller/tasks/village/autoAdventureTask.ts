@@ -10,7 +10,8 @@ import { IAdventureCriteria } from '../../../_types/graphql';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import {
-  getWithMaximum, getWithMinimum,
+  getWithMaximum,
+  getWithMinimum,
 } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 

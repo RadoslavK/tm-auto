@@ -1,11 +1,13 @@
 import {
-  useQuery, useSubscription,
+  useQuery,
+  useSubscription,
 } from '@apollo/react-hooks';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
 import {
-  BuildingsUpdated, GetBuildingSpots,
+  BuildingsUpdated,
+  GetBuildingSpots,
 } from '*/graphql_operations/building.graphql';
 import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
 

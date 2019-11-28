@@ -5,9 +5,7 @@ import {
 import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
 import { CoolDown } from '../../coolDown';
-import {
-  Duration,
-} from '../../duration';
+import { Duration } from '../../duration';
 
 const defaults: Fields<AutoAdventureSettings> = {
   allow: true,

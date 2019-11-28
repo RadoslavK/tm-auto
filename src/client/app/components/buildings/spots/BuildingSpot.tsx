@@ -1,5 +1,6 @@
 import {
-  Dialog, makeStyles,
+  Dialog,
+  makeStyles,
 } from '@material-ui/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';

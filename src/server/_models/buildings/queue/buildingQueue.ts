@@ -1,5 +1,6 @@
 import {
-  BuildingSpotType, getBuildingSpotType,
+  BuildingSpotType,
+  getBuildingSpotType,
 } from '../../../_enums/buildingSpotType';
 import { QueuedBuilding } from './queuedBuilding';
 

@@ -4,7 +4,8 @@ import { Village } from '../../_models/village/village';
 import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import {
-  publishEvent, publishPayloadEvent,
+  publishEvent,
+  publishPayloadEvent,
 } from '../../graphql/subscriptions/pubSub';
 import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
 import { getAllEnumValues } from '../../utils/enumUtils';

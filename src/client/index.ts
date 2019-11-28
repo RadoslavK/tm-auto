@@ -9,9 +9,7 @@ import {
   BrowserWindow,
   protocol,
 } from 'electron';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import which from 'which';

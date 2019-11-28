@@ -6,7 +6,8 @@ import {
 import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables,
+  IDequeueBuildingAtFieldMutation,
+  IDequeueBuildingAtFieldMutationVariables,
 } from '../../_types/graphql';
 import { useVillageContext } from './useVillageContext';
 

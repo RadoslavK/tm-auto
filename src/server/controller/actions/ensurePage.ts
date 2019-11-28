@@ -1,9 +1,11 @@
 import {
-  getBuildingSpotPath, TravianPath,
+  getBuildingSpotPath,
+  TravianPath,
 } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
 import {
-  isInfrastructure, isResourceField,
+  isInfrastructure,
+  isResourceField,
 } from '../../utils/buildingUtils';
 
 export const ensurePage = async (path: string, exact = false): Promise<void> => {
@@ -21,8 +23,7 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
 
   if (link) {
     await Promise.all([
-      page.evaluate(el => el.click(), link),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.evaluate(el => el.click(), link), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
     return;
@@ -33,8 +34,7 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
 
   if (link) {
     await Promise.all([
-      link.evaluate(node => node.dispatchEvent(new Event('click'))),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      link.evaluate(node => node.dispatchEvent(new Event('click'))), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
     return;
@@ -59,8 +59,7 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   }
 
   await Promise.all([
-    redirectElement.click(),
-    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    redirectElement.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
   ]);
 };
 

@@ -7,7 +7,11 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  Redirect, Route, RouteComponentProps, Switch, useRouteMatch,
+  Redirect,
+  Route,
+  RouteComponentProps,
+  Switch,
+  useRouteMatch,
 } from 'react-router-dom';
 
 import {
@@ -20,7 +24,8 @@ import {
   IUpdateVillagesSubscription,
 } from '../../../_types/graphql';
 import {
-  ISideMenuContext, SideMenuContext,
+  ISideMenuContext,
+  SideMenuContext,
 } from '../sideMenu/context/sideMenuContext';
 import { Village } from './Village';
 

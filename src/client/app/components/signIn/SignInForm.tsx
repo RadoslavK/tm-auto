@@ -33,7 +33,7 @@ import {
   GetAccount,
   GetAccounts,
   UpdateAccount,
-} from "*/graphql_operations/account.graphql";
+} from '*/graphql_operations/account.graphql';
 import { SignIn } from '*/graphql_operations/controller.graphql';
 
 import {

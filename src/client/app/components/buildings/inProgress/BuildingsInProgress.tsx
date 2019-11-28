@@ -1,5 +1,6 @@
 import {
-  useQuery, useSubscription,
+  useQuery,
+  useSubscription,
 } from '@apollo/react-hooks';
 import React from 'react';
 
@@ -7,7 +8,8 @@ import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
 import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
 
 import {
-  IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables,
+  IBuildingsUpdatedSubscription,
+  IBuildingsUpdatedSubscriptionVariables,
   IGetBuildingsInProgressQuery,
   IGetBuildingsInProgressQueryVariables,
 } from '../../../../_types/graphql';

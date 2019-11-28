@@ -1,5 +1,6 @@
 import {
-  allBuildingTypes, BuildingType,
+  allBuildingTypes,
+  BuildingType,
 } from '../_enums/buildingType';
 import {
   CapitalCondition,

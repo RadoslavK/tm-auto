@@ -8,16 +8,15 @@ import { accountContext } from '../../accountContext';
 import { fieldIds } from '../../constants/fieldIds';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import {
-  BuildingQueueService, MovingDirection,
+  BuildingQueueService,
+  MovingDirection,
 } from '../../services/buildingQueueService';
 import { buildingsService } from '../../services/buildingsService';
 import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { BotEvent } from '../subscriptions/botEvent';
-import {
-  subscribeToEvent,
-} from '../subscriptions/pubSub';
+import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 
 const getWallType = (): BuildingType => {

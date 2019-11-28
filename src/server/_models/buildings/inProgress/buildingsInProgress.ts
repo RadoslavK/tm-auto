@@ -1,5 +1,6 @@
 import {
-  BuildingSpotType, getBuildingSpotType,
+  BuildingSpotType,
+  getBuildingSpotType,
 } from '../../../_enums/buildingSpotType';
 import { getWithMinimum } from '../../../utils/getWithMaximum';
 import { BuildingInProgress } from './buildingInProgress';

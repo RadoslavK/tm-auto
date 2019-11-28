@@ -6,11 +6,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import classNames from 'classnames';
 import React, { useContext } from 'react';
 import {
-  Link, useLocation,
+  Link,
+  useLocation,
 } from 'react-router-dom';
 
 import {
-  ISideMenuContext, SideMenuContext,
+  ISideMenuContext,
+  SideMenuContext,
 } from './context/sideMenuContext';
 
 const useStyles = (drawerWidth: number): any => makeStyles(theme => ({

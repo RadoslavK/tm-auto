@@ -1,6 +1,4 @@
-import {
-  useMutation,
-} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import classNames from 'classnames';
 import React from 'react';

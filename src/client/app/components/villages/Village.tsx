@@ -1,5 +1,6 @@
 import {
-  useQuery, useSubscription,
+  useQuery,
+  useSubscription,
 } from '@apollo/react-hooks';
 import { Dialog } from '@material-ui/core';
 import React, {
@@ -7,22 +8,30 @@ import React, {
   useState,
 } from 'react';
 import {
-  Link, Redirect, Route, Switch, useHistory, useRouteMatch,
+  Link,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch,
 } from 'react-router-dom';
 
 import {
-  GetVillageById, UpdateVillage,
+  GetVillageById,
+  UpdateVillage,
 } from '*/graphql_operations/village.graphql';
 
 import {
   IGetVillageByIdQuery,
-  IGetVillageByIdQueryVariables, IUpdateVillageSubscription,
+  IGetVillageByIdQueryVariables,
+  IUpdateVillageSubscription,
 } from '../../../_types/graphql';
 import { Buildings } from '../buildings/Buildings';
 import { VillageSettings } from '../settings/village';
 import { Units } from '../units/Units';
 import {
-  IVillageContext, VillageContext,
+  IVillageContext,
+  VillageContext,
 } from './context/villageContext';
 import { Resources } from './Resources';
 

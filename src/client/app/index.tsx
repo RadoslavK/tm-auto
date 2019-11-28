@@ -22,7 +22,8 @@ import { EnsureTitle } from './components/EnsureTitle';
 import { MainRoutes } from './components/navigation/MainRoutes';
 import { Navigation } from './components/navigation/Navigation';
 import {
-  ISideMenuContext, SideMenuContext,
+  ISideMenuContext,
+  SideMenuContext,
 } from './components/sideMenu/context/sideMenuContext';
 import { SideMenu } from './components/sideMenu/SideMenu';
 import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';

@@ -22,7 +22,8 @@ import { buildingsService } from '../../../services/buildingsService';
 import { isInfrastructure } from '../../../utils/buildingUtils';
 import { randomElement } from '../../../utils/randomElement';
 import {
-  ensureBuildingSpotPage, ensurePage,
+  ensureBuildingSpotPage,
+  ensurePage,
 } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 

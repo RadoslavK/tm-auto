@@ -4,9 +4,7 @@ import { GeneralVillageSettings } from '../../_models/settings/generalVillageSet
 import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
-import {
-  ILogEntry,
-} from '../../_types/graphql';
+import { ILogEntry } from '../../_types/graphql';
 
 export enum BotEvent {
   BuildingsUpdated = 'BuildingsUpdated',

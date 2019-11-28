@@ -3,9 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { ICost } from '../../../../_types/graphql';
-import {
-  formatTimeFromDuration,
-} from '../../../../../server/utils/formatTime';
+import { formatTimeFromDuration } from '../../../../../server/utils/formatTime';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
 import { getTotalResources } from '../../../utils/resources';

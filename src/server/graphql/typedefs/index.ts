@@ -1,5 +1,6 @@
 import {
-  fileLoader, mergeTypes,
+  fileLoader,
+  mergeTypes,
 } from 'merge-graphql-schemas';
 
 const typesArray = fileLoader(__dirname);

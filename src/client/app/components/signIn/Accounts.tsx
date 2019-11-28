@@ -1,6 +1,4 @@
-import {
-  useQuery,
-} from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import {
   FormControl,
   InputBase,
@@ -9,17 +7,11 @@ import {
   NativeSelect,
   withStyles,
 } from '@material-ui/core';
-import React, {
-  useEffect,
-} from 'react';
+import React, { useEffect } from 'react';
 
-import {
-  GetAccounts,
-} from '*/graphql_operations/account.graphql';
+import { GetAccounts } from '*/graphql_operations/account.graphql';
 
-import {
-  IGetAccountsQuery,
-} from '../../../_types/graphql';
+import { IGetAccountsQuery } from '../../../_types/graphql';
 import { getServerShortcut } from '../../utils/getServerShortcut';
 
 type Props = {

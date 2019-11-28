@@ -1,6 +1,8 @@
 import React from 'react';
 import {
-  Redirect, Route, Switch,
+  Redirect,
+  Route,
+  Switch,
 } from 'react-router-dom';
 
 import { Logs } from '../logging/Logs';

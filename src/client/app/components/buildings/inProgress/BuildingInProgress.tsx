@@ -1,6 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {
-  useEffect, useState,
+  useEffect,
+  useState,
 } from 'react';
 
 import {

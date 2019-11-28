@@ -8,9 +8,7 @@ import React, {
   useState,
 } from 'react';
 
-import {
-  UpdateAutoUnitsUnitSettings,
-} from '*/graphql_operations/settings.graphql';
+import { UpdateAutoUnitsUnitSettings } from '*/graphql_operations/settings.graphql';
 import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
 
 import {

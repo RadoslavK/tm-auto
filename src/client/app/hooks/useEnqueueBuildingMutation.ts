@@ -6,7 +6,8 @@ import {
 import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables,
+  IEnqueueBuildingMutation,
+  IEnqueueBuildingMutationVariables,
 } from '../../_types/graphql';
 import { useVillageContext } from './useVillageContext';
 

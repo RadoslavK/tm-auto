@@ -1,5 +1,6 @@
 import {
-  useEffect, useRef,
+  useEffect,
+  useRef,
 } from 'react';
 
 export const useWhyDidYouUpdate = (name: string, props: any): void => {
