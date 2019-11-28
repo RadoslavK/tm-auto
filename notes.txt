@@ -46,6 +46,8 @@ pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
 queued building put as high as possible button
 dragging?
 
+parse account from textfield and extra url from any travian valid url
+
 
 eslint:
 -objects new line

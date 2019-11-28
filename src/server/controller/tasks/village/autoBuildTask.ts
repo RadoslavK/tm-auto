@@ -167,12 +167,11 @@ export class AutoBuildTask implements IBotTask {
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
     const { category } = buildingsService.getBuildingInfo(queuedBuilding.type);
 
-    //  They have same class but dont have to be selected through category
-    const areSpecialCases = queuedBuilding.fieldId === fieldIds.RallyPoint
-      || queuedBuilding.fieldId === fieldIds.Wall;
+    if (queuedBuilding.level === 1 && isInfrastructure(queuedBuilding.fieldId)) {
+      //  They have the category but dont have to be selected through category
+      const areSpecialCases = queuedBuilding.fieldId === fieldIds.RallyPoint
+        || queuedBuilding.fieldId === fieldIds.Wall;
 
-    if ((isInfrastructure(queuedBuilding.fieldId) && queuedBuilding.level === 1 && category > BuildingCategory.None) || areSpecialCases) {
-      // need to select correct section for new building
       if (category > BuildingCategory.Infrastructure && !areSpecialCases) {
         // infrastructure is preselected
         const path = `build.php?id=${queuedBuilding.fieldId}&category=${category}`;
