@@ -1,20 +1,7 @@
-import { ITribe } from '../../_types/graphql';
+import { Tribe } from '../../../_shared/types/tribe';
 import { getPage } from '../../browser/getPage';
 
-const getTribeFromIndex = (index: number): ITribe => {
-  switch (index) {
-    case 1: return ITribe.Romans;
-    case 2: return ITribe.Teutons;
-    case 3: return ITribe.Gauls;
-    case 4: return ITribe.Nature;
-    case 5: return ITribe.Natars;
-    case 6: return ITribe.Egyptians;
-    case 7: return ITribe.Huns;
-    default: throw new Error(`Unknown tribe index: ${index}`);
-  }
-};
-
-export const parseTribe = async (): Promise<ITribe> => {
+export const parseTribe = async (): Promise<Tribe> => {
   const page = await getPage();
   const className = await page.$eval('[class*=tribe]', e => e.className);
   const match = /tribe(\d+)/.exec(className);
@@ -25,9 +12,9 @@ export const parseTribe = async (): Promise<ITribe> => {
 
   const tribeIndex = +match[1];
 
-  if (tribeIndex < 1 || tribeIndex > 7) {
+  if (tribeIndex < Tribe.Romans || tribeIndex > Tribe.Huns) {
     throw new Error(`Unknown tribe index: ${tribeIndex}`);
   }
 
-  return getTribeFromIndex(tribeIndex);
+  return tribeIndex as Tribe;
 };

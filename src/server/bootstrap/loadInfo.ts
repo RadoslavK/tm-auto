@@ -2,11 +2,11 @@ import fs from 'fs';
 import path from 'path';
 
 import { BuildingCategory } from '../_enums/buildingCategory';
-import { BuildingType } from '../_enums/buildingType';
 import { IBuildingConditions } from '../_models/buildings/buildingConditions';
 import { Cost } from '../_models/misc/cost';
-import { ITribe } from '../_types/graphql';
 import { mapRecord } from '../../_shared/objectUtils';
+import { BuildingType } from '../../_shared/types/buildingType';
+import { Tribe } from '../../_shared/types/tribe';
 
 //  TODO nejaky resource loader
 
@@ -28,7 +28,7 @@ export interface IUnitInfo {
   readonly buildingType: BuildingType;
   readonly cost: Cost;
   readonly name: string;
-  readonly tribe: ITribe;
+  readonly tribe: Tribe;
 }
 
 export const loadInfo = (): void => {

@@ -1,3 +1,5 @@
+import { BuildingType } from '../../_shared/types/buildingType';
+
 const baseUrl = 'images';
 
 const resources = {
@@ -10,7 +12,7 @@ const resources = {
 };
 
 export const imageLinks = {
-  getBuilding: (buildingType: number): string => `${baseUrl}/buildings/${buildingType}.png`,
+  getBuilding: (buildingType: BuildingType): string => `${baseUrl}/buildings/${buildingType}.png`,
 
   getUnit: (unitIndex: number): string => `${baseUrl}/units/u${unitIndex}.gif`,
 

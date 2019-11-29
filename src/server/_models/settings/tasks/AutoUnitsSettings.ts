@@ -1,4 +1,3 @@
-import { BuildingType } from '../../../_enums/buildingType';
 import {
   IAutoUnitsBuildingSettings,
   IAutoUnitsSettings,
@@ -6,6 +5,7 @@ import {
 } from '../../../_types/graphql';
 import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { unitInfos } from '../../../bootstrap/loadInfo';
 import { CoolDown } from '../../coolDown';

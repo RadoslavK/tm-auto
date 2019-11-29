@@ -1,5 +1,5 @@
-import { BuildingType } from '../../_enums/buildingType';
 import { IBuildingSpot } from '../../_types/graphql';
+import { BuildingType } from '../../../_shared/types/buildingType';
 import { buildingsService } from '../../services/buildingsService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';

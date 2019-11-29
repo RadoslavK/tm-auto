@@ -1,6 +1,7 @@
-import fs from "fs";
+import fs from 'fs';
+
 import {
-  IBotState,
+  BotState,
   IMutationSignInArgs,
 } from '../_types/graphql';
 import { accountContext } from '../accountContext';
@@ -21,17 +22,16 @@ import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
-import { fileService } from './fileService';
 
 class ControllerService {
   private m_timeout: NodeJS.Timeout;
   private m_taskManager: TaskManager | null = null;
 
-  private botState: IBotState = IBotState.None;
+  private botState: BotState = BotState.None;
 
-  public state = (): IBotState => this.botState;
+  public state = (): BotState => this.botState;
 
-  private setState = async (state: IBotState): Promise<void> => {
+  private setState = async (state: BotState): Promise<void> => {
     this.botState = state;
     return publishEvent(BotEvent.BotRunningChanged);
   };
@@ -41,11 +41,11 @@ class ControllerService {
       accountId,
     } = input;
 
-    if (this.botState !== IBotState.None) {
+    if (this.botState !== BotState.None) {
       return;
     }
 
-    this.setState(IBotState.Pending);
+    this.setState(BotState.Pending);
 
     accountService.currentAccountId = accountId;
     accountContext.initialize();
@@ -65,16 +65,16 @@ class ControllerService {
       await updateBuildings();
     }
 
-    this.setState(IBotState.Paused);
+    this.setState(BotState.Paused);
   };
 
   public signOut = (): void => {
     accountService.currentAccountId = null;
-    this.setState(IBotState.None);
+    this.setState(BotState.None);
   };
 
   public start = async (): Promise<void> => {
-    this.setState(IBotState.Running);
+    this.setState(BotState.Running);
     await this.execute();
 
     this.m_timeout = setTimeout(async () => {
@@ -111,7 +111,7 @@ class ControllerService {
   };
 
   public stop = async (): Promise<void> => {
-    this.setState(IBotState.Stopping);
+    this.setState(BotState.Stopping);
 
     if (this.m_timeout) {
       clearTimeout(this.m_timeout);
@@ -120,7 +120,7 @@ class ControllerService {
     this.m_taskManager = null;
     await killBrowser();
 
-    this.setState(IBotState.Paused);
+    this.setState(BotState.Paused);
   };
 }
 

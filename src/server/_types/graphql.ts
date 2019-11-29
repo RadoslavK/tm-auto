@@ -11,7 +11,7 @@ export type Scalars = {
   Float: number,
 };
 
-export enum IAdventureCriteria {
+export enum AdventureCriteria {
   Closest = 'Closest',
   Furthest = 'Furthest',
   Random = 'Random',
@@ -22,7 +22,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly __typename?: 'AutoAdventureSettings',
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
-  readonly adventureCriteria: IAdventureCriteria,
+  readonly adventureCriteria: AdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -33,7 +33,7 @@ export type IAutoAdventureSettings = IITaskSettings & {
 export type IAutoAdventureSettingsInput = {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: IAdventureCriteria,
+  readonly adventureCriteria: AdventureCriteria,
   readonly preferHard: Scalars['Boolean'],
   readonly normalMinHealth: Scalars['Int'],
   readonly hardMinHealth: Scalars['Int'],
@@ -74,7 +74,7 @@ export type IAutoPartySettings = IITaskSettings & {
   readonly coolDown: ICoolDown,
   readonly allow: Scalars['Boolean'],
   readonly minCulturePoints: Scalars['Int'],
-  readonly partyType: IPartyType,
+  readonly partyType: PartyType,
 };
 
 export type IAutoUnitsBuildingSettings = {
@@ -93,7 +93,7 @@ export type IAutoUnitsLogEntryContentPayload = {
   readonly __typename?: 'AutoUnitsLogEntryContentPayload',
   readonly amount: Scalars['Int'],
   readonly index: Scalars['Int'],
-  readonly tribe: ITribe,
+  readonly tribe: Scalars['Int'],
   readonly unitName: Scalars['String'],
 };
 
@@ -127,7 +127,7 @@ export type IAvailableNewBuildingsInput = {
   readonly villageId: Scalars['Int'],
 };
 
-export enum IBotState {
+export enum BotState {
   None = 'None',
   Pending = 'Pending',
   Running = 'Running',
@@ -171,10 +171,6 @@ export type IBuildingSpots = {
   readonly infrastructure: ReadonlyArray<IBuildingSpot>,
   readonly resources: IResourceFields,
 };
-
-export enum IBuildingType {
-  None = 'None'
-}
 
 export type IClearQueueInput = {
   readonly villageId: Scalars['Int'],
@@ -237,11 +233,6 @@ export type IEnqueueBuildingInput = {
   readonly villageId: Scalars['Int'],
 };
 
-export type IGameInfo = {
-  readonly __typename?: 'GameInfo',
-  readonly tribe: ITribe,
-};
-
 export type IGeneralSettings = {
   readonly __typename?: 'GeneralSettings',
   readonly allowTasks: Scalars['Boolean'],
@@ -267,7 +258,7 @@ export type IGeneralVillageSettingsInput = {
 export type IHeroInformation = {
   readonly __typename?: 'HeroInformation',
   readonly health: Scalars['Int'],
-  readonly state: IHeroState,
+  readonly state: HeroState,
   readonly village: Maybe<IVillage>,
 };
 
@@ -276,7 +267,7 @@ export type IHeroSettings = {
   readonly autoAdventure: IAutoAdventureSettings,
 };
 
-export enum IHeroState {
+export enum HeroState {
   Unknown = 'Unknown',
   InVillage = 'InVillage',
   Dead = 'Dead',
@@ -412,16 +403,16 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
 
 
 export type IMutationResetSettingsArgs = {
-  type: ISettingsType
+  type: SettingsType
 };
 
 
 export type IMutationResetVillageSettingsArgs = {
   villageId: Scalars['Int'],
-  type: IVillageSettingsType
+  type: VillageSettingsType
 };
 
-export enum IPartyType {
+export enum PartyType {
   Small = 'Small',
   Large = 'Large'
 }
@@ -436,10 +427,9 @@ export type IQuery = {
   readonly buildingSpots: IBuildingSpots,
   readonly maxBuildingLevel: Scalars['Int'],
   readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>,
-  readonly botState: IBotState,
+  readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
-  readonly gameInfo: IGameInfo,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -548,7 +538,7 @@ export type IResources = {
   readonly freeCrop: Scalars['Int'],
 };
 
-export enum ISettingsType {
+export enum SettingsType {
   General = 'General',
   AutoAdventure = 'AutoAdventure'
 }
@@ -608,16 +598,6 @@ export type ITimestamp = {
   readonly __typename?: 'Timestamp',
   readonly totalSeconds: Scalars['Int'],
 };
-
-export enum ITribe {
-  Romans = 'Romans',
-  Teutons = 'Teutons',
-  Gauls = 'Gauls',
-  Nature = 'Nature',
-  Natars = 'Natars',
-  Egyptians = 'Egyptians',
-  Huns = 'Huns'
-}
 
 export type IUnitInfo = {
   readonly __typename?: 'UnitInfo',
@@ -708,7 +688,7 @@ export type IVillageSettings = {
   readonly autoParty: IAutoPartySettings,
 };
 
-export enum IVillageSettingsType {
+export enum VillageSettingsType {
   General = 'General',
   AutoBuild = 'AutoBuild',
   AutoUnits = 'AutoUnits'
@@ -798,9 +778,9 @@ export type IResolversTypes = {
   ResourceFields: ResolverTypeWrapper<IResourceFields>,
   BuildingInProgress: ResolverTypeWrapper<IBuildingInProgress>,
   Timestamp: ResolverTypeWrapper<ITimestamp>,
-  BotState: IBotState,
+  BotState: BotState,
   HeroInformation: ResolverTypeWrapper<IHeroInformation>,
-  HeroState: IHeroState,
+  HeroState: HeroState,
   Village: ResolverTypeWrapper<IVillage>,
   Coords: ResolverTypeWrapper<ICoords>,
   VillageResources: ResolverTypeWrapper<IVillageResources>,
@@ -814,8 +794,6 @@ export type IResolversTypes = {
   AutoBuildLogEntryContentPayload: ResolverTypeWrapper<IAutoBuildLogEntryContentPayload>,
   AutoUnitsLogEntryContent: ResolverTypeWrapper<IAutoUnitsLogEntryContent>,
   AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<IAutoUnitsLogEntryContentPayload>,
-  Tribe: ITribe,
-  GameInfo: ResolverTypeWrapper<IGameInfo>,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
@@ -826,7 +804,7 @@ export type IResolversTypes = {
   AutoAdventureSettings: ResolverTypeWrapper<IAutoAdventureSettings>,
   ITaskSettings: ResolverTypeWrapper<IITaskSettings>,
   CoolDown: ResolverTypeWrapper<ICoolDown>,
-  AdventureCriteria: IAdventureCriteria,
+  AdventureCriteria: AdventureCriteria,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
   AutoUnitsSettings: ResolverTypeWrapper<IAutoUnitsSettings>,
@@ -852,12 +830,11 @@ export type IResolversTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
-  SettingsType: ISettingsType,
-  VillageSettingsType: IVillageSettingsType,
+  SettingsType: SettingsType,
+  VillageSettingsType: VillageSettingsType,
   Subscription: ResolverTypeWrapper<{}>,
-  BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
-  PartyType: IPartyType,
+  PartyType: PartyType,
   AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
   VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   ResetVillageInput: IResetVillageInput,
@@ -878,9 +855,9 @@ export type IResolversParentTypes = {
   ResourceFields: IResourceFields,
   BuildingInProgress: IBuildingInProgress,
   Timestamp: ITimestamp,
-  BotState: IBotState,
+  BotState: BotState,
   HeroInformation: IHeroInformation,
-  HeroState: IHeroState,
+  HeroState: HeroState,
   Village: IVillage,
   Coords: ICoords,
   VillageResources: IVillageResources,
@@ -894,8 +871,6 @@ export type IResolversParentTypes = {
   AutoBuildLogEntryContentPayload: IAutoBuildLogEntryContentPayload,
   AutoUnitsLogEntryContent: IAutoUnitsLogEntryContent,
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayload,
-  Tribe: ITribe,
-  GameInfo: IGameInfo,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
   Boolean: Scalars['Boolean'],
@@ -906,7 +881,7 @@ export type IResolversParentTypes = {
   AutoAdventureSettings: IAutoAdventureSettings,
   ITaskSettings: IITaskSettings,
   CoolDown: ICoolDown,
-  AdventureCriteria: IAdventureCriteria,
+  AdventureCriteria: AdventureCriteria,
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
   AutoUnitsSettings: IAutoUnitsSettings,
@@ -932,12 +907,11 @@ export type IResolversParentTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
-  SettingsType: ISettingsType,
-  VillageSettingsType: IVillageSettingsType,
+  SettingsType: SettingsType,
+  VillageSettingsType: VillageSettingsType,
   Subscription: {},
-  BuildingType: IBuildingType,
   ClearQueueInput: IClearQueueInput,
-  PartyType: IPartyType,
+  PartyType: PartyType,
   AutoPartySettings: IAutoPartySettings,
   VillageSettings: IVillageSettings,
   ResetVillageInput: IResetVillageInput,
@@ -992,7 +966,7 @@ export type IAutoUnitsLogEntryContentResolvers<ContextType = any, ParentType ext
 export type IAutoUnitsLogEntryContentPayloadResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoUnitsLogEntryContentPayload'] = IResolversParentTypes['AutoUnitsLogEntryContentPayload']> = {
   amount: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   index: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
-  tribe: Resolver<IResolversTypes['Tribe'], ParentType, ContextType>,
+  tribe: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   unitName: Resolver<IResolversTypes['String'], ParentType, ContextType>,
 };
 
@@ -1072,10 +1046,6 @@ export type IDurationResolvers<ContextType = any, ParentType extends IResolversP
   seconds: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 
-export type IGameInfoResolvers<ContextType = any, ParentType extends IResolversParentTypes['GameInfo'] = IResolversParentTypes['GameInfo']> = {
-  tribe: Resolver<IResolversTypes['Tribe'], ParentType, ContextType>,
-};
-
 export type IGeneralSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralSettings'] = IResolversParentTypes['GeneralSettings']> = {
   allowTasks: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoBuild: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
@@ -1150,7 +1120,6 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   botState: Resolver<IResolversTypes['BotState'], ParentType, ContextType>,
   heroInformation: Resolver<IResolversTypes['HeroInformation'], ParentType, ContextType>,
   logsEntries: Resolver<ReadonlyArray<IResolversTypes['LogEntry']>, ParentType, ContextType>,
-  gameInfo: Resolver<IResolversTypes['GameInfo'], ParentType, ContextType>,
   buildingQueue: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
   hero: Resolver<IResolversTypes['HeroSettings'], ParentType, ContextType>,
@@ -1271,7 +1240,6 @@ export type IResolvers<ContextType = any> = {
   Coords: ICoordsResolvers<ContextType>,
   Cost: ICostResolvers<ContextType>,
   Duration: IDurationResolvers<ContextType>,
-  GameInfo: IGameInfoResolvers<ContextType>,
   GeneralSettings: IGeneralSettingsResolvers<ContextType>,
   GeneralVillageSettings: IGeneralVillageSettingsResolvers<ContextType>,
   HeroInformation: IHeroInformationResolvers<ContextType>,

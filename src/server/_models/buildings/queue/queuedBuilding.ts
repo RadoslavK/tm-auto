@@ -1,4 +1,4 @@
-import { BuildingType } from '../../../_enums/buildingType';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 
 interface IParams {
   readonly fieldId: number;

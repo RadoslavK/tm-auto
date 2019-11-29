@@ -2,11 +2,11 @@ import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
-import { BuildingType } from '../../../_enums/buildingType';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';

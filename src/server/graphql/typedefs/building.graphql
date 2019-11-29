@@ -1,7 +1,3 @@
-enum BuildingType {
-    None
-}
-
 type BuildingSpotLevel {
     actual: Int!
     ongoing: Int!

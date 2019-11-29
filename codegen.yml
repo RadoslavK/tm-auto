@@ -3,8 +3,6 @@ schema: 'src/server/graphql/typedefs/*.graphql'
 documents: 'src/client/graphql/operations/*.graphql'
 config:
   maybeValue: T | null
-  scalars:
-    Date: Date
 generates:
   src/server/_types/graphql.ts:
     plugins:
@@ -12,6 +10,7 @@ generates:
       - "typescript-resolvers"
     config:
       typesPrefix: I
+      enumPrefix: false
       immutableTypes: true
       avoidOptionals: true
   src/client/_types/graphql.ts:

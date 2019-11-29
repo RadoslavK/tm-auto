@@ -1,6 +1,6 @@
 import {
   IAutoPartySettings,
-  IPartyType,
+  PartyType,
 } from '../../../_types/graphql';
 import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
@@ -14,7 +14,7 @@ const getDefaults = (): Fields<AutoPartySettings> => ({
     min: new Duration({ minutes: 30 }),
     max: new Duration({ minutes: 55 }),
   }),
-  partyType: IPartyType.Small,
+  partyType: PartyType.Small,
 });
 
 export class AutoPartySettings implements IAutoPartySettings {
@@ -22,7 +22,7 @@ export class AutoPartySettings implements IAutoPartySettings {
   public coolDown: CoolDown;
 
   public minCulturePoints: number;
-  public partyType: IPartyType;
+  public partyType: PartyType;
 
   constructor(params: Partial<IAutoPartySettings> = {}) {
     Object.assign(this, merge(getDefaults, {

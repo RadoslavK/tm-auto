@@ -25,3 +25,6 @@ debugging - yarn run debug
 ---server port: 9220
 
 node 13.2 +
+
+ked sa kopiruju lokalne moduly tak najprv treba zmazat z nich node_modules lebo sa to vsetko prekopiruje
+a az potom dat yarn add lokalny modul

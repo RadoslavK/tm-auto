@@ -8,7 +8,7 @@ import {
   IGetAutoUnitsSettingsQuery,
   IGetAutoUnitsSettingsQueryVariables,
 } from '../../../_types/graphql';
-import { BuildingType } from '../../../../server/_enums/buildingType';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { useVillageContext } from '../../hooks/useVillageContext';
 import { UnitBuildingSection } from './UnitBuildingSection';
 

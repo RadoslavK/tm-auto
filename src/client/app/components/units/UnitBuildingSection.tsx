@@ -15,7 +15,7 @@ import {
   IUpdateAutoUnitsBuildingSettingsMutation,
   IUpdateAutoUnitsBuildingSettingsMutationVariables,
 } from '../../../_types/graphql';
-import { BuildingType } from '../../../../server/_enums/buildingType';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../hooks/useVillageContext';
 import { Duration } from '../controls/Duration';

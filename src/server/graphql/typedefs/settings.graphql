@@ -184,8 +184,6 @@ enum VillageSettingsType {
     AutoUnits
 }
 
-
-
 extend type Mutation {
     updateGeneralSettings(input: UpdateGeneralSettingsInput!): Boolean!
     updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!

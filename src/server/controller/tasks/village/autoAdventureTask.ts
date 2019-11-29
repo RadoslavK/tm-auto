@@ -2,11 +2,11 @@ import {
   BotTaskResult,
   IBotTask,
 } from '../_types';
-import { BuildingType } from '../../../_enums/buildingType';
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
 import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
-import { IAdventureCriteria } from '../../../_types/graphql';
+import { AdventureCriteria } from '../../../_types/graphql';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import {
@@ -107,21 +107,21 @@ export class AutoAdventureTask implements IBotTask {
     let selectedLinkElementId: string;
     // if adventures present
     switch (settings.adventureCriteria) {
-      case IAdventureCriteria.Random:
+      case AdventureCriteria.Random:
         selectedLinkElementId = randomElement(suitableAdventures).linkElementId;
         break;
 
-      case IAdventureCriteria.Furthest: {
+      case AdventureCriteria.Furthest: {
         const adventure = getWithMaximum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }
 
-      case IAdventureCriteria.FirstToExpire:
+      case AdventureCriteria.FirstToExpire:
         selectedLinkElementId = suitableAdventures[0].linkElementId;
         break;
 
-      case IAdventureCriteria.Closest:
+      case AdventureCriteria.Closest:
       default: {
         const adventure = getWithMinimum(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;

@@ -82,7 +82,7 @@ export type IAutoUnitsLogEntryContent = {
 export type IAutoUnitsLogEntryContentPayload = {
   readonly amount: Scalars['Int'],
   readonly index: Scalars['Int'],
-  readonly tribe: Tribe,
+  readonly tribe: Scalars['Int'],
   readonly unitName: Scalars['String'],
 };
 
@@ -153,10 +153,6 @@ export type IBuildingSpots = {
   readonly resources: IResourceFields,
 };
 
-export enum BuildingType {
-  None = 'None'
-}
-
 export type IClearQueueInput = {
   readonly villageId: Scalars['Int'],
 };
@@ -212,10 +208,6 @@ export type IEnqueueBuildingInput = {
   readonly levels: Scalars['Int'],
   readonly type: Scalars['Int'],
   readonly villageId: Scalars['Int'],
-};
-
-export type IGameInfo = {
-  readonly tribe: Tribe,
 };
 
 export type IGeneralSettings = {
@@ -408,7 +400,6 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
-  readonly gameInfo: IGameInfo,
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -570,16 +561,6 @@ export type ITextLogEntryContentPayload = {
 export type ITimestamp = {
   readonly totalSeconds: Scalars['Int'],
 };
-
-export enum Tribe {
-  Romans = 'Romans',
-  Teutons = 'Teutons',
-  Gauls = 'Gauls',
-  Nature = 'Nature',
-  Natars = 'Natars',
-  Egyptians = 'Egyptians',
-  Huns = 'Huns'
-}
 
 export type IUnitInfo = {
   readonly name: Scalars['String'],
@@ -842,11 +823,6 @@ export type IVillageFragmentFragment = (
 );
 
 export type IDurationFragment = Pick<IDuration, 'days' | 'hours' | 'minutes' | 'seconds'>;
-
-export type IGetGameInfoQueryVariables = {};
-
-
-export type IGetGameInfoQuery = { readonly gameInfo: Pick<IGameInfo, 'tribe'> };
 
 export type IClearQueueMutationVariables = {
   villageId: Scalars['Int']

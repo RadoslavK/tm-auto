@@ -1,4 +1,4 @@
-import { IHeroState } from '../../_types/graphql';
+import { HeroState } from '../../_types/graphql';
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
@@ -58,20 +58,20 @@ export const updateHeroInformation = async (): Promise<void> => {
 
   switch(status) {
     case 100:
-      hero.state = IHeroState.InVillage;
+      hero.state = HeroState.InVillage;
       break;
 
     case 101: {
-      hero.state = heroStatusClass.includes('Regenerate') ? IHeroState.Reviving : IHeroState.Dead;
+      hero.state = heroStatusClass.includes('Regenerate') ? HeroState.Reviving : HeroState.Dead;
       break;
     }
 
     case 50:
-      hero.state = IHeroState.OnAdventure;
+      hero.state = HeroState.OnAdventure;
       break;
 
     default:
-      hero.state = IHeroState.Unknown;
+      hero.state = HeroState.Unknown;
   }
 
   const pageContent = await page.content();

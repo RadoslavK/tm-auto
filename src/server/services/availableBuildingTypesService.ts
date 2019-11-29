@@ -1,15 +1,13 @@
 import {
-  allBuildingTypes,
-  BuildingType,
-} from '../_enums/buildingType';
-import {
   CapitalCondition,
   IBuildingConditions,
 } from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
-import { ITribe } from '../_types/graphql';
+import { BuildingType } from '../../_shared/types/buildingType';
+import { Tribe } from '../../_shared/types/tribe';
 import { accountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
+import { getAllEnumValues } from '../utils/enumUtils';
 import { buildingsService } from './buildingsService';
 
 export class AvailableBuildingTypesService {
@@ -30,33 +28,33 @@ export class AvailableBuildingTypesService {
         let type: BuildingType;
 
         switch (tribe) {
-          case ITribe.Egyptians: {
+          case Tribe.Egyptians: {
             type = BuildingType.StoneWall;
             break;
           }
 
-          case ITribe.Gauls: {
+          case Tribe.Gauls: {
             type = BuildingType.Palisade;
             break;
           }
 
-          case ITribe.Huns: {
+          case Tribe.Huns: {
             type = BuildingType.MakeshiftWall;
             break;
           }
 
-          case ITribe.Romans: {
+          case Tribe.Romans: {
             type = BuildingType.CityWall;
             break;
           }
 
-          case ITribe.Teutons: {
+          case Tribe.Teutons: {
             type = BuildingType.EarthWall;
             break;
           }
 
           default:
-            throw new Error(`Unknown player tribe: ${ITribe[tribe]}`);
+            throw new Error(`Unknown player tribe: ${Tribe[tribe]}`);
         }
 
         buildingTypes.push(type);
@@ -70,7 +68,7 @@ export class AvailableBuildingTypesService {
       }
 
       default: {
-        allBuildingTypes.forEach(type => {
+        getAllEnumValues(BuildingType).filter(type => type !== BuildingType.None).forEach(type => {
           if (type <= BuildingType.Crop) {
             return;
           }

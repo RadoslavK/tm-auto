@@ -20,7 +20,7 @@ type AutoBuildLogEntryContent {
 type AutoUnitsLogEntryContentPayload {
     amount: Int!
     index: Int!
-    tribe: Tribe!
+    tribe: Int!
     unitName: String!
 }
 

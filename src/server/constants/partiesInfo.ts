@@ -1,5 +1,5 @@
 import { Resources } from '../_models/misc/resources';
-import { IPartyType } from '../_types/graphql';
+import { PartyType } from '../_types/graphql';
 
 interface IPartyInfo {
   readonly townHallLevel: number;
@@ -7,11 +7,11 @@ interface IPartyInfo {
 }
 
 export const partiesInfo: Record<string, IPartyInfo> = {
-  [IPartyType.Small]: {
+  [PartyType.Small]: {
     townHallLevel: 1,
     cost: new Resources({ wood: 6400, clay: 6650, iron: 5940, crop: 1340 }),
   },
-  [IPartyType.Large]: {
+  [PartyType.Large]: {
     townHallLevel: 10,
     cost: new Resources({ wood: 29700, clay: 33250, iron: 32000, crop: 6700 }),
   },

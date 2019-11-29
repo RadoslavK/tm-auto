@@ -1,6 +1,6 @@
-import { BuildingType } from '../../_enums/buildingType';
 import { TravianPath } from '../../_enums/travianPath';
 import { IActualBuilding } from '../../_models/buildings';
+import { BuildingType } from '../../../_shared/types/buildingType';
 import { getPage } from '../../browser/getPage';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { validateUrl } from '../../utils/validateUrl';
@@ -39,9 +39,9 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
 
     const type = +typeMatch[1];
 
-    const level = type > BuildingType.None
-      ? +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText)
-      : 0;
+    const level = type === BuildingType.None
+      ? 0
+      : +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText);
 
     return {
       fieldId,

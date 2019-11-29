@@ -1,9 +1,10 @@
-import { BuildingType } from '../../_enums/buildingType';
 import {
+  IAvailableNewBuilding,
   IBuildingQueue,
   IBuildingSpotLevel,
-  ITribe,
 } from '../../_types/graphql';
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { Tribe } from '../../../_shared/types/tribe';
 import { accountContext } from '../../accountContext';
 import { fieldIds } from '../../constants/fieldIds';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
@@ -12,7 +13,6 @@ import {
   MovingDirection,
 } from '../../services/buildingQueueService';
 import { buildingsService } from '../../services/buildingsService';
-import { mapAvailableNewBuilding } from '../mappers/mapAvailableNewBuilding';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { BotEvent } from '../subscriptions/botEvent';
@@ -23,23 +23,23 @@ const getWallType = (): BuildingType => {
   const { tribe } = accountContext.gameInfo;
 
   switch (tribe) {
-    case ITribe.Egyptians:
+    case Tribe.Egyptians:
       return BuildingType.StoneWall;
 
-    case ITribe.Romans:
+    case Tribe.Romans:
       return BuildingType.CityWall;
 
-    case ITribe.Teutons:
+    case Tribe.Teutons:
       return BuildingType.EarthWall;
 
-    case ITribe.Gauls:
+    case Tribe.Gauls:
       return BuildingType.Palisade;
 
-    case ITribe.Huns:
+    case Tribe.Huns:
       return BuildingType.MakeshiftWall;
 
     default:
-      throw new Error(`Unknown player tribe: ${tribe}`);
+      throw new Error(`Unknown player tribe: ${Tribe[tribe]}`);
   }
 };
 
@@ -108,7 +108,10 @@ export const buildingResolvers: Resolvers = {
       } = args.input;
 
       const manager = new AvailableBuildingTypesService(villageId);
-      return manager.availableBuildingTypes(fieldId).map(mapAvailableNewBuilding);
+      return manager.availableBuildingTypes(fieldId).map((type): IAvailableNewBuilding => ({
+        type,
+        name: buildingsService.getBuildingInfo(type).name,
+      }));
     },
   },
 

@@ -1,5 +1,5 @@
 import {
-  IAdventureCriteria,
+  AdventureCriteria,
   IAutoAdventureSettings,
 } from '../../../_types/graphql';
 import { merge } from '../../../../_shared/merge';
@@ -14,7 +14,7 @@ const getDefaults = (): Fields<AutoAdventureSettings> => ({
     max: new Duration({ minutes: 13 }),
   }),
 
-  adventureCriteria: IAdventureCriteria.Closest,
+  adventureCriteria: AdventureCriteria.Closest,
   preferHard: false,
   normalMinHealth: 30,
   hardMinHealth: 50,
@@ -26,7 +26,7 @@ export class AutoAdventureSettings implements IAutoAdventureSettings {
   public allow: boolean;
   public coolDown: CoolDown;
 
-  public adventureCriteria: IAdventureCriteria;
+  public adventureCriteria: AdventureCriteria;
   public preferHard: boolean;
   public normalMinHealth: number;
   public hardMinHealth: number;

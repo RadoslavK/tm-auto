@@ -1,5 +1,3 @@
-import { getAllEnumValues } from '../utils/enumUtils';
-
 export enum BuildingType {
   None = 0,
   Wood = 1,
@@ -46,8 +44,5 @@ export enum BuildingType {
   StoneWall = 42,
   MakeshiftWall = 43,
   CommandCenter = 44,
-  Waterworks = 45,
+  Waterworks = 45
 }
-
-export const allBuildingTypes: readonly BuildingType[] = getAllEnumValues(BuildingType)
-  .filter(type => type !== BuildingType.None);

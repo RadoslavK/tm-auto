@@ -1,4 +1,3 @@
-import { BuildingType } from '../../_enums/buildingType';
 import { GeneralSettings } from '../../_models/settings/generalSettings';
 import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
 import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
@@ -8,9 +7,10 @@ import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSetting
 import {
   IAutoUnitsBuildingSettings,
   IAutoUnitsSettings,
-  ISettingsType,
-  IVillageSettingsType,
+  SettingsType,
+  VillageSettingsType,
 } from '../../_types/graphql';
+import { BuildingType } from '../../../_shared/types/buildingType';
 import { accountContext } from '../../accountContext';
 import { unitsService } from '../../services/unitsService';
 import { BotEvent } from '../subscriptions/botEvent';
@@ -185,14 +185,14 @@ export const settingsResolvers: Resolvers = {
 
     resetSettings: async (_, args): Promise<boolean> => {
       switch (args.type) {
-        case ISettingsType.General: {
+        case SettingsType.General: {
           const settings = new GeneralSettings();
           await accountContext.settingsService.general.update(settings);
           await publishPayloadEvent(BotEvent.GeneralSettingsChanged, { settings });
           break;
         }
 
-        case ISettingsType.AutoAdventure: {
+        case SettingsType.AutoAdventure: {
           const settings = new AutoAdventureSettings();
           await accountContext.settingsService.hero.autoAdventure.update(settings);
           await publishPayloadEvent(BotEvent.AutoAdventureSettingsChanged, { settings });
@@ -200,7 +200,7 @@ export const settingsResolvers: Resolvers = {
         }
 
         default:
-          throw new Error(`Invalid settings type: ${ISettingsType[args.type]}`);
+          throw new Error(`Invalid settings type: ${SettingsType[args.type]}`);
       }
 
       return true;
@@ -208,21 +208,21 @@ export const settingsResolvers: Resolvers = {
 
     resetVillageSettings: async (_, { type, villageId }): Promise<boolean> => {
       switch (type) {
-        case IVillageSettingsType.General: {
+        case VillageSettingsType.General: {
           const settings = new GeneralVillageSettings();
           await accountContext.settingsService.village(villageId).general.update(settings);
           await publishPayloadEvent(BotEvent.GeneralVillageSettingsChanged, { villageId, settings });
           break;
         }
 
-        case IVillageSettingsType.AutoBuild: {
+        case VillageSettingsType.AutoBuild: {
           const settings = new AutoBuildSettings();
           await accountContext.settingsService.village(villageId).autoBuild.update(settings);
           await publishPayloadEvent(BotEvent.AutoBuildSettingsChanged, { villageId, settings });
           break;
         }
 
-        case IVillageSettingsType.AutoUnits: {
+        case VillageSettingsType.AutoUnits: {
           const settings = new AutoUnitsSettings();
           await accountContext.settingsService.village(villageId).autoUnits.update(settings);
           await publishPayloadEvent(BotEvent.AutoUnitsSettingsChanged, { villageId, settings });
@@ -230,7 +230,7 @@ export const settingsResolvers: Resolvers = {
         }
 
         default:
-          throw new Error(`Invalid village settings type: ${IVillageSettingsType[type]}`);
+          throw new Error(`Invalid village settings type: ${VillageSettingsType[type]}`);
       }
 
       return true;

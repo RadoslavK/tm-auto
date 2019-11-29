@@ -1,5 +1,5 @@
-import { BuildingType } from '../../_enums/buildingType';
-import { ITribe } from '../../_types/graphql';
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { Tribe } from '../../../_shared/types/tribe';
 
 export enum CapitalCondition {
   None = 0,
@@ -15,7 +15,7 @@ export interface IBuildingWithLevelRequirement {
 export interface IBuildingConditions {
   readonly capital: CapitalCondition;
   readonly isUnique: boolean;
-  readonly playerTribe: ITribe | null;
+  readonly playerTribe: Tribe | null;
   readonly requiredBuildings: readonly IBuildingWithLevelRequirement[];
   readonly prohibitedBuildingTypes: readonly BuildingType[];
 }
