@@ -12,8 +12,12 @@ import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { unitsService } from '../../../services/unitsService';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
-import { ensureBuildingSpotPage } from '../../actions/ensurePage';
+import {
+  ensureBuildingSpotPage,
+  ITabInformation,
+} from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
+import { updateUnitsInformation } from '../../updateUnitsInformation';
 
 export class AutoUnitsTask implements IBotTask {
   private readonly m_village: Village;
@@ -26,17 +30,27 @@ export class AutoUnitsTask implements IBotTask {
 
   private settings = (): AutoUnitsSettings => accountContext.settingsService.village(this.m_village.id).autoUnits.get();
 
-  public allowExecution = (): boolean => this.settings().allow
-    && accountContext.settingsService.general.get().autoUnits;
+  public allowExecution = (): boolean =>
+    accountContext.settingsService.general.get().autoUnits
+    && this.settings().allow
+    && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(this.allowForBuilding);
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): BotTaskResult => {
+    await updateUnitsInformation();
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
     await this.analyzeQueueAndBuildUnits(BuildingType.Stable);
     await this.analyzeQueueAndBuildUnits(BuildingType.Workshop);
     await this.analyzeQueueAndBuildUnits(BuildingType.Residence);
     await this.analyzeQueueAndBuildUnits(BuildingType.Palace);
+  };
+
+  private allowForBuilding = (type: BuildingType): boolean => {
+    const buildingSettings = this.settings().forBuilding(type);
+
+    return buildingSettings.allow
+      && buildingSettings.units.some(uSettings => uSettings.autoBuild);
   };
 
   private analyzeQueueAndBuildUnits = async (type: BuildingType): Promise<void> => {
@@ -64,12 +78,12 @@ export class AutoUnitsTask implements IBotTask {
       return;
     }
 
-    const tabIndex = type === BuildingType.Residence || type === BuildingType.Palace
-      ? 1
+    const tab: ITabInformation | undefined = type === BuildingType.Residence || type === BuildingType.Palace
+      ? { index: 1, name: 's' }
       : undefined;
 
     // select appropriate building
-    await ensureBuildingSpotPage(unitBuilding.fieldId, tabIndex);
+    await ensureBuildingSpotPage(unitBuilding.fieldId, tab);
     await updateActualResources();
 
     const unitQueue = await parseUnitQueue();

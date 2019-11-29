@@ -82,10 +82,10 @@ module.exports = {
     "unicorn/filename-case": ["error", { "case": "camelCase" }],
     "@typescript-eslint/ban-ts-ignore": "warn",
     "unicorn/explicit-length-check": "off",
-    "no-await-in-loop": "warn",
+    "no-await-in-loop": "off",
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "no-param-reassign": "warn",
-    "unicorn/prefer-text-content": "warn",
+    "unicorn/prefer-text-content": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "import/no-unresolved": "error",
     "jsx-a11y/label-has-associated-control": "off",
@@ -116,6 +116,7 @@ module.exports = {
     "brace-style": "error",
     "no-console": "off",
     "tm-auto/single-import-per-line": "error",
-    "tm-auto/single-line-per-single-import": "error"
+    "tm-auto/single-line-per-single-import": "error",
+    "no-continue": "off"
   },
 };

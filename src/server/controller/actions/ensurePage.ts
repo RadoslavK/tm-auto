@@ -78,7 +78,12 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   }
 };
 
-export const ensureBuildingSpotPage = async (fieldId: number, tabIndex: number | undefined = undefined): Promise<void> => {
+export interface ITabInformation {
+  readonly index: number;
+  readonly name: string;
+}
+
+export const ensureBuildingSpotPage = async (fieldId: number, tab: ITabInformation | undefined = undefined): Promise<void> => {
   //  TODO: spravit to efektivnejsie a celkovo ensure navigaciu. ked uz je na tej budove tak sa nemusi davat na resource fieldy atd
   if (isResourceField(fieldId)) {
     await ensurePage(TravianPath.ResourceFieldsOverview);
@@ -88,9 +93,9 @@ export const ensureBuildingSpotPage = async (fieldId: number, tabIndex: number |
 
   await ensurePage(getBuildingSpotPath(fieldId), true);
 
-  if (tabIndex === undefined) {
+  if (tab === undefined) {
     return;
   }
 
-  await ensurePage(getBuildingSpotPath(fieldId, tabIndex));
+  await ensurePage(getBuildingSpotPath(fieldId, tab));
 };

@@ -2,7 +2,7 @@ import { BuildingType } from '../../_enums/buildingType';
 import { UnitsQueue } from './unitsQueue';
 
 export class Units {
-  private readonly m_counts: Record<number, number> = {};
+  private m_counts: Map<number, number> = new Map();
 
   public barracksQueue: UnitsQueue = new UnitsQueue();
   public stableQueue: UnitsQueue = new UnitsQueue();
@@ -33,9 +33,14 @@ export class Units {
     }
   };
 
-  public setCount = (unitIndex: number, amount: number): void => {
-    this.m_counts[unitIndex] = amount;
+  public resetCounts = (): void => {
+    this.m_counts.clear();
   };
 
-  public getCount = (unitIndex: number): number => this.m_counts[unitIndex] || 0;
+  public addCount = (unitIndex: number, amount: number): void => {
+    const count = this.m_counts.get(unitIndex);
+    this.m_counts.set(unitIndex, count ? count + amount : amount);
+  };
+
+  public getCount = (unitIndex: number): number => this.m_counts.get(unitIndex) || 0;
 }

@@ -39,15 +39,22 @@ export class VillageService {
     });
   };
 
+  public villageByCoords = (coords: Coords): Village | undefined => this
+    .allVillages()
+    .find(x => x.coords.x === coords.x && x.coords.y === coords.y);
+
+  public capitalVillage = (): Village | undefined => this
+    .allVillages()
+    .find(x => x.isCapital);
+
   public setCapital = (coords: Coords): { readonly capitalChanged: boolean; } => {
-    const villages = this.allVillages();
-    const village = villages.find(x => x.coords.x === coords.x && x.coords.y === coords.y);
+    const village = this.villageByCoords(coords);
 
     if (!village) {
       throw new Error(`No village at coords ${coords.toString()} was found`);
     }
 
-    const previousCapitalVillage = villages.find(x => x.isCapital);
+    const previousCapitalVillage = this.capitalVillage();
 
     if (previousCapitalVillage === village) {
       return { capitalChanged: false };

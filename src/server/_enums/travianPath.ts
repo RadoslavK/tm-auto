@@ -1,3 +1,5 @@
+import { ITabInformation } from '../controller/actions/ensurePage';
+
 export enum TravianPath {
   ResourceFieldsOverview = 'dorf1.php',
   InfrastructureOverview = 'dorf2.php',
@@ -16,11 +18,7 @@ export enum TravianPath {
   Hero = 'hero.php',
 }
 
-export const getBuildingSpotPath = (fieldId: number, tabIndex: number | undefined = undefined): string =>
-  tabIndex === undefined
+export const getBuildingSpotPath = (fieldId: number, tab: ITabInformation | undefined = undefined): string =>
+  tab === undefined
     ? `build.php?id=${fieldId}`
-    : `build.php?s=${tabIndex}&id=${fieldId}`;
-
-export const getPath = {
-  buildingSpot: (fieldId: number) => `build.php?id=${fieldId}`,
-};
+    : `build.php?${tab.name}=${tab.index}&id=${fieldId}`;
