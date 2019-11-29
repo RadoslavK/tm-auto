@@ -1,0 +1,23 @@
+parse account from textfield and extra url from any travian valid url
+
+pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval
+
+povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne
+....zase sa to stalo
+queue vyzerala tak ze wall 2-10 a potom market 2-10 a medzi tym iron fieldy
+.potom sa to stalo aj s marketom ked bol 2-10 na tom istom lvlu.. povedal ze lvl7 stava ale staval 6
+
+namiesto allow checkboxu dat nejaky toggle - enable/disable
+
+autounits settingy blbnu - nastavi building queue a autobuild na index, potom v settings menu nastavit allow a ked sa  vrati na prehlad units tak tam ma povodne hodnoty
+
+divny village res formatting..
+suroviny su po  1.0 a 1.1k cize asi spravny formatting ale total ukazuje jak 4,324/62k. nedava zmysel
+
+puppeteer casto pada s navigation timeout 30000.. hlavne u ensure page u toho redirect linku a potom obcas u parse active village
+
+po exceptione refreshnut stranku a pokracovat skusit..
+
+side menu context prerobit
+
+nejak to spravit nech to generuje spolocne typescript typy  do shared

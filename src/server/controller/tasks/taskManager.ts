@@ -22,7 +22,7 @@ import { AutoBuildTask } from './village/autoBuildTask';
 import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
 
-class BotTaskEngine<TArgs = undefined> {
+class BotTaskEngine {
   private readonly m_task: IBotTask;
   private m_timeOfNextExecution: Date = new Date();
 
@@ -30,10 +30,11 @@ class BotTaskEngine<TArgs = undefined> {
     this.m_task = task;
   }
 
-  private isExecutionReady = (): boolean => this.m_timeOfNextExecution < new Date();
+  public isExecutionReady = (): boolean => this.m_task.allowExecution()
+    && this.m_timeOfNextExecution < new Date();
 
   public execute = async (): Promise<void> => {
-    if (!this.m_task.allowExecution() || !this.isExecutionReady()) {
+    if (!this.isExecutionReady()) {
       return;
     }
 
@@ -57,9 +58,11 @@ class VillageBotTasksEngine {
   constructor(village: Village, tasks: { new(village: Village): IBotTask }[]) {
     this.m_tasks = tasks.map(Task => {
       const task = new Task(village);
-      return new BotTaskEngine<Village>(task);
+      return new BotTaskEngine(task);
     });
   }
+
+  public isExecutionReady = (): boolean => this.m_tasks.some(t => t.isExecutionReady());
 
   public execute = async (): Promise<void> => {
     for (const task of this.m_tasks) {
@@ -107,11 +110,6 @@ export class TaskManager {
         continue;
       }
 
-      await ensureVillageSelected(village.id);
-
-      await updateResources();
-      await updateBuildings();
-
       let taskEngine = this.m_villageTasks[village.id];
 
       if (!taskEngine) {
@@ -126,6 +124,15 @@ export class TaskManager {
         ]);
         this.m_villageTasks[village.id] = taskEngine;
       }
+
+      if (!taskEngine.isExecutionReady()) {
+        continue;
+      }
+
+      await ensureVillageSelected(village.id);
+
+      await updateResources();
+      await updateBuildings();
 
       await taskEngine.execute();
 
