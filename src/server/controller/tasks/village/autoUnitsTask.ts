@@ -174,6 +174,11 @@ export class AutoUnitsTask implements IBotTask {
       const input = await page.$(`[name=t${uIndex}]`);
 
       if (input) {
+        await input.focus();
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.down('Backspace');
         await input.type(amount.toString());
       }
     }
