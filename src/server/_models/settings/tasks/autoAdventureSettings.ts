@@ -7,7 +7,7 @@ import { Fields } from '../../../../_shared/types';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const defaults: Fields<AutoAdventureSettings> = {
+const getDefaults = (): Fields<AutoAdventureSettings> => ({
   allow: true,
   coolDown: new CoolDown({
     min: new Duration({ minutes: 8 }),
@@ -20,7 +20,7 @@ const defaults: Fields<AutoAdventureSettings> = {
   hardMinHealth: 50,
   maxTravelTime: new Duration({ hours: 1 }),
   preferredVillageId: null,
-};
+});
 
 export class AutoAdventureSettings implements IAutoAdventureSettings {
   public allow: boolean;
@@ -34,7 +34,7 @@ export class AutoAdventureSettings implements IAutoAdventureSettings {
   public preferredVillageId: number | null;
 
   constructor(params: Partial<IAutoAdventureSettings> = {}) {
-    Object.assign(this, merge(defaults, {
+    Object.assign(this, merge(getDefaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
       maxTravelTime: params.maxTravelTime && new Duration(params.maxTravelTime),

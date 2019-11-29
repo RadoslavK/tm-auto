@@ -7,11 +7,11 @@ import { Fields } from '../../_shared/types';
 
 //  TODO has gold club feature
 
-const defaults: Fields<GameInfo> = {
+const getDefaults = (): Fields<GameInfo> => ({
   speed: 0,
   tribe: ITribe.Romans,
   allyId: null,
-};
+});
 
 export class GameInfo implements IGameInfo {
   public speed: number;
@@ -19,6 +19,6 @@ export class GameInfo implements IGameInfo {
   public allyId: number | null;
 
   constructor(params: Partial<IGameInfo> = {}) {
-    Object.assign(this, merge(defaults, params));
+    Object.assign(this, merge(getDefaults, params));
   }
 }

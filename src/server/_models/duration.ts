@@ -2,12 +2,12 @@ import { IDuration } from '../_types/graphql';
 import { merge } from '../../_shared/merge';
 import { Fields } from '../../_shared/types';
 
-const defaults: Fields<Duration> = {
+const getDefaults = (): Fields<Duration> => ({
   seconds: 0,
   minutes: 0,
   hours: 0,
   days: 0,
-};
+});
 
 export class Duration implements IDuration {
   public seconds: number;
@@ -16,7 +16,7 @@ export class Duration implements IDuration {
   public days: number;
 
   constructor(params: Partial<IDuration> = {}) {
-    Object.assign(this, merge(defaults, params));
+    Object.assign(this, merge(getDefaults, params));
   }
 
   public totalSeconds = (): number => (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;

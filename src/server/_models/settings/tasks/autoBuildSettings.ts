@@ -4,7 +4,7 @@ import { Fields } from '../../../../_shared/types';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const defaults: Fields<AutoBuildSettings> = {
+const getDefaults = (): Fields<AutoBuildSettings> => ({
   allow: true,
   coolDown: new CoolDown({
     min: new Duration({ minutes: 4 }),
@@ -12,7 +12,7 @@ const defaults: Fields<AutoBuildSettings> = {
   }),
   autoCropFields: false,
   minCrop: 0,
-};
+});
 
 export class AutoBuildSettings implements IAutoBuildSettings {
   public allow: boolean;
@@ -22,7 +22,7 @@ export class AutoBuildSettings implements IAutoBuildSettings {
   readonly minCrop: number;
 
   constructor(params: Partial<IAutoBuildSettings> = {}) {
-    Object.assign(this, merge(defaults, {
+    Object.assign(this, merge(getDefaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
     }));

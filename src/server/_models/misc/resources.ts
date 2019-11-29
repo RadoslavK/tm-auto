@@ -5,13 +5,13 @@ import {
   IComparable,
 } from '../../../_shared/types';
 
-const defaults: Fields<Resources> = {
+const getDefaults = (): Fields<Resources> => ({
   clay: 0,
   crop: 0,
   freeCrop: 0,
   iron: 0,
   wood: 0,
-};
+});
 
 export class Resources implements IResources, IComparable<Resources> {
   public wood: number;
@@ -21,7 +21,7 @@ export class Resources implements IResources, IComparable<Resources> {
   public freeCrop: number;
 
   constructor(params: Partial<IResources> = {}) {
-    Object.assign(this, merge(defaults, params));
+    Object.assign(this, merge(getDefaults, params));
   }
 
   public add = (addition: Resources): Resources => {

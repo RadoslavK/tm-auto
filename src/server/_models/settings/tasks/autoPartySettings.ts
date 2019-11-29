@@ -7,7 +7,7 @@ import { Fields } from '../../../../_shared/types';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const defaults: Fields<AutoPartySettings> = {
+const getDefaults = (): Fields<AutoPartySettings> => ({
   allow: false,
   minCulturePoints: 0,
   coolDown: new CoolDown({
@@ -15,7 +15,7 @@ const defaults: Fields<AutoPartySettings> = {
     max: new Duration({ minutes: 55 }),
   }),
   partyType: IPartyType.Small,
-};
+});
 
 export class AutoPartySettings implements IAutoPartySettings {
   public allow: boolean;
@@ -25,7 +25,7 @@ export class AutoPartySettings implements IAutoPartySettings {
   public partyType: IPartyType;
 
   constructor(params: Partial<IAutoPartySettings> = {}) {
-    Object.assign(this, merge(defaults, {
+    Object.assign(this, merge(getDefaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
     }));

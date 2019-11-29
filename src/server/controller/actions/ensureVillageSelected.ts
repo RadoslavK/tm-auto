@@ -1,5 +1,23 @@
+import { ElementHandle } from 'puppeteer';
+
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
+
+const getVillageSwitch = async (switches: readonly ElementHandle[], villageId: number): Promise<ElementHandle> => {
+  for (const villageSwitch of switches) {
+    const url = await villageSwitch.evaluate(x => x.getAttribute('href'));
+
+    if (!url) {
+      throw new Error('Failed to get village switch url');
+    }
+
+    if (url.includes(villageId.toString())) {
+      return villageSwitch;
+    }
+  }
+
+  throw new Error(`Did not find village switch for village id: ${villageId}`);
+};
 
 export const ensureVillageSelected = async (villageId: number): Promise<void> => {
   const { currentVillageId } = accountContext.villageService;
@@ -7,15 +25,7 @@ export const ensureVillageSelected = async (villageId: number): Promise<void> =>
   if (currentVillageId !== villageId) {
     const page = await getPage();
     const switches = await page.$$('#sidebarBoxVillagelist [href*=newdid]');
-    const villageSwitch = await switches.find(async (x) => {
-      const url: string = await x.getProperty('href').then(href => href.jsonValue());
-
-      return url.includes(villageId.toString());
-    });
-
-    if (!villageSwitch) {
-      throw new Error(`Did not find village switch for village id: ${villageId}`);
-    }
+    const villageSwitch = await getVillageSwitch(switches, villageId);
 
     await Promise.all([
       villageSwitch.click(),

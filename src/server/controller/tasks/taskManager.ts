@@ -104,14 +104,13 @@ export class TaskManager {
 
     for (const village of shuffle(villages)) {
       if (!accountContext.settingsService.village(village.id).general.get().allowTasks) {
-        return;
+        continue;
       }
 
       await ensureVillageSelected(village.id);
 
       await updateResources();
       await updateBuildings();
-      // await updateUnitsInformation();
 
       let taskEngine = this.m_villageTasks[village.id];
 

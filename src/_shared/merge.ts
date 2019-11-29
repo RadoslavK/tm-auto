@@ -12,7 +12,7 @@ type CustomPartial<T> = {
   [TKey in keyof T]?: T[TKey];
 }
 
-export const merge = <T extends object>(defaultValues: T, values: CustomPartial<T>): T => ({
-  ...defaultValues,
+export const merge = <T extends object>(getDefaultValues: () => T, values: CustomPartial<T>): T => ({
+  ...getDefaultValues(),
   ...removeUndefinedFields(values),
 });

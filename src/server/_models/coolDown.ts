@@ -3,17 +3,17 @@ import { merge } from '../../_shared/merge';
 import { Fields } from '../../_shared/types';
 import { Duration } from './duration';
 
-const defaults: Fields<CoolDown> = {
+const getDefaults = (): Fields<CoolDown> => ({
   max: new Duration(),
   min: new Duration(),
-};
+});
 
 export class CoolDown implements ICoolDown {
   public min: Duration;
   public max: Duration;
 
   constructor(params: Partial<ICoolDown> = {}) {
-    Object.assign(this, merge(defaults, {
+    Object.assign(this, merge(getDefaults, {
       ...params,
       min: params.min && new Duration(params.min),
       max: params.max && new Duration(params.max),
