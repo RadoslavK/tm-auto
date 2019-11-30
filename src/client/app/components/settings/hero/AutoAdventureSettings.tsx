@@ -29,7 +29,7 @@ import {
   IUpdateAutoAdventureSettingsMutationVariables,
   SettingsType,
 } from '../../../../_types/graphql';
-import { getAllEnumValues } from '../../../../../server/utils/enumUtils';
+import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { CoolDown } from '../../controls/Cooldown';
 import { Duration } from '../../controls/Duration';
 

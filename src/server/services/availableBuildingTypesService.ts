@@ -3,11 +3,11 @@ import {
   IBuildingConditions,
 } from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
+import { getAllEnumValues } from '../../_shared/enumUtils';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { Tribe } from '../../_shared/types/tribe';
 import { accountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
-import { getAllEnumValues } from '../utils/enumUtils';
 import { buildingsService } from './buildingsService';
 
 export class AvailableBuildingTypesService {

@@ -1,5 +1,6 @@
 import { TravianPath } from '../../_enums/travianPath';
 import { Village } from '../../_models/village/village';
+import { getAllEnumValues } from '../../../_shared/enumUtils';
 import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import {
@@ -7,7 +8,6 @@ import {
   publishPayloadEvent,
 } from '../../graphql/subscriptions/pubSub';
 import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation';
-import { getAllEnumValues } from '../../utils/enumUtils';
 import { randomElement } from '../../utils/randomElement';
 import { shuffle } from '../../utils/shuffle';
 import { updateBuildings } from '../actions/buildings/updateBuildings';

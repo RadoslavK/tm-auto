@@ -1,23 +1,71 @@
+-------------------New features-------------------
+
+Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
+
+ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je videt aj s ongoing a queued
+a toto iste pridat aj pre kapacitu - warehouse/granary
+
+allow creating own defautls
+
+--------Quality of life-----------------
+
 parse account from textfield and extra url from any travian valid url
 
+ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potom
+
+pridat indikator aktualnej dediny
+
+ked sa prepne dedina ostat v tej istej casti UI
+
+pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
+
+pouzit nove trav ikonky na suroviny a  tak
+
+-------Exception handling-----
+
 pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval
+
+po exceptione refreshnut stranku a pokracovat skusit..
+
+puppeteer casto pada s navigation timeout 30000.. hlavne u ensure page u toho redirect linku pre dorf3.php a potom obcas u parse active village
+
+dat do serveru check ze nebezi oproti spravnej node verzii a log
+
+------Bugged behavior-----------------
 
 povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne
 ....zase sa to stalo
 queue vyzerala tak ze wall 2-10 a potom market 2-10 a medzi tym iron fieldy
 .potom sa to stalo aj s marketom ked bol 2-10 na tom istom lvlu.. povedal ze lvl7 stava ale staval 6
 
-namiesto allow checkboxu dat nejaky toggle - enable/disable
-
-autounits settingy blbnu - nastavi building queue a autobuild na index, potom v settings menu nastavit allow a ked sa  vrati na prehlad units tak tam ma povodne hodnoty
-
 divny village res formatting..
 suroviny su po  1.0 a 1.1k cize asi spravny formatting ale total ukazuje jak 4,324/62k. nedava zmysel
 
-puppeteer casto pada s navigation timeout 30000.. hlavne u ensure page u toho redirect linku a potom obcas u parse active village
+unit indexy nesedia lebo napisal ze stava senatora namiesto settler
 
-po exceptione refreshnut stranku a pokracovat skusit..
+-----------Refactor-------------------------
 
 side menu context prerobit
 
 nejak to spravit nech to generuje spolocne typescript typy  do shared
+
+tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all: true } setting tak vrati iny typ
+
+fragmentom nedavat fragment suffix lebo typ ma pootom meni fragmentfragment a zaroven mozu mat rovnake meno jak typ
+
+zjednotit setting server model a graphql a nejak mnormalne s tou servisou nech neni kod na milion miestach
+
+nepouzivat zlozite inputy ale proste 1 input a tam narvat vsetky data aj village id a tak
+
+aj ostatne settingy updatovat ciastocne ale requestovat ked sa da
+
+-----------UX-------------------------------------
+
+namiesto allow checkboxu dat nejaky toggle - enable/disable
+
+lepsi inidikator ze jednotka ma zapnuty autobuild lebo ked to ma ciernu farbu sa to tazko rozozna
+
+
+---------ESLINT--------------------
+-objects new line
+-aj na funkcie argumenty

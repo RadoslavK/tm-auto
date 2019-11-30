@@ -1,45 +1,8 @@
 debouncovat aj napriklad tie graphql update uz na klientovi.
 
-tie eventy by sa dali otypovat podobne jak which lebo ked sa da all: true tak vrati iny typ
-
-dat do serveru check ze nebezi oproti spravnej node verzii a log
-
-ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potom
-
-fragmentom nedavat fragment suffix lebo typ ma pootom meni fragmentfragment a zaroven mozu mat rovnake meno jak typ
-
-todo zjednotit setting server model a graphql a nejak mnormalne s tou servisou nech neni kod na milion miestach
-
-nepouzivat zlozite inputy ale proste 1 input a tam narvat vsetky data aj village id a tak
-
-aj ostatne settingy updatovat ciastocne ale requestovat ked sa da
-
-
-
-
-revive hero costs http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
-
-pridat indikator aktualnej dediny
-
-ked sa prepne dedina ostat v tej istej casti UI
-
-pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
-
 tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr
 
-ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je videt aj s ongoing a queued 
-
-a toto iste pridat aj pre kapacitu - warehouse/granary
-
-allow creating own defautls
-
 ulozit si aj next execution do suboru a nacitat potom
-
-pouzit nove trav ikonky na suroviny a  tak
-
-lepsi inidikator ze jednotka ma zapnuty autobuild lebo ked to ma ciernu farbu sa to tazko rozozna
-
-unit indexy nesedia lebo napisal ze stava senatora namiesto settler
 
 pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
 
@@ -47,7 +10,6 @@ queued building put as high as possible button
 dragging?
 
 parse account from textfield and extra url from any travian valid url
-
 
 eslint:
 -objects new line
