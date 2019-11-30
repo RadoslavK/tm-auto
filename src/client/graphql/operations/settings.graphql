@@ -33,6 +33,7 @@ fragment GeneralSettings on GeneralSettings {
     allowTasks
     autoBuild
     autoUnits
+    autoStart
 }
 
 fragment AutoAdventureSettings on AutoAdventureSettings {

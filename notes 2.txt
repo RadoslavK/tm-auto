@@ -62,8 +62,6 @@ operation times/hours
 
 village settings -> moznost prepinat medzi dedinami v tom dialogu
 
-autostart po prihlaseni	
-
 parse account from textfield and extra url from any travian valid url
 
 ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potom

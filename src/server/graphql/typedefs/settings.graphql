@@ -7,6 +7,7 @@ type GeneralSettings {
     allowTasks: Boolean!
     autoBuild: Boolean!
     autoUnits: Boolean!
+    autoStart: Boolean!
 }
 
 type GeneralVillageSettings {
@@ -125,6 +126,7 @@ input GeneralSettingsInput {
     allowTasks: Boolean!
     autoBuild: Boolean!
     autoUnits: Boolean!
+    autoStart: Boolean!
 }
 
 input UpdateAutoBuildVillageSettingsInput {

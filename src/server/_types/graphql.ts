@@ -238,12 +238,14 @@ export type IGeneralSettings = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IGeneralSettingsInput = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IGeneralVillageSettings = {
@@ -1051,6 +1053,7 @@ export type IGeneralSettingsResolvers<ContextType = any, ParentType extends IRes
   allowTasks: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoBuild: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoUnits: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  autoStart: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
 export type IGeneralVillageSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralVillageSettings'] = IResolversParentTypes['GeneralVillageSettings']> = {

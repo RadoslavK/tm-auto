@@ -65,7 +65,13 @@ class ControllerService {
       await updateBuildings();
     }
 
-    this.setState(BotState.Paused);
+    const generalSettings = accountContext.settingsService.general.get();
+
+    if (generalSettings.autoStart) {
+      await this.start();
+    } else {
+      this.setState(BotState.Paused);
+    }
   };
 
   public signOut = (): void => {

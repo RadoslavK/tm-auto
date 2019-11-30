@@ -109,6 +109,7 @@ const GeneralSettings: React.FC<IProps> = (props) => {
     autoBuild,
     autoUnits,
     allowTasks,
+    autoStart,
   } = state;
 
   return (
@@ -125,6 +126,11 @@ const GeneralSettings: React.FC<IProps> = (props) => {
         </Button>
       </div>
       <div>
+        <div>
+          <label htmlFor="autoStart">Start after sign in</label>
+          <input type="checkbox" checked={autoStart} onChange={onChange} id="autoStart" name="autoStart" />
+        </div>
+
         <div>
           <label htmlFor="allowTasks">Allow tasks</label>
           <input type="checkbox" checked={allowTasks} onChange={onChange} id="allowTasks" name="allowTasks" />

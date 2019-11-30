@@ -214,12 +214,14 @@ export type IGeneralSettings = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IGeneralSettingsInput = {
   readonly allowTasks: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IGeneralVillageSettings = {
@@ -913,7 +915,7 @@ export type IAutoUnitsBuildingSettingsFragmentFragment = (
   & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragmentFragment> }
 );
 
-export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoBuild' | 'autoUnits'>;
+export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoBuild' | 'autoUnits' | 'autoStart'>;
 
 export type IAutoAdventureSettingsFragment = (
   Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
