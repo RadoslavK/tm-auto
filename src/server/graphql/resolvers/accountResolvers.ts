@@ -8,6 +8,8 @@ export const accountResolvers: Resolvers = {
     account: (_, args) => accountService.getAccount(args.accountId),
 
     currentAccount: () => accountService.getCurrentAccount(),
+
+    lastSignedAccountId: () => accountService.lastSignedAccountId(),
   },
 
   Mutation: {

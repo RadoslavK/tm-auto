@@ -17,10 +17,14 @@ query GetCurrentAccount {
     }
 }
 
-query GetAccount($accountId: ID!) {
+query GetAccount($accountId: String!) {
     account(accountId: $accountId) {
         ...UserAccountFragment
     }
+}
+
+query GetLastSignedAccountId {
+    lastSignedAccountId
 }
 
 mutation CreateAccount($account: CreateUserAccountInput!) {
@@ -31,6 +35,6 @@ mutation UpdateAccount($account: UpdateUserAccountInput!) {
     updateAccount(account: $account)
 }
 
-mutation DeleteAccount($accountId: ID!) {
+mutation DeleteAccount($accountId: String!) {
     deleteAccount(accountId: $accountId)
 }

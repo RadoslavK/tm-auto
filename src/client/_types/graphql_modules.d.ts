@@ -6,6 +6,7 @@ declare module '*/graphql_operations/account.graphql' {
 export const GetAccounts: DocumentNode;
 export const GetCurrentAccount: DocumentNode;
 export const GetAccount: DocumentNode;
+export const GetLastSignedAccountId: DocumentNode;
 export const CreateAccount: DocumentNode;
 export const UpdateAccount: DocumentNode;
 export const DeleteAccount: DocumentNode;

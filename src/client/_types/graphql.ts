@@ -265,7 +265,7 @@ export type ILogEntry = {
 export type ILogEntryContent = ITextLogEntryContent | IAutoBuildLogEntryContent | IAutoUnitsLogEntryContent;
 
 export type IMutation = {
-  readonly createAccount: Maybe<Scalars['ID']>,
+  readonly createAccount: Maybe<Scalars['String']>,
   readonly updateAccount: Scalars['Boolean'],
   readonly deleteAccount: Scalars['Boolean'],
   readonly signIn: Maybe<Scalars['Boolean']>,
@@ -301,7 +301,7 @@ export type IMutationUpdateAccountArgs = {
 
 
 export type IMutationDeleteAccountArgs = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 
@@ -394,6 +394,7 @@ export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account: Maybe<IUserAccount>,
   readonly currentAccount: IUserAccount,
+  readonly lastSignedAccountId: Maybe<Scalars['String']>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -415,7 +416,7 @@ export type IQuery = {
 
 
 export type IQueryAccountArgs = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 
@@ -616,7 +617,7 @@ export type IUpdateUserAccountInput = {
 };
 
 export type IUserAccount = {
-  readonly id: Scalars['ID'],
+  readonly id: Scalars['String'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -667,11 +668,16 @@ export type IGetCurrentAccountQueryVariables = {};
 export type IGetCurrentAccountQuery = { readonly currentAccount: IUserAccountFragmentFragment };
 
 export type IGetAccountQueryVariables = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 
 export type IGetAccountQuery = { readonly account: Maybe<IUserAccountFragmentFragment> };
+
+export type IGetLastSignedAccountIdQueryVariables = {};
+
+
+export type IGetLastSignedAccountIdQuery = Pick<IQuery, 'lastSignedAccountId'>;
 
 export type ICreateAccountMutationVariables = {
   account: ICreateUserAccountInput
@@ -688,7 +694,7 @@ export type IUpdateAccountMutationVariables = {
 export type IUpdateAccountMutation = Pick<IMutation, 'updateAccount'>;
 
 export type IDeleteAccountMutationVariables = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 

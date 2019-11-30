@@ -109,6 +109,8 @@ tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukr
 
 -----------Refactor-------------------------
 
+oddelit can move od building que.. potom ked as pohne v queue bude stacit nacitat ci sa moze pohnut a ne celu budovu zase
+
 side menu context prerobit
 
 nejak to spravit nech to generuje spolocne typescript typy  do shared

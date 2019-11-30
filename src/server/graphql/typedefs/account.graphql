@@ -1,5 +1,5 @@
 type UserAccount {
-    id: ID!
+    id: String!
     username: String!
     password: String!
     server: String!
@@ -7,12 +7,13 @@ type UserAccount {
 
 extend type Query {
     accounts: [UserAccount!]!
-    account(accountId: ID!): UserAccount
+    account(accountId: String!): UserAccount
     currentAccount: UserAccount!
+    lastSignedAccountId: String
 }
 
 extend type Mutation {
-    createAccount(account: CreateUserAccountInput!): ID
+    createAccount(account: CreateUserAccountInput!): String
     updateAccount(account: UpdateUserAccountInput!): Boolean!
-    deleteAccount(accountId: ID!): Boolean!
+    deleteAccount(accountId: String!): Boolean!
 }

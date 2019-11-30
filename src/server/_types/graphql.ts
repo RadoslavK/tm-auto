@@ -294,7 +294,7 @@ export type ILogEntryContent = ITextLogEntryContent | IAutoBuildLogEntryContent 
 
 export type IMutation = {
   readonly __typename?: 'Mutation',
-  readonly createAccount: Maybe<Scalars['ID']>,
+  readonly createAccount: Maybe<Scalars['String']>,
   readonly updateAccount: Scalars['Boolean'],
   readonly deleteAccount: Scalars['Boolean'],
   readonly signIn: Maybe<Scalars['Boolean']>,
@@ -330,7 +330,7 @@ export type IMutationUpdateAccountArgs = {
 
 
 export type IMutationDeleteAccountArgs = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 
@@ -424,6 +424,7 @@ export type IQuery = {
   readonly accounts: ReadonlyArray<IUserAccount>,
   readonly account: Maybe<IUserAccount>,
   readonly currentAccount: IUserAccount,
+  readonly lastSignedAccountId: Maybe<Scalars['String']>,
   readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
   readonly buildingName: Scalars['String'],
   readonly buildingSpots: IBuildingSpots,
@@ -445,7 +446,7 @@ export type IQuery = {
 
 
 export type IQueryAccountArgs = {
-  accountId: Scalars['ID']
+  accountId: Scalars['String']
 };
 
 
@@ -655,7 +656,7 @@ export type IUpdateUserAccountInput = {
 
 export type IUserAccount = {
   readonly __typename?: 'UserAccount',
-  readonly id: Scalars['ID'],
+  readonly id: Scalars['String'],
   readonly username: Scalars['String'],
   readonly password: Scalars['String'],
   readonly server: Scalars['String'],
@@ -770,7 +771,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   UserAccount: ResolverTypeWrapper<IUserAccount>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput,
   Int: ResolverTypeWrapper<Scalars['Int']>,
@@ -791,6 +791,7 @@ export type IResolversTypes = {
   VillageCapacity: ResolverTypeWrapper<IVillageCapacity>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   LogEntry: ResolverTypeWrapper<Omit<ILogEntry, 'content'> & { content: IResolversTypes['LogEntryContent'] }>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
   LogEntryContent: IResolversTypes['TextLogEntryContent'] | IResolversTypes['AutoBuildLogEntryContent'] | IResolversTypes['AutoUnitsLogEntryContent'],
   TextLogEntryContent: ResolverTypeWrapper<ITextLogEntryContent>,
   TextLogEntryContentPayload: ResolverTypeWrapper<ITextLogEntryContentPayload>,
@@ -847,7 +848,6 @@ export type IResolversTypes = {
 export type IResolversParentTypes = {
   Query: {},
   UserAccount: IUserAccount,
-  ID: Scalars['ID'],
   String: Scalars['String'],
   AvailableNewBuildingsInput: IAvailableNewBuildingsInput,
   Int: Scalars['Int'],
@@ -868,6 +868,7 @@ export type IResolversParentTypes = {
   VillageCapacity: IVillageCapacity,
   Boolean: Scalars['Boolean'],
   LogEntry: Omit<ILogEntry, 'content'> & { content: IResolversParentTypes['LogEntryContent'] },
+  ID: Scalars['ID'],
   LogEntryContent: IResolversParentTypes['TextLogEntryContent'] | IResolversParentTypes['AutoBuildLogEntryContent'] | IResolversParentTypes['AutoUnitsLogEntryContent'],
   TextLogEntryContent: ITextLogEntryContent,
   TextLogEntryContentPayload: ITextLogEntryContentPayload,
@@ -1088,7 +1089,7 @@ export type ILogEntryContentResolvers<ContextType = any, ParentType extends IRes
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  createAccount: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
+  createAccount: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationCreateAccountArgs, 'account'>>,
   updateAccount: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAccountArgs, 'account'>>,
   deleteAccount: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDeleteAccountArgs, 'accountId'>>,
   signIn: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationSignInArgs, 'accountId'>>,
@@ -1116,6 +1117,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   accounts: Resolver<ReadonlyArray<IResolversTypes['UserAccount']>, ParentType, ContextType>,
   account: Resolver<Maybe<IResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<IQueryAccountArgs, 'accountId'>>,
   currentAccount: Resolver<IResolversTypes['UserAccount'], ParentType, ContextType>,
+  lastSignedAccountId: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   availableNewBuildings: Resolver<ReadonlyArray<IResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<IQueryAvailableNewBuildingsArgs, 'input'>>,
   buildingName: Resolver<IResolversTypes['String'], ParentType, ContextType, RequireFields<IQueryBuildingNameArgs, 'buildingType'>>,
   buildingSpots: Resolver<IResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<IQueryBuildingSpotsArgs, 'villageId'>>,
@@ -1192,7 +1194,7 @@ export type IUnitInfoResolvers<ContextType = any, ParentType extends IResolversP
 };
 
 export type IUserAccountResolvers<ContextType = any, ParentType extends IResolversParentTypes['UserAccount'] = IResolversParentTypes['UserAccount']> = {
-  id: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
+  id: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   username: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   password: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   server: Resolver<IResolversTypes['String'], ParentType, ContextType>,

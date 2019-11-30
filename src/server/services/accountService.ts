@@ -5,27 +5,40 @@ import {
   IMutationUpdateAccountArgs,
   IUserAccount,
 } from '../_types/graphql';
+import { merge } from '../../_shared/merge';
+import { Fields } from '../../_shared/types';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
+const getDefaults = (): Fields<AccountsData> => ({
+  accounts: [],
+  lastSignedAccountId: null,
+});
+
+class AccountsData {
+  public accounts: IUserAccount[];
+  public lastSignedAccountId: string | null;
+
+  constructor(params: Partial<AccountsData> = {}) {
+    Object.assign(this, merge(getDefaults, params));
+  }
+}
+
 class AccountService {
-  public currentAccountId: string | null = null;
-  private accounts: IUserAccount[] = [];
+  private currentAccountId: string | null = null;
+  private accountsData: AccountsData;
   private accountsLoaded = false;
 
   private saveAccounts = async (): Promise<void> => {
-    return fileService.save(dataPathService.accountsPath, this.accounts);
+    return fileService.save(dataPathService.accountsPath, this.accountsData);
   };
 
   public getAccounts = (): readonly IUserAccount[] => {
-    if (this.accountsLoaded) {
-      return this.accounts;
+    if (!this.accountsLoaded) {
+      this.load();
     }
 
-    this.accounts = fileService.load<IUserAccount[]>(dataPathService.accountsPath, []);
-    this.accountsLoaded = true;
-
-    return this.accounts;
+    return this.accountsData.accounts;
   };
 
   public createAccount = async (args: IMutationCreateAccountArgs): Promise<IUserAccount> => {
@@ -36,7 +49,7 @@ class AccountService {
       id,
     };
 
-    this.accounts.push(newAccount);
+    this.accountsData.accounts.push(newAccount);
     await this.saveAccounts();
 
     return newAccount;
@@ -52,7 +65,7 @@ class AccountService {
   };
 
   public deleteAccount = async (id: string): Promise<void> => {
-    const accountIndex = this.accounts.findIndex(acc => acc.id === id);
+    const accountIndex = this.accountsData.accounts.findIndex(acc => acc.id === id);
 
     if (accountIndex === -1) {
       throw new Error(`Account with ${id} was not found`);
@@ -61,7 +74,11 @@ class AccountService {
     const accountPath = dataPathService.baseAccountPath(id);
     await fileService.delete(accountPath);
 
-    this.accounts.splice(accountIndex, 1);
+    if (this.accountsData.lastSignedAccountId === id) {
+      this.accountsData.lastSignedAccountId = null;
+    }
+
+    this.accountsData.accounts.splice(accountIndex, 1);
     this.saveAccounts();
   };
 
@@ -70,8 +87,8 @@ class AccountService {
       account,
     } = args;
 
-    const accountIndex = this.accounts.findIndex(acc => acc.id === account.id);
-    this.accounts[accountIndex] = account;
+    const accountIndex = this.accountsData.accounts.findIndex(acc => acc.id === account.id);
+    this.accountsData.accounts[accountIndex] = account;
     return this.saveAccounts();
   };
 
@@ -89,6 +106,29 @@ class AccountService {
     }
 
     return account;
+  };
+
+  public setCurrentAccountId = async (id: string | null): Promise<void> => {
+    this.currentAccountId = id;
+
+    if (id) {
+      this.accountsData.lastSignedAccountId = id;
+    }
+
+    return this.saveAccounts();
+  };
+
+  public lastSignedAccountId = (): string | null => {
+    if (!this.accountsLoaded) {
+      this.load();
+    }
+
+    return this.accountsData.lastSignedAccountId;
+  };
+
+  private load = (): void => {
+    this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
+    this.accountsLoaded = true;
   };
 }
 

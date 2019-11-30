@@ -47,7 +47,7 @@ class ControllerService {
 
     this.setState(BotState.Pending);
 
-    accountService.currentAccountId = accountId;
+    await accountService.setCurrentAccountId(accountId);
     accountContext.initialize();
 
     await ensureLoggedIn();
@@ -75,7 +75,7 @@ class ControllerService {
   };
 
   public signOut = (): void => {
-    accountService.currentAccountId = null;
+    accountService.setCurrentAccountId(null);
     this.setState(BotState.None);
   };
 

@@ -32,6 +32,7 @@ import {
   DeleteAccount,
   GetAccount,
   GetAccounts,
+  GetLastSignedAccountId,
   UpdateAccount,
 } from '*/graphql_operations/account.graphql';
 import { SignIn } from '*/graphql_operations/controller.graphql';
@@ -46,6 +47,7 @@ import {
   IGetAccountQuery,
   IGetAccountQueryVariables,
   IGetAccountsQuery,
+  IGetLastSignedAccountIdQuery,
   ISignInMutation,
   ISignInMutationVariables,
   IUpdateAccountMutation,
@@ -245,10 +247,30 @@ const FormDialog: React.FC<IFormDialogProps> = (props) => {
   );
 };
 
-export const SignInForm: React.FC = () => {
+const SignInFormContainer: React.FC = () => {
+  const { data, loading } = useQuery<IGetLastSignedAccountIdQuery>(GetLastSignedAccountId);
+
+  if (loading || !data) {
+    return null;
+  }
+
+  return <SignInForm lastSignedInAccountId={data.lastSignedAccountId} />;
+};
+
+export { SignInFormContainer as SignInForm };
+
+interface ISignInFormProps {
+  readonly lastSignedInAccountId: string | null;
+}
+
+const SignInForm: React.FC<ISignInFormProps> = (props) => {
+  const {
+    lastSignedInAccountId,
+  } = props;
+
   const classes = useStyles();
 
-  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>('');
+  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>(lastSignedInAccountId || '');
   const [showSubmitMessage, setShowSubmitMessage] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitError, setSubmitError] = useState(false);
