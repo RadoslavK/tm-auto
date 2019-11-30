@@ -665,6 +665,7 @@ export type IVillage = {
   readonly coords: ICoords,
   readonly name: Scalars['String'],
   readonly resources: IVillageResources,
+  readonly isCapital: Scalars['Boolean'],
 };
 
 export type IVillageCapacity = {
@@ -786,6 +787,7 @@ export type IResolversTypes = {
   VillageResources: ResolverTypeWrapper<IVillageResources>,
   Resources: ResolverTypeWrapper<IResources>,
   VillageCapacity: ResolverTypeWrapper<IVillageCapacity>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   LogEntry: ResolverTypeWrapper<Omit<ILogEntry, 'content'> & { content: IResolversTypes['LogEntryContent'] }>,
   LogEntryContent: IResolversTypes['TextLogEntryContent'] | IResolversTypes['AutoBuildLogEntryContent'] | IResolversTypes['AutoUnitsLogEntryContent'],
   TextLogEntryContent: ResolverTypeWrapper<ITextLogEntryContent>,
@@ -796,7 +798,6 @@ export type IResolversTypes = {
   AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<IAutoUnitsLogEntryContentPayload>,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Cost: ResolverTypeWrapper<ICost>,
   Duration: ResolverTypeWrapper<IDuration>,
   GeneralSettings: ResolverTypeWrapper<IGeneralSettings>,
@@ -863,6 +864,7 @@ export type IResolversParentTypes = {
   VillageResources: IVillageResources,
   Resources: IResources,
   VillageCapacity: IVillageCapacity,
+  Boolean: Scalars['Boolean'],
   LogEntry: Omit<ILogEntry, 'content'> & { content: IResolversParentTypes['LogEntryContent'] },
   LogEntryContent: IResolversParentTypes['TextLogEntryContent'] | IResolversParentTypes['AutoBuildLogEntryContent'] | IResolversParentTypes['AutoUnitsLogEntryContent'],
   TextLogEntryContent: ITextLogEntryContent,
@@ -873,7 +875,6 @@ export type IResolversParentTypes = {
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayload,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
-  Boolean: Scalars['Boolean'],
   Cost: ICost,
   Duration: IDuration,
   GeneralSettings: IGeneralSettings,
@@ -1199,6 +1200,7 @@ export type IVillageResolvers<ContextType = any, ParentType extends IResolversPa
   coords: Resolver<IResolversTypes['Coords'], ParentType, ContextType>,
   name: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   resources: Resolver<IResolversTypes['VillageResources'], ParentType, ContextType>,
+  isCapital: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
 export type IVillageCapacityResolvers<ContextType = any, ParentType extends IResolversParentTypes['VillageCapacity'] = IResolversParentTypes['VillageCapacity']> = {

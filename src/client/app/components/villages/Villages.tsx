@@ -46,7 +46,7 @@ export const Villages: React.FC = () => {
   useEffect(() => {
     const navigationItems = data
       ? data.villages.map(village => ({
-        text: village.name,
+        text: `${village.name}${village.isCapital ? ' (c)': ''}`,
         path: `${match.url}/${village.id}`,
       }))
       : [];

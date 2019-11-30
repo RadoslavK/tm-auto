@@ -625,6 +625,7 @@ export type IVillage = {
   readonly coords: ICoords,
   readonly name: Scalars['String'],
   readonly resources: IVillageResources,
+  readonly isCapital: Scalars['Boolean'],
 };
 
 export type IVillageCapacity = {
@@ -1079,7 +1080,7 @@ export type IGetVillageByIdQuery = { readonly village: Maybe<(
 export type IGetVillagesQueryVariables = {};
 
 
-export type IGetVillagesQuery = { readonly villages: ReadonlyArray<Pick<IVillage, 'id' | 'name'>> };
+export type IGetVillagesQuery = { readonly villages: ReadonlyArray<Pick<IVillage, 'id' | 'name' | 'isCapital'>> };
 
 export type IUpdateVillageSubscriptionVariables = {};
 

@@ -1,27 +1,6 @@
-autostart po prihlaseni
-
-allow hero revive 
-
-pridat tam vsetkym taskom ze sa nastavi next execution.. + reset to default
-
 reset to default everything alebo ciastocne
 
-move to the top? v queu -> ctrl + click v originale
-...skor to ale predpocitat a umoznit/neumoznit posuvat uz na zaciatuk
-
-debouncovat save do suboru
-
-capital je tam nekde?
-
-allow building on free spots flag
-
------
-po reloade sa zle vyhodnocuju queries. pravdepodobne sa zle uvolnuju resources v IPC
-
-pri prepnuti uctu este asi obdrzi informacie z predchadazajuceho lebo graphql na klientovi zaloguje error
 -------
-
-pokial spadne na strane klienta.. napr poslalo sa malo dat kvoli chybajecemu fragment importu v operacii na klientovi sa nastavi errors ale pristupne je az v onError funkcii pre konkretnu query a nie v tom apollo link errors handleri
 
 default cooldowny	
 -revive: 30-90 minut
@@ -29,13 +8,4 @@ default cooldowny
 -tasks: 10-35 sekund
 -check unit amounts: 5-20 minut
 
-proxy.. cookies overit
-
 free crop je aj v amount aj v produkcii. co to znamena
-
-structures
--reports + analyza okolia
--market
--spravy
-
-hrdinovi pridat nech nejde na adventuru pokial expiruje pocas cesty a mozno nejaky threshold ze kedy ma preferovat tu co skoro expiruje radsej nez nieco ine

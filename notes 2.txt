@@ -1,4 +1,32 @@
+------------- IPC / GRAPQL LINK ----------------
+
+po reloade sa zle vyhodnocuju queries. pravdepodobne sa zle uvolnuju resources v IPC
+
+pri prepnuti uctu este asi obdrzi informacie z predchadazajuceho lebo graphql na klientovi zaloguje error
+
+--------------Inspiracia / Future----------------------
+
+https://travibot.com/en/travian-bot-5-1-0-0/
+
+travian codex: nove budovy a tak
+
+do building info pridat cp
+
+do troops info pridat carry capacity, defense, move speed
+
+building mode templates
+--vytvorit sablonu, podobne ako v secondvillagebot su tie Level podla toho stava budovy
+
 -------------------New features-------------------
+
+ten delay jak casto cekuje tasky doplnit do UI
+signal ze bot caka na timer a kedy zacne zas
+
+Mozno kontrola ze kolko max settler/chief sa da vobec postavit
+
+hrdinovi pridat nech nejde na adventuru pokial expiruje pocas cesty a mozno nejaky threshold ze kedy ma preferovat tu co skoro expiruje radsej nez nieco ine
+
+reports + analyza okolia, messages, market, spravy
 
 Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
 
@@ -7,7 +35,34 @@ a toto iste pridat aj pre kapacitu - warehouse/granary
 
 allow creating own defautls
 
+log sort by..
+
+buildings sort..
+-v ramci res fields podla levelu napriklad
+-custom groupping
+-Filter budov, napr vyhladat konkretnu budovu a tu naklikat
+
+market requirements - great warehouse, granary sa pocita ale neviem ci treba cele kombo alebo lubovolne
+--uistit sa ci je to fakt real
+
+pridat tam vsetkym taskom ze sa nastavi next execution v UI.. + reset to default
+
+move to the top? v queu -> ctrl + click v originale
+
+pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
+
+allow building on free spots flag
+
+proxy
+..overit cookies
+
+operation times/hours
+
 --------Quality of life-----------------
+
+village settings -> moznost prepinat medzi dedinami v tom dialogu
+
+autostart po prihlaseni	
 
 parse account from textfield and extra url from any travian valid url
 
@@ -17,9 +72,13 @@ pridat indikator aktualnej dediny
 
 ked sa prepne dedina ostat v tej istej casti UI
 
-pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
-
 pouzit nove trav ikonky na suroviny a  tak
+
+na spotoch aky je v poradi pokial je v queue
+
+v queue ukazovat na akom indexe je ta konkretna budova
+
+pamatat si posledne zvoleny ucet
 
 -------Exception handling-----
 
@@ -31,9 +90,14 @@ puppeteer casto pada s navigation timeout 30000.. hlavne u ensure page u toho re
 
 dat do serveru check ze nebezi oproti spravnej node verzii a log
 
+nejaka retry policy ked zlyha login az po zobrazenie UI
+
+pokial spadne na strane klienta.. napr poslalo sa malo dat kvoli chybajecemu fragment importu v operacii na klientovi sa nastavi errors ale pristupne je az v onError funkcii pre konkretnu query a nie v tom apollo link errors handleri
+
 ------Bugged behavior-----------------
 
-povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne
+vyzera ze nebuduje dobre budovy ked je naklikanych v queue viac rovnakeho typu alebo minimalne ked viac existuje v dedine alebo kombinacia.. s ukrytami
+dalsi podobny problem: povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne
 ....zase sa to stalo
 queue vyzerala tak ze wall 2-10 a potom market 2-10 a medzi tym iron fieldy
 .potom sa to stalo aj s marketom ked bol 2-10 na tom istom lvlu.. povedal ze lvl7 stava ale staval 6
@@ -42,6 +106,8 @@ divny village res formatting..
 suroviny su po  1.0 a 1.1k cize asi spravny formatting ale total ukazuje jak 4,324/62k. nedava zmysel
 
 unit indexy nesedia lebo napisal ze stava senatora namiesto settler
+
+tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr
 
 -----------Refactor-------------------------
 
@@ -60,6 +126,10 @@ nepouzivat zlozite inputy ale proste 1 input a tam narvat vsetky data aj village
 aj ostatne settingy updatovat ciastocne ale requestovat ked sa da
 
 -----------UX-------------------------------------
+
+ukazovat aj village coords v sidemenu dedin
+
+sidemenu nech si handluju tie komponenty sami, nebude tam context podpora.. takze pre villages to prerobit hned
 
 namiesto allow checkboxu dat nejaky toggle - enable/disable
 

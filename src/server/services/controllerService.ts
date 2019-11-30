@@ -51,8 +51,8 @@ class ControllerService {
     accountContext.initialize();
 
     await ensureLoggedIn();
-    await initPlayerInfo();
     await updateNewOldVillages();
+    await initPlayerInfo();
     await updateHeroInformation();
 
     const allVillages = accountContext.villageService.allVillages();

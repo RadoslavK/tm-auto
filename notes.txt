@@ -1,6 +1,6 @@
 debouncovat aj napriklad tie graphql update uz na klientovi.
 
-tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr
+debouncovat save do suboru
 
 ulozit si aj next execution do suboru a nacitat potom
 
@@ -9,37 +9,5 @@ pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
 queued building put as high as possible button
 dragging?
 
-parse account from textfield and extra url from any travian valid url
-
-eslint:
--objects new line
--aj na funkcie argumenty
-
-
-
-
-
-v klientovi nepouzivat referencie zo serveru..  server by mal mat co najviac definicii z graphql ktore sa vygeneruju aj na klientovi a importovat si moze aj tie
-
-v queue ukazovat na spotoch aky je v poradi pokial je v queue
-
-a v queue ukazovat na akom indexe je ta konkretna budova
-
 roman - show double queue.. bez operacii, iba delete.
-
-log filter -> autoBuild, units, hero...
-
-log sort by..
-
-buildings sort..
-v ramci res fields podla levelu napriklad
-
-custom groupping
-
-Filter budov, napr vyhladat konkretnu budovu a tu naklikat
-
-vyzera ze nebuduje dobre budovy ked je naklikanych v queue viac rovnakeho typu alebo minimalne ked viac existuje v dedine alebo kombinacia.. s ukrytami
-
-nejaka retry policy ked zlyha login az po zobrazenie UI
-
-pamatat si posledne zvoleny ucet
+..toto premyslet, mozno queue moze byt rozdelena na 2 stlpce ale pokial to ma prerekvizitu tak to bude stale pod nou
