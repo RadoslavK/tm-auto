@@ -1,12 +1,9 @@
 import {
   IAvailableNewBuilding,
   IBuildingQueue,
-  IBuildingSpotLevel,
 } from '../../_types/graphql';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
 import { accountContext } from '../../accountContext';
-import { fieldIds } from '../../constants/fieldIds';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import {
   BuildingQueueService,
@@ -19,61 +16,11 @@ import { BotEvent } from '../subscriptions/botEvent';
 import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 
-const getWallType = (): BuildingType => {
-  const { tribe } = accountContext.gameInfo;
-
-  switch (tribe) {
-    case Tribe.Egyptians:
-      return BuildingType.StoneWall;
-
-    case Tribe.Romans:
-      return BuildingType.CityWall;
-
-    case Tribe.Teutons:
-      return BuildingType.EarthWall;
-
-    case Tribe.Gauls:
-      return BuildingType.Palisade;
-
-    case Tribe.Huns:
-      return BuildingType.MakeshiftWall;
-
-    default:
-      throw new Error(`Unknown player tribe: ${Tribe[tribe]}`);
-  }
-};
-
 export const buildingResolvers: Resolvers = {
   Query: {
     buildingSpots: (_, args) => {
       const { villageId } = args;
       const normalizedSpots = accountContext.villageService.village(villageId).buildings.normalizedBuildingSpots();
-
-      normalizedSpots.forEach(b => {
-        if (b.type > BuildingType.None) {
-          return;
-        }
-
-        if (b.fieldId === fieldIds.RallyPoint) {
-          (b.type as BuildingType) = BuildingType.RallyPoint;
-          (b.level as IBuildingSpotLevel) = {
-            total: 0,
-            queued: 0,
-            actual: 0,
-            ongoing: 0,
-            max: buildingsService.getBuildingInfo(b.type).maxLevel,
-          };
-        } else if (b.fieldId === fieldIds.Wall) {
-          (b.type as BuildingType) = getWallType();
-          (b.level as IBuildingSpotLevel) = {
-            total: 0,
-            queued: 0,
-            actual: 0,
-            ongoing: 0,
-            max: buildingsService.getBuildingInfo(b.type).maxLevel,
-          };
-        }
-      });
 
       return {
         infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),

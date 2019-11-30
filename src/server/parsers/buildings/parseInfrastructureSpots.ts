@@ -1,7 +1,10 @@
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { Tribe } from '../../../_shared/types/tribe';
 import { TravianPath } from '../../_enums/travianPath';
 import { IActualBuilding } from '../../_models/buildings';
-import { BuildingType } from '../../../_shared/types/buildingType';
+import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
+import { fieldIds } from '../../constants/fieldIds';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { validateUrl } from '../../utils/validateUrl';
 
@@ -9,13 +12,37 @@ const acceptedUrls: readonly string[] = [
   TravianPath.InfrastructureOverview,
 ];
 
+const getWallType = (): BuildingType => {
+  const { tribe } = accountContext.gameInfo;
+
+  switch (tribe) {
+    case Tribe.Egyptians:
+      return BuildingType.StoneWall;
+
+    case Tribe.Romans:
+      return BuildingType.CityWall;
+
+    case Tribe.Teutons:
+      return BuildingType.EarthWall;
+
+    case Tribe.Gauls:
+      return BuildingType.Palisade;
+
+    case Tribe.Huns:
+      return BuildingType.MakeshiftWall;
+
+    default:
+      throw new Error(`Unknown player tribe: ${Tribe[tribe]}`);
+  }
+};
+
 export const parseInfrastructureSpots = async (): Promise<readonly IActualBuilding[]> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
   await page.waitForSelector('#village_map');
 
-  const nodes = await page.$$('#village_map > div');
+  const nodes = await page.$$('#village_map > .buildingSlot');
 
   const buildings = await Promise.all(nodes.map(async (node): Promise<IActualBuilding | null> => {
     const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
@@ -37,11 +64,17 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
       throw new Error('Failed to parse building type');
     }
 
-    const type = +typeMatch[1];
+    let type: BuildingType = +typeMatch[1];
 
     const level = type === BuildingType.None
       ? 0
       : +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText);
+
+    if (fieldId === fieldIds.RallyPoint) {
+      type = BuildingType.RallyPoint;
+    } else if (fieldId === fieldIds.Wall) {
+      type = getWallType();
+    }
 
     return {
       fieldId,
@@ -54,7 +87,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
 
   return buildings
     .filter(b => {
-      if (!!b && !uniqueFieldIds.includes(b.fieldId)) {
+      if (b && !uniqueFieldIds.includes(b.fieldId)) {
         uniqueFieldIds.push(b.fieldId);
         return true;
       }
