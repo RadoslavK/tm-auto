@@ -9,11 +9,10 @@ import {
 } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { MemoryRouter as Router } from 'react-router-dom';
 
-import { INavigationItem } from '../_types/navigationItem';
 import { createErrorLink } from '../../_shared/graphql/createErrorLink';
 import { navigationItems } from '../constants/navigationItems';
 import introspectionQueryResultData from '../graphql/fragmentTypes.json';
@@ -21,14 +20,7 @@ import { createIpcLink } from '../graphql/utils/createIpcLink';
 import { EnsureTitle } from './components/EnsureTitle';
 import { MainRoutes } from './components/navigation/MainRoutes';
 import { Navigation } from './components/navigation/Navigation';
-import {
-  ISideMenuContext,
-  SideMenuContext,
-} from './components/sideMenu/context/sideMenuContext';
-import { SideMenu } from './components/sideMenu/SideMenu';
 import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';
-
-type NavigationItemsState = readonly INavigationItem[];
 
 const drawerWidth = 240;
 
@@ -73,28 +65,20 @@ const init = async (): Promise<void> => {
 
   const App: React.FC = () => {
     const classes = useStyles({});
-    const [items, setItems] = useState<NavigationItemsState>([]);
-    const sideMenuContext: ISideMenuContext = {
-      items,
-      setItems,
-    };
 
     return (
       <Router>
         <ApolloProvider client={apolloClient}>
           <EnsureSignedIn>
             <EnsureTitle>
-              <SideMenuContext.Provider value={sideMenuContext}>
-                <div className={classes.root}>
-                  <CssBaseline />
-                  <Navigation drawerWidth={drawerWidth} navigationItems={navigationItems}/>
-                  <SideMenu width={drawerWidth}/>
-                  <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <MainRoutes />
-                  </main>
-                </div>
-              </SideMenuContext.Provider>
+              <div className={classes.root}>
+                <CssBaseline />
+                <Navigation navigationItems={navigationItems}/>
+                <main className={classes.content}>
+                  <div className={classes.toolbar} />
+                  <MainRoutes />
+                </main>
+              </div>
             </EnsureTitle>
           </EnsureSignedIn>
         </ApolloProvider>

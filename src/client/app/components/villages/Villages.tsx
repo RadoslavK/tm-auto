@@ -2,8 +2,8 @@ import {
   useQuery,
   useSubscription,
 } from '@apollo/react-hooks';
+import { makeStyles } from '@material-ui/core';
 import React, {
-  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -28,12 +28,17 @@ import {
   IGetVillagesQuery,
   IUpdateVillagesSubscription,
 } from '../../../_types/graphql';
-import { formatVillageName } from '../../utils/formatVillageName';
-import {
-  ISideMenuContext,
-  SideMenuContext,
-} from '../sideMenu/context/sideMenuContext';
+import { VillageSideItem } from './sideMenu/VillageSideItem';
 import { Village } from './Village';
+
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+  },
+  sideMenu: {
+    flex: '0 0 300px',
+  },
+});
 
 interface IVillageRouteParams {
   readonly id: string;
@@ -41,8 +46,9 @@ interface IVillageRouteParams {
 
 export const Villages: React.FC = () => {
   const match = useRouteMatch();
-  const { setItems, items } = useContext<ISideMenuContext>(SideMenuContext);
   const [activeVillageId, setActiveVillageId] = useState<number>();
+
+  const classes = useStyles();
 
   const { data, loading, refetch } = useQuery<IGetVillagesQuery>(GetVillages);
 
@@ -68,41 +74,27 @@ export const Villages: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    const navigationItems = data
-      ? data.villages.map(village => {
-        const modifiers = [];
-
-        if (village.isCapital) {
-          modifiers.push('c');
-        }
-
-        if (village.id === activeVillageId) {
-          modifiers.push('a');
-        }
-
-        return {
-          text: `${formatVillageName(village)}${modifiers.length ? ` (${modifiers.join(',')})` : ''}`,
-          path: `${match.url}/${village.id}`,
-        };
-      })
-      : [];
-
-    setItems(navigationItems);
-
-    return () => setItems([]);
-  }, [setItems, data, match.url, activeVillageId]);
-
-  if (loading || activeVillageIdQueryResult.loading) {
+  if (loading || !data || activeVillageIdQueryResult.loading) {
     return null;
   }
 
   return (
-    <Switch>
-      <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
-      {items.length > 0 && (
-        <Redirect to={items[0].path} />
-      )}
-    </Switch>
+    <div className={classes.root}>
+      <div className={classes.sideMenu}>
+        {data.villages.map(village => (
+          <VillageSideItem
+            key={village.id}
+            village={village}
+            isVillageActive={village.id === activeVillageId}
+          />
+        ))}
+      </div>
+      <Switch>
+        <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
+        {data.villages.length > 0 && (
+          <Redirect to={`${match.url}/${data.villages[0].id}`} />
+        )}
+      </Switch>
+    </div>
   );
 };

@@ -83,26 +83,28 @@ export const Village: React.FC<IParams> = (props) => {
   };
 
   return (
-    <VillageContext.Provider value={context}>
-      <Resources resources={resources} />
-      <button type="button" onClick={openSettings}>
-        Settings
-      </button>
-      <div>
-        <Link to={`${match.url}/buildings`}>Buildings</Link>
-        <Link to={`${match.url}/units`}>Units</Link>
-      </div>
-      <Switch>
-        <Route path={`${match.path}/buildings`} component={Buildings} />
-        <Route path={`${match.path}/units`} component={Units} />
-        <Redirect to={`${match.path}/buildings`} />
-      </Switch>
-      <Dialog
-        open={showSettings}
-        onClose={closeSettings}
-      >
-        <VillageSettings />
-      </Dialog>
-    </VillageContext.Provider>
+    <div>
+      <VillageContext.Provider value={context}>
+        <Resources resources={resources} />
+        <button type="button" onClick={openSettings}>
+          Settings
+        </button>
+        <div>
+          <Link to={`${match.url}/buildings`}>Buildings</Link>
+          <Link to={`${match.url}/units`}>Units</Link>
+        </div>
+        <Switch>
+          <Route path={`${match.path}/buildings`} component={Buildings} />
+          <Route path={`${match.path}/units`} component={Units} />
+          <Redirect to={`${match.path}/buildings`} />
+        </Switch>
+        <Dialog
+          open={showSettings}
+          onClose={closeSettings}
+        >
+          <VillageSettings />
+        </Dialog>
+      </VillageContext.Provider>
+    </div>
   );
 };

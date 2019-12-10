@@ -122,8 +122,6 @@ tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukr
 
 oddelit can move od building que.. potom ked as pohne v queue bude stacit nacitat ci sa moze pohnut a ne celu budovu zase
 
-side menu context prerobit
-
 nejak to spravit nech to generuje spolocne typescript typy  do shared
 
 tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all: true } setting tak vrati iny typ
@@ -131,8 +129,6 @@ tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all:
 aj ostatne settingy updatovat ciastocne a requestovat ked sa da
 
 -----------UX-------------------------------------
-
-sidemenu nech si handluju tie komponenty sami, nebude tam context podpora.. takze pre villages to prerobit hned
 
 namiesto allow checkboxu dat nejaky toggle - enable/disable
 

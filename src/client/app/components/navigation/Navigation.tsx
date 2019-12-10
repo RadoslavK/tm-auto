@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
@@ -26,15 +25,7 @@ import {
 import { INavigationItem } from '../../../_types/navigationItem';
 import { useBotState } from '../../hooks/useBotState';
 
-const useStyles = (drawerWidth: number): any => makeStyles({
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-  },
-});
-
 interface IProps {
-  readonly drawerWidth: number;
   readonly navigationItems: readonly INavigationItem[];
 }
 
@@ -104,10 +95,8 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
 export const Navigation: React.FC<IProps> = (props) => {
   const {
     navigationItems,
-    drawerWidth,
   } = props;
 
-  const classes = useStyles(drawerWidth)({});
   const location = useLocation();
 
   const currentItemIndex = navigationItems.findIndex(item => location.pathname.startsWith(item.path));
@@ -117,7 +106,7 @@ export const Navigation: React.FC<IProps> = (props) => {
   }
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <AppBar position="fixed">
       <Tabs
         value={currentItemIndex}
         indicatorColor="primary"
