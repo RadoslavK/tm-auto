@@ -92,7 +92,13 @@ const parseAdventureCount = async (): Promise<number> => {
 const parseAdventureCountNew = async (): Promise<number> => {
   const page = await getPage();
 
-  const countText = await page.$eval('.adventure .content', x => (x as HTMLElement).innerText);
+  const countTextElement = await page.$('.adventure .content');
+
+  if (!countTextElement) {
+    return 0;
+  }
+
+  const countText = await countTextElement.evaluate(x => (x as HTMLElement).innerText);
   return +countText;
 };
 
