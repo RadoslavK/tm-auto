@@ -76,8 +76,6 @@ pouzit nove trav ikonky na suroviny a  tak
 
 na spotoch aky je v poradi pokial je v queue
 
-pamatat si posledne zvoleny ucet
-
 -------Exception handling-----
 
 pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval

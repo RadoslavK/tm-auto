@@ -31,7 +31,18 @@ const useStyles = makeStyles<unknown, IProps>({
     border: '1px solid black',
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundSize: 'contain',
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'flex-start',
   }),
+  queueButtons: {
+    flex: 1,
+  },
+  fieldId: {
+    background: '#b1b5b9',
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
 });
 
 export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
@@ -91,7 +102,7 @@ export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
         {building.type > 0 && (
           <BuildingLevelBox level={building.level} />
         )}
-        <div>
+        <div className={classes.queueButtons}>
           <button type="button" disabled={building.type > 0 && building.level.total === building.level.max} onClick={onEnqueue}>
             +
           </button>
@@ -100,6 +111,9 @@ export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
               -
             </button>
           )}
+        </div>
+        <div className={classes.fieldId}>
+          [{building.fieldId}]
         </div>
       </div>
       <Dialog
