@@ -26,17 +26,6 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
-export type IAutoAdventureSettingsInput = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: AdventureCriteria,
-  readonly preferHard: Scalars['Boolean'],
-  readonly normalMinHealth: Scalars['Int'],
-  readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: IDurationInput,
-  readonly preferredVillageId: Maybe<Scalars['Int']>,
-};
-
 export type IAutoBuildLogEntryContent = {
   readonly autoBuild: IAutoBuildLogEntryContentPayload,
 };
@@ -51,13 +40,6 @@ export type IAutoBuildLogEntryContentPayload = {
 export type IAutoBuildSettings = IITaskSettings & {
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
-  readonly autoCropFields: Scalars['Boolean'],
-  readonly minCrop: Scalars['Int'],
-};
-
-export type IAutoBuildVillageSettingsInput = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
 };
@@ -217,18 +199,7 @@ export type IGeneralSettings = {
   readonly autoStart: Scalars['Boolean'],
 };
 
-export type IGeneralSettingsInput = {
-  readonly allowTasks: Scalars['Boolean'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly autoUnits: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
-};
-
 export type IGeneralVillageSettings = {
-  readonly allowTasks: Scalars['Boolean'],
-};
-
-export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars['Boolean'],
 };
 
@@ -341,37 +312,37 @@ export type IMutationMoveQueuedBuildingUpArgs = {
 
 
 export type IMutationUpdateGeneralSettingsArgs = {
-  input: IUpdateGeneralSettingsInput
+  settings: IUpdateGeneralSettingsInput
 };
 
 
 export type IMutationUpdateAutoAdventureSettingsArgs = {
-  input: IUpdateAutoAdventureSettingsInput
+  settings: IUpdateAutoAdventureSettingsInput
 };
 
 
 export type IMutationUpdateGeneralVillageSettingsArgs = {
-  input: IUpdateGeneralVillageSettingsInput
+  settings: IUpdateGeneralVillageSettingsInput
 };
 
 
 export type IMutationUpdateAutoBuildVillageSettingsArgs = {
-  input: IUpdateAutoBuildVillageSettingsInput
+  settings: IUpdateAutoBuildVillageSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsUnitSettingsArgs = {
-  input: IUpdateAutoUnitsUnitSettingsInput
+  settings: IUpdateAutoUnitsUnitSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
-  input: IUpdateAutoUnitsBuildingSettingsInput
+  settings: IUpdateAutoUnitsBuildingSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsSettingsArgs = {
-  input: IUpdateAutoUnitsSettingsInput
+  settings: IUpdateAutoUnitsSettingsInput
 };
 
 
@@ -573,12 +544,22 @@ export type IUnitInfo = {
 };
 
 export type IUpdateAutoAdventureSettingsInput = {
-  readonly settings: IAutoAdventureSettingsInput,
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly adventureCriteria: AdventureCriteria,
+  readonly preferHard: Scalars['Boolean'],
+  readonly normalMinHealth: Scalars['Int'],
+  readonly hardMinHealth: Scalars['Int'],
+  readonly maxTravelTime: IDurationInput,
+  readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
 export type IUpdateAutoBuildVillageSettingsInput = {
   readonly villageId: Scalars['Int'],
-  readonly settings: IAutoBuildVillageSettingsInput,
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly autoCropFields: Scalars['Boolean'],
+  readonly minCrop: Scalars['Int'],
 };
 
 export type IUpdateAutoUnitsBuildingSettingsInput = {
@@ -604,12 +585,15 @@ export type IUpdateAutoUnitsUnitSettingsInput = {
 };
 
 export type IUpdateGeneralSettingsInput = {
-  readonly settings: IGeneralSettingsInput,
+  readonly allowTasks: Scalars['Boolean'],
+  readonly autoBuild: Scalars['Boolean'],
+  readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IUpdateGeneralVillageSettingsInput = {
   readonly villageId: Scalars['Int'],
-  readonly settings: IGeneralVillageSettingsInput,
+  readonly allowTasks: Scalars['Boolean'],
 };
 
 export type IUpdateUserAccountInput = {
@@ -977,49 +961,49 @@ export type IGetAutoUnitsSettingsQueryVariables = {
 export type IGetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: IAutoUnitsSettingsFragment };
 
 export type IUpdateGeneralSettingsMutationVariables = {
-  input: IUpdateGeneralSettingsInput
+  settings: IUpdateGeneralSettingsInput
 };
 
 
 export type IUpdateGeneralSettingsMutation = Pick<IMutation, 'updateGeneralSettings'>;
 
 export type IUpdateAutoAdventureSettingsMutationVariables = {
-  input: IUpdateAutoAdventureSettingsInput
+  settings: IUpdateAutoAdventureSettingsInput
 };
 
 
 export type IUpdateAutoAdventureSettingsMutation = Pick<IMutation, 'updateAutoAdventureSettings'>;
 
 export type IUpdateGeneralVillageSettingsMutationVariables = {
-  input: IUpdateGeneralVillageSettingsInput
+  settings: IUpdateGeneralVillageSettingsInput
 };
 
 
 export type IUpdateGeneralVillageSettingsMutation = Pick<IMutation, 'updateGeneralVillageSettings'>;
 
 export type IUpdateAutoBuildVillageSettingsMutationVariables = {
-  input: IUpdateAutoBuildVillageSettingsInput
+  settings: IUpdateAutoBuildVillageSettingsInput
 };
 
 
 export type IUpdateAutoBuildVillageSettingsMutation = Pick<IMutation, 'updateAutoBuildVillageSettings'>;
 
 export type IUpdateAutoUnitsUnitSettingsMutationVariables = {
-  input: IUpdateAutoUnitsUnitSettingsInput
+  settings: IUpdateAutoUnitsUnitSettingsInput
 };
 
 
 export type IUpdateAutoUnitsUnitSettingsMutation = Pick<IMutation, 'updateAutoUnitsUnitSettings'>;
 
 export type IUpdateAutoUnitsBuildingSettingsMutationVariables = {
-  input: IUpdateAutoUnitsBuildingSettingsInput
+  settings: IUpdateAutoUnitsBuildingSettingsInput
 };
 
 
 export type IUpdateAutoUnitsBuildingSettingsMutation = Pick<IMutation, 'updateAutoUnitsBuildingSettings'>;
 
 export type IUpdateAutoUnitsSettingsMutationVariables = {
-  input: IUpdateAutoUnitsSettingsInput
+  settings: IUpdateAutoUnitsSettingsInput
 };
 
 

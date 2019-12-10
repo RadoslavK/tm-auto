@@ -52,7 +52,7 @@ export const settingsResolvers: Resolvers = {
 
   Mutation: {
     updateGeneralSettings: (_, args) => {
-      const updatedSettings = new GeneralSettings(args.input.settings);
+      const updatedSettings = new GeneralSettings(args.settings);
 
       accountContext.settingsService.general.update(updatedSettings);
       return true;
@@ -61,8 +61,8 @@ export const settingsResolvers: Resolvers = {
     updateAutoBuildVillageSettings: (_, args) => {
       const {
         villageId,
-        settings,
-      } = args.input;
+        ...settings
+      } = args.settings;
 
       const updatedSettings = new AutoBuildSettings(settings);
 
@@ -73,8 +73,8 @@ export const settingsResolvers: Resolvers = {
     updateGeneralVillageSettings: (_, args) => {
       const {
         villageId,
-        settings,
-      } = args.input;
+        ...settings
+      } = args.settings;
 
       const updatedSettings = new GeneralVillageSettings(settings);
 
@@ -85,7 +85,7 @@ export const settingsResolvers: Resolvers = {
     updateAutoAdventureSettings: (_, args) => {
       const {
         settings,
-      } = args.input;
+      } = args;
 
       const updatedSettings = new AutoAdventureSettings(settings);
 
@@ -98,7 +98,7 @@ export const settingsResolvers: Resolvers = {
         villageId,
         unitIndex,
         ...updatedUnitSettings
-      } = args.input;
+      } = args.settings;
 
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();
@@ -127,7 +127,7 @@ export const settingsResolvers: Resolvers = {
         villageId,
         allow,
         maxBuildTime,
-      } = args.input;
+      } = args.settings;
 
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();
@@ -168,7 +168,7 @@ export const settingsResolvers: Resolvers = {
       const {
         villageId,
         ...modifiedSettings
-      } = args.input;
+      } = args.settings;
 
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();

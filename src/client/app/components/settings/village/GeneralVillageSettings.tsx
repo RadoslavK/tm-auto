@@ -77,7 +77,7 @@ const GeneralVillageSettings: React.FC<IProps> = (props) => {
   const { villageId } = useVillageContext();
   const [state, setState] = useState(settings);
   const input: IUpdateGeneralVillageSettingsInput = {
-    settings: state,
+    ...state,
     villageId,
   };
 
@@ -86,7 +86,7 @@ const GeneralVillageSettings: React.FC<IProps> = (props) => {
   });
 
   const [updateSettings] = useMutation<IUpdateGeneralVillageSettingsMutation, IUpdateGeneralVillageSettingsMutationVariables>(UpdateGeneralVillageSettings,
-    { variables: { input } },
+    { variables: { settings: input } },
   );
 
   const isInitialMount = useRef(true);

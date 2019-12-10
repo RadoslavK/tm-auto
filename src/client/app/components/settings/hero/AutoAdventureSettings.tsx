@@ -63,11 +63,11 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
 
   const [state, setState] = useState(settings);
   const input: IUpdateAutoAdventureSettingsInput = {
-    settings: state,
+    ...state,
   };
 
   const [updateSettings] = useMutation<IUpdateAutoAdventureSettingsMutation, IUpdateAutoAdventureSettingsMutationVariables>(UpdateAutoAdventureSettings, {
-    variables: { input },
+    variables: { settings: input },
   });
 
   const isInitialMount = useRef(true);

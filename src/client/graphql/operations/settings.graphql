@@ -107,32 +107,32 @@ query GetAutoUnitsSettings($villageId: Int!) {
     }
 }
 
-mutation UpdateGeneralSettings($input: UpdateGeneralSettingsInput!) {
-    updateGeneralSettings(input: $input)
+mutation UpdateGeneralSettings($settings: UpdateGeneralSettingsInput!) {
+    updateGeneralSettings(settings: $settings)
 }
 
-mutation UpdateAutoAdventureSettings($input: UpdateAutoAdventureSettingsInput!) {
-    updateAutoAdventureSettings(input: $input)
+mutation UpdateAutoAdventureSettings($settings: UpdateAutoAdventureSettingsInput!) {
+    updateAutoAdventureSettings(settings: $settings)
 }
 
-mutation UpdateGeneralVillageSettings($input: UpdateGeneralVillageSettingsInput!) {
-    updateGeneralVillageSettings(input: $input)
+mutation UpdateGeneralVillageSettings($settings: UpdateGeneralVillageSettingsInput!) {
+    updateGeneralVillageSettings(settings: $settings)
 }
 
-mutation UpdateAutoBuildVillageSettings($input: UpdateAutoBuildVillageSettingsInput!) {
-    updateAutoBuildVillageSettings(input: $input)
+mutation UpdateAutoBuildVillageSettings($settings: UpdateAutoBuildVillageSettingsInput!) {
+    updateAutoBuildVillageSettings(settings: $settings)
 }
 
-mutation UpdateAutoUnitsUnitSettings($input: UpdateAutoUnitsUnitSettingsInput!) {
-    updateAutoUnitsUnitSettings(input: $input)
+mutation UpdateAutoUnitsUnitSettings($settings: UpdateAutoUnitsUnitSettingsInput!) {
+    updateAutoUnitsUnitSettings(settings: $settings)
 }
 
-mutation UpdateAutoUnitsBuildingSettings($input: UpdateAutoUnitsBuildingSettingsInput!) {
-    updateAutoUnitsBuildingSettings(input: $input)
+mutation UpdateAutoUnitsBuildingSettings($settings: UpdateAutoUnitsBuildingSettingsInput!) {
+    updateAutoUnitsBuildingSettings(settings: $settings)
 }
 
-mutation UpdateAutoUnitsSettings($input: UpdateAutoUnitsSettingsInput!) {
-    updateAutoUnitsSettings(input: $input)
+mutation UpdateAutoUnitsSettings($settings: UpdateAutoUnitsSettingsInput!) {
+    updateAutoUnitsSettings(settings: $settings)
 }
 
 mutation ResetSettings($type: SettingsType!) {

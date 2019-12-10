@@ -90,7 +90,7 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
   };
 
   const [updateSettings] = useMutation<IUpdateAutoUnitsSettingsMutation, IUpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
-    variables: { input },
+    variables: { settings: input },
   });
 
   useEffect(() => {

@@ -98,11 +98,13 @@ extend type Query {
     autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
 }
 
-input GeneralVillageSettingsInput {
+input UpdateGeneralVillageSettingsInput {
+    villageId: Int!
     allowTasks: Boolean!
 }
 
-input AutoBuildVillageSettingsInput {
+input UpdateAutoBuildVillageSettingsInput {
+    villageId: Int!
     allow: Boolean!
     coolDown: CoolDownInput!
 
@@ -110,7 +112,7 @@ input AutoBuildVillageSettingsInput {
     minCrop: Int!
 }
 
-input AutoAdventureSettingsInput {
+input UpdateAutoAdventureSettingsInput {
     allow: Boolean!
     coolDown: CoolDownInput!
 
@@ -122,16 +124,11 @@ input AutoAdventureSettingsInput {
     preferredVillageId: Int
 }
 
-input GeneralSettingsInput {
+input UpdateGeneralSettingsInput {
     allowTasks: Boolean!
     autoBuild: Boolean!
     autoUnits: Boolean!
     autoStart: Boolean!
-}
-
-input UpdateAutoBuildVillageSettingsInput {
-    villageId: Int!
-    settings: AutoBuildVillageSettingsInput!
 }
 
 input UpdateAutoUnitsUnitSettingsInput {
@@ -158,19 +155,6 @@ input UpdateAutoUnitsSettingsInput {
     minCrop: Int!
 }
 
-input UpdateGeneralVillageSettingsInput {
-    villageId: Int!
-    settings: GeneralVillageSettingsInput!
-}
-
-input UpdateGeneralSettingsInput {
-    settings: GeneralSettingsInput!
-}
-
-input UpdateAutoAdventureSettingsInput {
-    settings: AutoAdventureSettingsInput!
-}
-
 input ResetVillageInput {
     villageId: Int!
 }
@@ -187,14 +171,14 @@ enum VillageSettingsType {
 }
 
 extend type Mutation {
-    updateGeneralSettings(input: UpdateGeneralSettingsInput!): Boolean!
-    updateAutoAdventureSettings(input: UpdateAutoAdventureSettingsInput!): Boolean!
-    updateGeneralVillageSettings(input: UpdateGeneralVillageSettingsInput!): Boolean!
-    updateAutoBuildVillageSettings(input: UpdateAutoBuildVillageSettingsInput!): Boolean!
+    updateGeneralSettings(settings: UpdateGeneralSettingsInput!): Boolean!
+    updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): Boolean!
+    updateGeneralVillageSettings(settings: UpdateGeneralVillageSettingsInput!): Boolean!
+    updateAutoBuildVillageSettings(settings: UpdateAutoBuildVillageSettingsInput!): Boolean!
 
-    updateAutoUnitsUnitSettings(input: UpdateAutoUnitsUnitSettingsInput!): Boolean!
-    updateAutoUnitsBuildingSettings(input: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
-    updateAutoUnitsSettings(input: UpdateAutoUnitsSettingsInput!): Boolean!
+    updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!): Boolean!
+    updateAutoUnitsBuildingSettings(settings: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
+    updateAutoUnitsSettings(settings: UpdateAutoUnitsSettingsInput!): Boolean!
 
     resetSettings(type: SettingsType!): Boolean!
     resetVillageSettings(villageId: Int!, type: VillageSettingsType!): Boolean!

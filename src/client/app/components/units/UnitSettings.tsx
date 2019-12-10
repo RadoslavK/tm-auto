@@ -83,7 +83,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
 
   const [updateSettings] = useMutation<IUpdateAutoUnitsUnitSettingsMutation, IUpdateAutoUnitsUnitSettingsMutationVariables>(UpdateAutoUnitsUnitSettings, {
     variables: {
-      input: {
+      settings: {
         villageId,
         unitIndex: settings.index,
         autoBuild: state.autoBuild,

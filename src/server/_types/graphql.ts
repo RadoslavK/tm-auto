@@ -30,17 +30,6 @@ export type IAutoAdventureSettings = IITaskSettings & {
   readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
-export type IAutoAdventureSettingsInput = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: AdventureCriteria,
-  readonly preferHard: Scalars['Boolean'],
-  readonly normalMinHealth: Scalars['Int'],
-  readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: IDurationInput,
-  readonly preferredVillageId: Maybe<Scalars['Int']>,
-};
-
 export type IAutoBuildLogEntryContent = {
   readonly __typename?: 'AutoBuildLogEntryContent',
   readonly autoBuild: IAutoBuildLogEntryContentPayload,
@@ -58,13 +47,6 @@ export type IAutoBuildSettings = IITaskSettings & {
   readonly __typename?: 'AutoBuildSettings',
   readonly allow: Scalars['Boolean'],
   readonly coolDown: ICoolDown,
-  readonly autoCropFields: Scalars['Boolean'],
-  readonly minCrop: Scalars['Int'],
-};
-
-export type IAutoBuildVillageSettingsInput = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
 };
@@ -241,19 +223,8 @@ export type IGeneralSettings = {
   readonly autoStart: Scalars['Boolean'],
 };
 
-export type IGeneralSettingsInput = {
-  readonly allowTasks: Scalars['Boolean'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly autoUnits: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
-};
-
 export type IGeneralVillageSettings = {
   readonly __typename?: 'GeneralVillageSettings',
-  readonly allowTasks: Scalars['Boolean'],
-};
-
-export type IGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars['Boolean'],
 };
 
@@ -370,37 +341,37 @@ export type IMutationMoveQueuedBuildingUpArgs = {
 
 
 export type IMutationUpdateGeneralSettingsArgs = {
-  input: IUpdateGeneralSettingsInput
+  settings: IUpdateGeneralSettingsInput
 };
 
 
 export type IMutationUpdateAutoAdventureSettingsArgs = {
-  input: IUpdateAutoAdventureSettingsInput
+  settings: IUpdateAutoAdventureSettingsInput
 };
 
 
 export type IMutationUpdateGeneralVillageSettingsArgs = {
-  input: IUpdateGeneralVillageSettingsInput
+  settings: IUpdateGeneralVillageSettingsInput
 };
 
 
 export type IMutationUpdateAutoBuildVillageSettingsArgs = {
-  input: IUpdateAutoBuildVillageSettingsInput
+  settings: IUpdateAutoBuildVillageSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsUnitSettingsArgs = {
-  input: IUpdateAutoUnitsUnitSettingsInput
+  settings: IUpdateAutoUnitsUnitSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
-  input: IUpdateAutoUnitsBuildingSettingsInput
+  settings: IUpdateAutoUnitsBuildingSettingsInput
 };
 
 
 export type IMutationUpdateAutoUnitsSettingsArgs = {
-  input: IUpdateAutoUnitsSettingsInput
+  settings: IUpdateAutoUnitsSettingsInput
 };
 
 
@@ -611,12 +582,22 @@ export type IUnitInfo = {
 };
 
 export type IUpdateAutoAdventureSettingsInput = {
-  readonly settings: IAutoAdventureSettingsInput,
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly adventureCriteria: AdventureCriteria,
+  readonly preferHard: Scalars['Boolean'],
+  readonly normalMinHealth: Scalars['Int'],
+  readonly hardMinHealth: Scalars['Int'],
+  readonly maxTravelTime: IDurationInput,
+  readonly preferredVillageId: Maybe<Scalars['Int']>,
 };
 
 export type IUpdateAutoBuildVillageSettingsInput = {
   readonly villageId: Scalars['Int'],
-  readonly settings: IAutoBuildVillageSettingsInput,
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly autoCropFields: Scalars['Boolean'],
+  readonly minCrop: Scalars['Int'],
 };
 
 export type IUpdateAutoUnitsBuildingSettingsInput = {
@@ -642,12 +623,15 @@ export type IUpdateAutoUnitsUnitSettingsInput = {
 };
 
 export type IUpdateGeneralSettingsInput = {
-  readonly settings: IGeneralSettingsInput,
+  readonly allowTasks: Scalars['Boolean'],
+  readonly autoBuild: Scalars['Boolean'],
+  readonly autoUnits: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
 };
 
 export type IUpdateGeneralVillageSettingsInput = {
   readonly villageId: Scalars['Int'],
-  readonly settings: IGeneralVillageSettingsInput,
+  readonly allowTasks: Scalars['Boolean'],
 };
 
 export type IUpdateUserAccountInput = {
@@ -825,15 +809,11 @@ export type IResolversTypes = {
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
   UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput,
-  GeneralSettingsInput: IGeneralSettingsInput,
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
-  AutoAdventureSettingsInput: IAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
   DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
-  GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
-  AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput,
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
@@ -902,15 +882,11 @@ export type IResolversParentTypes = {
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
   UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput,
-  GeneralSettingsInput: IGeneralSettingsInput,
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
-  AutoAdventureSettingsInput: IAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
   DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
-  GeneralVillageSettingsInput: IGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
-  AutoBuildVillageSettingsInput: IAutoBuildVillageSettingsInput,
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
@@ -1105,13 +1081,13 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   enqueueBuilding: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationEnqueueBuildingArgs, 'input'>>,
   moveQueuedBuildingDown: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationMoveQueuedBuildingDownArgs, 'input'>>,
   moveQueuedBuildingUp: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationMoveQueuedBuildingUpArgs, 'input'>>,
-  updateGeneralSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralSettingsArgs, 'input'>>,
-  updateAutoAdventureSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoAdventureSettingsArgs, 'input'>>,
-  updateGeneralVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralVillageSettingsArgs, 'input'>>,
-  updateAutoBuildVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoBuildVillageSettingsArgs, 'input'>>,
-  updateAutoUnitsUnitSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsUnitSettingsArgs, 'input'>>,
-  updateAutoUnitsBuildingSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsBuildingSettingsArgs, 'input'>>,
-  updateAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsSettingsArgs, 'input'>>,
+  updateGeneralSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralSettingsArgs, 'settings'>>,
+  updateAutoAdventureSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoAdventureSettingsArgs, 'settings'>>,
+  updateGeneralVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralVillageSettingsArgs, 'settings'>>,
+  updateAutoBuildVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoBuildVillageSettingsArgs, 'settings'>>,
+  updateAutoUnitsUnitSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsUnitSettingsArgs, 'settings'>>,
+  updateAutoUnitsBuildingSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsBuildingSettingsArgs, 'settings'>>,
+  updateAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsSettingsArgs, 'settings'>>,
   resetSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetSettingsArgs, 'type'>>,
   resetVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetVillageSettingsArgs, 'villageId' | 'type'>>,
 };

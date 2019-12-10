@@ -65,7 +65,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
 
   const [updateSettings] = useMutation<IUpdateAutoUnitsBuildingSettingsMutation, IUpdateAutoUnitsBuildingSettingsMutationVariables>(UpdateAutoUnitsBuildingSettings, {
     variables: {
-      input: {
+      settings: {
         villageId,
         buildingType,
         allow,

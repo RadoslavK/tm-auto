@@ -82,11 +82,11 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
   const { villageId } = useVillageContext();
   const input: IUpdateAutoBuildVillageSettingsInput = {
     villageId,
-    settings: state,
+    ...state,
   };
 
   const [updateSettings] = useMutation<IUpdateAutoBuildVillageSettingsMutation, IUpdateAutoBuildVillageSettingsMutationVariables>(UpdateAutoBuildVillageSettings,
-    { variables: { input } },
+    { variables: { settings: input } },
   );
 
   const isInitialMount = useRef(true);

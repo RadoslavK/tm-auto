@@ -67,10 +67,10 @@ const GeneralSettings: React.FC<IProps> = (props) => {
 
   const [state, setState] = useState(settings);
   const input: IUpdateGeneralSettingsInput = {
-    settings: state,
+    ...state,
   };
   const [updateSettings] = useMutation<IUpdateGeneralSettingsMutation, IUpdateGeneralSettingsMutationVariables>(UpdateGeneralSettings, {
-    variables: { input },
+    variables: { settings: input },
   });
 
   const isInitialMount = useRef(true);
