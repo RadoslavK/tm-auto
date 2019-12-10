@@ -8,5 +8,6 @@ query GetBuildingsInProgress($villageId: Int!) {
         }
         name
         type
+        fieldId
     }
 }

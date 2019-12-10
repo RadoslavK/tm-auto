@@ -27,8 +27,14 @@ const useStyles = makeStyles<unknown, IProps>({
   root: {
     display: 'flex',
   },
+  imageWithFieldId: {
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'center',
+    marginRight: 10,
+  },
   image: props => ({
-    flex: '1',
+    flex: 'auto',
     height: '4rem',
     width: '4rem',
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
@@ -36,7 +42,9 @@ const useStyles = makeStyles<unknown, IProps>({
     backgroundRepeat: 'no-repeat',
   }),
   info: {
-    flex: '1',
+    display: 'flex',
+    flexFlow: 'column',
+    justifyContent: 'center',
   },
 });
 
@@ -71,7 +79,10 @@ export const BuildingInProgress: React.FC<IProps> = (props) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.image} />
+      <div className={classes.imageWithFieldId}>
+        <div className={classes.image} />
+        <div>[{building.fieldId}]</div>
+      </div>
       <div className={classes.info}>
         <div>{building.name}</div>
         <div>Level {building.level}</div>

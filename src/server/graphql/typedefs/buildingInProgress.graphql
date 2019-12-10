@@ -3,6 +3,7 @@ type BuildingInProgress {
     finishedAt: Timestamp!
     name: String!
     type: Int!
+    fieldId: Int!
 }
 
 extend type Query {

@@ -123,6 +123,7 @@ export type IBuildingInProgress = {
   readonly finishedAt: ITimestamp,
   readonly name: Scalars['String'],
   readonly type: Scalars['Int'],
+  readonly fieldId: Scalars['Int'],
 };
 
 export type IBuildingQueue = {
@@ -980,6 +981,7 @@ export type IBuildingInProgressResolvers<ContextType = any, ParentType extends I
   finishedAt: Resolver<IResolversTypes['Timestamp'], ParentType, ContextType>,
   name: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   type: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  fieldId: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 
 export type IBuildingQueueResolvers<ContextType = any, ParentType extends IResolversParentTypes['BuildingQueue'] = IResolversParentTypes['BuildingQueue']> = {

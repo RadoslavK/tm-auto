@@ -108,6 +108,7 @@ export type IBuildingInProgress = {
   readonly finishedAt: ITimestamp,
   readonly name: Scalars['String'],
   readonly type: Scalars['Int'],
+  readonly fieldId: Scalars['Int'],
 };
 
 export type IBuildingQueue = {
@@ -733,7 +734,7 @@ export type IGetBuildingsInProgressQueryVariables = {
 
 
 export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<(
-    Pick<IBuildingInProgress, 'level' | 'name' | 'type'>
+    Pick<IBuildingInProgress, 'level' | 'name' | 'type' | 'fieldId'>
     & { readonly finishedAt: ITimestampFragment }
   )> };
 
