@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import { CoolDown } from '../_models/coolDown';
+import { Duration } from '../_models/duration';
 import {
   BotState,
   IMutationSignInArgs,
@@ -26,6 +28,11 @@ import { BuildingQueueService } from './buildingQueueService';
 class ControllerService {
   private m_timeout: NodeJS.Timeout;
   private m_taskManager: TaskManager | null = null;
+
+  private m_tasksCoolDown = new CoolDown({
+    min: new Duration({ seconds: 10 }),
+    max: new Duration({ seconds: 35 }),
+  });
 
   private botState: BotState = BotState.None;
 
@@ -82,11 +89,6 @@ class ControllerService {
   public start = async (): Promise<void> => {
     this.setState(BotState.Running);
     await this.execute();
-
-    this.m_timeout = setTimeout(async () => {
-      await this.execute();
-      this.m_timeout.refresh();
-    }, 10 * 1000);
   };
 
   private execute = async (): Promise<void> => {
@@ -97,7 +99,7 @@ class ControllerService {
         this.m_taskManager = new TaskManager();
       }
 
-      return await this.m_taskManager.execute();
+      await this.m_taskManager.execute();
     } catch (error) {
       console.error(error.stack);
       // try to make screenshot
@@ -112,8 +114,13 @@ class ControllerService {
       }
 
       await killBrowser();
-      return undefined;
     }
+
+    const nextTimeout = this.m_tasksCoolDown.randomDelay() * 1000;
+
+    this.m_timeout = setTimeout(async () => {
+      await this.execute();
+    }, nextTimeout);
   };
 
   public stop = async (): Promise<void> => {

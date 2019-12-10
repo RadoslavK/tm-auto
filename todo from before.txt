@@ -3,16 +3,6 @@ max warehouse/granary fullness when taking adventure
 
 dat viacej moznosti v stavacom okne. napr vsetky res na nejaky level atd
 
-filtre na dediny
-moznost premenovat si dedinu podla seba - iba v UI
-vytvaranie skupin atd
-
-Features
-delay pri klikani a tak?
-minimalna doba medzi 1 cekovanim dediny a druhym
-
-auto warehouse - iba ked neni 1 uz na max lvl
-
 problemy: nevyvazene posilani surovin, proste posila sa od tej najvystavanejsi
 ---dalej ked sa v malej dedine stava a ta velka teraz vyzada res tak jej ta mala zase vsetko posle. to je dobre?
 ---spravit?: ked odcita sur co sa posielaju tak iba do urcitej dlzky napriklad 1h ale v tem pripade iba posilat do 1h

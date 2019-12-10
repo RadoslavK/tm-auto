@@ -19,7 +19,23 @@ building mode templates
 
 building queue... umoznit spojit budovy dokopy a bude to ukazovat totalny cas, res atd.. tato skupina sa bude dat odstranit tiez alebo rozbalit.
 
+filtre na dediny
+moznost premenovat si dedinu podla seba - iba v UI
+vytvaranie skupin atd
+
+delay pri klikani a tak?
+minimalna doba medzi 1 cekovanim dediny a druhym
+
+auto warehouse - iba ked neni 1 uz na max lvl??.. co je toto, preverit
+
+dat viacej moznosti v stavacom okne. napr vsetky res na nejaky level atd
+
+max warehouse/granary fullness when taking adventure
+- zalezi ci sa implementuje ta vec ze sa to ulozi do inventara
+
 -------------------New features-------------------
+
+reset to default everything alebo ciastocne
 
 ten delay jak casto cekuje tasky doplnit do UI
 signal ze bot caka na timer a kedy zacne zas
@@ -73,6 +89,8 @@ pouzit nove trav ikonky na suroviny a  tak
 
 -------Exception handling-----
 
+ked spatne ten server, nejak detekovat a dat moznost ho restartovat z klienta
+
 pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval
 
 po exceptione refreshnut stranku a pokracovat skusit..
@@ -119,7 +137,6 @@ sidemenu nech si handluju tie komponenty sami, nebude tam context podpora.. takz
 namiesto allow checkboxu dat nejaky toggle - enable/disable
 
 lepsi inidikator ze jednotka ma zapnuty autobuild lebo ked to ma ciernu farbu sa to tazko rozozna
-
 
 ---------ESLINT--------------------
 -objects new line
