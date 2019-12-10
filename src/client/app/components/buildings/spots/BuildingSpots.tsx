@@ -12,7 +12,7 @@ import {
 import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IBuildingSpotFragmentFragment,
+  IBuildingSpot,
   IBuildingsUpdatedSubscription,
   IBuildingsUpdatedSubscriptionVariables,
   IGetBuildingSpotsQuery,
@@ -35,7 +35,7 @@ interface IProps {
   readonly className: string;
 }
 
-const mapBuilding = (building: IBuildingSpotFragmentFragment, index: number): JSX.Element => (
+const mapBuilding = (building: IBuildingSpot, index: number): JSX.Element => (
   <BuildingSpot key={index} building={building} />
 );
 

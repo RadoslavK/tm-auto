@@ -2,7 +2,7 @@
 declare module '*/graphql_operations/account.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const UserAccountFragment: DocumentNode;
+  export const UserAccount: DocumentNode;
 export const GetAccounts: DocumentNode;
 export const GetCurrentAccount: DocumentNode;
 export const GetAccount: DocumentNode;
@@ -18,7 +18,7 @@ export const DeleteAccount: DocumentNode;
 declare module '*/graphql_operations/building.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const BuildingSpotFragment: DocumentNode;
+  export const BuildingSpot: DocumentNode;
 export const GetBuildingSpots: DocumentNode;
 export const GetAvailableNewBuildings: DocumentNode;
 export const GetMaxBuildingLevel: DocumentNode;
@@ -55,7 +55,7 @@ export const OnBotRunningChanged: DocumentNode;
 declare module '*/graphql_operations/hero.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const HeroInformationFragment: DocumentNode;
+  export const HeroInformation: DocumentNode;
 export const GetHeroInformation: DocumentNode;
 export const OnHeroInformationUpdated: DocumentNode;
 
@@ -66,7 +66,7 @@ export const OnHeroInformationUpdated: DocumentNode;
 declare module '*/graphql_operations/logs.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const LogEntryFragment: DocumentNode;
+  export const LogEntry: DocumentNode;
 export const GetLogs: DocumentNode;
 export const OnLogEntryAdded: DocumentNode;
 
@@ -78,10 +78,10 @@ declare module '*/graphql_operations/misc.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const Timestamp: DocumentNode;
-export const ResourcesFragment: DocumentNode;
-export const CostFragment: DocumentNode;
-export const CoordsFragment: DocumentNode;
-export const VillageFragment: DocumentNode;
+export const Resources: DocumentNode;
+export const Cost: DocumentNode;
+export const Coords: DocumentNode;
+export const Village: DocumentNode;
 export const Duration: DocumentNode;
 
   export default defaultDocument;
@@ -107,9 +107,9 @@ export const OnQueueUpdated: DocumentNode;
 declare module '*/graphql_operations/settings.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const TaskSettingsFragment: DocumentNode;
-export const AutoUnitsUnitSettingsFragment: DocumentNode;
-export const AutoUnitsBuildingSettingsFragment: DocumentNode;
+  export const TaskSettings: DocumentNode;
+export const AutoUnitsUnitSettings: DocumentNode;
+export const AutoUnitsBuildingSettings: DocumentNode;
 export const GeneralSettings: DocumentNode;
 export const AutoAdventureSettings: DocumentNode;
 export const GeneralVillageSettings: DocumentNode;

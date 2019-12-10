@@ -1,12 +1,12 @@
 #import "./misc.graphql"
 
-fragment LogEntryFragment on LogEntry {
+fragment LogEntry on LogEntry {
     id
     timestamp
     village {
         id
         coords {
-            ...CoordsFragment
+            ...Coords
         }
         name
     }
@@ -37,12 +37,12 @@ fragment LogEntryFragment on LogEntry {
 
 query GetLogs {
     logsEntries {
-        ...LogEntryFragment
+        ...LogEntry
     }
 }
 
 subscription OnLogEntryAdded {
     onLogEntryAdded {
-        ...LogEntryFragment
+        ...LogEntry
     }
 }

@@ -5,17 +5,17 @@ import { Link } from 'react-router-dom';
 import {
   IAutoBuildLogEntryContent,
   IAutoUnitsLogEntryContent,
-  ILogEntryFragmentFragment,
+  ILogEntryFragment,
   ITextLogEntryContent,
 } from '../../../_types/graphql';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
 import { TextLogContent } from './entries/TextLogContent';
 
-type Content = ILogEntryFragmentFragment['content'];
+type Content = ILogEntryFragment['content'];
 
 interface IProps {
-  readonly logEntry: ILogEntryFragmentFragment;
+  readonly logEntry: ILogEntryFragment;
 }
 
 const isTextEntry = (content: Content): content is ITextLogEntryContent => (content as ITextLogEntryContent).text !== undefined;

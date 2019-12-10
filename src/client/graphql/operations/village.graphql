@@ -3,20 +3,20 @@
 query GetVillageById($villageId: Int!) {
     village(villageId: $villageId) {
         coords {
-            ...CoordsFragment
+            ...Coords
         }
         id
         name
         resources {
             amount {
-                ...ResourcesFragment
+                ...Resources
             }
             capacity {
                 granary
                 warehouse
             }
             production {
-                ...ResourcesFragment
+                ...Resources
             }
         }
     }

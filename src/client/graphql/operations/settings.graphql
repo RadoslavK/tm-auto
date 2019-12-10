@@ -1,6 +1,6 @@
 #import "./misc.graphql"
 
-fragment TaskSettingsFragment on ITaskSettings {
+fragment TaskSettings on ITaskSettings {
     allow
     coolDown {
         min {
@@ -12,20 +12,20 @@ fragment TaskSettingsFragment on ITaskSettings {
     }
 }
 
-fragment AutoUnitsUnitSettingsFragment on AutoUnitsUnitSettings {
+fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
     autoBuild
     index
     targetAmount
     trainForever
 }
 
-fragment AutoUnitsBuildingSettingsFragment on AutoUnitsBuildingSettings {
+fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
     allow
     maxBuildTime {
         ...Duration
     }
     units {
-        ...AutoUnitsUnitSettingsFragment
+        ...AutoUnitsUnitSettings
     }
 }
 
@@ -37,7 +37,7 @@ fragment GeneralSettings on GeneralSettings {
 }
 
 fragment AutoAdventureSettings on AutoAdventureSettings {
-    ...TaskSettingsFragment
+    ...TaskSettings
     adventureCriteria
     hardMinHealth
     normalMinHealth
@@ -53,25 +53,25 @@ fragment GeneralVillageSettings on GeneralVillageSettings {
 }
 
 fragment AutoBuildSettings on AutoBuildSettings {
-    ...TaskSettingsFragment
+    ...TaskSettings
     autoCropFields
     minCrop
 }
 
 fragment AutoUnitsSettings on AutoUnitsSettings {
-    ...TaskSettingsFragment
+    ...TaskSettings
     minCrop
     barracks {
-        ...AutoUnitsBuildingSettingsFragment
+        ...AutoUnitsBuildingSettings
     }
     stable {
-        ...AutoUnitsBuildingSettingsFragment
+        ...AutoUnitsBuildingSettings
     }
     workshop {
-        ...AutoUnitsBuildingSettingsFragment
+        ...AutoUnitsBuildingSettings
     }
     residence {
-        ...AutoUnitsBuildingSettingsFragment
+        ...AutoUnitsBuildingSettings
     }
 }
 

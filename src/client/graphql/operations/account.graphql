@@ -1,4 +1,4 @@
-fragment UserAccountFragment on UserAccount {
+fragment UserAccount on UserAccount {
     id
     username
     password
@@ -7,19 +7,19 @@ fragment UserAccountFragment on UserAccount {
 
 query GetAccounts {
     accounts {
-        ...UserAccountFragment
+        ...UserAccount
     }
 }
 
 query GetCurrentAccount {
     currentAccount {
-        ...UserAccountFragment
+        ...UserAccount
     }
 }
 
 query GetAccount($accountId: String!) {
     account(accountId: $accountId) {
-        ...UserAccountFragment
+        ...UserAccount
     }
 }
 

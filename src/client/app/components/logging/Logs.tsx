@@ -14,14 +14,14 @@ import {
 
 import {
   IGetLogsQuery,
-  ILogEntryFragmentFragment,
+  ILogEntryFragment,
   IOnLogEntryAddedSubscription,
 } from '../../../_types/graphql';
 import { LogEntry } from './LogEntry';
 
 const useLogs = () => {
   const { data, loading } = useQuery<IGetLogsQuery>(GetLogs);
-  const [entries, setEntries] = useState<ILogEntryFragmentFragment[]>([]);
+  const [entries, setEntries] = useState<ILogEntryFragment[]>([]);
   useSubscription<IOnLogEntryAddedSubscription>(OnLogEntryAdded, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (subscriptionData.loading || !subscriptionData.data) {

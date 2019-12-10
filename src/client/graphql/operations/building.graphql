@@ -1,4 +1,4 @@
-fragment BuildingSpotFragment on BuildingSpot {
+fragment BuildingSpot on BuildingSpot {
     fieldId
     level {
         actual
@@ -14,20 +14,20 @@ fragment BuildingSpotFragment on BuildingSpot {
 query GetBuildingSpots($villageId: Int!) {
     buildingSpots(villageId: $villageId) {
         infrastructure {
-            ...BuildingSpotFragment
+            ...BuildingSpot
         }
         resources {
             wood {
-                ...BuildingSpotFragment
+                ...BuildingSpot
             }
             clay {
-                ...BuildingSpotFragment
+                ...BuildingSpot
             }
             iron {
-                ...BuildingSpotFragment
+                ...BuildingSpot
             }
             crop {
-                ...BuildingSpotFragment
+                ...BuildingSpot
             }
         }
     }

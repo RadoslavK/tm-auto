@@ -1,12 +1,12 @@
 #import "./misc.graphql"
 
-fragment HeroInformationFragment on HeroInformation {
+fragment HeroInformation on HeroInformation {
     health
     state
     village {
         id
         coords {
-            ...CoordsFragment
+            ...Coords
         }
         name
     }
@@ -14,12 +14,12 @@ fragment HeroInformationFragment on HeroInformation {
 
 query GetHeroInformation {
     heroInformation {
-        ...HeroInformationFragment
+        ...HeroInformation
     }
 }
 
 subscription OnHeroInformationUpdated {
     heroInformationUpdated {
-        ...HeroInformationFragment
+        ...HeroInformation
     }
 }

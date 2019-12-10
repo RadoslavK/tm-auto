@@ -30,7 +30,7 @@ query GetQueuedBuildings($villageId: Int!) {
             canMoveDown
             canMoveUp
             cost {
-                ...CostFragment
+                ...Cost
             }
             name
             level
@@ -39,7 +39,7 @@ query GetQueuedBuildings($villageId: Int!) {
             fieldId
         }
         totalCost {
-            ...CostFragment
+            ...Cost
         }
     }
 }

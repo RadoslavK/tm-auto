@@ -658,24 +658,24 @@ export enum VillageSettingsType {
   AutoUnits = 'AutoUnits'
 }
 
-export type IUserAccountFragmentFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
+export type IUserAccountFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
 
 export type IGetAccountsQueryVariables = {};
 
 
-export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragmentFragment> };
+export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragment> };
 
 export type IGetCurrentAccountQueryVariables = {};
 
 
-export type IGetCurrentAccountQuery = { readonly currentAccount: IUserAccountFragmentFragment };
+export type IGetCurrentAccountQuery = { readonly currentAccount: IUserAccountFragment };
 
 export type IGetAccountQueryVariables = {
   accountId: Scalars['String']
 };
 
 
-export type IGetAccountQuery = { readonly account: Maybe<IUserAccountFragmentFragment> };
+export type IGetAccountQuery = { readonly account: Maybe<IUserAccountFragment> };
 
 export type IGetLastSignedAccountIdQueryVariables = {};
 
@@ -703,7 +703,7 @@ export type IDeleteAccountMutationVariables = {
 
 export type IDeleteAccountMutation = Pick<IMutation, 'deleteAccount'>;
 
-export type IBuildingSpotFragmentFragment = (
+export type IBuildingSpotFragment = (
   Pick<IBuildingSpot, 'fieldId' | 'type' | 'name'>
   & { readonly level: Pick<IBuildingSpotLevel, 'actual' | 'ongoing' | 'queued' | 'total' | 'max'> }
 );
@@ -713,7 +713,7 @@ export type IGetBuildingSpotsQueryVariables = {
 };
 
 
-export type IGetBuildingSpotsQuery = { readonly buildingSpots: { readonly infrastructure: ReadonlyArray<IBuildingSpotFragmentFragment>, readonly resources: { readonly wood: ReadonlyArray<IBuildingSpotFragmentFragment>, readonly clay: ReadonlyArray<IBuildingSpotFragmentFragment>, readonly iron: ReadonlyArray<IBuildingSpotFragmentFragment>, readonly crop: ReadonlyArray<IBuildingSpotFragmentFragment> } } };
+export type IGetBuildingSpotsQuery = { readonly buildingSpots: { readonly infrastructure: ReadonlyArray<IBuildingSpotFragment>, readonly resources: { readonly wood: ReadonlyArray<IBuildingSpotFragment>, readonly clay: ReadonlyArray<IBuildingSpotFragment>, readonly iron: ReadonlyArray<IBuildingSpotFragment>, readonly crop: ReadonlyArray<IBuildingSpotFragment> } } };
 
 export type IGetAvailableNewBuildingsQueryVariables = {
   input: IAvailableNewBuildingsInput
@@ -785,53 +785,53 @@ export type IOnBotRunningChangedSubscriptionVariables = {};
 
 export type IOnBotRunningChangedSubscription = Pick<ISubscription, 'onBotRunningChanged'>;
 
-export type IHeroInformationFragmentFragment = (
+export type IHeroInformationFragment = (
   Pick<IHeroInformation, 'health' | 'state'>
   & { readonly village: Maybe<(
     Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragmentFragment }
+    & { readonly coords: ICoordsFragment }
   )> }
 );
 
 export type IGetHeroInformationQueryVariables = {};
 
 
-export type IGetHeroInformationQuery = { readonly heroInformation: IHeroInformationFragmentFragment };
+export type IGetHeroInformationQuery = { readonly heroInformation: IHeroInformationFragment };
 
 export type IOnHeroInformationUpdatedSubscriptionVariables = {};
 
 
-export type IOnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: IHeroInformationFragmentFragment };
+export type IOnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: IHeroInformationFragment };
 
-export type ILogEntryFragmentFragment = (
+export type ILogEntryFragment = (
   Pick<ILogEntry, 'id' | 'timestamp'>
   & { readonly village: Maybe<(
     Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragmentFragment }
+    & { readonly coords: ICoordsFragment }
   )>, readonly content: { readonly text: Pick<ITextLogEntryContentPayload, 'message'> } | { readonly autoBuild: Pick<IAutoBuildLogEntryContentPayload, 'fieldId' | 'level' | 'name' | 'type'> } | { readonly autoUnits: Pick<IAutoUnitsLogEntryContentPayload, 'amount' | 'index' | 'tribe' | 'unitName'> } }
 );
 
 export type IGetLogsQueryVariables = {};
 
 
-export type IGetLogsQuery = { readonly logsEntries: ReadonlyArray<ILogEntryFragmentFragment> };
+export type IGetLogsQuery = { readonly logsEntries: ReadonlyArray<ILogEntryFragment> };
 
 export type IOnLogEntryAddedSubscriptionVariables = {};
 
 
-export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragmentFragment };
+export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragment };
 
 export type ITimestampFragment = Pick<ITimestamp, 'totalSeconds'>;
 
-export type IResourcesFragmentFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
+export type IResourcesFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
 
-export type ICostFragmentFragment = { readonly resources: IResourcesFragmentFragment, readonly buildTime: IDurationFragment };
+export type ICostFragment = { readonly resources: IResourcesFragment, readonly buildTime: IDurationFragment };
 
-export type ICoordsFragmentFragment = Pick<ICoords, 'x' | 'y'>;
+export type ICoordsFragment = Pick<ICoords, 'x' | 'y'>;
 
-export type IVillageFragmentFragment = (
+export type IVillageFragment = (
   Pick<IVillage, 'id' | 'name'>
-  & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly production: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
+  & { readonly coords: ICoordsFragment, readonly resources: { readonly amount: IResourcesFragment, readonly production: IResourcesFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
 );
 
 export type IDurationFragment = Pick<IDuration, 'days' | 'hours' | 'minutes' | 'seconds'>;
@@ -885,8 +885,8 @@ export type IGetQueuedBuildingsQueryVariables = {
 
 export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buildings: ReadonlyArray<(
       Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
-      & { readonly cost: ICostFragmentFragment }
-    )>, readonly totalCost: ICostFragmentFragment } };
+      & { readonly cost: ICostFragment }
+    )>, readonly totalCost: ICostFragment } };
 
 export type IOnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['Int']
@@ -895,33 +895,33 @@ export type IOnQueueUpdatedSubscriptionVariables = {
 
 export type IOnQueueUpdatedSubscription = Pick<ISubscription, 'onQueueUpdated'>;
 
-type ITaskSettingsFragment_AutoAdventureSettings_Fragment = (
+type ITaskSettings_AutoAdventureSettings_Fragment = (
   Pick<IAutoAdventureSettings, 'allow'>
   & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
-type ITaskSettingsFragment_AutoBuildSettings_Fragment = (
+type ITaskSettings_AutoBuildSettings_Fragment = (
   Pick<IAutoBuildSettings, 'allow'>
   & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
-type ITaskSettingsFragment_AutoUnitsSettings_Fragment = (
+type ITaskSettings_AutoUnitsSettings_Fragment = (
   Pick<IAutoUnitsSettings, 'allow'>
   & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
-type ITaskSettingsFragment_AutoPartySettings_Fragment = (
+type ITaskSettings_AutoPartySettings_Fragment = (
   Pick<IAutoPartySettings, 'allow'>
   & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
 );
 
-export type ITaskSettingsFragmentFragment = ITaskSettingsFragment_AutoAdventureSettings_Fragment | ITaskSettingsFragment_AutoBuildSettings_Fragment | ITaskSettingsFragment_AutoUnitsSettings_Fragment | ITaskSettingsFragment_AutoPartySettings_Fragment;
+export type ITaskSettingsFragment = ITaskSettings_AutoAdventureSettings_Fragment | ITaskSettings_AutoBuildSettings_Fragment | ITaskSettings_AutoUnitsSettings_Fragment | ITaskSettings_AutoPartySettings_Fragment;
 
-export type IAutoUnitsUnitSettingsFragmentFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
+export type IAutoUnitsUnitSettingsFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
 
-export type IAutoUnitsBuildingSettingsFragmentFragment = (
+export type IAutoUnitsBuildingSettingsFragment = (
   Pick<IAutoUnitsBuildingSettings, 'allow'>
-  & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragmentFragment> }
+  & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragment> }
 );
 
 export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoBuild' | 'autoUnits' | 'autoStart'>;
@@ -929,20 +929,20 @@ export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'au
 export type IAutoAdventureSettingsFragment = (
   Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
   & { readonly maxTravelTime: IDurationFragment }
-  & ITaskSettingsFragment_AutoAdventureSettings_Fragment
+  & ITaskSettings_AutoAdventureSettings_Fragment
 );
 
 export type IGeneralVillageSettingsFragment = Pick<IGeneralVillageSettings, 'allowTasks'>;
 
 export type IAutoBuildSettingsFragment = (
   Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
-  & ITaskSettingsFragment_AutoBuildSettings_Fragment
+  & ITaskSettings_AutoBuildSettings_Fragment
 );
 
 export type IAutoUnitsSettingsFragment = (
   Pick<IAutoUnitsSettings, 'minCrop'>
-  & { readonly barracks: IAutoUnitsBuildingSettingsFragmentFragment, readonly stable: IAutoUnitsBuildingSettingsFragmentFragment, readonly workshop: IAutoUnitsBuildingSettingsFragmentFragment, readonly residence: IAutoUnitsBuildingSettingsFragmentFragment }
-  & ITaskSettingsFragment_AutoUnitsSettings_Fragment
+  & { readonly barracks: IAutoUnitsBuildingSettingsFragment, readonly stable: IAutoUnitsBuildingSettingsFragment, readonly workshop: IAutoUnitsBuildingSettingsFragment, readonly residence: IAutoUnitsBuildingSettingsFragment }
+  & ITaskSettings_AutoUnitsSettings_Fragment
 );
 
 export type IGetGeneralSettingsQueryVariables = {};
@@ -1085,7 +1085,7 @@ export type IGetVillageByIdQueryVariables = {
 
 export type IGetVillageByIdQuery = { readonly village: Maybe<(
     Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragmentFragment, readonly resources: { readonly amount: IResourcesFragmentFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'>, readonly production: IResourcesFragmentFragment } }
+    & { readonly coords: ICoordsFragment, readonly resources: { readonly amount: IResourcesFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'>, readonly production: IResourcesFragment } }
   )> };
 
 export type IGetVillagesQueryVariables = {};

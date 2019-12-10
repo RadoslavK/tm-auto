@@ -2,7 +2,7 @@ fragment Timestamp on Timestamp {
     totalSeconds
 }
 
-fragment ResourcesFragment on Resources {
+fragment Resources on Resources {
     wood
     clay
     iron
@@ -10,32 +10,32 @@ fragment ResourcesFragment on Resources {
     freeCrop
 }
 
-fragment CostFragment on Cost {
+fragment Cost on Cost {
     resources {
-        ...ResourcesFragment
+        ...Resources
     }
     buildTime {
         ...Duration
     }
 }
 
-fragment CoordsFragment on Coords {
+fragment Coords on Coords {
     x
     y
 }
 
-fragment VillageFragment on Village {
+fragment Village on Village {
     coords {
-        ...CoordsFragment
+        ...Coords
     }
     id
     name
     resources {
         amount {
-            ...ResourcesFragment
+            ...Resources
         }
         production {
-            ...ResourcesFragment
+            ...Resources
         }
         capacity {
             granary

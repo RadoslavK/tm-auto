@@ -16,12 +16,12 @@ import {
 import {
   HeroState,
   IGetHeroInformationQuery,
-  IHeroInformationFragmentFragment,
+  IHeroInformationFragment,
   IOnHeroInformationUpdatedSubscription,
 } from '../../_types/graphql';
 
 const useHeroInformation = () => {
-  const [heroInformation, setHeroInformation] = useState<IHeroInformationFragmentFragment>();
+  const [heroInformation, setHeroInformation] = useState<IHeroInformationFragment>();
   const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation);
 
   useEffect(() => {

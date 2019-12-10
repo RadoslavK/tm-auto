@@ -67,6 +67,7 @@ village settings -> moznost prepinat medzi dedinami v tom dialogu
 ked sa prepne dedina ostat v tej istej casti UI
 
 ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potoms
+-alebo ine riesenie
 
 pouzit nove trav ikonky na suroviny a  tak
 
@@ -97,7 +98,7 @@ suroviny su po  1.0 a 1.1k cize asi spravny formatting ale total ukazuje jak 4,3
 
 unit indexy nesedia lebo napisal ze stava senatora namiesto settler
 
-tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr
+tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr na speede
 
 -----------Refactor-------------------------
 
@@ -108,10 +109,6 @@ side menu context prerobit
 nejak to spravit nech to generuje spolocne typescript typy  do shared
 
 tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all: true } setting tak vrati iny typ
-
-fragmentom nedavat fragment suffix lebo typ ma pootom meni fragmentfragment a zaroven mozu mat rovnake meno jak typ
-
-zjednotit setting server model a graphql a nejak mnormalne s tou servisou nech neni kod na milion miestach
 
 nepouzivat zlozite inputy ale proste 1 input a tam narvat vsetky data aj village id a tak
 
