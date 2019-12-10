@@ -96,15 +96,13 @@ const parseAdventureCountNew = async (): Promise<number> => {
   return +countText;
 };
 
-export const updateHeroInformation = async (): Promise<void> => {
+const parseHeroVillageId = async (): Promise<number | null> => {
   const page = await getPage();
-  const { hero } = accountContext;
-
   const heroStatusMessage = await page.$('.heroStatusMessage > a');
 
   if (heroStatusMessage) {
     // Dead hero does not have status message, so no village can be recognized
-    hero.villageId = await heroStatusMessage.evaluate(x => {
+    return heroStatusMessage.evaluate(x => {
       const heroVillageLink = x.getAttribute('href');
 
       if (!heroVillageLink) {
@@ -119,9 +117,39 @@ export const updateHeroInformation = async (): Promise<void> => {
 
       return +villageIdMatch[1];
     });
-  } else {
-    hero.villageId = null;
   }
+
+  return null;
+};
+
+const parseHeroVillageIdNew = async (): Promise<number> => {
+  const page = await getPage();
+
+  const villageId = await page.$eval('.heroStatus a[href*="newdid"]', x => {
+    const heroVillageLink = x.getAttribute('href');
+
+    if (!heroVillageLink) {
+      throw new Error('Did not find hero village link');
+    }
+
+    const match = /newdid=(\d+)/.exec(heroVillageLink);
+
+    if (!match) {
+      throw new Error('Failed to parse hero village id');
+    }
+
+    return match[1];
+  });
+
+  return +villageId;
+};
+
+export const updateHeroInformation = async (): Promise<void> => {
+  const { hero } = accountContext;
+
+  hero.villageId = gameInfoService.hasNewUI
+    ? await parseHeroVillageIdNew()
+    : await parseHeroVillageId();
 
   hero.health = gameInfoService.hasNewUI
     ? await parseHealthNew()
@@ -133,7 +161,7 @@ export const updateHeroInformation = async (): Promise<void> => {
 
   const adventureCount = gameInfoService.hasNewUI
     ? await parseAdventureCountNew()
-    : parseAdventureCount();
+    : await parseAdventureCount();
 
   hero.hasAvailableAdventures = adventureCount > 0;
 

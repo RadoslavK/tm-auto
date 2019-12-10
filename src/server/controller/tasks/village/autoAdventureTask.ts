@@ -1,3 +1,4 @@
+import { gameInfoService } from '../../../services/gameInfoService';
 import {
   BotTaskResult,
   IBotTask,
@@ -42,7 +43,9 @@ export class AutoAdventureTask implements IBotTask {
     }
 
     const page = await getPage();
-    const adventuresButton = await page.$('[class*="adventureWhite"]');
+    const adventuresButton = gameInfoService.hasNewUI
+      ? await page.$('.adventure.green')
+      : await page.$('[class*="adventureWhite"]');
 
     if (!adventuresButton) {
       return;
