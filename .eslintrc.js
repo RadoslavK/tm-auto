@@ -117,6 +117,7 @@ module.exports = {
     "no-console": "off",
     "tm-auto/single-import-per-line": "error",
     "tm-auto/single-line-per-single-import": "error",
-    "no-continue": "off"
+    "no-continue": "off",
+    "no-underscore-dangle": "off"
   },
 };
