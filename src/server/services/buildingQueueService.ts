@@ -6,7 +6,6 @@ import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { getWithMaximum } from '../utils/getWithMaximum';
 import { buildingsService } from './buildingsService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
@@ -129,6 +128,18 @@ export class BuildingQueueService {
     return true;
   };
 
+  public moveToTop = (queueId: string): void => {
+    const queuedBuilding = this.m_village.buildings.queue.buildings().find(b => b.queueId === queueId);
+
+    if (!queuedBuilding) {
+      return;
+    }
+
+    this.m_village.buildings.queue.pushToTheStart(queuedBuilding);
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
+    this.serializeQueue();
+  };
+
   public clearQueue = (): void => {
     if (!this.m_village.buildings.queue.buildings().length) {
       return;
@@ -143,6 +154,31 @@ export class BuildingQueueService {
 
     publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
+  };
+
+  public canMoveToTop = (queueId: string): boolean => {
+    // key: fieldId, value: queued offset
+    const offsets: Record<number, number> = {};
+    const queuedBuildings = this.m_village.buildings.queue.buildings();
+
+    const spots = this.m_village.buildings.spots.buildings();
+    spots.forEach(spot => {
+      offsets[spot.fieldId] = 0;
+    });
+
+    const movedBuilding = queuedBuildings.find(b => b.queueId === queueId);
+
+    if (!movedBuilding) {
+      return false;
+    }
+
+    const queueIndex = this.m_village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
+
+    if (queueIndex === 0) {
+      return false;
+    }
+
+    return this.willQueuedBuildingStillMeetItsRequirements(movedBuilding, offsets);
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -185,13 +221,6 @@ export class BuildingQueueService {
       throw new Error('Did not find other building while trying to move in queue');
     }
 
-    return this.willQueuedBuildingStillMeetItsRequirementsAfterRepositioning(
-      qBuildingWithPossiblyAffectedRequirements,
-      theOtherBuilding.fieldId,
-    );
-  };
-
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioning = (checkedBuilding: QueuedBuilding, reducedOffsetBuildingFieldId: number): boolean => {
     // need to calculate offset till its position
     const offsets: Record<number, number> = {};
     const queuedBuildings = this.m_village.buildings.queue.buildings();
@@ -201,69 +230,65 @@ export class BuildingQueueService {
       offsets[spot.fieldId] = 0;
     });
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const qBuilding of queuedBuildings) {
-      offsets[qBuilding.fieldId]++;
-
-      if (qBuilding.queueId === checkedBuilding.queueId) {
+      if (qBuilding.queueId === qBuildingWithPossiblyAffectedRequirements.queueId) {
         break;
       }
+
+      offsets[qBuilding.fieldId]++;
     }
 
-    return this.willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther(
-      checkedBuilding,
+    offsets[theOtherBuilding.fieldId]--;
+
+    return this.willQueuedBuildingStillMeetItsRequirements(
+      qBuildingWithPossiblyAffectedRequirements,
       offsets,
-      reducedOffsetBuildingFieldId,
     );
   };
 
-  private willQueuedBuildingStillMeetItsRequirementsAfterRepositioningOther = (checkedBuilding: QueuedBuilding, offsets: Record<number, number>, reducedOffsetBuildingFieldId?: number): boolean => {
-    const getTemporaryTotalLevel = (building: IBuildingSpot): number =>
+  private willQueuedBuildingStillMeetItsRequirements = (checkedBuilding: QueuedBuilding, offsets: Record<number, number>): boolean => {
+    const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
+
+    const getNewTotalLevel = (building: IBuildingSpot): number =>
       building.level.actual
       + building.level.ongoing
-      + (building.fieldId === reducedOffsetBuildingFieldId
-        ? offsets[building.fieldId] - 1
-        : offsets[building.fieldId]);
+      + offsets[building.fieldId];
 
-    const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
     const { conditions } = buildingsService.getBuildingInfo(checkedBuilding.type);
 
-    if (checkedBuilding.type > BuildingType.Crop) {
-      const { maxLevel } = buildingsService.getBuildingInfo(checkedBuilding.type);
+    //  should have parent, lvl1 also has a parent: with lvl 0
+    const hasParent = normalizedBuildings.some(s => s.fieldId === checkedBuilding.fieldId
+      && getNewTotalLevel(s) === checkedBuilding.level - 1);
 
-      const anyCompleted = normalizedBuildings
-        .filter(b => b.type === checkedBuilding.type)
-        .some(b => getTemporaryTotalLevel(b) >= maxLevel);
-
-      if (!anyCompleted) {
-        // if not unique, but at least 1 is not fully completed
-        // it can break down on queue switch
-        const highestLevelBuildingOfSameType = getWithMaximum(
-          normalizedBuildings.filter(b => b.type === checkedBuilding.type),
-          getTemporaryTotalLevel,
-        );
-
-        if (!highestLevelBuildingOfSameType) {
-          return false;
-        }
-
-        const itsTemporaryLevel = getTemporaryTotalLevel(highestLevelBuildingOfSameType);
-
-        // if they are not the same building spot or its level is not preceding to this then theres a problem
-        if (highestLevelBuildingOfSameType.fieldId !== checkedBuilding.fieldId || (itsTemporaryLevel < checkedBuilding.level - 1)) {
-          return false;
-        }
-      }
+    if (!hasParent) {
+      return false;
     }
 
-    for (let i = 0; i < conditions.requiredBuildings.length; i++) {
-      const requiredBuilding = conditions.requiredBuildings[i];
-      const requiredBuildingExists = normalizedBuildings.some(
-        b => b.type === requiredBuilding.type
-          && getTemporaryTotalLevel(b) >= requiredBuilding.level);
+    if (checkedBuilding.type <= BuildingType.Crop) {
+      return true;
+    }
 
-      if (!requiredBuildingExists) {
+    if (checkedBuilding.level === 1) {
+      //  unique buildings test.. if it has same type on another field it should be maxed at least somewhere
+      const { maxLevel } = buildingsService.getBuildingInfo(checkedBuilding.type);
+
+      const buildingsOfTheType = normalizedBuildings.filter(b => b.type === checkedBuilding.type);
+      const anyCompleted = buildingsOfTheType.some(b => getNewTotalLevel(b) >= maxLevel);
+
+      //  if none is completed but other of the same type exist then we cant move it
+      if (!anyCompleted && buildingsOfTheType.length > 1) {
         return false;
+      }
+
+      for (let i = 0; i < conditions.requiredBuildings.length; i++) {
+        const requiredBuilding = conditions.requiredBuildings[i];
+        const requiredBuildingExists = normalizedBuildings.some(
+          b => b.type === requiredBuilding.type
+            && getNewTotalLevel(b) >= requiredBuilding.level);
+
+        if (!requiredBuildingExists) {
+          return false;
+        }
       }
     }
 

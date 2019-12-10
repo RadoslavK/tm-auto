@@ -24,6 +24,10 @@ mutation MoveQueuedBuildingUp($input: QueuedBuildingManipulationInput!) {
     moveQueuedBuildingUp(input: $input)
 }
 
+mutation MoveQueuedBuildingToTop($villageId: Int!, $queueId: ID!) {
+    moveQueuedBuildingToTop(villageId: $villageId, queueId: $queueId)
+}
+
 query GetQueuedBuildings($villageId: Int!) {
     buildingQueue(villageId: $villageId) {
         buildings {
@@ -42,6 +46,10 @@ query GetQueuedBuildings($villageId: Int!) {
             ...Cost
         }
     }
+}
+
+query CanMoveToTop($villageId: Int!, $queueId: ID!) {
+    canMoveToTop(villageId: $villageId, queueId: $queueId)
 }
 
 subscription OnQueueUpdated($villageId: Int!) {

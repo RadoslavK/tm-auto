@@ -60,6 +60,15 @@ export const buildingResolvers: Resolvers = {
         name: buildingsService.getBuildingInfo(type).name,
       }));
     },
+
+    canMoveToTop: (_, args) => {
+      const {
+        villageId,
+        queueId,
+      } = args;
+
+      return new BuildingQueueService(villageId).canMoveToTop(queueId);
+    },
   },
 
   Mutation: {
@@ -128,6 +137,12 @@ export const buildingResolvers: Resolvers = {
 
       const queueManager = new BuildingQueueService(villageId);
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
+    },
+
+    moveQueuedBuildingToTop: (_, args) => {
+      const queueManager = new BuildingQueueService(args.villageId);
+      queueManager.moveToTop(args.queueId);
+      return true;
     },
   },
 

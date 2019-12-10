@@ -277,6 +277,7 @@ export type IMutation = {
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
   readonly enqueueBuilding: Scalars['Boolean'],
+  readonly moveQueuedBuildingToTop: Scalars['Boolean'],
   readonly moveQueuedBuildingDown: Scalars['Boolean'],
   readonly moveQueuedBuildingUp: Scalars['Boolean'],
   readonly updateGeneralSettings: Scalars['Boolean'],
@@ -328,6 +329,12 @@ export type IMutationDequeueBuildingAtFieldArgs = {
 
 export type IMutationEnqueueBuildingArgs = {
   input: IEnqueueBuildingInput
+};
+
+
+export type IMutationMoveQueuedBuildingToTopArgs = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
 };
 
 
@@ -405,6 +412,7 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly canMoveToTop: Scalars['Boolean'],
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -445,6 +453,12 @@ export type IQueryMaxBuildingLevelArgs = {
 
 export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type IQueryCanMoveToTopArgs = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
 };
 
 
@@ -1081,6 +1095,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   dequeueBuilding: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingArgs, 'input'>>,
   dequeueBuildingAtField: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingAtFieldArgs, 'input'>>,
   enqueueBuilding: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationEnqueueBuildingArgs, 'input'>>,
+  moveQueuedBuildingToTop: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationMoveQueuedBuildingToTopArgs, 'villageId' | 'queueId'>>,
   moveQueuedBuildingDown: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationMoveQueuedBuildingDownArgs, 'input'>>,
   moveQueuedBuildingUp: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationMoveQueuedBuildingUpArgs, 'input'>>,
   updateGeneralSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateGeneralSettingsArgs, 'settings'>>,
@@ -1107,6 +1122,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   botState: Resolver<IResolversTypes['BotState'], ParentType, ContextType>,
   heroInformation: Resolver<IResolversTypes['HeroInformation'], ParentType, ContextType>,
   logsEntries: Resolver<ReadonlyArray<IResolversTypes['LogEntry']>, ParentType, ContextType>,
+  canMoveToTop: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IQueryCanMoveToTopArgs, 'villageId' | 'queueId'>>,
   buildingQueue: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
   hero: Resolver<IResolversTypes['HeroSettings'], ParentType, ContextType>,

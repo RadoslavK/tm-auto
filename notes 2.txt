@@ -35,6 +35,8 @@ max warehouse/granary fullness when taking adventure
 
 -------------------New features-------------------
 
+dragging building in queue
+
 reset to default everything alebo ciastocne
 
 ten delay jak casto cekuje tasky doplnit do UI
@@ -65,8 +67,6 @@ market requirements - great warehouse, granary sa pocita ale neviem ci treba cel
 
 pridat tam vsetkym taskom ze sa nastavi next execution v UI.. + reset to default
 
-move to the top? v queu -> ctrl + click v originale
-
 pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
 
 allow building on free spots flag
@@ -77,6 +77,8 @@ proxy
 operation times/hours
 
 --------Quality of life-----------------
+
+queued building put as high as possible button
 
 village settings -> moznost prepinat medzi dedinami v tom dialogu
 
@@ -93,15 +95,14 @@ ked spatne ten server, nejak detekovat a dat moznost ho restartovat z klienta
 
 pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval
 
-po exceptione refreshnut stranku a pokracovat skusit..
-
-puppeteer casto pada s navigation timeout 30000.. hlavne u ensure page u toho redirect linku pre dorf3.php a potom obcas u parse active village
+po exceptione refreshnut stranku a pokracovat skusit znovu..
 
 dat do serveru check ze nebezi oproti spravnej node verzii a log
 
 nejaka retry policy ked zlyha login az po zobrazenie UI
 
 pokial spadne na strane klienta.. napr poslalo sa malo dat kvoli chybajecemu fragment importu v operacii na klientovi sa nastavi errors ale pristupne je az v onError funkcii pre konkretnu query a nie v tom apollo link errors handleri
+-https://github.com/apollographql/apollo-link/issues/793
 
 ------Bugged behavior-----------------
 

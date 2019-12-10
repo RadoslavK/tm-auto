@@ -248,6 +248,7 @@ export type IMutation = {
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
   readonly enqueueBuilding: Scalars['Boolean'],
+  readonly moveQueuedBuildingToTop: Scalars['Boolean'],
   readonly moveQueuedBuildingDown: Scalars['Boolean'],
   readonly moveQueuedBuildingUp: Scalars['Boolean'],
   readonly updateGeneralSettings: Scalars['Boolean'],
@@ -299,6 +300,12 @@ export type IMutationDequeueBuildingAtFieldArgs = {
 
 export type IMutationEnqueueBuildingArgs = {
   input: IEnqueueBuildingInput
+};
+
+
+export type IMutationMoveQueuedBuildingToTopArgs = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
 };
 
 
@@ -375,6 +382,7 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly canMoveToTop: Scalars['Boolean'],
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -415,6 +423,12 @@ export type IQueryMaxBuildingLevelArgs = {
 
 export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type IQueryCanMoveToTopArgs = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
 };
 
 
@@ -863,6 +877,14 @@ export type IMoveQueuedBuildingUpMutationVariables = {
 
 export type IMoveQueuedBuildingUpMutation = Pick<IMutation, 'moveQueuedBuildingUp'>;
 
+export type IMoveQueuedBuildingToTopMutationVariables = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
+};
+
+
+export type IMoveQueuedBuildingToTopMutation = Pick<IMutation, 'moveQueuedBuildingToTop'>;
+
 export type IGetQueuedBuildingsQueryVariables = {
   villageId: Scalars['Int']
 };
@@ -872,6 +894,14 @@ export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buil
       Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
       & { readonly cost: ICostFragment }
     )>, readonly totalCost: ICostFragment } };
+
+export type ICanMoveToTopQueryVariables = {
+  villageId: Scalars['Int'],
+  queueId: Scalars['ID']
+};
+
+
+export type ICanMoveToTopQuery = Pick<IQuery, 'canMoveToTop'>;
 
 export type IOnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['Int']

@@ -174,8 +174,8 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
 
   const preferredVillageExists = villages.some(x => x.id === preferredVillageId);
   const options = preferredVillageExists
-    ? villages
-    : [{ id: preferredVillageId || 0, name: 'Select village', isCapital: false }].concat(villages);
+    ? villages.map(village => ({ id: village.id, name: village.name }))
+    : [{ id: preferredVillageId || 0, name: 'Select village' }].concat(villages);
 
   const criteriaOptions = getAllEnumValues(AdventureCriteria);
 
