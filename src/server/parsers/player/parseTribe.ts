@@ -1,8 +1,32 @@
 import { Tribe } from '../../../_shared/types/tribe';
+import { TravianPath } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
+import { ensurePage } from '../../controller/actions/ensurePage';
+import { gameInfoService } from '../../services/gameInfoService';
 
 export const parseTribe = async (): Promise<Tribe> => {
   const page = await getPage();
+
+  if (gameInfoService.hasNewUI) {
+    //  Can be detected only from infrastructure layout
+    await ensurePage(TravianPath.InfrastructureOverview);
+
+    const className = await page.$eval('[class~="buildingSlot"]', x => x.className);
+    const match = /[^\s]*$/.exec(className);
+
+    if (!match) {
+      throw new Error('Failed to parse tribe');
+    }
+
+    switch (match[0]) {
+      case 'roman': return Tribe.Romans;
+      case 'teuton': return Tribe.Teutons;
+      case 'gaul': return Tribe.Gauls;
+      default:
+        throw new Error(`Unknown tribe found: ${match}`);
+    }
+  }
+
   const className = await page.$eval('[class*=tribe]', e => e.className);
   const match = /tribe(\d+)/.exec(className);
 
