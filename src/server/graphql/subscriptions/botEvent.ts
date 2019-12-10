@@ -14,6 +14,7 @@ export enum BotEvent {
   BotRunningChanged = 'BotRunningChanged',
   LogEntryAdded = 'LogEntryAdded',
   HeroInformationUpdated = 'HeroInformationUpdated',
+  ActiveVillageIdChanged = 'ActiveVillageIdChanged',
 
   GeneralSettingsChanged = 'GeneralSettingsChanged',
   AutoAdventureSettingsChanged = 'AutoAdventureSettingsChanged',
@@ -60,5 +61,9 @@ export type BotEventPayloads = {
   [BotEvent.AutoUnitsSettingsChanged]: {
     readonly villageId: number;
     readonly settings: AutoUnitsSettings;
+  }
+
+  [BotEvent.ActiveVillageIdChanged]: {
+    readonly villageId: number;
   }
 }

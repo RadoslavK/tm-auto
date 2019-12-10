@@ -410,6 +410,7 @@ export type IQuery = {
   readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
   readonly unitInfo: IUnitInfo,
+  readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
@@ -527,6 +528,7 @@ export type ISubscription = {
   readonly autoUnitsSettingsChanged: IAutoUnitsSettings,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
+  readonly activeVillageIdChanged: Scalars['Int'],
 };
 
 
@@ -1091,6 +1093,11 @@ export type IGetVillagesQueryVariables = {};
 
 export type IGetVillagesQuery = { readonly villages: ReadonlyArray<Pick<IVillage, 'id' | 'name' | 'isCapital'>> };
 
+export type IActiveVillageIdQueryVariables = {};
+
+
+export type IActiveVillageIdQuery = Pick<IQuery, 'activeVillageId'>;
+
 export type IUpdateVillageSubscriptionVariables = {};
 
 
@@ -1100,3 +1107,8 @@ export type IUpdateVillagesSubscriptionVariables = {};
 
 
 export type IUpdateVillagesSubscription = Pick<ISubscription, 'updateVillages'>;
+
+export type IActiveVillageIdChangedSubscriptionVariables = {};
+
+
+export type IActiveVillageIdChangedSubscription = Pick<ISubscription, 'activeVillageIdChanged'>;

@@ -5,6 +5,8 @@ import { Resolvers } from './_types';
 
 export const villageResolvers: Resolvers = {
   Query: {
+    activeVillageId: () => accountContext.villageService.currentVillageId,
+
     village: (_, args) => accountContext.villageService.village(args.villageId),
 
     villages: () => accountContext.villageService.allVillages(),
@@ -17,6 +19,10 @@ export const villageResolvers: Resolvers = {
 
     updateVillages: subscribeToEvent(BotEvent.VillagesUpdated, {
       resolve: () => true,
+    }),
+
+    activeVillageIdChanged: subscribeToEvent(BotEvent.ActiveVillageIdChanged, {
+      resolve: p => p.villageId,
     }),
   },
 };

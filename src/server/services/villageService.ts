@@ -1,10 +1,22 @@
 import { Coords } from '../_models/coords';
 import { Village } from '../_models/village/village';
+import { BotEvent } from '../graphql/subscriptions/botEvent';
+import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
 export class VillageService {
-  public currentVillageId: number;
+  private _currentVillageId: number;
+
+  get currentVillageId(): number {
+    return this._currentVillageId;
+  }
+
+  set currentVillageId(villageId: number) {
+    this._currentVillageId = villageId;
+    publishPayloadEvent(BotEvent.ActiveVillageIdChanged, { villageId });
+  }
+
   private readonly m_villages: Record<string, Village> = {};
 
   public allVillages = (): readonly Village[] => Object.values(this.m_villages);

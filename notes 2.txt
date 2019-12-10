@@ -66,15 +66,11 @@ village settings -> moznost prepinat medzi dedinami v tom dialogu
 
 parse account from textfield and extra url from any travian valid url
 
-ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potom
-
-pridat indikator aktualnej dediny
+ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potoms
 
 ked sa prepne dedina ostat v tej istej casti UI
 
 pouzit nove trav ikonky na suroviny a  tak
-
-na spotoch aky je v poradi pokial je v queue
 
 -------Exception handling-----
 

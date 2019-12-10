@@ -18,6 +18,7 @@ type Village {
 }
 
 extend type Query {
+    activeVillageId: Int!
     village(villageId: Int!): Village
     villages: [Village!]!,
 }
@@ -25,4 +26,5 @@ extend type Query {
 extend type Subscription {
     updateVillage: Boolean!
     updateVillages: Boolean!
+    activeVillageIdChanged: Int!
 }

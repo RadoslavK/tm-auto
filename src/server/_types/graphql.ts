@@ -440,6 +440,7 @@ export type IQuery = {
   readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
   readonly unitInfo: IUnitInfo,
+  readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
 };
@@ -561,6 +562,7 @@ export type ISubscription = {
   readonly autoUnitsSettingsChanged: IAutoUnitsSettings,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
+  readonly activeVillageIdChanged: Scalars['Int'],
 };
 
 
@@ -1134,6 +1136,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   autoBuildSettings: Resolver<IResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<IQueryAutoBuildSettingsArgs, 'villageId'>>,
   autoUnitsSettings: Resolver<IResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<IQueryAutoUnitsSettingsArgs, 'villageId'>>,
   unitInfo: Resolver<IResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<IQueryUnitInfoArgs, 'index'>>,
+  activeVillageId: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   village: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType, RequireFields<IQueryVillageArgs, 'villageId'>>,
   villages: Resolver<ReadonlyArray<IResolversTypes['Village']>, ParentType, ContextType>,
 };
@@ -1177,6 +1180,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   autoUnitsSettingsChanged: SubscriptionResolver<IResolversTypes['AutoUnitsSettings'], "autoUnitsSettingsChanged", ParentType, ContextType, RequireFields<ISubscriptionAutoUnitsSettingsChangedArgs, 'villageId'>>,
   updateVillage: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
   updateVillages: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
+  activeVillageIdChanged: SubscriptionResolver<IResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>,
 };
 
 export type ITextLogEntryContentResolvers<ContextType = any, ParentType extends IResolversParentTypes['TextLogEntryContent'] = IResolversParentTypes['TextLogEntryContent']> = {

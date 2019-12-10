@@ -153,8 +153,10 @@ declare module '*/graphql_operations/village.graphql' {
   const defaultDocument: DocumentNode;
   export const GetVillageById: DocumentNode;
 export const GetVillages: DocumentNode;
+export const ActiveVillageId: DocumentNode;
 export const UpdateVillage: DocumentNode;
 export const UpdateVillages: DocumentNode;
+export const ActiveVillageIdChanged: DocumentNode;
 
   export default defaultDocument;
 }
