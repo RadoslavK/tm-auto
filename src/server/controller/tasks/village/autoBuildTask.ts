@@ -178,7 +178,7 @@ export class AutoBuildTask implements IBotTask {
         await ensurePage(path);
       }
 
-      const submit = await page.$(`[class="green new"][onclick*="a=${queuedBuilding.type}"]`);
+      const submit = await page.$(`.green.new[onclick*="a=${queuedBuilding.type}"]`);
 
       if (!submit) {
         return;
@@ -189,7 +189,7 @@ export class AutoBuildTask implements IBotTask {
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
       ]);
     } else {
-      const submit = await page.$('[class="green build"]');
+      const submit = await page.$('.green.build');
 
       if (!submit) {
         return;
