@@ -1075,7 +1075,10 @@ export type IGetVillageByIdQuery = { readonly village: Maybe<(
 export type IGetVillagesQueryVariables = {};
 
 
-export type IGetVillagesQuery = { readonly villages: ReadonlyArray<Pick<IVillage, 'id' | 'name' | 'isCapital'>> };
+export type IGetVillagesQuery = { readonly villages: ReadonlyArray<(
+    Pick<IVillage, 'id' | 'name' | 'isCapital'>
+    & { readonly coords: ICoordsFragment }
+  )> };
 
 export type IActiveVillageIdQueryVariables = {};
 

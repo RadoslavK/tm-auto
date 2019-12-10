@@ -28,6 +28,7 @@ import {
   IGetVillagesQuery,
   IUpdateVillagesSubscription,
 } from '../../../_types/graphql';
+import { formatVillageName } from '../../utils/formatVillageName';
 import {
   ISideMenuContext,
   SideMenuContext,
@@ -81,7 +82,7 @@ export const Villages: React.FC = () => {
         }
 
         return {
-          text: `${village.name}${modifiers.length ? ` (${modifiers.join(',')})` : ''}`,
+          text: `${formatVillageName(village)}${modifiers.length ? ` (${modifiers.join(',')})` : ''}`,
           path: `${match.url}/${village.id}`,
         };
       })

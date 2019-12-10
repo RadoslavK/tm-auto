@@ -114,8 +114,6 @@ aj ostatne settingy updatovat ciastocne a requestovat ked sa da
 
 -----------UX-------------------------------------
 
-ukazovat aj village coords v sidemenu dedin
-
 sidemenu nech si handluju tie komponenty sami, nebude tam context podpora.. takze pre villages to prerobit hned
 
 namiesto allow checkboxu dat nejaky toggle - enable/disable

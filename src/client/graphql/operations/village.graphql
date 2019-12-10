@@ -26,6 +26,9 @@ query GetVillages {
     villages {
         id
         name
+        coords {
+            ...Coords
+        }
         isCapital
     }
 }

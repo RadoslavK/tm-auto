@@ -8,6 +8,7 @@ import {
   ILogEntryFragment,
   ITextLogEntryContent,
 } from '../../../_types/graphql';
+import { formatVillageName } from '../../utils/formatVillageName';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
 import { TextLogContent } from './entries/TextLogContent';
@@ -70,7 +71,7 @@ export const LogEntry: React.FC<IProps> = (props) => {
 
     return (
       <Link to={`/villages/${logEntry.village.id}`} className={classes.village}>
-        {logEntry.village.name} [{logEntry.village.coords.x}|{logEntry.village.coords.y}]
+        {formatVillageName(logEntry.village)}
       </Link>
     );
   };
