@@ -44,8 +44,15 @@ class AccountService {
   public createAccount = async (args: IMutationCreateAccountArgs): Promise<IUserAccount> => {
     const id = uuid.v4();
 
+    const correctedServerMatch = /(.*travian.com)\/?/.exec(args.account.server);
+
+    if (!correctedServerMatch) {
+      throw new Error(`Invalid server url: ${args.account.server}`);
+    }
+
     const newAccount: IUserAccount = {
       ...args.account,
+      server: correctedServerMatch[1],
       id,
     };
 

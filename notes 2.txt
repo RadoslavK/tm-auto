@@ -64,11 +64,9 @@ operation times/hours
 
 village settings -> moznost prepinat medzi dedinami v tom dialogu
 
-parse account from textfield and extra url from any travian valid url
+ked sa prepne dedina ostat v tej istej casti UI
 
 ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potoms
-
-ked sa prepne dedina ostat v tej istej casti UI
 
 pouzit nove trav ikonky na suroviny a  tak
 
