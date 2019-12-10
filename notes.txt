@@ -11,3 +11,7 @@ dragging?
 
 roman - show double queue.. bez operacii, iba delete.
 ..toto premyslet, mozno queue moze byt rozdelena na 2 stlpce ale pokial to ma prerekvizitu tak to bude stale pod nou
+
+... podobne bolo
+2 building queues pre rimana
+pozor na kontrolu toho co je mozne do queue vlozit lebo treba kontrolovat aj suroviny aj budovy naraz

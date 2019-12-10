@@ -513,6 +513,7 @@ export type IQueuedBuilding = {
   readonly type: Scalars['Int'],
   readonly queueId: Scalars['ID'],
   readonly cost: ICost,
+  readonly fieldId: Scalars['Int'],
 };
 
 export type IQueuedBuildingManipulationInput = {
@@ -1145,6 +1146,7 @@ export type IQueuedBuildingResolvers<ContextType = any, ParentType extends IReso
   type: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   queueId: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
   cost: Resolver<IResolversTypes['Cost'], ParentType, ContextType>,
+  fieldId: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 
 export type IResourceFieldsResolvers<ContextType = any, ParentType extends IResolversParentTypes['ResourceFields'] = IResolversParentTypes['ResourceFields']> = {

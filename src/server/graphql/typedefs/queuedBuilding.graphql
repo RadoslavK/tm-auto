@@ -6,6 +6,7 @@ type QueuedBuilding {
     type: Int!
     queueId: ID!
     cost: Cost!
+    fieldId: Int!
 }
 
 type BuildingQueue {

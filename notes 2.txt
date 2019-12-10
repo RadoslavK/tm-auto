@@ -17,6 +17,8 @@ do troops info pridat carry capacity, defense, move speed
 building mode templates
 --vytvorit sablonu, podobne ako v secondvillagebot su tie Level podla toho stava budovy
 
+building queue... umoznit spojit budovy dokopy a bude to ukazovat totalny cas, res atd.. tato skupina sa bude dat odstranit tiez alebo rozbalit.
+
 -------------------New features-------------------
 
 ten delay jak casto cekuje tasky doplnit do UI
@@ -73,8 +75,6 @@ ked sa prepne dedina ostat v tej istej casti UI
 pouzit nove trav ikonky na suroviny a  tak
 
 na spotoch aky je v poradi pokial je v queue
-
-v queue ukazovat na akom indexe je ta konkretna budova
 
 pamatat si posledne zvoleny ucet
 

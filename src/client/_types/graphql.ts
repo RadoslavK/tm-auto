@@ -482,6 +482,7 @@ export type IQueuedBuilding = {
   readonly type: Scalars['Int'],
   readonly queueId: Scalars['ID'],
   readonly cost: ICost,
+  readonly fieldId: Scalars['Int'],
 };
 
 export type IQueuedBuildingManipulationInput = {
@@ -881,7 +882,7 @@ export type IGetQueuedBuildingsQueryVariables = {
 
 
 export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buildings: ReadonlyArray<(
-      Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId'>
+      Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
       & { readonly cost: ICostFragmentFragment }
     )>, readonly totalCost: ICostFragmentFragment } };
 

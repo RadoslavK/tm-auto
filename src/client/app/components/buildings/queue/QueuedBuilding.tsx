@@ -29,6 +29,11 @@ const useStyles = makeStyles<unknown, IProps>({
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
   }),
+  imageWithFieldId: {
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'center',
+  },
   info: {
     display: 'flex',
     flexDirection: 'column',
@@ -47,7 +52,10 @@ export const QueuedBuilding: React.FC<IProps> = (props) => {
   return (
     <div className={classes.root}>
       <QueuedBuildingActions className={classes.actions} building={building} />
-      <div className={classes.buildingImage} />
+      <div className={classes.imageWithFieldId}>
+        <div className={classes.buildingImage} />
+        <div>[{building.fieldId}]</div>
+      </div>
       <div className={classes.info}>
         <div>{building.name} Level {building.level}</div>
         <Cost cost={building.cost} />
