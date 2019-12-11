@@ -1,0 +1,25 @@
+#import "./misc.graphql"
+
+query NextTaskExecution($task: TaskType!) {
+    nextTaskExecution(task: $task) {
+        ...Timestamp
+    }
+}
+
+query NextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!) {
+    nextVillageTaskExecution(villageId: $villageId, task: $task) {
+        ...Timestamp
+    }
+}
+
+subscription NextTaskExecutionChanged($task: TaskType!) {
+    nextTaskExecutionChanged(task: $task) {
+        ...Timestamp
+    }
+}
+
+subscription NextVillageTaskExecutionChanged($villageId: Int!, $task: VillageTaskType!) {
+    nextVillageTaskExecutionChanged(villageId: $villageId, task: $task) {
+        ...Timestamp
+    }
+}

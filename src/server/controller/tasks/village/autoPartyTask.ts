@@ -1,10 +1,11 @@
 import {
   BotTaskResult,
-  IBotTask,
+  IVillageBotTask,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
 import { Village } from '../../../_models/village/village';
+import { VillageTaskType } from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
@@ -12,7 +13,9 @@ import { partiesInfo } from '../../../constants/partiesInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 
-export class AutoPartyTask implements IBotTask {
+export class AutoPartyTask implements IVillageBotTask {
+  public readonly type: VillageTaskType = VillageTaskType.AutoParty;
+
   private readonly m_village: Village;
 
   constructor(village: Village) {

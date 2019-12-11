@@ -1,12 +1,9 @@
-import {
-  BotTaskResult,
-  IBotTask,
-} from '../_types';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
-import { BuildingType } from '../../../../_shared/types/buildingType';
+import { VillageTaskType } from '../../../_types/graphql';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
@@ -18,8 +15,14 @@ import {
 } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { updateUnitsInformation } from '../../updateUnitsInformation';
+import {
+  BotTaskResult,
+  IVillageBotTask,
+} from '../_types';
 
-export class AutoUnitsTask implements IBotTask {
+export class AutoUnitsTask implements IVillageBotTask {
+  public readonly type: VillageTaskType = VillageTaskType.AutoUnits;
+
   private readonly m_village: Village;
   private readonly m_units: Units;
 

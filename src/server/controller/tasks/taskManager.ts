@@ -16,18 +16,23 @@ import { ensureVillageSelected } from '../actions/ensureVillageSelected';
 import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { updateResources } from '../actions/village/updateResources';
-import { IBotTask } from './_types';
+import {
+  IBotTask,
+  IVillageBotTask,
+} from './_types';
 import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';
 import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
 
 class BotTaskEngine {
-  private readonly m_task: IBotTask;
+  private readonly m_task: IBotTask | IVillageBotTask;
   private m_timeOfNextExecution: Date = new Date();
+  private m_onNextExecutionChanged: (nextExecution: Date) => void;
 
-  constructor(task: IBotTask) {
+  constructor(task: IBotTask | IVillageBotTask, onNextExecutionChanged: (nextExecution: Date) => void) {
     this.m_task = task;
+    this.m_onNextExecutionChanged = onNextExecutionChanged;
   }
 
   public isExecutionReady = (): boolean => this.m_task.allowExecution()
@@ -49,16 +54,23 @@ class BotTaskEngine {
 
     this.m_timeOfNextExecution = timeOfStart;
     this.m_timeOfNextExecution.setSeconds(this.m_timeOfNextExecution.getSeconds() + delay);
+
+    this.m_onNextExecutionChanged(this.m_timeOfNextExecution);
   }
 }
 
 class VillageBotTasksEngine {
   private readonly m_tasks: readonly BotTaskEngine[];
 
-  constructor(village: Village, tasks: { new(village: Village): IBotTask }[]) {
+  constructor(village: Village, tasks: { new(village: Village): IVillageBotTask }[]) {
     this.m_tasks = tasks.map(Task => {
       const task = new Task(village);
-      return new BotTaskEngine(task);
+      return new BotTaskEngine(
+        task,
+        nextExecution => {
+          accountContext.nextExecutionService.setForVillage(village.id, task.type, nextExecution);
+        },
+      );
     });
   }
 
@@ -73,12 +85,24 @@ class VillageBotTasksEngine {
 
 export class TaskManager {
   private readonly m_generalTasks: readonly BotTaskEngine[];
-  private readonly m_villageTasks: Record<number, VillageBotTasksEngine> = {};
+  //  special handling
+  private readonly m_autoAdventureTask: BotTaskEngine;
+  private readonly m_villageTasks: Record<number, VillageBotTasksEngine>;
   private readonly m_finalTasks: readonly BotTaskEngine[];
 
   constructor() {
     this.m_generalTasks = [];
     this.m_finalTasks = [];
+    this.m_villageTasks = {};
+
+    const autoAdventureTask = new AutoAdventureTask();
+
+    this.m_autoAdventureTask = new BotTaskEngine(
+      autoAdventureTask,
+      nextExecution => {
+        accountContext.nextExecutionService.set(autoAdventureTask.type, nextExecution);
+      },
+    );
   }
 
   public execute = async (): Promise<void> => {
@@ -114,7 +138,6 @@ export class TaskManager {
 
       if (!taskEngine) {
         taskEngine = new VillageBotTasksEngine(village, [
-          AutoAdventureTask,
           AutoPartyTask,
           //  TODO: autobuild storage, mozno spojit s autobuildom
           // AutoBuildStorage,
@@ -125,7 +148,7 @@ export class TaskManager {
         this.m_villageTasks[village.id] = taskEngine;
       }
 
-      if (!taskEngine.isExecutionReady()) {
+      if (!this.m_autoAdventureTask.isExecutionReady() && !taskEngine.isExecutionReady()) {
         continue;
       }
 
@@ -133,6 +156,8 @@ export class TaskManager {
 
       await updateResources();
       await updateBuildings();
+
+      await this.m_autoAdventureTask.execute();
 
       await taskEngine.execute();
 

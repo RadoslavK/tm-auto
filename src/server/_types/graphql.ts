@@ -412,6 +412,8 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly nextTaskExecution: ITimestamp,
+  readonly nextVillageTaskExecution: ITimestamp,
   readonly canMoveToTop: Scalars['Boolean'],
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
@@ -453,6 +455,17 @@ export type IQueryMaxBuildingLevelArgs = {
 
 export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type IQueryNextTaskExecutionArgs = {
+  task: TaskType
+};
+
+
+export type IQueryNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -540,6 +553,8 @@ export type ISubscription = {
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly heroInformationUpdated: IHeroInformation,
   readonly onLogEntryAdded: ILogEntry,
+  readonly nextTaskExecutionChanged: ITimestamp,
+  readonly nextVillageTaskExecutionChanged: ITimestamp,
   readonly onQueueUpdated: Scalars['Boolean'],
   readonly generalSettingsChanged: IGeneralSettings,
   readonly autoAdventureSettingsChanged: IAutoAdventureSettings,
@@ -554,6 +569,17 @@ export type ISubscription = {
 
 export type ISubscriptionBuildingsUpdatedArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionNextTaskExecutionChangedArgs = {
+  task: TaskType
+};
+
+
+export type ISubscriptionNextVillageTaskExecutionChangedArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -575,6 +601,10 @@ export type ISubscriptionAutoBuildSettingsChangedArgs = {
 export type ISubscriptionAutoUnitsSettingsChangedArgs = {
   villageId: Scalars['Int']
 };
+
+export enum TaskType {
+  AutoAdventure = 'AutoAdventure'
+}
 
 export type ITextLogEntryContent = {
   readonly __typename?: 'TextLogEntryContent',
@@ -700,6 +730,12 @@ export enum VillageSettingsType {
   AutoUnits = 'AutoUnits'
 }
 
+export enum VillageTaskType {
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
+}
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -801,6 +837,8 @@ export type IResolversTypes = {
   AutoBuildLogEntryContentPayload: ResolverTypeWrapper<IAutoBuildLogEntryContentPayload>,
   AutoUnitsLogEntryContent: ResolverTypeWrapper<IAutoUnitsLogEntryContent>,
   AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<IAutoUnitsLogEntryContentPayload>,
+  TaskType: TaskType,
+  VillageTaskType: VillageTaskType,
   BuildingQueue: ResolverTypeWrapper<IBuildingQueue>,
   QueuedBuilding: ResolverTypeWrapper<IQueuedBuilding>,
   Cost: ResolverTypeWrapper<ICost>,
@@ -874,6 +912,8 @@ export type IResolversParentTypes = {
   AutoBuildLogEntryContentPayload: IAutoBuildLogEntryContentPayload,
   AutoUnitsLogEntryContent: IAutoUnitsLogEntryContent,
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayload,
+  TaskType: TaskType,
+  VillageTaskType: VillageTaskType,
   BuildingQueue: IBuildingQueue,
   QueuedBuilding: IQueuedBuilding,
   Cost: ICost,
@@ -1122,6 +1162,8 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   botState: Resolver<IResolversTypes['BotState'], ParentType, ContextType>,
   heroInformation: Resolver<IResolversTypes['HeroInformation'], ParentType, ContextType>,
   logsEntries: Resolver<ReadonlyArray<IResolversTypes['LogEntry']>, ParentType, ContextType>,
+  nextTaskExecution: Resolver<IResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<IQueryNextTaskExecutionArgs, 'task'>>,
+  nextVillageTaskExecution: Resolver<IResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<IQueryNextVillageTaskExecutionArgs, 'villageId' | 'task'>>,
   canMoveToTop: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IQueryCanMoveToTopArgs, 'villageId' | 'queueId'>>,
   buildingQueue: Resolver<IResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<IQueryBuildingQueueArgs, 'villageId'>>,
   generalSettings: Resolver<IResolversTypes['GeneralSettings'], ParentType, ContextType>,
@@ -1166,6 +1208,8 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   onBotRunningChanged: SubscriptionResolver<IResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>,
   heroInformationUpdated: SubscriptionResolver<IResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>,
   onLogEntryAdded: SubscriptionResolver<IResolversTypes['LogEntry'], "onLogEntryAdded", ParentType, ContextType>,
+  nextTaskExecutionChanged: SubscriptionResolver<IResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<ISubscriptionNextTaskExecutionChangedArgs, 'task'>>,
+  nextVillageTaskExecutionChanged: SubscriptionResolver<IResolversTypes['Timestamp'], "nextVillageTaskExecutionChanged", ParentType, ContextType, RequireFields<ISubscriptionNextVillageTaskExecutionChangedArgs, 'villageId' | 'task'>>,
   onQueueUpdated: SubscriptionResolver<IResolversTypes['Boolean'], "onQueueUpdated", ParentType, ContextType, RequireFields<ISubscriptionOnQueueUpdatedArgs, 'villageId'>>,
   generalSettingsChanged: SubscriptionResolver<IResolversTypes['GeneralSettings'], "generalSettingsChanged", ParentType, ContextType>,
   autoAdventureSettingsChanged: SubscriptionResolver<IResolversTypes['AutoAdventureSettings'], "autoAdventureSettingsChanged", ParentType, ContextType>,

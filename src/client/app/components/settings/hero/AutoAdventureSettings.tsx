@@ -16,6 +16,7 @@ import {
 } from '*/graphql_operations/settings.graphql';
 import { GetVillages } from '*/graphql_operations/village.graphql';
 
+import { NextTaskExecution } from '../../_shared/NextTaskExecution';
 import {
   AdventureCriteria,
   IAutoAdventureSettings,
@@ -28,6 +29,7 @@ import {
   IUpdateAutoAdventureSettingsMutation,
   IUpdateAutoAdventureSettingsMutationVariables,
   SettingsType,
+  TaskType,
 } from '../../../../_types/graphql';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { CoolDown } from '../../controls/Cooldown';
@@ -182,6 +184,8 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
   return (
     <div>
       <h2>AutoAdventure</h2>
+
+      <NextTaskExecution task={TaskType.AutoAdventure} />
 
       <Button
         onClick={() => resetSettings()}

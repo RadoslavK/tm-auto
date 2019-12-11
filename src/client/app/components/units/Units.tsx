@@ -4,9 +4,11 @@ import React from 'react';
 
 import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
 
+import { NextVillageTaskExecution } from '../_shared/NextVillageTaskExecution';
 import {
   IGetAutoUnitsSettingsQuery,
   IGetAutoUnitsSettingsQueryVariables,
+  VillageTaskType,
 } from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { useVillageContext } from '../../hooks/useVillageContext';
@@ -25,11 +27,11 @@ const useAutoUnitsSettings = () => {
 };
 
 const useStyles = makeStyles({
-  root: {
+  buildings: {
     display: 'flex',
     flexDirection: 'row',
   },
-  section: {
+  building: {
     flex: '1',
   },
 });
@@ -44,27 +46,30 @@ export const Units: React.FC = () => {
   }
 
   return (
-    <div className={classes.root}>
-      <UnitBuildingSection
-        className={classes.section}
-        settings={settings.barracks}
-        buildingType={BuildingType.Barracks}
-      />
-      <UnitBuildingSection
-        className={classes.section}
-        settings={settings.stable}
-        buildingType={BuildingType.Stable}
-      />
-      <UnitBuildingSection
-        className={classes.section}
-        settings={settings.workshop}
-        buildingType={BuildingType.Workshop}
-      />
-      <UnitBuildingSection
-        className={classes.section}
-        settings={settings.residence}
-        buildingType={BuildingType.Residence}
-      />
+    <div>
+      <NextVillageTaskExecution task={VillageTaskType.AutoUnits} />
+      <div className={classes.buildings}>
+        <UnitBuildingSection
+          className={classes.building}
+          settings={settings.barracks}
+          buildingType={BuildingType.Barracks}
+        />
+        <UnitBuildingSection
+          className={classes.building}
+          settings={settings.stable}
+          buildingType={BuildingType.Stable}
+        />
+        <UnitBuildingSection
+          className={classes.building}
+          settings={settings.workshop}
+          buildingType={BuildingType.Workshop}
+        />
+        <UnitBuildingSection
+          className={classes.building}
+          settings={settings.residence}
+          buildingType={BuildingType.Residence}
+        />
+      </div>
     </div>
   );
 };

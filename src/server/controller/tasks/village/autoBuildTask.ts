@@ -1,6 +1,6 @@
 import {
   BotTaskResult,
-  IBotTask,
+  IVillageBotTask,
 } from '../_types';
 import { BuildingCategory } from '../../../_enums/buildingCategory';
 import { BuildingSpotType } from '../../../_enums/buildingSpotType';
@@ -12,6 +12,7 @@ import { Duration } from '../../../_models/duration';
 import { Resources } from '../../../_models/misc/resources';
 import { AutoBuildSettings } from '../../../_models/settings/tasks/autoBuildSettings';
 import { Village } from '../../../_models/village/village';
+import { VillageTaskType } from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { Tribe } from '../../../../_shared/types/tribe';
 import { accountContext } from '../../../accountContext';
@@ -27,7 +28,9 @@ import {
 } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 
-export class AutoBuildTask implements IBotTask {
+export class AutoBuildTask implements IVillageBotTask {
+  public readonly type: VillageTaskType = VillageTaskType.AutoBuild;
+
   private readonly m_village: Village;
   private readonly m_buildings: Buildings;
 
@@ -81,10 +84,10 @@ export class AutoBuildTask implements IBotTask {
     }
 
     // seconds
-    const finishedIn = finishedAt && Math.floor(((new Date() as any) - (finishedAt as any)) / 1000);
+    const finishedIn = finishedAt && Math.max(0, Math.floor(((finishedAt as any) - (new Date() as any)) / 1000));
 
     return {
-      nextCoolDown: finishedIn ? CoolDown.fromDuration(Duration.fromSeconds(finishedIn)) : null,
+      nextCoolDown: finishedIn === undefined ? null : CoolDown.fromDuration(Duration.fromSeconds(finishedIn)),
     };
   };
 

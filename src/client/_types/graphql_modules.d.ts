@@ -88,6 +88,18 @@ export const Duration: DocumentNode;
 }
     
 
+declare module '*/graphql_operations/nextTaskExecution.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const NextTaskExecution: DocumentNode;
+export const NextVillageTaskExecution: DocumentNode;
+export const NextTaskExecutionChanged: DocumentNode;
+export const NextVillageTaskExecutionChanged: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/graphql_operations/queuedBuilding.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

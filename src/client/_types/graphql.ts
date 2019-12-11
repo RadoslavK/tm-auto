@@ -382,6 +382,8 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly nextTaskExecution: ITimestamp,
+  readonly nextVillageTaskExecution: ITimestamp,
   readonly canMoveToTop: Scalars['Boolean'],
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
@@ -423,6 +425,17 @@ export type IQueryMaxBuildingLevelArgs = {
 
 export type IQueryBuildingsInProgressArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type IQueryNextTaskExecutionArgs = {
+  task: TaskType
+};
+
+
+export type IQueryNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -506,6 +519,8 @@ export type ISubscription = {
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly heroInformationUpdated: IHeroInformation,
   readonly onLogEntryAdded: ILogEntry,
+  readonly nextTaskExecutionChanged: ITimestamp,
+  readonly nextVillageTaskExecutionChanged: ITimestamp,
   readonly onQueueUpdated: Scalars['Boolean'],
   readonly generalSettingsChanged: IGeneralSettings,
   readonly autoAdventureSettingsChanged: IAutoAdventureSettings,
@@ -520,6 +535,17 @@ export type ISubscription = {
 
 export type ISubscriptionBuildingsUpdatedArgs = {
   villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionNextTaskExecutionChangedArgs = {
+  task: TaskType
+};
+
+
+export type ISubscriptionNextVillageTaskExecutionChangedArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -541,6 +567,10 @@ export type ISubscriptionAutoBuildSettingsChangedArgs = {
 export type ISubscriptionAutoUnitsSettingsChangedArgs = {
   villageId: Scalars['Int']
 };
+
+export enum TaskType {
+  AutoAdventure = 'AutoAdventure'
+}
 
 export type ITextLogEntryContent = {
   readonly text: ITextLogEntryContentPayload,
@@ -655,6 +685,12 @@ export enum VillageSettingsType {
   General = 'General',
   AutoBuild = 'AutoBuild',
   AutoUnits = 'AutoUnits'
+}
+
+export enum VillageTaskType {
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
 }
 
 export type IUserAccountFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
@@ -834,6 +870,36 @@ export type IVillageFragment = (
 );
 
 export type IDurationFragment = Pick<IDuration, 'days' | 'hours' | 'minutes' | 'seconds'>;
+
+export type INextTaskExecutionQueryVariables = {
+  task: TaskType
+};
+
+
+export type INextTaskExecutionQuery = { readonly nextTaskExecution: ITimestampFragment };
+
+export type INextVillageTaskExecutionQueryVariables = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
+};
+
+
+export type INextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: ITimestampFragment };
+
+export type INextTaskExecutionChangedSubscriptionVariables = {
+  task: TaskType
+};
+
+
+export type INextTaskExecutionChangedSubscription = { readonly nextTaskExecutionChanged: ITimestampFragment };
+
+export type INextVillageTaskExecutionChangedSubscriptionVariables = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
+};
+
+
+export type INextVillageTaskExecutionChangedSubscription = { readonly nextVillageTaskExecutionChanged: ITimestampFragment };
 
 export type IClearQueueMutationVariables = {
   villageId: Scalars['Int']

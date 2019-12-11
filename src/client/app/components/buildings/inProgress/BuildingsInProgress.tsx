@@ -17,7 +17,7 @@ import { useVillageContext } from '../../../hooks/useVillageContext';
 import { BuildingInProgress } from './BuildingInProgress';
 
 interface IProps {
-  readonly className: string;
+  readonly className?: string;
 }
 
 export const BuildingsInProgress: React.FC<IProps> = (props) => {

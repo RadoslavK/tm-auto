@@ -6,6 +6,7 @@ import { buildingResolvers } from './buildingResolvers';
 import { controllerResolvers } from './controllerResolvers';
 import { heroResolvers } from './heroResolvers';
 import { logsResolvers } from './logsResolvers';
+import { nextExecutionResolvers } from './nextExecutionResolvers';
 import { settingsResolvers } from './settingsResolvers';
 import { unitResolvers } from './unitResolvers';
 import { villageResolvers } from './villageResolvers';
@@ -19,4 +20,5 @@ export const resolvers = mergeResolvers([
   accountResolvers as IResolvers,
   logsResolvers as IResolvers,
   unitResolvers as IResolvers,
+  nextExecutionResolvers as IResolvers,
 ]);

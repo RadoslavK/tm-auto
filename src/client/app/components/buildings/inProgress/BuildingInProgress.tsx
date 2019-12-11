@@ -1,8 +1,5 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React from 'react';
 
 import {
   IBuildingInProgress,
@@ -10,6 +7,7 @@ import {
 } from '../../../../_types/graphql';
 import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { imageLinks } from '../../../../utils/imageLinks';
+import { useCountdown } from '../../../hooks/useCountdown';
 
 interface IProps {
   readonly building: IBuildingInProgress;
@@ -53,27 +51,8 @@ export const BuildingInProgress: React.FC<IProps> = (props) => {
     building,
   } = props;
 
-  const [timer, setTimer] = useState(getInitialTimer(building.finishedAt));
   const classes = useStyles(props);
-
-  useEffect(() => {
-    setTimer(getInitialTimer(building.finishedAt));
-  }, [building]);
-
-  useEffect(() => {
-    const intervalId = setInterval(
-      () => {
-        if (timer <= 0) {
-          clearInterval(intervalId);
-        } else {
-          setTimer(prevTimer => prevTimer - 1);
-        }
-      },
-      1000,
-    );
-
-    return () => clearInterval(intervalId);
-  }, [building.finishedAt, timer]);
+  const timer = useCountdown(getInitialTimer(building.finishedAt));
 
   const time = formatTimeFromSeconds(timer);
 

@@ -4,7 +4,12 @@ import { GeneralVillageSettings } from '../../_models/settings/generalVillageSet
 import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
-import { ILogEntry } from '../../_types/graphql';
+import {
+  ILogEntry,
+  ITimestamp,
+  TaskType,
+  VillageTaskType,
+} from '../../_types/graphql';
 
 export enum BotEvent {
   BuildingsUpdated = 'BuildingsUpdated',
@@ -20,7 +25,10 @@ export enum BotEvent {
   AutoAdventureSettingsChanged = 'AutoAdventureSettingsChanged',
   GeneralVillageSettingsChanged = 'GeneralVillageSettingsChanged',
   AutoBuildSettingsChanged = 'AutoBuildSettingsChanged',
-  AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged'
+  AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged',
+
+  NextTaskExecutionChanged = 'NextTaskExecutionChanged',
+  NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
 }
 
 export type BotEventPayloads = {
@@ -65,5 +73,16 @@ export type BotEventPayloads = {
 
   [BotEvent.ActiveVillageIdChanged]: {
     readonly villageId: number;
+  }
+
+  [BotEvent.NextTaskExecutionChanged]: {
+    readonly task: TaskType;
+    readonly nextExecution: ITimestamp;
+  }
+
+  [BotEvent.NextVillageTaskExecutionChanged]: {
+    readonly villageId: number;
+    readonly task: VillageTaskType;
+    readonly nextExecution: ITimestamp;
   }
 }

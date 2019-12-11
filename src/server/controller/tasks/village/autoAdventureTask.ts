@@ -1,4 +1,3 @@
-import { gameInfoService } from '../../../services/gameInfoService';
 import {
   BotTaskResult,
   IBotTask,
@@ -6,10 +5,14 @@ import {
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
 import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
-import { AdventureCriteria } from '../../../_types/graphql';
+import {
+  AdventureCriteria,
+  TaskType,
+} from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
+import { gameInfoService } from '../../../services/gameInfoService';
 import {
   getWithMaximum,
   getWithMinimum,
@@ -17,6 +20,8 @@ import {
 import { randomElement } from '../../../utils/randomElement';
 
 export class AutoAdventureTask implements IBotTask {
+  public readonly type: TaskType.AutoAdventure;
+
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
 
   public allowExecution = (): boolean => {
