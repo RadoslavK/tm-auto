@@ -18,7 +18,7 @@ import {
   INextVillageTaskExecutionQuery,
   INextVillageTaskExecutionQueryVariables,
   VillageTaskType,
-} from '../../_types/graphql';
+} from '../../../_types/graphql';
 
 export const useNextVillageTaskExecution = (villageId: number, task: VillageTaskType): number => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);

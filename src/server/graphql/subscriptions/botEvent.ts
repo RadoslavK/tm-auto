@@ -6,7 +6,6 @@ import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSetting
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   ILogEntry,
-  ITimestamp,
   TaskType,
   VillageTaskType,
 } from '../../_types/graphql';
@@ -77,12 +76,12 @@ export type BotEventPayloads = {
 
   [BotEvent.NextTaskExecutionChanged]: {
     readonly task: TaskType;
-    readonly nextExecution: ITimestamp;
+    readonly nextExecution: Date;
   }
 
   [BotEvent.NextVillageTaskExecutionChanged]: {
     readonly villageId: number;
     readonly task: VillageTaskType;
-    readonly nextExecution: ITimestamp;
+    readonly nextExecution: Date;
   }
 }

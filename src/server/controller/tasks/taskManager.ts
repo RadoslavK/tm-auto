@@ -27,16 +27,18 @@ import { AutoUnitsTask } from './village/autoUnitsTask';
 
 class BotTaskEngine {
   private readonly m_task: IBotTask | IVillageBotTask;
-  private m_timeOfNextExecution: Date = new Date();
-  private m_onNextExecutionChanged: (nextExecution: Date) => void;
+  private readonly m_setNextExecution: (nextExecution: Date) => void;
 
-  constructor(task: IBotTask | IVillageBotTask, onNextExecutionChanged: (nextExecution: Date) => void) {
+  private readonly getNextExecution: () => Date;
+
+  constructor(task: IBotTask | IVillageBotTask, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
     this.m_task = task;
-    this.m_onNextExecutionChanged = onNextExecutionChanged;
+    this.m_setNextExecution = setNextExecution;
+    this.getNextExecution = getNextExecution;
   }
 
   public isExecutionReady = (): boolean => this.m_task.allowExecution()
-    && this.m_timeOfNextExecution < new Date();
+    && this.getNextExecution() < new Date();
 
   public execute = async (): Promise<void> => {
     if (!this.isExecutionReady()) {
@@ -52,10 +54,10 @@ class BotTaskEngine {
 
     const delay = coolDown.randomDelay();
 
-    this.m_timeOfNextExecution = timeOfStart;
-    this.m_timeOfNextExecution.setSeconds(this.m_timeOfNextExecution.getSeconds() + delay);
+    const timeOfNextExecution = timeOfStart;
+    timeOfNextExecution.setSeconds(timeOfNextExecution.getSeconds() + delay);
 
-    this.m_onNextExecutionChanged(this.m_timeOfNextExecution);
+    this.m_setNextExecution(timeOfNextExecution);
   }
 }
 
@@ -67,6 +69,7 @@ class VillageBotTasksEngine {
       const task = new Task(village);
       return new BotTaskEngine(
         task,
+        () => accountContext.nextExecutionService.getForVillage(village.id, task.type),
         nextExecution => {
           accountContext.nextExecutionService.setForVillage(village.id, task.type, nextExecution);
         },
@@ -99,6 +102,7 @@ export class TaskManager {
 
     this.m_autoAdventureTask = new BotTaskEngine(
       autoAdventureTask,
+      () => accountContext.nextExecutionService.get(autoAdventureTask.type),
       nextExecution => {
         accountContext.nextExecutionService.set(autoAdventureTask.type, nextExecution);
       },

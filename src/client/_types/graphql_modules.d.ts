@@ -93,6 +93,8 @@ declare module '*/graphql_operations/nextTaskExecution.graphql' {
   const defaultDocument: DocumentNode;
   export const NextTaskExecution: DocumentNode;
 export const NextVillageTaskExecution: DocumentNode;
+export const SetNextTaskExecution: DocumentNode;
+export const SetNextVillageTaskExecution: DocumentNode;
 export const NextTaskExecutionChanged: DocumentNode;
 export const NextVillageTaskExecutionChanged: DocumentNode;
 

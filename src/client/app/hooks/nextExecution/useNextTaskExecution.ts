@@ -18,7 +18,7 @@ import {
   INextTaskExecutionQuery,
   INextTaskExecutionQueryVariables,
   TaskType,
-} from '../../_types/graphql';
+} from '../../../_types/graphql';
 
 export const useNextTaskExecution = (task: TaskType): number => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);

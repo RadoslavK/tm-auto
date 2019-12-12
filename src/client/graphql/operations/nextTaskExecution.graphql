@@ -12,6 +12,14 @@ query NextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!) {
     }
 }
 
+mutation SetNextTaskExecution($task: TaskType!, $delay: DurationInput!) {
+    setNextTaskExecution(task: $task, delay: $delay)
+}
+
+mutation SetNextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!, $delay: DurationInput!) {
+    setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay)
+}
+
 subscription NextTaskExecutionChanged($task: TaskType!) {
     nextTaskExecutionChanged(task: $task) {
         ...Timestamp

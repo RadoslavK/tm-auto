@@ -273,6 +273,8 @@ export type IMutation = {
   readonly signOut: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
+  readonly setNextTaskExecution: Scalars['Boolean'],
+  readonly setNextVillageTaskExecution: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
@@ -309,6 +311,19 @@ export type IMutationDeleteAccountArgs = {
 
 export type IMutationSignInArgs = {
   accountId: Scalars['ID']
+};
+
+
+export type IMutationSetNextTaskExecutionArgs = {
+  task: TaskType,
+  delay: IDurationInput
+};
+
+
+export type IMutationSetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType,
+  delay: IDurationInput
 };
 
 
@@ -621,6 +636,10 @@ export type ITimestamp = {
   readonly totalSeconds: Scalars['Int'],
 };
 
+export type ITimestampInput = {
+  readonly totalSeconds: Scalars['Int'],
+};
+
 export type IUnitInfo = {
   readonly __typename?: 'UnitInfo',
   readonly name: Scalars['String'],
@@ -858,13 +877,13 @@ export type IResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserAccountInput: ICreateUserAccountInput,
   UpdateUserAccountInput: IUpdateUserAccountInput,
+  DurationInput: IDurationInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
   UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput,
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
-  DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
@@ -873,6 +892,7 @@ export type IResolversTypes = {
   SettingsType: SettingsType,
   VillageSettingsType: VillageSettingsType,
   Subscription: ResolverTypeWrapper<{}>,
+  TimestampInput: ITimestampInput,
   ClearQueueInput: IClearQueueInput,
   PartyType: PartyType,
   AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
@@ -933,13 +953,13 @@ export type IResolversParentTypes = {
   Mutation: {},
   CreateUserAccountInput: ICreateUserAccountInput,
   UpdateUserAccountInput: IUpdateUserAccountInput,
+  DurationInput: IDurationInput,
   QueuedBuildingManipulationInput: IQueuedBuildingManipulationInput,
   DequeueBuildingAtFieldInput: IDequeueBuildingAtFieldInput,
   EnqueueBuildingInput: IEnqueueBuildingInput,
   UpdateGeneralSettingsInput: IUpdateGeneralSettingsInput,
   UpdateAutoAdventureSettingsInput: IUpdateAutoAdventureSettingsInput,
   CoolDownInput: ICoolDownInput,
-  DurationInput: IDurationInput,
   UpdateGeneralVillageSettingsInput: IUpdateGeneralVillageSettingsInput,
   UpdateAutoBuildVillageSettingsInput: IUpdateAutoBuildVillageSettingsInput,
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
@@ -948,6 +968,7 @@ export type IResolversParentTypes = {
   SettingsType: SettingsType,
   VillageSettingsType: VillageSettingsType,
   Subscription: {},
+  TimestampInput: ITimestampInput,
   ClearQueueInput: IClearQueueInput,
   PartyType: PartyType,
   AutoPartySettings: IAutoPartySettings,
@@ -1131,6 +1152,8 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   signOut: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   startBot: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   stopBot: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  setNextTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSetNextTaskExecutionArgs, 'task' | 'delay'>>,
+  setNextVillageTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSetNextVillageTaskExecutionArgs, 'villageId' | 'task' | 'delay'>>,
   clearQueue: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
   dequeueBuilding: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingArgs, 'input'>>,
   dequeueBuildingAtField: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingAtFieldArgs, 'input'>>,

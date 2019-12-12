@@ -244,6 +244,8 @@ export type IMutation = {
   readonly signOut: Maybe<Scalars['Boolean']>,
   readonly startBot: Scalars['Boolean'],
   readonly stopBot: Scalars['Boolean'],
+  readonly setNextTaskExecution: Scalars['Boolean'],
+  readonly setNextVillageTaskExecution: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
@@ -280,6 +282,19 @@ export type IMutationDeleteAccountArgs = {
 
 export type IMutationSignInArgs = {
   accountId: Scalars['ID']
+};
+
+
+export type IMutationSetNextTaskExecutionArgs = {
+  task: TaskType,
+  delay: IDurationInput
+};
+
+
+export type IMutationSetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType,
+  delay: IDurationInput
 };
 
 
@@ -584,6 +599,10 @@ export type ITimestamp = {
   readonly totalSeconds: Scalars['Int'],
 };
 
+export type ITimestampInput = {
+  readonly totalSeconds: Scalars['Int'],
+};
+
 export type IUnitInfo = {
   readonly name: Scalars['String'],
 };
@@ -885,6 +904,23 @@ export type INextVillageTaskExecutionQueryVariables = {
 
 
 export type INextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: ITimestampFragment };
+
+export type ISetNextTaskExecutionMutationVariables = {
+  task: TaskType,
+  delay: IDurationInput
+};
+
+
+export type ISetNextTaskExecutionMutation = Pick<IMutation, 'setNextTaskExecution'>;
+
+export type ISetNextVillageTaskExecutionMutationVariables = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType,
+  delay: IDurationInput
+};
+
+
+export type ISetNextVillageTaskExecutionMutation = Pick<IMutation, 'setNextVillageTaskExecution'>;
 
 export type INextTaskExecutionChangedSubscriptionVariables = {
   task: TaskType

@@ -13,6 +13,11 @@ extend type Query {
     nextVillageTaskExecution(villageId: Int!, task: VillageTaskType!): Timestamp!
 }
 
+extend  type Mutation {
+    setNextTaskExecution(task: TaskType!, delay: DurationInput!): Boolean!
+    setNextVillageTaskExecution(villageId: Int!, task: VillageTaskType!, delay: DurationInput!): Boolean!
+}
+
 extend type Subscription {
     nextTaskExecutionChanged(task: TaskType!): Timestamp!
     nextVillageTaskExecutionChanged(villageId: Int!, task: VillageTaskType!): Timestamp!

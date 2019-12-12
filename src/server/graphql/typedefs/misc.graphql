@@ -43,3 +43,7 @@ input DurationInput {
     minutes: Int!
     seconds: Int!
 }
+
+input TimestampInput {
+    totalSeconds: Int!
+}
