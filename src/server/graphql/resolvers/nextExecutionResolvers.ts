@@ -19,6 +19,7 @@ const delayToDate = (delay: IDuration): Date => {
 
 export const nextExecutionResolvers: Resolvers = {
   Query: {
+    nextTasksExecution: () => convertDateToTimestamp(accountContext.nextExecutionService.tasks()),
     nextTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.get(args.task)),
     nextVillageTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.getForVillage(args.villageId, args.task)),
   },
@@ -36,6 +37,10 @@ export const nextExecutionResolvers: Resolvers = {
   },
 
   Subscription: {
+    nextTasksExecutionChanged: subscribeToEvent(BotEvent.NextTasksExecutionChanged, {
+      resolve: p => convertDateToTimestamp(p.nextExecution),
+    }),
+
     nextTaskExecutionChanged: subscribeToEvent(BotEvent.NextTaskExecutionChanged, {
       filter: (payload, variables) => payload.task === variables.task,
       resolve: p => convertDateToTimestamp(p.nextExecution),

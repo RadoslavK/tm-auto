@@ -26,6 +26,7 @@ export enum BotEvent {
   AutoBuildSettingsChanged = 'AutoBuildSettingsChanged',
   AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged',
 
+  NextTasksExecutionChanged = 'NextTasksExecutionChanged',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
   NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
 }
@@ -72,6 +73,10 @@ export type BotEventPayloads = {
 
   [BotEvent.ActiveVillageIdChanged]: {
     readonly villageId: number;
+  }
+
+  [BotEvent.NextTasksExecutionChanged]: {
+    readonly nextExecution: Date;
   }
 
   [BotEvent.NextTaskExecutionChanged]: {

@@ -2,8 +2,6 @@ debouncovat aj napriklad tie graphql update uz na klientovi.
 
 debouncovat save do suboru
 
-ulozit si aj next execution do suboru a nacitat potom
-
 pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
 
 roman - show double queue.. bez operacii, iba delete.

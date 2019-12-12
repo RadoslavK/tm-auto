@@ -397,6 +397,7 @@ export type IQuery = {
   readonly botState: BotState,
   readonly heroInformation: IHeroInformation,
   readonly logsEntries: ReadonlyArray<ILogEntry>,
+  readonly nextTasksExecution: ITimestamp,
   readonly nextTaskExecution: ITimestamp,
   readonly nextVillageTaskExecution: ITimestamp,
   readonly canMoveToTop: Scalars['Boolean'],
@@ -534,6 +535,7 @@ export type ISubscription = {
   readonly onBotRunningChanged: Scalars['Boolean'],
   readonly heroInformationUpdated: IHeroInformation,
   readonly onLogEntryAdded: ILogEntry,
+  readonly nextTasksExecutionChanged: ITimestamp,
   readonly nextTaskExecutionChanged: ITimestamp,
   readonly nextVillageTaskExecutionChanged: ITimestamp,
   readonly onQueueUpdated: Scalars['Boolean'],
@@ -905,6 +907,11 @@ export type INextVillageTaskExecutionQueryVariables = {
 
 export type INextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: ITimestampFragment };
 
+export type INextTasksExecutionQueryVariables = {};
+
+
+export type INextTasksExecutionQuery = { readonly nextTasksExecution: ITimestampFragment };
+
 export type ISetNextTaskExecutionMutationVariables = {
   task: TaskType,
   delay: IDurationInput
@@ -921,6 +928,11 @@ export type ISetNextVillageTaskExecutionMutationVariables = {
 
 
 export type ISetNextVillageTaskExecutionMutation = Pick<IMutation, 'setNextVillageTaskExecution'>;
+
+export type INextTasksExecutionChangedSubscriptionVariables = {};
+
+
+export type INextTasksExecutionChangedSubscription = { readonly nextTasksExecutionChanged: ITimestampFragment };
 
 export type INextTaskExecutionChangedSubscriptionVariables = {
   task: TaskType

@@ -116,11 +116,15 @@ class ControllerService {
       await killBrowser();
     }
 
-    const nextTimeout = this.m_tasksCoolDown.randomDelay() * 1000;
+    const nextTimeout = this.m_tasksCoolDown.randomDelay();
+
+    const nextExecution = new Date();
+    nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
+    accountContext.nextExecutionService.setTasks(nextExecution);
 
     this.m_timeout = setTimeout(async () => {
       await this.execute();
-    }, nextTimeout);
+    }, nextTimeout * 1000);
   };
 
   public stop = async (): Promise<void> => {

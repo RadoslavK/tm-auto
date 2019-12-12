@@ -9,6 +9,7 @@ enum VillageTaskType {
 }
 
 extend type Query {
+    nextTasksExecution: Timestamp!
     nextTaskExecution(task: TaskType!): Timestamp!
     nextVillageTaskExecution(villageId: Int!, task: VillageTaskType!): Timestamp!
 }
@@ -19,6 +20,7 @@ extend  type Mutation {
 }
 
 extend type Subscription {
+    nextTasksExecutionChanged: Timestamp!
     nextTaskExecutionChanged(task: TaskType!): Timestamp!
     nextVillageTaskExecutionChanged(villageId: Int!, task: VillageTaskType!): Timestamp!
 }

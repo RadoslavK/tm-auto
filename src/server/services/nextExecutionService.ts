@@ -10,6 +10,16 @@ const getDefaultExecutionTime = (): Date => new Date(1970, 1, 1);
 export class NextExecutionService {
   private nextTaskExecutionTimes: Map<TaskType, Date> = new Map();
   private nextVillageTaskExecutionTimes: Map<number, Map<VillageTaskType, Date>> = new Map();
+  private nextTasksExecution: Date | undefined;
+
+  public tasks = (): Date => this.nextTasksExecution ||
+    getDefaultExecutionTime();
+
+  public setTasks = (nextExecution: Date): void => {
+    this.nextTasksExecution = nextExecution;
+
+    publishPayloadEvent(BotEvent.NextTasksExecutionChanged, { nextExecution });
+  };
 
   public get = (task: TaskType): Date => this.nextTaskExecutionTimes.get(task)
     || getDefaultExecutionTime();
