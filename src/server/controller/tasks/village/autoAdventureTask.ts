@@ -20,7 +20,7 @@ import {
 import { randomElement } from '../../../utils/randomElement';
 
 export class AutoAdventureTask implements IBotTask {
-  public readonly type: TaskType.AutoAdventure;
+  public readonly type: TaskType = TaskType.AutoAdventure;
 
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
 

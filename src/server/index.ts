@@ -10,6 +10,8 @@ import { typeDefs } from './graphql/typedefs';
 
 const socketName = process.argv[2];
 
+process.on('warning', e => console.warn(e.stack));
+
 const init = async (): Promise<void> => {
   loadInfo();
 
