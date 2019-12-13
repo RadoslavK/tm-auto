@@ -65,8 +65,6 @@ buildings sort..
 market requirements - great warehouse, granary sa pocita ale neviem ci treba cele kombo alebo lubovolne
 --uistit sa ci je to fakt real
 
-pridat tam vsetkym taskom ze sa nastavi next execution v UI.. + reset to default
-
 pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
 
 allow building on free spots flag

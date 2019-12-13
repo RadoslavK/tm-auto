@@ -12,10 +12,14 @@ const defaultDelay: IDuration = {
 };
 
 export const NextExecutionForm: React.FC<IProps> = (props) => {
+  const {
+    onSubmit,
+  } = props;
+
   const [delay, setDelay] = useState<IDuration>(defaultDelay);
 
-  const onSubmit = () => {
-    props.onSubmit(delay);
+  const submit = () => {
+    onSubmit(delay);
   };
 
   return (
@@ -23,7 +27,7 @@ export const NextExecutionForm: React.FC<IProps> = (props) => {
       <Duration value={delay} onChange={setDelay} />
       <button
         type="button"
-        onClick={onSubmit}
+        onClick={submit}
       >
         Submit
       </button>

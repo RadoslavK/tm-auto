@@ -246,6 +246,8 @@ export type IMutation = {
   readonly stopBot: Scalars['Boolean'],
   readonly setNextTaskExecution: Scalars['Boolean'],
   readonly setNextVillageTaskExecution: Scalars['Boolean'],
+  readonly resetNextTaskExecution: Scalars['Boolean'],
+  readonly resetNextVillageTaskExecution: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
@@ -295,6 +297,17 @@ export type IMutationSetNextVillageTaskExecutionArgs = {
   villageId: Scalars['Int'],
   task: VillageTaskType,
   delay: IDurationInput
+};
+
+
+export type IMutationResetNextTaskExecutionArgs = {
+  task: TaskType
+};
+
+
+export type IMutationResetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -928,6 +941,21 @@ export type ISetNextVillageTaskExecutionMutationVariables = {
 
 
 export type ISetNextVillageTaskExecutionMutation = Pick<IMutation, 'setNextVillageTaskExecution'>;
+
+export type IResetNextTaskExecutionMutationVariables = {
+  task: TaskType
+};
+
+
+export type IResetNextTaskExecutionMutation = Pick<IMutation, 'resetNextTaskExecution'>;
+
+export type IResetNextVillageTaskExecutionMutationVariables = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
+};
+
+
+export type IResetNextVillageTaskExecutionMutation = Pick<IMutation, 'resetNextVillageTaskExecution'>;
 
 export type INextTasksExecutionChangedSubscriptionVariables = {};
 

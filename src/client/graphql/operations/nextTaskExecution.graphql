@@ -26,6 +26,14 @@ mutation SetNextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!, 
     setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay)
 }
 
+mutation ResetNextTaskExecution($task: TaskType!) {
+    resetNextTaskExecution(task: $task)
+}
+
+mutation ResetNextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!) {
+    resetNextVillageTaskExecution(villageId: $villageId, task: $task)
+}
+
 subscription NextTasksExecutionChanged {
     nextTasksExecutionChanged {
         ...Timestamp

@@ -34,6 +34,16 @@ export const nextExecutionResolvers: Resolvers = {
       accountContext.nextExecutionService.setForVillage(args.villageId, args.task, delayToDate(args.delay));
       return true;
     },
+
+    resetNextTaskExecution: (_, args) => {
+      accountContext.nextExecutionService.resetNextTaskExecution(args.task);
+      return true;
+    },
+
+    resetNextVillageTaskExecution: (_, args) => {
+      accountContext.nextExecutionService.resetNextVillageTaskExecution(args.villageId, args.task);
+      return true;
+    },
   },
 
   Subscription: {

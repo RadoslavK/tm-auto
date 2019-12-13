@@ -96,6 +96,8 @@ export const NextVillageTaskExecution: DocumentNode;
 export const NextTasksExecution: DocumentNode;
 export const SetNextTaskExecution: DocumentNode;
 export const SetNextVillageTaskExecution: DocumentNode;
+export const ResetNextTaskExecution: DocumentNode;
+export const ResetNextVillageTaskExecution: DocumentNode;
 export const NextTasksExecutionChanged: DocumentNode;
 export const NextTaskExecutionChanged: DocumentNode;
 export const NextVillageTaskExecutionChanged: DocumentNode;

@@ -275,6 +275,8 @@ export type IMutation = {
   readonly stopBot: Scalars['Boolean'],
   readonly setNextTaskExecution: Scalars['Boolean'],
   readonly setNextVillageTaskExecution: Scalars['Boolean'],
+  readonly resetNextTaskExecution: Scalars['Boolean'],
+  readonly resetNextVillageTaskExecution: Scalars['Boolean'],
   readonly clearQueue: Scalars['Boolean'],
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
@@ -324,6 +326,17 @@ export type IMutationSetNextVillageTaskExecutionArgs = {
   villageId: Scalars['Int'],
   task: VillageTaskType,
   delay: IDurationInput
+};
+
+
+export type IMutationResetNextTaskExecutionArgs = {
+  task: TaskType
+};
+
+
+export type IMutationResetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'],
+  task: VillageTaskType
 };
 
 
@@ -1156,6 +1169,8 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   stopBot: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   setNextTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSetNextTaskExecutionArgs, 'task' | 'delay'>>,
   setNextVillageTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationSetNextVillageTaskExecutionArgs, 'villageId' | 'task' | 'delay'>>,
+  resetNextTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetNextTaskExecutionArgs, 'task'>>,
+  resetNextVillageTaskExecution: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetNextVillageTaskExecutionArgs, 'villageId' | 'task'>>,
   clearQueue: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationClearQueueArgs, 'villageId'>>,
   dequeueBuilding: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingArgs, 'input'>>,
   dequeueBuildingAtField: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationDequeueBuildingAtFieldArgs, 'input'>>,

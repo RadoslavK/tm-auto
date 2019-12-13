@@ -2,10 +2,15 @@ import { useMutation } from '@apollo/react-hooks';
 import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import { SetNextTaskExecution } from '*/graphql_operations/nextTaskExecution.graphql';
+import {
+  ResetNextTaskExecution,
+  SetNextTaskExecution,
+} from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
   IDuration,
+  IResetNextTaskExecutionMutation,
+  IResetNextTaskExecutionMutationVariables,
   ISetNextTaskExecutionMutation,
   ISetNextTaskExecutionMutationVariables,
   TaskType,
@@ -30,9 +35,15 @@ export const NextTaskExecution: React.FC<IProps> = (props) => {
   const nextExecutionTimer = useCountdown(nextExecutionIn);
 
   const [setNextTaskExecution] = useMutation<ISetNextTaskExecutionMutation, ISetNextTaskExecutionMutationVariables>(SetNextTaskExecution);
+  const [resetNextTaskExecution] = useMutation<IResetNextTaskExecutionMutation, IResetNextTaskExecutionMutationVariables>(ResetNextTaskExecution);
 
   const onSubmit = (delay: IDuration): void => {
     setNextTaskExecution({ variables: { task, delay } });
+    setShowForm(false);
+  };
+
+  const onReset = (): void => {
+    resetNextTaskExecution({ variables: { task } });
     setShowForm(false);
   };
 
@@ -41,12 +52,13 @@ export const NextTaskExecution: React.FC<IProps> = (props) => {
       <div>
         Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
         <button type="button" onClick={() => setShowForm(true)}>Change</button>
+        <button type="button" onClick={onReset}>Reset</button>
       </div>
       <Dialog
         open={showForm}
         onClose={() => setShowForm(false)}
       >
-        <NextExecutionForm onSubmit={onSubmit} />
+        <NextExecutionForm onSubmit={onSubmit}/>
       </Dialog>
     </div>
   );

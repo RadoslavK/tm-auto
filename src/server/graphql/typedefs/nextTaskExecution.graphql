@@ -17,6 +17,8 @@ extend type Query {
 extend  type Mutation {
     setNextTaskExecution(task: TaskType!, delay: DurationInput!): Boolean!
     setNextVillageTaskExecution(villageId: Int!, task: VillageTaskType!, delay: DurationInput!): Boolean!
+    resetNextTaskExecution(task: TaskType!): Boolean!
+    resetNextVillageTaskExecution(villageId: Int!, task: VillageTaskType!): Boolean!
 }
 
 extend type Subscription {

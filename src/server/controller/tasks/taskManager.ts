@@ -67,6 +67,9 @@ class VillageBotTasksEngine {
   constructor(village: Village, tasks: { new(village: Village): IVillageBotTask }[]) {
     this.m_tasks = tasks.map(Task => {
       const task = new Task(village);
+
+      accountContext.nextExecutionService.setDefaultVillageTaskCoolDown(village.id, task);
+
       return new BotTaskEngine(
         task,
         () => accountContext.nextExecutionService.getForVillage(village.id, task.type),
@@ -99,6 +102,8 @@ export class TaskManager {
     this.m_villageTasks = {};
 
     const autoAdventureTask = new AutoAdventureTask();
+
+    accountContext.nextExecutionService.setDefaultTaskCoolDown(autoAdventureTask);
 
     this.m_autoAdventureTask = new BotTaskEngine(
       autoAdventureTask,

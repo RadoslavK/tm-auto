@@ -2,10 +2,15 @@ import { useMutation } from '@apollo/react-hooks';
 import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import { SetNextVillageTaskExecution } from "*/graphql_operations/nextTaskExecution.graphql";
+import {
+  ResetNextVillageTaskExecution,
+  SetNextVillageTaskExecution,
+} from "*/graphql_operations/nextTaskExecution.graphql";
 
 import {
   IDuration,
+  IResetNextVillageTaskExecutionMutation,
+  IResetNextVillageTaskExecutionMutationVariables,
   ISetNextVillageTaskExecutionMutation,
   ISetNextVillageTaskExecutionMutationVariables,
   VillageTaskType,
@@ -32,9 +37,15 @@ export const NextVillageTaskExecution: React.FC<IProps> = (props) => {
   const nextExecutionTimer = useCountdown(nextExecutionIn);
 
   const [setNextVillageTaskExecution] = useMutation<ISetNextVillageTaskExecutionMutation, ISetNextVillageTaskExecutionMutationVariables>(SetNextVillageTaskExecution);
+  const [resetNextVillageTaskExecution] = useMutation<IResetNextVillageTaskExecutionMutation, IResetNextVillageTaskExecutionMutationVariables>(ResetNextVillageTaskExecution);
 
   const onSubmit = (delay: IDuration): void => {
-    setNextVillageTaskExecution({ variables: { task, delay, villageId } });
+    setNextVillageTaskExecution({ variables: { villageId, task, delay } });
+    setShowForm(false);
+  };
+
+  const onReset = (): void => {
+    resetNextVillageTaskExecution({ variables: { villageId, task } });
     setShowForm(false);
   };
 
@@ -43,6 +54,7 @@ export const NextVillageTaskExecution: React.FC<IProps> = (props) => {
       <div>
         Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
         <button type="button" onClick={() => setShowForm(true)}>Change</button>
+        <button type="button" onClick={onReset}>Reset</button>
       </div>
       <Dialog
         open={showForm}
