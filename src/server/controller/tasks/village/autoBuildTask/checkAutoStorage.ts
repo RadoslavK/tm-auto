@@ -59,14 +59,16 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
 
   const neededBuildings: BuildingType[] = [];
 
-  if (village.resources.warehouseFullness() >= settings.warehouse.overflowLevel
-    || nextTaskExceedsWarehouseCapacity
+  if (settings.warehouse.allow
+    && (village.resources.warehouseFullness() >= settings.warehouse.overflowLevel
+      || nextTaskExceedsWarehouseCapacity)
   ) {
     neededBuildings.push(BuildingType.Warehouse);
   }
 
-  if (village.resources.granaryFullness() >= settings.granary.overflowLevel
-    || nextTaskExceedsGranaryCapacity
+  if (settings.granary.allow
+    && (village.resources.granaryFullness() >= settings.granary.overflowLevel
+      || nextTaskExceedsGranaryCapacity)
   ) {
     neededBuildings.push(BuildingType.Granary);
   }
