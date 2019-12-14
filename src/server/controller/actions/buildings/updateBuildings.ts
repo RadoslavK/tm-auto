@@ -1,16 +1,22 @@
 import { TravianPath } from '../../../_enums/travianPath';
 import { accountContext } from '../../../accountContext';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
-import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots';
+import {
+  parseFieldSpots,
+  parseFieldSpotsNew,
+} from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
 import { BuildingQueueService } from '../../../services/buildingQueueService';
+import { gameInfoService } from '../../../services/gameInfoService';
 import { ensurePage } from '../ensurePage';
 
 export const updateBuildings = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
   const village = accountContext.villageService.currentVillage();
-  const fieldSpots = await parseFieldSpots();
+  const fieldSpots = gameInfoService.hasNewUI
+    ? await parseFieldSpotsNew()
+    : await parseFieldSpots();
   const buildingsInProgress = await parseBuildingsInProgress();
 
   village.buildings.updateActual(fieldSpots);

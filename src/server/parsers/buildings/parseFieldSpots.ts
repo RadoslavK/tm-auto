@@ -42,3 +42,25 @@ export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
     };
   }));
 };
+
+export const parseFieldSpotsNew = async (): Promise<IActualBuilding[]> => {
+  await validateUrl(acceptedUrls);
+
+  const page = await getPage();
+
+  return await page.$$eval('#resourceFieldContainer div.level[class*=buildingSlot][class*=gid]', xx => {
+    return xx.map((x): IActualBuilding => {
+      const match = /gid(\d+).*?buildingSlot(\d+).*?level(\d+)/.exec(x.className);
+
+      if (!match) {
+        throw new Error('Failed to parse resource field spot');
+      }
+
+      return {
+        type: +match[1],
+        fieldId: +match[2],
+        level: +match[3],
+      };
+    });
+  });
+};

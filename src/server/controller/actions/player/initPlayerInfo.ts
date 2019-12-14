@@ -11,12 +11,12 @@ export const initPlayerInfo = async (): Promise<void> => {
 
   const page = await getPage();
   const content = await page.content();
-  gameInfoService.hasNewUI = content.includes('HyderabadPermalloyWelterweightMecca');
+  gameInfoService.hasNewUI = content.includes('VerizonBeseechingRuggedEltonTrigonometric ');
 
   gameInfo.speed = await parseServerSpeed();
   gameInfo.tribe = await parseTribe();
 
   await updatePlayerInfo();
 
-  accountContext.logsService.logText(`Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${gameInfo.speed}x`);
+  accountContext.logsService.logText(`Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${gameInfo.speed}x, New version: ${gameInfoService.hasNewUI}`);
 };
