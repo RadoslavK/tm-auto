@@ -68,7 +68,6 @@ export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpee
 };
 
 export const getActualUnitBuildTime = (originalBuildTime: Duration, gameSpeed: number, buildingLevel: number): Duration => {
-  //  TODO do unit infos ulozit duration ale v subore radsej nechat total seconds
   const modifier = getUnitsModifier(buildingLevel);
   const buildTime = originalBuildTime.totalSeconds() / gameSpeed * modifier;
   const actualBuildTimeInSeconds = Math.round(buildTime);

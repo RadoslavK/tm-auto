@@ -2,7 +2,6 @@ import { ApolloLink } from 'apollo-link';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { createErrorLink } from '../_shared/graphql/createErrorLink';
-import { loadInfo } from './bootstrap/loadInfo';
 import { createIpcExecutor } from './createIpcExecutor';
 import { createSchemaLink } from './createSchemaLink';
 import { resolvers } from './graphql/resolvers';
@@ -13,8 +12,6 @@ const socketName = process.argv[2];
 process.on('warning', e => console.warn(e.stack));
 
 const init = async (): Promise<void> => {
-  loadInfo();
-
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
