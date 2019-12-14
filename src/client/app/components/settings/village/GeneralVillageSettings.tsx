@@ -137,8 +137,11 @@ const GeneralVillageSettings: React.FC<IProps> = (props) => {
       >
         Reset to default
       </Button>
-      <label htmlFor="allowTasks">Allow tasks</label>
-      <input type="checkbox" checked={allowTasks} onChange={onChange} id="allowTasks" name="allowTasks" />
+
+      <div>
+        <label htmlFor="allowTasks">Allow tasks</label>
+        <input type="checkbox" checked={allowTasks} onChange={onChange} id="allowTasks" name="allowTasks" />
+      </div>
     </div>
   );
 };

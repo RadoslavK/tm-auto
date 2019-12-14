@@ -2,7 +2,7 @@ import {
   BuildingSpotType,
   getBuildingSpotType,
 } from '../../../_enums/buildingSpotType';
-import { getWithMinimum } from '../../../utils/getWithMaximum';
+import { getWithMinimumSafe } from '../../../utils/getWithMaximum';
 import { BuildingInProgress } from './buildingInProgress';
 
 export class BuildingsInProgress {
@@ -28,7 +28,7 @@ export class BuildingsInProgress {
       return undefined;
     }
 
-    const building = getWithMinimum(filteredSequence, b => b.finishedAt.valueOf());
+    const building = getWithMinimumSafe(filteredSequence, b => b.finishedAt.valueOf());
     return building.finishedAt;
   };
 }

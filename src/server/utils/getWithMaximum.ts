@@ -1,6 +1,6 @@
-export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) => number): T => {
-  let maximum = Number.MIN_VALUE;
-  let foundMaximum: T = null as any;
+const getWithMaximumInternal = <T>(values: readonly T[], getMaximum: (value: T) => number): T => {
+  let foundMaximum: T = values[0];
+  let maximum = getMaximum(foundMaximum);
 
   values.forEach(value => {
     const currentMaximum = getMaximum(value);
@@ -16,9 +16,25 @@ export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) =
   return foundMaximum;
 };
 
-export const getWithMinimum = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {
-  let minimum = Number.MAX_VALUE;
-  let foundMinimum: T = null as any;
+export const getWithMaximumSafe = <T>(values: readonly T[], getMaximum: (value: T) => number): T => {
+  if (!values.length) {
+    throw new Error('Empty collection provided');
+  }
+
+  return getWithMaximumInternal(values, getMaximum);
+};
+
+export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) => number): T | null => {
+  if (!values.length) {
+    return null;
+  }
+
+  return getWithMaximumInternal(values, getMaximum);
+};
+
+const getWithMinimumInternal = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {
+  let foundMinimum: T = values[0];
+  let minimum = getMinimum(foundMinimum);
 
   values.forEach(value => {
     const currentMinimum = getMinimum(value);
@@ -32,4 +48,20 @@ export const getWithMinimum = <T>(values: readonly T[], getMinimum: (value: T) =
   });
 
   return foundMinimum;
+};
+
+export const getWithMinimum = <T>(values: readonly T[], getMinimum: (value: T) => number): T | null => {
+  if (!values.length) {
+    return null;
+  }
+
+  return getWithMinimumInternal(values, getMinimum);
+};
+
+export const getWithMinimumSafe = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {
+  if (!values.length) {
+    throw new Error('Empty collection provided');
+  }
+
+  return getWithMinimumInternal(values, getMinimum);
 };

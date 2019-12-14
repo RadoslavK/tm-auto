@@ -55,4 +55,9 @@ export class Buildings {
       };
     });
   };
+
+  public freeFieldIds = (): readonly number[] => this
+    .normalizedBuildingSpots()
+    .filter(b => b.level.total === 0)
+    .map(b => b.fieldId);
 }

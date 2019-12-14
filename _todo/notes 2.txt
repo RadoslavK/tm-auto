@@ -1,7 +1,5 @@
 --------------Inspiracia / Future----------------------
 
-pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
-
 https://travibot.com/en/travian-bot-5-1-0-0/
 
 travian codex: nove budovy a tak
@@ -9,12 +7,6 @@ travian codex: nove budovy a tak
 do building info pridat cp
 
 do troops info pridat carry capacity, defense, move speed
-
-building mode templates
---vytvorit sablonu, podobne ako v secondvillagebot su tie Level podla toho stava budovy
---uzivatel si v UI vytvori sablonu
-
-building queue... umoznit spojit budovy dokopy a bude to ukazovat totalny cas, res atd.. tato skupina sa bude dat odstranit tiez alebo rozbalit.
 
 auto warehouse - iba ked neni 1 uz na max lvl??.. co je toto, preverit
 
@@ -76,8 +68,6 @@ allow creating own defautls
 
 market requirements - great warehouse, granary sa pocita ale neviem ci treba cele kombo alebo lubovolne
 --uistit sa ci je to fakt real
-
-allow building on free spots flag
 
 ---------ESLINT--------------------
 -objects new line

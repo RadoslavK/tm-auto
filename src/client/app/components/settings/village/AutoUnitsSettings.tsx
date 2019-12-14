@@ -170,15 +170,20 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
         Reset to default
       </Button>
 
-      <label htmlFor="allow">Allow</label>
-      <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
+      <div>
+        <label htmlFor="allow">Allow</label>
+        <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
+      </div>
 
-      <h3>Cooldown</h3>
-      <label>Cooldown</label>
-      <CoolDown value={coolDown} onChange={onCooldownChange} />
+      <div>
+        <label>Cooldown</label>
+        <CoolDown value={coolDown} onChange={onCooldownChange} />
+      </div>
 
-      <label htmlFor="minCrop">Min crop</label>
-      <input type="number" value={minCrop} onChange={onNumberChange} id="minCrop" name="minCrop" />
+      <div>
+        <label htmlFor="minCrop">Min crop</label>
+        <input type="number" value={minCrop} onChange={onNumberChange} id="minCrop" name="minCrop" />
+      </div>
     </div>
   );
 };

@@ -148,8 +148,6 @@ export class TaskManager {
       if (!taskEngine) {
         taskEngine = new VillageBotTasksEngine(village, [
           AutoPartyTask,
-          //  TODO: autobuild storage, mozno spojit s autobuildom
-          // AutoBuildStorage,
           AutoBuildTask,
           // Update resources - market
           AutoUnitsTask,

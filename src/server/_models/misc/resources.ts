@@ -62,4 +62,6 @@ export class Resources implements IResources, IComparable<Resources> {
     && this.freeCrop >= other.freeCrop;
 
   public isLowerThan = (other: Resources): boolean => !this.isGreaterOrEqualThan(other);
+
+  public maxWarehouseRes = (): number => Math.max(this.wood, this.clay, this.iron);
 }

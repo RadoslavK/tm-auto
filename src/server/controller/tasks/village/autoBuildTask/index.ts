@@ -1,32 +1,31 @@
-import {
-  BotTaskResult,
-  IVillageBotTask,
-} from '../_types';
-import { BuildingCategory } from '../../../_enums/buildingCategory';
-import { BuildingSpotType } from '../../../_enums/buildingSpotType';
-import { TravianPath } from '../../../_enums/travianPath';
-import { Buildings } from '../../../_models/buildings';
-import { QueuedBuilding } from '../../../_models/buildings/queue/queuedBuilding';
-import { CoolDown } from '../../../_models/coolDown';
-import { Duration } from '../../../_models/duration';
-import { Resources } from '../../../_models/misc/resources';
-import { AutoBuildSettings } from '../../../_models/settings/tasks/autoBuildSettings';
-import { Village } from '../../../_models/village/village';
-import { VillageTaskType } from '../../../_types/graphql';
-import { BuildingType } from '../../../../_shared/types/buildingType';
-import { Tribe } from '../../../../_shared/types/tribe';
-import { accountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { fieldIds } from '../../../constants/fieldIds';
-import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
-import { buildingsService } from '../../../services/buildingsService';
-import { isInfrastructure } from '../../../utils/buildingUtils';
-import { randomElement } from '../../../utils/randomElement';
+import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { Tribe } from '../../../../../_shared/types/tribe';
+import { BuildingCategory } from '../../../../_enums/buildingCategory';
+import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
+import { Buildings } from '../../../../_models/buildings';
+import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding';
+import { CoolDown } from '../../../../_models/coolDown';
+import { Duration } from '../../../../_models/duration';
+import { Resources } from '../../../../_models/misc/resources';
+import { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
+import { Village } from '../../../../_models/village/village';
+import { VillageTaskType } from '../../../../_types/graphql';
+import { accountContext } from '../../../../accountContext';
+import { getPage } from '../../../../browser/getPage';
+import { fieldIds } from '../../../../constants/fieldIds';
+import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
+import { buildingsService } from '../../../../services/buildingsService';
+import { isInfrastructure } from '../../../../utils/buildingUtils';
 import {
   ensureBuildingSpotPage,
   ensurePage,
-} from '../../actions/ensurePage';
-import { updateActualResources } from '../../actions/village/updateResources';
+} from '../../../actions/ensurePage';
+import { updateActualResources } from '../../../actions/village/updateResources';
+import {
+  BotTaskResult,
+  IVillageBotTask,
+} from '../../_types';
+import { checkAutoStorage } from './checkAutoStorage';
 
 export class AutoBuildTask implements IVillageBotTask {
   public readonly type: VillageTaskType = VillageTaskType.AutoBuild;
@@ -49,13 +48,14 @@ export class AutoBuildTask implements IVillageBotTask {
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): BotTaskResult => {
-    const path = randomElement([TravianPath.ResourceFieldsOverview, TravianPath.InfrastructureOverview]);
-    await ensurePage(path);
-
-    const ongoing = await parseBuildingsInProgress();
-    this.m_buildings.updateOngoing(ongoing);
-
     const { queue } = this.m_village.buildings;
+
+    const { buildingsToBuild } = await checkAutoStorage(this.m_village, this.settings().autoStorage);
+
+    for (const autoStorageBuilding of buildingsToBuild) {
+      await this.startBuildingIfQueueIsFree(autoStorageBuilding, !!autoStorageBuilding.queueId);
+    }
+
     if (!queue.buildings().length) {
       return undefined;
     }
@@ -64,8 +64,8 @@ export class AutoBuildTask implements IVillageBotTask {
 
     let finishedAt: Date | undefined;
     if (isRoman) {
-      await this.startBuildingIfQueueIsFree(BuildingSpotType.Fields);
-      await this.startBuildingIfQueueIsFree(BuildingSpotType.Infrastructure);
+      await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
+      await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Infrastructure);
 
       const fieldFinishedAt = this.m_buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Fields);
       const infrastructureFinishedAt = this.m_buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Infrastructure);
@@ -78,7 +78,7 @@ export class AutoBuildTask implements IVillageBotTask {
         finishedAt = fieldFinishedAt >= infrastructureFinishedAt ? fieldFinishedAt : infrastructureFinishedAt;
       }
     } else {
-      await this.startBuildingIfQueueIsFree(BuildingSpotType.Any);
+      await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Any);
 
       finishedAt = this.m_buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Any);
     }
@@ -91,7 +91,7 @@ export class AutoBuildTask implements IVillageBotTask {
     };
   };
 
-  private startBuildingIfQueueIsFree = async (type: BuildingSpotType): Promise<void> => {
+  private startBuildingIfQueueIsFreeByType = async (type: BuildingSpotType): Promise<void> => {
     const isSpotFree = this.m_buildings.ongoing.isSpotFree(type);
 
     if (!isSpotFree) {
@@ -104,6 +104,10 @@ export class AutoBuildTask implements IVillageBotTask {
       return;
     }
 
+    await this.startBuildingIfQueueIsFree(queuedBuilding);
+  };
+
+  private startBuildingIfQueueIsFree = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
     const settings = this.settings();
     const cost = buildingsService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
     const resources = cost.resources.add(new Resources({ crop: settings.minCrop }));
@@ -112,7 +116,7 @@ export class AutoBuildTask implements IVillageBotTask {
     const currentResources = this.m_village.resources.amount;
 
     if (currentResources.isGreaterOrEqualThan(resources)) {
-      await this.startBuilding(queuedBuilding);
+      await this.startBuilding(queuedBuilding, isQueued);
     } else if (currentResources.freeCrop < cost.resources.freeCrop && settings.autoCropFields) {
       // need cropland
       const croplandIsCurrentlyBeingBuilt = this.m_buildings.ongoing.buildings().some(b => b.type === BuildingType.Crop);
@@ -136,8 +140,7 @@ export class AutoBuildTask implements IVillageBotTask {
       let qBuilding: QueuedBuilding;
 
       if (inQueueCropLand) {
-        // ked je nejaky v queue a zaroven je level <= nez ten co sa prida tak ho iba dat na zaciatok
-        this.m_buildings.queue.pushToTheStart(inQueueCropLand);
+        // ked je nejaky v queue a zaroven je level <= nez ten co sa prida tak ho dat stavat hned
         qBuilding = inQueueCropLand;
       } else {
         const newCropLandFieldId = lowestLevelCropLand.fieldId;
@@ -158,8 +161,8 @@ export class AutoBuildTask implements IVillageBotTask {
         return;
       }
 
-      const isQueued = !!inQueueCropLand;
-      await this.startBuilding(qBuilding, isQueued);
+      // !!inQueueCropLand === isQueued
+      await this.startBuilding(qBuilding, !!inQueueCropLand);
     }
   };
 

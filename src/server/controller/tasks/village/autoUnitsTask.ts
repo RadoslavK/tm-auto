@@ -107,12 +107,11 @@ export class AutoUnitsTask implements IVillageBotTask {
 
       // max by res
       let maxPossibleAmountToBuild = Math.min(
-        Math.min(
-          Math.min(
-            startingVillageRes.wood / cost.wood,
-            startingVillageRes.clay / cost.clay),
-          startingVillageRes.iron / cost.iron),
-        startingVillageRes.crop / cost.crop);
+        startingVillageRes.wood / cost.wood,
+        startingVillageRes.clay / cost.clay,
+        startingVillageRes.iron / cost.iron,
+        startingVillageRes.crop / cost.crop,
+      );
 
       if (maxPossibleAmountToBuild < 1) {
         return;
@@ -125,7 +124,8 @@ export class AutoUnitsTask implements IVillageBotTask {
 
         maxPossibleAmountToBuild = Math.min(
           maxPossibleAmountToBuild,
-          unitToBuild.targetAmount - totalAmount);
+          unitToBuild.targetAmount - totalAmount,
+        );
       }
 
       if (maxPossibleAmountToBuild < 1) {
@@ -137,7 +137,8 @@ export class AutoUnitsTask implements IVillageBotTask {
         maxPossibleAmountToBuild,
         this.m_village.resources.amount.crop >= this.settings().minCrop
           ? Number.MAX_VALUE
-          : 0);
+          : 0,
+      );
 
       // have res for at least 1
       if (maxPossibleAmountToBuild < 1) {

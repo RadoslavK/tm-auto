@@ -32,6 +32,7 @@ import {
   IUpdateAutoBuildVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
+import { createOnNumberChanged } from '../../../utils/input/createOnNumberChanged';
 import { CoolDown } from '../../controls/Cooldown';
 import { useVillageSettingsContext } from './_context';
 
@@ -77,13 +78,47 @@ interface IProps {
   readonly villageId: number;
 }
 
+type Settings = Omit<IAutoBuildSettings, 'autoStorage'> & {
+  readonly allowFreeSpots: boolean;
+  readonly allowAutoGranary: boolean;
+  readonly allowAutoWarehouse: boolean;
+  readonly autoGranaryOverflowLevel: number;
+  readonly autoWarehouseOverflowLevel: number;
+};
+
+const getStateFromSettings = (settings: IAutoBuildSettings): Settings => {
+  const {
+    autoStorage: {
+      granary: {
+        allow: allowAutoGranary,
+        overflowLevel: autoGranaryOverflowLevel,
+      },
+      warehouse: {
+        allow: allowAutoWarehouse,
+        overflowLevel: autoWarehouseOverflowLevel,
+      },
+      allowFreeSpots,
+    },
+    ...otherSettings
+  } = settings;
+
+  return {
+    ...otherSettings,
+    allowFreeSpots,
+    autoWarehouseOverflowLevel,
+    allowAutoWarehouse,
+    autoGranaryOverflowLevel,
+    allowAutoGranary,
+  };
+};
+
 const AutoBuildSettings: React.FC<IProps> = (props) => {
   const {
     settings,
     villageId,
   } = props;
 
-  const [state, setState] = useState(settings);
+  const [state, setState] = useState(getStateFromSettings(settings));
 
   const input: IUpdateAutoBuildVillageSettingsInput = {
     villageId,
@@ -95,18 +130,22 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
   );
 
   const isInitialMount = useRef(true);
+  const settingsUpdated = useRef(false);
 
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      setState(settings);
+      setState(getStateFromSettings(settings));
+      settingsUpdated.current = false;
     }
   }, [settings]);
 
   useEffect(() => {
-    if (state !== settings) {
+    if (settingsUpdated.current) {
       updateSettings();
+    } else {
+      settingsUpdated.current = true;
     }
   }, [state, updateSettings]);
 
@@ -133,28 +172,33 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
     }));
   };
 
-  const onNumberChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
-
-    if (+value < 0) {
-      return;
-    }
-
-    setState(prevState => ({
-      ...prevState,
-      [name]: +value,
-    }));
-  };
-
   const {
     allow,
     coolDown,
     autoCropFields,
     minCrop,
+    allowFreeSpots,
+    allowAutoGranary,
+    autoGranaryOverflowLevel,
+    allowAutoWarehouse,
+    autoWarehouseOverflowLevel,
   } = state;
+
+  const updateState = <TValue extends unknown>(name: string, value: TValue) => setState(prevState => ({
+    ...prevState,
+    [name]: value,
+  }));
+
+  const onMinCropChanged = createOnNumberChanged({
+    minValue: 0,
+    callback: updateState,
+  });
+
+  const onOverflowLevelChanged = createOnNumberChanged({
+    minValue: 0,
+    maxValue: 100,
+    callback: updateState,
+  });
 
   return (
     <div>
@@ -167,18 +211,46 @@ const AutoBuildSettings: React.FC<IProps> = (props) => {
         Reset to default
       </Button>
 
-      <label htmlFor="allow">Allow</label>
-      <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
+      <div>
+        <label htmlFor="allow">Allow</label>
+        <input type="checkbox" checked={allow} onChange={onChange} id="allow" name="allow" />
+      </div>
 
-      <h3>Cooldown</h3>
-      <label>Cooldown</label>
-      <CoolDown value={coolDown} onChange={onCooldownChange} />
+      <div>
+        <label>Cooldown</label>
+        <CoolDown value={coolDown} onChange={onCooldownChange} />
+      </div>
 
-      <label htmlFor="autoCropFields">Auto crop fields</label>
-      <input type="checkbox" checked={autoCropFields} onChange={onChange} id="autoCropFields" name="autoCropFields" />
+      <div>
+        <label htmlFor="autoCropFields">Auto crop fields</label>
+        <input type="checkbox" checked={autoCropFields} onChange={onChange} id="autoCropFields" name="autoCropFields" />
+      </div>
 
-      <label htmlFor="minCrop">Min crop</label>
-      <input type="number" value={minCrop} onChange={onNumberChange} id="minCrop" name="minCrop" />
+      <div>
+        <label htmlFor="allowFreeSpots">Allow auto buildings on new spots</label>
+        <input type="checkbox" checked={allowFreeSpots} onChange={onChange} id="allowFreeSpots" name="allowFreeSpots" />
+      </div>
+
+      <div>
+        <label htmlFor="allowAutoWarehouse">Auto warehouse</label>
+        <input type="checkbox" checked={allowAutoWarehouse} onChange={onChange} id="allowAutoWarehouse" name="allowAutoWarehouse" />
+
+        <label htmlFor="autoWarehouseOverflowLevel">Overflow level</label>
+        <input type="number" value={autoWarehouseOverflowLevel} onChange={onOverflowLevelChanged} id="autoWarehouseOverflowLevel" name="autoWarehouseOverflowLevel" />
+      </div>
+
+      <div>
+        <label htmlFor="allowAutoGranary">Auto granary</label>
+        <input type="checkbox" checked={allowAutoGranary} onChange={onChange} id="allowAutoGranary" name="allowAutoGranary" />
+
+        <label htmlFor="autoGranaryOverflowLevel">Overflow level</label>
+        <input type="number" value={autoGranaryOverflowLevel} onChange={onOverflowLevelChanged} id="autoGranaryOverflowLevel" name="autoGranaryOverflowLevel" />
+      </div>
+
+      <div>
+        <label htmlFor="minCrop">Min crop</label>
+        <input type="number" value={minCrop} onChange={onMinCropChanged} id="minCrop" name="minCrop" />
+      </div>
     </div>
   );
 };

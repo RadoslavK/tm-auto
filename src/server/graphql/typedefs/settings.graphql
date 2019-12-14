@@ -14,12 +14,25 @@ type GeneralVillageSettings {
     allowTasks: Boolean!
 }
 
+type AutoStorageOptionSettings {
+    allow: Boolean!
+    overflowLevel: Int!
+}
+
+type AutoStorageSettings {
+    allowFreeSpots: Boolean!
+    granary: AutoStorageOptionSettings!
+    warehouse: AutoStorageOptionSettings!
+}
+
 type AutoBuildSettings implements ITaskSettings {
     allow: Boolean!
     coolDown: CoolDown!
 
     autoCropFields: Boolean!
     minCrop: Int!
+
+    autoStorage: AutoStorageSettings!
 }
 
 enum AdventureCriteria {
@@ -110,6 +123,12 @@ input UpdateAutoBuildVillageSettingsInput {
 
     autoCropFields: Boolean!
     minCrop: Int!
+
+    allowFreeSpots: Boolean!
+    allowAutoGranary: Boolean!
+    autoGranaryOverflowLevel: Int!
+    allowAutoWarehouse: Boolean!
+    autoWarehouseOverflowLevel: Int!
 }
 
 input UpdateAutoAdventureSettingsInput {

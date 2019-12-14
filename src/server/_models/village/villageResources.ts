@@ -22,4 +22,8 @@ export class VillageResources implements IVillageResources {
       production: params.production && new Resources(params.production),
     }));
   }
+
+  public warehouseFullness = (): number => this.amount.maxWarehouseRes() / this.capacity.warehouse;
+
+  public granaryFullness = (): number => this.amount.crop / this.capacity.granary;
 }

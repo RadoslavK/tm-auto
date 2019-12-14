@@ -14,8 +14,8 @@ import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { gameInfoService } from '../../../services/gameInfoService';
 import {
-  getWithMaximum,
-  getWithMinimum,
+  getWithMaximumSafe,
+  getWithMinimumSafe,
 } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 
@@ -120,7 +120,7 @@ export class AutoAdventureTask implements IBotTask {
         break;
 
       case AdventureCriteria.Furthest: {
-        const adventure = getWithMaximum(suitableAdventures, x => x.duration.totalSeconds());
+        const adventure = getWithMaximumSafe(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }
@@ -131,7 +131,7 @@ export class AutoAdventureTask implements IBotTask {
 
       case AdventureCriteria.Closest:
       default: {
-        const adventure = getWithMinimum(suitableAdventures, x => x.duration.totalSeconds());
+        const adventure = getWithMinimumSafe(suitableAdventures, x => x.duration.totalSeconds());
         selectedLinkElementId = adventure.linkElementId;
         break;
       }

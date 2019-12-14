@@ -133,6 +133,8 @@ export const AutoUnitsBuildingSettings: DocumentNode;
 export const GeneralSettings: DocumentNode;
 export const AutoAdventureSettings: DocumentNode;
 export const GeneralVillageSettings: DocumentNode;
+export const AutoStorageOptionSettings: DocumentNode;
+export const AutoStorageSettings: DocumentNode;
 export const AutoBuildSettings: DocumentNode;
 export const AutoUnitsSettings: DocumentNode;
 export const GetGeneralSettings: DocumentNode;

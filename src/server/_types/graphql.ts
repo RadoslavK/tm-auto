@@ -49,6 +49,7 @@ export type IAutoBuildSettings = IITaskSettings & {
   readonly coolDown: ICoolDown,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+  readonly autoStorage: IAutoStorageSettings,
 };
 
 export type IAutoPartySettings = IITaskSettings & {
@@ -57,6 +58,19 @@ export type IAutoPartySettings = IITaskSettings & {
   readonly allow: Scalars['Boolean'],
   readonly minCulturePoints: Scalars['Int'],
   readonly partyType: PartyType,
+};
+
+export type IAutoStorageOptionSettings = {
+  readonly __typename?: 'AutoStorageOptionSettings',
+  readonly allow: Scalars['Boolean'],
+  readonly overflowLevel: Scalars['Int'],
+};
+
+export type IAutoStorageSettings = {
+  readonly __typename?: 'AutoStorageSettings',
+  readonly allowFreeSpots: Scalars['Boolean'],
+  readonly granary: IAutoStorageOptionSettings,
+  readonly warehouse: IAutoStorageOptionSettings,
 };
 
 export type IAutoUnitsBuildingSettings = {
@@ -677,6 +691,11 @@ export type IUpdateAutoBuildVillageSettingsInput = {
   readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+  readonly allowFreeSpots: Scalars['Boolean'],
+  readonly allowAutoGranary: Scalars['Boolean'],
+  readonly autoGranaryOverflowLevel: Scalars['Int'],
+  readonly allowAutoWarehouse: Scalars['Boolean'],
+  readonly autoWarehouseOverflowLevel: Scalars['Int'],
 };
 
 export type IUpdateAutoUnitsBuildingSettingsInput = {
@@ -885,6 +904,8 @@ export type IResolversTypes = {
   AdventureCriteria: AdventureCriteria,
   GeneralVillageSettings: ResolverTypeWrapper<IGeneralVillageSettings>,
   AutoBuildSettings: ResolverTypeWrapper<IAutoBuildSettings>,
+  AutoStorageSettings: ResolverTypeWrapper<IAutoStorageSettings>,
+  AutoStorageOptionSettings: ResolverTypeWrapper<IAutoStorageOptionSettings>,
   AutoUnitsSettings: ResolverTypeWrapper<IAutoUnitsSettings>,
   AutoUnitsBuildingSettings: ResolverTypeWrapper<IAutoUnitsBuildingSettings>,
   AutoUnitsUnitSettings: ResolverTypeWrapper<IAutoUnitsUnitSettings>,
@@ -961,6 +982,8 @@ export type IResolversParentTypes = {
   AdventureCriteria: AdventureCriteria,
   GeneralVillageSettings: IGeneralVillageSettings,
   AutoBuildSettings: IAutoBuildSettings,
+  AutoStorageSettings: IAutoStorageSettings,
+  AutoStorageOptionSettings: IAutoStorageOptionSettings,
   AutoUnitsSettings: IAutoUnitsSettings,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettings,
   AutoUnitsUnitSettings: IAutoUnitsUnitSettings,
@@ -1018,6 +1041,7 @@ export type IAutoBuildSettingsResolvers<ContextType = any, ParentType extends IR
   coolDown: Resolver<IResolversTypes['CoolDown'], ParentType, ContextType>,
   autoCropFields: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   minCrop: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  autoStorage: Resolver<IResolversTypes['AutoStorageSettings'], ParentType, ContextType>,
 };
 
 export type IAutoPartySettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoPartySettings'] = IResolversParentTypes['AutoPartySettings']> = {
@@ -1025,6 +1049,17 @@ export type IAutoPartySettingsResolvers<ContextType = any, ParentType extends IR
   allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   minCulturePoints: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   partyType: Resolver<IResolversTypes['PartyType'], ParentType, ContextType>,
+};
+
+export type IAutoStorageOptionSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoStorageOptionSettings'] = IResolversParentTypes['AutoStorageOptionSettings']> = {
+  allow: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  overflowLevel: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+};
+
+export type IAutoStorageSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoStorageSettings'] = IResolversParentTypes['AutoStorageSettings']> = {
+  allowFreeSpots: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  granary: Resolver<IResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>,
+  warehouse: Resolver<IResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>,
 };
 
 export type IAutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['AutoUnitsBuildingSettings'] = IResolversParentTypes['AutoUnitsBuildingSettings']> = {
@@ -1318,6 +1353,8 @@ export type IResolvers<ContextType = any> = {
   AutoBuildLogEntryContentPayload: IAutoBuildLogEntryContentPayloadResolvers<ContextType>,
   AutoBuildSettings: IAutoBuildSettingsResolvers<ContextType>,
   AutoPartySettings: IAutoPartySettingsResolvers<ContextType>,
+  AutoStorageOptionSettings: IAutoStorageOptionSettingsResolvers<ContextType>,
+  AutoStorageSettings: IAutoStorageSettingsResolvers<ContextType>,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettingsResolvers<ContextType>,
   AutoUnitsLogEntryContent: IAutoUnitsLogEntryContentResolvers<ContextType>,
   AutoUnitsLogEntryContentPayload: IAutoUnitsLogEntryContentPayloadResolvers<ContextType>,

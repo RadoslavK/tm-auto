@@ -61,10 +61,28 @@ export const settingsResolvers: Resolvers = {
     updateAutoBuildVillageSettings: (_, args) => {
       const {
         villageId,
+        allowFreeSpots,
+        allowAutoGranary,
+        allowAutoWarehouse,
+        autoGranaryOverflowLevel,
+        autoWarehouseOverflowLevel,
         ...settings
       } = args.settings;
 
-      const updatedSettings = new AutoBuildSettings(settings);
+      const updatedSettings = new AutoBuildSettings({
+        ...settings,
+        autoStorage: {
+          allowFreeSpots,
+          granary: {
+            allow: allowAutoGranary,
+            overflowLevel: autoGranaryOverflowLevel,
+          },
+          warehouse: {
+            allow: allowAutoWarehouse,
+            overflowLevel: autoWarehouseOverflowLevel,
+          },
+        },
+      });
 
       accountContext.settingsService.village(villageId).autoBuild.update(updatedSettings);
       return true;

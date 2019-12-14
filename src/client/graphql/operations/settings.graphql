@@ -52,10 +52,28 @@ fragment GeneralVillageSettings on GeneralVillageSettings {
     allowTasks
 }
 
+fragment AutoStorageOptionSettings on AutoStorageOptionSettings {
+    allow
+    overflowLevel
+}
+
+fragment AutoStorageSettings on AutoStorageSettings {
+    granary {
+        ...AutoStorageOptionSettings
+    }
+    warehouse {
+        ...AutoStorageOptionSettings
+    }
+    allowFreeSpots
+}
+
 fragment AutoBuildSettings on AutoBuildSettings {
     ...TaskSettings
     autoCropFields
     minCrop
+    autoStorage {
+        ...AutoStorageSettings
+    }
 }
 
 fragment AutoUnitsSettings on AutoUnitsSettings {

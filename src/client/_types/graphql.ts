@@ -42,6 +42,7 @@ export type IAutoBuildSettings = IITaskSettings & {
   readonly coolDown: ICoolDown,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+  readonly autoStorage: IAutoStorageSettings,
 };
 
 export type IAutoPartySettings = IITaskSettings & {
@@ -49,6 +50,17 @@ export type IAutoPartySettings = IITaskSettings & {
   readonly allow: Scalars['Boolean'],
   readonly minCulturePoints: Scalars['Int'],
   readonly partyType: PartyType,
+};
+
+export type IAutoStorageOptionSettings = {
+  readonly allow: Scalars['Boolean'],
+  readonly overflowLevel: Scalars['Int'],
+};
+
+export type IAutoStorageSettings = {
+  readonly allowFreeSpots: Scalars['Boolean'],
+  readonly granary: IAutoStorageOptionSettings,
+  readonly warehouse: IAutoStorageOptionSettings,
 };
 
 export type IAutoUnitsBuildingSettings = {
@@ -639,6 +651,11 @@ export type IUpdateAutoBuildVillageSettingsInput = {
   readonly coolDown: ICoolDownInput,
   readonly autoCropFields: Scalars['Boolean'],
   readonly minCrop: Scalars['Int'],
+  readonly allowFreeSpots: Scalars['Boolean'],
+  readonly allowAutoGranary: Scalars['Boolean'],
+  readonly autoGranaryOverflowLevel: Scalars['Int'],
+  readonly allowAutoWarehouse: Scalars['Boolean'],
+  readonly autoWarehouseOverflowLevel: Scalars['Int'],
 };
 
 export type IUpdateAutoUnitsBuildingSettingsInput = {
@@ -1091,8 +1108,16 @@ export type IAutoAdventureSettingsFragment = (
 
 export type IGeneralVillageSettingsFragment = Pick<IGeneralVillageSettings, 'allowTasks'>;
 
+export type IAutoStorageOptionSettingsFragment = Pick<IAutoStorageOptionSettings, 'allow' | 'overflowLevel'>;
+
+export type IAutoStorageSettingsFragment = (
+  Pick<IAutoStorageSettings, 'allowFreeSpots'>
+  & { readonly granary: IAutoStorageOptionSettingsFragment, readonly warehouse: IAutoStorageOptionSettingsFragment }
+);
+
 export type IAutoBuildSettingsFragment = (
   Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
+  & { readonly autoStorage: IAutoStorageSettingsFragment }
   & ITaskSettings_AutoBuildSettings_Fragment
 );
 
