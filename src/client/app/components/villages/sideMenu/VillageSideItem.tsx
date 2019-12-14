@@ -8,17 +8,16 @@ import {
 import { IGetVillagesQuery } from '../../../../_types/graphql';
 import { formatVillageName } from '../../../utils/formatVillageName';
 
-interface IProps {
-  readonly isVillageActive: boolean;
-  readonly village: IGetVillagesQuery['villages'][0];
+interface IStyleProps {
+  readonly isVillageSelected: boolean;
 }
 
-const useStyles = makeStyles<unknown, IProps>({
+const useStyles = makeStyles<unknown, IStyleProps>({
   root: {
     display: 'flex',
   },
   villageName: props => ({
-    color: props.village.isCapital ? '#438655' : undefined,
+    color: props.isVillageSelected ? '#438655' : undefined,
     fontWeight: 'bold',
   }),
   activeDot: {
@@ -31,13 +30,20 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
+interface IProps {
+  readonly isVillageActive: boolean;
+  readonly isVillageSelected: boolean;
+  readonly village: IGetVillagesQuery['villages'][0];
+}
+
 export const VillageSideItem: React.FC<IProps> = (props) => {
   const {
     isVillageActive,
+    isVillageSelected,
     village,
   } = props;
 
-  const classes = useStyles(props);
+  const classes = useStyles({ isVillageSelected });
   const match = useRouteMatch();
 
   return (
@@ -49,7 +55,7 @@ export const VillageSideItem: React.FC<IProps> = (props) => {
         className={classes.villageName}
         to={`${match.url}/${village.id}`}
       >
-        {formatVillageName(village)}
+        {formatVillageName(village)}{village.isCapital ? ' (Capital)': ''}
       </Link>
     </div>
   );

@@ -3,8 +3,3 @@ pouzit nove trav ikonky na suroviny a  tak
 namiesto allow checkboxu dat nejaky toggle - enable/disable
 
 lepsi inidikator ze jednotka ma zapnuty autobuild lebo ked to ma ciernu farbu sa to tazko rozozna
-
-indikator
--dedina je vybrana v UI
--dedina je capital
--dedina je vybrana botom
