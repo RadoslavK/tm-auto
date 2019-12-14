@@ -69,6 +69,8 @@ export const buildingResolvers: Resolvers = {
 
       return new BuildingQueueService(villageId).canMoveToTop(queueId);
     },
+
+    maxBuildingLevel: (_, args) => buildingsService.getBuildingInfo(args.buildingType).maxLevel,
   },
 
   Mutation: {

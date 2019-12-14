@@ -1,6 +1,3 @@
-ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potoms
--alebo ine riesenie
-
 dragging building in queue
 
 log sort by..
