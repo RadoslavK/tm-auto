@@ -1,7 +1,4 @@
-import {
-  useMutation,
-  useQuery,
-} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
 import React, {
   useCallback,
@@ -14,7 +11,6 @@ import {
   ResetSettings,
   UpdateAutoAdventureSettings,
 } from '*/graphql_operations/settings.graphql';
-import { GetVillages } from '*/graphql_operations/village.graphql';
 
 import { NextTaskExecution } from '../../_shared/NextTaskExecution';
 import {
@@ -22,7 +18,6 @@ import {
   IAutoAdventureSettings,
   ICoolDown,
   IDuration,
-  IGetVillagesQuery,
   IResetSettingsMutation,
   IResetSettingsMutationVariables,
   IUpdateAutoAdventureSettingsInput,
@@ -32,6 +27,7 @@ import {
   TaskType,
 } from '../../../../_types/graphql';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
+import { useVillages } from '../../../hooks/villages/useVillages';
 import { CoolDown } from '../../controls/Cooldown';
 import { Duration } from '../../controls/Duration';
 
@@ -88,7 +84,7 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
     }
   }, [state, updateSettings]);
 
-  const { data, loading } = useQuery<IGetVillagesQuery>(GetVillages);
+  const villages = useVillages();
 
   const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), []);
 
@@ -103,13 +99,9 @@ export const AutoAdventureSettings: React.FC<IProps> = (props) => {
     }));
   }, []);
 
-  if (loading || !data) {
+  if (!villages) {
     return null;
   }
-
-  const {
-    villages,
-  } = data;
 
   const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {

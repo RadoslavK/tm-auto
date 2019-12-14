@@ -32,15 +32,11 @@ import {
   IUpdateAutoBuildVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { CoolDown } from '../../controls/Cooldown';
-
-interface IProps {
-  readonly settings: IAutoBuildSettings;
-}
+import { useVillageSettingsContext } from './_context';
 
 const Container: React.FC = () => {
-  const { villageId } = useVillageContext();
+  const { villageId } = useVillageSettingsContext();
   const [settings, setSettings] = useState<IAutoBuildSettings>();
   const { data, loading } = useQuery<IGetAutoBuildSettingsQuery, IGetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
     variables: { villageId },
@@ -66,20 +62,29 @@ const Container: React.FC = () => {
   }
 
   return (
-    <AutoBuildSettings settings={settings} />
+    <AutoBuildSettings
+      key={villageId}
+      settings={settings}
+      villageId={villageId}
+    />
   );
 };
 
 export { Container as AutoBuildSettings };
 
+interface IProps {
+  readonly settings: IAutoBuildSettings;
+  readonly villageId: number;
+}
+
 const AutoBuildSettings: React.FC<IProps> = (props) => {
   const {
     settings,
+    villageId,
   } = props;
 
   const [state, setState] = useState(settings);
 
-  const { villageId } = useVillageContext();
   const input: IUpdateAutoBuildVillageSettingsInput = {
     villageId,
     ...state,

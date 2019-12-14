@@ -18,16 +18,13 @@ import {
 import {
   ActiveVillageId,
   ActiveVillageIdChanged,
-  GetVillages,
-  UpdateVillages,
 } from '*/graphql_operations/village.graphql';
 
 import {
   IActiveVillageIdChangedSubscription,
   IActiveVillageIdQuery,
-  IGetVillagesQuery,
-  IUpdateVillagesSubscription,
 } from '../../../_types/graphql';
+import { useVillages } from '../../hooks/villages/useVillages';
 import { VillageSideItem } from './sideMenu/VillageSideItem';
 import { Village } from './Village';
 
@@ -50,13 +47,7 @@ export const Villages: React.FC = () => {
 
   const classes = useStyles();
 
-  const { data, loading, refetch } = useQuery<IGetVillagesQuery>(GetVillages);
-
-  useSubscription<IUpdateVillagesSubscription>(UpdateVillages, {
-    onSubscriptionData: () => {
-      refetch();
-    },
-  });
+  const villages = useVillages();
 
   const activeVillageIdQueryResult = useQuery<IActiveVillageIdQuery>(ActiveVillageId);
 
@@ -74,14 +65,14 @@ export const Villages: React.FC = () => {
     },
   });
 
-  if (loading || !data || activeVillageIdQueryResult.loading) {
+  if (!villages || activeVillageIdQueryResult.loading) {
     return null;
   }
 
   return (
     <div className={classes.root}>
       <div className={classes.sideMenu}>
-        {data.villages.map(village => (
+        {villages.map(village => (
           <VillageSideItem
             key={village.id}
             village={village}
@@ -91,8 +82,8 @@ export const Villages: React.FC = () => {
       </div>
       <Switch>
         <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />} />
-        {data.villages.length > 0 && (
-          <Redirect to={`${match.url}/${data.villages[0].id}`} />
+        {villages.length > 0 && (
+          <Redirect to={`${match.url}/${villages[0].id}`} />
         )}
       </Switch>
     </div>

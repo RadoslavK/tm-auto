@@ -30,10 +30,11 @@ import {
   IUpdateGeneralVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageSettingsContext } from './_context';
 
 const Container: React.FC = () => {
-  const { villageId } = useVillageContext();
+  const { villageId } = useVillageSettingsContext();
+
   const [settings, setSettings] = useState<IGeneralVillageSettings>();
   const { data, loading } = useQuery<IGetGeneralVillageSettingsQuery, IGetGeneralVillageSettingsQueryVariables>(GetGeneralVillageSettings, {
     variables: { villageId },
@@ -59,7 +60,11 @@ const Container: React.FC = () => {
   }
 
   return (
-    <GeneralVillageSettings settings={settings} />
+    <GeneralVillageSettings
+      key={villageId}
+      settings={settings}
+      villageId={villageId}
+    />
   );
 };
 
@@ -67,14 +72,15 @@ export { Container as GeneralVillageSettings };
 
 interface IProps {
   readonly settings: IGeneralVillageSettings;
+  readonly villageId: number;
 }
 
 const GeneralVillageSettings: React.FC<IProps> = (props) => {
   const {
     settings,
+    villageId,
   } = props;
 
-  const { villageId } = useVillageContext();
   const [state, setState] = useState(settings);
   const input: IUpdateGeneralVillageSettingsInput = {
     ...state,

@@ -32,15 +32,11 @@ import {
   IUpdateAutoUnitsSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { CoolDown } from '../../controls/Cooldown';
-
-interface IProps {
-  readonly settings: IAutoUnitsSettings;
-}
+import { useVillageSettingsContext } from './_context';
 
 const Container: React.FC = () => {
-  const { villageId } = useVillageContext();
+  const { villageId } = useVillageSettingsContext();
   const [settings, setSettings] = useState<IAutoUnitsSettings>();
   const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
     variables: { villageId },
@@ -66,18 +62,27 @@ const Container: React.FC = () => {
   }
 
   return (
-    <AutoUnitsSettings settings={settings} />
+    <AutoUnitsSettings
+      key={villageId}
+      settings={settings}
+      villageId={villageId}
+    />
   );
 };
 
 export { Container as AutoUnitsSettings };
 
+interface IProps {
+  readonly settings: IAutoUnitsSettings;
+  readonly villageId: number;
+}
+
 const AutoUnitsSettings: React.FC<IProps> = (props) => {
   const {
     settings,
+    villageId,
   } = props;
 
-  const { villageId } = useVillageContext();
   const [state, setState] = useState<Omit<IUpdateAutoUnitsSettingsInput, 'villageId'>>({
     allow: settings.allow,
     coolDown: settings.coolDown,

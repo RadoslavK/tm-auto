@@ -1,7 +1,14 @@
 import { makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import { VillageSettingsType } from '../../../../_types/graphql';
+import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillages } from '../../../hooks/villages/useVillages';
+import { formatVillageName } from '../../../utils/formatVillageName';
+import { VillageSettingsContext } from './_context';
 import { AutoBuildSettings } from './AutoBuildSettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
@@ -37,7 +44,20 @@ const TabLink: React.FC<ILinkProps> = (props) => {
 };
 
 export const VillageSettings: React.FC = () => {
+  const { villageId } = useVillageContext();
+  const [selectedVillageId, setSelectedVillageId] = useState(villageId);
+
+  useEffect(() => {
+    setSelectedVillageId(villageId);
+  }, [villageId]);
+
   const [selectedTab, setSelectedTab] = useState<VillageSettingsType>(VillageSettingsType.General);
+
+  const villages = useVillages();
+
+  if (!villages) {
+    return null;
+  }
 
   const renderSettings = (): JSX.Element => {
     switch (selectedTab) {
@@ -48,27 +68,45 @@ export const VillageSettings: React.FC = () => {
     }
   };
 
-  return (
+  return <div>
+    <h1>Village settings</h1>
     <div>
-      <h1>Village settings</h1>
-      <div>
-        <TabLink
-          label="General"
-          isSelected={selectedTab === VillageSettingsType.General}
-          onSelect={() => setSelectedTab(VillageSettingsType.General)}
-        />
-        <TabLink
-          label="Auto Build"
-          isSelected={selectedTab === VillageSettingsType.AutoBuild}
-          onSelect={() => setSelectedTab(VillageSettingsType.AutoBuild)}
-        />
-        <TabLink
-          label="Auto Units"
-          isSelected={selectedTab === VillageSettingsType.AutoUnits}
-          onSelect={() => setSelectedTab(VillageSettingsType.AutoUnits)}
-        />
-      </div>
-      {renderSettings()}
+      <select
+        value={selectedVillageId}
+        onChange={e => {
+          const id = +e.currentTarget.value;
+          setSelectedVillageId(id);
+        }}
+      >
+        {villages.map(village => (
+          <option
+            key={village.id}
+            value={village.id}
+          >
+            {formatVillageName(village)}
+          </option>
+        ))}
+      </select>
     </div>
-  );
+    <div>
+      <TabLink
+        label="General"
+        isSelected={selectedTab === VillageSettingsType.General}
+        onSelect={() => setSelectedTab(VillageSettingsType.General)}
+      />
+      <TabLink
+        label="Auto Build"
+        isSelected={selectedTab === VillageSettingsType.AutoBuild}
+        onSelect={() => setSelectedTab(VillageSettingsType.AutoBuild)}
+      />
+      <TabLink
+        label="Auto Units"
+        isSelected={selectedTab === VillageSettingsType.AutoUnits}
+        onSelect={() => setSelectedTab(VillageSettingsType.AutoUnits)}
+      />
+    </div>
+    <VillageSettingsContext.Provider value={{ villageId: selectedVillageId }}>
+      {renderSettings()}
+    </VillageSettingsContext.Provider>
+  </div>;
 };
