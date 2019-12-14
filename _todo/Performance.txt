@@ -1,0 +1,3 @@
+debouncovat aj napriklad tie graphql update uz na klientovi.
+
+debouncovat save do suboru

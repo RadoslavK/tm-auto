@@ -1,12 +1,18 @@
-dragging building in queue
+---------General-----------
+
+filtre na dediny
+moznost premenovat si dedinu podla seba - iba v UI
+vytvaranie skupin atd
 
 log sort by..
+
+---------AutoBuild---------
 
 buildings sort..
 -v ramci res fields podla levelu napriklad
 -custom groupping
 -Filter budov, napr vyhladat konkretnu budovu a tu naklikat
 
-filtre na dediny
-moznost premenovat si dedinu podla seba - iba v UI
-vytvaranie skupin atd
+dragging building in queue
+
+pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy

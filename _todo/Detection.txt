@@ -1,0 +1,9 @@
+delay pri klikani a tak?
+
+minimalna doba medzi 1 cekovanim dediny a druhym
+
+proxy
+
+..overit cookies
+
+operation times/hours
