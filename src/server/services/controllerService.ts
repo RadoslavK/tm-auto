@@ -145,5 +145,5 @@ class ControllerServiceMock extends ControllerService {
   public state = (): BotState => BotState.Paused;
 }
 
-// export const controllerService = new ControllerService();
-export const controllerService = new ControllerServiceMock();
+export const controllerService = new ControllerService();
+// export const controllerService = new ControllerServiceMock();

@@ -7,6 +7,94 @@ import {
   isInfrastructure,
   isResourceField,
 } from '../../utils/buildingUtils';
+import { validateUrl } from '../../utils/validateUrl';
+
+const navigateByLink = async (path: string): Promise<boolean> => {
+  const page = await getPage();
+  const link = await page.$(`[href="${path}"]`);
+
+  if (!link) {
+    return false;
+  }
+
+  try {
+    await Promise.all([
+      page.evaluate(el => el.click(), link),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+  } catch {
+    throw new Error(`Failed to load page: ${path}`);
+  }
+
+  return true;
+};
+
+const navigateByOnClick = async (path: string): Promise<boolean> => {
+  const page = await getPage();
+  const link = await page.$(`[onclick="window.location.href='${path}'"]`);
+
+  if (!link) {
+    return false;
+  }
+
+  try {
+    await Promise.all([
+      link.evaluate(node => node.dispatchEvent(new Event('click'))),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+  } catch {
+    throw new Error(`Failed to load page: ${path}`);
+  }
+
+  return true;
+};
+
+const navigateByJQuery = async (path: string): Promise<boolean> => {
+  const page = await getPage();
+  const pageContent = await page.content();
+
+  const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
+  const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
+
+  if (!redirectElementIdMatch) {
+    return false;
+  }
+
+  const redirectElementId = redirectElementIdMatch[1];
+
+  const redirectElement = await page.$(`#${redirectElementId}`);
+
+  if (!redirectElement) {
+    throw new Error('Did not find redirect element for redirect id');
+  }
+
+  try {
+    await Promise.all([
+      redirectElement.click(),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+  } catch {
+    throw new Error(`Failed to load page: ${path}`);
+  }
+
+  return true;
+};
+
+const navigate = async (path: string): Promise<void> => {
+  if (await navigateByLink(path)) {
+    return;
+  }
+
+  if (await navigateByOnClick(path)) {
+    return;
+  }
+
+  if (await navigateByJQuery(path)) {
+    return;
+  }
+
+  throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
+};
 
 export const ensurePage = async (path: string, exact = false): Promise<void> => {
   const page = await getPage();
@@ -19,63 +107,9 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
     return;
   }
 
-  let link = await page.$(`[href*="${path}"]`);
+  await navigate(path);
 
-  if (link) {
-    try {
-      await Promise.all([
-        page.evaluate(el => el.click(), link),
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-      ]);
-    } catch {
-      throw new Error(`Failed to load page: ${path}`);
-    }
-
-    return;
-  }
-
-  //  might be an onclick event
-  link = await page.$(`[onclick*="${path}"]`);
-
-  if (link) {
-    try {
-      await Promise.all([
-        link.evaluate(node => node.dispatchEvent(new Event('click'))),
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-      ]);
-    } catch {
-      throw new Error(`Failed to load page: ${path}`);
-    }
-
-    return;
-  }
-
-  //  can be redirect through jquery
-  const pageContent = await page.content();
-
-  const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
-  const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
-
-  if (!redirectElementIdMatch) {
-    throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
-  }
-
-  const redirectElementId = redirectElementIdMatch[1];
-
-  const redirectElement = await page.$(`#${redirectElementId}`);
-
-  if (!redirectElement) {
-    throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
-  }
-
-  try {
-    await Promise.all([
-      redirectElement.click(),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    ]);
-  } catch {
-    throw new Error(`Failed to load page: ${path}`);
-  }
+  await validateUrl([path], exact);
 };
 
 export interface ITabInformation {
