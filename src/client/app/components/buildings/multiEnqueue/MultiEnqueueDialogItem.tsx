@@ -7,14 +7,13 @@ interface IProps {
   readonly fieldId: number;
   readonly onSelect: () => void;
   readonly targetLevel: number;
-  readonly totalLevel: number;
 }
 
 export const MultiEnqueueDialogItem: React.FC<IProps> = (props) => {
   const [enqueue] = useEnqueueBuildingMutation({
     fieldId: props.fieldId,
     buildingType: props.buildingType,
-    levels: props.targetLevel - props.totalLevel,
+    targetLevel: props.targetLevel,
   });
 
   const onClick = async (): Promise<void> => {

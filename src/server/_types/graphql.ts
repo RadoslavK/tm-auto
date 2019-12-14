@@ -211,9 +211,9 @@ export type IDurationInput = {
 
 export type IEnqueueBuildingInput = {
   readonly fieldId: Scalars['Int'],
-  readonly levels: Scalars['Int'],
   readonly type: Scalars['Int'],
   readonly villageId: Scalars['Int'],
+  readonly targetLevel: Maybe<Scalars['Int']>,
 };
 
 export type IGeneralSettings = {

@@ -10,8 +10,6 @@ buildings sort..
 -custom groupping
 -Filter budov, napr vyhladat konkretnu budovu a tu naklikat
 
-pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift
-
 filtre na dediny
 moznost premenovat si dedinu podla seba - iba v UI
 vytvaranie skupin atd

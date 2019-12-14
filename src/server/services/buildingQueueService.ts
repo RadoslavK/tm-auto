@@ -12,7 +12,7 @@ import { fileService } from './fileService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
-  readonly levels: number;
+  readonly targetLevel: number | null;
   readonly type: BuildingType;
 }
 
@@ -48,12 +48,17 @@ export class BuildingQueueService {
     const {
       type,
       fieldId,
-      levels,
+      targetLevel,
     } = building;
 
     const spot = this.m_village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.total();
     const { maxLevel } = buildingsService.getBuildingInfo(type);
+
+    const levels = targetLevel
+      ? targetLevel - totalLevel
+      : 1;
+
     let enqueued = false;
 
     for (let i = 1; i <= levels; i++) {

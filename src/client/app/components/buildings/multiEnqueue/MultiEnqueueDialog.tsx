@@ -28,7 +28,6 @@ export const MultiEnqueueDialog: React.FC<IProps> = (props) => {
           buildingType={buildingType}
           fieldId={fieldId}
           onSelect={onSelect}
-          totalLevel={totalLevel}
         />
       ))}
     </div>

@@ -25,9 +25,9 @@ input ClearQueueInput {
 
 input EnqueueBuildingInput {
     fieldId: Int!
-    levels: Int!
     type: Int!
     villageId: Int!
+    targetLevel: Int
 }
 
 extend type Mutation {

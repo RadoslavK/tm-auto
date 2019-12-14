@@ -74,6 +74,8 @@ export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
 
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
+      } else if (event.shiftKey) {
+        await enqueue(building.level.max);
       } else {
         await enqueue();
       }
