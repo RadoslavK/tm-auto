@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import {
   Link,
+  useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 
@@ -45,6 +46,9 @@ export const VillageSideItem: React.FC<IProps> = (props) => {
 
   const classes = useStyles({ isVillageSelected });
   const match = useRouteMatch();
+  const location = useLocation();
+  const regExp = new RegExp(`${match.path}\\/(\\d+)`);
+  const path = location.pathname.replace(regExp, `${match.path}/${village.id}`);
 
   return (
     <div className={classes.root}>
@@ -53,7 +57,7 @@ export const VillageSideItem: React.FC<IProps> = (props) => {
       )}
       <Link
         className={classes.villageName}
-        to={`${match.url}/${village.id}`}
+        to={path}
       >
         {formatVillageName(village)}{village.isCapital ? ' (Capital)': ''}
       </Link>
