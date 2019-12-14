@@ -1,0 +1,16 @@
+po reloade sa zle vyhodnocuju queries. pravdepodobne sa zle uvolnuju resources v IPC
+
+pri prepnuti uctu este asi obdrzi informacie z predchadazajuceho lebo graphql na klientovi zaloguje error.. toto sa uz dlho nestalo
+
+vyzera ze nebuduje dobre budovy ked je naklikanych v queue viac rovnakeho typu alebo minimalne ked viac existuje v dedine alebo kombinacia.. s ukrytami
+dalsi podobny problem: povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne
+....zase sa to stalo
+queue vyzerala tak ze wall 2-10 a potom market 2-10 a medzi tym iron fieldy
+.potom sa to stalo aj s marketom ked bol 2-10 na tom istom lvlu.. povedal ze lvl7 stava ale staval 6
+
+divny village res formatting..
+suroviny su po  1.0 a 1.1k cize asi spravny formatting ale total ukazuje jak 4,324/62k. nedava zmysel
+
+unit indexy nesedia lebo napisal ze stava senatora namiesto settler
+
+tie odhadovane casy budov nesedia.. mozno sa zmenili v hre.. o 10 sekund pre ukryt lvl 7 napr na speede

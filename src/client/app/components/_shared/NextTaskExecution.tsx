@@ -44,7 +44,6 @@ export const NextTaskExecution: React.FC<IProps> = (props) => {
 
   const onReset = (): void => {
     resetNextTaskExecution({ variables: { task } });
-    setShowForm(false);
   };
 
   return (

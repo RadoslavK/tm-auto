@@ -1,0 +1,17 @@
+village settings -> moznost prepinat medzi dedinami v tom dialogu
+
+ked sa prepne dedina ostat v tej istej casti UI
+
+ctrl click na novu budovu tiez nech da na vyber level alebo ten level dat vedla nej alebo nieco nech sa nemusi na nu klikat znovu potoms
+-alebo ine riesenie
+
+dragging building in queue
+
+log sort by..
+
+buildings sort..
+-v ramci res fields podla levelu napriklad
+-custom groupping
+-Filter budov, napr vyhladat konkretnu budovu a tu naklikat
+
+pridat v enqueue tlacitko nech to da na max level. skor skratku asi shift

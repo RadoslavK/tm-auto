@@ -1,0 +1,55 @@
+--------------Inspiracia / Future----------------------
+
+https://travibot.com/en/travian-bot-5-1-0-0/
+
+travian codex: nove budovy a tak
+
+do building info pridat cp
+
+do troops info pridat carry capacity, defense, move speed
+
+building mode templates
+--vytvorit sablonu, podobne ako v secondvillagebot su tie Level podla toho stava budovy
+
+building queue... umoznit spojit budovy dokopy a bude to ukazovat totalny cas, res atd.. tato skupina sa bude dat odstranit tiez alebo rozbalit.
+
+delay pri klikani a tak?
+minimalna doba medzi 1 cekovanim dediny a druhym
+
+auto warehouse - iba ked neni 1 uz na max lvl??.. co je toto, preverit
+
+dat viacej moznosti v stavacom okne. napr vsetky res na nejaky level atd
+
+max warehouse/granary fullness when taking adventure
+- zalezi ci sa implementuje ta vec ze sa to ulozi do inventara
+
+-------------------New features-------------------
+
+reset to default everything alebo ciastocne (settings)
+
+Mozno kontrola ze kolko max settler/chief sa da vobec postavit
+
+hrdinovi pridat nech nejde na adventuru pokial expiruje pocas cesty a mozno nejaky threshold ze kedy ma preferovat tu co skoro expiruje radsej nez nieco ine
+
+reports + analyza okolia, messages, market, spravy
+
+Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
+
+ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je videt aj s ongoing a queued
+a toto iste pridat aj pre kapacitu - warehouse/granary
+
+allow creating own defautls
+
+market requirements - great warehouse, granary sa pocita ale neviem ci treba cele kombo alebo lubovolne
+--uistit sa ci je to fakt real
+
+allow building on free spots flag
+
+proxy
+..overit cookies
+
+operation times/hours
+
+---------ESLINT--------------------
+-objects new line
+-aj na funkcie argumenty

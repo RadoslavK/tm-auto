@@ -46,7 +46,6 @@ export const NextVillageTaskExecution: React.FC<IProps> = (props) => {
 
   const onReset = (): void => {
     resetNextVillageTaskExecution({ variables: { villageId, task } });
-    setShowForm(false);
   };
 
   return (

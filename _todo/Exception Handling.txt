@@ -1,0 +1,12 @@
+ked spatne ten server, nejak detekovat a dat moznost ho restartovat z klienta
+
+pozastavit bota ked spadne X krat.. a logovat tie exceptiony aj do suboru a aj ten bot log co robil dat do suboru a tam asi includnut viacej veci nech sa da trackovat co bot robil a dat flag ci chceme aby to trackoval
+
+po exceptione refreshnut stranku a pokracovat skusit znovu..
+
+dat do serveru check ze nebezi oproti spravnej node verzii a log
+
+nejaka retry policy ked zlyha login az po zobrazenie UI
+
+pokial spadne na strane klienta.. napr poslalo sa malo dat kvoli chybajecemu fragment importu v operacii na klientovi sa nastavi errors ale pristupne je az v onError funkcii pre konkretnu query a nie v tom apollo link errors handleri
+-https://github.com/apollographql/apollo-link/issues/793

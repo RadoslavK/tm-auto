@@ -1,0 +1,7 @@
+oddelit can move od building que.. potom ked as pohne v queue bude stacit nacitat ci sa moze pohnut a ne celu budovu zase
+
+nejak to spravit nech to generuje spolocne typescript typy  do shared
+
+tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all: true } setting tak vrati iny typ
+
+aj ostatne settingy updatovat ciastocne a requestovat ked sa da
