@@ -35,8 +35,13 @@ const useStyles = makeStyles<unknown, IProps>({
     flexFlow: 'column',
     alignItems: 'flex-start',
   }),
-  queueButtons: {
-    flex: 1,
+  queueButtons: ({ building }) => {
+    const isMaxed = building.type > 0 && building.level.total === building.level.max;
+
+    return {
+      flex: 1,
+      visibility: isMaxed ? 'hidden' : undefined,
+    };
   },
   fieldId: {
     background: '#b1b5b9',
@@ -105,11 +110,11 @@ export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
           <BuildingLevelBox level={building.level} />
         )}
         <div className={classes.queueButtons}>
-          <button type="button" disabled={building.type > 0 && building.level.total === building.level.max} onClick={onEnqueue}>
+          <button type="button" onClick={onEnqueue}>
             +
           </button>
           {building.level.queued > 0 && (
-            <button type="button" disabled={!building.level.queued} onClick={onDequeue}>
+            <button type="button" onClick={onDequeue}>
               -
             </button>
           )}
