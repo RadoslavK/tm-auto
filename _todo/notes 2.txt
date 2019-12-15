@@ -22,7 +22,7 @@ pozor na kontrolu toho co je mozne do queue vlozit lebo treba kontrolovat aj sur
 balancovanie surovin, posielanie si medzi sebou na vystavbu
 -- + traderoutes
 
--download map.sql a evidovat historiu hracov dedin atd	
+-download map.sql a evidovat historiu hracov dedin atd
 
 double build pokial ma big barracks
 
@@ -56,8 +56,7 @@ reports + analyza okolia, messages, market, spravy
 
 Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
 
-ukazovat niekde kolko suruvoin ukryju ukryty v dedine a nejaky switch nech je videt aj s ongoing a queued
-a toto iste pridat aj pre kapacitu - warehouse/granary
+pre kapacitu: warehouse/granary dat moznost zobrazit kapacitu ktora bude po dostavani ongoing a ktora bude ked sa dostava vsetko z queue.
 
 allow creating own defautls
 

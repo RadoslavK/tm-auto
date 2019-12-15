@@ -35,7 +35,7 @@ export class BuildingQueueService {
     this.m_filePath = dataPathService.villagePath(villageId).queue;
   }
 
-  public serializeQueue = async (): Promise<void> => {
+  private serializeQueue = async (): Promise<void> => {
     return fileService.save(this.m_filePath, this.m_village.buildings.queue.buildings());
   };
 
@@ -82,8 +82,7 @@ export class BuildingQueueService {
     }
 
     if (enqueued) {
-      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-      this.serializeQueue();
+      this.onUpdate();
     }
   };
 
@@ -94,8 +93,6 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-    this.serializeQueue();
   };
 
   public dequeueBuildingAtField = (input: IDequeueAtFieldInput): void => {
@@ -113,8 +110,6 @@ export class BuildingQueueService {
     }
 
     this.correctBuildingQueue();
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-    this.serializeQueue();
   };
 
   public moveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -128,8 +123,7 @@ export class BuildingQueueService {
       this.m_village.buildings.queue.moveDown(queueId);
     }
 
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-    this.serializeQueue();
+    this.onUpdate();
     return true;
   };
 
@@ -172,8 +166,7 @@ export class BuildingQueueService {
     }
 
     this.m_village.buildings.queue.move(queueIndex, newIndex);
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-    this.serializeQueue();
+    this.onUpdate();
   };
 
   public clearQueue = (): void => {
@@ -188,8 +181,7 @@ export class BuildingQueueService {
       spot.level.queued = 0;
     });
 
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
-    this.serializeQueue();
+    this.onUpdate();
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
@@ -328,6 +320,8 @@ export class BuildingQueueService {
     spots.forEach(spot => {
       spot.level.queued = offsets[spot.fieldId];
     });
+
+    this.onUpdate();
   };
 
   public getMainBuildingLevels = (): Record<string, number> => {
@@ -455,5 +449,15 @@ export class BuildingQueueService {
     }
 
     return false;
+  };
+
+  private onUpdate = async (): Promise<void> => {
+    const promise = Promise.all([
+      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id }),
+      publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.m_village.id }),
+    ]);
+
+    this.serializeQueue();
+    await promise;
   };
 }

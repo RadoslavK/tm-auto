@@ -15,6 +15,7 @@ import { updateBuildings } from '../controller/actions/buildings/updateBuildings
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
 import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
+import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/tasks/taskManager';
@@ -71,6 +72,8 @@ class ControllerService {
       await updateResources();
       await updateBuildings();
     }
+
+    await updatePlayerInfo();
 
     const generalSettings = accountContext.settingsService.general.get();
 

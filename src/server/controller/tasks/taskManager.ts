@@ -1,6 +1,6 @@
+import { getAllEnumValues } from '../../../_shared/enumUtils';
 import { TravianPath } from '../../_enums/travianPath';
 import { Village } from '../../_models/village/village';
-import { getAllEnumValues } from '../../../_shared/enumUtils';
 import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import {
@@ -164,8 +164,11 @@ export class TaskManager {
 
       await taskEngine.execute();
 
-      await publishPayloadEvent(BotEvent.BuildingsUpdated, { villageId: village.id });
-      await publishEvent(BotEvent.VillageUpdated);
+      await Promise.all([
+        publishPayloadEvent(BotEvent.BuildingsUpdated, { villageId: village.id }),
+        publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: village.id }),
+        publishEvent(BotEvent.VillageUpdated),
+      ]);
     }
   };
 

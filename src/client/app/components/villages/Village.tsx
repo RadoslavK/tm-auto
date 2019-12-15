@@ -34,6 +34,7 @@ import {
   IVillageContext,
   VillageContext,
 } from './context/villageContext';
+import { CrannyCapacity } from './CrannyCapacity';
 import { Resources } from './Resources';
 
 interface IParams {
@@ -87,6 +88,7 @@ export const Village: React.FC<IParams> = (props) => {
     <div>
       <VillageContext.Provider value={context}>
         <Resources resources={resources} />
+        <CrannyCapacity />
         <button type="button" onClick={openSettings}>
           Settings
         </button>

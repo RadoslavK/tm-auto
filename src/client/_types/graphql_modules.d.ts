@@ -176,12 +176,15 @@ declare module '*/graphql_operations/unit.graphql' {
 declare module '*/graphql_operations/village.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const GetVillageById: DocumentNode;
+  export const VillageCrannyCapacity: DocumentNode;
+export const GetVillageById: DocumentNode;
 export const GetVillages: DocumentNode;
 export const ActiveVillageId: DocumentNode;
+export const CrannyCapacity: DocumentNode;
 export const UpdateVillage: DocumentNode;
 export const UpdateVillages: DocumentNode;
 export const ActiveVillageIdChanged: DocumentNode;
+export const CrannyCapacityChanged: DocumentNode;
 
   export default defaultDocument;
 }

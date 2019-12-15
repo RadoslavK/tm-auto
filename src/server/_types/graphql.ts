@@ -475,6 +475,7 @@ export type IQuery = {
   readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
+  readonly crannyCapacity: IVillageCrannyCapacity,
 };
 
 
@@ -553,6 +554,11 @@ export type IQueryVillageArgs = {
   villageId: Scalars['Int']
 };
 
+
+export type IQueryCrannyCapacityArgs = {
+  villageId: Scalars['Int']
+};
+
 export type IQueuedBuilding = {
   readonly __typename?: 'QueuedBuilding',
   readonly canMoveDown: Scalars['Boolean'],
@@ -615,6 +621,7 @@ export type ISubscription = {
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
   readonly activeVillageIdChanged: Scalars['Int'],
+  readonly crannyCapacityChanged: Scalars['Boolean'],
 };
 
 
@@ -655,6 +662,11 @@ export type ISubscriptionAutoUnitsSettingsChangedArgs = {
 
 
 export type ISubscriptionAutoPartySettingsChangedArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionCrannyCapacityChangedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -781,6 +793,13 @@ export type IVillageCapacity = {
   readonly __typename?: 'VillageCapacity',
   readonly granary: Scalars['Int'],
   readonly warehouse: Scalars['Int'],
+};
+
+export type IVillageCrannyCapacity = {
+  readonly __typename?: 'VillageCrannyCapacity',
+  readonly actual: Scalars['Int'],
+  readonly ongoing: Scalars['Int'],
+  readonly total: Scalars['Int'],
 };
 
 export type IVillageResources = {
@@ -934,6 +953,7 @@ export type IResolversTypes = {
   AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
   PartyType: PartyType,
   UnitInfo: ResolverTypeWrapper<IUnitInfo>,
+  VillageCrannyCapacity: ResolverTypeWrapper<IVillageCrannyCapacity>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserAccountInput: ICreateUserAccountInput,
   UpdateUserAccountInput: IUpdateUserAccountInput,
@@ -1013,6 +1033,7 @@ export type IResolversParentTypes = {
   AutoPartySettings: IAutoPartySettings,
   PartyType: PartyType,
   UnitInfo: IUnitInfo,
+  VillageCrannyCapacity: IVillageCrannyCapacity,
   Mutation: {},
   CreateUserAccountInput: ICreateUserAccountInput,
   UpdateUserAccountInput: IUpdateUserAccountInput,
@@ -1277,6 +1298,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   activeVillageId: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   village: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType, RequireFields<IQueryVillageArgs, 'villageId'>>,
   villages: Resolver<ReadonlyArray<IResolversTypes['Village']>, ParentType, ContextType>,
+  crannyCapacity: Resolver<IResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<IQueryCrannyCapacityArgs, 'villageId'>>,
 };
 
 export type IQueuedBuildingResolvers<ContextType = any, ParentType extends IResolversParentTypes['QueuedBuilding'] = IResolversParentTypes['QueuedBuilding']> = {
@@ -1323,6 +1345,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   updateVillage: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
   updateVillages: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
   activeVillageIdChanged: SubscriptionResolver<IResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>,
+  crannyCapacityChanged: SubscriptionResolver<IResolversTypes['Boolean'], "crannyCapacityChanged", ParentType, ContextType, RequireFields<ISubscriptionCrannyCapacityChangedArgs, 'villageId'>>,
 };
 
 export type ITextLogEntryContentResolvers<ContextType = any, ParentType extends IResolversParentTypes['TextLogEntryContent'] = IResolversParentTypes['TextLogEntryContent']> = {
@@ -1359,6 +1382,12 @@ export type IVillageResolvers<ContextType = any, ParentType extends IResolversPa
 export type IVillageCapacityResolvers<ContextType = any, ParentType extends IResolversParentTypes['VillageCapacity'] = IResolversParentTypes['VillageCapacity']> = {
   granary: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   warehouse: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+};
+
+export type IVillageCrannyCapacityResolvers<ContextType = any, ParentType extends IResolversParentTypes['VillageCrannyCapacity'] = IResolversParentTypes['VillageCrannyCapacity']> = {
+  actual: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  ongoing: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
+  total: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
 };
 
 export type IVillageResourcesResolvers<ContextType = any, ParentType extends IResolversParentTypes['VillageResources'] = IResolversParentTypes['VillageResources']> = {
@@ -1417,6 +1446,7 @@ export type IResolvers<ContextType = any> = {
   UserAccount: IUserAccountResolvers<ContextType>,
   Village: IVillageResolvers<ContextType>,
   VillageCapacity: IVillageCapacityResolvers<ContextType>,
+  VillageCrannyCapacity: IVillageCrannyCapacityResolvers<ContextType>,
   VillageResources: IVillageResourcesResolvers<ContextType>,
   VillageSettings: IVillageSettingsResolvers<ContextType>,
 };

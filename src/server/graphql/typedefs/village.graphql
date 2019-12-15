@@ -17,14 +17,22 @@ type Village {
     isCapital: Boolean!
 }
 
+type VillageCrannyCapacity {
+    actual: Int!
+    ongoing: Int!
+    total: Int!
+}
+
 extend type Query {
     activeVillageId: Int!
     village(villageId: Int!): Village
     villages: [Village!]!,
+    crannyCapacity(villageId: Int!): VillageCrannyCapacity!
 }
 
 extend type Subscription {
     updateVillage: Boolean!
     updateVillages: Boolean!
     activeVillageIdChanged: Int!
+    crannyCapacityChanged(villageId: Int!): Boolean!
 }

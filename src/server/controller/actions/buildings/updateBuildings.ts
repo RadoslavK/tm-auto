@@ -29,5 +29,4 @@ export const updateBuildings = async (): Promise<void> => {
 
   const queueService = new BuildingQueueService(village.id);
   queueService.correctBuildingQueue();
-  queueService.serializeQueue();
 };

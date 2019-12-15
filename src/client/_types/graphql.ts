@@ -443,6 +443,7 @@ export type IQuery = {
   readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
   readonly villages: ReadonlyArray<IVillage>,
+  readonly crannyCapacity: IVillageCrannyCapacity,
 };
 
 
@@ -521,6 +522,11 @@ export type IQueryVillageArgs = {
   villageId: Scalars['Int']
 };
 
+
+export type IQueryCrannyCapacityArgs = {
+  villageId: Scalars['Int']
+};
+
 export type IQueuedBuilding = {
   readonly canMoveDown: Scalars['Boolean'],
   readonly canMoveUp: Scalars['Boolean'],
@@ -579,6 +585,7 @@ export type ISubscription = {
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
   readonly activeVillageIdChanged: Scalars['Int'],
+  readonly crannyCapacityChanged: Scalars['Boolean'],
 };
 
 
@@ -619,6 +626,11 @@ export type ISubscriptionAutoUnitsSettingsChangedArgs = {
 
 
 export type ISubscriptionAutoPartySettingsChangedArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionCrannyCapacityChangedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -738,6 +750,12 @@ export type IVillage = {
 export type IVillageCapacity = {
   readonly granary: Scalars['Int'],
   readonly warehouse: Scalars['Int'],
+};
+
+export type IVillageCrannyCapacity = {
+  readonly actual: Scalars['Int'],
+  readonly ongoing: Scalars['Int'],
+  readonly total: Scalars['Int'],
 };
 
 export type IVillageResources = {
@@ -1300,6 +1318,8 @@ export type IGetUnitInfoQueryVariables = {
 
 export type IGetUnitInfoQuery = { readonly unitInfo: Pick<IUnitInfo, 'name'> };
 
+export type IVillageCrannyCapacityFragment = Pick<IVillageCrannyCapacity, 'actual' | 'ongoing' | 'total'>;
+
 export type IGetVillageByIdQueryVariables = {
   villageId: Scalars['Int']
 };
@@ -1323,6 +1343,13 @@ export type IActiveVillageIdQueryVariables = {};
 
 export type IActiveVillageIdQuery = Pick<IQuery, 'activeVillageId'>;
 
+export type ICrannyCapacityQueryVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type ICrannyCapacityQuery = { readonly crannyCapacity: IVillageCrannyCapacityFragment };
+
 export type IUpdateVillageSubscriptionVariables = {};
 
 
@@ -1337,3 +1364,10 @@ export type IActiveVillageIdChangedSubscriptionVariables = {};
 
 
 export type IActiveVillageIdChangedSubscription = Pick<ISubscription, 'activeVillageIdChanged'>;
+
+export type ICrannyCapacityChangedSubscriptionVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type ICrannyCapacityChangedSubscription = Pick<ISubscription, 'crannyCapacityChanged'>;

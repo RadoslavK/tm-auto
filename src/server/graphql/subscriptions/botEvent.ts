@@ -7,6 +7,7 @@ import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySetting
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   ILogEntry,
+  IVillageCrannyCapacity,
   TaskType,
   VillageTaskType,
 } from '../../_types/graphql';
@@ -31,6 +32,8 @@ export enum BotEvent {
   NextTasksExecutionChanged = 'NextTasksExecutionChanged',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
   NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
+
+  CrannyCapacityUpdated = 'CrannyCapacityUpdated',
 }
 
 export type BotEventPayloads = {
@@ -95,5 +98,9 @@ export type BotEventPayloads = {
     readonly villageId: number;
     readonly task: VillageTaskType;
     readonly nextExecution: Date;
+  },
+
+  [BotEvent.CrannyCapacityUpdated]: {
+    readonly villageId: number;
   }
 }

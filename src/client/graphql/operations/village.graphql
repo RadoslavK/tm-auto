@@ -1,5 +1,11 @@
 #import "./misc.graphql"
 
+fragment VillageCrannyCapacity on VillageCrannyCapacity {
+    actual
+    ongoing
+    total
+}
+
 query GetVillageById($villageId: Int!) {
     village(villageId: $villageId) {
         coords {
@@ -37,6 +43,12 @@ query ActiveVillageId {
     activeVillageId
 }
 
+query CrannyCapacity($villageId: Int!) {
+    crannyCapacity(villageId: $villageId) {
+        ...VillageCrannyCapacity
+    }
+}
+
 subscription UpdateVillage {
     updateVillage
 }
@@ -47,4 +59,8 @@ subscription UpdateVillages {
 
 subscription ActiveVillageIdChanged {
     activeVillageIdChanged
+}
+
+subscription CrannyCapacityChanged($villageId: Int!) {
+    crannyCapacityChanged(villageId: $villageId)
 }
