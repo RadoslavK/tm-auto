@@ -61,15 +61,6 @@ export const buildingResolvers: Resolvers = {
       }));
     },
 
-    canMoveToTop: (_, args) => {
-      const {
-        villageId,
-        queueId,
-      } = args;
-
-      return new BuildingQueueService(villageId).canMoveToTop(queueId);
-    },
-
     maxBuildingLevel: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType).maxLevel,
   },
 
@@ -141,9 +132,9 @@ export const buildingResolvers: Resolvers = {
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
     },
 
-    moveQueuedBuildingToTop: (_, args) => {
+    moveQueuedBuildingAsHighAsPossible: (_, args) => {
       const queueManager = new BuildingQueueService(args.villageId);
-      queueManager.moveToTop(args.queueId);
+      queueManager.moveAsHighAsPossible(args.queueId);
       return true;
     },
   },

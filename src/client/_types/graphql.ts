@@ -265,7 +265,7 @@ export type IMutation = {
   readonly dequeueBuilding: Scalars['Boolean'],
   readonly dequeueBuildingAtField: Scalars['Boolean'],
   readonly enqueueBuilding: Scalars['Boolean'],
-  readonly moveQueuedBuildingToTop: Scalars['Boolean'],
+  readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'],
   readonly moveQueuedBuildingDown: Scalars['Boolean'],
   readonly moveQueuedBuildingUp: Scalars['Boolean'],
   readonly updateGeneralSettings: Scalars['Boolean'],
@@ -345,7 +345,7 @@ export type IMutationEnqueueBuildingArgs = {
 };
 
 
-export type IMutationMoveQueuedBuildingToTopArgs = {
+export type IMutationMoveQueuedBuildingAsHighAsPossibleArgs = {
   villageId: Scalars['Int'],
   queueId: Scalars['ID']
 };
@@ -432,7 +432,6 @@ export type IQuery = {
   readonly nextTasksExecution: ITimestamp,
   readonly nextTaskExecution: ITimestamp,
   readonly nextVillageTaskExecution: ITimestamp,
-  readonly canMoveToTop: Scalars['Boolean'],
   readonly buildingQueue: IBuildingQueue,
   readonly generalSettings: IGeneralSettings,
   readonly hero: IHeroSettings,
@@ -485,12 +484,6 @@ export type IQueryNextTaskExecutionArgs = {
 export type IQueryNextVillageTaskExecutionArgs = {
   villageId: Scalars['Int'],
   task: VillageTaskType
-};
-
-
-export type IQueryCanMoveToTopArgs = {
-  villageId: Scalars['Int'],
-  queueId: Scalars['ID']
 };
 
 
@@ -1065,13 +1058,13 @@ export type IMoveQueuedBuildingUpMutationVariables = {
 
 export type IMoveQueuedBuildingUpMutation = Pick<IMutation, 'moveQueuedBuildingUp'>;
 
-export type IMoveQueuedBuildingToTopMutationVariables = {
+export type IMoveQueuedBuildingAsHighAsPossibleMutationVariables = {
   villageId: Scalars['Int'],
   queueId: Scalars['ID']
 };
 
 
-export type IMoveQueuedBuildingToTopMutation = Pick<IMutation, 'moveQueuedBuildingToTop'>;
+export type IMoveQueuedBuildingAsHighAsPossibleMutation = Pick<IMutation, 'moveQueuedBuildingAsHighAsPossible'>;
 
 export type IGetQueuedBuildingsQueryVariables = {
   villageId: Scalars['Int']
@@ -1082,14 +1075,6 @@ export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buil
       Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
       & { readonly cost: ICostFragment }
     )>, readonly totalCost: ICostFragment } };
-
-export type ICanMoveToTopQueryVariables = {
-  villageId: Scalars['Int'],
-  queueId: Scalars['ID']
-};
-
-
-export type ICanMoveToTopQuery = Pick<IQuery, 'canMoveToTop'>;
 
 export type IOnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['Int']

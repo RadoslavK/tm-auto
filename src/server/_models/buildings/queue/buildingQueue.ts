@@ -92,12 +92,7 @@ export class BuildingQueue {
     this.move(index, newIndex);
   };
 
-  public pushToTheStart = (qBuilding: QueuedBuilding): void => {
-    this.remove(qBuilding.queueId);
-    this.m_buildings.splice(0, 0, qBuilding);
-  };
-
-  private move = (oldIndex: number, newIndex: number): void => {
+  public move = (oldIndex: number, newIndex: number): void => {
     this.m_buildings.splice(newIndex, 0, this.m_buildings.splice(oldIndex, 1)[0]);
   };
 }

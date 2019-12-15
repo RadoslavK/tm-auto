@@ -1,28 +1,22 @@
-import {
-  useMutation,
-  useQuery,
-} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import classNames from 'classnames';
 import React from 'react';
 
 import {
-  CanMoveToTop,
   DequeueBuilding,
+  MoveQueuedBuildingAsHighAsPossible,
   MoveQueuedBuildingDown,
-  MoveQueuedBuildingToTop,
   MoveQueuedBuildingUp,
 } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  ICanMoveToTopQuery,
-  ICanMoveToTopQueryVariables,
   IDequeueBuildingMutation,
   IDequeueBuildingMutationVariables,
+  IMoveQueuedBuildingAsHighAsPossibleMutation,
+  IMoveQueuedBuildingAsHighAsPossibleMutationVariables,
   IMoveQueuedBuildingDownMutation,
   IMoveQueuedBuildingDownMutationVariables,
-  IMoveQueuedBuildingToTopMutation,
-  IMoveQueuedBuildingToTopMutationVariables,
   IMoveQueuedBuildingUpMutation,
   IMoveQueuedBuildingUpMutationVariables,
   IQueuedBuilding,
@@ -50,9 +44,6 @@ const useStyles = makeStyles({
   },
   moveToTop: {
     backgroundImage: `url("${imageLinks.actions.queue.moveToTop}")`,
-    '&[disabled]': {
-      opacity: 0.5,
-    },
   },
   moveUp: {
     backgroundImage: `url("${imageLinks.actions.queue.moveUp}")`,
@@ -88,11 +79,7 @@ export const QueuedBuildingActions: React.FC<IProps> = (props) => {
     variables: { input },
   };
 
-  const canMoveToTopQueryResult = useQuery<ICanMoveToTopQuery, ICanMoveToTopQueryVariables>(CanMoveToTop, {
-    variables: { villageId, queueId },
-  });
-
-  const [moveToTop] = useMutation<IMoveQueuedBuildingToTopMutation, IMoveQueuedBuildingToTopMutationVariables>(MoveQueuedBuildingToTop, {
+  const [moveToTop] = useMutation<IMoveQueuedBuildingAsHighAsPossibleMutation, IMoveQueuedBuildingAsHighAsPossibleMutationVariables>(MoveQueuedBuildingAsHighAsPossible, {
     variables: { villageId, queueId },
   });
   const [moveDown] = useMutation<IMoveQueuedBuildingDownMutation, IMoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
@@ -101,20 +88,14 @@ export const QueuedBuildingActions: React.FC<IProps> = (props) => {
 
   const classes = useStyles({});
 
-  if (canMoveToTopQueryResult.loading || !canMoveToTopQueryResult.data) {
-    return null;
-  }
-
-  const onMoveToTop = canMoveToTopQueryResult.data.canMoveToTop ? async () => moveToTop() : undefined;
-  const onMoveDown = canMoveDown ? async () => moveDown() : undefined;
-  const onMoveUp = canMoveUp ? async () => moveUp() : undefined;
-  const onDequeue = async (): Promise<void> => {
-    await dequeue();
-  };
+  const onMoveToTop = () => moveToTop();
+  const onMoveDown = canMoveDown ? () => moveDown() : undefined;
+  const onMoveUp = canMoveUp ? () => moveUp() : undefined;
+  const onDequeue = () => dequeue();
 
   return (
     <div className={classNames(className, classes.root)}>
-      <button type="button" className={classNames(classes.image, classes.moveToTop)} disabled={!canMoveToTopQueryResult.data.canMoveToTop} onClick={onMoveToTop} />
+      <button type="button" className={classNames(classes.image, classes.moveToTop)} onClick={onMoveToTop} />
       <button type="button" className={classNames(classes.image, classes.moveUp)} disabled={!canMoveUp} onClick={onMoveUp} />
       <button type="button" className={classNames(classes.image, classes.moveDown)} disabled={!canMoveDown} onClick={onMoveDown} />
       <button type="button" className={classNames(classes.image, classes.delete)} onClick={onDequeue} />

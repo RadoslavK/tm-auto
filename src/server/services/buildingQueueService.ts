@@ -6,9 +6,9 @@ import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { buildingInfoService } from './info/buildingInfoService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
+import { buildingInfoService } from './info/buildingInfoService';
 
 export interface IEnqueuedBuilding {
   readonly fieldId: number;
@@ -133,14 +133,45 @@ export class BuildingQueueService {
     return true;
   };
 
-  public moveToTop = (queueId: string): void => {
-    const queuedBuilding = this.m_village.buildings.queue.buildings().find(b => b.queueId === queueId);
+  public moveAsHighAsPossible = (queueId: string): void => {
+    // key: fieldId, value: queued offset
+    const offsets: Record<number, number> = {};
+    const queuedBuildings = this.m_village.buildings.queue.buildings();
 
-    if (!queuedBuilding) {
+    const spots = this.m_village.buildings.spots.buildings();
+    spots.forEach(spot => {
+      offsets[spot.fieldId] = 0;
+    });
+
+    const movedBuilding = queuedBuildings.find(b => b.queueId === queueId);
+
+    if (!movedBuilding) {
       return;
     }
 
-    this.m_village.buildings.queue.pushToTheStart(queuedBuilding);
+    const queueIndex = this.m_village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
+
+    if (queueIndex === 0) {
+      return;
+    }
+
+    let newIndex: number | undefined;
+
+    for (let i = 0; i < queueIndex; i++) {
+      if (this.willQueuedBuildingStillMeetItsRequirements(movedBuilding, offsets)) {
+        newIndex = i;
+        break;
+      }
+
+      const qBuilding = queuedBuildings[i];
+      offsets[qBuilding.fieldId]++;
+    }
+
+    if (newIndex === undefined) {
+      return;
+    }
+
+    this.m_village.buildings.queue.move(queueIndex, newIndex);
     publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
   };
@@ -159,31 +190,6 @@ export class BuildingQueueService {
 
     publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id });
     this.serializeQueue();
-  };
-
-  public canMoveToTop = (queueId: string): boolean => {
-    // key: fieldId, value: queued offset
-    const offsets: Record<number, number> = {};
-    const queuedBuildings = this.m_village.buildings.queue.buildings();
-
-    const spots = this.m_village.buildings.spots.buildings();
-    spots.forEach(spot => {
-      offsets[spot.fieldId] = 0;
-    });
-
-    const movedBuilding = queuedBuildings.find(b => b.queueId === queueId);
-
-    if (!movedBuilding) {
-      return false;
-    }
-
-    const queueIndex = this.m_village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
-
-    if (queueIndex === 0) {
-      return false;
-    }
-
-    return this.willQueuedBuildingStillMeetItsRequirements(movedBuilding, offsets);
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {

@@ -15,7 +15,6 @@ type BuildingQueue {
 }
 
 extend type Query {
-    canMoveToTop(villageId: Int!, queueId: ID!): Boolean!
     buildingQueue(villageId: Int!): BuildingQueue!
 }
 
@@ -35,7 +34,7 @@ extend type Mutation {
     dequeueBuilding(input: QueuedBuildingManipulationInput!): Boolean!
     dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
-    moveQueuedBuildingToTop(villageId: Int!, queueId: ID!): Boolean!
+    moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
 }
 
 input QueuedBuildingManipulationInput {

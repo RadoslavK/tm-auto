@@ -115,9 +115,8 @@ export const DequeueBuilding: DocumentNode;
 export const DequeueBuildingAtField: DocumentNode;
 export const MoveQueuedBuildingDown: DocumentNode;
 export const MoveQueuedBuildingUp: DocumentNode;
-export const MoveQueuedBuildingToTop: DocumentNode;
+export const MoveQueuedBuildingAsHighAsPossible: DocumentNode;
 export const GetQueuedBuildings: DocumentNode;
-export const CanMoveToTop: DocumentNode;
 export const OnQueueUpdated: DocumentNode;
 
   export default defaultDocument;
