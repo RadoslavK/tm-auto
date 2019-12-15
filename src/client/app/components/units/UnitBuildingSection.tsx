@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core';
+import classNames from 'classnames';
 import React, {
   useCallback,
   useEffect,
@@ -28,6 +29,9 @@ interface IProps {
 }
 
 const useStyles = makeStyles<unknown, [BuildingType, boolean]>({
+  root: {
+    marginRight: 35,
+  },
   building: {
     display: 'flex',
     alignItems: 'center',
@@ -40,8 +44,13 @@ const useStyles = makeStyles<unknown, [BuildingType, boolean]>({
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center center',
     filter: allow ? undefined : 'grayscale(100%)',
-    margin: '0 auto',
+    opacity: allow ? undefined : 0.2,
+    marginRight: 25,
+    marginBottom: 25,
   }),
+  unit: {
+    marginBottom: 30,
+  },
 });
 
 export const UnitBuildingSection: React.FC<IProps> = (props) => {
@@ -97,7 +106,7 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
   const updateMaxBuildTime = useCallback((newValue: IDuration) => setState(prevState => ({ ...prevState, maxBuildTime: newValue })), []);
 
   return (
-    <div className={className}>
+    <div className={classNames(className, classes.root)}>
       <div className={classes.building}>
         <div
           className={classes.buildingImage}
@@ -109,7 +118,11 @@ export const UnitBuildingSection: React.FC<IProps> = (props) => {
         </div>
       </div>
       {settings.units.map(unitSettings => (
-        <UnitSettings key={unitSettings.index} settings={unitSettings} />
+        <UnitSettings
+          key={unitSettings.index}
+          className={classes.unit}
+          settings={unitSettings}
+        />
       ))}
     </div>
   );

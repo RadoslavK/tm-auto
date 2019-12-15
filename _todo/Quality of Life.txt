@@ -16,3 +16,5 @@ buildings sort..
 dragging building in queue
 
 pridat option ze ked ma plus ucet tak bude moct zaradit do queue 2 budovy
+
+umoznit vybrat novu budovu na ktoru nie su splnene poziadavky ale ukazat ju sedu napr a do queue popridavat tak aby poziadavky boli splnene.

@@ -3,6 +3,7 @@ import {
   useQuery,
 } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core';
+import classNames from 'classnames';
 import React, {
   useEffect,
   useState,
@@ -22,6 +23,7 @@ import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../hooks/useVillageContext';
 
 interface IProps {
+  readonly className?: string;
   readonly settings: IAutoUnitsUnitSettings;
 }
 
@@ -33,30 +35,24 @@ interface IStyleProps {
 
 const useStyles = makeStyles<unknown, IStyleProps>({
   root: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 2fr',
-    gridTemplateRows: 'repeat(3, 1fr)',
-    gridGap: 10,
-  },
-  unitName: {
-    gridColumn: '1 / 3',
-    gridRow: '1',
+    display: 'flex',
   },
   unitImage: props => ({
-    gridColumn: '1',
-    gridRow: '2 / 3',
+    flex: '1',
     backgroundImage: `url("${imageLinks.getUnit(props.unitIndex)}")`,
+    filter: props.autoBuild ? undefined : 'grayscale(100%)',
+    opacity: props.autoBuild ? undefined : 0.2,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
-    filter: props.autoBuild ? undefined : 'grayscale(100%)',
+    backgroundPosition: 'center',
+    marginRight: 15,
   }),
-  trainForever: {
-    gridColumn: '2',
-    gridRow: '2',
+  unitInfo: {
+    flex: '3',
+    display: 'flex',
+    flexDirection: 'column',
   },
   targetAmount: props => ({
-    gridColumn: '2',
-    gridRow: '3',
     display: 'flex',
     visibility: props.trainForever ? 'hidden' : undefined,
   }),
@@ -64,6 +60,7 @@ const useStyles = makeStyles<unknown, IStyleProps>({
 
 export const UnitSettings: React.FC<IProps> = (props) => {
   const {
+    className,
     settings,
   } = props;
 
@@ -143,21 +140,20 @@ export const UnitSettings: React.FC<IProps> = (props) => {
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.unitName}>
-        {data.unitInfo.name}
-      </div>
+    <div className={classNames(className, classes.root)}>
       <div
         className={classes.unitImage}
         onClick={toggleAutoBuild}
       />
-      <div className={classes.trainForever}>
-        <label htmlFor="trainForever">Unlimited</label>
-        <input type="checkbox" checked={trainForever} onChange={onBoolChange} id="trainForever" name="trainForever" />
-      </div>
-      <div className={classes.targetAmount}>
-        <label>Target:</label>
-        <input type="number" value={targetAmount} onChange={onNumberChange} id="targetAmount" name="targetAmount" />
+      <div className={classes.unitInfo}>
+        <div>
+          <label htmlFor="trainForever">Unlimited</label>
+          <input type="checkbox" checked={trainForever} onChange={onBoolChange} id="trainForever" name="trainForever" />
+        </div>
+        <div className={classes.targetAmount}>
+          <label>Target:</label>
+          <input type="number" value={targetAmount} onChange={onNumberChange} id="targetAmount" name="targetAmount" />
+        </div>
       </div>
     </div>
   );
