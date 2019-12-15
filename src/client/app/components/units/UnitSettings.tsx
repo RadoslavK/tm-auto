@@ -56,6 +56,9 @@ const useStyles = makeStyles<unknown, IStyleProps>({
     display: 'flex',
     visibility: props.trainForever ? 'hidden' : undefined,
   }),
+  targetAmountInput: {
+    maxWidth: 70,
+  },
 });
 
 export const UnitSettings: React.FC<IProps> = (props) => {
@@ -152,7 +155,7 @@ export const UnitSettings: React.FC<IProps> = (props) => {
         </div>
         <div className={classes.targetAmount}>
           <label>Target:</label>
-          <input type="number" value={targetAmount} onChange={onNumberChange} id="targetAmount" name="targetAmount" />
+          <input className={classes.targetAmountInput} type="number" value={targetAmount} onChange={onNumberChange} id="targetAmount" name="targetAmount" />
         </div>
       </div>
     </div>
