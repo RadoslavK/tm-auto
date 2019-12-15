@@ -25,7 +25,6 @@ export class AutoAdventureTask implements IBotTask {
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
 
   public allowExecution = (): boolean => {
-    //  TODO rather generate this task only for the current village when hero can actually do it
     const settings = this.settings();
     const { hero } = accountContext;
 

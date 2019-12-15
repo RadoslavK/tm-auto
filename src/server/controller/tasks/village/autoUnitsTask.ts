@@ -187,7 +187,7 @@ export class AutoUnitsTask implements IVillageBotTask {
       }
     }
 
-    const submitButton = await page.$('[class="green startTraining"]');
+    const submitButton = await page.$('.green.startTraining');
 
     if (!submitButton) {
       return;
