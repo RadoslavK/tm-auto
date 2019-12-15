@@ -5,7 +5,7 @@ import { Cost } from '../../_models/misc/cost';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
 
-const unitsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'unit-infos.json');
+const unitsInfoPath = path.join(__dirname, '..', '..', '..', '..', 'resources', 'unit-infos.json');
 
 interface IUnitInfo {
   readonly buildingType: BuildingType;

@@ -7,7 +7,7 @@ import { Cost } from '../../_models/misc/cost';
 import { mapRecord } from '../../../_shared/objectUtils';
 import { BuildingType } from '../../../_shared/types/buildingType';
 
-const buildingsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'building-infos.json');
+const buildingsInfoPath = path.join(__dirname, '..', '..', '..', '..', 'resources', 'building-infos.json');
 
 interface IBuildingInfo {
   readonly category: BuildingCategory;
