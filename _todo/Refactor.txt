@@ -3,3 +3,14 @@ oddelit can move od building que.. potom ked as pohne v queue bude stacit nacita
 tie bot eventy by sa dali otypovat podobne jak which modul lebo ked sa da { all: true } setting tak vrati iny typ
 
 aj ostatne settingy updatovat ciastocne a requestovat ked sa da
+
+
+
+
+settingy zrefaktorovat
+
+update nech vrati nove a subscription neni treba lebo bot nebude settingy menit sam od seba
+
+zaroven keby sa da nejak zjednodit vsetky village related eventy, atd nech to neni xkrat kopirovane
+
+a inputy nemusia obsahovat villageId, ten sa da dat zvlast vedla toho

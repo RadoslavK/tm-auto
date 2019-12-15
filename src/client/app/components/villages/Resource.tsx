@@ -12,6 +12,7 @@ interface IProps {
   readonly production?: number;
   readonly resourceName: ResourceName;
   readonly resourceFormatter?: (amount: number) => string;
+  readonly capacityFormatter?: (amount: number) => string;
 }
 
 interface IStyleProps {
@@ -62,17 +63,19 @@ export const Resource: React.FC<IProps> = (props) => {
     production,
     resourceName,
     resourceFormatter,
+    capacityFormatter,
   } = props;
 
   const classes = useStyles({ production, resourceName });
   const formatResources = resourceFormatter || createFormatter();
+  const formatCapacity = capacityFormatter || createFormatter();
 
   return (
     <span className={classes.root}>
       <span className={classes.image} />
       <span>{formatResources(amount)}</span>
       {capacity !== undefined && (
-        <span>/{formatResources(capacity)}</span>
+        <span>/{formatCapacity(capacity)}</span>
       )}
       {production !== undefined && (
         <>

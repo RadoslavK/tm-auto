@@ -31,17 +31,18 @@ export const Resources: React.FC<IProps> = (props) => {
   const classes = useStyles({});
   const totalCapacity = capacity.granary + capacity.warehouse * 3;
 
-  const resourceFormatter = createFormatter(Math.max(capacity.granary, capacity.warehouse, amount.wood, amount.clay, amount.iron, amount.crop));
+  const resourceFormatter = createFormatter(Math.max(amount.wood, amount.clay, amount.iron, amount.crop));
 
+  const capacityFormatter = createFormatter(Math.max(capacity.granary, capacity.warehouse));
   const totalAmount = getTotalResources(amount);
 
   return (
     <div className={classes.root}>
-      <Resource resourceName="wood" amount={amount.wood} capacity={capacity.warehouse} production={production.wood} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop} resourceFormatter={resourceFormatter} />
-      <Resource resourceName="total" amount={totalAmount} capacity={totalCapacity} />
+      <Resource resourceName="wood" amount={amount.wood} capacity={capacity.warehouse} production={production.wood} resourceFormatter={resourceFormatter} capacityFormatter={capacityFormatter} />
+      <Resource resourceName="clay" amount={amount.clay} capacity={capacity.warehouse} production={production.clay} resourceFormatter={resourceFormatter} capacityFormatter={capacityFormatter} />
+      <Resource resourceName="iron" amount={amount.iron} capacity={capacity.warehouse} production={production.iron} resourceFormatter={resourceFormatter} capacityFormatter={capacityFormatter} />
+      <Resource resourceName="crop" amount={amount.crop} capacity={capacity.granary} production={production.crop} resourceFormatter={resourceFormatter} capacityFormatter={capacityFormatter} />
+      <Resource resourceName="total" amount={totalAmount} capacity={totalCapacity} capacityFormatter={capacityFormatter} />
       <Resource resourceName="freeCrop" amount={amount.freeCrop} />
     </div>
   );
