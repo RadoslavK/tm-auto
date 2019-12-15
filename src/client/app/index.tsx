@@ -14,15 +14,12 @@ import ReactDOM from 'react-dom';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 import { createErrorLink } from '../../_shared/graphql/createErrorLink';
-import { navigationItems } from '../constants/navigationItems';
 import introspectionQueryResultData from '../graphql/fragmentTypes.json';
 import { createIpcLink } from '../graphql/utils/createIpcLink';
 import { EnsureTitle } from './components/EnsureTitle';
 import { MainRoutes } from './components/navigation/MainRoutes';
 import { Navigation } from './components/navigation/Navigation';
 import { EnsureSignedIn } from './components/signIn/EnsureSignedIn';
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,7 +70,7 @@ const init = async (): Promise<void> => {
             <EnsureTitle>
               <div className={classes.root}>
                 <CssBaseline />
-                <Navigation navigationItems={navigationItems}/>
+                <Navigation />
                 <main className={classes.content}>
                   <div className={classes.toolbar} />
                   <MainRoutes />

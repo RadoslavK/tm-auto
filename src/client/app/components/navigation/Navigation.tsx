@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Link,
   useHistory,
@@ -22,12 +22,7 @@ import {
   IStartBotMutation,
   IStopBotMutation,
 } from '../../../_types/graphql';
-import { INavigationItem } from '../../../_types/navigationItem';
 import { useBotState } from '../../hooks/useBotState';
-
-interface IProps {
-  readonly navigationItems: readonly INavigationItem[];
-}
 
 const getToggleText = (botState: BotState): string => {
   switch (botState) {
@@ -92,18 +87,28 @@ const ToggleButton: React.FC = React.forwardRef<unknown, any>((props, ref: any) 
   );
 });
 
-export const Navigation: React.FC<IProps> = (props) => {
-  const {
-    navigationItems,
-  } = props;
+const navigationPaths: readonly string[] = [
+  '/villages',
+  '/hero',
+  '/settings',
+  '/logs',
+];
 
-  const location = useLocation();
+export const Navigation: React.FC = () => {
+  const { pathname } = useLocation();
+  const [lastVillagesPath, setLastVillagesPath] = useState<string>();
 
-  const currentItemIndex = navigationItems.findIndex(item => location.pathname.startsWith(item.path));
+  const currentItemIndex = navigationPaths.findIndex(path => pathname.startsWith(path));
 
   if (currentItemIndex === -1) {
     return null;
   }
+
+  const onTabClick = (): void => {
+    if (currentItemIndex === 0) {
+      setLastVillagesPath(pathname);
+    }
+  };
 
   return (
     <AppBar position="fixed">
@@ -112,14 +117,10 @@ export const Navigation: React.FC<IProps> = (props) => {
         indicatorColor="primary"
         centered
       >
-        {navigationItems.map((route, index) => (
-          <Tab
-            key={index}
-            label={route.text}
-            component={Link}
-            to={route.path}
-          />
-        ))}
+        <Tab label="Villages" component={Link} to={currentItemIndex === 0 ? '#' : lastVillagesPath || navigationPaths[0]} />
+        <Tab label="Hero" component={Link} to={navigationPaths[1]} onClick={onTabClick} />
+        <Tab label="Settings" component={Link} to={navigationPaths[2]} onClick={onTabClick} />
+        <Tab label="Logs" component={Link} to={navigationPaths[3]} onClick={onTabClick} />
         <Tab component={ToggleButton} />
       </Tabs>
     </AppBar>
