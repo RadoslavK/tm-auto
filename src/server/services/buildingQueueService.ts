@@ -6,7 +6,7 @@ import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { buildingsService } from './buildingsService';
+import { buildingInfoService } from './info/buildingInfoService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
@@ -53,7 +53,7 @@ export class BuildingQueueService {
 
     const spot = this.m_village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.total();
-    const { maxLevel } = buildingsService.getBuildingInfo(type);
+    const { maxLevel } = buildingInfoService.getBuildingInfo(type);
 
     const levels = targetLevel
       ? targetLevel - totalLevel
@@ -259,7 +259,7 @@ export class BuildingQueueService {
       + building.level.ongoing
       + offsets[building.fieldId];
 
-    const { conditions } = buildingsService.getBuildingInfo(checkedBuilding.type);
+    const { conditions } = buildingInfoService.getBuildingInfo(checkedBuilding.type);
 
     //  should have parent, lvl1 also has a parent: with lvl 0
     const hasParent = normalizedBuildings.some(s => s.fieldId === checkedBuilding.fieldId
@@ -275,7 +275,7 @@ export class BuildingQueueService {
 
     if (checkedBuilding.level === 1) {
       //  unique buildings test.. if it has same type on another field it should be maxed at least somewhere
-      const { maxLevel } = buildingsService.getBuildingInfo(checkedBuilding.type);
+      const { maxLevel } = buildingInfoService.getBuildingInfo(checkedBuilding.type);
 
       const buildingsOfTheType = normalizedBuildings.filter(b => b.type === checkedBuilding.type);
       const anyCompleted = buildingsOfTheType.some(b => getNewTotalLevel(b) >= maxLevel);
@@ -371,7 +371,7 @@ export class BuildingQueueService {
       return true;
     }
 
-    const { conditions, maxLevel } = buildingsService.getBuildingInfo(queuedBuilding.type);
+    const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(queuedBuilding.type);
 
     if ((conditions.capital === CapitalCondition.Prohibited && this.m_village.isCapital)
       || (conditions.capital === CapitalCondition.Required && !this.m_village.isCapital)) {

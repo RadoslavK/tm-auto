@@ -9,7 +9,7 @@ import {
   BuildingQueueService,
   MovingDirection,
 } from '../../services/buildingQueueService';
-import { buildingsService } from '../../services/buildingsService';
+import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { mapBuildingInProgress } from '../mappers/mapBuildingInProgress';
 import { mapBuildingQueueFactory } from '../mappers/mapBuildingQueue';
 import { BotEvent } from '../subscriptions/botEvent';
@@ -57,7 +57,7 @@ export const buildingResolvers: Resolvers = {
       const manager = new AvailableBuildingTypesService(villageId);
       return manager.availableBuildingTypes(fieldId).map((type): IAvailableNewBuilding => ({
         type,
-        name: buildingsService.getBuildingInfo(type).name,
+        name: buildingInfoService.getBuildingInfo(type).name,
       }));
     },
 
@@ -70,7 +70,7 @@ export const buildingResolvers: Resolvers = {
       return new BuildingQueueService(villageId).canMoveToTop(queueId);
     },
 
-    maxBuildingLevel: (_, args) => buildingsService.getBuildingInfo(args.buildingType).maxLevel,
+    maxBuildingLevel: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType).maxLevel,
   },
 
   Mutation: {

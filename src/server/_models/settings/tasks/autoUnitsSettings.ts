@@ -7,7 +7,7 @@ import { merge } from '../../../../_shared/merge';
 import { Fields } from '../../../../_shared/types';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
-import { unitsService } from '../../../services/unitsService';
+import { unitInfoService } from '../../../services/info/unitInfoService';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
@@ -60,7 +60,7 @@ const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] =>
 
   const { tribe } = accountContext.gameInfo;
 
-  units = unitsService
+  units = unitInfoService
     .getAllInfos()
     .filter(i => i.tribe === tribe && i.buildingType === buildingType)
     .map(({ index }) => new AutoUnitsUnitSettings({ index }));

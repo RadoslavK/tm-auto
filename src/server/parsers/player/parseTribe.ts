@@ -2,7 +2,7 @@ import { Tribe } from '../../../_shared/types/tribe';
 import { TravianPath } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
 import { ensurePage } from '../../controller/actions/ensurePage';
-import { gameInfoService } from '../../services/gameInfoService';
+import { gameInfoService } from '../../services/info/gameInfoService';
 
 export const parseTribe = async (): Promise<Tribe> => {
   const page = await getPage();

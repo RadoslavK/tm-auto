@@ -11,8 +11,8 @@ import {
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
-import { buildingsService } from './buildingsService';
-import { unitsService } from './unitsService';
+import { buildingInfoService } from './info/buildingInfoService';
+import { unitInfoService } from './info/unitInfoService';
 
 export interface ILogAutoUnitsParams {
   readonly amount: number;
@@ -38,7 +38,7 @@ export class LogsService {
         fieldId: building.fieldId,
         level: building.level,
         type: building.type,
-        name: buildingsService.getBuildingInfo(building.type).name,
+        name: buildingInfoService.getBuildingInfo(building.type).name,
       },
     };
 
@@ -52,7 +52,7 @@ export class LogsService {
     } = params;
 
     const { tribe } = accountContext.gameInfo;
-    const { name } = unitsService.getUnitInfo(index);
+    const { name } = unitInfoService.getUnitInfo(index);
 
     const content: IAutoUnitsLogEntryContent = {
       autoUnits: {

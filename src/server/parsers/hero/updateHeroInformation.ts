@@ -3,7 +3,7 @@ import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../../graphql/subscriptions/pubSub';
-import { gameInfoService } from '../../services/gameInfoService';
+import { gameInfoService } from '../../services/info/gameInfoService';
 
 const parseHealth = async (): Promise<number> => {
   const page = await getPage();

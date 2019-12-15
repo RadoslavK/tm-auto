@@ -9,8 +9,8 @@ import { VillageTaskType } from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
-import { partiesInfo } from '../../../constants/partiesInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
+import { partyInfoService } from '../../../services/info/partyInfoService';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 
 export class AutoPartyTask implements IVillageBotTask {
@@ -35,7 +35,7 @@ export class AutoPartyTask implements IVillageBotTask {
       minCulturePoints,
     } = this.settings();
 
-    const partyInfo = partiesInfo[partyType];
+    const partyInfo = partyInfoService.get(partyType);
 
     const townHall = this.m_village.buildings.spots.ofType(BuildingType.TownHall);
 

@@ -12,7 +12,7 @@ import {
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
-import { gameInfoService } from '../../../services/gameInfoService';
+import { gameInfoService } from '../../../services/info/gameInfoService';
 import {
   getWithMaximumSafe,
   getWithMinimumSafe,

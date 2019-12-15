@@ -10,7 +10,7 @@ import {
   BuildingQueueService,
   MovingDirection,
 } from '../../services/buildingQueueService';
-import { buildingsService } from '../../services/buildingsService';
+import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
 export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueue) => IBuildingQueue => {
@@ -20,7 +20,7 @@ export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (qu
 
   return (queue: BuildingQueue): IBuildingQueue => {
     const buildings = queue.buildings().map((building: QueuedBuilding): IQueuedBuilding => {
-      const cost = buildingsService.getBuildingInfo(building.type).costs[building.level];
+      const cost = buildingInfoService.getBuildingInfo(building.type).costs[building.level];
       const mbLevel = mbLevels[building.queueId];
       const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
 
@@ -33,7 +33,7 @@ export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (qu
         ...building,
         canMoveDown: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Down),
         canMoveUp: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Up),
-        name: buildingsService.getBuildingInfo(building.type).name,
+        name: buildingInfoService.getBuildingInfo(building.type).name,
         cost: {
           ...cost,
           buildTime: actualBuildTime,

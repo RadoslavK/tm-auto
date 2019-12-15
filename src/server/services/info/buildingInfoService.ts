@@ -1,11 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-import { BuildingCategory } from '../_enums/buildingCategory';
-import { IBuildingConditions } from '../_models/buildings/buildingConditions';
-import { Cost } from '../_models/misc/cost';
-import { mapRecord } from '../../_shared/objectUtils';
-import { BuildingType } from '../../_shared/types/buildingType';
+import { BuildingCategory } from '../../_enums/buildingCategory';
+import { IBuildingConditions } from '../../_models/buildings/buildingConditions';
+import { Cost } from '../../_models/misc/cost';
+import { mapRecord } from '../../../_shared/objectUtils';
+import { BuildingType } from '../../../_shared/types/buildingType';
 
 const buildingsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'building-infos.json');
 
@@ -18,7 +18,7 @@ interface IBuildingInfo {
   readonly type: number;
 }
 
-class BuildingsService {
+class BuildingInfoService {
   private buildingInfos: Map<BuildingType, IBuildingInfo> | undefined;
 
   public getBuildingInfo = (type: BuildingType): IBuildingInfo => {
@@ -56,4 +56,4 @@ class BuildingsService {
   };
 }
 
-export const buildingsService = new BuildingsService();
+export const buildingInfoService = new BuildingInfoService();

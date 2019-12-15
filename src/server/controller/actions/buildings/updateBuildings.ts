@@ -7,7 +7,7 @@ import {
 } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
 import { BuildingQueueService } from '../../../services/buildingQueueService';
-import { gameInfoService } from '../../../services/gameInfoService';
+import { gameInfoService } from '../../../services/info/gameInfoService';
 import { ensurePage } from '../ensurePage';
 
 export const updateBuildings = async (): Promise<void> => {

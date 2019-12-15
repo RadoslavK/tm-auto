@@ -1,6 +1,6 @@
 import { IBuildingSpot } from '../../_types/graphql';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { buildingsService } from '../../services/buildingsService';
+import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
@@ -41,7 +41,7 @@ export class Buildings {
       const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
       // eslint-disable-next-line unicorn/no-nested-ternary
       const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
-      const info = buildingsService.getBuildingInfo(type);
+      const info = buildingInfoService.getBuildingInfo(type);
 
       return {
         type,

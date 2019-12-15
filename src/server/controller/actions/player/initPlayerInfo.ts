@@ -3,7 +3,7 @@ import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseServerSpeed } from '../../../parsers/player/parseServerSpeed';
 import { parseTribe } from '../../../parsers/player/parseTribe';
-import { gameInfoService } from '../../../services/gameInfoService';
+import { gameInfoService } from '../../../services/info/gameInfoService';
 import { updatePlayerInfo } from './updatePlayerInfo';
 
 export const initPlayerInfo = async (): Promise<void> => {

@@ -5,7 +5,7 @@ import { IAutoStorageSettings } from '../../../../_types/graphql';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { Tribe } from '../../../../../_shared/types/tribe';
 import { accountContext } from '../../../../accountContext';
-import { buildingsService } from '../../../../services/buildingsService';
+import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import {
   getWithMinimum,
   getWithMinimumSafe,
@@ -28,7 +28,7 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
     const resourceField = village.buildings.queue.peek(BuildingSpotType.Fields);
 
     if (resourceField) {
-      const resourcesNeeded = buildingsService.getBuildingInfo(resourceField.type).costs[resourceField.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingInfo(resourceField.type).costs[resourceField.level].resources;
 
       nextTaskHighestWarehouseCost = resourcesNeeded.maxWarehouseRes();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
@@ -37,7 +37,7 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
     const infrastructureField = village.buildings.queue.peek(BuildingSpotType.Infrastructure);
 
     if (infrastructureField) {
-      const resourcesNeeded = buildingsService.getBuildingInfo(infrastructureField.type).costs[infrastructureField.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingInfo(infrastructureField.type).costs[infrastructureField.level].resources;
 
       nextTaskHighestWarehouseCost = Math.max(nextTaskHighestWarehouseCost, resourcesNeeded.maxWarehouseRes());
       nextTaskHighestGranaryCost = Math.max(nextTaskHighestGranaryCost, resourcesNeeded.crop);
@@ -46,7 +46,7 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
     const building = village.buildings.queue.peek(BuildingSpotType.Any);
 
     if (building) {
-      const resourcesNeeded = buildingsService.getBuildingInfo(building.type).costs[building.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingInfo(building.type).costs[building.level].resources;
       nextTaskHighestWarehouseCost = resourcesNeeded.maxWarehouseRes();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
     }

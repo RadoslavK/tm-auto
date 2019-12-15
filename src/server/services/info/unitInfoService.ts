@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Cost } from '../_models/misc/cost';
-import { BuildingType } from '../../_shared/types/buildingType';
-import { Tribe } from '../../_shared/types/tribe';
+import { Cost } from '../../_models/misc/cost';
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { Tribe } from '../../../_shared/types/tribe';
 
 const unitsInfoPath = path.join(__dirname, '..', '..', '..', 'resources', 'unit-infos.json');
 
@@ -15,7 +15,7 @@ interface IUnitInfo {
   readonly index: number;
 }
 
-class UnitsService {
+class UnitInfoService {
   private unitInfos: Map<number, IUnitInfo> | undefined;
 
   public getAllInfos = (): readonly IUnitInfo[] => [...this.infos().values()];
@@ -54,4 +54,4 @@ class UnitsService {
   };
 }
 
-export const unitsService = new UnitsService();
+export const unitInfoService = new UnitInfoService();

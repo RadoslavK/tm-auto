@@ -7,7 +7,7 @@ import { VillageTaskType } from '../../../_types/graphql';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
-import { unitsService } from '../../../services/unitsService';
+import { unitInfoService } from '../../../services/info/unitInfoService';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import {
   ensureBuildingSpotPage,
@@ -103,7 +103,7 @@ export class AutoUnitsTask implements IVillageBotTask {
       const {
         resources: cost,
         buildTime: originalBuildTime,
-      } = unitsService.getUnitInfo(uIndex).cost;
+      } = unitInfoService.getUnitInfo(uIndex).cost;
 
       // max by res
       let maxPossibleAmountToBuild = Math.min(

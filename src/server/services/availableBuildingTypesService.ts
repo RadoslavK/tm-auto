@@ -8,7 +8,7 @@ import { BuildingType } from '../../_shared/types/buildingType';
 import { Tribe } from '../../_shared/types/tribe';
 import { accountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
-import { buildingsService } from './buildingsService';
+import { buildingInfoService } from './info/buildingInfoService';
 
 export class AvailableBuildingTypesService {
   private readonly m_village: Village;
@@ -88,7 +88,7 @@ export class AvailableBuildingTypesService {
               break;
           }
 
-          const buildingConditions = buildingsService.getBuildingInfo(type).conditions;
+          const buildingConditions = buildingInfoService.getBuildingInfo(type).conditions;
           const meetVillageConditions = this.newBuildingMeetsConditions(type, buildingConditions);
 
           if (!meetVillageConditions) {
@@ -110,7 +110,7 @@ export class AvailableBuildingTypesService {
             }
 
             // requirements for more than 1 building of that type
-            if (!spotsOfType.some(b => b.level.total === buildingsService.getBuildingInfo(b.type).maxLevel)) {
+            if (!spotsOfType.some(b => b.level.total === buildingInfoService.getBuildingInfo(b.type).maxLevel)) {
               return;
             }
           }
@@ -154,7 +154,7 @@ export class AvailableBuildingTypesService {
         return false;
       }
     } else {
-      const completedBuildingExists = buildings.some(b => b.level.total === buildingsService.getBuildingInfo(b.type).maxLevel);
+      const completedBuildingExists = buildings.some(b => b.level.total === buildingInfoService.getBuildingInfo(b.type).maxLevel);
 
       if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level

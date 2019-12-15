@@ -12,7 +12,7 @@ import {
 } from '../../_types/graphql';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { accountContext } from '../../accountContext';
-import { unitsService } from '../../services/unitsService';
+import { unitInfoService } from '../../services/info/unitInfoService';
 import { BotEvent } from '../subscriptions/botEvent';
 import {
   publishPayloadEvent,
@@ -122,7 +122,7 @@ export const settingsResolvers: Resolvers = {
       const settingsManager = accountContext.settingsService.village(villageId).autoUnits;
       const settings = settingsManager.get();
 
-      const unitInfo = unitsService.getUnitInfo(unitIndex);
+      const unitInfo = unitInfoService.getUnitInfo(unitIndex);
       const buildingSettings = settings.forBuilding(unitInfo.buildingType);
 
       const collectionIndex = buildingSettings.units.findIndex(u => u.index === unitIndex);

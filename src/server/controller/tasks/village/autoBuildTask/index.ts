@@ -14,7 +14,7 @@ import { accountContext } from '../../../../accountContext';
 import { getPage } from '../../../../browser/getPage';
 import { fieldIds } from '../../../../constants/fieldIds';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
-import { buildingsService } from '../../../../services/buildingsService';
+import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import { isInfrastructure } from '../../../../utils/buildingUtils';
 import {
   ensureBuildingSpotPage,
@@ -109,7 +109,7 @@ export class AutoBuildTask implements IVillageBotTask {
 
   private startBuildingIfQueueIsFree = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
     const settings = this.settings();
-    const cost = buildingsService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
+    const cost = buildingInfoService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
     const resources = cost.resources.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
@@ -154,7 +154,7 @@ export class AutoBuildTask implements IVillageBotTask {
       this.m_addedCroplandInQueue = true;
 
       // dost surovin a zaroven prazdna res queue
-      const cropLandResourceCost = buildingsService.getBuildingInfo(BuildingType.Crop).costs[newCropLandLevel].resources;
+      const cropLandResourceCost = buildingInfoService.getBuildingInfo(BuildingType.Crop).costs[newCropLandLevel].resources;
 
       if (this.m_village.resources.amount.isLowerThan(cropLandResourceCost)
         || !this.m_village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)) {
@@ -171,7 +171,7 @@ export class AutoBuildTask implements IVillageBotTask {
 
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
-    const { category } = buildingsService.getBuildingInfo(queuedBuilding.type);
+    const { category } = buildingInfoService.getBuildingInfo(queuedBuilding.type);
 
     if (queuedBuilding.level === 1 && isInfrastructure(queuedBuilding.fieldId)) {
       //  They have the category but dont have to be selected through category
