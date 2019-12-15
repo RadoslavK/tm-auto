@@ -48,7 +48,6 @@ export const Villages: React.FC = () => {
   const classes = useStyles();
 
   const villages = useVillages();
-  const [selectedVillageId, setSelectedVillageId] = useState();
   const activeVillageIdQueryResult = useQuery<IActiveVillageIdQuery>(ActiveVillageId);
 
   useEffect(() => {
@@ -72,21 +71,25 @@ export const Villages: React.FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.sideMenu}>
-        {villages.map(village => (
-          <VillageSideItem
-            key={village.id}
-            village={village}
-            isVillageActive={village.id === activeVillageId}
-            isVillageSelected={village.id === selectedVillageId}
-          />
-        ))}
+        <Route path={`${match.path}/:selectedVillageId`} render={(props: RouteComponentProps<{ readonly selectedVillageId: string; }>) => {
+          const selectedVillageId = +props.match.params.selectedVillageId;
+
+          return (
+            <>
+              {villages.map(village => (
+                <VillageSideItem
+                  key={village.id}
+                  village={village}
+                  isVillageActive={village.id === activeVillageId}
+                  isVillageSelected={village.id === selectedVillageId}
+                />
+              ))}
+            </>
+          );
+        }} />
       </div>
       <Switch>
-        <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => {
-          const villageId = +props.match.params.id;
-          setSelectedVillageId(villageId)
-          return <Village villageId={villageId} />;
-        }} />
+        <Route path={`${match.path}/:id`} render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id}/>} />
         {villages.length > 0 && (
           <Redirect to={`${match.url}/${villages[0].id}`} />
         )}

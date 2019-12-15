@@ -14,6 +14,7 @@ import {
   Switch,
   useHistory,
   useRouteMatch,
+  RouteComponentProps,
 } from 'react-router-dom';
 
 import {
@@ -102,7 +103,9 @@ export const Village: React.FC<IParams> = (props) => {
           open={showSettings}
           onClose={closeSettings}
         >
-          <VillageSettings />
+          <Route path={`${match.path}/:tab`} render={(routeProps: RouteComponentProps<{ readonly tab: string; }>) => (
+            <VillageSettings tab={routeProps.match.params.tab} />
+          )} />
         </Dialog>
       </VillageContext.Provider>
     </div>

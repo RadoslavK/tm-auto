@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Link,
   useLocation,
-  useRouteMatch,
 } from 'react-router-dom';
 
 import { IGetVillagesQuery } from '../../../../_types/graphql';
@@ -45,10 +44,8 @@ export const VillageSideItem: React.FC<IProps> = (props) => {
   } = props;
 
   const classes = useStyles({ isVillageSelected });
-  const match = useRouteMatch();
   const location = useLocation();
-  const regExp = new RegExp(`${match.path}\\/(\\d+)`);
-  const path = location.pathname.replace(regExp, `${match.path}/${village.id}`);
+  const path = location.pathname.replace(/villages\/(\d+)/, `villages/${village.id}`);
 
   return (
     <div className={classes.root}>

@@ -29,6 +29,7 @@ export class AutoBuildSettings implements IAutoBuildSettings {
     Object.assign(this, merge(getDefaults, {
       ...params,
       coolDown: params.coolDown && new CoolDown(params.coolDown),
+      autoStorage: params.autoStorage && new AutoStorageSettings(params.autoStorage),
     }));
   }
 }
