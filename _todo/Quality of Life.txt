@@ -21,14 +21,6 @@ umoznit vybrat novu budovu na ktoru nie su splnene poziadavky ale ukazat ju sedu
 
 dat viacej moznosti v stavacom okne. napr vsetky res na nejaky level atd
 
-
-
-next execution pre building spravit nech to da next cooldown v pripade ze jedna z budov sa dostava skor
-
-queue push as high as possible button
-
-
-
 -----------HERO--------------
 
 hero set next cooldown based on having adventures >= 1 and hero comming back from one

@@ -75,7 +75,7 @@ export class AutoBuildTask implements IVillageBotTask {
       } else if (!infrastructureFinishedAt) {
         finishedAt = fieldFinishedAt;
       } else {
-        finishedAt = fieldFinishedAt >= infrastructureFinishedAt ? fieldFinishedAt : infrastructureFinishedAt;
+        finishedAt = fieldFinishedAt >= infrastructureFinishedAt ? infrastructureFinishedAt : fieldFinishedAt;
       }
     } else {
       await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Any);
@@ -84,7 +84,7 @@ export class AutoBuildTask implements IVillageBotTask {
     }
 
     // seconds
-    const finishedIn = finishedAt && Math.max(0, Math.floor(((finishedAt as any) - (new Date() as any)) / 1000));
+    const finishedIn = finishedAt && Math.max(0, Math.floor((finishedAt.getTime() - new Date().getTime()) / 1000));
 
     return {
       nextCoolDown: finishedIn === undefined ? null : CoolDown.fromDuration(Duration.fromSeconds(finishedIn)),
