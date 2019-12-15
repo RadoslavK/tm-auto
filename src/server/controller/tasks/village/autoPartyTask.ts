@@ -24,7 +24,8 @@ export class AutoPartyTask implements IVillageBotTask {
 
   private settings = (): AutoPartySettings => accountContext.settingsService.village(this.m_village.id).autoParty.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean => accountContext.settingsService.general.get().autoParty
+    && this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 

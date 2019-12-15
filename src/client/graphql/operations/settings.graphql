@@ -31,9 +31,10 @@ fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
 
 fragment GeneralSettings on GeneralSettings {
     allowTasks
+    autoStart
     autoBuild
     autoUnits
-    autoStart
+    autoParty
 }
 
 fragment AutoAdventureSettings on AutoAdventureSettings {
@@ -93,6 +94,12 @@ fragment AutoUnitsSettings on AutoUnitsSettings {
     }
 }
 
+fragment AutoPartySettings on AutoPartySettings {
+    ...TaskSettings
+    minCulturePoints
+    partyType
+}
+
 query GetGeneralSettings {
     generalSettings {
         ...GeneralSettings
@@ -125,6 +132,12 @@ query GetAutoUnitsSettings($villageId: Int!) {
     }
 }
 
+query GetAutoPartySettings($villageId: Int!) {
+    autoPartySettings(villageId: $villageId) {
+        ...AutoPartySettings
+    }
+}
+
 mutation UpdateGeneralSettings($settings: UpdateGeneralSettingsInput!) {
     updateGeneralSettings(settings: $settings)
 }
@@ -151,6 +164,10 @@ mutation UpdateAutoUnitsBuildingSettings($settings: UpdateAutoUnitsBuildingSetti
 
 mutation UpdateAutoUnitsSettings($settings: UpdateAutoUnitsSettingsInput!) {
     updateAutoUnitsSettings(settings: $settings)
+}
+
+mutation UpdateAutoPartySettings($settings: UpdateAutoPartySettingsInput!) {
+    updateAutoPartySettings(settings: $settings)
 }
 
 mutation ResetSettings($type: SettingsType!) {
@@ -185,8 +202,14 @@ subscription OnAutoBuildSettingsChanged($villageId: Int!) {
     }
 }
 
-subscription OnAutoUnitsSettingsChange($villageId: Int!) {
+subscription OnAutoUnitsSettingsChanged($villageId: Int!) {
     autoUnitsSettingsChanged(villageId: $villageId) {
         ...AutoUnitsSettings
+    }
+}
+
+subscription OnAutoPartySettingsChanged($villageId: Int!) {
+    autoPartySettingsChanged(villageId: $villageId) {
+        ...AutoPartySettings
     }
 }

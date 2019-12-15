@@ -106,10 +106,11 @@ const GeneralSettings: React.FC<IProps> = (props) => {
   };
 
   const {
-    autoBuild,
-    autoUnits,
     allowTasks,
     autoStart,
+    autoBuild,
+    autoUnits,
+    autoParty,
   } = state;
 
   return (
@@ -137,13 +138,18 @@ const GeneralSettings: React.FC<IProps> = (props) => {
         </div>
 
         <div>
-          <label htmlFor="autoBuild">AutoBuild</label>
+          <label htmlFor="autoBuild">Auto Build</label>
           <input type="checkbox" checked={autoBuild} onChange={onChange} id="autoBuild" name="autoBuild" />
         </div>
 
         <div>
-          <label htmlFor="autoUnits">AutoUnits</label>
+          <label htmlFor="autoUnits">Auto Units</label>
           <input type="checkbox" checked={autoUnits} onChange={onChange} id="autoUnits" name="autoUnits" />
+        </div>
+
+        <div>
+          <label htmlFor="autoParty">Auto Party</label>
+          <input type="checkbox" checked={autoParty} onChange={onChange} id="autoParty" name="autoParty" />
         </div>
       </div>
     </div>

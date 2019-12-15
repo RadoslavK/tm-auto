@@ -3,6 +3,7 @@ import { GeneralSettings } from '../../_models/settings/generalSettings';
 import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
 import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
+import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   ILogEntry,
@@ -25,6 +26,7 @@ export enum BotEvent {
   GeneralVillageSettingsChanged = 'GeneralVillageSettingsChanged',
   AutoBuildSettingsChanged = 'AutoBuildSettingsChanged',
   AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged',
+  AutoPartySettingsChanged = 'AutoPartySettingsChanged',
 
   NextTasksExecutionChanged = 'NextTasksExecutionChanged',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
@@ -69,6 +71,11 @@ export type BotEventPayloads = {
   [BotEvent.AutoUnitsSettingsChanged]: {
     readonly villageId: number;
     readonly settings: AutoUnitsSettings;
+  }
+
+  [BotEvent.AutoPartySettingsChanged]: {
+    readonly villageId: number;
+    readonly settings: AutoPartySettings;
   }
 
   [BotEvent.ActiveVillageIdChanged]: {

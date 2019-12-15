@@ -207,9 +207,10 @@ export type IEnqueueBuildingInput = {
 
 export type IGeneralSettings = {
   readonly allowTasks: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
+  readonly autoParty: Scalars['Boolean'],
 };
 
 export type IGeneralVillageSettings = {
@@ -274,6 +275,7 @@ export type IMutation = {
   readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
   readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
   readonly updateAutoUnitsSettings: Scalars['Boolean'],
+  readonly updateAutoPartySettings: Scalars['Boolean'],
   readonly resetSettings: Scalars['Boolean'],
   readonly resetVillageSettings: Scalars['Boolean'],
 };
@@ -394,6 +396,11 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
 };
 
 
+export type IMutationUpdateAutoPartySettingsArgs = {
+  settings: IUpdateAutoPartySettingsInput
+};
+
+
 export type IMutationResetSettingsArgs = {
   type: SettingsType
 };
@@ -432,6 +439,7 @@ export type IQuery = {
   readonly generalVillageSettings: IGeneralVillageSettings,
   readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
+  readonly autoPartySettings: IAutoPartySettings,
   readonly unitInfo: IUnitInfo,
   readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
@@ -506,6 +514,11 @@ export type IQueryAutoUnitsSettingsArgs = {
 };
 
 
+export type IQueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int']
+};
+
+
 export type IQueryUnitInfoArgs = {
   index: Scalars['Int']
 };
@@ -569,6 +582,7 @@ export type ISubscription = {
   readonly generalVillageSettingsChanged: IGeneralVillageSettings,
   readonly autoBuildSettingsChanged: IAutoBuildSettings,
   readonly autoUnitsSettingsChanged: IAutoUnitsSettings,
+  readonly autoPartySettingsChanged: IAutoPartySettings,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
   readonly activeVillageIdChanged: Scalars['Int'],
@@ -607,6 +621,11 @@ export type ISubscriptionAutoBuildSettingsChangedArgs = {
 
 
 export type ISubscriptionAutoUnitsSettingsChangedArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionAutoPartySettingsChangedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -658,6 +677,14 @@ export type IUpdateAutoBuildVillageSettingsInput = {
   readonly autoWarehouseOverflowLevel: Scalars['Int'],
 };
 
+export type IUpdateAutoPartySettingsInput = {
+  readonly villageId: Scalars['Int'],
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly minCulturePoints: Scalars['Int'],
+  readonly partyType: PartyType,
+};
+
 export type IUpdateAutoUnitsBuildingSettingsInput = {
   readonly villageId: Scalars['Int'],
   readonly buildingType: Scalars['Int'],
@@ -685,6 +712,7 @@ export type IUpdateGeneralSettingsInput = {
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
   readonly autoStart: Scalars['Boolean'],
+  readonly autoParty: Scalars['Boolean'],
 };
 
 export type IUpdateGeneralVillageSettingsInput = {
@@ -735,7 +763,8 @@ export type IVillageSettings = {
 export enum VillageSettingsType {
   General = 'General',
   AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits'
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
 }
 
 export enum VillageTaskType {
@@ -1098,7 +1127,7 @@ export type IAutoUnitsBuildingSettingsFragment = (
   & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragment> }
 );
 
-export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoBuild' | 'autoUnits' | 'autoStart'>;
+export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoStart' | 'autoBuild' | 'autoUnits' | 'autoParty'>;
 
 export type IAutoAdventureSettingsFragment = (
   Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
@@ -1125,6 +1154,11 @@ export type IAutoUnitsSettingsFragment = (
   Pick<IAutoUnitsSettings, 'minCrop'>
   & { readonly barracks: IAutoUnitsBuildingSettingsFragment, readonly stable: IAutoUnitsBuildingSettingsFragment, readonly workshop: IAutoUnitsBuildingSettingsFragment, readonly residence: IAutoUnitsBuildingSettingsFragment }
   & ITaskSettings_AutoUnitsSettings_Fragment
+);
+
+export type IAutoPartySettingsFragment = (
+  Pick<IAutoPartySettings, 'minCulturePoints' | 'partyType'>
+  & ITaskSettings_AutoPartySettings_Fragment
 );
 
 export type IGetGeneralSettingsQueryVariables = {};
@@ -1157,6 +1191,13 @@ export type IGetAutoUnitsSettingsQueryVariables = {
 
 
 export type IGetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: IAutoUnitsSettingsFragment };
+
+export type IGetAutoPartySettingsQueryVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type IGetAutoPartySettingsQuery = { readonly autoPartySettings: IAutoPartySettingsFragment };
 
 export type IUpdateGeneralSettingsMutationVariables = {
   settings: IUpdateGeneralSettingsInput
@@ -1207,6 +1248,13 @@ export type IUpdateAutoUnitsSettingsMutationVariables = {
 
 export type IUpdateAutoUnitsSettingsMutation = Pick<IMutation, 'updateAutoUnitsSettings'>;
 
+export type IUpdateAutoPartySettingsMutationVariables = {
+  settings: IUpdateAutoPartySettingsInput
+};
+
+
+export type IUpdateAutoPartySettingsMutation = Pick<IMutation, 'updateAutoPartySettings'>;
+
 export type IResetSettingsMutationVariables = {
   type: SettingsType
 };
@@ -1246,12 +1294,19 @@ export type IOnAutoBuildSettingsChangedSubscriptionVariables = {
 
 export type IOnAutoBuildSettingsChangedSubscription = { readonly autoBuildSettingsChanged: IAutoBuildSettingsFragment };
 
-export type IOnAutoUnitsSettingsChangeSubscriptionVariables = {
+export type IOnAutoUnitsSettingsChangedSubscriptionVariables = {
   villageId: Scalars['Int']
 };
 
 
-export type IOnAutoUnitsSettingsChangeSubscription = { readonly autoUnitsSettingsChanged: IAutoUnitsSettingsFragment };
+export type IOnAutoUnitsSettingsChangedSubscription = { readonly autoUnitsSettingsChanged: IAutoUnitsSettingsFragment };
+
+export type IOnAutoPartySettingsChangedSubscriptionVariables = {
+  villageId: Scalars['Int']
+};
+
+
+export type IOnAutoPartySettingsChangedSubscription = { readonly autoPartySettingsChanged: IAutoPartySettingsFragment };
 
 export type IGetUnitInfoQueryVariables = {
   index: Scalars['Int']

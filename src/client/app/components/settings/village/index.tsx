@@ -11,6 +11,7 @@ import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { VillageSettingsContext } from './_context';
 import { AutoBuildSettings } from './AutoBuildSettings';
+import { AutoPartySettings } from './AutoPartySettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
@@ -90,6 +91,7 @@ export const VillageSettings: React.FC<IProps> = (props) => {
       case VillageSettingsType.General: return <GeneralVillageSettings />;
       case VillageSettingsType.AutoBuild: return <AutoBuildSettings />;
       case VillageSettingsType.AutoUnits: return <AutoUnitsSettings />;
+      case VillageSettingsType.AutoParty: return <AutoPartySettings />;
       default: throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
   };
@@ -129,6 +131,11 @@ export const VillageSettings: React.FC<IProps> = (props) => {
         label="Auto Units"
         isSelected={selectedTab === VillageSettingsType.AutoUnits}
         onSelect={() => setSelectedTab(VillageSettingsType.AutoUnits)}
+      />
+      <TabLink
+        label="Auto Party"
+        isSelected={selectedTab === VillageSettingsType.AutoParty}
+        onSelect={() => setSelectedTab(VillageSettingsType.AutoParty)}
       />
     </div>
     <VillageSettingsContext.Provider value={{ villageId: selectedVillageId }}>

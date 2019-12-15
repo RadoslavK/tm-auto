@@ -233,9 +233,10 @@ export type IEnqueueBuildingInput = {
 export type IGeneralSettings = {
   readonly __typename?: 'GeneralSettings',
   readonly allowTasks: Scalars['Boolean'],
+  readonly autoStart: Scalars['Boolean'],
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
+  readonly autoParty: Scalars['Boolean'],
 };
 
 export type IGeneralVillageSettings = {
@@ -305,6 +306,7 @@ export type IMutation = {
   readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
   readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
   readonly updateAutoUnitsSettings: Scalars['Boolean'],
+  readonly updateAutoPartySettings: Scalars['Boolean'],
   readonly resetSettings: Scalars['Boolean'],
   readonly resetVillageSettings: Scalars['Boolean'],
 };
@@ -425,6 +427,11 @@ export type IMutationUpdateAutoUnitsSettingsArgs = {
 };
 
 
+export type IMutationUpdateAutoPartySettingsArgs = {
+  settings: IUpdateAutoPartySettingsInput
+};
+
+
 export type IMutationResetSettingsArgs = {
   type: SettingsType
 };
@@ -464,6 +471,7 @@ export type IQuery = {
   readonly generalVillageSettings: IGeneralVillageSettings,
   readonly autoBuildSettings: IAutoBuildSettings,
   readonly autoUnitsSettings: IAutoUnitsSettings,
+  readonly autoPartySettings: IAutoPartySettings,
   readonly unitInfo: IUnitInfo,
   readonly activeVillageId: Scalars['Int'],
   readonly village: Maybe<IVillage>,
@@ -538,6 +546,11 @@ export type IQueryAutoUnitsSettingsArgs = {
 };
 
 
+export type IQueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int']
+};
+
+
 export type IQueryUnitInfoArgs = {
   index: Scalars['Int']
 };
@@ -605,6 +618,7 @@ export type ISubscription = {
   readonly generalVillageSettingsChanged: IGeneralVillageSettings,
   readonly autoBuildSettingsChanged: IAutoBuildSettings,
   readonly autoUnitsSettingsChanged: IAutoUnitsSettings,
+  readonly autoPartySettingsChanged: IAutoPartySettings,
   readonly updateVillage: Scalars['Boolean'],
   readonly updateVillages: Scalars['Boolean'],
   readonly activeVillageIdChanged: Scalars['Int'],
@@ -643,6 +657,11 @@ export type ISubscriptionAutoBuildSettingsChangedArgs = {
 
 
 export type ISubscriptionAutoUnitsSettingsChangedArgs = {
+  villageId: Scalars['Int']
+};
+
+
+export type ISubscriptionAutoPartySettingsChangedArgs = {
   villageId: Scalars['Int']
 };
 
@@ -698,6 +717,14 @@ export type IUpdateAutoBuildVillageSettingsInput = {
   readonly autoWarehouseOverflowLevel: Scalars['Int'],
 };
 
+export type IUpdateAutoPartySettingsInput = {
+  readonly villageId: Scalars['Int'],
+  readonly allow: Scalars['Boolean'],
+  readonly coolDown: ICoolDownInput,
+  readonly minCulturePoints: Scalars['Int'],
+  readonly partyType: PartyType,
+};
+
 export type IUpdateAutoUnitsBuildingSettingsInput = {
   readonly villageId: Scalars['Int'],
   readonly buildingType: Scalars['Int'],
@@ -725,6 +752,7 @@ export type IUpdateGeneralSettingsInput = {
   readonly autoBuild: Scalars['Boolean'],
   readonly autoUnits: Scalars['Boolean'],
   readonly autoStart: Scalars['Boolean'],
+  readonly autoParty: Scalars['Boolean'],
 };
 
 export type IUpdateGeneralVillageSettingsInput = {
@@ -780,7 +808,8 @@ export type IVillageSettings = {
 export enum VillageSettingsType {
   General = 'General',
   AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits'
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
 }
 
 export enum VillageTaskType {
@@ -909,6 +938,8 @@ export type IResolversTypes = {
   AutoUnitsSettings: ResolverTypeWrapper<IAutoUnitsSettings>,
   AutoUnitsBuildingSettings: ResolverTypeWrapper<IAutoUnitsBuildingSettings>,
   AutoUnitsUnitSettings: ResolverTypeWrapper<IAutoUnitsUnitSettings>,
+  AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
+  PartyType: PartyType,
   UnitInfo: ResolverTypeWrapper<IUnitInfo>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -925,13 +956,12 @@ export type IResolversTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
+  UpdateAutoPartySettingsInput: IUpdateAutoPartySettingsInput,
   SettingsType: SettingsType,
   VillageSettingsType: VillageSettingsType,
   Subscription: ResolverTypeWrapper<{}>,
   TimestampInput: ITimestampInput,
   ClearQueueInput: IClearQueueInput,
-  PartyType: PartyType,
-  AutoPartySettings: ResolverTypeWrapper<IAutoPartySettings>,
   VillageSettings: ResolverTypeWrapper<IVillageSettings>,
   ResetVillageInput: IResetVillageInput,
 };
@@ -987,6 +1017,8 @@ export type IResolversParentTypes = {
   AutoUnitsSettings: IAutoUnitsSettings,
   AutoUnitsBuildingSettings: IAutoUnitsBuildingSettings,
   AutoUnitsUnitSettings: IAutoUnitsUnitSettings,
+  AutoPartySettings: IAutoPartySettings,
+  PartyType: PartyType,
   UnitInfo: IUnitInfo,
   Mutation: {},
   CreateUserAccountInput: ICreateUserAccountInput,
@@ -1003,13 +1035,12 @@ export type IResolversParentTypes = {
   UpdateAutoUnitsUnitSettingsInput: IUpdateAutoUnitsUnitSettingsInput,
   UpdateAutoUnitsBuildingSettingsInput: IUpdateAutoUnitsBuildingSettingsInput,
   UpdateAutoUnitsSettingsInput: IUpdateAutoUnitsSettingsInput,
+  UpdateAutoPartySettingsInput: IUpdateAutoPartySettingsInput,
   SettingsType: SettingsType,
   VillageSettingsType: VillageSettingsType,
   Subscription: {},
   TimestampInput: ITimestampInput,
   ClearQueueInput: IClearQueueInput,
-  PartyType: PartyType,
-  AutoPartySettings: IAutoPartySettings,
   VillageSettings: IVillageSettings,
   ResetVillageInput: IResetVillageInput,
 };
@@ -1158,9 +1189,10 @@ export type IDurationResolvers<ContextType = any, ParentType extends IResolversP
 
 export type IGeneralSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralSettings'] = IResolversParentTypes['GeneralSettings']> = {
   allowTasks: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  autoStart: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoBuild: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   autoUnits: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
-  autoStart: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
+  autoParty: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
 export type IGeneralVillageSettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['GeneralVillageSettings'] = IResolversParentTypes['GeneralVillageSettings']> = {
@@ -1220,6 +1252,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateAutoUnitsUnitSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsUnitSettingsArgs, 'settings'>>,
   updateAutoUnitsBuildingSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsBuildingSettingsArgs, 'settings'>>,
   updateAutoUnitsSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoUnitsSettingsArgs, 'settings'>>,
+  updateAutoPartySettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationUpdateAutoPartySettingsArgs, 'settings'>>,
   resetSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetSettingsArgs, 'type'>>,
   resetVillageSettings: Resolver<IResolversTypes['Boolean'], ParentType, ContextType, RequireFields<IMutationResetVillageSettingsArgs, 'villageId' | 'type'>>,
 };
@@ -1247,6 +1280,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   generalVillageSettings: Resolver<IResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<IQueryGeneralVillageSettingsArgs, 'villageId'>>,
   autoBuildSettings: Resolver<IResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<IQueryAutoBuildSettingsArgs, 'villageId'>>,
   autoUnitsSettings: Resolver<IResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<IQueryAutoUnitsSettingsArgs, 'villageId'>>,
+  autoPartySettings: Resolver<IResolversTypes['AutoPartySettings'], ParentType, ContextType, RequireFields<IQueryAutoPartySettingsArgs, 'villageId'>>,
   unitInfo: Resolver<IResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<IQueryUnitInfoArgs, 'index'>>,
   activeVillageId: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
   village: Resolver<Maybe<IResolversTypes['Village']>, ParentType, ContextType, RequireFields<IQueryVillageArgs, 'villageId'>>,
@@ -1293,6 +1327,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   generalVillageSettingsChanged: SubscriptionResolver<IResolversTypes['GeneralVillageSettings'], "generalVillageSettingsChanged", ParentType, ContextType, RequireFields<ISubscriptionGeneralVillageSettingsChangedArgs, 'villageId'>>,
   autoBuildSettingsChanged: SubscriptionResolver<IResolversTypes['AutoBuildSettings'], "autoBuildSettingsChanged", ParentType, ContextType, RequireFields<ISubscriptionAutoBuildSettingsChangedArgs, 'villageId'>>,
   autoUnitsSettingsChanged: SubscriptionResolver<IResolversTypes['AutoUnitsSettings'], "autoUnitsSettingsChanged", ParentType, ContextType, RequireFields<ISubscriptionAutoUnitsSettingsChangedArgs, 'villageId'>>,
+  autoPartySettingsChanged: SubscriptionResolver<IResolversTypes['AutoPartySettings'], "autoPartySettingsChanged", ParentType, ContextType, RequireFields<ISubscriptionAutoPartySettingsChangedArgs, 'villageId'>>,
   updateVillage: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillage", ParentType, ContextType>,
   updateVillages: SubscriptionResolver<IResolversTypes['Boolean'], "updateVillages", ParentType, ContextType>,
   activeVillageIdChanged: SubscriptionResolver<IResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>,

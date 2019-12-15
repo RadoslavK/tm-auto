@@ -13,7 +13,7 @@ import React, {
 
 import {
   GetAutoUnitsSettings,
-  OnAutoUnitsSettingsChange,
+  OnAutoUnitsSettingsChanged,
   ResetVillageSettings,
   UpdateAutoUnitsSettings,
 } from '*/graphql_operations/settings.graphql';
@@ -23,8 +23,8 @@ import {
   ICoolDown,
   IGetAutoUnitsSettingsQuery,
   IGetAutoUnitsSettingsQueryVariables,
-  IOnAutoUnitsSettingsChangeSubscription,
-  IOnAutoUnitsSettingsChangeSubscriptionVariables,
+  IOnAutoUnitsSettingsChangedSubscription,
+  IOnAutoUnitsSettingsChangedSubscriptionVariables,
   IResetVillageSettingsMutation,
   IResetVillageSettingsMutationVariables,
   IUpdateAutoUnitsSettingsInput,
@@ -32,6 +32,7 @@ import {
   IUpdateAutoUnitsSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../../_types/graphql';
+import { createOnNumberChanged } from '../../../utils/input/createOnNumberChanged';
 import { CoolDown } from '../../controls/Cooldown';
 import { useVillageSettingsContext } from './_context';
 
@@ -42,7 +43,7 @@ const Container: React.FC = () => {
     variables: { villageId },
   });
 
-  useSubscription<IOnAutoUnitsSettingsChangeSubscription, IOnAutoUnitsSettingsChangeSubscriptionVariables>(OnAutoUnitsSettingsChange, {
+  useSubscription<IOnAutoUnitsSettingsChangedSubscription, IOnAutoUnitsSettingsChangedSubscriptionVariables>(OnAutoUnitsSettingsChanged, {
     variables: { villageId },
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
@@ -118,7 +119,7 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
     }
   }, [settings]);
 
-  const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
+  const onCoolDownChange = useCallback((updatedCooldown: ICoolDown): void => {
     setState(prevState => ({
       ...prevState,
       coolDown: updatedCooldown,
@@ -143,21 +144,13 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
     }));
   };
 
-  const onNumberChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
-
-    if (+value < 0) {
-      return;
-    }
-
-    setState(prevState => ({
+  const onNumberChange = createOnNumberChanged({
+    minValue: 0,
+    callback: (name, value) => setState(prevState => ({
       ...prevState,
       [name]: +value,
-    }));
-  };
+    })),
+  });
 
   return (
     <div>
@@ -177,7 +170,7 @@ const AutoUnitsSettings: React.FC<IProps> = (props) => {
 
       <div>
         <label>Cooldown</label>
-        <CoolDown value={coolDown} onChange={onCooldownChange} />
+        <CoolDown value={coolDown} onChange={onCoolDownChange} />
       </div>
 
       <div>

@@ -8,13 +8,8 @@ do building info pridat cp
 
 do troops info pridat carry capacity, defense, move speed
 
-auto warehouse - iba ked neni 1 uz na max lvl??.. co je toto, preverit
-
-dat viacej moznosti v stavacom okne. napr vsetky res na nejaky level atd
-
 max warehouse/granary fullness when taking adventure
 - zalezi ci sa implementuje ta vec ze sa to ulozi do inventara
-
 
 roman - show double queue.. bez operacii, iba delete.
 ..toto premyslet, mozno queue moze byt rozdelena na 2 stlpce ale pokial to ma prerekvizitu tak to bude stale pod nou

@@ -48,6 +48,7 @@ export const settingsResolvers: Resolvers = {
     generalVillageSettings: (_, args) => accountContext.settingsService.village(args.villageId).general.get(),
     autoBuildSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoBuild.get(),
     autoUnitsSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoUnits.get(),
+    autoPartySettings: (_, args) => accountContext.settingsService.village(args.villageId).autoParty.get(),
   },
 
   Mutation: {
@@ -201,6 +202,25 @@ export const settingsResolvers: Resolvers = {
       return true;
     },
 
+    updateAutoPartySettings: (_, args) => {
+      const {
+        villageId,
+        ...modifiedSettings
+      } = args.settings;
+
+      const settingsManager = accountContext.settingsService.village(villageId).autoParty;
+      const settings = settingsManager.get();
+
+      const updatedSettings = new AutoPartySettings({
+        ...settings,
+        ...modifiedSettings,
+      });
+
+      settingsManager.update(updatedSettings);
+
+      return true;
+    },
+
     resetSettings: async (_, args): Promise<boolean> => {
       switch (args.type) {
         case SettingsType.General: {
@@ -247,6 +267,13 @@ export const settingsResolvers: Resolvers = {
           break;
         }
 
+        case VillageSettingsType.AutoParty: {
+          const settings = new AutoPartySettings();
+          await accountContext.settingsService.village(villageId).autoParty.update(settings);
+          await publishPayloadEvent(BotEvent.AutoPartySettingsChanged, { villageId, settings });
+          break;
+        }
+
         default:
           throw new Error(`Invalid village settings type: ${VillageSettingsType[type]}`);
       }
@@ -275,6 +302,11 @@ export const settingsResolvers: Resolvers = {
     }),
 
     autoUnitsSettingsChanged: subscribeToEvent(BotEvent.AutoUnitsSettingsChanged, {
+      filter: (payload, args) => payload.villageId === args.villageId,
+      resolve: payload => payload.settings,
+    }),
+
+    autoPartySettingsChanged: subscribeToEvent(BotEvent.AutoPartySettingsChanged, {
       filter: (payload, args) => payload.villageId === args.villageId,
       resolve: payload => payload.settings,
     }),

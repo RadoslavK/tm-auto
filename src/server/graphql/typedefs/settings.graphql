@@ -5,9 +5,10 @@ interface ITaskSettings {
 
 type GeneralSettings {
     allowTasks: Boolean!
+    autoStart: Boolean!
     autoBuild: Boolean!
     autoUnits: Boolean!
-    autoStart: Boolean!
+    autoParty: Boolean!
 }
 
 type GeneralVillageSettings {
@@ -109,6 +110,7 @@ extend type Query {
     generalVillageSettings(villageId: Int!): GeneralVillageSettings!
     autoBuildSettings(villageId: Int!): AutoBuildSettings!
     autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+    autoPartySettings(villageId: Int!): AutoPartySettings!
 }
 
 input UpdateGeneralVillageSettingsInput {
@@ -148,6 +150,7 @@ input UpdateGeneralSettingsInput {
     autoBuild: Boolean!
     autoUnits: Boolean!
     autoStart: Boolean!
+    autoParty: Boolean!
 }
 
 input UpdateAutoUnitsUnitSettingsInput {
@@ -174,6 +177,16 @@ input UpdateAutoUnitsSettingsInput {
     minCrop: Int!
 }
 
+input UpdateAutoPartySettingsInput {
+    villageId: Int!
+
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    minCulturePoints: Int!
+    partyType: PartyType!
+}
+
 input ResetVillageInput {
     villageId: Int!
 }
@@ -187,6 +200,7 @@ enum VillageSettingsType {
     General
     AutoBuild
     AutoUnits
+    AutoParty
 }
 
 extend type Mutation {
@@ -198,6 +212,7 @@ extend type Mutation {
     updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!): Boolean!
     updateAutoUnitsBuildingSettings(settings: UpdateAutoUnitsBuildingSettingsInput!): Boolean!
     updateAutoUnitsSettings(settings: UpdateAutoUnitsSettingsInput!): Boolean!
+    updateAutoPartySettings(settings: UpdateAutoPartySettingsInput!): Boolean!
 
     resetSettings(type: SettingsType!): Boolean!
     resetVillageSettings(villageId: Int!, type: VillageSettingsType!): Boolean!
@@ -210,4 +225,5 @@ extend type Subscription {
     generalVillageSettingsChanged(villageId: Int!): GeneralVillageSettings!
     autoBuildSettingsChanged(villageId: Int!): AutoBuildSettings!
     autoUnitsSettingsChanged(villageId: Int!): AutoUnitsSettings!
+    autoPartySettingsChanged(villageId: Int!): AutoPartySettings!
 }
