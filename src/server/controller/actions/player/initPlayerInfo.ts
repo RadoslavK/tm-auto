@@ -10,7 +10,7 @@ export const initPlayerInfo = async (): Promise<void> => {
 
   const page = await getPage();
   const content = await page.content();
-  gameInfoService.hasNewUI = content.includes('VerizonBeseechingRuggedEltonTrigonometric ');
+  gameInfoService.hasNewUI = !content.includes('buildingsV1');
 
   gameInfo.speed = await parseServerSpeed();
   gameInfo.tribe = await parseTribe();

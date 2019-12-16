@@ -42,6 +42,8 @@ priority v utracani surovin + min surovin nechat pri stavani a budovani vojaku
 
 -------------------New features-------------------
 
+dat tam nieco ako requested tasky.. ze dedina nema auto build ani nic tak sa ani nerefreshnu budovy.. tak ze napr refresh buildings alebo celu dedinu alebo nieco a jednorazovo sa proste prepne a nieco spravi
+
 goldclub farming
 
 -poslat utok na nekoho atd, mierit s katapultami
