@@ -1,5 +1,5 @@
-import { BuildingType } from '../../../_shared/types/buildingType';
 import { IVillageCrannyCapacity } from '../../_types/graphql';
+import { BuildingType } from '../../../_shared/types/buildingType';
 import { accountContext } from '../../accountContext';
 import { crannyInfoService } from '../../services/crannyInfoService';
 import { BotEvent } from '../subscriptions/botEvent';
@@ -17,6 +17,12 @@ export const villageResolvers: Resolvers = {
     crannyCapacity: (_, args) => {
       const crannies = accountContext.villageService.village(args.villageId).buildings.normalizedBuildingSpots().filter(s => s.type === BuildingType.Cranny);
 
+      const emptyCapacity: IVillageCrannyCapacity = { actual: 0, ongoing: 0, total: 0 };
+
+      if (!crannies.length) {
+        return emptyCapacity;
+      }
+
       return crannies
         .reduce<IVillageCrannyCapacity>(
           (capacity, cranny) => {
@@ -30,7 +36,7 @@ export const villageResolvers: Resolvers = {
               total: capacity.total + total,
             };
           },
-          { actual: 0, ongoing: 0, total: 0 },
+          emptyCapacity,
         );
     },
   },

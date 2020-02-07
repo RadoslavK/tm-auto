@@ -1,3 +1,5 @@
+import { ElementHandle } from 'puppeteer';
+
 import {
   getBuildingSpotPath,
   TravianPath,
@@ -80,7 +82,27 @@ const navigateByJQuery = async (path: string): Promise<boolean> => {
   return true;
 };
 
+const getRidOfOnBoardingUi = async (): Promise<void> => {
+  const page = await getPage();
+  let forwardOnBoardingElement: ElementHandle | null;
+
+  do {
+    try {
+      forwardOnBoardingElement = await page.$('.chevronForward:not(.hide)');
+
+      if (forwardOnBoardingElement) {
+        await forwardOnBoardingElement.click();
+      }
+    } catch {
+      break;
+    }
+  } while (!forwardOnBoardingElement);
+};
+
 const navigate = async (path: string): Promise<void> => {
+  //  maybe stupid UI onboarding is blocking buttons or something
+  await getRidOfOnBoardingUi();
+
   if (await navigateByLink(path)) {
     return;
   }
