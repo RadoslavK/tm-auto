@@ -118,6 +118,11 @@ class ControllerService {
         const page = await getPage();
         const now = new Date();
         const format = `${now.getDate()}-${now.getMonth()}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+
+        if (!fs.existsSync('./screenshots')) {
+          fs.mkdirSync('./screenshots');
+        }
+
         await page.screenshot({ path: `.screenshots/${format}.png`, fullPage: true });
         await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack, { flag: 'w' });
       } catch(screenshotError) {
