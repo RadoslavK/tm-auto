@@ -16,6 +16,10 @@ const capacities: Record<number, number> = {
 
 class CrannyInfoService {
   getCapacity = (level: number): number => {
+    if (level === 0) {
+      return 0;
+    }
+
     const { tribe } = accountContext.gameInfo;
 
     const multiplier = tribe === Tribe.Gauls
