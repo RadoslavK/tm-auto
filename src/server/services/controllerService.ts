@@ -2,6 +2,7 @@ import fs from 'fs';
 
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
+import { GeneralSettings } from '../_models/settings/generalSettings';
 import {
   BotState,
   IMutationSignInArgs,
@@ -49,33 +50,40 @@ class ControllerService {
       accountId,
     } = input;
 
-    if (this.botState !== BotState.None) {
-      return;
+    let generalSettings: GeneralSettings;
+
+    try {
+      if (this.botState !== BotState.None) {
+        return;
+      }
+
+      this.setState(BotState.Pending);
+
+      await accountService.setCurrentAccountId(accountId);
+      accountContext.initialize();
+
+      await ensureLoggedIn();
+      await updateNewOldVillages();
+      await initPlayerInfo();
+      await updateHeroInformation();
+
+      const allVillages = accountContext.villageService.allVillages();
+
+      for (const village of shuffle(allVillages)) {
+        await new BuildingQueueService(village.id).loadQueue();
+        await ensureVillageSelected(village.id);
+
+        await updateResources();
+        await updateBuildings();
+      }
+
+      await updatePlayerInfo();
+    } catch (error) {
+      console.error(error.stack);
+      await this.signOut();
+    } finally {
+      generalSettings = accountContext.settingsService.general.get();
     }
-
-    this.setState(BotState.Pending);
-
-    await accountService.setCurrentAccountId(accountId);
-    accountContext.initialize();
-
-    await ensureLoggedIn();
-    await updateNewOldVillages();
-    await initPlayerInfo();
-    await updateHeroInformation();
-
-    const allVillages = accountContext.villageService.allVillages();
-
-    for (const village of shuffle(allVillages)) {
-      await new BuildingQueueService(village.id).loadQueue();
-      await ensureVillageSelected(village.id);
-
-      await updateResources();
-      await updateBuildings();
-    }
-
-    await updatePlayerInfo();
-
-    const generalSettings = accountContext.settingsService.general.get();
 
     if (generalSettings.autoStart) {
       await this.start();

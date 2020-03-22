@@ -84,7 +84,7 @@ const navigateByJQuery = async (path: string): Promise<boolean> => {
 
 const getRidOfOnBoardingUi = async (): Promise<void> => {
   const page = await getPage();
-  let forwardOnBoardingElement: ElementHandle | null;
+  let forwardOnBoardingElement: ElementHandle | null = null;
 
   do {
     try {
@@ -96,7 +96,7 @@ const getRidOfOnBoardingUi = async (): Promise<void> => {
     } catch {
       break;
     }
-  } while (!forwardOnBoardingElement);
+  } while (forwardOnBoardingElement);
 };
 
 const navigate = async (path: string): Promise<void> => {
