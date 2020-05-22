@@ -12,11 +12,11 @@ import { ensureBuildingSpotPage } from './actions/ensurePage';
 //  TODO finish and check with various unit movements.. raid,support, coming back, trapped etc
 
 enum MovementType {
-  Unknown = 'Unknown',
-  Return = 'Return',
   Attack = 'Attack',
-  Raid = 'Raid',
   InVillage = 'InVillage',
+  Raid = 'Raid',
+  Return = 'Return',
+  Unknown = 'Unknown'
 }
 
 const mapMovementType = (movementClass: string | undefined): MovementType => {
@@ -31,14 +31,14 @@ const mapMovementType = (movementClass: string | undefined): MovementType => {
 };
 
 interface IUnitAmount {
-  readonly unitIndex: number;
   readonly amount: number;
+  readonly unitIndex: number;
 }
 
 interface ITroopDetail {
- readonly originVillageId: number;
- readonly movementType: MovementType;
- readonly unitAmounts: readonly IUnitAmount[];
+  readonly movementType: MovementType;
+  readonly originVillageId: number;
+  readonly unitAmounts: readonly IUnitAmount[];
 }
 
 const parseCoordinate = async (elementHandle: ElementHandle, className: string): Promise<number | null> => {
@@ -53,33 +53,27 @@ const parseCoordinate = async (elementHandle: ElementHandle, className: string):
 };
 
 const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<IUnitAmount[]> => {
-  const amounts = await detailsHandle.$$eval('tbody[class="units last"] tr td', countColumns => {
-    return countColumns.map(column => +(column as HTMLElement).innerText);
-  });
+  const amounts = await detailsHandle.$$eval('tbody[class="units last"] tr td', countColumns => countColumns.map(column => +(column as HTMLElement).innerText));
 
-  const indexes = await detailsHandle.$$eval('tbody[class="units"] tr td.uniticon img', icons => {
-    return icons.map(icon => {
-      const heroIndexMatch = /unit uhero/.exec(icon.className);
+  const indexes = await detailsHandle.$$eval('tbody[class="units"] tr td.uniticon img', icons => icons.map(icon => {
+    const heroIndexMatch = /unit uhero/.exec(icon.className);
 
-      if (heroIndexMatch) {
-        return null;
-      }
+    if (heroIndexMatch) {
+      return null;
+    }
 
-      const unitIndexMatch = /unit u(\d+)/.exec(icon.className);
+    const unitIndexMatch = /unit u(\d+)/.exec(icon.className);
 
-      if (!unitIndexMatch) {
-        throw new Error('Could not parse unit index');
-      }
+    if (!unitIndexMatch) {
+      throw new Error('Could not parse unit index');
+    }
 
-      return +unitIndexMatch[1];
-    });
-  });
+    return +unitIndexMatch[1];
+  }));
 
-  return indexes.reduce((reduced, unitIndex, index) => {
-    return unitIndex
-      ? [...reduced, { unitIndex, amount: amounts[index] ||0 }]
-      : reduced;
-  }, [] as IUnitAmount[]);
+  return indexes.reduce((reduced, unitIndex, index) => unitIndex
+    ? [...reduced, { amount: amounts[index] || 0, unitIndex }]
+    : reduced, [] as IUnitAmount[]);
 };
 
 export const updateUnitsInformation = async (): Promise<void> => {
@@ -131,8 +125,8 @@ export const updateUnitsInformation = async (): Promise<void> => {
     const unitAmounts = await parseUnitAmounts(detailNode);
 
     const detail: ITroopDetail = {
-      originVillageId: originVillage.id,
       movementType,
+      originVillageId: originVillage.id,
       unitAmounts,
     };
 

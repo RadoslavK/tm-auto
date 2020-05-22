@@ -15,13 +15,9 @@ type EventWithoutPayload<TEvent extends BotEvent> = Extends<TEvent, keyof BotEve
 
 const pubSub = new PubSub();
 
-export const publishPayloadEvent = async <TEvent extends keyof BotEventPayloads>(event: TEvent, payload: BotEventPayloads[TEvent]): Promise<void> => {
-  return pubSub.publish(event, payload);
-};
+export const publishPayloadEvent = async <TEvent extends keyof BotEventPayloads>(event: TEvent, payload: BotEventPayloads[TEvent]): Promise<void> => pubSub.publish(event, payload);
 
-export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutPayload<TEvent>): Promise<void> => {
-  return pubSub.publish(event, null);
-};
+export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutPayload<TEvent>): Promise<void> => pubSub.publish(event, null);
 
 type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayloads[TEvent] : undefined;
 
@@ -30,7 +26,7 @@ interface ISubscribeToEventOptions<TEvent, TArgs, TResult> {
   readonly resolve: (payload: EventPayload<TEvent>) => TResult;
 }
 
-export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TKey, TParent, TContext>(
+export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TParent, TContext>(
   event: TEvent,
   options: ISubscribeToEventOptions<TEvent, TArgs, TResult>,
 ) => {
@@ -45,5 +41,5 @@ export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TKey, 
     ? withFilter(sub, filter)
     : sub;
 
-  return { subscribe, resolve };
+  return { resolve, subscribe };
 };

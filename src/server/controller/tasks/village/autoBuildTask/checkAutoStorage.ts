@@ -104,11 +104,13 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
     } else if (lowestLevelBuildingInVillage) {
       // exists and not max level
       const queuedBuilding = new QueuedBuilding({
+
+        fieldId: lowestLevelBuildingInVillage.fieldId,
+
+        level: lowestLevelBuildingInVillage.level.total + 1,
         //  id is not important is it wont be placed into the queue
         queueId: '',
-        fieldId: lowestLevelBuildingInVillage.fieldId,
         type: lowestLevelBuildingInVillage.type,
-        level: lowestLevelBuildingInVillage.level.total + 1,
       });
 
       buildingsToBuild.push(queuedBuilding);
@@ -127,11 +129,13 @@ export const checkAutoStorage = async (village: Village, settings: IAutoStorageS
       // build new at random free spot
       const freeFieldId = randomElement(freeFieldIds);
       const queuedBuilding = new QueuedBuilding({
+
+        fieldId: freeFieldId,
+
+        level: 1,
         //  id is not important is it wont be placed into the queue
         queueId: '',
-        fieldId: freeFieldId,
         type: neededBuildingType,
-        level: 1,
       });
 
       buildingsToBuild.push(queuedBuilding);

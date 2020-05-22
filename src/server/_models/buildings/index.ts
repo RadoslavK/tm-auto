@@ -35,26 +35,24 @@ export class Buildings {
     this.ongoing.set(buildingsInProgress);
   };
 
-  public normalizedBuildingSpots = (): readonly IBuildingSpot[] => {
-    return this.spots.buildings().map((b): IBuildingSpot => {
-      const queued = this.queue.buildings().filter(bb => bb.fieldId === b.fieldId);
-      const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
-      // eslint-disable-next-line unicorn/no-nested-ternary
-      const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
-      const info = buildingInfoService.getBuildingInfo(type);
+  public normalizedBuildingSpots = (): readonly IBuildingSpot[] => this.spots.buildings().map((b): IBuildingSpot => {
+    const queued = this.queue.buildings().filter(bb => bb.fieldId === b.fieldId);
+    const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
+    // eslint-disable-next-line unicorn/no-nested-ternary
+    const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
+    const info = buildingInfoService.getBuildingInfo(type);
 
-      return {
-        type,
-        fieldId: b.fieldId,
-        level: {
-          ...b.level,
-          total: b.level.total(),
-          max: info.maxLevel,
-        },
-        name: info.name,
-      };
-    });
-  };
+    return {
+      fieldId: b.fieldId,
+      level: {
+        ...b.level,
+        max: info.maxLevel,
+        total: b.level.total(),
+      },
+      name: info.name,
+      type,
+    };
+  });
 
   public freeFieldIds = (): readonly number[] => this
     .normalizedBuildingSpots()

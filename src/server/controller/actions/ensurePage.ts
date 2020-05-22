@@ -139,7 +139,7 @@ export interface ITabInformation {
   readonly name: string;
 }
 
-export const ensureBuildingSpotPage = async (fieldId: number, tab: ITabInformation | undefined = undefined): Promise<void> => {
+export const ensureBuildingSpotPage = async (fieldId: number, tab?: ITabInformation): Promise<void> => {
   //  TODO: spravit to efektivnejsie a celkovo ensure navigaciu. ked uz je na tej budove tak sa nemusi davat na resource fieldy atd
   if (isResourceField(fieldId)) {
     await ensurePage(TravianPath.ResourceFieldsOverview);

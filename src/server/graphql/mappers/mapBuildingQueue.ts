@@ -33,11 +33,11 @@ export const mapBuildingQueueFactory = (queueService: BuildingQueueService): (qu
         ...building,
         canMoveDown: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Down),
         canMoveUp: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Up),
-        name: buildingInfoService.getBuildingInfo(building.type).name,
         cost: {
           ...cost,
           buildTime: actualBuildTime,
         },
+        name: buildingInfoService.getBuildingInfo(building.type).name,
       });
     });
 

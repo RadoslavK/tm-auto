@@ -33,20 +33,25 @@ class AccountContext {
   };
 }
 
+// TODO: make better mocking
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
 class AccountContextMock extends AccountContext {
   constructor() {
     super();
 
     (accountService as any).currentAccountId = '1';
     (accountService as any).accountsData = {
-      lastSignedAccountId: '1',
       accounts: [
         {
           id: '1',
-          username: 'Jozo',
           password: 'Haha',
           server: 'lol',
-        }],
+          username: 'Jozo',
+        },
+      ],
+      lastSignedAccountId: '1',
     };
     (accountService as any).accountsLoaded = true;
 
@@ -55,22 +60,30 @@ class AccountContextMock extends AccountContext {
     const villages: Village[] = [
       new Village({
         coords: new Coords({ x: 0, y: 0 }),
-        name: 'Village 1',
         id: 1,
+        name: 'Village 1',
         resources: new VillageResources({
-          amount: new Resources({ wood: 333, clay: 444, iron: 555, crop: 666, freeCrop: 14 }),
-          production: new Resources({ wood: 33, clay: 44, iron: 55, crop: 66 }),
-          capacity: new VillageCapacity( { warehouse: 2222, granary: 1111 }),
+          amount: new Resources({
+            clay: 444, crop: 666, freeCrop: 14, iron: 555, wood: 333,
+          }),
+          capacity: new VillageCapacity({ granary: 1111, warehouse: 2222 }),
+          production: new Resources({
+            clay: 44, crop: 66, iron: 55, wood: 33,
+          }),
         }),
       }),
       new Village({
         coords: new Coords({ x: 10, y: 10 }),
-        name: 'Village 2',
         id: 2,
+        name: 'Village 2',
         resources: new VillageResources({
-          amount: new Resources({ wood: 333, clay: 444, iron: 555, crop: 666, freeCrop: 14 }),
-          production: new Resources({ wood: 33, clay: 44, iron: 55, crop: 66 }),
-          capacity: new VillageCapacity( { warehouse: 2222, granary: 1111 }),
+          amount: new Resources({
+            clay: 444, crop: 666, freeCrop: 14, iron: 555, wood: 333,
+          }),
+          capacity: new VillageCapacity({ granary: 1111, warehouse: 2222 }),
+          production: new Resources({
+            clay: 44, crop: 66, iron: 55, wood: 33,
+          }),
         }),
       }),
     ];

@@ -4,16 +4,14 @@ import {
   VillageTaskType,
 } from '../../_types/graphql';
 
-interface IBotTaskResult {
+export interface IBotTaskResult {
   readonly nextCoolDown?: CoolDown | null;
 }
-
-export type BotTaskResult = Promise<IBotTaskResult | void>;
 
 interface IBotTaskBase {
   readonly allowExecution: () => boolean;
   readonly coolDown: () => CoolDown;
-  readonly execute: () => BotTaskResult;
+  readonly execute: () => Promise<IBotTaskResult | void>;
 }
 
 export interface IBotTask extends IBotTaskBase {

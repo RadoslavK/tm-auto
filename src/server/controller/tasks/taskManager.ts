@@ -1,6 +1,6 @@
-import { getAllEnumValues } from '../../../_shared/enumUtils';
 import { TravianPath } from '../../_enums/travianPath';
 import { Village } from '../../_models/village/village';
+import { getAllEnumValues } from '../../../_shared/enumUtils';
 import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../graphql/subscriptions/botEvent';
 import {
@@ -58,7 +58,7 @@ class BotTaskEngine {
     timeOfNextExecution.setSeconds(timeOfNextExecution.getSeconds() + delay);
 
     this.m_setNextExecution(timeOfNextExecution);
-  }
+  };
 }
 
 class VillageBotTasksEngine {

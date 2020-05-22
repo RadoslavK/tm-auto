@@ -8,7 +8,7 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
 
   const villages = await Promise.all(villageNodes.map(async (villageNode) => {
     const link = await villageNode.getProperty('href').then(x => x.jsonValue());
-    const idMatch = /newdid=(\d+)/.exec(link);
+    const idMatch = /newdid=(\d+)/.exec(link as string);
 
     if (!idMatch) {
       throw new Error('Failed to parse village id');
@@ -30,9 +30,9 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
     }
 
     return new Village({
+      coords: { x, y },
       id,
       name,
-      coords: { x, y },
     });
   }));
 

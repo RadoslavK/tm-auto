@@ -5,9 +5,9 @@ import { Tribe } from '../../_shared/types/tribe';
 //  TODO has gold club feature
 
 const getDefaults = (): Fields<GameInfo> => ({
+  allyId: null,
   speed: 0,
   tribe: Tribe.Romans,
-  allyId: null,
 });
 
 export class GameInfo {

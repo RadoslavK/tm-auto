@@ -16,6 +16,6 @@ export interface IBuildingConditions {
   readonly capital: CapitalCondition;
   readonly isUnique: boolean;
   readonly playerTribe: Tribe | null;
-  readonly requiredBuildings: readonly IBuildingWithLevelRequirement[];
   readonly prohibitedBuildingTypes: readonly BuildingType[];
+  readonly requiredBuildings: readonly IBuildingWithLevelRequirement[];
 }

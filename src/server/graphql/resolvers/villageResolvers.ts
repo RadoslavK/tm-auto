@@ -10,10 +10,6 @@ export const villageResolvers: Resolvers = {
   Query: {
     activeVillageId: () => accountContext.villageService.currentVillageId,
 
-    village: (_, args) => accountContext.villageService.village(args.villageId),
-
-    villages: () => accountContext.villageService.allVillages(),
-
     crannyCapacity: (_, args) => {
       const crannies = accountContext.villageService.village(args.villageId).buildings.normalizedBuildingSpots().filter(s => s.type === BuildingType.Cranny);
 
@@ -39,23 +35,27 @@ export const villageResolvers: Resolvers = {
           emptyCapacity,
         );
     },
+
+    village: (_, args) => accountContext.villageService.village(args.villageId),
+
+    villages: () => accountContext.villageService.allVillages(),
   },
 
   Subscription: {
-    updateVillage: subscribeToEvent(BotEvent.VillageUpdated, {
-      resolve: () => true,
-    }),
-
-    updateVillages: subscribeToEvent(BotEvent.VillagesUpdated, {
-      resolve: () => true,
-    }),
-
     activeVillageIdChanged: subscribeToEvent(BotEvent.ActiveVillageIdChanged, {
       resolve: p => p.villageId,
     }),
 
     crannyCapacityChanged: subscribeToEvent(BotEvent.CrannyCapacityUpdated, {
       filter: (payload, variables) => payload.villageId === variables.villageId,
+      resolve: () => true,
+    }),
+
+    updateVillage: subscribeToEvent(BotEvent.VillageUpdated, {
+      resolve: () => true,
+    }),
+
+    updateVillages: subscribeToEvent(BotEvent.VillagesUpdated, {
       resolve: () => true,
     }),
   },

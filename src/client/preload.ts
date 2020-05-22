@@ -1,40 +1,45 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcRenderer } from 'electron';
 import isDev from 'electron-is-dev';
-import ipc from 'node-ipc';
-import uuid from 'uuid';
+import { IPC } from 'node-ipc';
 
-let resolveSocketPromise: (name: string) => void;
-
-const socketPromise = new Promise<string>(resolve => {
-  resolveSocketPromise = resolve;
-});
+type Writeable<T, TProps extends keyof T = keyof T> = { -readonly [P in TProps]: T[P] };
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/interface-name-prefix
   interface Window {
-    IS_DEV: boolean;
-    getServerSocket: () => Promise<string>;
-    generateId: () => string;
-    ipcConnect: (id: string, callback: (client: any) => void) => void;
+    readonly IS_DEV: boolean;
+    readonly api: {
+      readonly getSocketName: () => Promise<string>;
+      readonly ipcConnect: (id: string, callback: (client: any) => void) => void;
+      readonly ipcDisconnect: (id: string) => void;
+    };
   }
 }
 
-window.IS_DEV = isDev;
+(window as Writeable<Window, 'IS_DEV'>).IS_DEV = isDev;
 
-window.getServerSocket = async (): Promise<string> => {
-  return socketPromise;
+const ipc = new IPC();
+
+(window as Writeable<Window, 'api'>).api = {
+  getSocketName: (): Promise<string> =>
+    new Promise((resolve) => {
+      ipcRenderer.removeAllListeners('set-socket-name');
+
+      ipcRenderer.on('set-socket-name', (_event, socketName: string) => {
+        ipcRenderer.removeAllListeners('set-socket-name');
+        resolve(socketName);
+      });
+
+      ipcRenderer.send('request-socket-name');
+    }),
+  ipcConnect: (id: string, callback: any) => {
+    ipc.config.silent = true;
+    ipc.config.id = id;
+    ipc.connectTo(id, () => {
+      callback(ipc.of[id]);
+    });
+  },
+  ipcDisconnect: (id: string) => {
+    ipc.disconnect(id);
+  },
 };
-
-ipcRenderer.on('set-socket', (_event: any, payload: { readonly name: string }) => {
-  resolveSocketPromise(payload.name);
-});
-
-window.ipcConnect = (id: string, callback: any) => {
-  ipc.config.silent = true;
-  ipc.connectTo(id, () => {
-    callback(ipc.of[id]);
-  });
-};
-
-window.generateId = () => uuid.v4();

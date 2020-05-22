@@ -1,6 +1,4 @@
-po reloade sa zle vyhodnocuju queries. pravdepodobne sa zle uvolnuju resources v IPC
 
-pri prepnuti uctu este asi obdrzi informacie z predchadazajuceho lebo graphql na klientovi zaloguje error.. toto sa uz dlho nestalo
 
 vyzera ze nebuduje dobre budovy ked je naklikanych v queue viac rovnakeho typu alebo minimalne ked viac existuje v dedine alebo kombinacia.. s ukrytami
 dalsi podobny problem: povedal ze stava lvl7, pricom dal stavat lvl6 a zvysok budov vymazal z Queue. asi medzitym spadol.. spravit to konzistentne

@@ -24,35 +24,29 @@ export class Resources implements IResources, IComparable<Resources> {
     Object.assign(this, merge(getDefaults, params));
   }
 
-  public add = (addition: Resources): Resources => {
-    return new Resources({
-      wood: this.wood + addition.wood,
-      clay: this.clay + addition.clay,
-      iron: this.iron + addition.iron,
-      crop: this.crop + addition.crop,
-      freeCrop: this.freeCrop + addition.freeCrop,
-    });
-  };
+  public add = (addition: Resources): Resources => new Resources({
+    clay: this.clay + addition.clay,
+    crop: this.crop + addition.crop,
+    freeCrop: this.freeCrop + addition.freeCrop,
+    iron: this.iron + addition.iron,
+    wood: this.wood + addition.wood,
+  });
 
-  public subtract = (subtraction: Resources): Resources => {
-    return new Resources({
-      wood: this.wood - subtraction.wood,
-      clay: this.clay - subtraction.clay,
-      iron: this.iron - subtraction.iron,
-      crop: this.crop - subtraction.crop,
-      freeCrop: this.freeCrop - subtraction.freeCrop,
-    });
-  };
+  public subtract = (subtraction: Resources): Resources => new Resources({
+    clay: this.clay - subtraction.clay,
+    crop: this.crop - subtraction.crop,
+    freeCrop: this.freeCrop - subtraction.freeCrop,
+    iron: this.iron - subtraction.iron,
+    wood: this.wood - subtraction.wood,
+  });
 
-  public multiply = (multiplicator: number): Resources => {
-    return new Resources({
-      wood: this.wood * multiplicator,
-      clay: this.clay * multiplicator,
-      iron: this.iron * multiplicator,
-      crop: this.crop * multiplicator,
-      freeCrop: this.freeCrop * multiplicator,
-    });
-  };
+  public multiply = (multiplicator: number): Resources => new Resources({
+    clay: this.clay * multiplicator,
+    crop: this.crop * multiplicator,
+    freeCrop: this.freeCrop * multiplicator,
+    iron: this.iron * multiplicator,
+    wood: this.wood * multiplicator,
+  });
 
   public isGreaterOrEqualThan = (other: Resources): boolean =>
     this.wood >= other.wood

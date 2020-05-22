@@ -1,9 +1,7 @@
 import { Duration } from '../_models/duration';
 import { BuildingType } from '../../_shared/types/buildingType';
 
-const roundToNearest10 = (seconds: number): number => {
-  return 10 * Math.round(seconds / 10);
-};
+const roundToNearest10 = (seconds: number): number => 10 * Math.round(seconds / 10);
 
 const getUnitsModifier = (buildingLevel: number): number => {
   switch (buildingLevel) {

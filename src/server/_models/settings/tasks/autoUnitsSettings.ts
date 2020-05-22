@@ -12,10 +12,10 @@ import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
 const getDefaultUnitSettings = (): Fields<AutoUnitsUnitSettings> => ({
-  index: 0,
   autoBuild: false,
-  trainForever: false,
+  index: 0,
   targetAmount: 0,
+  trainForever: false,
 });
 
 export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettings {
@@ -72,23 +72,23 @@ const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] =>
 
 const getDefaultSettings = (): Fields<AutoUnitsSettings> => ({
   allow: false,
-  coolDown: new CoolDown({
-    min: new Duration({ minutes: 7 }),
-    max: new Duration({ minutes: 12 }),
-  }),
-  minCrop: 0,
   barracks: new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Barracks),
+  }),
+  coolDown: new CoolDown({
+    max: new Duration({ minutes: 12 }),
+    min: new Duration({ minutes: 7 }),
+  }),
+  minCrop: 0,
+  residence: new AutoUnitsBuildingSettings({
+    maxBuildTime: new Duration({ hours: 12 }),
+    units: getUnitsOfType(BuildingType.Residence),
   }),
   stable: new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Stable),
   }),
   workshop: new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Workshop),
-  }),
-  residence: new AutoUnitsBuildingSettings({
-    maxBuildTime: new Duration({ hours: 12 }),
-    units: getUnitsOfType(BuildingType.Residence),
   }),
 });
 
@@ -106,11 +106,11 @@ export class AutoUnitsSettings implements IAutoUnitsSettings {
   constructor(params: Partial<IAutoUnitsSettings> = {}) {
     Object.assign(this, merge(getDefaultSettings, {
       ...params,
-      coolDown: params.coolDown && new CoolDown(params.coolDown),
       barracks: params.barracks && new AutoUnitsBuildingSettings(params.barracks),
+      coolDown: params.coolDown && new CoolDown(params.coolDown),
+      residence: params.residence && new AutoUnitsBuildingSettings(params.residence),
       stable: params.stable && new AutoUnitsBuildingSettings(params.stable),
       workshop: params.workshop && new AutoUnitsBuildingSettings(params.workshop),
-      residence: params.residence && new AutoUnitsBuildingSettings(params.residence),
     }));
   }
 

@@ -5,13 +5,13 @@ module.exports = [
     use: 'node-loader',
   },
   {
-    test: /\.mjs$/,
     include: /node_modules/,
-    type: "javascript/auto",
+    test: /\.mjs$/,
+    type: 'javascript/auto',
   },
   {
-    test: /\.(m?js|node)$/,
     parser: { amd: false },
+    test: /\.(m?js|node)$/,
     use: {
       loader: '@marshallofsound/webpack-asset-relocator-loader',
       options: {
@@ -20,34 +20,42 @@ module.exports = [
     },
   },
   {
-    test: /\.(j|t)sx?$/,
-    exclude: /node_modules/,
-    use: [
-      "babel-loader"
+    exclude: /(node_modules|.webpack)/,
+    loaders: [
+      {
+        loader: 'babel-loader',
+      },
+      {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        },
+      },
     ],
+    test: /\.[jt]sx?$/,
   },
   {
     test: /\.(css)$/,
-    use: ["style-loader", "css-loader"],
+    use: ['style-loader', 'css-loader'],
   },
   {
-    test: /\.(jpg|png|svg|ico|icns)$/,
-    loader: "file-loader",
+    loader: 'file-loader',
     options: {
-      name: "[path][name].[ext]",
+      name: '[path][name].[ext]',
     },
+    test: /\.(jpg|png|svg|ico|icns)$/,
   },
   {
-    test: /\.(graphql|gql)$/,
     exclude: /node_modules/,
-    loader: 'graphql-tag/loader'
+    loader: 'graphql-tag/loader',
+    test: /\.(graphql|gql)$/,
   },
   {
-    test: /\.(woff|woff2|eot|ttf|svg)$/,
     loader: 'file-loader',
     options: {
       name: '[name].[ext]',
-      outputPath: 'fonts/'
-    }
-  }
+      outputPath: 'fonts/',
+    },
+    test: /\.(woff|woff2|eot|ttf|svg)$/,
+  },
 ];

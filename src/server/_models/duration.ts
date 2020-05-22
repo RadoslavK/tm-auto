@@ -3,10 +3,10 @@ import { merge } from '../../_shared/merge';
 import { Fields } from '../../_shared/types';
 
 const getDefaults = (): Fields<Duration> => ({
-  seconds: 0,
-  minutes: 0,
-  hours: 0,
   days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
 });
 
 export class Duration implements IDuration {
@@ -21,11 +21,9 @@ export class Duration implements IDuration {
 
   public totalSeconds = (): number => (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
 
-  public getMin = (other: Duration): Duration => {
-    return this.totalSeconds() <= other.totalSeconds()
-      ? new Duration(this)
-      : new Duration(other);
-  };
+  public getMin = (other: Duration): Duration => this.totalSeconds() <= other.totalSeconds()
+    ? new Duration(this)
+    : new Duration(other);
 
   public multiply = (multiplicator: number): Duration => Duration.fromSeconds(this.totalSeconds() * multiplicator);
 

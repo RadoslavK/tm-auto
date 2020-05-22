@@ -14,7 +14,7 @@ export class VillageSettingsService implements ComplexSettingsServiceType<IVilla
   public autoUnits: InternalSettingsService<IVillageSettings['autoUnits'], VillageSettings['autoUnits']>;
   public general: InternalSettingsService<IVillageSettings['general'], VillageSettings['general']>;
 
-  constructor(private villageId: number) {
+  constructor(villageId: number) {
     const villageSettingsPath = dataPathService.villagePath(villageId).settings;
 
     this.autoBuild = new InternalSettingsService(AutoBuildSettings, villageSettingsPath.autoBuild);

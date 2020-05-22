@@ -9,11 +9,11 @@ import { Duration } from '../../duration';
 
 const getDefaults = (): Fields<AutoPartySettings> => ({
   allow: false,
-  minCulturePoints: 0,
   coolDown: new CoolDown({
-    min: new Duration({ minutes: 30 }),
     max: new Duration({ minutes: 55 }),
+    min: new Duration({ minutes: 30 }),
   }),
+  minCulturePoints: 0,
   partyType: PartyType.Small,
 });
 

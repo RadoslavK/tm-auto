@@ -41,9 +41,9 @@ export const parseBuildingsInProgress = async (): Promise<readonly BuildingInPro
       finishedAt.setSeconds(finishedAt.getSeconds() + timer);
 
       const building = new BuildingInProgress({
+        fieldId,
         finishedAt,
         level,
-        fieldId,
         type,
       });
 

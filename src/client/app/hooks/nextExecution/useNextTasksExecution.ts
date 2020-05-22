@@ -10,35 +10,48 @@ import {
 import {
   NextTasksExecution,
   NextTasksExecutionChanged,
-} from "*/graphql_operations/nextTaskExecution.graphql";
+} from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
   INextTasksExecutionChangedSubscription,
   INextTasksExecutionChangedSubscriptionVariables,
   INextTasksExecutionQuery,
   INextTasksExecutionQueryVariables,
+  ITimestamp,
 } from '../../../_types/graphql';
+import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
 export const useNextTasksExecution = (): number => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);
 
-  const nextExecutionResult = useQuery<INextTasksExecutionQuery, INextTasksExecutionQueryVariables>(NextTasksExecution);
+  const nextExecutionResult = useQuery<INextTasksExecutionQuery, INextTasksExecutionQueryVariables>(
+    NextTasksExecution,
+  );
+
+  const updateNextExecution = (nextTasksExecution: ITimestamp): void => {
+    const difference = getSecondsUntilTimestamp(nextTasksExecution);
+
+    setNextExecutionIn(difference);
+  };
 
   useEffect(() => {
-    if (!nextExecutionResult.loading && nextExecutionResult.data) {
-      const difference = Math.max(0, nextExecutionResult.data.nextTasksExecution.totalSeconds - Math.floor(new Date().getTime() / 1000));
-      setNextExecutionIn(difference);
+    const { data, loading } = nextExecutionResult;
+
+    if (!loading && data) {
+      updateNextExecution(data.nextTasksExecution);
     }
   }, [nextExecutionResult]);
 
-  useSubscription<INextTasksExecutionChangedSubscription, INextTasksExecutionChangedSubscriptionVariables>(NextTasksExecutionChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        const difference = Math.max(0, subscriptionData.data.nextTasksExecutionChanged.totalSeconds - Math.floor(new Date().getTime() / 1000));
-        setNextExecutionIn(difference);
-      }
+  useSubscription<INextTasksExecutionChangedSubscription, INextTasksExecutionChangedSubscriptionVariables>(
+    NextTasksExecutionChanged,
+    {
+      onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+        if (!loading && data) {
+          updateNextExecution(data.nextTasksExecutionChanged);
+        }
+      },
     },
-  });
+  );
 
   return nextExecutionIn;
 };

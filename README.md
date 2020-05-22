@@ -24,7 +24,12 @@ debugging - yarn run debug
 ---main port: 9229
 ---server port: 9220
 
-node 13.2 +
+node 13.7 +
 
 ked sa kopiruju lokalne moduly tak najprv treba zmazat z nich node_modules lebo sa to vsetko prekopiruje
 a az potom dat yarn add lokalny modul
+
+upgrade all packages to latest
+npx yarn-upgrade-all
+
+linter has lower typescript support. like 3.7.5

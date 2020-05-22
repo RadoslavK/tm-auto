@@ -29,7 +29,7 @@ class BuildingInfoService {
     }
 
     return info;
-  }
+  };
 
   private infos = (): Map<BuildingType, IBuildingInfo> => {
     if (!this.buildingInfos) {

@@ -1,3 +1,6 @@
 import { IVillage } from '../../_types/graphql';
 
-export const formatVillageName = ({ name, coords }: Pick<IVillage, 'name' | 'coords'>): string => `${name} [${coords.x}|${coords.y}]`;
+type VillageType = Pick<IVillage, 'name' | 'coords'> & Pick<Partial<IVillage>, 'isCapital'>;
+
+export const formatVillageName = ({ coords, isCapital, name }: VillageType): string =>
+  `${name} [${coords.x}|${coords.y}] ${isCapital ? ' (Capital)' : ''}`;

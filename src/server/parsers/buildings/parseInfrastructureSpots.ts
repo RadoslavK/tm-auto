@@ -1,7 +1,7 @@
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
 import { TravianPath } from '../../_enums/travianPath';
 import { IActualBuilding } from '../../_models/buildings';
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { Tribe } from '../../../_shared/types/tribe';
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { fieldIds } from '../../constants/fieldIds';
@@ -46,7 +46,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
 
   const buildings = await Promise.all(nodes.map(async (node): Promise<IActualBuilding | null> => {
     const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
-    const fieldIdMatch = /a(\d+)/.exec(className);
+    const fieldIdMatch = /a(\d+)/.exec(className as string);
 
     if (!fieldIdMatch) {
       throw new Error('Failed to parse field id');
@@ -58,7 +58,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
       return null;
     }
 
-    const typeMatch = /g(\d+)/.exec(className);
+    const typeMatch = /g(\d+)/.exec(className as string);
 
     if (!typeMatch) {
       throw new Error('Failed to parse building type');

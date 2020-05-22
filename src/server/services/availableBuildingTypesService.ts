@@ -172,7 +172,8 @@ export class AvailableBuildingTypesService {
       const requiredBuilding = conditions.requiredBuildings[i];
       const requiredBuildingExists = normalizedBuildingSpots.some(
         b => b.level.total >= requiredBuilding.level
-          && b.type === requiredBuilding.type);
+          && b.type === requiredBuilding.type,
+      );
 
       if (!requiredBuildingExists) {
         return false;

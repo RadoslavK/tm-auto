@@ -18,23 +18,7 @@ const delayToDate = (delay: IDuration): Date => {
 };
 
 export const nextExecutionResolvers: Resolvers = {
-  Query: {
-    nextTasksExecution: () => convertDateToTimestamp(accountContext.nextExecutionService.tasks()),
-    nextTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.get(args.task)),
-    nextVillageTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.getForVillage(args.villageId, args.task)),
-  },
-
   Mutation: {
-    setNextTaskExecution: (_, args) => {
-      accountContext.nextExecutionService.set(args.task, delayToDate(args.delay));
-      return true;
-    },
-
-    setNextVillageTaskExecution: (_, args) => {
-      accountContext.nextExecutionService.setForVillage(args.villageId, args.task, delayToDate(args.delay));
-      return true;
-    },
-
     resetNextTaskExecution: (_, args) => {
       accountContext.nextExecutionService.resetNextTaskExecution(args.task);
       return true;
@@ -44,15 +28,31 @@ export const nextExecutionResolvers: Resolvers = {
       accountContext.nextExecutionService.resetNextVillageTaskExecution(args.villageId, args.task);
       return true;
     },
+
+    setNextTaskExecution: (_, args) => {
+      accountContext.nextExecutionService.set(args.task, delayToDate(args.delay));
+      return true;
+    },
+
+    setNextVillageTaskExecution: (_, args) => {
+      accountContext.nextExecutionService.setForVillage(args.villageId, args.task, delayToDate(args.delay));
+      return true;
+    },
+  },
+
+  Query: {
+    nextTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.get(args.task)),
+    nextTasksExecution: () => convertDateToTimestamp(accountContext.nextExecutionService.tasks()),
+    nextVillageTaskExecution: (_, args) => convertDateToTimestamp(accountContext.nextExecutionService.getForVillage(args.villageId, args.task)),
   },
 
   Subscription: {
-    nextTasksExecutionChanged: subscribeToEvent(BotEvent.NextTasksExecutionChanged, {
+    nextTaskExecutionChanged: subscribeToEvent(BotEvent.NextTaskExecutionChanged, {
+      filter: (payload, variables) => payload.task === variables.task,
       resolve: p => convertDateToTimestamp(p.nextExecution),
     }),
 
-    nextTaskExecutionChanged: subscribeToEvent(BotEvent.NextTaskExecutionChanged, {
-      filter: (payload, variables) => payload.task === variables.task,
+    nextTasksExecutionChanged: subscribeToEvent(BotEvent.NextTasksExecutionChanged, {
       resolve: p => convertDateToTimestamp(p.nextExecution),
     }),
 

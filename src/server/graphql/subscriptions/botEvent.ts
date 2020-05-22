@@ -7,33 +7,32 @@ import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySetting
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import {
   ILogEntry,
-  IVillageCrannyCapacity,
   TaskType,
   VillageTaskType,
 } from '../../_types/graphql';
 
 export enum BotEvent {
-  BuildingsUpdated = 'BuildingsUpdated',
-  QueuedUpdated = 'QueueUpdated',
-  VillageUpdated = 'VillageUpdated',
-  VillagesUpdated = 'VillagesUpdated',
-  BotRunningChanged = 'BotRunningChanged',
-  LogEntryAdded = 'LogEntryAdded',
-  HeroInformationUpdated = 'HeroInformationUpdated',
   ActiveVillageIdChanged = 'ActiveVillageIdChanged',
+  AutoAdventureSettingsChanged = 'AutoAdventureSettingsChanged',
+  AutoBuildSettingsChanged = 'AutoBuildSettingsChanged',
+  AutoPartySettingsChanged = 'AutoPartySettingsChanged',
+  AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged',
+  BotRunningChanged = 'BotRunningChanged',
+  BuildingsUpdated = 'BuildingsUpdated',
+  CrannyCapacityUpdated = 'CrannyCapacityUpdated',
 
   GeneralSettingsChanged = 'GeneralSettingsChanged',
-  AutoAdventureSettingsChanged = 'AutoAdventureSettingsChanged',
   GeneralVillageSettingsChanged = 'GeneralVillageSettingsChanged',
-  AutoBuildSettingsChanged = 'AutoBuildSettingsChanged',
-  AutoUnitsSettingsChanged = 'AutoUnitsSettingsChanged',
-  AutoPartySettingsChanged = 'AutoPartySettingsChanged',
-
-  NextTasksExecutionChanged = 'NextTasksExecutionChanged',
+  HeroInformationUpdated = 'HeroInformationUpdated',
+  LogEntryAdded = 'LogEntryAdded',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
-  NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
+  NextTasksExecutionChanged = 'NextTasksExecutionChanged',
 
-  CrannyCapacityUpdated = 'CrannyCapacityUpdated',
+  NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
+  QueuedUpdated = 'QueueUpdated',
+  VillageUpdated = 'VillageUpdated',
+
+  VillagesUpdated = 'VillagesUpdated'
 }
 
 export type BotEventPayloads = {
@@ -62,23 +61,23 @@ export type BotEventPayloads = {
   }
 
   [BotEvent.GeneralVillageSettingsChanged]: {
-    readonly villageId: number;
     readonly settings: GeneralVillageSettings;
+    readonly villageId: number;
   }
 
   [BotEvent.AutoBuildSettingsChanged]: {
-    readonly villageId: number;
     readonly settings: AutoBuildSettings;
+    readonly villageId: number;
   }
 
   [BotEvent.AutoUnitsSettingsChanged]: {
-    readonly villageId: number;
     readonly settings: AutoUnitsSettings;
+    readonly villageId: number;
   }
 
   [BotEvent.AutoPartySettingsChanged]: {
-    readonly villageId: number;
     readonly settings: AutoPartySettings;
+    readonly villageId: number;
   }
 
   [BotEvent.ActiveVillageIdChanged]: {
@@ -90,17 +89,17 @@ export type BotEventPayloads = {
   }
 
   [BotEvent.NextTaskExecutionChanged]: {
-    readonly task: TaskType;
     readonly nextExecution: Date;
+    readonly task: TaskType;
   }
 
   [BotEvent.NextVillageTaskExecutionChanged]: {
-    readonly villageId: number;
-    readonly task: VillageTaskType;
     readonly nextExecution: Date;
+    readonly task: VillageTaskType;
+    readonly villageId: number;
   },
 
   [BotEvent.CrannyCapacityUpdated]: {
     readonly villageId: number;
   }
-}
+};

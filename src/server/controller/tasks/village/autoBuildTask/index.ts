@@ -1,5 +1,7 @@
-import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { Tribe } from '../../../../../_shared/types/tribe';
+import {
+  IBotTaskResult,
+  IVillageBotTask,
+} from '../../_types';
 import { BuildingCategory } from '../../../../_enums/buildingCategory';
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
 import { Buildings } from '../../../../_models/buildings';
@@ -10,6 +12,8 @@ import { Resources } from '../../../../_models/misc/resources';
 import { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
 import { Village } from '../../../../_models/village/village';
 import { VillageTaskType } from '../../../../_types/graphql';
+import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { Tribe } from '../../../../../_shared/types/tribe';
 import { accountContext } from '../../../../accountContext';
 import { getPage } from '../../../../browser/getPage';
 import { fieldIds } from '../../../../constants/fieldIds';
@@ -21,10 +25,6 @@ import {
   ensurePage,
 } from '../../../actions/ensurePage';
 import { updateActualResources } from '../../../actions/village/updateResources';
-import {
-  BotTaskResult,
-  IVillageBotTask,
-} from '../../_types';
 import { checkAutoStorage } from './checkAutoStorage';
 
 export class AutoBuildTask implements IVillageBotTask {
@@ -47,7 +47,7 @@ export class AutoBuildTask implements IVillageBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): BotTaskResult => {
+  public execute = async (): Promise<IBotTaskResult | void> => {
     const { queue } = this.m_village.buildings;
 
     const { buildingsToBuild } = await checkAutoStorage(this.m_village, this.settings().autoStorage);
@@ -57,7 +57,7 @@ export class AutoBuildTask implements IVillageBotTask {
     }
 
     if (!queue.buildings().length) {
-      return undefined;
+      return;
     }
 
     const isRoman = accountContext.gameInfo.tribe === Tribe.Romans;
@@ -129,8 +129,7 @@ export class AutoBuildTask implements IVillageBotTask {
 
       const lowestLevelCropLand = this.m_buildings.spots.buildings()
         .filter(b => b.type === BuildingType.Crop)
-        .sort((b1, b2) => b1.level.actual - b2.level.actual)
-        [0];
+        .sort((b1, b2) => b1.level.actual - b2.level.actual)[0];
 
       const newCropLandLevel = lowestLevelCropLand.level.actual + 1;
 
@@ -146,8 +145,8 @@ export class AutoBuildTask implements IVillageBotTask {
         const newCropLandFieldId = lowestLevelCropLand.fieldId;
         qBuilding = new QueuedBuilding({
           fieldId: newCropLandFieldId,
-          type: BuildingType.Crop,
           level: newCropLandLevel,
+          type: BuildingType.Crop,
         });
       }
 
@@ -166,7 +165,7 @@ export class AutoBuildTask implements IVillageBotTask {
     }
   };
 
-  private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> =>{
+  private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
     accountContext.logsService.logAutoBuild(queuedBuilding);
 
     const page = await getPage();
@@ -216,5 +215,5 @@ export class AutoBuildTask implements IVillageBotTask {
       this.m_buildings.queue.remove(queuedBuilding.queueId);
       this.m_buildings.spots.at(queuedBuilding.fieldId).level.queued--;
     }
-  }
+  };
 }

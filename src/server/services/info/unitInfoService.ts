@@ -10,9 +10,9 @@ const unitsInfoPath = path.join(__dirname, '..', '..', '..', '..', 'resources', 
 interface IUnitInfo {
   readonly buildingType: BuildingType;
   readonly cost: Cost;
+  readonly index: number;
   readonly name: string;
   readonly tribe: Tribe;
-  readonly index: number;
 }
 
 class UnitInfoService {

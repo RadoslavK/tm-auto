@@ -22,7 +22,7 @@ export const findOpenSocket = async (namePrefix: string): Promise<string> => {
     currentSocket++;
     socketName = `tm-auto_${currentSocket}`;
     // eslint-disable-next-line no-await-in-loop
-  } while(await isSocketTaken(socketName));
+  } while (await isSocketTaken(socketName));
 
   return socketName;
 };

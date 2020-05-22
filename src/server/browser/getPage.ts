@@ -2,16 +2,14 @@ import {
   Browser,
   Page,
 } from 'puppeteer';
-// @ts-ignore
 import puppeteer from 'puppeteer-extra';
-// @ts-ignore
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(pluginStealth());
 
 const chromeOptions = {
-  headless: false,
   executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+  headless: false,
   slowMo: 25,
   userDataDir: './.data/browser_data',
 };
@@ -30,10 +28,12 @@ const initializePage = async (b: Browser): Promise<Page> => {
   });
 
   await lPage.evaluateOnNewDocument(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line no-proto
     const newProto = navigator.__proto__;
     delete newProto.webdriver;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line no-proto
     navigator.__proto__ = newProto;
@@ -47,11 +47,11 @@ export const getPage = async (): Promise<Page> => {
     browser = await puppeteer.launch(chromeOptions);
   }
 
-  const pages = await browser!.pages();
+  const pages = await browser.pages();
 
   page = pages.length
     ? pages[0]
-    : await initializePage(browser!);
+    : await initializePage(browser);
 
   return page;
 };

@@ -3,6 +3,7 @@ import { accountContext } from '../accountContext';
 
 const capacities: Record<number, number> = {
   1: 200,
+  10: 2000,
   2: 260,
   3: 340,
   4: 440,
@@ -11,7 +12,6 @@ const capacities: Record<number, number> = {
   7: 920,
   8: 1200,
   9: 1540,
-  10: 2000,
 };
 
 class CrannyInfoService {

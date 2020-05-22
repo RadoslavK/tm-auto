@@ -15,11 +15,9 @@ export class BuildingQueue {
     this.m_buildings.push(building);
   };
 
-  public peek = (type: BuildingSpotType): QueuedBuilding | undefined => {
-    return type === BuildingSpotType.Any
-      ? this.m_buildings[0]
-      : this.m_buildings.find(x => getBuildingSpotType(x.type) === type);
-  };
+  public peek = (type: BuildingSpotType): QueuedBuilding | undefined => type === BuildingSpotType.Any
+    ? this.m_buildings[0]
+    : this.m_buildings.find(x => getBuildingSpotType(x.type) === type);
 
   public removeLastAtField = (fieldId: number): number => {
     const buildingToRemove = this.m_buildings.slice().reverse().find(b => b.fieldId === fieldId);

@@ -3,8 +3,6 @@ import { useContext } from 'react';
 import {
   IVillageContext,
   VillageContext,
-} from '../components/villages/context/villageContext';
+} from '../applications/villages/context/villageContext';
 
-export const useVillageContext = () => {
-  return useContext<IVillageContext>(VillageContext);
-};
+export const useVillageContext = (): IVillageContext => useContext<IVillageContext>(VillageContext);

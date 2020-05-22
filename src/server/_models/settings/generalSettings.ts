@@ -4,10 +4,10 @@ import { Fields } from '../../../_shared/types';
 
 const getDefaults = (): Fields<GeneralSettings> => ({
   allowTasks: true,
-  autoStart: false,
-  autoUnits: true,
   autoBuild: true,
   autoParty: true,
+  autoStart: false,
+  autoUnits: true,
 });
 
 export class GeneralSettings implements IGeneralSettings {

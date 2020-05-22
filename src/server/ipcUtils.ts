@@ -7,67 +7,65 @@ import {
   createServerReplyMessage,
 } from '../_shared/ipc/serverMessages';
 
-export interface IHandler<TPayload = {}, TResult = void> {
-  (payload: TPayload): Promise<TResult>;
+export interface IHandler<TPayload = unknown, TResult = void> {
+  (payload: TPayload): TResult;
 }
 
-export const startIpcServer = async <TPayload = {}, TResult = never>(socketName: string, handlers : Map<string, IHandler<TPayload, TResult>>): Promise<void> => {
-  return new Promise(resolve => {
-    ipc.config.id = socketName;
-    ipc.config.silent = true;
+export const startIpcServer = async <TPayload = unknown, TResult = never>(socketName: string, handlers: Map<string, IHandler<TPayload, TResult>>): Promise<void> => new Promise(resolve => {
+  ipc.config.id = socketName;
+  ipc.config.silent = true;
 
-    ipc.serve(() => {
-      ipc.server.on('message', async (messageData: string, socket: any) => {
-        const message = JSON.parse(messageData) as IClientMessage<TPayload>;
-        const { id, name, payload } = message;
+  ipc.serve(() => {
+    ipc.server.on('message', (message: IClientMessage<TPayload>, socket: any) => {
+      const { id, name, payload } = message;
 
-        const handler = handlers.get(name);
+      const handler = handlers.get(name);
 
-        if (handler) {
-          try {
-            const result = await handler(payload);
-            const replyData = createServerReplyMessage(id, result);
-
-            ipc.server.emit(
-              socket,
-              'message',
-              JSON.stringify(replyData),
-            );
-          } catch(error) {
-            const errorData = createServerErrorMessage(id);
-
-            console.error(error.stack);
-
-            ipc.server.emit(
-              socket,
-              'message',
-              JSON.stringify(errorData),
-            );
-
-            throw error;
-          }
-        } else {
-          console.warn(`No handler for method: ${name}`);
-          const replyData = createServerReplyMessage(id, null);
+      if (handler) {
+        try {
+          const result = handler(payload);
+          const replyData = createServerReplyMessage(id, result);
 
           ipc.server.emit(
             socket,
             'message',
-            JSON.stringify(replyData),
+            replyData,
           );
-        }
-      });
+        } catch (error) {
+          const errorData = createServerErrorMessage(id, error);
 
-      resolve();
+          console.error(error.stack);
+
+          ipc.server.emit(
+            socket,
+            'message',
+            errorData,
+          );
+
+          throw error;
+        }
+      } else {
+        console.warn(`No handler for method: ${name}`);
+        const replyData = createServerReplyMessage(id, null);
+
+        ipc.server.emit(
+          socket,
+          'message',
+          replyData,
+        );
+      }
     });
 
-    ipc.server.start();
+    resolve();
   });
-};
+
+  ipc.server.start();
+});
 
 export const broadcastMessage = <TPayload>(name: string, payload: TPayload): void => {
-  const messageData = createServerBroadcastMessage(name, payload);
+  const message = createServerBroadcastMessage(name, payload);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  ipc.server.broadcast('message', JSON.stringify(messageData));
+  ipc.server.broadcast('message', message);
 };

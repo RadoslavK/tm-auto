@@ -1,13 +1,18 @@
+const rules = require('./webpack.rules');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   entry: './src/client/index.ts',
-  // // Put your normal webpack config below here
+  mode: isDevelopment ? 'development' : 'production',
+  module: {
+    rules,
+  },
   node: {
     __dirname: true,
   },
   resolve: {
     extensions: ['.js', '.ts'],
   },
-  module: {
-    rules: require('./webpack.rules'),
-  },
+  target: 'electron-main',
 };

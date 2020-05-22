@@ -3,8 +3,8 @@ import { BuildingType } from '../../../../_shared/types/buildingType';
 interface IParams {
   readonly fieldId: number;
   readonly level: number;
-  readonly type: BuildingType;
   readonly queueId: string;
+  readonly type: BuildingType;
 }
 
 export class QueuedBuilding implements IParams {

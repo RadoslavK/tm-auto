@@ -25,7 +25,7 @@ export class BuildingsInProgress {
       : this.m_buildings.filter(x => getBuildingSpotType(x.type) === type);
 
     if (!filteredSequence.length) {
-      return undefined;
+      return;
     }
 
     const building = getWithMinimumSafe(filteredSequence, b => b.finishedAt.valueOf());

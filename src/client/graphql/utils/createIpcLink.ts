@@ -5,6 +5,7 @@ import {
 } from 'apollo-link';
 import { print as printQuery } from 'graphql';
 
+import { generateId } from '../../../_shared/generateId';
 import {
   IGraphqlHandlerPayload,
   ISerializableGraphQLRequest,
@@ -14,25 +15,21 @@ import {
   GraphqlHandlerMessageType,
   IpcHandler,
 } from '../../../_shared/ipc/graphqlHandlerMessages';
-import {
-  init,
-  send,
-  subscribe,
-} from '../../ipc/ipcUtils';
+import { IpcClient } from '../../ipc/ipcUtils';
 
-export const createIpcLink = async (): Promise<ApolloLink> => {
-  await init();
-
-  let counter = 0;
+export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> => {
+  await ipcClient.initConnection();
 
   return new ApolloLink((operation): Observable<FetchResult> | null => {
-    const handleRequest = async (observer: ZenObservable.SubscriptionObserver<FetchResult>): Promise<void> => {
+    const handleRequest = (observer: ZenObservable.SubscriptionObserver<FetchResult>): void => {
       const request: ISerializableGraphQLRequest = {
-        operationName: operation.operationName,
-        variables: operation.variables,
-        query: printQuery(operation.query),
         context: operation.getContext(),
+        operationName: operation.operationName,
+        query: printQuery(operation.query),
+        variables: operation.variables,
       };
+
+      const subscriptionId = `${request.operationName}_${generateId()}`;
 
       const processMessage = (message: GraphqlHandlerMessage): void => {
         switch (message.type) {
@@ -42,17 +39,22 @@ export const createIpcLink = async (): Promise<ApolloLink> => {
           case GraphqlHandlerMessageType.Error:
             return observer.error(message.error);
 
-          case GraphqlHandlerMessageType.Complete:
-            return observer.complete();
+          case GraphqlHandlerMessageType.Complete: {
+            ipcClient.unsubscribe(subscriptionId, processMessage);
 
-          default:
+            return observer.complete();
+          }
+
+          default: {
+            ipcClient.unsubscribe(subscriptionId, processMessage);
+
             throw new Error(`Unknown result type, message: ${JSON.stringify(message)}`);
+          }
         }
       };
 
-      const subscriptionId = `${++counter}`;
-      subscribe<GraphqlHandlerMessage>(subscriptionId, processMessage);
-      await send<IGraphqlHandlerPayload>(IpcHandler.GraphQL, { subscriptionId, request });
+      ipcClient.subscribe<GraphqlHandlerMessage>(subscriptionId, processMessage);
+      ipcClient.sendMessage<IGraphqlHandlerPayload>(IpcHandler.GraphQL, { request, subscriptionId });
     };
 
     return new Observable(observer => {

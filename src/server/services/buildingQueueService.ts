@@ -35,9 +35,7 @@ export class BuildingQueueService {
     this.m_filePath = dataPathService.villagePath(villageId).queue;
   }
 
-  private serializeQueue = async (): Promise<void> => {
-    return fileService.save(this.m_filePath, this.m_village.buildings.queue.buildings());
-  };
+  private serializeQueue = async (): Promise<void> => fileService.save(this.m_filePath, this.m_village.buildings.queue.buildings());
 
   public loadQueue = async (): Promise<void> => {
     const buildings = fileService.load<QueuedBuilding[]>(this.m_filePath, []);
@@ -46,9 +44,9 @@ export class BuildingQueueService {
 
   public enqueueBuilding = (building: IEnqueuedBuilding): void => {
     const {
-      type,
       fieldId,
       targetLevel,
+      type,
     } = building;
 
     const spot = this.m_village.buildings.spots.at(fieldId);
@@ -72,8 +70,8 @@ export class BuildingQueueService {
       const qBuilding = new QueuedBuilding({
         fieldId,
         level,
-        type,
         queueId,
+        type,
       });
 
       this.m_village.buildings.queue.add(qBuilding);
@@ -287,7 +285,8 @@ export class BuildingQueueService {
         const requiredBuilding = conditions.requiredBuildings[i];
         const requiredBuildingExists = normalizedBuildings.some(
           b => b.type === requiredBuilding.type
-            && getNewTotalLevel(b) >= requiredBuilding.level);
+            && getNewTotalLevel(b) >= requiredBuilding.level,
+        );
 
         if (!requiredBuildingExists) {
           return false;
@@ -382,7 +381,8 @@ export class BuildingQueueService {
       // dolezite iba ked sa stava nove
       const prohibitedBuildingExists = normalizedBuildings.some(
         b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId] > 0
-          && conditions.prohibitedBuildingTypes.includes(b.type));
+          && conditions.prohibitedBuildingTypes.includes(b.type),
+      );
 
       if (prohibitedBuildingExists) {
         return true;
@@ -396,7 +396,8 @@ export class BuildingQueueService {
           // existuje nejaka budova, rozstavana alebo v queue az po tialto
           const existingBuilding = sameTypeBuildings.find(
             b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
-              > 0);
+              > 0,
+          );
 
           if (!!existingBuilding
             && existingBuilding.fieldId !== queuedBuilding.fieldId) {
@@ -405,12 +406,13 @@ export class BuildingQueueService {
         } else {
           const existingBuildings = sameTypeBuildings.map(
             b => ({
+              fieldId: b.fieldId,
               totalLevel:
                 b.level.actual
                 + b.level.ongoing
                 + providedOffsets[b.fieldId],
-              fieldId: b.fieldId,
-            }))
+            }),
+          )
             .filter(b => b.totalLevel > 0);
 
           if (existingBuildings.length > 0) {
@@ -420,7 +422,8 @@ export class BuildingQueueService {
               // ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon
               // 1 musi zhodovat s tym co stavame
               const anyExists = existingBuildings.some(
-                b => b.fieldId === queuedBuilding.fieldId);
+                b => b.fieldId === queuedBuilding.fieldId,
+              );
 
               if (!anyExists) {
                 return true;
@@ -437,7 +440,8 @@ export class BuildingQueueService {
           const requiredBuildingExists = normalizedBuildings.some(
             b => b.type === requiredBuilding.type
               && b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
-              >= requiredBuilding.level);
+              >= requiredBuilding.level,
+          );
 
           if (!requiredBuildingExists) {
             return true;

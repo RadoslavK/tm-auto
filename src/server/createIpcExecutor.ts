@@ -29,10 +29,10 @@ export const createIpcExecutor = async (options: IIpcExecutorOptions): Promise<v
     socketName,
   } = options;
 
-  const handlers = new Map<string, IHandler<IGraphqlHandlerPayload, void>>();
+  const handlers = new Map<string, IHandler<IGraphqlHandlerPayload>>();
 
-  const graphqlHandler = async (payload: IGraphqlHandlerPayload): Promise<void> => {
-    const { subscriptionId, request } = payload;
+  const graphqlHandler = (payload: IGraphqlHandlerPayload): void => {
+    const { request, subscriptionId } = payload;
     const result = executeLink(link, {
       ...request,
       query: parseQuery(request.query),

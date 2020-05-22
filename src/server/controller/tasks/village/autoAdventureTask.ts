@@ -1,6 +1,6 @@
 import {
-  BotTaskResult,
   IBotTask,
+  IBotTaskResult,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
@@ -34,7 +34,7 @@ export class AutoAdventureTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): BotTaskResult => {
+  public execute = async (): Promise<IBotTaskResult | void> => {
     const village = accountContext.villageService.currentVillage();
     const settings = this.settings();
 

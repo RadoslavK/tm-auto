@@ -1,10 +1,9 @@
-import uuid from 'uuid';
-
 import {
   IMutationCreateAccountArgs,
   IMutationUpdateAccountArgs,
   IUserAccount,
 } from '../_types/graphql';
+import { generateId } from '../../_shared/generateId';
 import { merge } from '../../_shared/merge';
 import { Fields } from '../../_shared/types';
 import { dataPathService } from './dataPathService';
@@ -29,9 +28,7 @@ class AccountService {
   private accountsData: AccountsData;
   private accountsLoaded = false;
 
-  private saveAccounts = async (): Promise<void> => {
-    return fileService.save(dataPathService.accountsPath, this.accountsData);
-  };
+  private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath, this.accountsData);
 
   public getAccounts = (): readonly IUserAccount[] => {
     if (!this.accountsLoaded) {
@@ -42,7 +39,7 @@ class AccountService {
   };
 
   public createAccount = async (args: IMutationCreateAccountArgs): Promise<IUserAccount> => {
-    const id = uuid.v4();
+    const id = generateId();
 
     const correctedServerMatch = /(.*travian.com)\/?/.exec(args.account.server);
 
@@ -52,8 +49,8 @@ class AccountService {
 
     const newAccount: IUserAccount = {
       ...args.account,
-      server: correctedServerMatch[1],
       id,
+      server: correctedServerMatch[1],
     };
 
     this.accountsData.accounts.push(newAccount);

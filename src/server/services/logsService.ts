@@ -1,5 +1,3 @@
-import uuid from 'uuid';
-
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import {
   IAutoBuildLogEntryContent,
@@ -8,6 +6,7 @@ import {
   ILogEntryContent,
   ITextLogEntryContent,
 } from '../_types/graphql';
+import { generateId } from '../../_shared/generateId';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../graphql/subscriptions/botEvent';
 import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
@@ -37,8 +36,8 @@ export class LogsService {
       autoBuild: {
         fieldId: building.fieldId,
         level: building.level,
-        type: building.type,
         name: buildingInfoService.getBuildingInfo(building.type).name,
+        type: building.type,
       },
     };
 
@@ -47,8 +46,8 @@ export class LogsService {
 
   public logAutoUnits = (params: ILogAutoUnitsParams): void => {
     const {
-      index,
       amount,
+      index,
     } = params;
 
     const { tribe } = accountContext.gameInfo;
@@ -67,14 +66,14 @@ export class LogsService {
   };
 
   private log = (content: ILogEntryContent, fromVillage: boolean): void => {
-    const id = uuid.v4();
+    const id = generateId();
     const timestamp = Math.round(Date.now() / 1000);
     const village = fromVillage ? accountContext.villageService.currentVillage() : null;
 
     this.addEntry({
+      content,
       id,
       timestamp,
-      content,
       village,
     });
   };

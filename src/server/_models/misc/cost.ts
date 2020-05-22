@@ -21,10 +21,8 @@ export class Cost implements ICost {
     }));
   }
 
-  public add = (addition: Cost): Cost => {
-    return new Cost({
-      buildTime: this.buildTime.add(addition.buildTime),
-      resources: this.resources.add(addition.resources),
-    });
-  };
+  public add = (addition: Cost): Cost => new Cost({
+    buildTime: this.buildTime.add(addition.buildTime),
+    resources: this.resources.add(addition.resources),
+  });
 }

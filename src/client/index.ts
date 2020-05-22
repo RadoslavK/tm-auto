@@ -7,40 +7,44 @@ import {
 import {
   app,
   BrowserWindow,
+  ipcMain,
   protocol,
+  session,
 } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
+import fs from 'fs';
 import * as path from 'path';
 import which from 'which';
 
 import { findOpenSocket } from './ipc/findOpenSocket';
 
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
 let serverProcess: ChildProcess | null = null;
+
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+// eslint-disable-next-line global-require
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let clientWin: null | BrowserWindow;
 
-const createClientWindow = (socketName: string): void => {
+const createClientWindow = async (socketName: string): Promise<void> => {
   clientWin = new BrowserWindow({
+    show: false,
     webPreferences: {
       nodeIntegration: false,
-      // @ts-ignore
-      // eslint-disable-next-line no-undef
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
-    show: false,
   });
 
   clientWin.maximize();
-  clientWin.show();
-
+  await clientWin.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   clientWin.webContents.openDevTools();
-
-  // @ts-ignore
-  // eslint-disable-next-line no-undef
-  clientWin.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Emitted when the window is closed.
   clientWin.on('closed', () => {
@@ -50,20 +54,14 @@ const createClientWindow = (socketName: string): void => {
     clientWin = null;
   });
 
-  clientWin.webContents.on('did-finish-load', () => {
-    if (!clientWin) {
-      return;
-    }
-
-    clientWin.webContents.send('set-socket', {
-      name: socketName,
-    });
+  ipcMain.on('request-socket-name', (event) => {
+    event.reply('set-socket-name', socketName);
   });
 };
 
 const createBackgroundProcess = (socketName: string): void => {
   //  Electron run renderer in its own version, we want to run the background process with actual system node version
-  const nodePaths = which.sync('node', { nothrow: true, all: true });
+  const nodePaths = which.sync('node', { all: true, nothrow: true });
 
   const currentNodePath = nodePaths
     && nodePaths.find(x => x.toLowerCase().endsWith('node.exe'));
@@ -73,15 +71,16 @@ const createBackgroundProcess = (socketName: string): void => {
   }
 
   const options: ForkOptions = {
+    env: {
+      TS_NODE_COMPILER_OPTIONS: '{"module":"commonjs"}',
+    },
     execArgv: [
       ...(isDev ? ['--inspect=9220'] : []),
       '-r',
       'ts-node/register',
     ],
     execPath: currentNodePath || undefined,
-    env: {
-      TS_NODE_COMPILER_OPTIONS: '{"module":"commonjs"}',
-    },
+    silent: true,
   };
 
   const filePath = path.join(__dirname, '..', 'server', 'index.ts');
@@ -92,9 +91,13 @@ const createBackgroundProcess = (socketName: string): void => {
     options,
   );
 
-  serverProcess.on('close', (code) => {
-    console.log(`server closed with code ${code}`);
+  //  logging
+  serverProcess.on('data', (data) => {
+    console.log(data);
   });
+
+  serverProcess.stderr?.pipe(process.stderr);
+  serverProcess.stdout?.pipe(process.stdout);
 
   serverProcess.on('exit', (code) => {
     console.log(`server exited with code ${code}`);
@@ -110,25 +113,45 @@ const createBackgroundProcess = (socketName: string): void => {
   });
 };
 
+interface IExtension {
+  readonly id: string;
+  readonly name: string;
+}
+
+const extensions: readonly IExtension[] = [
+  { id: 'fmkadmapgofadopljbjfkapdkoienihi', name: 'React DevTools' },
+  { id: 'jdkknkkbebbapilgoeccciglkfbmbnfm', name: 'Apollo DevTools' },
+];
+
 const installDevTools = async (): Promise<void> => {
   if (!isDev) {
     return;
   }
 
-  try {
-    const devTools = await installExtension(REACT_DEVELOPER_TOOLS);
-    console.log(`Added Extension(s): ${devTools}`);
+  const appDataPath = process.env.LOCALAPPDATA;
 
-    const apolloDevtoolsPath = 'C:\\Users\\Radek\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\jdkknkkbebbapilgoeccciglkfbmbnfm\\2.2.5_0';
-    const extensions = BrowserWindow.getDevToolsExtensions();
+  if (!appDataPath) {
+    console.error('Did not find local app data. Will not install extensions.');
+    return;
+  }
 
-    const apolloInstalled = Object.values(extensions).some(e => e.name === 'Apollo Client Developer Tools');
-    if (!apolloInstalled) {
-      BrowserWindow.addDevToolsExtension(apolloDevtoolsPath);
+  for (const extension of extensions) {
+    const extensionFolder = path.join(appDataPath, `/Google/Chrome/User Data/Default/Extensions/${extension.id}`);
+
+    if (!fs.existsSync(extensionFolder)) {
+      console.error(`${extension.name} is not installed.`);
     }
-    console.log('Added Apollo Dev tools');
-  } catch (error) {
-    console.error('An error occurred:', error);
+
+    const versionDirs = fs
+      .readdirSync(extensionFolder, { withFileTypes: true })
+      .filter(subDir => subDir.isDirectory());
+
+    try {
+      await session.defaultSession.loadExtension(path.join(extensionFolder, versionDirs[0].name));
+      console.log(`Installed extension: ${extension.name}.`);
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
@@ -136,6 +159,7 @@ app.on('ready', async () => {
   protocol.interceptFileProtocol('file', (request, callback) => {
     // eslint-disable-next-line unicorn/prefer-string-slice
     const url = request.url.substr(7); /* all urls start with 'file://' */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     callback({ path: path.normalize(`${__dirname}/${url}`) });
   }, (err) => {
@@ -149,7 +173,7 @@ app.on('ready', async () => {
   const serverSocket = await findOpenSocket('tm-auto');
 
   createBackgroundProcess(serverSocket);
-  createClientWindow(serverSocket);
+  await createClientWindow(serverSocket);
 });
 
 // Quit when all windows are closed.
@@ -168,10 +192,12 @@ app.on('before-quit', () => {
   }
 });
 
-app.on('activate', () => {
+app.on('activate', async (): Promise<void> => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  // if (mainWindow === null) {
-  //   createWindow();
-  // }
+  if (clientWin === null) {
+    const serverSocket = await findOpenSocket('tm-auto');
+
+    await createClientWindow(serverSocket);
+  }
 });

@@ -2,8 +2,7 @@
 const filterStringKeys = (key: number | string): boolean => Number.isNaN(+key);
 
 export const getAllEnumValues = <TEnum>(enumObject: TEnum): ReadonlyArray<TEnum[keyof TEnum]> => {
-  const keys = Object.keys(enumObject).filter(filterStringKeys);
+  const keys = Object.keys(enumObject).filter(x => filterStringKeys(x));
 
-  // @ts-ignore
-  return keys.map(key => enumObject[key]);
+  return keys.map(key => enumObject[key as keyof TEnum]);
 };

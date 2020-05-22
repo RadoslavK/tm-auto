@@ -19,10 +19,10 @@ export const parseVillageResources = async (): Promise<Resources> => {
   const freeCrop = Math.floor(+freeCropMatch[1]);
 
   return new Resources({
-    wood,
     clay,
-    iron,
     crop,
     freeCrop,
+    iron,
+    wood,
   });
 };

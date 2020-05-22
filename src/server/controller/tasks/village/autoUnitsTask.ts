@@ -1,9 +1,13 @@
-import { BuildingType } from '../../../../_shared/types/buildingType';
+import {
+  IBotTaskResult,
+  IVillageBotTask,
+} from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
 import { VillageTaskType } from '../../../_types/graphql';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
@@ -15,10 +19,6 @@ import {
 } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { updateUnitsInformation } from '../../updateUnitsInformation';
-import {
-  BotTaskResult,
-  IVillageBotTask,
-} from '../_types';
 
 export class AutoUnitsTask implements IVillageBotTask {
   public readonly type: VillageTaskType = VillageTaskType.AutoUnits;
@@ -36,11 +36,11 @@ export class AutoUnitsTask implements IVillageBotTask {
   public allowExecution = (): boolean =>
     accountContext.settingsService.general.get().autoUnits
     && this.settings().allow
-    && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(this.allowForBuilding);
+    && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(x => this.allowForBuilding(x));
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): BotTaskResult => {
+  public execute = async (): Promise<IBotTaskResult | void> => {
     await updateUnitsInformation();
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
     await this.analyzeQueueAndBuildUnits(BuildingType.Stable);
@@ -101,8 +101,8 @@ export class AutoUnitsTask implements IVillageBotTask {
     possibleUnitsToBuild.forEach(unitToBuild => {
       const uIndex = unitToBuild.index;
       const {
-        resources: cost,
         buildTime: originalBuildTime,
+        resources: cost,
       } = unitInfoService.getUnitInfo(uIndex).cost;
 
       // max by res

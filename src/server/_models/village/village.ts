@@ -8,12 +8,12 @@ import { VillageResources } from './villageResources';
 
 const getDefaults = (): Fields<Village> => ({
   buildings: new Buildings(),
-  units: new Units(),
   coords: new Coords(),
   id: 0,
   isCapital: false,
   name: '',
   resources: new VillageResources(),
+  units: new Units(),
 });
 
 export class Village implements IVillage {

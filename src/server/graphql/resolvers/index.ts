@@ -12,7 +12,7 @@ import { unitResolvers } from './unitResolvers';
 import { villageResolvers } from './villageResolvers';
 
 export const resolvers = mergeResolvers([
-  villageResolvers as IResolvers,
+  villageResolvers as any,
   controllerResolvers as IResolvers,
   buildingResolvers as IResolvers,
   settingsResolvers as IResolvers,

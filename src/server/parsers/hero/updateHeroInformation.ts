@@ -50,7 +50,7 @@ const parseState = async (): Promise<HeroState> => {
 
   const status = +heroStatusMatch[1];
 
-  switch(status) {
+  switch (status) {
     case 100: return HeroState.InVillage;
     case 101: return heroStatusClass.includes('Regenerate') ? HeroState.Reviving : HeroState.Dead;
     case 50: return HeroState.OnAdventure;

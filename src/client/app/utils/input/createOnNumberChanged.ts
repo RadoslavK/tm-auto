@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface IParams {
+type Params = {
   readonly callback: (name: string, value: number) => void;
   readonly maxValue?: number;
   readonly minValue?: number;
-}
+};
 
-export const createOnNumberChanged = (params: IParams) => {
+export const createOnNumberChanged = (params: Params): React.EventHandler<any> => {
   const {
     callback,
     maxValue,

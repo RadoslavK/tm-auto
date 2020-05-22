@@ -16,6 +16,4 @@ export const formatTimeFromDuration = (duration: IDuration): string => {
   return `${days}:${correctedHours}:${correctedMinutes}:${correctedSeconds}`;
 };
 
-export const formatTimeFromSeconds = (seconds: number): string => {
-  return formatTimeFromDuration(Duration.fromSeconds(seconds));
-};
+export const formatTimeFromSeconds = (seconds: number): string => formatTimeFromDuration(Duration.fromSeconds(seconds));

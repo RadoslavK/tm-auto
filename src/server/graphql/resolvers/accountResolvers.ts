@@ -2,16 +2,6 @@ import { accountService } from '../../services/accountService';
 import { Resolvers } from './_types';
 
 export const accountResolvers: Resolvers = {
-  Query: {
-    accounts: () => accountService.getAccounts(),
-
-    account: (_, args) => accountService.getAccount(args.accountId),
-
-    currentAccount: () => accountService.getCurrentAccount(),
-
-    lastSignedAccountId: () => accountService.lastSignedAccountId(),
-  },
-
   Mutation: {
     createAccount: async (_, args) => {
       if (accountService.accountExists(args)) {
@@ -22,6 +12,11 @@ export const accountResolvers: Resolvers = {
       return newAcc.id;
     },
 
+    deleteAccount: async (_, args) => {
+      accountService.deleteAccount(args.accountId);
+      return true;
+    },
+
     updateAccount: async (_, args) => {
       if (accountService.accountExists(args)) {
         return false;
@@ -30,10 +25,15 @@ export const accountResolvers: Resolvers = {
       await accountService.updateAccount(args);
       return true;
     },
+  },
 
-    deleteAccount: async (_, args) => {
-      accountService.deleteAccount(args.accountId);
-      return true;
-    },
+  Query: {
+    account: (_, args) => accountService.getAccount(args.accountId),
+
+    accounts: () => accountService.getAccounts(),
+
+    currentAccount: () => accountService.getCurrentAccount(),
+
+    lastSignedAccountId: () => accountService.lastSignedAccountId(),
   },
 };

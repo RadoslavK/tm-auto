@@ -2,8 +2,8 @@ import { BuildingType } from '../../../../_shared/types/buildingType';
 
 interface IParams {
   readonly fieldId: number;
-  readonly level: number;
   readonly finishedAt: Date;
+  readonly level: number;
   readonly type: BuildingType;
 }
 

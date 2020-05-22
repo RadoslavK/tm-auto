@@ -7,13 +7,13 @@ import { AutoStorageSettings } from './autoStorageSettings';
 
 const getDefaults = (): Fields<AutoBuildSettings> => ({
   allow: true,
-  coolDown: new CoolDown({
-    min: new Duration({ minutes: 4 }),
-    max: new Duration({ minutes: 7 }),
-  }),
   autoCropFields: false,
-  minCrop: 0,
   autoStorage: new AutoStorageSettings(),
+  coolDown: new CoolDown({
+    max: new Duration({ minutes: 7 }),
+    min: new Duration({ minutes: 4 }),
+  }),
+  minCrop: 0,
 });
 
 export class AutoBuildSettings implements IAutoBuildSettings {
@@ -28,8 +28,8 @@ export class AutoBuildSettings implements IAutoBuildSettings {
   constructor(params: Partial<IAutoBuildSettings> = {}) {
     Object.assign(this, merge(getDefaults, {
       ...params,
-      coolDown: params.coolDown && new CoolDown(params.coolDown),
       autoStorage: params.autoStorage && new AutoStorageSettings(params.autoStorage),
+      coolDown: params.coolDown && new CoolDown(params.coolDown),
     }));
   }
 }

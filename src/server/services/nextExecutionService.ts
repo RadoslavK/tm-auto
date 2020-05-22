@@ -63,8 +63,8 @@ export class NextExecutionService {
     villageTimes.set(task, nextExecution);
     publishPayloadEvent(BotEvent.NextVillageTaskExecutionChanged, {
       nextExecution,
-      villageId,
       task,
+      villageId,
     });
-  }
+  };
 }

@@ -10,41 +10,53 @@ import {
 import {
   NextVillageTaskExecution,
   NextVillageTaskExecutionChanged,
-} from "*/graphql_operations/nextTaskExecution.graphql";
+} from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
   INextVillageTaskExecutionChangedSubscription,
   INextVillageTaskExecutionChangedSubscriptionVariables,
   INextVillageTaskExecutionQuery,
   INextVillageTaskExecutionQueryVariables,
+  ITimestamp,
   VillageTaskType,
 } from '../../../_types/graphql';
+import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
 export const useNextVillageTaskExecution = (villageId: number, task: VillageTaskType): number => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);
 
-  const variables = { villageId, task };
+  const variables = { task, villageId };
 
-  const nextExecutionResult = useQuery<INextVillageTaskExecutionQuery, INextVillageTaskExecutionQueryVariables>(NextVillageTaskExecution, {
-    variables,
-  });
+  const nextExecutionResult = useQuery<INextVillageTaskExecutionQuery, INextVillageTaskExecutionQueryVariables>(
+    NextVillageTaskExecution,
+    { variables },
+  );
+
+  const updateNextExecution = (timestamp: ITimestamp): void => {
+    const difference = getSecondsUntilTimestamp(timestamp);
+
+    setNextExecutionIn(difference);
+  };
 
   useEffect(() => {
-    if (!nextExecutionResult.loading && nextExecutionResult.data) {
-      const difference = Math.max(0, nextExecutionResult.data.nextVillageTaskExecution.totalSeconds - Math.floor(new Date().getTime() / 1000));
-      setNextExecutionIn(difference);
+    const { data, loading } = nextExecutionResult;
+
+    if (!loading && data) {
+      updateNextExecution(data.nextVillageTaskExecution);
     }
   }, [nextExecutionResult]);
 
-  useSubscription<INextVillageTaskExecutionChangedSubscription, INextVillageTaskExecutionChangedSubscriptionVariables>(NextVillageTaskExecutionChanged, {
-    variables,
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        const difference = Math.max(0, subscriptionData.data.nextVillageTaskExecutionChanged.totalSeconds - Math.floor(new Date().getTime() / 1000));
-        setNextExecutionIn(difference);
-      }
+  useSubscription<INextVillageTaskExecutionChangedSubscription, INextVillageTaskExecutionChangedSubscriptionVariables>(
+    NextVillageTaskExecutionChanged,
+    {
+      onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+        if (!loading && data) {
+          updateNextExecution(data.nextVillageTaskExecutionChanged);
+        }
+      },
+      variables,
     },
-  });
+  );
 
   return nextExecutionIn;
 };

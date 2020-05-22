@@ -1,5 +1,5 @@
 import {
-  BotTaskResult,
+  IBotTaskResult,
   IVillageBotTask,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
@@ -29,10 +29,10 @@ export class AutoPartyTask implements IVillageBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): BotTaskResult => {
+  public execute = async (): Promise<IBotTaskResult | void> => {
     const {
-      partyType,
       minCulturePoints,
+      partyType,
     } = this.settings();
 
     const partyInfo = partyInfoService.get(partyType);
@@ -42,7 +42,7 @@ export class AutoPartyTask implements IVillageBotTask {
     if (!townHall
       || townHall.level.actual < partyInfo.townHallLevel
       || this.m_village.resources.amount.isLowerThan(partyInfo.cost)) {
-      return undefined;
+      return;
     }
 
     //  TODO, ensure bere cely spot
@@ -59,14 +59,14 @@ export class AutoPartyTask implements IVillageBotTask {
       });
 
       if (culturePoints < minCulturePoints) {
-        return undefined;
+        return;
       }
     }
 
     const partyDuration = await getPartyDuration();
 
     if (!partyDuration) {
-      return undefined;
+      return;
     }
 
     const nextCoolDown = CoolDown.fromDuration(partyDuration);

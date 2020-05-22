@@ -8,17 +8,17 @@ import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
 const getDefaults = (): Fields<AutoAdventureSettings> => ({
-  allow: true,
-  coolDown: new CoolDown({
-    min: new Duration({ minutes: 8 }),
-    max: new Duration({ minutes: 13 }),
-  }),
-
   adventureCriteria: AdventureCriteria.Closest,
-  preferHard: false,
-  normalMinHealth: 30,
+  allow: true,
+
+  coolDown: new CoolDown({
+    max: new Duration({ minutes: 13 }),
+    min: new Duration({ minutes: 8 }),
+  }),
   hardMinHealth: 50,
   maxTravelTime: new Duration({ hours: 1 }),
+  normalMinHealth: 30,
+  preferHard: false,
   preferredVillageId: null,
 });
 

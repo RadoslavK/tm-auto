@@ -13,20 +13,14 @@ import {
   IGetBotStateQuery,
 } from '../../_types/graphql';
 
-interface IResult {
-  readonly loading: boolean;
-  readonly botState: BotState | undefined;
-}
-
-export const useBotState = (): IResult => {
+export const useBotState = (): BotState | null => {
   const { data, loading, refetch } = useQuery<IGetBotStateQuery>(GetBotState);
 
   useSubscription(OnBotRunningChanged, {
     onSubscriptionData: () => refetch(),
   });
 
-  return {
-    loading,
-    botState: data && data.botState,
-  };
+  return loading || !data
+    ? null
+    : data.botState;
 };

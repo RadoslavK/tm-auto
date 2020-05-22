@@ -1,5 +1,5 @@
-import { Tribe } from '../../../_shared/types/tribe';
 import { TravianPath } from '../../_enums/travianPath';
+import { Tribe } from '../../../_shared/types/tribe';
 import { getPage } from '../../browser/getPage';
 import { ensurePage } from '../../controller/actions/ensurePage';
 import { gameInfoService } from '../../services/info/gameInfoService';

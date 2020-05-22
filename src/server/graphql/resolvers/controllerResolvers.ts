@@ -4,21 +4,7 @@ import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 
 export const controllerResolvers: Resolvers = {
-  Query: {
-    botState: () => controllerService.state(),
-  },
-
   Mutation: {
-    startBot: () => {
-      controllerService.start();
-      return true;
-    },
-
-    stopBot: () => {
-      controllerService.stop();
-      return true;
-    },
-
     signIn: (_, args) => {
       controllerService.signIn(args);
       return true;
@@ -28,6 +14,20 @@ export const controllerResolvers: Resolvers = {
       controllerService.signOut();
       return true;
     },
+
+    startBot: () => {
+      controllerService.start();
+      return true;
+    },
+
+    stopBot: () => {
+      controllerService.stop();
+      return true;
+    },
+  },
+
+  Query: {
+    botState: () => controllerService.state(),
   },
 
   Subscription: {

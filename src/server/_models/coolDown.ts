@@ -15,8 +15,8 @@ export class CoolDown implements ICoolDown {
   constructor(params: Partial<ICoolDown> = {}) {
     Object.assign(this, merge(getDefaults, {
       ...params,
-      min: params.min && new Duration(params.min),
       max: params.max && new Duration(params.max),
+      min: params.min && new Duration(params.min),
     }));
   }
 
@@ -28,12 +28,12 @@ export class CoolDown implements ICoolDown {
   };
 
   public getMin = (other: CoolDown): CoolDown => new CoolDown({
-    min: this.min.getMin(other.min),
     max: this.max.getMin(other.max),
+    min: this.min.getMin(other.min),
   });
 
   static fromDuration = (duration: Duration): CoolDown => new CoolDown({
-    min: duration,
     max: duration,
+    min: duration,
   });
 }

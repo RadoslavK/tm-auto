@@ -13,8 +13,8 @@ process.on('warning', e => console.warn(e.stack));
 
 const init = async (): Promise<void> => {
   const schema = makeExecutableSchema({
-    typeDefs,
     resolvers,
+    typeDefs,
   });
 
   const errorLink = createErrorLink();

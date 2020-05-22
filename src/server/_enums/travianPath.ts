@@ -1,24 +1,24 @@
 import { ITabInformation } from '../controller/actions/ensurePage';
 
 export enum TravianPath {
-  ResourceFieldsOverview = 'dorf1.php',
-  InfrastructureOverview = 'dorf2.php',
   AccountOverview = 'dorf3.php',
-
   CenterMap = 'karte.php',
+  Hero = 'hero.php',
 
-  Statistics = 'statistiken.php',
-
-  Reports = 'berichte.php',
+  InfrastructureOverview = 'dorf2.php',
 
   Messages = 'messages.php',
 
   PlayerProfile = 'spieler.php',
 
-  Hero = 'hero.php',
+  Reports = 'berichte.php',
+
+  ResourceFieldsOverview = 'dorf1.php',
+
+  Statistics = 'statistiken.php'
 }
 
-export const getBuildingSpotPath = (fieldId: number, tab: ITabInformation | undefined = undefined): string =>
+export const getBuildingSpotPath = (fieldId: number, tab?: ITabInformation): string =>
   tab === undefined
     ? `build.php?id=${fieldId}`
     : `build.php?${tab.name}=${tab.index}&id=${fieldId}`;

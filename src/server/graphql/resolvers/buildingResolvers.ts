@@ -17,53 +17,6 @@ import { subscribeToEvent } from '../subscriptions/pubSub';
 import { Resolvers } from './_types';
 
 export const buildingResolvers: Resolvers = {
-  Query: {
-    buildingSpots: (_, args) => {
-      const { villageId } = args;
-      const normalizedSpots = accountContext.villageService.village(villageId).buildings.normalizedBuildingSpots();
-
-      return {
-        infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
-        resources: {
-          wood: normalizedSpots.filter(s => s.type === BuildingType.Wood),
-          clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
-          iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
-          crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
-        },
-      };
-    },
-
-    buildingQueue: (_, args): IBuildingQueue => {
-      const {
-        villageId,
-      } = args;
-
-      const village = accountContext.villageService.village(villageId);
-      const { queue } = village.buildings;
-      const queueService = new BuildingQueueService(villageId);
-      const mapBuildingQueue = mapBuildingQueueFactory(queueService);
-
-      return mapBuildingQueue(queue);
-    },
-
-    buildingsInProgress: (_, args) => accountContext.villageService.village(args.villageId).buildings.ongoing.buildings().map(mapBuildingInProgress),
-
-    availableNewBuildings: (_, args) => {
-      const {
-        fieldId,
-        villageId,
-      } = args.input;
-
-      const manager = new AvailableBuildingTypesService(villageId);
-      return manager.availableBuildingTypes(fieldId).map((type): IAvailableNewBuilding => ({
-        type,
-        name: buildingInfoService.getBuildingInfo(type).name,
-      }));
-    },
-
-    maxBuildingLevel: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType).maxLevel,
-  },
-
   Mutation: {
     clearQueue: (_, args) => {
       const {
@@ -72,18 +25,6 @@ export const buildingResolvers: Resolvers = {
 
       const queueManager = new BuildingQueueService(villageId);
       queueManager.clearQueue();
-
-      return true;
-    },
-
-    enqueueBuilding: async (_, args) => {
-      const {
-        villageId,
-        ...enqueuedBuilding
-      } = args.input;
-
-      const queueManager = new BuildingQueueService(villageId);
-      queueManager.enqueueBuilding(enqueuedBuilding);
 
       return true;
     },
@@ -112,6 +53,24 @@ export const buildingResolvers: Resolvers = {
       return true;
     },
 
+    enqueueBuilding: async (_, args) => {
+      const {
+        villageId,
+        ...enqueuedBuilding
+      } = args.input;
+
+      const queueManager = new BuildingQueueService(villageId);
+      queueManager.enqueueBuilding(enqueuedBuilding);
+
+      return true;
+    },
+
+    moveQueuedBuildingAsHighAsPossible: (_, args) => {
+      const queueManager = new BuildingQueueService(args.villageId);
+      queueManager.moveAsHighAsPossible(args.queueId);
+      return true;
+    },
+
     moveQueuedBuildingDown: (_, args) => {
       const {
         queueId,
@@ -131,12 +90,53 @@ export const buildingResolvers: Resolvers = {
       const queueManager = new BuildingQueueService(villageId);
       return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
     },
+  },
 
-    moveQueuedBuildingAsHighAsPossible: (_, args) => {
-      const queueManager = new BuildingQueueService(args.villageId);
-      queueManager.moveAsHighAsPossible(args.queueId);
-      return true;
+  Query: {
+    availableNewBuildings: (_, args) => {
+      const {
+        fieldId,
+        villageId,
+      } = args.input;
+
+      const manager = new AvailableBuildingTypesService(villageId);
+      return manager.availableBuildingTypes(fieldId).map((type): IAvailableNewBuilding => ({
+        name: buildingInfoService.getBuildingInfo(type).name,
+        type,
+      }));
     },
+
+    buildingQueue: (_, args): IBuildingQueue => {
+      const {
+        villageId,
+      } = args;
+
+      const village = accountContext.villageService.village(villageId);
+      const { queue } = village.buildings;
+      const queueService = new BuildingQueueService(villageId);
+      const mapBuildingQueue = mapBuildingQueueFactory(queueService);
+
+      return mapBuildingQueue(queue);
+    },
+
+    buildingSpots: (_, args) => {
+      const { villageId } = args;
+      const normalizedSpots = accountContext.villageService.village(villageId).buildings.normalizedBuildingSpots();
+
+      return {
+        infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
+        resources: {
+          clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
+          crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
+          iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
+          wood: normalizedSpots.filter(s => s.type === BuildingType.Wood),
+        },
+      };
+    },
+
+    buildingsInProgress: (_, args) => accountContext.villageService.village(args.villageId).buildings.ongoing.buildings().map(x => mapBuildingInProgress(x)),
+
+    maxBuildingLevel: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType).maxLevel,
   },
 
   Subscription: {

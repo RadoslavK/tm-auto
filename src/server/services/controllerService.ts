@@ -32,8 +32,8 @@ class ControllerService {
   private m_taskManager: TaskManager | null = null;
 
   private m_tasksCoolDown = new CoolDown({
-    min: new Duration({ seconds: 10 }),
     max: new Duration({ seconds: 35 }),
+    min: new Duration({ seconds: 10 }),
   });
 
   private botState: BotState = BotState.None;
@@ -123,9 +123,9 @@ class ControllerService {
           fs.mkdirSync('./screenshots');
         }
 
-        await page.screenshot({ path: `.screenshots/${format}.png`, fullPage: true });
+        await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
         await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack, { flag: 'w' });
-      } catch(screenshotError) {
+      } catch (screenshotError) {
         console.error(screenshotError.stack);
       }
 
@@ -157,6 +157,10 @@ class ControllerService {
   };
 }
 
+// TODO: make better mocking
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
 class ControllerServiceMock extends ControllerService {
   public state = (): BotState => BotState.Paused;
 }

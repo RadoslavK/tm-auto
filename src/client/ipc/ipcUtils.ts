@@ -1,137 +1,139 @@
+import { generateId } from '../../_shared/generateId';
 import { IClientMessage } from '../../_shared/ipc/clientMessages';
 import {
   ServerMessage,
   ServerMessageType,
 } from '../../_shared/ipc/serverMessages';
 
-interface IReplyHandler {
-  readonly resolve: (value: any) => void;
-  readonly reject: any;
+interface IReplyHandler<TPayload> {
+  readonly onError: (error: Error) => void;
+  readonly onSuccess: (value: TPayload) => void;
 }
 
-interface IListener<TPayload = {}> {
+interface IListener<TPayload = unknown> {
   (payload: TPayload): void;
 }
 
-const replyHandlers = new Map<string, IReplyHandler>();
-const listenersMap = new Map<string, IListener<any>[]>();
+export class IpcClient {
+  private replyHandlers = new Map<string, IReplyHandler<any>>();
+  private listenersMap = new Map<string, IListener<any>[]>();
 
-let messageQueue: string[] = [];
-let socketClient: any | null = null;
+  private messageQueue: IClientMessage<any>[] = [];
+  private socketClient: any | null = null;
 
-const connectSocket = (socketName: string): Promise<void> => {
-  return new Promise(resolve => {
-    window.ipcConnect(socketName, client => {
-      client.on('message', (messageData: string) => {
-        const message = JSON.parse(messageData) as ServerMessage;
+  constructor(public socketName: string) {}
 
-        switch (message.type) {
-          case ServerMessageType.Error:
-            replyHandlers.delete(message.id);
+  public initConnection = async (): Promise<void> =>
+    new Promise(resolve => {
+      window.api.ipcConnect(this.socketName, client => {
+        client.on('message', (message: ServerMessage) => {
+          switch (message.type) {
+            case ServerMessageType.Error: {
+              const handler = this.replyHandlers.get(message.id);
 
-            break;
+              if (handler) {
+                this.replyHandlers.delete(message.id);
+                handler.onError(message.payload);
+              }
+              this.replyHandlers.delete(message.id);
 
-          case ServerMessageType.Reply: {
-            const handler = replyHandlers.get(message.id);
-
-            if (handler) {
-              replyHandlers.delete(message.id);
-              handler.resolve(message.payload);
+              break;
             }
 
-            break;
-          }
+            case ServerMessageType.Reply: {
+              const handler = this.replyHandlers.get(message.id);
 
-          case ServerMessageType.Push: {
-            const listeners = listenersMap.get(message.name);
+              if (handler) {
+                this.replyHandlers.delete(message.id);
+                handler.onSuccess(message.payload);
+              }
 
-            if (listeners) {
-              listeners.forEach(listener => {
-                listener(message.payload);
-              });
+              break;
             }
 
-            break;
+            case ServerMessageType.Push: {
+              const listeners = this.listenersMap.get(message.name);
+
+              if (listeners) {
+                listeners.forEach(listener => {
+                  listener(message.payload);
+                });
+              }
+
+              break;
+            }
+
+            default:
+              throw new Error(`Unknown message type, message data: ${JSON.stringify(message)}`);
+          }
+        });
+
+        client.on('connect', () => {
+          this.socketClient = client;
+          console.debug(`Connected to ${this.socketName}`);
+
+          // Send any messages that were queued while closed
+          if (this.messageQueue.length > 0) {
+            this.messageQueue.forEach(message => client.emit('message', message));
+            this.messageQueue = [];
           }
 
-          default:
-            throw new Error(`Unknown message type, message data: ${messageData}`);
-        }
-      });
+          resolve();
+        });
 
-      client.on('connect', () => {
-        socketClient = client;
+        client.on('disconnect', () => {
+          console.debug('Client disconnected.');
 
-        // Send any messages that were queued while closed
-        if (messageQueue.length > 0) {
-          messageQueue.forEach(message => client.emit('message', message));
-          messageQueue = [];
-        }
-
-        resolve();
-      });
-
-      client.on('disconnect', () => {
-        socketClient = null;
+          this.socketClient = null;
+        });
       });
     });
-  });
-};
 
-export const init = async (): Promise<void> => {
-  const socketName = await window.getServerSocket();
-  await connectSocket(socketName);
-
-  console.log(`Connected to ${socketName}`);
-};
-
-export const send = <TPayload extends object = {}, TResult = void>(name: string, payload: TPayload): Promise<TResult> => new Promise((resolve, reject) => {
-  const messageId = window.generateId();
-  replyHandlers.set(messageId, { resolve, reject });
-
-  const messageData: IClientMessage <TPayload> = {
-    id: messageId,
-    name,
-    payload,
+  public closeConnection = (): void => {
+    this.listenersMap.clear();
+    this.replyHandlers.clear();
+    window.api.ipcDisconnect(this.socketName);
+    this.socketClient = null;
   };
 
-  const message = JSON.stringify(messageData);
+  public sendMessage = <TPayload extends unknown = unknown, TResponse extends unknown = unknown>(name: string, payload: TPayload, handleResponse?: IReplyHandler<TResponse>): void => {
+    const messageId = generateId();
 
-  if (socketClient) {
-    socketClient.emit('message', message);
-  } else {
-    messageQueue.push(message);
-  }
-});
+    if (handleResponse) {
+      this.replyHandlers.set(messageId, handleResponse);
+    }
 
-export const subscribe = <TPayload>(name: string, listener: IListener<TPayload>): () => void => {
-  let listeners = listenersMap.get(name);
+    const message: IClientMessage<TPayload> = {
+      id: messageId,
+      name,
+      payload,
+    };
 
-  if (!listeners) {
-    listeners = [listener];
-    listenersMap.set(name, listeners);
-  } else {
-    listeners.push(listener);
-  }
+    if (this.socketClient) {
+      this.socketClient.emit('message', message);
+    } else {
+      this.messageQueue.push(message);
+    }
+  };
 
-  const unsubscribe = (): void => {
-    const currentListeners = listenersMap.get(name);
+  public subscribe = <TPayload>(name: string, listener: IListener<TPayload>): void => {
+    let listeners = this.listenersMap.get(name);
+
+    if (!listeners) {
+      listeners = [listener];
+      this.listenersMap.set(name, listeners);
+    } else {
+      listeners.push(listener);
+    }
+  };
+
+  public unsubscribe = <TPayload>(name: string, listener: IListener<TPayload>): void => {
+    const currentListeners = this.listenersMap.get(name);
 
     if (!currentListeners) {
       return;
     }
 
-    listenersMap.set(name, currentListeners.filter(x => x !== listener));
+    this.listenersMap.set(name, currentListeners.filter(x => x !== listener));
   };
-
-  return unsubscribe;
-};
-
-export const unsubscribeName = (name: string): void => {
-  listenersMap.delete(name);
-};
-
-export const unsubscribeAll = (): void => {
-  listenersMap.clear();
-};
-
+}
