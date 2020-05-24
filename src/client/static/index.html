@@ -1,14 +1,20 @@
+<!DOCTYPE html>
+<html>
 <head lang="en">
+    <meta charset="UTF-8">
     <title>TM Auto</title>
 </head>
 
-<div id="app"></div>
+<body>
+    <div id="app"></div>
 
-<script>
-  if(!IS_DEV) {
-    const tag = document.createElement('meta');
-    tag.setAttribute("http-equiv", "Content-Security-Policy");
-    tag.setAttribute("content", "default-src 'self'; style-src 'self' 'unsafe-inline';");
-    document.head.appendChild(tag);
-  }
-</script>
+    <script>
+        if(!window.isDev) {
+            const tag = document.createElement('meta');
+            tag.setAttribute("http-equiv", "Content-Security-Policy");
+            tag.setAttribute("content", "default-src 'self'; style-src 'self' 'unsafe-inline';");
+            document.head.appendChild(tag);
+        }
+    </script>
+</body>
+</html>

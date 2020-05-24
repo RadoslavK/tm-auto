@@ -1,6 +1,8 @@
 {
   "include": [
     ".eslintrc.js",
-    "webpack.*.js"
+    "webpack.*.js",
+    "hot-reload.server.js",
+    "babel.config.js"
   ]
 }
