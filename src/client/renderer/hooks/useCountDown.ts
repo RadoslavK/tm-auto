@@ -10,7 +10,7 @@ export const useCountDown = (seconds: number): number => {
     setTimer(seconds);
 
     const id = setInterval(() => {
-      setTimer(prevTimer => prevTimer - 1);
+      setTimer(prevTimer => Math.max(0, prevTimer - 1));
     }, 1000);
 
     return () => clearInterval(id);
