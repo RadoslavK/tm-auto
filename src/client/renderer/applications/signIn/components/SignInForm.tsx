@@ -250,11 +250,11 @@ const SignInFormContainer: React.FC = () => {
 
 export { SignInFormContainer as SignInForm };
 
-interface ISignInFormProps {
+type Props = {
   readonly lastSignedInAccountId: string | null;
-}
+};
 
-const SignInForm: React.FC<ISignInFormProps> = (props) => {
+const SignInForm: React.FC<Props> = (props) => {
   const {
     lastSignedInAccountId,
   } = props;

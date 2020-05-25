@@ -9,9 +9,9 @@ import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { imageLinks } from '../../../utils/imageLinks';
 
-interface IProps {
+type Props = {
   readonly building: IBuildingInProgress;
-}
+};
 
 const getInitialTimer = (finishedAt: ITimestamp): number => {
   const timer = Math.floor(finishedAt.totalSeconds - new Date().valueOf() / 1000);
@@ -21,7 +21,7 @@ const getInitialTimer = (finishedAt: ITimestamp): number => {
     : 0;
 };
 
-const useStyles = makeStyles<unknown, IProps>({
+const useStyles = makeStyles<unknown, Props>({
   image: props => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundRepeat: 'no-repeat',
@@ -46,7 +46,7 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
-export const BuildingInProgress: React.FC<IProps> = (props) => {
+export const BuildingInProgress: React.FC<Props> = (props) => {
   const {
     building,
   } = props;

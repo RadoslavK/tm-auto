@@ -20,7 +20,7 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingSpot } from './BuildingSpot';
 
 const useStyles = makeStyles({
@@ -31,9 +31,9 @@ const useStyles = makeStyles({
   },
 });
 
-interface IProps {
+type Props = {
   readonly className: string;
-}
+};
 
 const mapBuilding = (building: IBuildingSpot, index: number): JSX.Element => (
   <BuildingSpot
@@ -42,7 +42,7 @@ const mapBuilding = (building: IBuildingSpot, index: number): JSX.Element => (
   />
 );
 
-export const BuildingSpots: React.FC<IProps> = (props) => {
+export const BuildingSpots: React.FC<Props> = (props) => {
   const {
     className,
   } = props;

@@ -19,21 +19,21 @@ import {
   IUpdateAutoUnitsUnitSettingsMutation,
   IUpdateAutoUnitsUnitSettingsMutationVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { imageLinks } from '../../../utils/imageLinks';
+import { useVillageContext } from '../../villages/context/villageContext';
 
-interface IProps {
+type Props = {
   readonly className?: string;
   readonly settings: IAutoUnitsUnitSettings;
-}
+};
 
-interface IStyleProps {
+type StyleProps = {
   readonly autoBuild: boolean;
   readonly trainForever: boolean;
   readonly unitIndex: number;
-}
+};
 
-const useStyles = makeStyles<unknown, IStyleProps>({
+const useStyles = makeStyles<unknown, StyleProps>({
   root: {
     display: 'flex',
   },
@@ -61,7 +61,7 @@ const useStyles = makeStyles<unknown, IStyleProps>({
   },
 });
 
-export const UnitSettings: React.FC<IProps> = (props) => {
+export const UnitSettings: React.FC<Props> = (props) => {
   const {
     className,
     settings,

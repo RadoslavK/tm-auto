@@ -1,8 +1,8 @@
 import { IResources } from '../../_types/graphql';
 import { merge } from '../../../_shared/merge';
 import {
+  Comparable,
   Fields,
-  IComparable,
 } from '../../../_shared/types';
 
 const getDefaults = (): Fields<Resources> => ({
@@ -13,7 +13,7 @@ const getDefaults = (): Fields<Resources> => ({
   wood: 0,
 });
 
-export class Resources implements IResources, IComparable<Resources> {
+export class Resources implements IResources, Comparable<Resources> {
   public wood: number;
   public clay: number;
   public iron: number;

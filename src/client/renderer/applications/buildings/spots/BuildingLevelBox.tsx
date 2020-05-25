@@ -3,10 +3,10 @@ import React from 'react';
 
 import { IBuildingSpotLevel } from '../../../_types/graphql';
 
-interface IProps {
+type Props = {
   readonly className?: string;
   readonly level: IBuildingSpotLevel;
-}
+};
 
 enum BuildingState {
   Completed = 'Completed',
@@ -15,11 +15,11 @@ enum BuildingState {
   QueueMaxed = 'QueueMaxed'
 }
 
-interface IStyleProps {
+type StyleProps = {
   readonly levelState: BuildingState;
-}
+};
 
-const useStyles = makeStyles<unknown, IStyleProps>({
+const useStyles = makeStyles<unknown, StyleProps>({
   actualLevel: props => ({
     background: props.levelState === BuildingState.Completed ? '#B8860B' : '#FFFFFF',
     border: '1px solid black',
@@ -37,7 +37,7 @@ const useStyles = makeStyles<unknown, IStyleProps>({
   }),
 });
 
-const getLevelState = (props: IProps): BuildingState => {
+const getLevelState = (props: Props): BuildingState => {
   const {
     level,
   } = props;
@@ -62,7 +62,7 @@ const getLevelState = (props: IProps): BuildingState => {
   return BuildingState.None;
 };
 
-export const BuildingLevelBox: React.FC<IProps> = (props) => {
+export const BuildingLevelBox: React.FC<Props> = (props) => {
   const {
     className,
     level,

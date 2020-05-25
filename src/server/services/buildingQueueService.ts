@@ -10,16 +10,16 @@ import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
 
-export interface IEnqueuedBuilding {
+export type EnqueuedBuilding = {
   readonly fieldId: number;
   readonly targetLevel: number | null;
   readonly type: BuildingType;
-}
+};
 
-export interface IDequeueAtFieldInput {
+export type DequeueAtFieldInput = {
   readonly deleteAll: boolean;
   readonly fieldId: number;
-}
+};
 
 export enum MovingDirection {
   Up = -1,
@@ -42,7 +42,7 @@ export class BuildingQueueService {
     this.m_village.buildings.queue.set(buildings);
   };
 
-  public enqueueBuilding = (building: IEnqueuedBuilding): void => {
+  public enqueueBuilding = (building: EnqueuedBuilding): void => {
     const {
       fieldId,
       targetLevel,
@@ -93,7 +93,7 @@ export class BuildingQueueService {
     this.correctBuildingQueue();
   };
 
-  public dequeueBuildingAtField = (input: IDequeueAtFieldInput): void => {
+  public dequeueBuildingAtField = (input: DequeueAtFieldInput): void => {
     const {
       deleteAll,
       fieldId,

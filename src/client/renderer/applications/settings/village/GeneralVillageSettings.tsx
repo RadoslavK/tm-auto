@@ -70,12 +70,12 @@ const Container: React.FC = () => {
 
 export { Container as GeneralVillageSettings };
 
-interface IProps {
+type Props = {
   readonly settings: IGeneralVillageSettings;
   readonly villageId: number;
-}
+};
 
-const GeneralVillageSettings: React.FC<IProps> = (props) => {
+const GeneralVillageSettings: React.FC<Props> = (props) => {
   const {
     settings,
     villageId,

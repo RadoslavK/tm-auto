@@ -1,12 +1,12 @@
 import { Resources } from '../../_models/misc/resources';
 import { PartyType } from '../../_types/graphql';
 
-interface IPartyInfo {
+type PartyInfo = {
   readonly cost: Resources;
   readonly townHallLevel: number;
-}
+};
 
-const partiesInfo: Record<string, IPartyInfo> = {
+const partiesInfo: Record<string, PartyInfo> = {
   [PartyType.Small]: {
     cost: new Resources({
       clay: 6650, crop: 1340, iron: 5940, wood: 6400,
@@ -22,7 +22,7 @@ const partiesInfo: Record<string, IPartyInfo> = {
 };
 
 class PartyInfoService {
-  public get = (type: PartyType): IPartyInfo => partiesInfo[type];
+  public get = (type: PartyType): PartyInfo => partiesInfo[type];
 }
 
 export const partyInfoService = new PartyInfoService();

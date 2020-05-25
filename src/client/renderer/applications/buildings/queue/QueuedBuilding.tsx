@@ -6,11 +6,11 @@ import { imageLinks } from '../../../utils/imageLinks';
 import { Cost } from './Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
 
-interface IProps {
+type Props = {
   readonly building: IQueuedBuilding;
-}
+};
 
-const useStyles = makeStyles<unknown, IProps>({
+const useStyles = makeStyles<unknown, Props>({
   actions: {
     '& button': {
       display: 'block',
@@ -42,7 +42,7 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
-export const QueuedBuilding: React.FC<IProps> = (props) => {
+export const QueuedBuilding: React.FC<Props> = (props) => {
   const {
     building,
   } = props;

@@ -134,12 +134,12 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
   await validateUrl([path], exact);
 };
 
-export interface ITabInformation {
+export type TabInformation = {
   readonly index: number;
   readonly name: string;
-}
+};
 
-export const ensureBuildingSpotPage = async (fieldId: number, tab?: ITabInformation): Promise<void> => {
+export const ensureBuildingSpotPage = async (fieldId: number, tab?: TabInformation): Promise<void> => {
   //  TODO: spravit to efektivnejsie a celkovo ensure navigaciu. ked uz je na tej budove tak sa nemusi davat na resource fieldy atd
   if (isResourceField(fieldId)) {
     await ensurePage(TravianPath.ResourceFieldsOverview);

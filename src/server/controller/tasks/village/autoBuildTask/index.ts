@@ -1,6 +1,6 @@
 import {
-  IBotTaskResult,
-  IVillageBotTask,
+  BotTaskResult,
+  VillageBotTask,
 } from '../../_types';
 import { BuildingCategory } from '../../../../_enums/buildingCategory';
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
@@ -27,7 +27,7 @@ import {
 import { updateActualResources } from '../../../actions/village/updateResources';
 import { checkAutoStorage } from './checkAutoStorage';
 
-export class AutoBuildTask implements IVillageBotTask {
+export class AutoBuildTask implements VillageBotTask {
   public readonly type: VillageTaskType = VillageTaskType.AutoBuild;
 
   private readonly m_village: Village;
@@ -47,7 +47,7 @@ export class AutoBuildTask implements IVillageBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResult | void> => {
+  public execute = async (): Promise<BotTaskResult | void> => {
     const { queue } = this.m_village.buildings;
 
     const { buildingsToBuild } = await checkAutoStorage(this.m_village, this.settings().autoStorage);

@@ -1,6 +1,6 @@
 import {
-  IBotTaskResult,
-  IVillageBotTask,
+  BotTaskResult,
+  VillageBotTask,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
@@ -13,7 +13,7 @@ import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { partyInfoService } from '../../../services/info/partyInfoService';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
 
-export class AutoPartyTask implements IVillageBotTask {
+export class AutoPartyTask implements VillageBotTask {
   public readonly type: VillageTaskType = VillageTaskType.AutoParty;
 
   private readonly m_village: Village;
@@ -29,7 +29,7 @@ export class AutoPartyTask implements IVillageBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResult | void> => {
+  public execute = async (): Promise<BotTaskResult | void> => {
     const {
       minCulturePoints,
       partyType,

@@ -12,9 +12,9 @@ import {
   IDuration,
 } from '../../../_types/graphql';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { areShallowEqual } from '../../../utils/areShallowEqual';
 import { imageLinks } from '../../../utils/imageLinks';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { useUpdateAutoUnitsBuildingSettingsMutation } from '../hooks/useUpdateAutoUnitsBuildingSettingsMutation';
 import { UnitSettings } from './UnitSettings';
 

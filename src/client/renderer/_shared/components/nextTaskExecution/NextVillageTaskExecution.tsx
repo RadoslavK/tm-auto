@@ -6,11 +6,11 @@ import {
   VillageTaskType,
 } from '../../../_types/graphql';
 import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
+import { useVillageContext } from '../../../applications/villages/context/villageContext';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useResetNextVillageTaskExecution } from '../../../hooks/nextExecution/useResetNextVillageTaskExecution';
 import { useSetNextVillageTaskExecution } from '../../../hooks/nextExecution/useSetNextVillageTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { NextExecutionForm } from './NextExecutionForm';
 
 type Props = {

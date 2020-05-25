@@ -31,18 +31,18 @@ const ensureIterable = (data: any): AsyncIterable<any> => isAsyncIterable(data)
   ? data
   : createAsyncIterator([data]) as any;
 
-export interface ISchemaLinkOptions {
+type Params = {
   readonly context?: (operation: Operation) => any;
   readonly root?: any;
   readonly schema: GraphQLSchema;
-}
+};
 
 const omitTypename = <TValue>(key: string, value: TValue): TValue | undefined =>
   key === '__typename' ? undefined : value;
 
-export const createSchemaLink = (options: ISchemaLinkOptions): ApolloLink => new ApolloLink((operation): Observable<FetchResult> | null => {
+export const createSchemaLink = (params: Params): ApolloLink => new ApolloLink((operation): Observable<FetchResult> | null => {
   const handleRequest = async (observer: ZenObservable.SubscriptionObserver<FetchResult>): Promise<void> => {
-    const context = options.context && await options.context(operation);
+    const context = params.context && await params.context(operation);
     const definition = getMainDefinition(operation.query);
 
     // input variables might be passed as classes but classes contains __typename field which is not recognized by graphql types
@@ -52,8 +52,8 @@ export const createSchemaLink = (options: ISchemaLinkOptions): ApolloLink => new
       contextValue: context,
       document: operation.query,
       operationName: operation.operationName,
-      rootValue: options.root,
-      schema: options.schema,
+      rootValue: params.root,
+      schema: params.schema,
       variableValues,
     };
 

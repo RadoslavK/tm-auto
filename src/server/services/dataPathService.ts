@@ -2,30 +2,30 @@ import * as path from 'path';
 
 import { accountService } from './accountService';
 
-interface IHeroSettingsPath {
+type HeroSettingsPath = {
   readonly autoAdventure: string;
-}
+};
 
-interface IAccountSettingsPath {
+type AccountSettingsPath = {
   readonly general: string;
-  readonly hero: IHeroSettingsPath;
-}
+  readonly hero: HeroSettingsPath;
+};
 
-interface IAccountPath {
-  readonly settings: IAccountSettingsPath;
-}
+type AccountPath = {
+  readonly settings: AccountSettingsPath;
+};
 
-interface IVillageSettingsPath {
+type VillageSettingsPath = {
   readonly autoBuild: string;
   readonly autoParty: string;
   readonly autoUnits: string;
   readonly general: string;
-}
+};
 
-interface IVillagePath {
+type VillagePath = {
   readonly queue: string;
-  readonly settings: IVillageSettingsPath;
-}
+  readonly settings: VillageSettingsPath;
+};
 
 class DataPathService {
   private basePath = '.data';
@@ -35,7 +35,7 @@ class DataPathService {
     this.accountsPath = path.join(this.basePath, 'accounts.json');
   }
 
-  public accountPath = (): IAccountPath => {
+  public accountPath = (): AccountPath => {
     const lPath = this.baseAccountPath();
 
     return {
@@ -43,7 +43,7 @@ class DataPathService {
     };
   };
 
-  public villagePath = (villageId: number): IVillagePath => {
+  public villagePath = (villageId: number): VillagePath => {
     const lPath = this.baseVillagePath(villageId);
 
     return {
@@ -52,7 +52,7 @@ class DataPathService {
     };
   };
 
-  private createVillageSettingsPath = (basePath: string): IVillageSettingsPath => {
+  private createVillageSettingsPath = (basePath: string): VillageSettingsPath => {
     const lPath = path.join(basePath, 'settings');
 
     return {
@@ -63,7 +63,7 @@ class DataPathService {
     };
   };
 
-  private createAccountSettingsPath = (basePath: string): IAccountSettingsPath => {
+  private createAccountSettingsPath = (basePath: string): AccountSettingsPath => {
     const lPath = path.join(basePath, 'settings');
 
     return {
@@ -72,7 +72,7 @@ class DataPathService {
     };
   };
 
-  private createHeroSettingsPath = (basePath: string): IHeroSettingsPath => {
+  private createHeroSettingsPath = (basePath: string): HeroSettingsPath => {
     const lPath = path.join(basePath, 'hero');
 
     return {

@@ -16,10 +16,7 @@ import {
 import { Buildings } from '../../buildings/Buildings';
 import { VillageSettings } from '../../settings/village';
 import { Units } from '../../units/components/Units';
-import {
-  IVillageContext,
-  VillageContext,
-} from '../context/villageContext';
+import { VillageContext } from '../context/villageContext';
 import { useGetVillageById } from '../hooks/useGetVillageById';
 import { CrannyCapacity } from './CrannyCapacity';
 import { Resources } from './Resources';
@@ -55,11 +52,9 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const { resources } = villageResult.village;
 
-  const context: IVillageContext = { villageId };
-
   return (
     <div>
-      <VillageContext.Provider value={context}>
+      <VillageContext.Provider value={{ villageId }}>
         <Resources resources={resources} />
         <CrannyCapacity />
         <button

@@ -13,14 +13,14 @@ import {
   IGetBuildingsInProgressQuery,
   IGetBuildingsInProgressQueryVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingInProgress } from './BuildingInProgress';
 
-interface IProps {
+type Props = {
   readonly className?: string;
-}
+};
 
-export const BuildingsInProgress: React.FC<IProps> = (props) => {
+export const BuildingsInProgress: React.FC<Props> = (props) => {
   const {
     className,
   } = props;

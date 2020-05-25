@@ -13,10 +13,10 @@ import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { buildingInfoService } from './info/buildingInfoService';
 import { unitInfoService } from './info/unitInfoService';
 
-export interface ILogAutoUnitsParams {
+type LogAutoUnitsParams = {
   readonly amount: number;
   readonly index: number;
-}
+};
 
 export class LogsService {
   private readonly entries: ILogEntry[] = [];
@@ -44,7 +44,7 @@ export class LogsService {
     this.log(content, true);
   };
 
-  public logAutoUnits = (params: ILogAutoUnitsParams): void => {
+  public logAutoUnits = (params: LogAutoUnitsParams): void => {
     const {
       amount,
       index,

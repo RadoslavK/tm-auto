@@ -7,15 +7,15 @@ export enum CapitalCondition {
   Required = 2,
 }
 
-export interface IBuildingWithLevelRequirement {
+export type BuildingWithLevelRequirement = {
   readonly level: number;
   readonly type: BuildingType;
-}
+};
 
-export interface IBuildingConditions {
+export type BuildingConditions = {
   readonly capital: CapitalCondition;
   readonly isUnique: boolean;
   readonly playerTribe: Tribe | null;
   readonly prohibitedBuildingTypes: readonly BuildingType[];
-  readonly requiredBuildings: readonly IBuildingWithLevelRequirement[];
-}
+  readonly requiredBuildings: readonly BuildingWithLevelRequirement[];
+};

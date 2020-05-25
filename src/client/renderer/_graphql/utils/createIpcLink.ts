@@ -8,8 +8,8 @@ import { print as printQuery } from 'graphql';
 import { IpcClient } from '../../_ipc/ipcUtils';
 import { generateId } from '../../../../_shared/generateId';
 import {
-  IGraphqlHandlerPayload,
-  ISerializableGraphQLRequest,
+  GraphqlHandlerPayload,
+  SerializableGraphQLRequest,
 } from '../../../../_shared/graphql/models';
 import {
   GraphqlHandlerMessage,
@@ -22,7 +22,7 @@ export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> =
 
   return new ApolloLink((operation): Observable<FetchResult> | null => {
     const handleRequest = (observer: ZenObservable.SubscriptionObserver<FetchResult>): void => {
-      const request: ISerializableGraphQLRequest = {
+      const request: SerializableGraphQLRequest = {
         context: operation.getContext(),
         operationName: operation.operationName,
         query: printQuery(operation.query),
@@ -54,7 +54,7 @@ export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> =
       };
 
       ipcClient.subscribe<GraphqlHandlerMessage>(subscriptionId, processMessage);
-      ipcClient.sendMessage<IGraphqlHandlerPayload>(IpcHandler.GraphQL, { request, subscriptionId });
+      ipcClient.sendMessage<GraphqlHandlerPayload>(IpcHandler.GraphQL, { request, subscriptionId });
     };
 
     return new Observable(observer => {

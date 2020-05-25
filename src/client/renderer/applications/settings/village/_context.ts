@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 
-interface IContext {
+type Context = {
   readonly villageId: number;
-}
+};
 
-export const VillageSettingsContext = React.createContext<IContext>({ villageId: 0 });
+export const VillageSettingsContext = React.createContext<Context>({ villageId: 0 });
 
-export const useVillageSettingsContext = () => useContext<IContext>(VillageSettingsContext);
+export const useVillageSettingsContext = () => useContext<Context>(VillageSettingsContext);

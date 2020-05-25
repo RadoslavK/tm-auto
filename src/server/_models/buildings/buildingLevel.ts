@@ -1,15 +1,15 @@
-interface IParams {
+type Params = {
   actual: number;
   ongoing: number;
   queued: number;
-}
+};
 
-export class BuildingLevel implements IParams {
+export class BuildingLevel implements Params {
   public actual = 0;
   public ongoing = 0;
   public queued = 0;
 
-  constructor(params: Partial<IParams> = {}) {
+  constructor(params: Partial<Params> = {}) {
     Object.assign(this, params);
   }
 

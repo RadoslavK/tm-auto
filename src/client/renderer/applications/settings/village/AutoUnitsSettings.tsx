@@ -73,12 +73,12 @@ const Container: React.FC = () => {
 
 export { Container as AutoUnitsSettings };
 
-interface IProps {
+type Props = {
   readonly settings: IAutoUnitsSettings;
   readonly villageId: number;
-}
+};
 
-const AutoUnitsSettings: React.FC<IProps> = (props) => {
+const AutoUnitsSettings: React.FC<Props> = (props) => {
   const {
     settings,
     villageId,

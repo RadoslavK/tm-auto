@@ -1,6 +1,6 @@
 import {
-  IBotTaskResult,
-  IVillageBotTask,
+  BotTaskResult,
+  VillageBotTask,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
@@ -15,12 +15,12 @@ import { unitInfoService } from '../../../services/info/unitInfoService';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import {
   ensureBuildingSpotPage,
-  ITabInformation,
+  TabInformation,
 } from '../../actions/ensurePage';
 import { updateActualResources } from '../../actions/village/updateResources';
 import { updateUnitsInformation } from '../../updateUnitsInformation';
 
-export class AutoUnitsTask implements IVillageBotTask {
+export class AutoUnitsTask implements VillageBotTask {
   public readonly type: VillageTaskType = VillageTaskType.AutoUnits;
 
   private readonly m_village: Village;
@@ -40,7 +40,7 @@ export class AutoUnitsTask implements IVillageBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResult | void> => {
+  public execute = async (): Promise<BotTaskResult | void> => {
     await updateUnitsInformation();
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
     await this.analyzeQueueAndBuildUnits(BuildingType.Stable);
@@ -81,7 +81,7 @@ export class AutoUnitsTask implements IVillageBotTask {
       return;
     }
 
-    const tab: ITabInformation | undefined = type === BuildingType.Residence || type === BuildingType.Palace
+    const tab: TabInformation | undefined = type === BuildingType.Residence || type === BuildingType.Palace
       ? { index: 1, name: 's' }
       : undefined;
 

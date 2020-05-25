@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { IActualBuilding } from '../../_models/buildings';
+import { ActualBuilding } from '../../_models/buildings';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
 
@@ -7,7 +7,7 @@ const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,
 ];
 
-export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
+export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
@@ -15,7 +15,7 @@ export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
 
   const nodes = await page.$$('#village_map > div');
 
-  return Promise.all(nodes.map(async (node, index): Promise<IActualBuilding> => {
+  return Promise.all(nodes.map(async (node, index): Promise<ActualBuilding> => {
     const classNameProperty = await node.getProperty('className');
     const className = await classNameProperty.jsonValue();
 
@@ -43,12 +43,12 @@ export const parseFieldSpots = async (): Promise<IActualBuilding[]> => {
   }));
 };
 
-export const parseFieldSpotsNew = async (): Promise<IActualBuilding[]> => {
+export const parseFieldSpotsNew = async (): Promise<ActualBuilding[]> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
 
-  return page.$$eval('#resourceFieldContainer div.level[class*=buildingSlot][class*=gid]', xx => xx.map((x): IActualBuilding => {
+  return page.$$eval('#resourceFieldContainer div.level[class*=buildingSlot][class*=gid]', xx => xx.map((x): ActualBuilding => {
     const match = /gid(\d+).*?buildingSlot(\d+).*?level(\d+)/.exec(x.className);
 
     if (!match) {

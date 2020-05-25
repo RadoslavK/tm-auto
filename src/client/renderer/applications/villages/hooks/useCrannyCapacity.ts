@@ -15,7 +15,7 @@ import {
   ICrannyCapacityQueryVariables,
   IVillageCrannyCapacity,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../context/villageContext';
 
 export const useCrannyCapacity = (): IVillageCrannyCapacity | null => {
   const { villageId } = useVillageContext();

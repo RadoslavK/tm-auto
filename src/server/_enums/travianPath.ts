@@ -1,4 +1,4 @@
-import { ITabInformation } from '../controller/actions/ensurePage';
+import { TabInformation } from '../controller/actions/ensurePage';
 
 export enum TravianPath {
   AccountOverview = 'dorf3.php',
@@ -18,7 +18,7 @@ export enum TravianPath {
   Statistics = 'statistiken.php'
 }
 
-export const getBuildingSpotPath = (fieldId: number, tab?: ITabInformation): string =>
+export const getBuildingSpotPath = (fieldId: number, tab?: TabInformation): string =>
   tab === undefined
     ? `build.php?id=${fieldId}`
     : `build.php?${tab.name}=${tab.index}&id=${fieldId}`;

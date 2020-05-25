@@ -12,11 +12,11 @@ import {
 } from '../../../../utils/getWithMaximum';
 import { randomElement } from '../../../../utils/randomElement';
 
-interface IResult {
+type Result = {
   readonly buildingsToBuild: readonly QueuedBuilding[];
-}
+};
 
-export const checkAutoStorage = async (village: Village, settings: IAutoStorageSettings): Promise<IResult> => {
+export const checkAutoStorage = async (village: Village, settings: IAutoStorageSettings): Promise<Result> => {
   const buildingsToBuild: QueuedBuilding[] = [];
 
   let nextTaskHighestWarehouseCost = 0;

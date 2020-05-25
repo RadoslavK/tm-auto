@@ -31,9 +31,9 @@ import {
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { useVillages } from '../../../hooks/villages/useVillages';
 
-interface IProps {
+type Props = {
   readonly settings: IAutoAdventureSettings;
-}
+};
 
 const getCriteriaString = (criteria: AdventureCriteria): string => {
   switch (criteria) {
@@ -54,7 +54,7 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
   }
 };
 
-export const AutoAdventureSettings: React.FC<IProps> = (props) => {
+export const AutoAdventureSettings: React.FC<Props> = (props) => {
   const {
     settings,
   } = props;

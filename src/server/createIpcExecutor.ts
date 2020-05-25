@@ -4,7 +4,7 @@ import {
 } from 'apollo-link';
 import { parse as parseQuery } from 'graphql';
 
-import { IGraphqlHandlerPayload } from '../_shared/graphql/models';
+import { GraphqlHandlerPayload } from '../_shared/graphql/models';
 import {
   createGraphqlHandlerCompleteMessage,
   createGraphqlHandlerDataMessage,
@@ -14,24 +14,24 @@ import {
 } from '../_shared/ipc/graphqlHandlerMessages';
 import {
   broadcastMessage,
-  IHandler,
+  IpcMessageHandler,
   startIpcServer,
 } from './ipcUtils';
 
-interface IIpcExecutorOptions {
+type Params = {
   readonly link: ApolloLink;
   readonly socketName: string;
-}
+};
 
-export const createIpcExecutor = async (options: IIpcExecutorOptions): Promise<void> => {
+export const createIpcExecutor = async (parms: Params): Promise<void> => {
   const {
     link,
     socketName,
-  } = options;
+  } = parms;
 
-  const handlers = new Map<string, IHandler<IGraphqlHandlerPayload>>();
+  const handlers = new Map<string, IpcMessageHandler<GraphqlHandlerPayload>>();
 
-  const graphqlHandler = (payload: IGraphqlHandlerPayload): void => {
+  const graphqlHandler = (payload: GraphqlHandlerPayload): void => {
     const { request, subscriptionId } = payload;
     const result = executeLink(link, {
       ...request,

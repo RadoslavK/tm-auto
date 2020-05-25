@@ -76,12 +76,12 @@ const Container: React.FC = () => {
 
 export { Container as AutoPartySettings };
 
-interface IProps {
+type Props = {
   readonly settings: IAutoPartySettings;
   readonly villageId: number;
-}
+};
 
-const AutoPartySettings: React.FC<IProps> = (props) => {
+const AutoPartySettings: React.FC<Props> = (props) => {
   const {
     settings,
     villageId,

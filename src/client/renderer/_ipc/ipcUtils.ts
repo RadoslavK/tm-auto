@@ -1,24 +1,22 @@
 import { generateId } from '../../../_shared/generateId';
-import { IClientMessage } from '../../../_shared/ipc/clientMessages';
+import { ClientMessage } from '../../../_shared/ipc/clientMessages';
 import {
   ServerMessage,
   ServerMessageType,
 } from '../../../_shared/ipc/serverMessages';
 
-interface IReplyHandler<TPayload> {
+type ReplyHandler<TPayload> = {
   readonly onError: (error: Error) => void;
   readonly onSuccess: (value: TPayload) => void;
-}
+};
 
-interface IListener<TPayload = unknown> {
-  (payload: TPayload): void;
-}
+type Listener<TPayload = unknown> = (payload: TPayload) => void;
 
 export class IpcClient {
-  private replyHandlers = new Map<string, IReplyHandler<any>>();
-  private listenersMap = new Map<string, IListener<any>[]>();
+  private replyHandlers = new Map<string, ReplyHandler<any>>();
+  private listenersMap = new Map<string, Listener<any>[]>();
 
-  private messageQueue: IClientMessage<any>[] = [];
+  private messageQueue: ClientMessage<any>[] = [];
   private socketClient: any | null = null;
 
   constructor(public socketName: string) {}
@@ -96,14 +94,14 @@ export class IpcClient {
     this.socketClient = null;
   };
 
-  public sendMessage = <TPayload extends unknown = unknown, TResponse extends unknown = unknown>(name: string, payload: TPayload, handleResponse?: IReplyHandler<TResponse>): void => {
+  public sendMessage = <TPayload extends unknown = unknown, TResponse extends unknown = unknown>(name: string, payload: TPayload, handleResponse?: ReplyHandler<TResponse>): void => {
     const messageId = generateId();
 
     if (handleResponse) {
       this.replyHandlers.set(messageId, handleResponse);
     }
 
-    const message: IClientMessage<TPayload> = {
+    const message: ClientMessage<TPayload> = {
       id: messageId,
       name,
       payload,
@@ -116,7 +114,7 @@ export class IpcClient {
     }
   };
 
-  public subscribe = <TPayload>(name: string, listener: IListener<TPayload>): void => {
+  public subscribe = <TPayload>(name: string, listener: Listener<TPayload>): void => {
     let listeners = this.listenersMap.get(name);
 
     if (!listeners) {
@@ -127,7 +125,7 @@ export class IpcClient {
     }
   };
 
-  public unsubscribe = <TPayload>(name: string, listener: IListener<TPayload>): void => {
+  public unsubscribe = <TPayload>(name: string, listener: Listener<TPayload>): void => {
     const currentListeners = this.listenersMap.get(name);
 
     if (!currentListeners) {

@@ -1,22 +1,20 @@
 import ipc from 'node-ipc';
 
-import { IClientMessage } from '../_shared/ipc/clientMessages';
+import { ClientMessage } from '../_shared/ipc/clientMessages';
 import {
   createServerBroadcastMessage,
   createServerErrorMessage,
   createServerReplyMessage,
 } from '../_shared/ipc/serverMessages';
 
-export interface IHandler<TPayload = unknown, TResult = void> {
-  (payload: TPayload): TResult;
-}
+export type IpcMessageHandler<TPayload = unknown, TResult = void> = (payload: TPayload) => TResult;
 
-export const startIpcServer = async <TPayload = unknown, TResult = never>(socketName: string, handlers: Map<string, IHandler<TPayload, TResult>>): Promise<void> => new Promise(resolve => {
+export const startIpcServer = async <TPayload = unknown, TResult = never>(socketName: string, handlers: Map<string, IpcMessageHandler<TPayload, TResult>>): Promise<void> => new Promise(resolve => {
   ipc.config.id = socketName;
   ipc.config.silent = true;
 
   ipc.serve(() => {
-    ipc.server.on('message', (message: IClientMessage<TPayload>, socket: any) => {
+    ipc.server.on('message', (message: ClientMessage<TPayload>, socket: any) => {
       const { id, name, payload } = message;
 
       const handler = handlers.get(name);

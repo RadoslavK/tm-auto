@@ -22,13 +22,13 @@ import {
   IQueuedBuilding,
   IQueuedBuildingManipulationInput,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { imageLinks } from '../../../utils/imageLinks';
+import { useVillageContext } from '../../villages/context/villageContext';
 
-interface IProps {
+type Props = {
   readonly building: IQueuedBuilding;
   readonly className?: string;
-}
+};
 
 const useStyles = makeStyles({
   delete: {
@@ -62,7 +62,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const QueuedBuildingActions: React.FC<IProps> = (props) => {
+export const QueuedBuildingActions: React.FC<Props> = (props) => {
   const {
     building: {
       canMoveDown,

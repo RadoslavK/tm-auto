@@ -22,9 +22,9 @@ const useStyles = makeStyles({
   },
 });
 
-interface IVillageRouteParams {
+type VillageRouteParams = {
   readonly id: string;
-}
+};
 
 export const Villages: React.FC = () => {
   const classes = useStyles();
@@ -63,7 +63,7 @@ export const Villages: React.FC = () => {
       <Switch>
         <Route
           path={`${match.path}/:id`}
-          render={(props: RouteComponentProps<IVillageRouteParams>) => <Village villageId={+props.match.params.id} />}
+          render={(props: RouteComponentProps<VillageRouteParams>) => <Village villageId={+props.match.params.id} />}
         />
         {villages.length > 0 && (
           <Redirect to={`${match.url}/${villages[0].id}`} />

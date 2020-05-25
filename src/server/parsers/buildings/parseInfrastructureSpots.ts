@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { IActualBuilding } from '../../_models/buildings';
+import { ActualBuilding } from '../../_models/buildings';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
 import { accountContext } from '../../accountContext';
@@ -36,7 +36,7 @@ const getWallType = (): BuildingType => {
   }
 };
 
-export const parseInfrastructureSpots = async (): Promise<readonly IActualBuilding[]> => {
+export const parseInfrastructureSpots = async (): Promise<readonly ActualBuilding[]> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
@@ -44,7 +44,7 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
 
   const nodes = await page.$$('#village_map > .buildingSlot');
 
-  const buildings = await Promise.all(nodes.map(async (node): Promise<IActualBuilding | null> => {
+  const buildings = await Promise.all(nodes.map(async (node): Promise<ActualBuilding | null> => {
     const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
     const fieldIdMatch = /a(\d+)/.exec(className as string);
 
@@ -93,5 +93,5 @@ export const parseInfrastructureSpots = async (): Promise<readonly IActualBuildi
       }
 
       return false;
-    }) as readonly IActualBuilding[];
+    }) as readonly ActualBuilding[];
 };

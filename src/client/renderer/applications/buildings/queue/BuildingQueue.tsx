@@ -23,13 +23,13 @@ import {
   IOnQueueUpdatedSubscription,
   IOnQueueUpdatedSubscriptionVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { Cost } from './Cost';
 import { QueuedBuilding } from './QueuedBuilding';
 
-interface IProps {
+type Props = {
   readonly className: string;
-}
+};
 
 const useStyles = makeStyles({
   action: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const BuildingQueue: React.FC<IProps> = (props) => {
+export const BuildingQueue: React.FC<Props> = (props) => {
   const {
     className,
   } = props;

@@ -21,14 +21,14 @@ export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutP
 
 type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayloads[TEvent] : undefined;
 
-interface ISubscribeToEventOptions<TEvent, TArgs, TResult> {
+type Options<TEvent, TArgs, TResult> = {
   readonly filter?: (payload: EventPayload<TEvent>, subscriptionVariables: TArgs) => boolean;
   readonly resolve: (payload: EventPayload<TEvent>) => TResult;
-}
+};
 
 export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TParent, TContext>(
   event: TEvent,
-  options: ISubscribeToEventOptions<TEvent, TArgs, TResult>,
+  options: Options<TEvent, TArgs, TResult>,
 ) => {
   const {
     filter,

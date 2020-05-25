@@ -8,7 +8,7 @@ import {
   IGetAvailableNewBuildingsQuery,
   IGetAvailableNewBuildingsQueryVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { NewBuildingItem } from './NewBuildingItem';
 
 const useStyles = makeStyles({
@@ -22,12 +22,12 @@ const useStyles = makeStyles({
   },
 });
 
-interface IProps {
+type Props = {
   readonly fieldId: number;
   readonly onSelect: () => void;
-}
+};
 
-export const NewBuildingDialog: React.FC<IProps> = React.forwardRef((props, ref: any) => {
+export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: any) => {
   const {
     fieldId,
     onSelect,

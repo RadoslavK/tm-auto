@@ -6,18 +6,18 @@ import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
 import { BuildingSpots } from './spots/buildingSpots';
 
-export interface IActualBuilding {
+export type ActualBuilding = {
   readonly fieldId: number;
   readonly level: number;
   readonly type: BuildingType;
-}
+};
 
 export class Buildings {
   public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();
   public readonly spots: BuildingSpots = new BuildingSpots();
   public readonly queue: BuildingQueue = new BuildingQueue();
 
-  public updateActual = (buildings: readonly IActualBuilding[]): void => {
+  public updateActual = (buildings: readonly ActualBuilding[]): void => {
     buildings.forEach(b => {
       const spot = this.spots.at(b.fieldId);
       spot.level.actual = b.level;

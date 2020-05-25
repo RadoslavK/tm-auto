@@ -2,15 +2,15 @@ import React from 'react';
 
 import { MultiEnqueueDialogItem } from './MultiEnqueueDialogItem';
 
-interface IProps {
+type Props = {
   readonly buildingType: number;
   readonly fieldId: number;
   readonly maxLevel: number;
   readonly onSelect: () => void;
   readonly totalLevel: number;
-}
+};
 
-export const MultiEnqueueDialog: React.FC<IProps> = (props) => {
+export const MultiEnqueueDialog: React.FC<Props> = (props) => {
   const {
     buildingType,
     fieldId,

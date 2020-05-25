@@ -9,7 +9,7 @@ import {
   IDequeueBuildingAtFieldMutation,
   IDequeueBuildingAtFieldMutationVariables,
 } from '../../_types/graphql';
-import { useVillageContext } from '../useVillageContext';
+import { useVillageContext } from '../../applications/villages/context/villageContext';
 
 type Params = {
   readonly deleteAll: boolean;

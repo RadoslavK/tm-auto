@@ -2,14 +2,14 @@ import React from 'react';
 
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 
-interface IProps {
+type Props = {
   readonly buildingType: number;
   readonly fieldId: number;
   readonly onSelect: () => void;
   readonly targetLevel: number;
-}
+};
 
-export const MultiEnqueueDialogItem: React.FC<IProps> = (props) => {
+export const MultiEnqueueDialogItem: React.FC<Props> = (props) => {
   const enqueue = useEnqueueBuildingMutation({
     buildingType: props.buildingType,
     fieldId: props.fieldId,

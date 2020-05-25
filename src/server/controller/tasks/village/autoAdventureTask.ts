@@ -1,6 +1,6 @@
 import {
-  IBotTask,
-  IBotTaskResult,
+  BotTask,
+  BotTaskResult,
 } from '../_types';
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
@@ -19,7 +19,7 @@ import {
 } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
 
-export class AutoAdventureTask implements IBotTask {
+export class AutoAdventureTask implements BotTask {
   public readonly type: TaskType = TaskType.AutoAdventure;
 
   private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
@@ -34,7 +34,7 @@ export class AutoAdventureTask implements IBotTask {
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
-  public execute = async (): Promise<IBotTaskResult | void> => {
+  public execute = async (): Promise<BotTaskResult | void> => {
     const village = accountContext.villageService.currentVillage();
     const settings = this.settings();
 

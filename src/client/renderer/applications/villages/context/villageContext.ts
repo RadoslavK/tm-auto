@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-export interface IVillageContext {
+export type Context = {
   readonly villageId: number;
-}
+};
 
-export const VillageContext = React.createContext<IVillageContext>({ villageId: 0 });
+export const VillageContext = React.createContext<Context>({ villageId: 0 });
+
+export const useVillageContext = (): Context => useContext<Context>(VillageContext);

@@ -14,15 +14,15 @@ import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueB
 import { imageLinks } from '../../../utils/imageLinks';
 import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 
-interface IProps {
+type Props = {
   readonly className?: string;
   readonly fieldId: number;
   readonly name: string;
   readonly onSelect: () => void;
   readonly type: BuildingType
-}
+};
 
-const useStyles = makeStyles<unknown, IProps>({
+const useStyles = makeStyles<unknown, Props>({
   image: props => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.type)}")`,
     backgroundRepeat: 'no-repeat',
@@ -36,7 +36,7 @@ const useStyles = makeStyles<unknown, IProps>({
   },
 });
 
-export const NewBuildingItem: React.FC<IProps> = (props) => {
+export const NewBuildingItem: React.FC<Props> = (props) => {
   const {
     className,
     fieldId,

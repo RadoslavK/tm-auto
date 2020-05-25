@@ -73,10 +73,10 @@ const Container: React.FC = () => {
 
 export { Container as AutoBuildSettings };
 
-interface IProps {
+type Props = {
   readonly settings: IAutoBuildSettings;
   readonly villageId: number;
-}
+};
 
 type Settings = Omit<IAutoBuildSettings, 'autoStorage'> & {
   readonly allowAutoGranary: boolean;
@@ -112,7 +112,7 @@ const getStateFromSettings = (settings: IAutoBuildSettings): Settings => {
   };
 };
 
-const AutoBuildSettings: React.FC<IProps> = (props) => {
+const AutoBuildSettings: React.FC<Props> = (props) => {
   const {
     settings,
     villageId,

@@ -1,6 +1,6 @@
 import {
+  BuildingConditions,
   CapitalCondition,
-  IBuildingConditions,
 } from '../_models/buildings/buildingConditions';
 import { Village } from '../_models/village/village';
 import { getAllEnumValues } from '../../_shared/enumUtils';
@@ -126,7 +126,7 @@ export class AvailableBuildingTypesService {
     return buildingTypes;
   };
 
-  private newBuildingMeetsConditions = (type: BuildingType, conditions: IBuildingConditions): boolean => {
+  private newBuildingMeetsConditions = (type: BuildingType, conditions: BuildingConditions): boolean => {
     // TODO detect if artefacts are in village
     if (type === BuildingType.GreatGranary
       || type === BuildingType.GreatWarehouse) {

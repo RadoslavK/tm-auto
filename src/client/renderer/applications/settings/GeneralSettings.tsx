@@ -56,11 +56,11 @@ const Container: React.FC = () => {
 
 export { Container as GeneralSettings };
 
-interface IProps {
+type Props = {
   readonly settings: IGeneralSettings;
-}
+};
 
-const GeneralSettings: React.FC<IProps> = (props) => {
+const GeneralSettings: React.FC<Props> = (props) => {
   const {
     settings,
   } = props;

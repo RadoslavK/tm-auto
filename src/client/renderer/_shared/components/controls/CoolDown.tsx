@@ -6,12 +6,12 @@ import {
 } from '../../../_types/graphql';
 import { Duration } from './Duration';
 
-interface IProps {
+type Props = {
   readonly onChange: (coolDown: ICoolDown) => void;
   readonly value: ICoolDown;
-}
+};
 
-export const CoolDown: React.FC<IProps> = ({ onChange, value }) => {
+export const CoolDown: React.FC<Props> = ({ onChange, value }) => {
   const updateMin = (newMin: IDuration) => onChange({ ...value, min: newMin });
   const updateMax = (newMax: IDuration) => onChange({ ...value, max: newMax });
 

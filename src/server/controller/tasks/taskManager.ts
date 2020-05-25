@@ -17,8 +17,8 @@ import { updatePlayerInfo } from '../actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from '../actions/village/updateNewOldVillages';
 import { updateResources } from '../actions/village/updateResources';
 import {
-  IBotTask,
-  IVillageBotTask,
+  BotTask,
+  VillageBotTask,
 } from './_types';
 import { AutoAdventureTask } from './village/autoAdventureTask';
 import { AutoBuildTask } from './village/autoBuildTask';
@@ -26,12 +26,12 @@ import { AutoPartyTask } from './village/autoPartyTask';
 import { AutoUnitsTask } from './village/autoUnitsTask';
 
 class BotTaskEngine {
-  private readonly m_task: IBotTask | IVillageBotTask;
+  private readonly m_task: BotTask | VillageBotTask;
   private readonly m_setNextExecution: (nextExecution: Date) => void;
 
   private readonly getNextExecution: () => Date;
 
-  constructor(task: IBotTask | IVillageBotTask, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
+  constructor(task: BotTask | VillageBotTask, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
     this.m_task = task;
     this.m_setNextExecution = setNextExecution;
     this.getNextExecution = getNextExecution;
@@ -64,7 +64,7 @@ class BotTaskEngine {
 class VillageBotTasksEngine {
   private readonly m_tasks: readonly BotTaskEngine[];
 
-  constructor(village: Village, tasks: { new(village: Village): IVillageBotTask }[]) {
+  constructor(village: Village, tasks: { new(village: Village): VillageBotTask }[]) {
     this.m_tasks = tasks.map(Task => {
       const task = new Task(village);
 

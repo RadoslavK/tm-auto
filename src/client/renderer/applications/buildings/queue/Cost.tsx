@@ -8,10 +8,10 @@ import { imageLinks } from '../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
 import { getTotalResources } from '../../../utils/resources';
 
-interface IProps {
+type Props = {
   readonly className?: string;
   readonly cost: ICost;
-}
+};
 
 const useStyles = makeStyles({
   buildTime: {
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Cost: React.FC<IProps> = (props) => {
+export const Cost: React.FC<Props> = (props) => {
   const {
     className,
     cost: {

@@ -6,28 +6,28 @@ import React, {
 } from 'react';
 
 import { VillageSettingsType } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
 import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { VillageSettingsContext } from './_context';
 import { AutoBuildSettings } from './AutoBuildSettings';
 import { AutoPartySettings } from './AutoPartySettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
-interface ILinkProps {
+type LinkProps = {
   readonly isSelected: boolean;
   readonly label: string;
   readonly onSelect: () => void;
-}
+};
 
-const useLinkStyles = makeStyles<unknown, ILinkProps>({
+const useLinkStyles = makeStyles<unknown, LinkProps>({
   root: props => ({
     backgroundColor: props.isSelected ? 'green' : undefined,
   }),
 });
 
-const TabLink: React.FC<ILinkProps> = (props) => {
+const TabLink: React.FC<LinkProps> = (props) => {
   const {
     label,
     onSelect,
@@ -45,9 +45,9 @@ const TabLink: React.FC<ILinkProps> = (props) => {
   );
 };
 
-interface IProps {
+type Props = {
   readonly tab: string;
-}
+};
 
 const getSettingsTab = (tab: string): VillageSettingsType => {
   switch (tab) {
@@ -57,7 +57,7 @@ const getSettingsTab = (tab: string): VillageSettingsType => {
   }
 };
 
-export const VillageSettings: React.FC<IProps> = (props) => {
+export const VillageSettings: React.FC<Props> = (props) => {
   const {
     tab,
   } = props;

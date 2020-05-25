@@ -6,7 +6,7 @@ import {
   IGetAutoUnitsSettingsQuery,
   IGetAutoUnitsSettingsQueryVariables,
 } from '../../../_types/graphql';
-import { useVillageContext } from '../../../hooks/useVillageContext';
+import { useVillageContext } from '../../villages/context/villageContext';
 
 export const useGetAutoUnitsSettings = (): IGetAutoUnitsSettingsQuery['autoUnitsSettings'] | null => {
   const { villageId } = useVillageContext();

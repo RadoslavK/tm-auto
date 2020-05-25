@@ -17,12 +17,12 @@ enum DialogType {
   None = 'None'
 }
 
-interface IProps {
+type Props = {
   readonly building: IBuildingSpot;
   readonly className?: string;
-}
+};
 
-const useStyles = makeStyles<unknown, IProps>({
+const useStyles = makeStyles<unknown, Props>({
   fieldId: {
     alignSelf: 'center',
     background: '#b1b5b9',
@@ -48,7 +48,7 @@ const useStyles = makeStyles<unknown, IProps>({
   }),
 });
 
-export const BuildingSpot: React.FC<IProps> = React.memo((props) => {
+export const BuildingSpot: React.FC<Props> = React.memo((props) => {
   const {
     building,
     className,

@@ -126,12 +126,12 @@ const createBackgroundProcess = (socketName: string): void => {
   });
 };
 
-interface IExtension {
+type Extension = {
   readonly id: string;
   readonly name: string;
-}
+};
 
-const extensions: readonly IExtension[] = [
+const extensions: readonly Extension[] = [
   { id: 'fmkadmapgofadopljbjfkapdkoienihi', name: 'React DevTools' },
   { id: 'jdkknkkbebbapilgoeccciglkfbmbnfm', name: 'Apollo DevTools' },
 ];

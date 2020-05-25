@@ -30,16 +30,16 @@ const mapMovementType = (movementClass: string | undefined): MovementType => {
   }
 };
 
-interface IUnitAmount {
+type UnitAmount = {
   readonly amount: number;
   readonly unitIndex: number;
-}
+};
 
-interface ITroopDetail {
+type TroopDetail = {
   readonly movementType: MovementType;
   readonly originVillageId: number;
-  readonly unitAmounts: readonly IUnitAmount[];
-}
+  readonly unitAmounts: readonly UnitAmount[];
+};
 
 const parseCoordinate = async (elementHandle: ElementHandle, className: string): Promise<number | null> => {
   const coordElement = await elementHandle.$(className);
@@ -52,7 +52,7 @@ const parseCoordinate = async (elementHandle: ElementHandle, className: string):
   return parseNumber(coordText);
 };
 
-const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<IUnitAmount[]> => {
+const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<UnitAmount[]> => {
   const amounts = await detailsHandle.$$eval('tbody[class="units last"] tr td', countColumns => countColumns.map(column => +(column as HTMLElement).innerText));
 
   const indexes = await detailsHandle.$$eval('tbody[class="units"] tr td.uniticon img', icons => icons.map(icon => {
@@ -73,7 +73,7 @@ const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<IUnitAmou
 
   return indexes.reduce((reduced, unitIndex, index) => unitIndex
     ? [...reduced, { amount: amounts[index] || 0, unitIndex }]
-    : reduced, [] as IUnitAmount[]);
+    : reduced, [] as UnitAmount[]);
 };
 
 export const updateUnitsInformation = async (): Promise<void> => {
@@ -90,7 +90,7 @@ export const updateUnitsInformation = async (): Promise<void> => {
   const page = await getPage();
   const detailNodes = await page.$$('table.troop_details');
 
-  const details: ITroopDetail[] = [];
+  const details: TroopDetail[] = [];
 
   for (const detailNode of detailNodes) {
     const firstBodyRow = await detailNode.$('tbody.units tr');
@@ -124,7 +124,7 @@ export const updateUnitsInformation = async (): Promise<void> => {
 
     const unitAmounts = await parseUnitAmounts(detailNode);
 
-    const detail: ITroopDetail = {
+    const detail: TroopDetail = {
       movementType,
       originVillageId: originVillage.id,
       unitAmounts,
