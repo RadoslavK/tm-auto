@@ -8,10 +8,10 @@ import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
 import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
 
 import {
-  IBuildingsUpdatedSubscription,
-  IBuildingsUpdatedSubscriptionVariables,
-  IGetBuildingsInProgressQuery,
-  IGetBuildingsInProgressQueryVariables,
+  BuildingsUpdatedSubscription,
+  BuildingsUpdatedSubscriptionVariables,
+  GetBuildingsInProgressQuery,
+  GetBuildingsInProgressQueryVariables,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingInProgress } from './BuildingInProgress';
@@ -27,9 +27,9 @@ export const BuildingsInProgress: React.FC<Props> = (props) => {
 
   const { villageId } = useVillageContext();
 
-  const { data, loading, refetch } = useQuery<IGetBuildingsInProgressQuery, IGetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, { variables: { villageId } });
+  const { data, loading, refetch } = useQuery<GetBuildingsInProgressQuery, GetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, { variables: { villageId } });
 
-  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     onSubscriptionData: () => refetch(),
     variables: { villageId },
   });

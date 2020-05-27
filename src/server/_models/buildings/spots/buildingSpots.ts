@@ -2,20 +2,20 @@ import { BuildingType } from '../../../../_shared/types/buildingType';
 import { BuildingSpot } from './buildingSpot';
 
 export class BuildingSpots {
-  private readonly m_buildings: Record<number, BuildingSpot> = {};
+  private readonly _buildings: Record<number, BuildingSpot> = {};
 
   constructor() {
     for (let i = 0; i < 40; i++) {
       const fieldId = i + 1;
-      this.m_buildings[fieldId] = new BuildingSpot({ fieldId });
+      this._buildings[fieldId] = new BuildingSpot({ fieldId });
     }
 
-    Object.freeze(this.m_buildings);
+    Object.freeze(this._buildings);
   }
 
-  public buildings = (): readonly BuildingSpot[] => Object.values(this.m_buildings);
+  public buildings = (): readonly BuildingSpot[] => Object.values(this._buildings);
 
-  public at = (fieldId: number): BuildingSpot => this.m_buildings[fieldId];
+  public at = (fieldId: number): BuildingSpot => this._buildings[fieldId];
 
   public ofType = (type: BuildingType): BuildingSpot | undefined => this.buildings().find(x => x.type === type);
 

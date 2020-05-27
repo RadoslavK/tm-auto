@@ -52,7 +52,7 @@ const getUnitsModifier = (buildingLevel: number): number => {
 
 export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpeed: number, mainBuildingLevel: number, buildingType: BuildingType): Duration => {
   const isMainBuilding = buildingType === BuildingType.MainBuilding;
-  let totalSeconds = originalBuildTime.totalSeconds();
+  let totalSeconds = originalBuildTime.getTotalSeconds();
 
   totalSeconds /= gameSpeed;
 
@@ -67,7 +67,7 @@ export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpee
 
 export const getActualUnitBuildTime = (originalBuildTime: Duration, gameSpeed: number, buildingLevel: number): Duration => {
   const modifier = getUnitsModifier(buildingLevel);
-  const buildTime = originalBuildTime.totalSeconds() / gameSpeed * modifier;
+  const buildTime = originalBuildTime.getTotalSeconds() / gameSpeed * modifier;
   const actualBuildTimeInSeconds = Math.round(buildTime);
 
   return Duration.fromSeconds(actualBuildTimeInSeconds);

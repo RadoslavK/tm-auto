@@ -1,110 +1,397 @@
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string,
-  String: string,
-  Boolean: boolean,
-  Int: number,
-  Float: number,
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
 };
 
-export enum AdventureCriteria {
-  Closest = 'Closest',
-  Furthest = 'Furthest',
-  Random = 'Random',
-  FirstToExpire = 'FirstToExpire'
-}
-
-export type IAutoAdventureSettings = IITaskSettings & {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDown,
-  readonly adventureCriteria: AdventureCriteria,
-  readonly preferHard: Scalars['Boolean'],
-  readonly normalMinHealth: Scalars['Int'],
-  readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: IDuration,
-  readonly preferredVillageId: Maybe<Scalars['Int']>,
+export type UserAccount = {
+  readonly id: Scalars['String'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
-export type IAutoBuildLogEntryContent = {
-  readonly autoBuild: IAutoBuildLogEntryContentPayload,
+export type Query = {
+  readonly account: Maybe<UserAccount>;
+  readonly accounts: ReadonlyArray<UserAccount>;
+  readonly activeVillageId: Scalars['Int'];
+  readonly autoBuildSettings: AutoBuildSettings;
+  readonly autoPartySettings: AutoPartySettings;
+  readonly autoUnitsSettings: AutoUnitsSettings;
+  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
+  readonly botState: BotState;
+  readonly buildingQueue: BuildingQueue;
+  readonly buildingSpots: BuildingSpots;
+  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly crannyCapacity: VillageCrannyCapacity;
+  readonly currentAccount: UserAccount;
+  readonly generalSettings: GeneralSettings;
+  readonly generalVillageSettings: GeneralVillageSettings;
+  readonly hero: HeroSettings;
+  readonly heroInformation: HeroInformation;
+  readonly lastSignedAccountId: Maybe<Scalars['String']>;
+  readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly maxBuildingLevel: Scalars['Int'];
+  readonly nextTaskExecution: Timestamp;
+  readonly nextTasksExecution: Timestamp;
+  readonly nextVillageTaskExecution: Timestamp;
+  readonly unitInfo: UnitInfo;
+  readonly village: Maybe<Village>;
+  readonly villages: ReadonlyArray<Village>;
 };
 
-export type IAutoBuildLogEntryContentPayload = {
-  readonly name: Scalars['String'],
-  readonly type: Scalars['Int'],
-  readonly level: Scalars['Int'],
-  readonly fieldId: Scalars['Int'],
+
+export type QueryAccountArgs = {
+  accountId: Scalars['String'];
 };
 
-export type IAutoBuildSettings = IITaskSettings & {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDown,
-  readonly autoCropFields: Scalars['Boolean'],
-  readonly minCrop: Scalars['Int'],
-  readonly autoStorage: IAutoStorageSettings,
+
+export type QueryAutoBuildSettingsArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoPartySettings = IITaskSettings & {
-  readonly coolDown: ICoolDown,
-  readonly allow: Scalars['Boolean'],
-  readonly minCulturePoints: Scalars['Int'],
-  readonly partyType: PartyType,
+
+export type QueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoStorageOptionSettings = {
-  readonly allow: Scalars['Boolean'],
-  readonly overflowLevel: Scalars['Int'],
+
+export type QueryAutoUnitsSettingsArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoStorageSettings = {
-  readonly allowFreeSpots: Scalars['Boolean'],
-  readonly granary: IAutoStorageOptionSettings,
-  readonly warehouse: IAutoStorageOptionSettings,
+
+export type QueryAvailableNewBuildingsArgs = {
+  input: AvailableNewBuildingsInput;
 };
 
-export type IAutoUnitsBuildingSettings = {
-  readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: IDuration,
-  readonly units: ReadonlyArray<IAutoUnitsUnitSettings>,
+
+export type QueryBuildingQueueArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoUnitsLogEntryContent = {
-  readonly autoUnits: IAutoUnitsLogEntryContentPayload,
+
+export type QueryBuildingSpotsArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoUnitsLogEntryContentPayload = {
-  readonly amount: Scalars['Int'],
-  readonly index: Scalars['Int'],
-  readonly tribe: Scalars['Int'],
-  readonly unitName: Scalars['String'],
+
+export type QueryBuildingsInProgressArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoUnitsSettings = IITaskSettings & {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDown,
-  readonly minCrop: Scalars['Int'],
-  readonly barracks: IAutoUnitsBuildingSettings,
-  readonly stable: IAutoUnitsBuildingSettings,
-  readonly workshop: IAutoUnitsBuildingSettings,
-  readonly residence: IAutoUnitsBuildingSettings,
+
+export type QueryCrannyCapacityArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAutoUnitsUnitSettings = {
-  readonly index: Scalars['Int'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly trainForever: Scalars['Boolean'],
-  readonly targetAmount: Scalars['Int'],
+
+export type QueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int'];
 };
 
-export type IAvailableNewBuilding = {
-  readonly type: Scalars['Int'],
-  readonly name: Scalars['String'],
+
+export type QueryMaxBuildingLevelArgs = {
+  buildingType: Scalars['Int'];
 };
 
-export type IAvailableNewBuildingsInput = {
-  readonly fieldId: Scalars['Int'],
-  readonly villageId: Scalars['Int'],
+
+export type QueryNextTaskExecutionArgs = {
+  task: TaskType;
+};
+
+
+export type QueryNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+};
+
+
+export type QueryUnitInfoArgs = {
+  index: Scalars['Int'];
+};
+
+
+export type QueryVillageArgs = {
+  villageId: Scalars['Int'];
+};
+
+export type Mutation = {
+  readonly clearQueue: Scalars['Boolean'];
+  readonly createAccount: Maybe<Scalars['String']>;
+  readonly deleteAccount: Scalars['Boolean'];
+  readonly dequeueBuilding: Scalars['Boolean'];
+  readonly dequeueBuildingAtField: Scalars['Boolean'];
+  readonly enqueueBuilding: Scalars['Boolean'];
+  readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
+  readonly moveQueuedBuildingDown: Scalars['Boolean'];
+  readonly moveQueuedBuildingUp: Scalars['Boolean'];
+  readonly resetNextTaskExecution: Scalars['Boolean'];
+  readonly resetNextVillageTaskExecution: Scalars['Boolean'];
+  readonly resetSettings: Scalars['Boolean'];
+  readonly resetVillageSettings: Scalars['Boolean'];
+  readonly setNextTaskExecution: Scalars['Boolean'];
+  readonly setNextVillageTaskExecution: Scalars['Boolean'];
+  readonly signIn: Maybe<Scalars['Boolean']>;
+  readonly signOut: Maybe<Scalars['Boolean']>;
+  readonly startBot: Scalars['Boolean'];
+  readonly stopBot: Scalars['Boolean'];
+  readonly updateAccount: Scalars['Boolean'];
+  readonly updateAutoAdventureSettings: Scalars['Boolean'];
+  readonly updateAutoBuildVillageSettings: Scalars['Boolean'];
+  readonly updateAutoPartySettings: Scalars['Boolean'];
+  readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'];
+  readonly updateAutoUnitsSettings: Scalars['Boolean'];
+  readonly updateAutoUnitsUnitSettings: Scalars['Boolean'];
+  readonly updateGeneralSettings: Scalars['Boolean'];
+  readonly updateGeneralVillageSettings: Scalars['Boolean'];
+};
+
+
+export type MutationClearQueueArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type MutationCreateAccountArgs = {
+  account: CreateUserAccountInput;
+};
+
+
+export type MutationDeleteAccountArgs = {
+  accountId: Scalars['String'];
+};
+
+
+export type MutationDequeueBuildingArgs = {
+  input: QueuedBuildingManipulationInput;
+};
+
+
+export type MutationDequeueBuildingAtFieldArgs = {
+  input: DequeueBuildingAtFieldInput;
+};
+
+
+export type MutationEnqueueBuildingArgs = {
+  input: EnqueueBuildingInput;
+};
+
+
+export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['ID'];
+};
+
+
+export type MutationMoveQueuedBuildingDownArgs = {
+  input: QueuedBuildingManipulationInput;
+};
+
+
+export type MutationMoveQueuedBuildingUpArgs = {
+  input: QueuedBuildingManipulationInput;
+};
+
+
+export type MutationResetNextTaskExecutionArgs = {
+  task: TaskType;
+};
+
+
+export type MutationResetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+};
+
+
+export type MutationResetSettingsArgs = {
+  type: SettingsType;
+};
+
+
+export type MutationResetVillageSettingsArgs = {
+  villageId: Scalars['Int'];
+  type: VillageSettingsType;
+};
+
+
+export type MutationSetNextTaskExecutionArgs = {
+  task: TaskType;
+  delay: DurationInput;
+};
+
+
+export type MutationSetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+  delay: DurationInput;
+};
+
+
+export type MutationSignInArgs = {
+  accountId: Scalars['ID'];
+};
+
+
+export type MutationUpdateAccountArgs = {
+  account: UpdateUserAccountInput;
+};
+
+
+export type MutationUpdateAutoAdventureSettingsArgs = {
+  settings: UpdateAutoAdventureSettingsInput;
+};
+
+
+export type MutationUpdateAutoBuildVillageSettingsArgs = {
+  settings: UpdateAutoBuildVillageSettingsInput;
+};
+
+
+export type MutationUpdateAutoPartySettingsArgs = {
+  settings: UpdateAutoPartySettingsInput;
+};
+
+
+export type MutationUpdateAutoUnitsBuildingSettingsArgs = {
+  settings: UpdateAutoUnitsBuildingSettingsInput;
+};
+
+
+export type MutationUpdateAutoUnitsSettingsArgs = {
+  settings: UpdateAutoUnitsSettingsInput;
+};
+
+
+export type MutationUpdateAutoUnitsUnitSettingsArgs = {
+  settings: UpdateAutoUnitsUnitSettingsInput;
+};
+
+
+export type MutationUpdateGeneralSettingsArgs = {
+  settings: UpdateGeneralSettingsInput;
+};
+
+
+export type MutationUpdateGeneralVillageSettingsArgs = {
+  settings: UpdateGeneralVillageSettingsInput;
+};
+
+export type BuildingSpotLevel = {
+  readonly actual: Scalars['Int'];
+  readonly ongoing: Scalars['Int'];
+  readonly queued: Scalars['Int'];
+  readonly max: Scalars['Int'];
+  readonly total: Scalars['Int'];
+};
+
+export type BuildingSpot = {
+  readonly fieldId: Scalars['Int'];
+  readonly level: BuildingSpotLevel;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+};
+
+export type ResourceFields = {
+  readonly wood: ReadonlyArray<BuildingSpot>;
+  readonly clay: ReadonlyArray<BuildingSpot>;
+  readonly iron: ReadonlyArray<BuildingSpot>;
+  readonly crop: ReadonlyArray<BuildingSpot>;
+};
+
+export type BuildingSpots = {
+  readonly infrastructure: ReadonlyArray<BuildingSpot>;
+  readonly resources: ResourceFields;
+};
+
+export type AvailableNewBuildingsInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type AvailableNewBuilding = {
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+};
+
+export type Subscription = {
+  readonly activeVillageIdChanged: Scalars['Int'];
+  readonly autoAdventureSettingsChanged: AutoAdventureSettings;
+  readonly autoBuildSettingsChanged: AutoBuildSettings;
+  readonly autoPartySettingsChanged: AutoPartySettings;
+  readonly autoUnitsSettingsChanged: AutoUnitsSettings;
+  readonly buildingsUpdated: Scalars['Boolean'];
+  readonly crannyCapacityChanged: Scalars['Boolean'];
+  readonly generalSettingsChanged: GeneralSettings;
+  readonly generalVillageSettingsChanged: GeneralVillageSettings;
+  readonly heroInformationUpdated: HeroInformation;
+  readonly nextTaskExecutionChanged: Timestamp;
+  readonly nextTasksExecutionChanged: Timestamp;
+  readonly nextVillageTaskExecutionChanged: Timestamp;
+  readonly onBotRunningChanged: Scalars['Boolean'];
+  readonly onLogEntryAdded: LogEntry;
+  readonly onQueueUpdated: Scalars['Boolean'];
+  readonly updateVillage: Scalars['Boolean'];
+  readonly updateVillages: Scalars['Boolean'];
+};
+
+
+export type SubscriptionAutoBuildSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionAutoPartySettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionAutoUnitsSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionBuildingsUpdatedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionCrannyCapacityChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionGeneralVillageSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionNextTaskExecutionChangedArgs = {
+  task: TaskType;
+};
+
+
+export type SubscriptionNextVillageTaskExecutionChangedArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+};
+
+
+export type SubscriptionOnQueueUpdatedArgs = {
+  villageId: Scalars['Int'];
+};
+
+export type BuildingInProgress = {
+  readonly level: Scalars['Int'];
+  readonly finishedAt: Timestamp;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
 };
 
 export enum BotState {
@@ -115,116 +402,17 @@ export enum BotState {
   Paused = 'Paused'
 }
 
-export type IBuildingInProgress = {
-  readonly level: Scalars['Int'],
-  readonly finishedAt: ITimestamp,
-  readonly name: Scalars['String'],
-  readonly type: Scalars['Int'],
-  readonly fieldId: Scalars['Int'],
+export type CreateUserAccountInput = {
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
-export type IBuildingQueue = {
-  readonly buildings: ReadonlyArray<IQueuedBuilding>,
-  readonly totalCost: ICost,
-};
-
-export type IBuildingSpot = {
-  readonly fieldId: Scalars['Int'],
-  readonly level: IBuildingSpotLevel,
-  readonly name: Scalars['String'],
-  readonly type: Scalars['Int'],
-};
-
-export type IBuildingSpotLevel = {
-  readonly actual: Scalars['Int'],
-  readonly ongoing: Scalars['Int'],
-  readonly queued: Scalars['Int'],
-  readonly max: Scalars['Int'],
-  readonly total: Scalars['Int'],
-};
-
-export type IBuildingSpots = {
-  readonly infrastructure: ReadonlyArray<IBuildingSpot>,
-  readonly resources: IResourceFields,
-};
-
-export type IClearQueueInput = {
-  readonly villageId: Scalars['Int'],
-};
-
-export type ICoolDown = {
-  readonly min: IDuration,
-  readonly max: IDuration,
-};
-
-export type ICoolDownInput = {
-  readonly min: IDurationInput,
-  readonly max: IDurationInput,
-};
-
-export type ICoords = {
-  readonly x: Scalars['Int'],
-  readonly y: Scalars['Int'],
-};
-
-export type ICost = {
-  readonly resources: IResources,
-  readonly buildTime: IDuration,
-};
-
-export type ICreateUserAccountInput = {
-  readonly username: Scalars['String'],
-  readonly password: Scalars['String'],
-  readonly server: Scalars['String'],
-};
-
-export type IDequeueBuildingAtFieldInput = {
-  readonly deleteAll: Scalars['Boolean'],
-  readonly fieldId: Scalars['Int'],
-  readonly villageId: Scalars['Int'],
-};
-
-export type IDuration = {
-  readonly days: Scalars['Int'],
-  readonly hours: Scalars['Int'],
-  readonly minutes: Scalars['Int'],
-  readonly seconds: Scalars['Int'],
-};
-
-export type IDurationInput = {
-  readonly days: Scalars['Int'],
-  readonly hours: Scalars['Int'],
-  readonly minutes: Scalars['Int'],
-  readonly seconds: Scalars['Int'],
-};
-
-export type IEnqueueBuildingInput = {
-  readonly fieldId: Scalars['Int'],
-  readonly type: Scalars['Int'],
-  readonly villageId: Scalars['Int'],
-  readonly targetLevel: Maybe<Scalars['Int']>,
-};
-
-export type IGeneralSettings = {
-  readonly allowTasks: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly autoUnits: Scalars['Boolean'],
-  readonly autoParty: Scalars['Boolean'],
-};
-
-export type IGeneralVillageSettings = {
-  readonly allowTasks: Scalars['Boolean'],
-};
-
-export type IHeroInformation = {
-  readonly health: Scalars['Int'],
-  readonly state: HeroState,
-  readonly village: Maybe<IVillage>,
-};
-
-export type IHeroSettings = {
-  readonly autoAdventure: IAutoAdventureSettings,
+export type UpdateUserAccountInput = {
+  readonly id: Scalars['ID'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
 export enum HeroState {
@@ -235,547 +423,104 @@ export enum HeroState {
   OnAdventure = 'OnAdventure'
 }
 
-export type IITaskSettings = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDown,
+export type HeroInformation = {
+  readonly health: Scalars['Int'];
+  readonly state: HeroState;
+  readonly village: Maybe<Village>;
 };
 
-export type ILogEntry = {
-  readonly id: Scalars['ID'],
-  readonly timestamp: Scalars['Int'],
-  readonly village: Maybe<IVillage>,
-  readonly content: ILogEntryContent,
+export type TextLogEntryContentPayload = {
+  readonly message: Scalars['String'];
 };
 
-export type ILogEntryContent = ITextLogEntryContent | IAutoBuildLogEntryContent | IAutoUnitsLogEntryContent;
-
-export type IMutation = {
-  readonly createAccount: Maybe<Scalars['String']>,
-  readonly updateAccount: Scalars['Boolean'],
-  readonly deleteAccount: Scalars['Boolean'],
-  readonly signIn: Maybe<Scalars['Boolean']>,
-  readonly signOut: Maybe<Scalars['Boolean']>,
-  readonly startBot: Scalars['Boolean'],
-  readonly stopBot: Scalars['Boolean'],
-  readonly setNextTaskExecution: Scalars['Boolean'],
-  readonly setNextVillageTaskExecution: Scalars['Boolean'],
-  readonly resetNextTaskExecution: Scalars['Boolean'],
-  readonly resetNextVillageTaskExecution: Scalars['Boolean'],
-  readonly clearQueue: Scalars['Boolean'],
-  readonly dequeueBuilding: Scalars['Boolean'],
-  readonly dequeueBuildingAtField: Scalars['Boolean'],
-  readonly enqueueBuilding: Scalars['Boolean'],
-  readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'],
-  readonly moveQueuedBuildingDown: Scalars['Boolean'],
-  readonly moveQueuedBuildingUp: Scalars['Boolean'],
-  readonly updateGeneralSettings: Scalars['Boolean'],
-  readonly updateAutoAdventureSettings: Scalars['Boolean'],
-  readonly updateGeneralVillageSettings: Scalars['Boolean'],
-  readonly updateAutoBuildVillageSettings: Scalars['Boolean'],
-  readonly updateAutoUnitsUnitSettings: Scalars['Boolean'],
-  readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'],
-  readonly updateAutoUnitsSettings: Scalars['Boolean'],
-  readonly updateAutoPartySettings: Scalars['Boolean'],
-  readonly resetSettings: Scalars['Boolean'],
-  readonly resetVillageSettings: Scalars['Boolean'],
+export type TextLogEntryContent = {
+  readonly text: TextLogEntryContentPayload;
 };
 
-
-export type IMutationCreateAccountArgs = {
-  account: ICreateUserAccountInput
+export type AutoBuildLogEntryContentPayload = {
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly level: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
 };
 
-
-export type IMutationUpdateAccountArgs = {
-  account: IUpdateUserAccountInput
+export type AutoBuildLogEntryContent = {
+  readonly autoBuild: AutoBuildLogEntryContentPayload;
 };
 
-
-export type IMutationDeleteAccountArgs = {
-  accountId: Scalars['String']
+export type AutoUnitsLogEntryContentPayload = {
+  readonly amount: Scalars['Int'];
+  readonly index: Scalars['Int'];
+  readonly tribe: Scalars['Int'];
+  readonly unitName: Scalars['String'];
 };
 
-
-export type IMutationSignInArgs = {
-  accountId: Scalars['ID']
+export type AutoUnitsLogEntryContent = {
+  readonly autoUnits: AutoUnitsLogEntryContentPayload;
 };
 
+export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent;
 
-export type IMutationSetNextTaskExecutionArgs = {
-  task: TaskType,
-  delay: IDurationInput
+export type LogEntry = {
+  readonly id: Scalars['ID'];
+  readonly timestamp: Scalars['Int'];
+  readonly village: Maybe<Village>;
+  readonly content: LogEntryContent;
 };
 
-
-export type IMutationSetNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType,
-  delay: IDurationInput
+export type Timestamp = {
+  readonly totalSeconds: Scalars['Int'];
 };
 
-
-export type IMutationResetNextTaskExecutionArgs = {
-  task: TaskType
+export type Resources = {
+  readonly wood: Scalars['Int'];
+  readonly clay: Scalars['Int'];
+  readonly iron: Scalars['Int'];
+  readonly crop: Scalars['Int'];
+  readonly freeCrop: Scalars['Int'];
+  readonly total: Scalars['Int'];
 };
 
-
-export type IMutationResetNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
+export type Cost = {
+  readonly resources: Resources;
+  readonly buildTime: Duration;
 };
 
-
-export type IMutationClearQueueArgs = {
-  villageId: Scalars['Int']
+export type Coords = {
+  readonly x: Scalars['Int'];
+  readonly y: Scalars['Int'];
 };
 
-
-export type IMutationDequeueBuildingArgs = {
-  input: IQueuedBuildingManipulationInput
+export type Duration = {
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
 };
 
-
-export type IMutationDequeueBuildingAtFieldArgs = {
-  input: IDequeueBuildingAtFieldInput
+export type CoolDown = {
+  readonly min: Duration;
+  readonly max: Duration;
 };
 
-
-export type IMutationEnqueueBuildingArgs = {
-  input: IEnqueueBuildingInput
+export type CoolDownInput = {
+  readonly min: DurationInput;
+  readonly max: DurationInput;
 };
 
-
-export type IMutationMoveQueuedBuildingAsHighAsPossibleArgs = {
-  villageId: Scalars['Int'],
-  queueId: Scalars['ID']
+export type DurationInput = {
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
 };
 
-
-export type IMutationMoveQueuedBuildingDownArgs = {
-  input: IQueuedBuildingManipulationInput
-};
-
-
-export type IMutationMoveQueuedBuildingUpArgs = {
-  input: IQueuedBuildingManipulationInput
-};
-
-
-export type IMutationUpdateGeneralSettingsArgs = {
-  settings: IUpdateGeneralSettingsInput
-};
-
-
-export type IMutationUpdateAutoAdventureSettingsArgs = {
-  settings: IUpdateAutoAdventureSettingsInput
-};
-
-
-export type IMutationUpdateGeneralVillageSettingsArgs = {
-  settings: IUpdateGeneralVillageSettingsInput
-};
-
-
-export type IMutationUpdateAutoBuildVillageSettingsArgs = {
-  settings: IUpdateAutoBuildVillageSettingsInput
-};
-
-
-export type IMutationUpdateAutoUnitsUnitSettingsArgs = {
-  settings: IUpdateAutoUnitsUnitSettingsInput
-};
-
-
-export type IMutationUpdateAutoUnitsBuildingSettingsArgs = {
-  settings: IUpdateAutoUnitsBuildingSettingsInput
-};
-
-
-export type IMutationUpdateAutoUnitsSettingsArgs = {
-  settings: IUpdateAutoUnitsSettingsInput
-};
-
-
-export type IMutationUpdateAutoPartySettingsArgs = {
-  settings: IUpdateAutoPartySettingsInput
-};
-
-
-export type IMutationResetSettingsArgs = {
-  type: SettingsType
-};
-
-
-export type IMutationResetVillageSettingsArgs = {
-  villageId: Scalars['Int'],
-  type: VillageSettingsType
-};
-
-export enum PartyType {
-  Small = 'Small',
-  Large = 'Large'
-}
-
-export type IQuery = {
-  readonly accounts: ReadonlyArray<IUserAccount>,
-  readonly account: Maybe<IUserAccount>,
-  readonly currentAccount: IUserAccount,
-  readonly lastSignedAccountId: Maybe<Scalars['String']>,
-  readonly availableNewBuildings: ReadonlyArray<IAvailableNewBuilding>,
-  readonly buildingName: Scalars['String'],
-  readonly buildingSpots: IBuildingSpots,
-  readonly maxBuildingLevel: Scalars['Int'],
-  readonly buildingsInProgress: ReadonlyArray<IBuildingInProgress>,
-  readonly botState: BotState,
-  readonly heroInformation: IHeroInformation,
-  readonly logsEntries: ReadonlyArray<ILogEntry>,
-  readonly nextTasksExecution: ITimestamp,
-  readonly nextTaskExecution: ITimestamp,
-  readonly nextVillageTaskExecution: ITimestamp,
-  readonly buildingQueue: IBuildingQueue,
-  readonly generalSettings: IGeneralSettings,
-  readonly hero: IHeroSettings,
-  readonly generalVillageSettings: IGeneralVillageSettings,
-  readonly autoBuildSettings: IAutoBuildSettings,
-  readonly autoUnitsSettings: IAutoUnitsSettings,
-  readonly autoPartySettings: IAutoPartySettings,
-  readonly unitInfo: IUnitInfo,
-  readonly activeVillageId: Scalars['Int'],
-  readonly village: Maybe<IVillage>,
-  readonly villages: ReadonlyArray<IVillage>,
-  readonly crannyCapacity: IVillageCrannyCapacity,
-};
-
-
-export type IQueryAccountArgs = {
-  accountId: Scalars['String']
-};
-
-
-export type IQueryAvailableNewBuildingsArgs = {
-  input: IAvailableNewBuildingsInput
-};
-
-
-export type IQueryBuildingNameArgs = {
-  buildingType: Scalars['Int']
-};
-
-
-export type IQueryBuildingSpotsArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryMaxBuildingLevelArgs = {
-  buildingType: Scalars['Int']
-};
-
-
-export type IQueryBuildingsInProgressArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryNextTaskExecutionArgs = {
-  task: TaskType
-};
-
-
-export type IQueryNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
-};
-
-
-export type IQueryBuildingQueueArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryGeneralVillageSettingsArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryAutoBuildSettingsArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryAutoUnitsSettingsArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryAutoPartySettingsArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryUnitInfoArgs = {
-  index: Scalars['Int']
-};
-
-
-export type IQueryVillageArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type IQueryCrannyCapacityArgs = {
-  villageId: Scalars['Int']
-};
-
-export type IQueuedBuilding = {
-  readonly canMoveDown: Scalars['Boolean'],
-  readonly canMoveUp: Scalars['Boolean'],
-  readonly level: Scalars['Int'],
-  readonly name: Scalars['String'],
-  readonly type: Scalars['Int'],
-  readonly queueId: Scalars['ID'],
-  readonly cost: ICost,
-  readonly fieldId: Scalars['Int'],
-};
-
-export type IQueuedBuildingManipulationInput = {
-  readonly queueId: Scalars['ID'],
-  readonly villageId: Scalars['Int'],
-};
-
-export type IResetVillageInput = {
-  readonly villageId: Scalars['Int'],
-};
-
-export type IResourceFields = {
-  readonly wood: ReadonlyArray<IBuildingSpot>,
-  readonly clay: ReadonlyArray<IBuildingSpot>,
-  readonly iron: ReadonlyArray<IBuildingSpot>,
-  readonly crop: ReadonlyArray<IBuildingSpot>,
-};
-
-export type IResources = {
-  readonly wood: Scalars['Int'],
-  readonly clay: Scalars['Int'],
-  readonly iron: Scalars['Int'],
-  readonly crop: Scalars['Int'],
-  readonly freeCrop: Scalars['Int'],
-};
-
-export enum SettingsType {
-  General = 'General',
-  AutoAdventure = 'AutoAdventure'
-}
-
-export type ISubscription = {
-  readonly buildingsUpdated: Scalars['Boolean'],
-  readonly onBotRunningChanged: Scalars['Boolean'],
-  readonly heroInformationUpdated: IHeroInformation,
-  readonly onLogEntryAdded: ILogEntry,
-  readonly nextTasksExecutionChanged: ITimestamp,
-  readonly nextTaskExecutionChanged: ITimestamp,
-  readonly nextVillageTaskExecutionChanged: ITimestamp,
-  readonly onQueueUpdated: Scalars['Boolean'],
-  readonly generalSettingsChanged: IGeneralSettings,
-  readonly autoAdventureSettingsChanged: IAutoAdventureSettings,
-  readonly generalVillageSettingsChanged: IGeneralVillageSettings,
-  readonly autoBuildSettingsChanged: IAutoBuildSettings,
-  readonly autoUnitsSettingsChanged: IAutoUnitsSettings,
-  readonly autoPartySettingsChanged: IAutoPartySettings,
-  readonly updateVillage: Scalars['Boolean'],
-  readonly updateVillages: Scalars['Boolean'],
-  readonly activeVillageIdChanged: Scalars['Int'],
-  readonly crannyCapacityChanged: Scalars['Boolean'],
-};
-
-
-export type ISubscriptionBuildingsUpdatedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionNextTaskExecutionChangedArgs = {
-  task: TaskType
-};
-
-
-export type ISubscriptionNextVillageTaskExecutionChangedArgs = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
-};
-
-
-export type ISubscriptionOnQueueUpdatedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionGeneralVillageSettingsChangedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionAutoBuildSettingsChangedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionAutoUnitsSettingsChangedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionAutoPartySettingsChangedArgs = {
-  villageId: Scalars['Int']
-};
-
-
-export type ISubscriptionCrannyCapacityChangedArgs = {
-  villageId: Scalars['Int']
+export type TimestampInput = {
+  readonly totalSeconds: Scalars['Int'];
 };
 
 export enum TaskType {
   AutoAdventure = 'AutoAdventure'
-}
-
-export type ITextLogEntryContent = {
-  readonly text: ITextLogEntryContentPayload,
-};
-
-export type ITextLogEntryContentPayload = {
-  readonly message: Scalars['String'],
-};
-
-export type ITimestamp = {
-  readonly totalSeconds: Scalars['Int'],
-};
-
-export type ITimestampInput = {
-  readonly totalSeconds: Scalars['Int'],
-};
-
-export type IUnitInfo = {
-  readonly name: Scalars['String'],
-};
-
-export type IUpdateAutoAdventureSettingsInput = {
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly adventureCriteria: AdventureCriteria,
-  readonly preferHard: Scalars['Boolean'],
-  readonly normalMinHealth: Scalars['Int'],
-  readonly hardMinHealth: Scalars['Int'],
-  readonly maxTravelTime: IDurationInput,
-  readonly preferredVillageId: Maybe<Scalars['Int']>,
-};
-
-export type IUpdateAutoBuildVillageSettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly autoCropFields: Scalars['Boolean'],
-  readonly minCrop: Scalars['Int'],
-  readonly allowFreeSpots: Scalars['Boolean'],
-  readonly allowAutoGranary: Scalars['Boolean'],
-  readonly autoGranaryOverflowLevel: Scalars['Int'],
-  readonly allowAutoWarehouse: Scalars['Boolean'],
-  readonly autoWarehouseOverflowLevel: Scalars['Int'],
-};
-
-export type IUpdateAutoPartySettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly minCulturePoints: Scalars['Int'],
-  readonly partyType: PartyType,
-};
-
-export type IUpdateAutoUnitsBuildingSettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly buildingType: Scalars['Int'],
-  readonly allow: Scalars['Boolean'],
-  readonly maxBuildTime: IDurationInput,
-};
-
-export type IUpdateAutoUnitsSettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly allow: Scalars['Boolean'],
-  readonly coolDown: ICoolDownInput,
-  readonly minCrop: Scalars['Int'],
-};
-
-export type IUpdateAutoUnitsUnitSettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly unitIndex: Scalars['Int'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly trainForever: Scalars['Boolean'],
-  readonly targetAmount: Scalars['Int'],
-};
-
-export type IUpdateGeneralSettingsInput = {
-  readonly allowTasks: Scalars['Boolean'],
-  readonly autoBuild: Scalars['Boolean'],
-  readonly autoUnits: Scalars['Boolean'],
-  readonly autoStart: Scalars['Boolean'],
-  readonly autoParty: Scalars['Boolean'],
-};
-
-export type IUpdateGeneralVillageSettingsInput = {
-  readonly villageId: Scalars['Int'],
-  readonly allowTasks: Scalars['Boolean'],
-};
-
-export type IUpdateUserAccountInput = {
-  readonly id: Scalars['ID'],
-  readonly username: Scalars['String'],
-  readonly password: Scalars['String'],
-  readonly server: Scalars['String'],
-};
-
-export type IUserAccount = {
-  readonly id: Scalars['String'],
-  readonly username: Scalars['String'],
-  readonly password: Scalars['String'],
-  readonly server: Scalars['String'],
-};
-
-export type IVillage = {
-  readonly id: Scalars['Int'],
-  readonly coords: ICoords,
-  readonly name: Scalars['String'],
-  readonly resources: IVillageResources,
-  readonly isCapital: Scalars['Boolean'],
-};
-
-export type IVillageCapacity = {
-  readonly granary: Scalars['Int'],
-  readonly warehouse: Scalars['Int'],
-};
-
-export type IVillageCrannyCapacity = {
-  readonly actual: Scalars['Int'],
-  readonly ongoing: Scalars['Int'],
-  readonly total: Scalars['Int'],
-};
-
-export type IVillageResources = {
-  readonly amount: IResources,
-  readonly capacity: IVillageCapacity,
-  readonly production: IResources,
-};
-
-export type IVillageSettings = {
-  readonly general: IGeneralVillageSettings,
-  readonly autoBuild: IAutoBuildSettings,
-  readonly autoUnits: IAutoUnitsSettings,
-  readonly autoParty: IAutoPartySettings,
-};
-
-export enum VillageSettingsType {
-  General = 'General',
-  AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits',
-  AutoParty = 'AutoParty'
 }
 
 export enum VillageTaskType {
@@ -784,590 +529,853 @@ export enum VillageTaskType {
   AutoParty = 'AutoParty'
 }
 
-export type IUserAccountFragment = Pick<IUserAccount, 'id' | 'username' | 'password' | 'server'>;
+export type QueuedBuilding = {
+  readonly canMoveDown: Scalars['Boolean'];
+  readonly canMoveUp: Scalars['Boolean'];
+  readonly level: Scalars['Int'];
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly queueId: Scalars['ID'];
+  readonly cost: Cost;
+  readonly fieldId: Scalars['Int'];
+};
 
-export type IGetAccountsQueryVariables = {};
+export type BuildingQueue = {
+  readonly buildings: ReadonlyArray<QueuedBuilding>;
+  readonly totalCost: Cost;
+};
+
+export type ClearQueueInput = {
+  readonly villageId: Scalars['Int'];
+};
+
+export type EnqueueBuildingInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly type: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+  readonly targetLevel: Maybe<Scalars['Int']>;
+};
+
+export type QueuedBuildingManipulationInput = {
+  readonly queueId: Scalars['ID'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type DequeueBuildingAtFieldInput = {
+  readonly deleteAll: Scalars['Boolean'];
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type ITaskSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+};
+
+export type GeneralSettings = {
+  readonly allowTasks: Scalars['Boolean'];
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
+export type GeneralVillageSettings = {
+  readonly allowTasks: Scalars['Boolean'];
+};
+
+export type AutoStorageOptionSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly overflowLevel: Scalars['Int'];
+};
+
+export type AutoStorageSettings = {
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly granary: AutoStorageOptionSettings;
+  readonly warehouse: AutoStorageOptionSettings;
+};
+
+export type AutoBuildSettings = ITaskSettings & {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly autoCropFields: Scalars['Boolean'];
+  readonly minCrop: Scalars['Int'];
+  readonly autoStorage: AutoStorageSettings;
+};
+
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random',
+  FirstToExpire = 'FirstToExpire'
+}
+
+export type AutoAdventureSettings = ITaskSettings & {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly adventureCriteria: AdventureCriteria;
+  readonly preferHard: Scalars['Boolean'];
+  readonly normalMinHealth: Scalars['Int'];
+  readonly hardMinHealth: Scalars['Int'];
+  readonly maxTravelTime: Duration;
+  readonly preferredVillageId: Maybe<Scalars['Int']>;
+};
+
+export type HeroSettings = {
+  readonly autoAdventure: AutoAdventureSettings;
+};
+
+export type AutoUnitsUnitSettings = {
+  readonly index: Scalars['Int'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly trainForever: Scalars['Boolean'];
+  readonly targetAmount: Scalars['Int'];
+};
+
+export type AutoUnitsBuildingSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: Duration;
+  readonly units: ReadonlyArray<AutoUnitsUnitSettings>;
+};
+
+export type AutoUnitsSettings = ITaskSettings & {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly minCrop: Scalars['Int'];
+  readonly barracks: AutoUnitsBuildingSettings;
+  readonly stable: AutoUnitsBuildingSettings;
+  readonly workshop: AutoUnitsBuildingSettings;
+  readonly residence: AutoUnitsBuildingSettings;
+};
+
+export enum PartyType {
+  Small = 'Small',
+  Large = 'Large'
+}
+
+export type AutoPartySettings = ITaskSettings & {
+  readonly coolDown: CoolDown;
+  readonly allow: Scalars['Boolean'];
+  readonly minCulturePoints: Scalars['Int'];
+  readonly partyType: PartyType;
+};
+
+export type VillageSettings = {
+  readonly general: GeneralVillageSettings;
+  readonly autoBuild: AutoBuildSettings;
+  readonly autoUnits: AutoUnitsSettings;
+  readonly autoParty: AutoPartySettings;
+};
+
+export type UpdateGeneralVillageSettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly allowTasks: Scalars['Boolean'];
+};
+
+export type UpdateAutoBuildVillageSettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly autoCropFields: Scalars['Boolean'];
+  readonly minCrop: Scalars['Int'];
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly allowAutoGranary: Scalars['Boolean'];
+  readonly autoGranaryOverflowLevel: Scalars['Int'];
+  readonly allowAutoWarehouse: Scalars['Boolean'];
+  readonly autoWarehouseOverflowLevel: Scalars['Int'];
+};
+
+export type UpdateAutoAdventureSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly adventureCriteria: AdventureCriteria;
+  readonly preferHard: Scalars['Boolean'];
+  readonly normalMinHealth: Scalars['Int'];
+  readonly hardMinHealth: Scalars['Int'];
+  readonly maxTravelTime: DurationInput;
+  readonly preferredVillageId: Maybe<Scalars['Int']>;
+};
+
+export type UpdateGeneralSettingsInput = {
+  readonly allowTasks: Scalars['Boolean'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
+export type UpdateAutoUnitsUnitSettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly unitIndex: Scalars['Int'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly trainForever: Scalars['Boolean'];
+  readonly targetAmount: Scalars['Int'];
+};
+
+export type UpdateAutoUnitsBuildingSettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly buildingType: Scalars['Int'];
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: DurationInput;
+};
+
+export type UpdateAutoUnitsSettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly minCrop: Scalars['Int'];
+};
+
+export type UpdateAutoPartySettingsInput = {
+  readonly villageId: Scalars['Int'];
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly minCulturePoints: Scalars['Int'];
+  readonly partyType: PartyType;
+};
+
+export type ResetVillageInput = {
+  readonly villageId: Scalars['Int'];
+};
+
+export enum SettingsType {
+  General = 'General',
+  AutoAdventure = 'AutoAdventure'
+}
+
+export enum VillageSettingsType {
+  General = 'General',
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
+}
+
+export type UnitInfo = {
+  readonly name: Scalars['String'];
+};
+
+export type VillageCapacity = {
+  readonly granary: Scalars['Int'];
+  readonly warehouse: Scalars['Int'];
+};
+
+export type VillageResources = {
+  readonly amount: Resources;
+  readonly capacity: VillageCapacity;
+  readonly production: Resources;
+};
+
+export type Village = {
+  readonly id: Scalars['Int'];
+  readonly coords: Coords;
+  readonly name: Scalars['String'];
+  readonly resources: VillageResources;
+  readonly isCapital: Scalars['Boolean'];
+};
+
+export type VillageCrannyCapacity = {
+  readonly actual: Scalars['Int'];
+  readonly ongoing: Scalars['Int'];
+  readonly total: Scalars['Int'];
+};
+
+export type UserAccountFragment = Pick<UserAccount, 'id' | 'username' | 'password' | 'server'>;
+
+export type GetAccountsQueryVariables = {};
 
 
-export type IGetAccountsQuery = { readonly accounts: ReadonlyArray<IUserAccountFragment> };
+export type GetAccountsQuery = { readonly accounts: ReadonlyArray<UserAccountFragment> };
 
-export type IGetCurrentAccountQueryVariables = {};
+export type GetCurrentAccountQueryVariables = {};
 
 
-export type IGetCurrentAccountQuery = { readonly currentAccount: IUserAccountFragment };
+export type GetCurrentAccountQuery = { readonly currentAccount: UserAccountFragment };
 
-export type IGetAccountQueryVariables = {
-  accountId: Scalars['String']
+export type GetAccountQueryVariables = {
+  accountId: Scalars['String'];
 };
 
 
-export type IGetAccountQuery = { readonly account: Maybe<IUserAccountFragment> };
+export type GetAccountQuery = { readonly account: Maybe<UserAccountFragment> };
 
-export type IGetLastSignedAccountIdQueryVariables = {};
+export type GetLastSignedAccountIdQueryVariables = {};
 
 
-export type IGetLastSignedAccountIdQuery = Pick<IQuery, 'lastSignedAccountId'>;
+export type GetLastSignedAccountIdQuery = Pick<Query, 'lastSignedAccountId'>;
 
-export type ICreateAccountMutationVariables = {
-  account: ICreateUserAccountInput
+export type CreateAccountMutationVariables = {
+  account: CreateUserAccountInput;
 };
 
 
-export type ICreateAccountMutation = Pick<IMutation, 'createAccount'>;
+export type CreateAccountMutation = Pick<Mutation, 'createAccount'>;
 
-export type IUpdateAccountMutationVariables = {
-  account: IUpdateUserAccountInput
+export type UpdateAccountMutationVariables = {
+  account: UpdateUserAccountInput;
 };
 
 
-export type IUpdateAccountMutation = Pick<IMutation, 'updateAccount'>;
+export type UpdateAccountMutation = Pick<Mutation, 'updateAccount'>;
 
-export type IDeleteAccountMutationVariables = {
-  accountId: Scalars['String']
+export type DeleteAccountMutationVariables = {
+  accountId: Scalars['String'];
 };
 
 
-export type IDeleteAccountMutation = Pick<IMutation, 'deleteAccount'>;
+export type DeleteAccountMutation = Pick<Mutation, 'deleteAccount'>;
 
-export type IBuildingSpotFragment = (
-  Pick<IBuildingSpot, 'fieldId' | 'type' | 'name'>
-  & { readonly level: Pick<IBuildingSpotLevel, 'actual' | 'ongoing' | 'queued' | 'total' | 'max'> }
+export type BuildingSpotFragment = (
+  Pick<BuildingSpot, 'fieldId' | 'type' | 'name'>
+  & { readonly level: Pick<BuildingSpotLevel, 'actual' | 'ongoing' | 'queued' | 'total' | 'max'> }
 );
 
-export type IGetBuildingSpotsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetBuildingSpotsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetBuildingSpotsQuery = { readonly buildingSpots: { readonly infrastructure: ReadonlyArray<IBuildingSpotFragment>, readonly resources: { readonly wood: ReadonlyArray<IBuildingSpotFragment>, readonly clay: ReadonlyArray<IBuildingSpotFragment>, readonly iron: ReadonlyArray<IBuildingSpotFragment>, readonly crop: ReadonlyArray<IBuildingSpotFragment> } } };
+export type GetBuildingSpotsQuery = { readonly buildingSpots: { readonly infrastructure: ReadonlyArray<BuildingSpotFragment>, readonly resources: { readonly wood: ReadonlyArray<BuildingSpotFragment>, readonly clay: ReadonlyArray<BuildingSpotFragment>, readonly iron: ReadonlyArray<BuildingSpotFragment>, readonly crop: ReadonlyArray<BuildingSpotFragment> } } };
 
-export type IGetAvailableNewBuildingsQueryVariables = {
-  input: IAvailableNewBuildingsInput
+export type GetAvailableNewBuildingsQueryVariables = {
+  input: AvailableNewBuildingsInput;
 };
 
 
-export type IGetAvailableNewBuildingsQuery = { readonly availableNewBuildings: ReadonlyArray<Pick<IAvailableNewBuilding, 'name' | 'type'>> };
+export type GetAvailableNewBuildingsQuery = { readonly availableNewBuildings: ReadonlyArray<Pick<AvailableNewBuilding, 'name' | 'type'>> };
 
-export type IGetMaxBuildingLevelQueryVariables = {
-  buildingType: Scalars['Int']
+export type GetMaxBuildingLevelQueryVariables = {
+  buildingType: Scalars['Int'];
 };
 
 
-export type IGetMaxBuildingLevelQuery = Pick<IQuery, 'maxBuildingLevel'>;
+export type GetMaxBuildingLevelQuery = Pick<Query, 'maxBuildingLevel'>;
 
-export type IGetBuildingNameQueryVariables = {
-  buildingType: Scalars['Int']
+export type BuildingsUpdatedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetBuildingNameQuery = Pick<IQuery, 'buildingName'>;
+export type BuildingsUpdatedSubscription = Pick<Subscription, 'buildingsUpdated'>;
 
-export type IBuildingsUpdatedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type GetBuildingsInProgressQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IBuildingsUpdatedSubscription = Pick<ISubscription, 'buildingsUpdated'>;
-
-export type IGetBuildingsInProgressQueryVariables = {
-  villageId: Scalars['Int']
-};
-
-
-export type IGetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<(
-    Pick<IBuildingInProgress, 'level' | 'name' | 'type' | 'fieldId'>
-    & { readonly finishedAt: ITimestampFragment }
+export type GetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<(
+    Pick<BuildingInProgress, 'level' | 'name' | 'type' | 'fieldId'>
+    & { readonly finishedAt: TimestampFragment }
   )> };
 
-export type IGetBotStateQueryVariables = {};
+export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
+
+export type GetBotStateQueryVariables = {};
 
 
-export type IGetBotStateQuery = Pick<IQuery, 'botState'>;
+export type GetBotStateQuery = Pick<Query, 'botState'>;
 
-export type IStartBotMutationVariables = {};
-
-
-export type IStartBotMutation = Pick<IMutation, 'startBot'>;
-
-export type IStopBotMutationVariables = {};
+export type StartBotMutationVariables = {};
 
 
-export type IStopBotMutation = Pick<IMutation, 'stopBot'>;
+export type StartBotMutation = Pick<Mutation, 'startBot'>;
 
-export type ISignInMutationVariables = {
-  accountId: Scalars['ID']
+export type StopBotMutationVariables = {};
+
+
+export type StopBotMutation = Pick<Mutation, 'stopBot'>;
+
+export type SignInMutationVariables = {
+  accountId: Scalars['ID'];
 };
 
 
-export type ISignInMutation = Pick<IMutation, 'signIn'>;
+export type SignInMutation = Pick<Mutation, 'signIn'>;
 
-export type ISignOutMutationVariables = {};
-
-
-export type ISignOutMutation = Pick<IMutation, 'signOut'>;
-
-export type IOnBotRunningChangedSubscriptionVariables = {};
+export type SignOutMutationVariables = {};
 
 
-export type IOnBotRunningChangedSubscription = Pick<ISubscription, 'onBotRunningChanged'>;
+export type SignOutMutation = Pick<Mutation, 'signOut'>;
 
-export type IHeroInformationFragment = (
-  Pick<IHeroInformation, 'health' | 'state'>
+export type OnBotRunningChangedSubscriptionVariables = {};
+
+
+export type OnBotRunningChangedSubscription = Pick<Subscription, 'onBotRunningChanged'>;
+
+export type HeroInformationFragment = (
+  Pick<HeroInformation, 'health' | 'state'>
   & { readonly village: Maybe<(
-    Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragment }
+    Pick<Village, 'id' | 'name'>
+    & { readonly coords: CoordsFragment }
   )> }
 );
 
-export type IGetHeroInformationQueryVariables = {};
+export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
+
+export type GetHeroInformationQueryVariables = {};
 
 
-export type IGetHeroInformationQuery = { readonly heroInformation: IHeroInformationFragment };
+export type GetHeroInformationQuery = { readonly heroInformation: HeroInformationFragment };
 
-export type IOnHeroInformationUpdatedSubscriptionVariables = {};
+export type OnHeroInformationUpdatedSubscriptionVariables = {};
 
 
-export type IOnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: IHeroInformationFragment };
+export type OnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: HeroInformationFragment };
 
-export type ILogEntryFragment = (
-  Pick<ILogEntry, 'id' | 'timestamp'>
+export type LogEntryFragment = (
+  Pick<LogEntry, 'id' | 'timestamp'>
   & { readonly village: Maybe<(
-    Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragment }
-  )>, readonly content: { readonly text: Pick<ITextLogEntryContentPayload, 'message'> } | { readonly autoBuild: Pick<IAutoBuildLogEntryContentPayload, 'fieldId' | 'level' | 'name' | 'type'> } | { readonly autoUnits: Pick<IAutoUnitsLogEntryContentPayload, 'amount' | 'index' | 'tribe' | 'unitName'> } }
+    Pick<Village, 'id' | 'name'>
+    & { readonly coords: CoordsFragment }
+  )>, readonly content: { readonly text: Pick<TextLogEntryContentPayload, 'message'> } | { readonly autoBuild: Pick<AutoBuildLogEntryContentPayload, 'fieldId' | 'level' | 'name' | 'type'> } | { readonly autoUnits: Pick<AutoUnitsLogEntryContentPayload, 'amount' | 'index' | 'tribe' | 'unitName'> } }
 );
 
-export type IGetLogsQueryVariables = {};
+export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
+
+export type GetLogsQueryVariables = {};
 
 
-export type IGetLogsQuery = { readonly logsEntries: ReadonlyArray<ILogEntryFragment> };
+export type GetLogsQuery = { readonly logsEntries: ReadonlyArray<LogEntryFragment> };
 
-export type IOnLogEntryAddedSubscriptionVariables = {};
+export type OnLogEntryAddedSubscriptionVariables = {};
 
 
-export type IOnLogEntryAddedSubscription = { readonly onLogEntryAdded: ILogEntryFragment };
+export type OnLogEntryAddedSubscription = { readonly onLogEntryAdded: LogEntryFragment };
 
-export type ITimestampFragment = Pick<ITimestamp, 'totalSeconds'>;
+export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
 
-export type IResourcesFragment = Pick<IResources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop'>;
+export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
 
-export type ICostFragment = { readonly resources: IResourcesFragment, readonly buildTime: IDurationFragment };
+export type CostFragment = { readonly resources: ResourcesFragment, readonly buildTime: DurationFragment };
 
-export type ICoordsFragment = Pick<ICoords, 'x' | 'y'>;
+export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
 
-export type IVillageFragment = (
-  Pick<IVillage, 'id' | 'name'>
-  & { readonly coords: ICoordsFragment, readonly resources: { readonly amount: IResourcesFragment, readonly production: IResourcesFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'> } }
+export type VillageFragment = (
+  Pick<Village, 'id' | 'name'>
+  & { readonly coords: CoordsFragment, readonly resources: { readonly amount: ResourcesFragment, readonly production: ResourcesFragment, readonly capacity: Pick<VillageCapacity, 'granary' | 'warehouse'> } }
 );
 
-export type IDurationFragment = Pick<IDuration, 'days' | 'hours' | 'minutes' | 'seconds'>;
+export type DurationFragment = Pick<Duration, 'days' | 'hours' | 'minutes' | 'seconds'>;
 
-export type INextTaskExecutionQueryVariables = {
-  task: TaskType
+export type NextTaskExecutionQueryVariables = {
+  task: TaskType;
 };
 
 
-export type INextTaskExecutionQuery = { readonly nextTaskExecution: ITimestampFragment };
+export type NextTaskExecutionQuery = { readonly nextTaskExecution: TimestampFragment };
 
-export type INextVillageTaskExecutionQueryVariables = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
+export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
+
+export type NextVillageTaskExecutionQueryVariables = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
 };
 
 
-export type INextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: ITimestampFragment };
+export type NextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: TimestampFragment };
 
-export type INextTasksExecutionQueryVariables = {};
+export type NextTasksExecutionQueryVariables = {};
 
 
-export type INextTasksExecutionQuery = { readonly nextTasksExecution: ITimestampFragment };
+export type NextTasksExecutionQuery = { readonly nextTasksExecution: TimestampFragment };
 
-export type ISetNextTaskExecutionMutationVariables = {
-  task: TaskType,
-  delay: IDurationInput
+export type SetNextTaskExecutionMutationVariables = {
+  task: TaskType;
+  delay: DurationInput;
 };
 
 
-export type ISetNextTaskExecutionMutation = Pick<IMutation, 'setNextTaskExecution'>;
+export type SetNextTaskExecutionMutation = Pick<Mutation, 'setNextTaskExecution'>;
 
-export type ISetNextVillageTaskExecutionMutationVariables = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType,
-  delay: IDurationInput
+export type SetNextVillageTaskExecutionMutationVariables = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+  delay: DurationInput;
 };
 
 
-export type ISetNextVillageTaskExecutionMutation = Pick<IMutation, 'setNextVillageTaskExecution'>;
+export type SetNextVillageTaskExecutionMutation = Pick<Mutation, 'setNextVillageTaskExecution'>;
 
-export type IResetNextTaskExecutionMutationVariables = {
-  task: TaskType
+export type ResetNextTaskExecutionMutationVariables = {
+  task: TaskType;
 };
 
 
-export type IResetNextTaskExecutionMutation = Pick<IMutation, 'resetNextTaskExecution'>;
+export type ResetNextTaskExecutionMutation = Pick<Mutation, 'resetNextTaskExecution'>;
 
-export type IResetNextVillageTaskExecutionMutationVariables = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
+export type ResetNextVillageTaskExecutionMutationVariables = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
 };
 
 
-export type IResetNextVillageTaskExecutionMutation = Pick<IMutation, 'resetNextVillageTaskExecution'>;
+export type ResetNextVillageTaskExecutionMutation = Pick<Mutation, 'resetNextVillageTaskExecution'>;
 
-export type INextTasksExecutionChangedSubscriptionVariables = {};
+export type NextTasksExecutionChangedSubscriptionVariables = {};
 
 
-export type INextTasksExecutionChangedSubscription = { readonly nextTasksExecutionChanged: ITimestampFragment };
+export type NextTasksExecutionChangedSubscription = { readonly nextTasksExecutionChanged: TimestampFragment };
 
-export type INextTaskExecutionChangedSubscriptionVariables = {
-  task: TaskType
+export type NextTaskExecutionChangedSubscriptionVariables = {
+  task: TaskType;
 };
 
 
-export type INextTaskExecutionChangedSubscription = { readonly nextTaskExecutionChanged: ITimestampFragment };
+export type NextTaskExecutionChangedSubscription = { readonly nextTaskExecutionChanged: TimestampFragment };
 
-export type INextVillageTaskExecutionChangedSubscriptionVariables = {
-  villageId: Scalars['Int'],
-  task: VillageTaskType
+export type NextVillageTaskExecutionChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
 };
 
 
-export type INextVillageTaskExecutionChangedSubscription = { readonly nextVillageTaskExecutionChanged: ITimestampFragment };
+export type NextVillageTaskExecutionChangedSubscription = { readonly nextVillageTaskExecutionChanged: TimestampFragment };
 
-export type IClearQueueMutationVariables = {
-  villageId: Scalars['Int']
+export type ClearQueueMutationVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IClearQueueMutation = Pick<IMutation, 'clearQueue'>;
+export type ClearQueueMutation = Pick<Mutation, 'clearQueue'>;
 
-export type IEnqueueBuildingMutationVariables = {
-  input: IEnqueueBuildingInput
+export type EnqueueBuildingMutationVariables = {
+  input: EnqueueBuildingInput;
 };
 
 
-export type IEnqueueBuildingMutation = Pick<IMutation, 'enqueueBuilding'>;
+export type EnqueueBuildingMutation = Pick<Mutation, 'enqueueBuilding'>;
 
-export type IDequeueBuildingMutationVariables = {
-  input: IQueuedBuildingManipulationInput
+export type DequeueBuildingMutationVariables = {
+  input: QueuedBuildingManipulationInput;
 };
 
 
-export type IDequeueBuildingMutation = Pick<IMutation, 'dequeueBuilding'>;
+export type DequeueBuildingMutation = Pick<Mutation, 'dequeueBuilding'>;
 
-export type IDequeueBuildingAtFieldMutationVariables = {
-  input: IDequeueBuildingAtFieldInput
+export type DequeueBuildingAtFieldMutationVariables = {
+  input: DequeueBuildingAtFieldInput;
 };
 
 
-export type IDequeueBuildingAtFieldMutation = Pick<IMutation, 'dequeueBuildingAtField'>;
+export type DequeueBuildingAtFieldMutation = Pick<Mutation, 'dequeueBuildingAtField'>;
 
-export type IMoveQueuedBuildingDownMutationVariables = {
-  input: IQueuedBuildingManipulationInput
+export type MoveQueuedBuildingDownMutationVariables = {
+  input: QueuedBuildingManipulationInput;
 };
 
 
-export type IMoveQueuedBuildingDownMutation = Pick<IMutation, 'moveQueuedBuildingDown'>;
+export type MoveQueuedBuildingDownMutation = Pick<Mutation, 'moveQueuedBuildingDown'>;
 
-export type IMoveQueuedBuildingUpMutationVariables = {
-  input: IQueuedBuildingManipulationInput
+export type MoveQueuedBuildingUpMutationVariables = {
+  input: QueuedBuildingManipulationInput;
 };
 
 
-export type IMoveQueuedBuildingUpMutation = Pick<IMutation, 'moveQueuedBuildingUp'>;
+export type MoveQueuedBuildingUpMutation = Pick<Mutation, 'moveQueuedBuildingUp'>;
 
-export type IMoveQueuedBuildingAsHighAsPossibleMutationVariables = {
-  villageId: Scalars['Int'],
-  queueId: Scalars['ID']
+export type MoveQueuedBuildingAsHighAsPossibleMutationVariables = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['ID'];
 };
 
 
-export type IMoveQueuedBuildingAsHighAsPossibleMutation = Pick<IMutation, 'moveQueuedBuildingAsHighAsPossible'>;
+export type MoveQueuedBuildingAsHighAsPossibleMutation = Pick<Mutation, 'moveQueuedBuildingAsHighAsPossible'>;
 
-export type IGetQueuedBuildingsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetQueuedBuildingsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buildings: ReadonlyArray<(
-      Pick<IQueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
-      & { readonly cost: ICostFragment }
-    )>, readonly totalCost: ICostFragment } };
+export type GetQueuedBuildingsQuery = { readonly buildingQueue: { readonly buildings: ReadonlyArray<(
+      Pick<QueuedBuilding, 'canMoveDown' | 'canMoveUp' | 'name' | 'level' | 'type' | 'queueId' | 'fieldId'>
+      & { readonly cost: CostFragment }
+    )>, readonly totalCost: CostFragment } };
 
-export type IOnQueueUpdatedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type CostFragment = { readonly resources: ResourcesFragment, readonly buildTime: DurationFragment };
+
+export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
+
+export type DurationFragment = Pick<Duration, 'days' | 'hours' | 'minutes' | 'seconds'>;
+
+export type OnQueueUpdatedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IOnQueueUpdatedSubscription = Pick<ISubscription, 'onQueueUpdated'>;
+export type OnQueueUpdatedSubscription = Pick<Subscription, 'onQueueUpdated'>;
 
-type ITaskSettings_AutoAdventureSettings_Fragment = (
-  Pick<IAutoAdventureSettings, 'allow'>
-  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
+type TaskSettings_AutoBuildSettings_Fragment = (
+  Pick<AutoBuildSettings, 'allow'>
+  & { readonly coolDown: { readonly min: DurationFragment, readonly max: DurationFragment } }
 );
 
-type ITaskSettings_AutoBuildSettings_Fragment = (
-  Pick<IAutoBuildSettings, 'allow'>
-  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
+type TaskSettings_AutoAdventureSettings_Fragment = (
+  Pick<AutoAdventureSettings, 'allow'>
+  & { readonly coolDown: { readonly min: DurationFragment, readonly max: DurationFragment } }
 );
 
-type ITaskSettings_AutoUnitsSettings_Fragment = (
-  Pick<IAutoUnitsSettings, 'allow'>
-  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
+type TaskSettings_AutoUnitsSettings_Fragment = (
+  Pick<AutoUnitsSettings, 'allow'>
+  & { readonly coolDown: { readonly min: DurationFragment, readonly max: DurationFragment } }
 );
 
-type ITaskSettings_AutoPartySettings_Fragment = (
-  Pick<IAutoPartySettings, 'allow'>
-  & { readonly coolDown: { readonly min: IDurationFragment, readonly max: IDurationFragment } }
+type TaskSettings_AutoPartySettings_Fragment = (
+  Pick<AutoPartySettings, 'allow'>
+  & { readonly coolDown: { readonly min: DurationFragment, readonly max: DurationFragment } }
 );
 
-export type ITaskSettingsFragment = ITaskSettings_AutoAdventureSettings_Fragment | ITaskSettings_AutoBuildSettings_Fragment | ITaskSettings_AutoUnitsSettings_Fragment | ITaskSettings_AutoPartySettings_Fragment;
+export type TaskSettingsFragment = TaskSettings_AutoBuildSettings_Fragment | TaskSettings_AutoAdventureSettings_Fragment | TaskSettings_AutoUnitsSettings_Fragment | TaskSettings_AutoPartySettings_Fragment;
 
-export type IAutoUnitsUnitSettingsFragment = Pick<IAutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
+export type DurationFragment = Pick<Duration, 'days' | 'hours' | 'minutes' | 'seconds'>;
 
-export type IAutoUnitsBuildingSettingsFragment = (
-  Pick<IAutoUnitsBuildingSettings, 'allow'>
-  & { readonly maxBuildTime: IDurationFragment, readonly units: ReadonlyArray<IAutoUnitsUnitSettingsFragment> }
+export type AutoUnitsUnitSettingsFragment = Pick<AutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
+
+export type AutoUnitsBuildingSettingsFragment = (
+  Pick<AutoUnitsBuildingSettings, 'allow'>
+  & { readonly maxBuildTime: DurationFragment, readonly units: ReadonlyArray<AutoUnitsUnitSettingsFragment> }
 );
 
-export type IGeneralSettingsFragment = Pick<IGeneralSettings, 'allowTasks' | 'autoStart' | 'autoBuild' | 'autoUnits' | 'autoParty'>;
+export type GeneralSettingsFragment = Pick<GeneralSettings, 'allowTasks' | 'autoStart' | 'autoBuild' | 'autoUnits' | 'autoParty'>;
 
-export type IAutoAdventureSettingsFragment = (
-  Pick<IAutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
-  & { readonly maxTravelTime: IDurationFragment }
-  & ITaskSettings_AutoAdventureSettings_Fragment
+export type AutoAdventureSettingsFragment = (
+  Pick<AutoAdventureSettings, 'adventureCriteria' | 'hardMinHealth' | 'normalMinHealth' | 'preferHard' | 'preferredVillageId'>
+  & { readonly maxTravelTime: DurationFragment }
+  & TaskSettings_AutoAdventureSettings_Fragment
 );
 
-export type IGeneralVillageSettingsFragment = Pick<IGeneralVillageSettings, 'allowTasks'>;
+export type GeneralVillageSettingsFragment = Pick<GeneralVillageSettings, 'allowTasks'>;
 
-export type IAutoStorageOptionSettingsFragment = Pick<IAutoStorageOptionSettings, 'allow' | 'overflowLevel'>;
+export type AutoStorageOptionSettingsFragment = Pick<AutoStorageOptionSettings, 'allow' | 'overflowLevel'>;
 
-export type IAutoStorageSettingsFragment = (
-  Pick<IAutoStorageSettings, 'allowFreeSpots'>
-  & { readonly granary: IAutoStorageOptionSettingsFragment, readonly warehouse: IAutoStorageOptionSettingsFragment }
+export type AutoStorageSettingsFragment = (
+  Pick<AutoStorageSettings, 'allowFreeSpots'>
+  & { readonly granary: AutoStorageOptionSettingsFragment, readonly warehouse: AutoStorageOptionSettingsFragment }
 );
 
-export type IAutoBuildSettingsFragment = (
-  Pick<IAutoBuildSettings, 'autoCropFields' | 'minCrop'>
-  & { readonly autoStorage: IAutoStorageSettingsFragment }
-  & ITaskSettings_AutoBuildSettings_Fragment
+export type AutoBuildSettingsFragment = (
+  Pick<AutoBuildSettings, 'autoCropFields' | 'minCrop'>
+  & { readonly autoStorage: AutoStorageSettingsFragment }
+  & TaskSettings_AutoBuildSettings_Fragment
 );
 
-export type IAutoUnitsSettingsFragment = (
-  Pick<IAutoUnitsSettings, 'minCrop'>
-  & { readonly barracks: IAutoUnitsBuildingSettingsFragment, readonly stable: IAutoUnitsBuildingSettingsFragment, readonly workshop: IAutoUnitsBuildingSettingsFragment, readonly residence: IAutoUnitsBuildingSettingsFragment }
-  & ITaskSettings_AutoUnitsSettings_Fragment
+export type AutoUnitsSettingsFragment = (
+  Pick<AutoUnitsSettings, 'minCrop'>
+  & { readonly barracks: AutoUnitsBuildingSettingsFragment, readonly stable: AutoUnitsBuildingSettingsFragment, readonly workshop: AutoUnitsBuildingSettingsFragment, readonly residence: AutoUnitsBuildingSettingsFragment }
+  & TaskSettings_AutoUnitsSettings_Fragment
 );
 
-export type IAutoPartySettingsFragment = (
-  Pick<IAutoPartySettings, 'minCulturePoints' | 'partyType'>
-  & ITaskSettings_AutoPartySettings_Fragment
+export type AutoPartySettingsFragment = (
+  Pick<AutoPartySettings, 'minCulturePoints' | 'partyType'>
+  & TaskSettings_AutoPartySettings_Fragment
 );
 
-export type IGetGeneralSettingsQueryVariables = {};
+export type GetGeneralSettingsQueryVariables = {};
 
 
-export type IGetGeneralSettingsQuery = { readonly generalSettings: IGeneralSettingsFragment };
+export type GetGeneralSettingsQuery = { readonly generalSettings: GeneralSettingsFragment };
 
-export type IGetHeroSettingsQueryVariables = {};
+export type GetHeroSettingsQueryVariables = {};
 
 
-export type IGetHeroSettingsQuery = { readonly hero: { readonly autoAdventure: IAutoAdventureSettingsFragment } };
+export type GetHeroSettingsQuery = { readonly hero: { readonly autoAdventure: AutoAdventureSettingsFragment } };
 
-export type IGetGeneralVillageSettingsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetGeneralVillageSettingsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetGeneralVillageSettingsQuery = { readonly generalVillageSettings: IGeneralVillageSettingsFragment };
+export type GetGeneralVillageSettingsQuery = { readonly generalVillageSettings: GeneralVillageSettingsFragment };
 
-export type IGetAutoBuildSettingsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetAutoBuildSettingsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetAutoBuildSettingsQuery = { readonly autoBuildSettings: IAutoBuildSettingsFragment };
+export type GetAutoBuildSettingsQuery = { readonly autoBuildSettings: AutoBuildSettingsFragment };
 
-export type IGetAutoUnitsSettingsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetAutoUnitsSettingsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: IAutoUnitsSettingsFragment };
+export type GetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: AutoUnitsSettingsFragment };
 
-export type IGetAutoPartySettingsQueryVariables = {
-  villageId: Scalars['Int']
+export type GetAutoPartySettingsQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetAutoPartySettingsQuery = { readonly autoPartySettings: IAutoPartySettingsFragment };
+export type GetAutoPartySettingsQuery = { readonly autoPartySettings: AutoPartySettingsFragment };
 
-export type IUpdateGeneralSettingsMutationVariables = {
-  settings: IUpdateGeneralSettingsInput
+export type UpdateGeneralSettingsMutationVariables = {
+  settings: UpdateGeneralSettingsInput;
 };
 
 
-export type IUpdateGeneralSettingsMutation = Pick<IMutation, 'updateGeneralSettings'>;
+export type UpdateGeneralSettingsMutation = Pick<Mutation, 'updateGeneralSettings'>;
 
-export type IUpdateAutoAdventureSettingsMutationVariables = {
-  settings: IUpdateAutoAdventureSettingsInput
+export type UpdateAutoAdventureSettingsMutationVariables = {
+  settings: UpdateAutoAdventureSettingsInput;
 };
 
 
-export type IUpdateAutoAdventureSettingsMutation = Pick<IMutation, 'updateAutoAdventureSettings'>;
+export type UpdateAutoAdventureSettingsMutation = Pick<Mutation, 'updateAutoAdventureSettings'>;
 
-export type IUpdateGeneralVillageSettingsMutationVariables = {
-  settings: IUpdateGeneralVillageSettingsInput
+export type UpdateGeneralVillageSettingsMutationVariables = {
+  settings: UpdateGeneralVillageSettingsInput;
 };
 
 
-export type IUpdateGeneralVillageSettingsMutation = Pick<IMutation, 'updateGeneralVillageSettings'>;
+export type UpdateGeneralVillageSettingsMutation = Pick<Mutation, 'updateGeneralVillageSettings'>;
 
-export type IUpdateAutoBuildVillageSettingsMutationVariables = {
-  settings: IUpdateAutoBuildVillageSettingsInput
+export type UpdateAutoBuildVillageSettingsMutationVariables = {
+  settings: UpdateAutoBuildVillageSettingsInput;
 };
 
 
-export type IUpdateAutoBuildVillageSettingsMutation = Pick<IMutation, 'updateAutoBuildVillageSettings'>;
+export type UpdateAutoBuildVillageSettingsMutation = Pick<Mutation, 'updateAutoBuildVillageSettings'>;
 
-export type IUpdateAutoUnitsUnitSettingsMutationVariables = {
-  settings: IUpdateAutoUnitsUnitSettingsInput
+export type UpdateAutoUnitsUnitSettingsMutationVariables = {
+  settings: UpdateAutoUnitsUnitSettingsInput;
 };
 
 
-export type IUpdateAutoUnitsUnitSettingsMutation = Pick<IMutation, 'updateAutoUnitsUnitSettings'>;
+export type UpdateAutoUnitsUnitSettingsMutation = Pick<Mutation, 'updateAutoUnitsUnitSettings'>;
 
-export type IUpdateAutoUnitsBuildingSettingsMutationVariables = {
-  settings: IUpdateAutoUnitsBuildingSettingsInput
+export type UpdateAutoUnitsBuildingSettingsMutationVariables = {
+  settings: UpdateAutoUnitsBuildingSettingsInput;
 };
 
 
-export type IUpdateAutoUnitsBuildingSettingsMutation = Pick<IMutation, 'updateAutoUnitsBuildingSettings'>;
+export type UpdateAutoUnitsBuildingSettingsMutation = Pick<Mutation, 'updateAutoUnitsBuildingSettings'>;
 
-export type IUpdateAutoUnitsSettingsMutationVariables = {
-  settings: IUpdateAutoUnitsSettingsInput
+export type UpdateAutoUnitsSettingsMutationVariables = {
+  settings: UpdateAutoUnitsSettingsInput;
 };
 
 
-export type IUpdateAutoUnitsSettingsMutation = Pick<IMutation, 'updateAutoUnitsSettings'>;
+export type UpdateAutoUnitsSettingsMutation = Pick<Mutation, 'updateAutoUnitsSettings'>;
 
-export type IUpdateAutoPartySettingsMutationVariables = {
-  settings: IUpdateAutoPartySettingsInput
+export type UpdateAutoPartySettingsMutationVariables = {
+  settings: UpdateAutoPartySettingsInput;
 };
 
 
-export type IUpdateAutoPartySettingsMutation = Pick<IMutation, 'updateAutoPartySettings'>;
+export type UpdateAutoPartySettingsMutation = Pick<Mutation, 'updateAutoPartySettings'>;
 
-export type IResetSettingsMutationVariables = {
-  type: SettingsType
+export type ResetSettingsMutationVariables = {
+  type: SettingsType;
 };
 
 
-export type IResetSettingsMutation = Pick<IMutation, 'resetSettings'>;
+export type ResetSettingsMutation = Pick<Mutation, 'resetSettings'>;
 
-export type IResetVillageSettingsMutationVariables = {
-  villageId: Scalars['Int'],
-  type: VillageSettingsType
+export type ResetVillageSettingsMutationVariables = {
+  villageId: Scalars['Int'];
+  type: VillageSettingsType;
 };
 
 
-export type IResetVillageSettingsMutation = Pick<IMutation, 'resetVillageSettings'>;
+export type ResetVillageSettingsMutation = Pick<Mutation, 'resetVillageSettings'>;
 
-export type IOnGeneralSettingsChangedSubscriptionVariables = {};
-
-
-export type IOnGeneralSettingsChangedSubscription = { readonly generalSettingsChanged: IGeneralSettingsFragment };
-
-export type IOnAutoAdventureSettingsChangedSubscriptionVariables = {};
+export type OnGeneralSettingsChangedSubscriptionVariables = {};
 
 
-export type IOnAutoAdventureSettingsChangedSubscription = { readonly autoAdventureSettingsChanged: IAutoAdventureSettingsFragment };
+export type OnGeneralSettingsChangedSubscription = { readonly generalSettingsChanged: GeneralSettingsFragment };
 
-export type IOnGeneralVillageSettingsChangedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type OnAutoAdventureSettingsChangedSubscriptionVariables = {};
+
+
+export type OnAutoAdventureSettingsChangedSubscription = { readonly autoAdventureSettingsChanged: AutoAdventureSettingsFragment };
+
+export type OnGeneralVillageSettingsChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IOnGeneralVillageSettingsChangedSubscription = { readonly generalVillageSettingsChanged: IGeneralVillageSettingsFragment };
+export type OnGeneralVillageSettingsChangedSubscription = { readonly generalVillageSettingsChanged: GeneralVillageSettingsFragment };
 
-export type IOnAutoBuildSettingsChangedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type OnAutoBuildSettingsChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IOnAutoBuildSettingsChangedSubscription = { readonly autoBuildSettingsChanged: IAutoBuildSettingsFragment };
+export type OnAutoBuildSettingsChangedSubscription = { readonly autoBuildSettingsChanged: AutoBuildSettingsFragment };
 
-export type IOnAutoUnitsSettingsChangedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type OnAutoUnitsSettingsChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IOnAutoUnitsSettingsChangedSubscription = { readonly autoUnitsSettingsChanged: IAutoUnitsSettingsFragment };
+export type OnAutoUnitsSettingsChangedSubscription = { readonly autoUnitsSettingsChanged: AutoUnitsSettingsFragment };
 
-export type IOnAutoPartySettingsChangedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type OnAutoPartySettingsChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IOnAutoPartySettingsChangedSubscription = { readonly autoPartySettingsChanged: IAutoPartySettingsFragment };
+export type OnAutoPartySettingsChangedSubscription = { readonly autoPartySettingsChanged: AutoPartySettingsFragment };
 
-export type IGetUnitInfoQueryVariables = {
-  index: Scalars['Int']
+export type GetUnitInfoQueryVariables = {
+  index: Scalars['Int'];
 };
 
 
-export type IGetUnitInfoQuery = { readonly unitInfo: Pick<IUnitInfo, 'name'> };
+export type GetUnitInfoQuery = { readonly unitInfo: Pick<UnitInfo, 'name'> };
 
-export type IVillageCrannyCapacityFragment = Pick<IVillageCrannyCapacity, 'actual' | 'ongoing' | 'total'>;
+export type VillageCrannyCapacityFragment = Pick<VillageCrannyCapacity, 'actual' | 'ongoing' | 'total'>;
 
-export type IGetVillageByIdQueryVariables = {
-  villageId: Scalars['Int']
+export type GetVillageByIdQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type IGetVillageByIdQuery = { readonly village: Maybe<(
-    Pick<IVillage, 'id' | 'name'>
-    & { readonly coords: ICoordsFragment, readonly resources: { readonly amount: IResourcesFragment, readonly capacity: Pick<IVillageCapacity, 'granary' | 'warehouse'>, readonly production: IResourcesFragment } }
+export type GetVillageByIdQuery = { readonly village: Maybe<(
+    Pick<Village, 'id' | 'name'>
+    & { readonly coords: CoordsFragment, readonly resources: { readonly amount: ResourcesFragment, readonly capacity: Pick<VillageCapacity, 'granary' | 'warehouse'>, readonly production: ResourcesFragment } }
   )> };
 
-export type IGetVillagesQueryVariables = {};
+export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
+
+export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
+
+export type GetVillagesQueryVariables = {};
 
 
-export type IGetVillagesQuery = { readonly villages: ReadonlyArray<(
-    Pick<IVillage, 'id' | 'name' | 'isCapital'>
-    & { readonly coords: ICoordsFragment }
+export type GetVillagesQuery = { readonly villages: ReadonlyArray<(
+    Pick<Village, 'id' | 'name' | 'isCapital'>
+    & { readonly coords: CoordsFragment }
   )> };
 
-export type IActiveVillageIdQueryVariables = {};
+export type ActiveVillageIdQueryVariables = {};
 
 
-export type IActiveVillageIdQuery = Pick<IQuery, 'activeVillageId'>;
+export type ActiveVillageIdQuery = Pick<Query, 'activeVillageId'>;
 
-export type ICrannyCapacityQueryVariables = {
-  villageId: Scalars['Int']
+export type CrannyCapacityQueryVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type ICrannyCapacityQuery = { readonly crannyCapacity: IVillageCrannyCapacityFragment };
+export type CrannyCapacityQuery = { readonly crannyCapacity: VillageCrannyCapacityFragment };
 
-export type IUpdateVillageSubscriptionVariables = {};
-
-
-export type IUpdateVillageSubscription = Pick<ISubscription, 'updateVillage'>;
-
-export type IUpdateVillagesSubscriptionVariables = {};
+export type UpdateVillageSubscriptionVariables = {};
 
 
-export type IUpdateVillagesSubscription = Pick<ISubscription, 'updateVillages'>;
+export type UpdateVillageSubscription = Pick<Subscription, 'updateVillage'>;
 
-export type IActiveVillageIdChangedSubscriptionVariables = {};
+export type UpdateVillagesSubscriptionVariables = {};
 
 
-export type IActiveVillageIdChangedSubscription = Pick<ISubscription, 'activeVillageIdChanged'>;
+export type UpdateVillagesSubscription = Pick<Subscription, 'updateVillages'>;
 
-export type ICrannyCapacityChangedSubscriptionVariables = {
-  villageId: Scalars['Int']
+export type ActiveVillageIdChangedSubscriptionVariables = {};
+
+
+export type ActiveVillageIdChangedSubscription = Pick<Subscription, 'activeVillageIdChanged'>;
+
+export type CrannyCapacityChangedSubscriptionVariables = {
+  villageId: Scalars['Int'];
 };
 
 
-export type ICrannyCapacityChangedSubscription = Pick<ISubscription, 'crannyCapacityChanged'>;
+export type CrannyCapacityChangedSubscription = Pick<Subscription, 'crannyCapacityChanged'>;

@@ -10,11 +10,11 @@ import {
 
 import {
   BotState,
-  IGetBotStateQuery,
+  GetBotStateQuery,
 } from '../_types/graphql';
 
 export const useBotState = (): BotState | null => {
-  const { data, loading, refetch } = useQuery<IGetBotStateQuery>(GetBotState);
+  const { data, loading, refetch } = useQuery<GetBotStateQuery>(GetBotState);
 
   useSubscription(OnBotRunningChanged, {
     onSubscriptionData: () => refetch(),

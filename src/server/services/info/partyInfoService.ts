@@ -1,5 +1,5 @@
 import { Resources } from '../../_models/misc/resources';
-import { PartyType } from '../../_types/graphql';
+import { PartyType } from '../../../_shared/types/partyType';
 
 type PartyInfo = {
   readonly cost: Resources;

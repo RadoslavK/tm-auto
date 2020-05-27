@@ -1,8 +1,8 @@
-import { Boxed } from '../../../_shared/types';
 import { InternalSettingsService } from './internalSettingsService';
 
-export type ComplexSettingsServiceType<TParams extends Boxed<TParams>, TSettings extends TParams> = {
-  [TSettingsKey in keyof TSettings]: InternalSettingsService<TParams[TSettingsKey], TSettings[TSettingsKey]>;
+// TODO toto je co boha
+export type ComplexSettingsServiceType<TSettings> = {
+  [TSettingsKey in keyof TSettings]: InternalSettingsService<TSettings[TSettingsKey]>;
 } & {
   readonly get: () => TSettings;
 };

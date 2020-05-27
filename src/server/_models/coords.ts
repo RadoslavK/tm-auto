@@ -1,18 +1,12 @@
-import { ICoords } from '../_types/graphql';
-import { merge } from '../../_shared/merge';
-import { Fields } from '../../_shared/types';
+import { mergeDefaults } from '../../_shared/merge';
+import { PartialFields } from '../../_shared/types/fields.type';
 
-const getDefaults = (): Fields<Coords> => ({
-  x: 0,
-  y: 0,
-});
+export class Coords {
+  public readonly x: number = 0;
+  public readonly y: number = 0;
 
-export class Coords implements ICoords {
-  public x: number;
-  public y: number;
-
-  constructor(params: Partial<ICoords> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<Coords> = {}) {
+    mergeDefaults(this, params);
   }
 
   public toString = (): string => `[${this.x}|${this.y}]`;

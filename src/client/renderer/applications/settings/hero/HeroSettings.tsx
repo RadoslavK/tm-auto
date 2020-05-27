@@ -13,18 +13,18 @@ import {
 } from '*/graphql_operations/settings.graphql';
 
 import {
-  IAutoAdventureSettings,
-  IGetHeroSettingsQuery,
-  IOnAutoAdventureSettingsChangedSubscription,
+  AutoAdventureSettings as AutoAdventureSettingsModel,
+  GetHeroSettingsQuery,
+  OnAutoAdventureSettingsChangedSubscription,
 } from '../../../_types/graphql';
 import { HeroInformation } from '../../hero/components/HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 
 export const HeroSettings: React.FC = () => {
-  const [settings, setSettings] = useState<IAutoAdventureSettings>();
-  const { data, loading } = useQuery<IGetHeroSettingsQuery>(GetHeroSettings);
+  const [settings, setSettings] = useState<AutoAdventureSettingsModel>();
+  const { data, loading } = useQuery<GetHeroSettingsQuery>(GetHeroSettings);
 
-  useSubscription<IOnAutoAdventureSettingsChangedSubscription>(OnAutoAdventureSettingsChanged, {
+  useSubscription<OnAutoAdventureSettingsChangedSubscription>(OnAutoAdventureSettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.autoAdventureSettingsChanged);

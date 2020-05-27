@@ -3,24 +3,23 @@ import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSetting
 import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
 import { VillageSettings } from '../../_models/settings/villageSettings';
-import { IVillageSettings } from '../../_types/graphql';
 import { dataPathService } from '../dataPathService';
 import { ComplexSettingsServiceType } from './_types';
 import { InternalSettingsService } from './internalSettingsService';
 
-export class VillageSettingsService implements ComplexSettingsServiceType<IVillageSettings, VillageSettings> {
-  public autoBuild: InternalSettingsService<IVillageSettings['autoBuild'], VillageSettings['autoBuild']>;
-  public autoParty: InternalSettingsService<IVillageSettings['autoParty'], VillageSettings['autoParty']>;
-  public autoUnits: InternalSettingsService<IVillageSettings['autoUnits'], VillageSettings['autoUnits']>;
-  public general: InternalSettingsService<IVillageSettings['general'], VillageSettings['general']>;
+export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
+  public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
+  public autoParty: InternalSettingsService<VillageSettings['autoParty']>;
+  public autoUnits: InternalSettingsService<VillageSettings['autoUnits']>;
+  public general: InternalSettingsService<VillageSettings['general']>;
 
   constructor(villageId: number) {
     const villageSettingsPath = dataPathService.villagePath(villageId).settings;
 
-    this.autoBuild = new InternalSettingsService(AutoBuildSettings, villageSettingsPath.autoBuild);
-    this.autoParty = new InternalSettingsService(AutoPartySettings, villageSettingsPath.autoParty);
-    this.autoUnits = new InternalSettingsService(AutoUnitsSettings, villageSettingsPath.autoUnits);
-    this.general = new InternalSettingsService(GeneralVillageSettings, villageSettingsPath.general);
+    this.autoBuild = new InternalSettingsService(villageSettingsPath.autoBuild, AutoBuildSettings);
+    this.autoParty = new InternalSettingsService(villageSettingsPath.autoParty, AutoPartySettings);
+    this.autoUnits = new InternalSettingsService(villageSettingsPath.autoUnits, AutoUnitsSettings);
+    this.general = new InternalSettingsService(villageSettingsPath.general, GeneralVillageSettings);
   }
 
   public get = (): VillageSettings => ({

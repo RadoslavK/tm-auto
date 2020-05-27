@@ -11,10 +11,10 @@ import { fieldIds } from '../constants/fieldIds';
 import { buildingInfoService } from './info/buildingInfoService';
 
 export class AvailableBuildingTypesService {
-  private readonly m_village: Village;
+  private readonly _village: Village;
 
   constructor(villageId: number) {
-    this.m_village = accountContext.villageService.village(villageId);
+    this._village = accountContext.villageService.village(villageId);
   }
 
   public availableBuildingTypes = (fieldId: number): readonly BuildingType[] => {
@@ -95,7 +95,7 @@ export class AvailableBuildingTypesService {
             return;
           }
 
-          const normalizedBuildingSlots = this.m_village.buildings.normalizedBuildingSpots();
+          const normalizedBuildingSlots = this._village.buildings.normalizedBuildingSpots();
           const spotsOfType = normalizedBuildingSlots.filter(b => b.type === type);
 
           // max count = 1
@@ -138,13 +138,13 @@ export class AvailableBuildingTypesService {
       return false;
     }
 
-    const { isCapital } = this.m_village;
+    const { isCapital } = this._village;
     if ((conditions.capital === CapitalCondition.Prohibited && isCapital)
       || (conditions.capital === CapitalCondition.Required && !isCapital)) {
       return false;
     }
 
-    const normalizedBuildingSpots = this.m_village.buildings.normalizedBuildingSpots();
+    const normalizedBuildingSpots = this._village.buildings.normalizedBuildingSpots();
 
     // vsetky budovy aj v queue
     const buildings = normalizedBuildingSpots.filter(b => b.type === type);

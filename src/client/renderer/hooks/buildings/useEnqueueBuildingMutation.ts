@@ -6,8 +6,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IEnqueueBuildingMutation,
-  IEnqueueBuildingMutationVariables,
+  EnqueueBuildingMutation,
+  EnqueueBuildingMutationVariables,
 } from '../../_types/graphql';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
@@ -17,7 +17,7 @@ type Params = {
   readonly targetLevel?: number;
 };
 
-type ReturnType = (targetLevel?: number) => Promise<ExecutionResult<IEnqueueBuildingMutation>>;
+type ReturnType = (targetLevel?: number) => Promise<ExecutionResult<EnqueueBuildingMutation>>;
 
 export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
   const { villageId } = useVillageContext();
@@ -33,12 +33,12 @@ export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
     },
   });
 
-  const [mutate] = useMutation<IEnqueueBuildingMutation, IEnqueueBuildingMutationVariables>(
+  const [mutate] = useMutation<EnqueueBuildingMutation, EnqueueBuildingMutationVariables>(
     EnqueueBuilding,
     createOptions(params),
   );
 
-  return (targetLevel?: number): Promise<ExecutionResult<IEnqueueBuildingMutation>> => {
+  return (targetLevel?: number): Promise<ExecutionResult<EnqueueBuildingMutation>> => {
     const options = targetLevel
       ? createOptions({
         ...params,

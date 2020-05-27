@@ -1,6 +1,6 @@
-import { ITimestamp } from '../_types/graphql';
+import { Timestamp } from '../_types/graphql';
 
-export const getSecondsUntilTimestamp = (timestamp: ITimestamp): number => Math.max(
+export const getSecondsUntilTimestamp = (timestamp: Timestamp): number => Math.max(
   0,
   timestamp.totalSeconds - Math.floor(new Date().getTime() / 1000),
 );

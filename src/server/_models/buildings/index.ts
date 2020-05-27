@@ -1,4 +1,4 @@
-import { IBuildingSpot } from '../../_types/graphql';
+import { BuildingSpot } from '../../_types/graphql';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
@@ -35,7 +35,7 @@ export class Buildings {
     this.ongoing.set(buildingsInProgress);
   };
 
-  public normalizedBuildingSpots = (): readonly IBuildingSpot[] => this.spots.buildings().map((b): IBuildingSpot => {
+  public normalizedBuildingSpots = (): readonly BuildingSpot[] => this.spots.buildings().map((b): BuildingSpot => {
     const queued = this.queue.buildings().filter(bb => bb.fieldId === b.fieldId);
     const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
     // eslint-disable-next-line unicorn/no-nested-ternary
@@ -47,7 +47,7 @@ export class Buildings {
       level: {
         ...b.level,
         max: info.maxLevel,
-        total: b.level.total(),
+        total: b.level.getTotal(),
       },
       name: info.name,
       type,

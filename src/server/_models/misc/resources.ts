@@ -1,27 +1,15 @@
-import { IResources } from '../../_types/graphql';
-import { merge } from '../../../_shared/merge';
-import {
-  Comparable,
-  Fields,
-} from '../../../_shared/types';
+import { mergeDefaults } from '../../../_shared/merge';
+import { PartialFields } from '../../../_shared/types/fields.type';
 
-const getDefaults = (): Fields<Resources> => ({
-  clay: 0,
-  crop: 0,
-  freeCrop: 0,
-  iron: 0,
-  wood: 0,
-});
+export class Resources {
+  public readonly clay: number = 0;
+  public readonly crop: number = 0;
+  public readonly freeCrop: number = 0;
+  public readonly iron: number = 0;
+  public readonly wood: number = 0;
 
-export class Resources implements IResources, Comparable<Resources> {
-  public wood: number;
-  public clay: number;
-  public iron: number;
-  public crop: number;
-  public freeCrop: number;
-
-  constructor(params: Partial<IResources> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<Resources> = {}) {
+    mergeDefaults(this, params);
   }
 
   public add = (addition: Resources): Resources => new Resources({
@@ -48,14 +36,19 @@ export class Resources implements IResources, Comparable<Resources> {
     wood: this.wood * multiplicator,
   });
 
-  public isGreaterOrEqualThan = (other: Resources): boolean =>
+  public getRequiredWarehouseSize = (): number =>
+    Math.max(this.wood, this.clay, this.iron);
+
+  public areGreaterOrEqualThan = (other: Resources): boolean =>
     this.wood >= other.wood
     && this.clay >= other.clay
     && this.iron >= other.iron
     && this.crop >= other.crop
     && this.freeCrop >= other.freeCrop;
 
-  public isLowerThan = (other: Resources): boolean => !this.isGreaterOrEqualThan(other);
+  public areLowerThan = (other: Resources): boolean =>
+    !this.areGreaterOrEqualThan(other);
 
-  public maxWarehouseRes = (): number => Math.max(this.wood, this.clay, this.iron);
+  public getTotal = (): number =>
+    this.wood + this.clay + this.iron + this.crop;
 }

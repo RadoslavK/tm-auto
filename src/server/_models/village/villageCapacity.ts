@@ -1,17 +1,11 @@
-import { IVillageCapacity } from '../../_types/graphql';
-import { merge } from '../../../_shared/merge';
-import { Fields } from '../../../_shared/types';
+import { mergeDefaults } from '../../../_shared/merge';
+import { PartialFields } from '../../../_shared/types/fields.type';
 
-const getDefaults = (): Fields<VillageCapacity> => ({
-  granary: 0,
-  warehouse: 0,
-});
+export class VillageCapacity {
+  public readonly granary: number = 0;
+  public readonly warehouse: number = 0;
 
-export class VillageCapacity implements IVillageCapacity {
-  public granary: number;
-  public warehouse: number;
-
-  constructor(params: Partial<IVillageCapacity> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<VillageCapacity> = {}) {
+    mergeDefaults(this, params);
   }
 }

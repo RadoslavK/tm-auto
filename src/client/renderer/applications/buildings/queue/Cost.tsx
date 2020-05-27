@@ -2,15 +2,14 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import clsx from 'clsx';
 import React from 'react';
 
-import { ICost } from '../../../_types/graphql';
-import { formatTimeFromDuration } from '../../../../../server/utils/formatTime';
+import { Cost as CostModel } from '../../../_types/graphql';
+import { formatTimeFromDuration } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
-import { getTotalResources } from '../../../utils/resources';
 
 type Props = {
   readonly className?: string;
-  readonly cost: ICost;
+  readonly cost: CostModel;
 };
 
 const useStyles = makeStyles({
@@ -71,8 +70,7 @@ export const Cost: React.FC<Props> = (props) => {
   const formatResources = createFormatter(highestResource);
   const formatTotal = createFormatter();
   const formatFreeCrop = createFormatter();
-
-  const totalResources = getTotalResources(resources);
+  const totalResources = resources.total;
 
   return (
     <div className={clsx(className, classes.root)}>

@@ -13,14 +13,14 @@ import {
 } from '*/graphql_operations/hero.graphql';
 
 import {
-  IGetHeroInformationQuery,
-  IHeroInformationFragment,
-  IOnHeroInformationUpdatedSubscription,
+  GetHeroInformationQuery,
+  HeroInformationFragment,
+  OnHeroInformationUpdatedSubscription,
 } from '../../../_types/graphql';
 
 export const useHeroInformation = () => {
-  const [heroInformation, setHeroInformation] = useState<IHeroInformationFragment>();
-  const { data, loading } = useQuery<IGetHeroInformationQuery>(GetHeroInformation);
+  const [heroInformation, setHeroInformation] = useState<HeroInformationFragment>();
+  const { data, loading } = useQuery<GetHeroInformationQuery>(GetHeroInformation);
 
   useEffect(() => {
     if (loading || !data) {
@@ -30,7 +30,7 @@ export const useHeroInformation = () => {
     setHeroInformation(data.heroInformation);
   }, [data, loading]);
 
-  useSubscription<IOnHeroInformationUpdatedSubscription>(OnHeroInformationUpdated, {
+  useSubscription<OnHeroInformationUpdatedSubscription>(OnHeroInformationUpdated, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (subscriptionData.loading || !subscriptionData.data) {
         return;

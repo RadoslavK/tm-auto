@@ -2,18 +2,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
 import {
-  IBuildingInProgress,
-  ITimestamp,
+  BuildingInProgress as BuildingInProgressModel,
+  Timestamp,
 } from '../../../_types/graphql';
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { useCountDown } from '../../../hooks/useCountDown';
+import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';
 
 type Props = {
-  readonly building: IBuildingInProgress;
+  readonly building: BuildingInProgressModel;
 };
 
-const getInitialTimer = (finishedAt: ITimestamp): number => {
+const getInitialTimer = (finishedAt: Timestamp): number => {
   const timer = Math.floor(finishedAt.totalSeconds - new Date().valueOf() / 1000);
 
   return timer > 0

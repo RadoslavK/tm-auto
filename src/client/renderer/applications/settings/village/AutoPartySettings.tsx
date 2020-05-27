@@ -20,33 +20,33 @@ import {
 
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import {
-  IAutoPartySettings,
-  ICoolDown,
-  IGetAutoPartySettingsQuery,
-  IGetAutoPartySettingsQueryVariables,
-  IOnAutoPartySettingsChangedSubscription,
-  IOnAutoPartySettingsChangedSubscriptionVariables,
-  IResetVillageSettingsMutation,
-  IResetVillageSettingsMutationVariables,
-  IUpdateAutoPartySettingsInput,
-  IUpdateAutoPartySettingsMutation,
-  IUpdateAutoPartySettingsMutationVariables,
+  AutoPartySettings,
+  CoolDown as CoolDownModel,
+  GetAutoPartySettingsQuery,
+  GetAutoPartySettingsQueryVariables,
+  OnAutoPartySettingsChangedSubscription,
+  OnAutoPartySettingsChangedSubscriptionVariables,
   PartyType,
+  ResetVillageSettingsMutation,
+  ResetVillageSettingsMutationVariables,
+  UpdateAutoPartySettingsInput,
+  UpdateAutoPartySettingsMutation,
+  UpdateAutoPartySettingsMutationVariables,
   VillageSettingsType,
 } from '../../../_types/graphql';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './_context';
+import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const Container: React.FC = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<IAutoPartySettings>();
-  const { data, loading } = useQuery<IGetAutoPartySettingsQuery, IGetAutoPartySettingsQueryVariables>(GetAutoPartySettings, {
+  const [settings, setSettings] = useState<AutoPartySettings>();
+  const { data, loading } = useQuery<GetAutoPartySettingsQuery, GetAutoPartySettingsQueryVariables>(GetAutoPartySettings, {
     variables: { villageId },
   });
 
-  useSubscription<IOnAutoPartySettingsChangedSubscription, IOnAutoPartySettingsChangedSubscriptionVariables>(OnAutoPartySettingsChanged, {
+  useSubscription<OnAutoPartySettingsChangedSubscription, OnAutoPartySettingsChangedSubscriptionVariables>(OnAutoPartySettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.autoPartySettingsChanged);
@@ -77,7 +77,7 @@ const Container: React.FC = () => {
 export { Container as AutoPartySettings };
 
 type Props = {
-  readonly settings: IAutoPartySettings;
+  readonly settings: AutoPartySettings;
   readonly villageId: number;
 };
 
@@ -88,16 +88,16 @@ const AutoPartySettings: React.FC<Props> = (props) => {
   } = props;
 
   const [state, setState] = useState(settings);
-  const input: IUpdateAutoPartySettingsInput = {
+  const input: UpdateAutoPartySettingsInput = {
     ...state,
     villageId,
   };
 
-  const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
+  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
     variables: { type: VillageSettingsType.AutoParty, villageId },
   });
 
-  const [updateSettings] = useMutation<IUpdateAutoPartySettingsMutation, IUpdateAutoPartySettingsMutationVariables>(
+  const [updateSettings] = useMutation<UpdateAutoPartySettingsMutation, UpdateAutoPartySettingsMutationVariables>(
     UpdateAutoPartySettings,
     { variables: { settings: input } },
   );
@@ -138,7 +138,7 @@ const AutoPartySettings: React.FC<Props> = (props) => {
     minValue: 0,
   });
 
-  const onCoolDownChange = useCallback((updatedCooldown: ICoolDown): void => {
+  const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
     setState(prevState => ({
       ...prevState,
       coolDown: updatedCooldown,

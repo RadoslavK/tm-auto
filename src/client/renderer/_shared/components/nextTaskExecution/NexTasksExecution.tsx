@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { useNextTasksExecution } from '../../../hooks/nextExecution/useNextTasksExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
+import { formatTimeFromSeconds } from '../../../utils/formatTime';
 
 export const NextTasksExecution: React.FC = () => {
   const nextExecution = useNextTasksExecution();

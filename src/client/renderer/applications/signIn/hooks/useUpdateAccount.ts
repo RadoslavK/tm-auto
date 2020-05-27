@@ -6,12 +6,12 @@ import {
 } from '*/graphql_operations/account.graphql';
 
 import {
-  IUpdateAccountMutation,
-  IUpdateAccountMutationVariables,
+  UpdateAccountMutation,
+  UpdateAccountMutationVariables,
 } from '../../../_types/graphql';
 
-export const useUpdateAccount = (account: IUpdateAccountMutationVariables['account']) => {
-  const [updateAccount, updateAccountResult] = useMutation<IUpdateAccountMutation, IUpdateAccountMutationVariables>(
+export const useUpdateAccount = (account: UpdateAccountMutationVariables['account']) => {
+  const [updateAccount, updateAccountResult] = useMutation<UpdateAccountMutation, UpdateAccountMutationVariables>(
     UpdateAccount,
     {
       refetchQueries: [{ query: GetAccounts }],

@@ -2,14 +2,14 @@ import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
 import {
-  IDuration,
+  Duration,
   TaskType,
 } from '../../../_types/graphql';
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { useNextTaskExecution } from '../../../hooks/nextExecution/useNextTaskExecution';
 import { useResetNextTaskExecution } from '../../../hooks/nextExecution/useResetNextTaskExecution';
 import { useSetNextTaskExecution } from '../../../hooks/nextExecution/useSetNextTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
+import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { NextExecutionForm } from './NextExecutionForm';
 
 type Props = {
@@ -28,7 +28,7 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   const showForm = () => setIsFormShown(true);
   const closeForm = () => setIsFormShown(false);
 
-  const submitForm = (delay: IDuration): void => {
+  const submitForm = (delay: Duration): void => {
     setNextTaskExecution({ variables: { delay, task } });
     closeForm();
   };

@@ -1,9 +1,8 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { IVillageResources } from '../../../_types/graphql';
+import { VillageResources } from '../../../_types/graphql';
 import { createFormatter } from '../../../utils/numberFormatting';
-import { getTotalResources } from '../../../utils/resources';
 import { Resource } from './Resource';
 
 const useStyles = makeStyles({
@@ -16,7 +15,7 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  readonly resources: IVillageResources;
+  readonly resources: VillageResources;
 };
 
 export const Resources: React.FC<Props> = ({
@@ -31,7 +30,7 @@ export const Resources: React.FC<Props> = ({
 
   const resourceFormatter = createFormatter(Math.max(amount.wood, amount.clay, amount.iron, amount.crop));
   const capacityFormatter = createFormatter(Math.max(capacity.granary, capacity.warehouse));
-  const totalAmount = getTotalResources(amount);
+  const totalAmount = amount.total;
 
   return (
     <div className={classes.root}>

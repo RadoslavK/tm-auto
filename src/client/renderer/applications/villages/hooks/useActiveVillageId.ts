@@ -13,14 +13,14 @@ import {
 } from '*/graphql_operations/village.graphql';
 
 import {
-  IActiveVillageIdChangedSubscription,
-  IActiveVillageIdQuery,
+  ActiveVillageIdChangedSubscription,
+  ActiveVillageIdQuery,
 } from '../../../_types/graphql';
 
 export const useActiveVillageId = (): number | undefined => {
   const [activeVillageId, setActiveVillageId] = useState<number>();
 
-  const activeVillageIdQueryResult = useQuery<IActiveVillageIdQuery>(ActiveVillageId);
+  const activeVillageIdQueryResult = useQuery<ActiveVillageIdQuery>(ActiveVillageId);
 
   useEffect(() => {
     const { data, loading } = activeVillageIdQueryResult;
@@ -32,7 +32,7 @@ export const useActiveVillageId = (): number | undefined => {
     setActiveVillageId(data.activeVillageId);
   }, [activeVillageIdQueryResult]);
 
-  useSubscription<IActiveVillageIdChangedSubscription>(ActiveVillageIdChanged, {
+  useSubscription<ActiveVillageIdChangedSubscription>(ActiveVillageIdChanged, {
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
       if (loading || !data) {
         return;

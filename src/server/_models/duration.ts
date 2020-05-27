@@ -1,45 +1,17 @@
-import { IDuration } from '../_types/graphql';
-import { merge } from '../../_shared/merge';
-import { Fields } from '../../_shared/types';
+import { mergeDefaults } from '../../_shared/merge';
+import { PartialFields } from '../../_shared/types/fields.type';
 
-const getDefaults = (): Fields<Duration> => ({
-  days: 0,
-  hours: 0,
-  minutes: 0,
-  seconds: 0,
-});
+export class Duration {
+  public readonly days: number = 0;
+  public readonly hours: number = 0;
+  public readonly minutes: number = 0;
+  public readonly seconds: number = 0;
 
-export class Duration implements IDuration {
-  public seconds: number;
-  public minutes: number;
-  public hours: number;
-  public days: number;
-
-  constructor(params: Partial<IDuration> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<Duration> = {}) {
+    mergeDefaults(this, params);
   }
 
-  public totalSeconds = (): number => (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
-
-  public getMin = (other: Duration): Duration => this.totalSeconds() <= other.totalSeconds()
-    ? new Duration(this)
-    : new Duration(other);
-
-  public multiply = (multiplicator: number): Duration => Duration.fromSeconds(this.totalSeconds() * multiplicator);
-
-  public add = (addition: Duration): Duration => Duration.fromSeconds(this.totalSeconds() + addition.totalSeconds());
-
-  public static fromText = (text: string): Duration => {
-    const params = text.split(':');
-
-    return new Duration({
-      hours: +params[0],
-      minutes: +params[1],
-      seconds: +params[2],
-    });
-  };
-
-  public static fromSeconds = (totalSeconds: number): Duration => {
+  static fromSeconds = (totalSeconds: number): Duration => {
     const days = Math.floor(totalSeconds / 86400);
     const daySeconds = days * 86400;
     const hours = Math.floor((totalSeconds - daySeconds) / 3600);
@@ -55,4 +27,28 @@ export class Duration implements IDuration {
       seconds,
     });
   };
+
+  static fromText = (text: string): Duration => {
+    const params = text.split(':');
+
+    return new Duration({
+      hours: +params[0],
+      minutes: +params[1],
+      seconds: +params[2],
+    });
+  };
+
+  public getTotalSeconds = (): number =>
+    (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
+
+  public getMin = (other: Duration): Duration =>
+    this.getTotalSeconds() <= other.getTotalSeconds()
+      ? this
+      : other;
+
+  public multiply = (multiplicator: number): Duration =>
+    Duration.fromSeconds(this.getTotalSeconds() * multiplicator);
+
+  public add = (addition: Duration): Duration =>
+    Duration.fromSeconds(this.getTotalSeconds() + addition.getTotalSeconds());
 }

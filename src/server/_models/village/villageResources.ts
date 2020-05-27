@@ -1,29 +1,14 @@
-import { IVillageResources } from '../../_types/graphql';
-import { merge } from '../../../_shared/merge';
-import { Fields } from '../../../_shared/types';
+import { mergeDefaults } from '../../../_shared/merge';
+import { PartialFields } from '../../../_shared/types/fields.type';
 import { Resources } from '../misc/resources';
 import { VillageCapacity } from './villageCapacity';
 
-const getDefaults = (): Fields<VillageResources> => ({
-  amount: new Resources(),
-  capacity: new VillageCapacity(),
-  production: new Resources(),
-});
+export class VillageResources {
+  public amount: Resources = new Resources();
+  public capacity: VillageCapacity = new VillageCapacity();
+  public production: Resources = new Resources();
 
-export class VillageResources implements IVillageResources {
-  public amount: Resources;
-  public capacity: VillageCapacity;
-  public production: Resources;
-
-  constructor(params: Partial<IVillageResources> = {}) {
-    Object.assign(this, merge(getDefaults, {
-      ...params,
-      amount: params.amount && new Resources(params.amount),
-      production: params.production && new Resources(params.production),
-    }));
+  constructor(params: PartialFields<VillageResources> = {}) {
+    mergeDefaults(this, params);
   }
-
-  public warehouseFullness = (): number => this.amount.maxWarehouseRes() / this.capacity.warehouse;
-
-  public granaryFullness = (): number => this.amount.crop / this.capacity.granary;
 }

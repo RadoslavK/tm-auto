@@ -1,36 +1,21 @@
-import {
-  IAutoStorageOptionSettings,
-  IAutoStorageSettings,
-} from '../../../../_types/graphql';
-import { merge } from '../../../../../_shared/merge';
-import { Fields } from '../../../../../_shared/types';
+import { mergeDefaults } from '../../../../../_shared/merge';
+import { PartialFields } from '../../../../../_shared/types/fields.type';
 
-const getOptionDefaults = (): Fields<AutoStorageOptionSettings> => ({
-  allow: false,
-  overflowLevel: 95,
-});
+class AutoStorageOptionSettings {
+  public readonly allow: boolean = false;
+  public readonly overflowLevel: number = 95;
 
-class AutoStorageOptionSettings implements IAutoStorageOptionSettings {
-  public readonly allow: boolean;
-  public readonly overflowLevel: number;
-
-  constructor(params: Partial<IAutoStorageOptionSettings> = {}) {
-    Object.assign(this, merge(getOptionDefaults, params));
+  constructor(params: PartialFields<AutoStorageOptionSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }
 
-const getDefaults = (): Fields<AutoStorageSettings> => ({
-  allowFreeSpots: false,
-  granary: new AutoStorageOptionSettings(),
-  warehouse: new AutoStorageOptionSettings(),
-});
+export class AutoStorageSettings {
+  public readonly allowFreeSpots: boolean = false;
+  public readonly granary: AutoStorageOptionSettings = new AutoStorageOptionSettings();
+  public readonly warehouse: AutoStorageOptionSettings = new AutoStorageOptionSettings();
 
-export class AutoStorageSettings implements IAutoStorageSettings {
-  public readonly allowFreeSpots: boolean;
-  public readonly granary: AutoStorageOptionSettings;
-  public readonly warehouse: AutoStorageOptionSettings;
-
-  constructor(params: Partial<IAutoStorageSettings> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<AutoStorageSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }

@@ -20,30 +20,30 @@ import {
 
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import {
-  IAutoUnitsSettings,
-  ICoolDown,
-  IGetAutoUnitsSettingsQuery,
-  IGetAutoUnitsSettingsQueryVariables,
-  IOnAutoUnitsSettingsChangedSubscription,
-  IOnAutoUnitsSettingsChangedSubscriptionVariables,
-  IResetVillageSettingsMutation,
-  IResetVillageSettingsMutationVariables,
-  IUpdateAutoUnitsSettingsInput,
-  IUpdateAutoUnitsSettingsMutation,
-  IUpdateAutoUnitsSettingsMutationVariables,
+  AutoUnitsSettings,
+  CoolDown as CoolDownModel,
+  GetAutoUnitsSettingsQuery,
+  GetAutoUnitsSettingsQueryVariables,
+  OnAutoUnitsSettingsChangedSubscription,
+  OnAutoUnitsSettingsChangedSubscriptionVariables,
+  ResetVillageSettingsMutation,
+  ResetVillageSettingsMutationVariables,
+  UpdateAutoUnitsSettingsInput,
+  UpdateAutoUnitsSettingsMutation,
+  UpdateAutoUnitsSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../_types/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './_context';
+import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const Container: React.FC = () => {
   const { villageId } = useVillageSettingsContext();
-  const [settings, setSettings] = useState<IAutoUnitsSettings>();
-  const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
+  const [settings, setSettings] = useState<AutoUnitsSettings>();
+  const { data, loading } = useQuery<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
     variables: { villageId },
   });
 
-  useSubscription<IOnAutoUnitsSettingsChangedSubscription, IOnAutoUnitsSettingsChangedSubscriptionVariables>(OnAutoUnitsSettingsChanged, {
+  useSubscription<OnAutoUnitsSettingsChangedSubscription, OnAutoUnitsSettingsChangedSubscriptionVariables>(OnAutoUnitsSettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.autoUnitsSettingsChanged);
@@ -74,7 +74,7 @@ const Container: React.FC = () => {
 export { Container as AutoUnitsSettings };
 
 type Props = {
-  readonly settings: IAutoUnitsSettings;
+  readonly settings: AutoUnitsSettings;
   readonly villageId: number;
 };
 
@@ -84,18 +84,18 @@ const AutoUnitsSettings: React.FC<Props> = (props) => {
     villageId,
   } = props;
 
-  const [state, setState] = useState<Omit<IUpdateAutoUnitsSettingsInput, 'villageId'>>({
+  const [state, setState] = useState<Omit<UpdateAutoUnitsSettingsInput, 'villageId'>>({
     allow: settings.allow,
     coolDown: settings.coolDown,
     minCrop: settings.minCrop,
   });
 
-  const input: IUpdateAutoUnitsSettingsInput = {
+  const input: UpdateAutoUnitsSettingsInput = {
     villageId,
     ...state,
   };
 
-  const [updateSettings] = useMutation<IUpdateAutoUnitsSettingsMutation, IUpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
+  const [updateSettings] = useMutation<UpdateAutoUnitsSettingsMutation, UpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
     variables: { settings: input },
   });
 
@@ -105,7 +105,7 @@ const AutoUnitsSettings: React.FC<Props> = (props) => {
     }
   }, [settings, state, updateSettings]);
 
-  const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
+  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
     variables: { type: VillageSettingsType.AutoUnits, villageId },
   });
 
@@ -119,7 +119,7 @@ const AutoUnitsSettings: React.FC<Props> = (props) => {
     }
   }, [settings]);
 
-  const onCoolDownChange = useCallback((updatedCooldown: ICoolDown): void => {
+  const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
     setState(prevState => ({
       ...prevState,
       coolDown: updatedCooldown,

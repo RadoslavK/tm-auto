@@ -29,10 +29,10 @@ import { GetLastSignedAccountId } from '*/graphql_operations/account.graphql';
 
 import {
   BotState,
-  ICreateUserAccountInput,
-  IGetAccountsQuery,
-  IGetLastSignedAccountIdQuery,
-  IUpdateUserAccountInput,
+  CreateUserAccountInput,
+  GetAccountsQuery,
+  GetLastSignedAccountIdQuery,
+  UpdateUserAccountInput,
 } from '../../../_types/graphql';
 import { useBotState } from '../../../hooks/useBotState';
 import { useCreateAccount } from '../hooks/useCreateAccount';
@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type AccountType = IGetAccountsQuery['accounts'][0];
+type AccountType = GetAccountsQuery['accounts'][0];
 
 enum DialogType {
   Create = 'create',
@@ -119,13 +119,13 @@ const FormDialog: React.FC<FormDialogProps> = ({
     }
   }, [account, type]);
 
-  const newAccount: ICreateUserAccountInput = {
+  const newAccount: CreateUserAccountInput = {
     password,
     server,
     username,
   };
 
-  const updatedAccount: IUpdateUserAccountInput = {
+  const updatedAccount: UpdateUserAccountInput = {
     ...newAccount,
     id: selectedAccountId,
   };
@@ -239,7 +239,7 @@ const FormDialog: React.FC<FormDialogProps> = ({
 };
 
 const SignInFormContainer: React.FC = () => {
-  const { data, loading } = useQuery<IGetLastSignedAccountIdQuery>(GetLastSignedAccountId);
+  const { data, loading } = useQuery<GetLastSignedAccountIdQuery>(GetLastSignedAccountId);
 
   if (loading || !data) {
     return null;

@@ -4,28 +4,28 @@ import {
 } from '@apollo/react-hooks';
 
 import {
-  CrannyCapacity as CrannyCapacityQuery,
+  CrannyCapacity,
   CrannyCapacityChanged,
 } from '*/graphql_operations/village.graphql';
 
 import {
-  ICrannyCapacityChangedSubscription,
-  ICrannyCapacityChangedSubscriptionVariables,
-  ICrannyCapacityQuery,
-  ICrannyCapacityQueryVariables,
-  IVillageCrannyCapacity,
+  CrannyCapacityChangedSubscription,
+  CrannyCapacityChangedSubscriptionVariables,
+  CrannyCapacityQuery,
+  CrannyCapacityQueryVariables,
+  VillageCrannyCapacity,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../context/villageContext';
 
-export const useCrannyCapacity = (): IVillageCrannyCapacity | null => {
+export const useCrannyCapacity = (): VillageCrannyCapacity | null => {
   const { villageId } = useVillageContext();
 
-  const crannyCapacityResult = useQuery<ICrannyCapacityQuery, ICrannyCapacityQueryVariables>(
-    CrannyCapacityQuery,
+  const crannyCapacityResult = useQuery<CrannyCapacityQuery, CrannyCapacityQueryVariables>(
+    CrannyCapacity,
     { variables: { villageId } },
   );
 
-  useSubscription<ICrannyCapacityChangedSubscription, ICrannyCapacityChangedSubscriptionVariables>(
+  useSubscription<CrannyCapacityChangedSubscription, CrannyCapacityChangedSubscriptionVariables>(
     CrannyCapacityChanged,
     {
       onSubscriptionData: () => {

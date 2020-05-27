@@ -1,19 +1,14 @@
+import { mergeDefaults } from '../../../../_shared/merge';
 import { BuildingType } from '../../../../_shared/types/buildingType';
+import { PartialFields } from '../../../../_shared/types/fields.type';
 
-type Params = {
-  readonly fieldId: number;
-  readonly finishedAt: Date;
-  readonly level: number;
-  readonly type: BuildingType;
-};
-
-export class BuildingInProgress implements Params {
+export class BuildingInProgress {
   public readonly fieldId: number = 0;
-  public readonly level: number = 0;
   public readonly finishedAt: Date = new Date();
+  public readonly level: number = 0;
   public readonly type: BuildingType = BuildingType.None;
 
-  constructor(params: Partial<Params> = {}) {
-    Object.assign(this, params);
+  constructor(params: PartialFields<BuildingInProgress> = {}) {
+    mergeDefaults(this, params);
   }
 }

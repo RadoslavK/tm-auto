@@ -6,12 +6,12 @@ import {
 } from '*/graphql_operations/account.graphql';
 
 import {
-  ICreateAccountMutation,
-  ICreateAccountMutationVariables,
+  CreateAccountMutation,
+  CreateAccountMutationVariables,
 } from '../../../_types/graphql';
 
-export const useCreateAccount = (account: ICreateAccountMutationVariables['account']) => {
-  const [createAccount, createAccountResult] = useMutation<ICreateAccountMutation, ICreateAccountMutationVariables>(
+export const useCreateAccount = (account: CreateAccountMutationVariables['account']) => {
+  const [createAccount, createAccountResult] = useMutation<CreateAccountMutation, CreateAccountMutationVariables>(
     CreateAccount,
     {
       refetchQueries: [{ query: GetAccounts }],

@@ -1,19 +1,19 @@
 import React from 'react';
 
 import {
-  ICoolDown,
-  IDuration,
+  CoolDown as CoolDownModel,
+  Duration as DurationModel,
 } from '../../../_types/graphql';
 import { Duration } from './Duration';
 
 type Props = {
-  readonly onChange: (coolDown: ICoolDown) => void;
-  readonly value: ICoolDown;
+  readonly onChange: (coolDown: CoolDownModel) => void;
+  readonly value: CoolDownModel;
 };
 
 export const CoolDown: React.FC<Props> = ({ onChange, value }) => {
-  const updateMin = (newMin: IDuration) => onChange({ ...value, min: newMin });
-  const updateMax = (newMax: IDuration) => onChange({ ...value, max: newMax });
+  const updateMin = (newMin: DurationModel) => onChange({ ...value, min: newMin });
+  const updateMax = (newMax: DurationModel) => onChange({ ...value, max: newMax });
 
   return (
     <div>

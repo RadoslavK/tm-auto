@@ -8,8 +8,8 @@ import React, {
 
 import { Duration } from '../../../_shared/components/controls/Duration';
 import {
-  IAutoUnitsBuildingSettings,
-  IDuration,
+  AutoUnitsBuildingSettings,
+  Duration as DurationModel,
 } from '../../../_types/graphql';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { areShallowEqual } from '../../../utils/areShallowEqual';
@@ -51,7 +51,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly buildingType: BuildingType;
   readonly className?: string;
-  readonly settings: IAutoUnitsBuildingSettings
+  readonly settings: AutoUnitsBuildingSettings
 };
 
 export const UnitBuildingSection: React.FC<Props> = ({
@@ -90,7 +90,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
 
   const toggleAllow = () => setAllow(!allow);
 
-  const updateMaxBuildTime = useCallback((newValue: IDuration) => {
+  const updateMaxBuildTime = useCallback((newValue: DurationModel) => {
     setMaxBuildTime(newValue);
   }, []);
 

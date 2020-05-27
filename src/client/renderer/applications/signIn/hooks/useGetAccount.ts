@@ -3,12 +3,12 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetAccount } from '*/graphql_operations/account.graphql';
 
 import {
-  IGetAccountQuery,
-  IGetAccountQueryVariables,
+  GetAccountQuery,
+  GetAccountQueryVariables,
 } from '../../../_types/graphql';
 
-export const useGetAccount = (accountId: string): IGetAccountQuery['account'] | null => {
-  const { data, loading } = useQuery<IGetAccountQuery, IGetAccountQueryVariables>(
+export const useGetAccount = (accountId: string): GetAccountQuery['account'] | null => {
+  const { data, loading } = useQuery<GetAccountQuery, GetAccountQueryVariables>(
     GetAccount,
     { variables: { accountId } },
   );

@@ -21,10 +21,10 @@
         "name": "ITaskSettings",
         "possibleTypes": [
           {
-            "name": "AutoAdventureSettings"
+            "name": "AutoBuildSettings"
           },
           {
-            "name": "AutoBuildSettings"
+            "name": "AutoAdventureSettings"
           },
           {
             "name": "AutoUnitsSettings"

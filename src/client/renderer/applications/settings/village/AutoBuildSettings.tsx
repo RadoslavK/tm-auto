@@ -20,30 +20,30 @@ import {
 
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import {
-  IAutoBuildSettings,
-  ICoolDown,
-  IGetAutoBuildSettingsQuery,
-  IGetAutoBuildSettingsQueryVariables,
-  IOnAutoBuildSettingsChangedSubscription,
-  IOnAutoBuildSettingsChangedSubscriptionVariables,
-  IResetVillageSettingsMutation,
-  IResetVillageSettingsMutationVariables,
-  IUpdateAutoBuildVillageSettingsInput,
-  IUpdateAutoBuildVillageSettingsMutation,
-  IUpdateAutoBuildVillageSettingsMutationVariables,
+  AutoBuildSettings,
+  CoolDown as CoolDownModel,
+  GetAutoBuildSettingsQuery,
+  GetAutoBuildSettingsQueryVariables,
+  OnAutoBuildSettingsChangedSubscription,
+  OnAutoBuildSettingsChangedSubscriptionVariables,
+  ResetVillageSettingsMutation,
+  ResetVillageSettingsMutationVariables,
+  UpdateAutoBuildVillageSettingsInput,
+  UpdateAutoBuildVillageSettingsMutation,
+  UpdateAutoBuildVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../_types/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './_context';
+import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const Container: React.FC = () => {
   const { villageId } = useVillageSettingsContext();
-  const [settings, setSettings] = useState<IAutoBuildSettings>();
-  const { data, loading } = useQuery<IGetAutoBuildSettingsQuery, IGetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
+  const [settings, setSettings] = useState<AutoBuildSettings>();
+  const { data, loading } = useQuery<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
     variables: { villageId },
   });
 
-  useSubscription<IOnAutoBuildSettingsChangedSubscription, IOnAutoBuildSettingsChangedSubscriptionVariables>(OnAutoBuildSettingsChanged, {
+  useSubscription<OnAutoBuildSettingsChangedSubscription, OnAutoBuildSettingsChangedSubscriptionVariables>(OnAutoBuildSettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.autoBuildSettingsChanged);
@@ -74,11 +74,11 @@ const Container: React.FC = () => {
 export { Container as AutoBuildSettings };
 
 type Props = {
-  readonly settings: IAutoBuildSettings;
+  readonly settings: AutoBuildSettings;
   readonly villageId: number;
 };
 
-type Settings = Omit<IAutoBuildSettings, 'autoStorage'> & {
+type Settings = Omit<AutoBuildSettings, 'autoStorage'> & {
   readonly allowAutoGranary: boolean;
   readonly allowAutoWarehouse: boolean;
   readonly allowFreeSpots: boolean;
@@ -86,7 +86,7 @@ type Settings = Omit<IAutoBuildSettings, 'autoStorage'> & {
   readonly autoWarehouseOverflowLevel: number;
 };
 
-const getStateFromSettings = (settings: IAutoBuildSettings): Settings => {
+const getStateFromSettings = (settings: AutoBuildSettings): Settings => {
   const {
     autoStorage: {
       allowFreeSpots,
@@ -120,12 +120,12 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
 
   const [state, setState] = useState(getStateFromSettings(settings));
 
-  const input: IUpdateAutoBuildVillageSettingsInput = {
+  const input: UpdateAutoBuildVillageSettingsInput = {
     villageId,
     ...state,
   };
 
-  const [updateSettings] = useMutation<IUpdateAutoBuildVillageSettingsMutation, IUpdateAutoBuildVillageSettingsMutationVariables>(
+  const [updateSettings] = useMutation<UpdateAutoBuildVillageSettingsMutation, UpdateAutoBuildVillageSettingsMutationVariables>(
     UpdateAutoBuildVillageSettings,
     { variables: { settings: input } },
   );
@@ -150,11 +150,11 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
     }
   }, [state, updateSettings]);
 
-  const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
+  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
     variables: { type: VillageSettingsType.AutoBuild, villageId },
   });
 
-  const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
+  const onCooldownChange = useCallback((updatedCooldown: CoolDownModel): void => {
     setState(prevState => ({
       ...prevState,
       coolDown: updatedCooldown,

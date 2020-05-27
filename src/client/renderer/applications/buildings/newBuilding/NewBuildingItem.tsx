@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { GetMaxBuildingLevel } from '*/graphql_operations/building.graphql';
 
 import {
-  IGetMaxBuildingLevelQuery,
-  IGetMaxBuildingLevelQueryVariables,
+  GetMaxBuildingLevelQuery,
+  GetMaxBuildingLevelQueryVariables,
 } from '../../../_types/graphql';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
@@ -49,7 +49,7 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
   const classes = useStyles(props);
 
   const enqueue = useEnqueueBuildingMutation({ buildingType: type, fieldId });
-  const maxLevelResult = useQuery<IGetMaxBuildingLevelQuery, IGetMaxBuildingLevelQueryVariables>(GetMaxBuildingLevel, {
+  const maxLevelResult = useQuery<GetMaxBuildingLevelQuery, GetMaxBuildingLevelQueryVariables>(GetMaxBuildingLevel, {
     variables: { buildingType: type },
   });
 

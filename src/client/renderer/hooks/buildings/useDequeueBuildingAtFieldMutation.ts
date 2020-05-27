@@ -6,8 +6,8 @@ import {
 import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IDequeueBuildingAtFieldMutation,
-  IDequeueBuildingAtFieldMutationVariables,
+  DequeueBuildingAtFieldMutation,
+  DequeueBuildingAtFieldMutationVariables,
 } from '../../_types/graphql';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
@@ -16,12 +16,12 @@ type Params = {
   readonly fieldId: number;
 };
 
-type ReturnType = MutationTuple<IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables>;
+type ReturnType = MutationTuple<DequeueBuildingAtFieldMutation, DequeueBuildingAtFieldMutationVariables>;
 
 export const useDequeueBuildingAtFieldMutation = ({ deleteAll, fieldId }: Params): ReturnType => {
   const { villageId } = useVillageContext();
 
-  return useMutation<IDequeueBuildingAtFieldMutation, IDequeueBuildingAtFieldMutationVariables>(
+  return useMutation<DequeueBuildingAtFieldMutation, DequeueBuildingAtFieldMutationVariables>(
     DequeueBuildingAtField,
     {
       variables: {

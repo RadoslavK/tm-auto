@@ -13,16 +13,16 @@ import {
 } from '*/graphql_operations/logs.graphql';
 
 import {
-  IGetLogsQuery,
-  ILogEntryFragment,
-  IOnLogEntryAddedSubscription,
+  GetLogsQuery,
+  LogEntryFragment,
+  OnLogEntryAddedSubscription,
 } from '../../../_types/graphql';
 
 export const useLogs = () => {
-  const queryResult = useQuery<IGetLogsQuery>(GetLogs);
-  const [entries, setEntries] = useState<ILogEntryFragment[]>([]);
+  const queryResult = useQuery<GetLogsQuery>(GetLogs);
+  const [entries, setEntries] = useState<LogEntryFragment[]>([]);
 
-  useSubscription<IOnLogEntryAddedSubscription>(OnLogEntryAdded, {
+  useSubscription<OnLogEntryAddedSubscription>(OnLogEntryAdded, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (subscriptionData.loading || !subscriptionData.data) {
         return;

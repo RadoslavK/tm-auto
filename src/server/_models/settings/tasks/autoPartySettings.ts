@@ -1,33 +1,21 @@
-import {
-  IAutoPartySettings,
-  PartyType,
-} from '../../../_types/graphql';
-import { merge } from '../../../../_shared/merge';
-import { Fields } from '../../../../_shared/types';
+import { mergeDefaults } from '../../../../_shared/merge';
+import { PartialFields } from '../../../../_shared/types/fields.type';
+import { PartyType } from '../../../../_shared/types/partyType';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const getDefaults = (): Fields<AutoPartySettings> => ({
-  allow: false,
-  coolDown: new CoolDown({
+export class AutoPartySettings {
+  public readonly allow: boolean = false;
+
+  public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 55 }),
     min: new Duration({ minutes: 30 }),
-  }),
-  minCulturePoints: 0,
-  partyType: PartyType.Small,
-});
+  });
 
-export class AutoPartySettings implements IAutoPartySettings {
-  public allow: boolean;
-  public coolDown: CoolDown;
+  public readonly minCulturePoints: number = 0;
+  public readonly partyType: PartyType = PartyType.Small;
 
-  public minCulturePoints: number;
-  public partyType: PartyType;
-
-  constructor(params: Partial<IAutoPartySettings> = {}) {
-    Object.assign(this, merge(getDefaults, {
-      ...params,
-      coolDown: params.coolDown && new CoolDown(params.coolDown),
-    }));
+  constructor(params: PartialFields<AutoPartySettings> = {}) {
+    mergeDefaults(this, params);
   }
 }

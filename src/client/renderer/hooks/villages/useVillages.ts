@@ -9,14 +9,14 @@ import {
 } from '*/graphql_operations/village.graphql';
 
 import {
-  IGetVillagesQuery,
-  IUpdateVillagesSubscription,
+  GetVillagesQuery,
+  UpdateVillagesSubscription,
 } from '../../_types/graphql';
 
-export const useVillages = (): IGetVillagesQuery['villages'] | null => {
-  const { data, loading, refetch } = useQuery<IGetVillagesQuery>(GetVillages);
+export const useVillages = (): GetVillagesQuery['villages'] | null => {
+  const { data, loading, refetch } = useQuery<GetVillagesQuery>(GetVillages);
 
-  useSubscription<IUpdateVillagesSubscription>(UpdateVillages, {
+  useSubscription<UpdateVillagesSubscription>(UpdateVillages, {
     onSubscriptionData: () => refetch(),
   });
 

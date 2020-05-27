@@ -18,29 +18,29 @@ import {
 } from '*/graphql_operations/settings.graphql';
 
 import {
-  IGeneralVillageSettings,
-  IGetGeneralVillageSettingsQuery,
-  IGetGeneralVillageSettingsQueryVariables,
-  IOnGeneralVillageSettingsChangedSubscription,
-  IOnGeneralVillageSettingsChangedSubscriptionVariables,
-  IResetVillageSettingsMutation,
-  IResetVillageSettingsMutationVariables,
-  IUpdateGeneralVillageSettingsInput,
-  IUpdateGeneralVillageSettingsMutation,
-  IUpdateGeneralVillageSettingsMutationVariables,
+  GeneralVillageSettings,
+  GetGeneralVillageSettingsQuery,
+  GetGeneralVillageSettingsQueryVariables,
+  OnGeneralVillageSettingsChangedSubscription,
+  OnGeneralVillageSettingsChangedSubscriptionVariables,
+  ResetVillageSettingsMutation,
+  ResetVillageSettingsMutationVariables,
+  UpdateGeneralVillageSettingsInput,
+  UpdateGeneralVillageSettingsMutation,
+  UpdateGeneralVillageSettingsMutationVariables,
   VillageSettingsType,
 } from '../../../_types/graphql';
-import { useVillageSettingsContext } from './_context';
+import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const Container: React.FC = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<IGeneralVillageSettings>();
-  const { data, loading } = useQuery<IGetGeneralVillageSettingsQuery, IGetGeneralVillageSettingsQueryVariables>(GetGeneralVillageSettings, {
+  const [settings, setSettings] = useState<GeneralVillageSettings>();
+  const { data, loading } = useQuery<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>(GetGeneralVillageSettings, {
     variables: { villageId },
   });
 
-  useSubscription<IOnGeneralVillageSettingsChangedSubscription, IOnGeneralVillageSettingsChangedSubscriptionVariables>(OnGeneralVillageSettingsChanged, {
+  useSubscription<OnGeneralVillageSettingsChangedSubscription, OnGeneralVillageSettingsChangedSubscriptionVariables>(OnGeneralVillageSettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.generalVillageSettingsChanged);
@@ -71,7 +71,7 @@ const Container: React.FC = () => {
 export { Container as GeneralVillageSettings };
 
 type Props = {
-  readonly settings: IGeneralVillageSettings;
+  readonly settings: GeneralVillageSettings;
   readonly villageId: number;
 };
 
@@ -82,16 +82,16 @@ const GeneralVillageSettings: React.FC<Props> = (props) => {
   } = props;
 
   const [state, setState] = useState(settings);
-  const input: IUpdateGeneralVillageSettingsInput = {
+  const input: UpdateGeneralVillageSettingsInput = {
     ...state,
     villageId,
   };
 
-  const [resetSettings] = useMutation<IResetVillageSettingsMutation, IResetVillageSettingsMutationVariables>(ResetVillageSettings, {
+  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
     variables: { type: VillageSettingsType.General, villageId },
   });
 
-  const [updateSettings] = useMutation<IUpdateGeneralVillageSettingsMutation, IUpdateGeneralVillageSettingsMutationVariables>(
+  const [updateSettings] = useMutation<UpdateGeneralVillageSettingsMutation, UpdateGeneralVillageSettingsMutationVariables>(
     UpdateGeneralVillageSettings,
     { variables: { settings: input } },
   );

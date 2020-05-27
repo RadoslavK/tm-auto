@@ -1,25 +1,20 @@
 import {
-  IMutationCreateAccountArgs,
-  IMutationUpdateAccountArgs,
-  IUserAccount,
+  MutationCreateAccountArgs,
+  MutationUpdateAccountArgs,
+  UserAccount,
 } from '../_types/graphql';
 import { generateId } from '../../_shared/generateId';
-import { merge } from '../../_shared/merge';
-import { Fields } from '../../_shared/types';
+import { mergeDefaults } from '../../_shared/merge';
+import { PartialFields } from '../../_shared/types/fields.type';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
-const getDefaults = (): Fields<AccountsData> => ({
-  accounts: [],
-  lastSignedAccountId: null,
-});
-
 class AccountsData {
-  public accounts: IUserAccount[];
-  public lastSignedAccountId: string | null;
+  public readonly accounts: UserAccount[] = [];
+  public lastSignedAccountId: string | null = null;
 
-  constructor(params: Partial<AccountsData> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<AccountsData> = {}) {
+    mergeDefaults(this, params);
   }
 }
 
@@ -30,7 +25,7 @@ class AccountService {
 
   private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath, this.accountsData);
 
-  public getAccounts = (): readonly IUserAccount[] => {
+  public getAccounts = (): readonly UserAccount[] => {
     if (!this.accountsLoaded) {
       this.load();
     }
@@ -38,7 +33,7 @@ class AccountService {
     return this.accountsData.accounts;
   };
 
-  public createAccount = async (args: IMutationCreateAccountArgs): Promise<IUserAccount> => {
+  public createAccount = async (args: MutationCreateAccountArgs): Promise<UserAccount> => {
     const id = generateId();
 
     const correctedServerMatch = /(.*travian.com)\/?/.exec(args.account.server);
@@ -47,7 +42,7 @@ class AccountService {
       throw new Error(`Invalid server url: ${args.account.server}`);
     }
 
-    const newAccount: IUserAccount = {
+    const newAccount: UserAccount = {
       ...args.account,
       id,
       server: correctedServerMatch[1],
@@ -59,7 +54,7 @@ class AccountService {
     return newAccount;
   };
 
-  public accountExists = (args: IMutationCreateAccountArgs | IMutationUpdateAccountArgs): boolean => {
+  public accountExists = (args: MutationCreateAccountArgs | MutationUpdateAccountArgs): boolean => {
     if ('id' in args.account) {
       const accountId = args.account.id;
       return this.getAccounts().some(acc => acc.id !== accountId && acc.server === args.account.server && acc.username === args.account.username);
@@ -86,7 +81,7 @@ class AccountService {
     this.saveAccounts();
   };
 
-  public updateAccount = async (args: IMutationUpdateAccountArgs): Promise<void> => {
+  public updateAccount = async (args: MutationUpdateAccountArgs): Promise<void> => {
     const {
       account,
     } = args;
@@ -96,12 +91,12 @@ class AccountService {
     return this.saveAccounts();
   };
 
-  public getAccount = (accountId: string): IUserAccount | null => {
+  public getAccount = (accountId: string): UserAccount | null => {
     const accounts = this.getAccounts();
     return accounts.find(x => x.id === accountId) || null;
   };
 
-  public getCurrentAccount = (): IUserAccount => {
+  public getCurrentAccount = (): UserAccount => {
     const accounts = this.getAccounts();
     const account = accounts.find(x => x.id === this.currentAccountId);
 

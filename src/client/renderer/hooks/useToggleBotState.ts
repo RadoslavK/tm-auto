@@ -7,15 +7,15 @@ import {
 
 import {
   BotState,
-  IStartBotMutation,
-  IStopBotMutation,
+  StartBotMutation,
+  StopBotMutation,
 } from '../_types/graphql';
 import { useBotState } from './useBotState';
 
 export const useToggleBotState = (): (() => Promise<void>) | null => {
   const botState = useBotState();
-  const [startBot] = useMutation<IStartBotMutation>(StartBot);
-  const [stopBot] = useMutation<IStopBotMutation>(StopBot);
+  const [startBot] = useMutation<StartBotMutation>(StartBot);
+  const [stopBot] = useMutation<StopBotMutation>(StopBot);
 
   if (botState === BotState.Stopping) {
     return null;

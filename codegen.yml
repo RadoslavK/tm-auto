@@ -1,6 +1,7 @@
 overwrite: true
-schema: 'src/server/graphql/typedefs/*.graphql'
-documents: 'src/client/graphql/operations/*.graphql'
+watch: true
+schema: 'src/server/_graphql/typedefs/*.graphql'
+documents: 'src/client/renderer/_graphql/operations/*.graphql'
 config:
   maybeValue: T | null
 generates:
@@ -9,25 +10,21 @@ generates:
       - "typescript"
       - "typescript-resolvers"
     config:
-      typesPrefix: I
-      enumPrefix: false
       immutableTypes: true
       avoidOptionals: true
-  src/client/_types/graphql.ts:
+  src/client/renderer/_types/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
     config:
-      typesPrefix: I
-      enumPrefix: false
       skipTypename: true
       immutableTypes: true
       avoidOptionals: true
-  src/client/_types/graphql_modules.d.ts:
+  src/client/renderer/_types/graphql_modules.d.ts:
     plugins:
       - "typescript-graphql-files-modules"
     config:
       modulePathPrefix: "graphql_operations/"
-  src/client/graphql/fragmentTypes.json:
+  src/client/renderer/_graphql/fragmentTypes.json:
     plugins:
       - fragment-matcher

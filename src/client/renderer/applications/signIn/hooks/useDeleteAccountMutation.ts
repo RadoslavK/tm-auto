@@ -6,12 +6,12 @@ import {
 } from '*/graphql_operations/account.graphql';
 
 import {
-  IDeleteAccountMutation,
-  IDeleteAccountMutationVariables,
+  DeleteAccountMutation,
+  DeleteAccountMutationVariables,
 } from '../../../_types/graphql';
 
-export const useDeleteAccountMutation = (accountId: IDeleteAccountMutationVariables['accountId']) => {
-  const [deleteAccount, deleteAccountResult] = useMutation<IDeleteAccountMutation, IDeleteAccountMutationVariables>(
+export const useDeleteAccountMutation = (accountId: DeleteAccountMutationVariables['accountId']) => {
+  const [deleteAccount, deleteAccountResult] = useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(
     DeleteAccount,
     {
       refetchQueries: [{ query: GetAccounts }],

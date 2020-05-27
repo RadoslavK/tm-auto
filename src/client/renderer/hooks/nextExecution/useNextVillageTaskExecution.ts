@@ -13,11 +13,11 @@ import {
 } from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
-  INextVillageTaskExecutionChangedSubscription,
-  INextVillageTaskExecutionChangedSubscriptionVariables,
-  INextVillageTaskExecutionQuery,
-  INextVillageTaskExecutionQueryVariables,
-  ITimestamp,
+  NextVillageTaskExecutionChangedSubscription,
+  NextVillageTaskExecutionChangedSubscriptionVariables,
+  NextVillageTaskExecutionQuery,
+  NextVillageTaskExecutionQueryVariables,
+  Timestamp,
   VillageTaskType,
 } from '../../_types/graphql';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
@@ -27,12 +27,12 @@ export const useNextVillageTaskExecution = (villageId: number, task: VillageTask
 
   const variables = { task, villageId };
 
-  const nextExecutionResult = useQuery<INextVillageTaskExecutionQuery, INextVillageTaskExecutionQueryVariables>(
+  const nextExecutionResult = useQuery<NextVillageTaskExecutionQuery, NextVillageTaskExecutionQueryVariables>(
     NextVillageTaskExecution,
     { variables },
   );
 
-  const updateNextExecution = (timestamp: ITimestamp): void => {
+  const updateNextExecution = (timestamp: Timestamp): void => {
     const difference = getSecondsUntilTimestamp(timestamp);
 
     setNextExecutionIn(difference);
@@ -46,7 +46,7 @@ export const useNextVillageTaskExecution = (villageId: number, task: VillageTask
     }
   }, [nextExecutionResult]);
 
-  useSubscription<INextVillageTaskExecutionChangedSubscription, INextVillageTaskExecutionChangedSubscriptionVariables>(
+  useSubscription<NextVillageTaskExecutionChangedSubscription, NextVillageTaskExecutionChangedSubscriptionVariables>(
     NextVillageTaskExecutionChanged,
     {
       onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

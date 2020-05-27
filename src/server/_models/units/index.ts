@@ -1,8 +1,9 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { UnitsQueue } from './unitsQueue';
 
+// TODO rewrite to service
 export class Units {
-  private m_counts: Map<number, number> = new Map();
+  private _counts: Map<number, number> = new Map();
 
   public barracksQueue: UnitsQueue = new UnitsQueue();
   public stableQueue: UnitsQueue = new UnitsQueue();
@@ -34,13 +35,13 @@ export class Units {
   };
 
   public resetCounts = (): void => {
-    this.m_counts.clear();
+    this._counts.clear();
   };
 
   public addCount = (unitIndex: number, amount: number): void => {
-    const count = this.m_counts.get(unitIndex);
-    this.m_counts.set(unitIndex, count ? count + amount : amount);
+    const count = this._counts.get(unitIndex);
+    this._counts.set(unitIndex, count ? count + amount : amount);
   };
 
-  public getCount = (unitIndex: number): number => this.m_counts.get(unitIndex) || 0;
+  public getCount = (unitIndex: number): number => this._counts.get(unitIndex) || 0;
 }

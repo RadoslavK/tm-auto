@@ -11,22 +11,22 @@ import {
 } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IDequeueBuildingMutation,
-  IDequeueBuildingMutationVariables,
-  IMoveQueuedBuildingAsHighAsPossibleMutation,
-  IMoveQueuedBuildingAsHighAsPossibleMutationVariables,
-  IMoveQueuedBuildingDownMutation,
-  IMoveQueuedBuildingDownMutationVariables,
-  IMoveQueuedBuildingUpMutation,
-  IMoveQueuedBuildingUpMutationVariables,
-  IQueuedBuilding,
-  IQueuedBuildingManipulationInput,
+  DequeueBuildingMutation,
+  DequeueBuildingMutationVariables,
+  MoveQueuedBuildingAsHighAsPossibleMutation,
+  MoveQueuedBuildingAsHighAsPossibleMutationVariables,
+  MoveQueuedBuildingDownMutation,
+  MoveQueuedBuildingDownMutationVariables,
+  MoveQueuedBuildingUpMutation,
+  MoveQueuedBuildingUpMutationVariables,
+  QueuedBuilding,
+  QueuedBuildingManipulationInput,
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 
 type Props = {
-  readonly building: IQueuedBuilding;
+  readonly building: QueuedBuilding;
   readonly className?: string;
 };
 
@@ -73,18 +73,18 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
   } = props;
 
   const { villageId } = useVillageContext();
-  const input: IQueuedBuildingManipulationInput = { queueId, villageId };
+  const input: QueuedBuildingManipulationInput = { queueId, villageId };
 
   const options = {
     variables: { input },
   };
 
-  const [moveToTop] = useMutation<IMoveQueuedBuildingAsHighAsPossibleMutation, IMoveQueuedBuildingAsHighAsPossibleMutationVariables>(MoveQueuedBuildingAsHighAsPossible, {
+  const [moveToTop] = useMutation<MoveQueuedBuildingAsHighAsPossibleMutation, MoveQueuedBuildingAsHighAsPossibleMutationVariables>(MoveQueuedBuildingAsHighAsPossible, {
     variables: { queueId, villageId },
   });
-  const [moveDown] = useMutation<IMoveQueuedBuildingDownMutation, IMoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
-  const [moveUp] = useMutation<IMoveQueuedBuildingUpMutation, IMoveQueuedBuildingUpMutationVariables>(MoveQueuedBuildingUp, options);
-  const [dequeue] = useMutation<IDequeueBuildingMutation, IDequeueBuildingMutationVariables>(DequeueBuilding, options);
+  const [moveDown] = useMutation<MoveQueuedBuildingDownMutation, MoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
+  const [moveUp] = useMutation<MoveQueuedBuildingUpMutation, MoveQueuedBuildingUpMutationVariables>(MoveQueuedBuildingUp, options);
+  const [dequeue] = useMutation<DequeueBuildingMutation, DequeueBuildingMutationVariables>(DequeueBuilding, options);
 
   const classes = useStyles({});
 

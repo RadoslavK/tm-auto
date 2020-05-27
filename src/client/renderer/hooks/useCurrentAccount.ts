@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { GetCurrentAccount } from '*/graphql_operations/account.graphql';
 
-import { IGetCurrentAccountQuery } from '../_types/graphql';
+import { GetCurrentAccountQuery } from '../_types/graphql';
 
-export const useCurrentAccount = (): IGetCurrentAccountQuery['currentAccount'] | null => {
-  const { data, loading } = useQuery<IGetCurrentAccountQuery>(GetCurrentAccount);
+export const useCurrentAccount = (): GetCurrentAccountQuery['currentAccount'] | null => {
+  const { data, loading } = useQuery<GetCurrentAccountQuery>(GetCurrentAccount);
 
   return loading || !data
     ? null

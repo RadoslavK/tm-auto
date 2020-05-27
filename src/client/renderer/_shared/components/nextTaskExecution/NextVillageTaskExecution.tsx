@@ -2,15 +2,15 @@ import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
 import {
-  IDuration,
+  Duration,
   VillageTaskType,
 } from '../../../_types/graphql';
-import { formatTimeFromSeconds } from '../../../../../server/utils/formatTime';
 import { useVillageContext } from '../../../applications/villages/context/villageContext';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useResetNextVillageTaskExecution } from '../../../hooks/nextExecution/useResetNextVillageTaskExecution';
 import { useSetNextVillageTaskExecution } from '../../../hooks/nextExecution/useSetNextVillageTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
+import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { NextExecutionForm } from './NextExecutionForm';
 
 type Props = {
@@ -32,7 +32,7 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
   const showForm = () => setIsFormShown(true);
   const closeForm = () => setIsFormShown(false);
 
-  const onSubmit = (delay: IDuration): void => {
+  const onSubmit = (delay: Duration): void => {
     setNextVillageTaskExecution({ variables: { delay, task, villageId } });
     closeForm();
   };

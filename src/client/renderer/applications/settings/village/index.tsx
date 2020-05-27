@@ -9,10 +9,10 @@ import { VillageSettingsType } from '../../../_types/graphql';
 import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { useVillageContext } from '../../villages/context/villageContext';
-import { VillageSettingsContext } from './_context';
 import { AutoBuildSettings } from './AutoBuildSettings';
 import { AutoPartySettings } from './AutoPartySettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
+import { VillageSettingsContext } from './context/villageSettingsContext';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
 type LinkProps = {

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { IDuration } from '../../../_types/graphql';
+import { Duration as DurationModel } from '../../../_types/graphql';
 
 const useStyles = makeStyles({
   input: {
@@ -10,8 +10,8 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  readonly onChange: (value: IDuration) => void;
-  readonly value: IDuration;
+  readonly onChange: (value: DurationModel) => void;
+  readonly value: DurationModel;
 };
 
 export const Duration: React.FC<Props> = ({ onChange, value }) => {

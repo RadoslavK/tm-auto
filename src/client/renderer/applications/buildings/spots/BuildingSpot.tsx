@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { IBuildingSpot } from '../../../_types/graphql';
+import { BuildingSpot as BuildingSpotModel } from '../../../_types/graphql';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { imageLinks } from '../../../utils/imageLinks';
@@ -18,7 +18,7 @@ enum DialogType {
 }
 
 type Props = {
-  readonly building: IBuildingSpot;
+  readonly building: BuildingSpotModel;
   readonly className?: string;
 };
 

@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
 
-import { IAutoBuildLogEntryContentPayload } from '../../../../_types/graphql';
+import { AutoBuildLogEntryContentPayload } from '../../../../_types/graphql';
 import { imageLinks } from '../../../../utils/imageLinks';
 
 type StylesProps = {
@@ -25,7 +25,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 
 type Props = {
   readonly className?: string;
-  readonly content: IAutoBuildLogEntryContentPayload;
+  readonly content: AutoBuildLogEntryContentPayload;
 };
 
 export const AutoBuildLogContent: React.FC<Props> = ({ className, content }) => {

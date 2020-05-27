@@ -13,12 +13,12 @@ import {
 } from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
-  INextTaskExecutionChangedSubscription,
-  INextTaskExecutionChangedSubscriptionVariables,
-  INextTaskExecutionQuery,
-  INextTaskExecutionQueryVariables,
-  ITimestamp,
+  NextTaskExecutionChangedSubscription,
+  NextTaskExecutionChangedSubscriptionVariables,
+  NextTaskExecutionQuery,
+  NextTaskExecutionQueryVariables,
   TaskType,
+  Timestamp,
 } from '../../_types/graphql';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
@@ -27,12 +27,12 @@ export const useNextTaskExecution = (task: TaskType): number => {
 
   const variables = { task };
 
-  const nextExecutionResult = useQuery<INextTaskExecutionQuery, INextTaskExecutionQueryVariables>(
+  const nextExecutionResult = useQuery<NextTaskExecutionQuery, NextTaskExecutionQueryVariables>(
     NextTaskExecution,
     { variables },
   );
 
-  const updateNextExecution = (nextTaskExecution: ITimestamp): void => {
+  const updateNextExecution = (nextTaskExecution: Timestamp): void => {
     const difference = getSecondsUntilTimestamp(nextTaskExecution);
 
     setNextExecutionIn(difference);
@@ -46,7 +46,7 @@ export const useNextTaskExecution = (task: TaskType): number => {
     }
   }, [nextExecutionResult]);
 
-  useSubscription<INextTaskExecutionChangedSubscription, INextTaskExecutionChangedSubscriptionVariables>(
+  useSubscription<NextTaskExecutionChangedSubscription, NextTaskExecutionChangedSubscriptionVariables>(
     NextTaskExecutionChanged,
     {
       onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

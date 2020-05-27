@@ -1,6 +1,6 @@
 
 declare module '*/graphql_operations/account.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const UserAccount: DocumentNode;
 export const GetAccounts: DocumentNode;
@@ -16,13 +16,12 @@ export const DeleteAccount: DocumentNode;
     
 
 declare module '*/graphql_operations/building.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const BuildingSpot: DocumentNode;
 export const GetBuildingSpots: DocumentNode;
 export const GetAvailableNewBuildings: DocumentNode;
 export const GetMaxBuildingLevel: DocumentNode;
-export const GetBuildingName: DocumentNode;
 export const BuildingsUpdated: DocumentNode;
 
   export default defaultDocument;
@@ -30,16 +29,17 @@ export const BuildingsUpdated: DocumentNode;
     
 
 declare module '*/graphql_operations/buildingInProgress.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GetBuildingsInProgress: DocumentNode;
+export const Timestamp: DocumentNode;
 
   export default defaultDocument;
 }
     
 
 declare module '*/graphql_operations/controller.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GetBotState: DocumentNode;
 export const StartBot: DocumentNode;
@@ -53,9 +53,10 @@ export const OnBotRunningChanged: DocumentNode;
     
 
 declare module '*/graphql_operations/hero.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const HeroInformation: DocumentNode;
+export const Coords: DocumentNode;
 export const GetHeroInformation: DocumentNode;
 export const OnHeroInformationUpdated: DocumentNode;
 
@@ -64,9 +65,10 @@ export const OnHeroInformationUpdated: DocumentNode;
     
 
 declare module '*/graphql_operations/logs.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const LogEntry: DocumentNode;
+export const Coords: DocumentNode;
 export const GetLogs: DocumentNode;
 export const OnLogEntryAdded: DocumentNode;
 
@@ -75,7 +77,7 @@ export const OnLogEntryAdded: DocumentNode;
     
 
 declare module '*/graphql_operations/misc.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const Timestamp: DocumentNode;
 export const Resources: DocumentNode;
@@ -89,9 +91,10 @@ export const Duration: DocumentNode;
     
 
 declare module '*/graphql_operations/nextTaskExecution.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const NextTaskExecution: DocumentNode;
+export const Timestamp: DocumentNode;
 export const NextVillageTaskExecution: DocumentNode;
 export const NextTasksExecution: DocumentNode;
 export const SetNextTaskExecution: DocumentNode;
@@ -107,7 +110,7 @@ export const NextVillageTaskExecutionChanged: DocumentNode;
     
 
 declare module '*/graphql_operations/queuedBuilding.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const ClearQueue: DocumentNode;
 export const EnqueueBuilding: DocumentNode;
@@ -117,6 +120,9 @@ export const MoveQueuedBuildingDown: DocumentNode;
 export const MoveQueuedBuildingUp: DocumentNode;
 export const MoveQueuedBuildingAsHighAsPossible: DocumentNode;
 export const GetQueuedBuildings: DocumentNode;
+export const Cost: DocumentNode;
+export const Resources: DocumentNode;
+export const Duration: DocumentNode;
 export const OnQueueUpdated: DocumentNode;
 
   export default defaultDocument;
@@ -124,9 +130,10 @@ export const OnQueueUpdated: DocumentNode;
     
 
 declare module '*/graphql_operations/settings.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const TaskSettings: DocumentNode;
+export const Duration: DocumentNode;
 export const AutoUnitsUnitSettings: DocumentNode;
 export const AutoUnitsBuildingSettings: DocumentNode;
 export const GeneralSettings: DocumentNode;
@@ -165,7 +172,7 @@ export const OnAutoPartySettingsChanged: DocumentNode;
     
 
 declare module '*/graphql_operations/unit.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const GetUnitInfo: DocumentNode;
 
@@ -174,10 +181,12 @@ declare module '*/graphql_operations/unit.graphql' {
     
 
 declare module '*/graphql_operations/village.graphql' {
-  import { DocumentNode } from 'src/client/renderer/_types/graphql';
+  import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const VillageCrannyCapacity: DocumentNode;
 export const GetVillageById: DocumentNode;
+export const Coords: DocumentNode;
+export const Resources: DocumentNode;
 export const GetVillages: DocumentNode;
 export const ActiveVillageId: DocumentNode;
 export const CrannyCapacity: DocumentNode;

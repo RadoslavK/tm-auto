@@ -1,0 +1,46 @@
+type BuildingSpotLevel {
+    actual: Int!
+    ongoing: Int!
+    queued: Int!
+    max: Int!
+    total: Int!
+}
+
+type BuildingSpot {
+    fieldId: Int!
+    level: BuildingSpotLevel!
+    name: String!
+    type: Int!
+}
+
+type ResourceFields {
+    wood: [BuildingSpot!]!
+    clay: [BuildingSpot!]!
+    iron: [BuildingSpot!]!
+    crop: [BuildingSpot!]!
+}
+
+type BuildingSpots {
+    infrastructure: [BuildingSpot!]!
+    resources: ResourceFields!
+}
+
+input AvailableNewBuildingsInput {
+    fieldId: Int!
+    villageId: Int!
+}
+
+type AvailableNewBuilding {
+    type: Int!
+    name: String!
+}
+
+extend type Query {
+    availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
+    buildingSpots(villageId: Int!): BuildingSpots!
+    maxBuildingLevel(buildingType: Int!): Int!
+}
+
+extend type Subscription {
+    buildingsUpdated(villageId: Int!): Boolean!
+}

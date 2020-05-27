@@ -1,20 +1,18 @@
+import { mergeDefaults } from '../../../../_shared/merge';
 import { BuildingType } from '../../../../_shared/types/buildingType';
-import { BuildingLevel } from '../buildingLevel';
+import { PartialFields } from '../../../../_shared/types/fields.type';
+import { BuildingSpotLevel } from './buildingSpotLevel';
 
-type Params = {
-  readonly fieldId: number;
-  level: BuildingLevel;
-  type: BuildingType;
-};
-
-export class BuildingSpot implements Params {
-  public readonly fieldId: number = 0;
-  public level: BuildingLevel = new BuildingLevel();
+export class BuildingSpot {
+  public fieldId: number = 0;
+  public level: BuildingSpotLevel = new BuildingSpotLevel();
+  public name: string = '';
   public type: BuildingType = BuildingType.None;
 
-  constructor(params: Partial<Params> = {}) {
-    Object.assign(this, params);
+  constructor(params: PartialFields<BuildingSpot> = {}) {
+    mergeDefaults(this, params);
   }
 
-  public isBuilt = (): boolean => this.level.actual > 0;
+  public isBuilt = (): boolean =>
+    this.level.actual > 0;
 }

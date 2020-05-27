@@ -3,27 +3,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import {
-  IAutoBuildLogEntryContent,
-  IAutoUnitsLogEntryContent,
-  ILogEntryFragment,
-  ITextLogEntryContent,
+  AutoBuildLogEntryContent,
+  AutoUnitsLogEntryContent,
+  LogEntryFragment,
+  TextLogEntryContent,
 } from '../../../_types/graphql';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
 import { TextLogContent } from './entries/TextLogContent';
 
-type Content = ILogEntryFragment['content'];
+type Content = LogEntryFragment['content'];
 
 type Props = {
-  readonly logEntry: ILogEntryFragment;
+  readonly logEntry: LogEntryFragment;
 };
 
-const isTextEntry = (content: Content): content is ITextLogEntryContent => (content as ITextLogEntryContent).text !== undefined;
-const isAutoBuildEntry = (content: Content): content is IAutoBuildLogEntryContent => (content as IAutoBuildLogEntryContent).autoBuild !== undefined;
-const isAutoUnitsEntry = (content: Content): content is IAutoUnitsLogEntryContent => (content as IAutoUnitsLogEntryContent).autoUnits !== undefined;
+const isTextEntry = (content: Content): content is TextLogEntryContent => (content as TextLogEntryContent).text !== undefined;
+const isAutoBuildEntry = (content: Content): content is AutoBuildLogEntryContent => (content as AutoBuildLogEntryContent).autoBuild !== undefined;
+const isAutoUnitsEntry = (content: Content): content is AutoUnitsLogEntryContent => (content as AutoUnitsLogEntryContent).autoUnits !== undefined;
 
-const getContentNode = ({ content }: ILogEntryFragment, className: string): JSX.Element => {
+const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.Element => {
   if (isTextEntry(content)) {
     return (
       <TextLogContent
@@ -54,7 +54,7 @@ const getContentNode = ({ content }: ILogEntryFragment, className: string): JSX.
   throw new Error(`Unknown content: ${JSON.stringify(content)}`);
 };
 
-const getVillageNode = ({ village }: ILogEntryFragment, className: string): JSX.Element | null => {
+const getVillageNode = ({ village }: LogEntryFragment, className: string): JSX.Element | null => {
   if (!village) {
     return null;
   }

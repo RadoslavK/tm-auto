@@ -1,6 +1,8 @@
 import fs, { MakeDirectoryOptions } from 'fs';
 import { dirname } from 'path';
 
+import { PartialFields } from '../../_shared/types/fields.type';
+
 class FileService {
   public save = async (path: string, object: unknown): Promise<void> => {
     const folder = dirname(path);
@@ -14,7 +16,7 @@ class FileService {
     return fs.promises.writeFile(path, serializedObject, { flag: 'w' });
   };
 
-  public loadInstance = <T extends unknown>(path: string, constructor: { new(params?: Partial<T>): T }, defaultValue?: T | undefined): T => {
+  public loadInstance = <T extends unknown>(path: string, constructor: { new(params?: PartialFields<T>): T }, defaultValue?: T | undefined): T => {
     try {
       const file = fs.readFileSync(path);
       const params: T = JSON.parse(file.toString());

@@ -3,12 +3,12 @@ import { useMutation } from '@apollo/react-hooks';
 import { SetNextVillageTaskExecution } from '*/graphql_operations/nextTaskExecution.graphql';
 
 import {
-  ISetNextVillageTaskExecutionMutation,
-  ISetNextVillageTaskExecutionMutationVariables,
+  SetNextVillageTaskExecutionMutation,
+  SetNextVillageTaskExecutionMutationVariables,
 } from '../../_types/graphql';
 
 export const useSetNextVillageTaskExecution = () => {
-  const [setNextVillageTaskExecution] = useMutation<ISetNextVillageTaskExecutionMutation, ISetNextVillageTaskExecutionMutationVariables>(
+  const [setNextVillageTaskExecution] = useMutation<SetNextVillageTaskExecutionMutation, SetNextVillageTaskExecutionMutationVariables>(
     SetNextVillageTaskExecution,
   );
 

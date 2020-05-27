@@ -1,11 +1,13 @@
 import fs from 'fs';
 
+import { BotEvent } from '../_graphql/subscriptions/botEvent';
+import { publishEvent } from '../_graphql/subscriptions/pubSub';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
-import { GeneralSettings } from '../_models/settings/generalSettings';
 import {
   BotState,
-  IMutationSignInArgs,
+  GeneralSettings,
+  MutationSignInArgs,
 } from '../_types/graphql';
 import { accountContext } from '../accountContext';
 import {
@@ -19,19 +21,17 @@ import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
 import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
-import { TaskManager } from '../controller/tasks/taskManager';
-import { BotEvent } from '../graphql/subscriptions/botEvent';
-import { publishEvent } from '../graphql/subscriptions/pubSub';
+import { TaskManager } from '../controller/taskManager';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
 
 class ControllerService {
-  private m_timeout: NodeJS.Timeout;
-  private m_taskManager: TaskManager | null = null;
+  private _timeout: NodeJS.Timeout;
+  private _taskManager: TaskManager | null = null;
 
-  private m_tasksCoolDown = new CoolDown({
+  private _tasksCoolDown: CoolDown = new CoolDown({
     max: new Duration({ seconds: 35 }),
     min: new Duration({ seconds: 10 }),
   });
@@ -45,7 +45,7 @@ class ControllerService {
     return publishEvent(BotEvent.BotRunningChanged);
   };
 
-  public signIn = async (input: IMutationSignInArgs): Promise<void> => {
+  public signIn = async (input: MutationSignInArgs): Promise<void> => {
     const {
       accountId,
     } = input;
@@ -106,11 +106,11 @@ class ControllerService {
     try {
       await ensureLoggedIn();
 
-      if (!this.m_taskManager) {
-        this.m_taskManager = new TaskManager();
+      if (!this._taskManager) {
+        this._taskManager = new TaskManager();
       }
 
-      await this.m_taskManager.execute();
+      await this._taskManager.execute();
     } catch (error) {
       console.error(error.stack);
       // try to make screenshot
@@ -132,13 +132,13 @@ class ControllerService {
       await killBrowser();
     }
 
-    const nextTimeout = this.m_tasksCoolDown.randomDelay();
+    const nextTimeout = this._tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
     accountContext.nextExecutionService.setTasks(nextExecution);
 
-    this.m_timeout = setTimeout(async () => {
+    this._timeout = setTimeout(async () => {
       await this.execute();
     }, nextTimeout * 1000);
   };
@@ -146,11 +146,11 @@ class ControllerService {
   public stop = async (): Promise<void> => {
     this.setState(BotState.Stopping);
 
-    if (this.m_timeout) {
-      clearTimeout(this.m_timeout);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
     }
 
-    this.m_taskManager = null;
+    this._taskManager = null;
     await killBrowser();
 
     this.setState(BotState.Paused);

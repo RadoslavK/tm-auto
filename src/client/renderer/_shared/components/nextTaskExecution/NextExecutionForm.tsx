@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { IDuration } from '../../../_types/graphql';
+import { Duration as DurationModel } from '../../../_types/graphql';
 import { Duration } from '../controls/Duration';
 
 type Props = {
-  readonly onSubmit: (delay: IDuration) => void;
+  readonly onSubmit: (delay: DurationModel) => void;
 };
 
-const defaultDelay: IDuration = {
+const defaultDelay: DurationModel = {
   days: 0,
   hours: 0,
   minutes: 0,
@@ -15,7 +15,7 @@ const defaultDelay: IDuration = {
 };
 
 export const NextExecutionForm: React.FC<Props> = ({ onSubmit }) => {
-  const [delay, setDelay] = useState<IDuration>(defaultDelay);
+  const [delay, setDelay] = useState<DurationModel>(defaultDelay);
 
   const submit = () => onSubmit(delay);
 

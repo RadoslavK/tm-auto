@@ -1,15 +1,10 @@
-import { IGeneralVillageSettings } from '../../_types/graphql';
-import { merge } from '../../../_shared/merge';
-import { Fields } from '../../../_shared/types';
+import { mergeDefaults } from '../../../_shared/merge';
+import { PartialFields } from '../../../_shared/types/fields.type';
 
-const getDefaults = (): Fields<GeneralVillageSettings> => ({
-  allowTasks: true,
-});
+export class GeneralVillageSettings {
+  public readonly allowTasks: boolean = true;
 
-export class GeneralVillageSettings implements IGeneralVillageSettings {
-  public allowTasks: boolean;
-
-  constructor(params: Partial<IGeneralVillageSettings> = {}) {
-    Object.assign(this, merge(getDefaults, params));
+  constructor(params: PartialFields<GeneralVillageSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }

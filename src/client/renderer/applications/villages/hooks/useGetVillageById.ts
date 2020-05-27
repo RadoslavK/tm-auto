@@ -3,13 +3,13 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetVillageById } from '*/graphql_operations/village.graphql';
 
 import {
-  IGetVillageByIdQuery,
-  IGetVillageByIdQueryVariables,
+  GetVillageByIdQuery,
+  GetVillageByIdQueryVariables,
 } from '../../../_types/graphql';
 import { useOnVillageUpdate } from './useOnVillageUpdate';
 
 export const useGetVillageById = (villageId: number) => {
-  const { data, loading, refetch } = useQuery<IGetVillageByIdQuery, IGetVillageByIdQueryVariables>(GetVillageById, {
+  const { data, loading, refetch } = useQuery<GetVillageByIdQuery, GetVillageByIdQueryVariables>(GetVillageById, {
     variables: { villageId },
   });
 

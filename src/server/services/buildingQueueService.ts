@@ -1,11 +1,11 @@
+import { BotEvent } from '../_graphql/subscriptions/botEvent';
+import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
-import { IBuildingSpot } from '../_types/graphql';
+import { BuildingSpot } from '../_types/graphql';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
-import { BotEvent } from '../graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -27,19 +27,19 @@ export enum MovingDirection {
 }
 
 export class BuildingQueueService {
-  private readonly m_village: Village;
-  private readonly m_filePath: string;
+  private readonly _village: Village;
+  private readonly _filePath: string;
 
   constructor(villageId: number) {
-    this.m_village = accountContext.villageService.village(villageId);
-    this.m_filePath = dataPathService.villagePath(villageId).queue;
+    this._village = accountContext.villageService.village(villageId);
+    this._filePath = dataPathService.villagePath(villageId).queue;
   }
 
-  private serializeQueue = async (): Promise<void> => fileService.save(this.m_filePath, this.m_village.buildings.queue.buildings());
+  private serializeQueue = async (): Promise<void> => fileService.save(this._filePath, this._village.buildings.queue.buildings());
 
   public loadQueue = async (): Promise<void> => {
-    const buildings = fileService.load<QueuedBuilding[]>(this.m_filePath, []);
-    this.m_village.buildings.queue.set(buildings);
+    const buildings = fileService.load<QueuedBuilding[]>(this._filePath, []);
+    this._village.buildings.queue.set(buildings);
   };
 
   public enqueueBuilding = (building: EnqueuedBuilding): void => {
@@ -49,8 +49,8 @@ export class BuildingQueueService {
       type,
     } = building;
 
-    const spot = this.m_village.buildings.spots.at(fieldId);
-    const totalLevel = spot.level.total();
+    const spot = this._village.buildings.spots.at(fieldId);
+    const totalLevel = spot.level.getTotal();
     const { maxLevel } = buildingInfoService.getBuildingInfo(type);
 
     const levels = targetLevel
@@ -67,14 +67,15 @@ export class BuildingQueueService {
       }
 
       const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8)}`;
-      const qBuilding = new QueuedBuilding({
+      const qBuilding = {
         fieldId,
         level,
         queueId,
         type,
-      });
+      };
 
-      this.m_village.buildings.queue.add(qBuilding);
+      this._village.buildings.queue.add(qBuilding);
+
       spot.level.queued++;
       enqueued = true;
     }
@@ -85,7 +86,7 @@ export class BuildingQueueService {
   };
 
   public dequeueBuilding = (queueId: string): void => {
-    const removedCount = this.m_village.buildings.queue.remove(queueId);
+    const removedCount = this._village.buildings.queue.remove(queueId);
     if (removedCount <= 0) {
       return;
     }
@@ -100,8 +101,8 @@ export class BuildingQueueService {
     } = input;
 
     const removedCount = deleteAll
-      ? this.m_village.buildings.queue.removeAllAtField(fieldId)
-      : this.m_village.buildings.queue.removeLastAtField(fieldId);
+      ? this._village.buildings.queue.removeAllAtField(fieldId)
+      : this._village.buildings.queue.removeLastAtField(fieldId);
 
     if (removedCount <= 0) {
       return;
@@ -116,9 +117,9 @@ export class BuildingQueueService {
     }
 
     if (direction === MovingDirection.Up) {
-      this.m_village.buildings.queue.moveUp(queueId);
+      this._village.buildings.queue.moveUp(queueId);
     } else {
-      this.m_village.buildings.queue.moveDown(queueId);
+      this._village.buildings.queue.moveDown(queueId);
     }
 
     this.onUpdate();
@@ -128,9 +129,9 @@ export class BuildingQueueService {
   public moveAsHighAsPossible = (queueId: string): void => {
     // key: fieldId, value: queued offset
     const offsets: Record<number, number> = {};
-    const queuedBuildings = this.m_village.buildings.queue.buildings();
+    const queuedBuildings = this._village.buildings.queue.buildings();
 
-    const spots = this.m_village.buildings.spots.buildings();
+    const spots = this._village.buildings.spots.buildings();
     spots.forEach(spot => {
       offsets[spot.fieldId] = 0;
     });
@@ -141,7 +142,7 @@ export class BuildingQueueService {
       return;
     }
 
-    const queueIndex = this.m_village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
+    const queueIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
 
     if (queueIndex === 0) {
       return;
@@ -163,17 +164,17 @@ export class BuildingQueueService {
       return;
     }
 
-    this.m_village.buildings.queue.move(queueIndex, newIndex);
+    this._village.buildings.queue.move(queueIndex, newIndex);
     this.onUpdate();
   };
 
   public clearQueue = (): void => {
-    if (!this.m_village.buildings.queue.buildings().length) {
+    if (!this._village.buildings.queue.buildings().length) {
       return;
     }
 
-    this.m_village.buildings.queue.clear();
-    const spots = this.m_village.buildings.spots.buildings();
+    this._village.buildings.queue.clear();
+    const spots = this._village.buildings.spots.buildings();
 
     spots.forEach(spot => {
       spot.level.queued = 0;
@@ -183,19 +184,19 @@ export class BuildingQueueService {
   };
 
   public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
-    const queueIndex = this.m_village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
+    const queueIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
 
     if (queueIndex === -1) {
       return false;
     }
 
     const newIndex = queueIndex + direction;
-    if (newIndex < 0 || newIndex >= this.m_village.buildings.queue.buildings().length) {
+    if (newIndex < 0 || newIndex >= this._village.buildings.queue.buildings().length) {
       return false;
     }
 
-    const building = this.m_village.buildings.queue.buildings()[queueIndex];
-    const buildingInTheWay = this.m_village.buildings.queue.buildings()[queueIndex + direction];
+    const building = this._village.buildings.queue.buildings()[queueIndex];
+    const buildingInTheWay = this._village.buildings.queue.buildings()[queueIndex + direction];
 
     const isMovingUp = direction === MovingDirection.Up;
 
@@ -206,9 +207,9 @@ export class BuildingQueueService {
     }
 
     let qBuildingWithPossiblyAffectedRequirements: QueuedBuilding;
-    let theOtherBuilding: IBuildingSpot | undefined;
+    let theOtherBuilding: BuildingSpot | undefined;
 
-    const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
 
     if (isMovingUp) {
       qBuildingWithPossiblyAffectedRequirements = building;
@@ -224,9 +225,9 @@ export class BuildingQueueService {
 
     // need to calculate offset till its position
     const offsets: Record<number, number> = {};
-    const queuedBuildings = this.m_village.buildings.queue.buildings();
+    const queuedBuildings = this._village.buildings.queue.buildings();
 
-    const spots = this.m_village.buildings.spots.buildings();
+    const spots = this._village.buildings.spots.buildings();
     spots.forEach(spot => {
       offsets[spot.fieldId] = 0;
     });
@@ -248,9 +249,9 @@ export class BuildingQueueService {
   };
 
   private willQueuedBuildingStillMeetItsRequirements = (checkedBuilding: QueuedBuilding, offsets: Record<number, number>): boolean => {
-    const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
 
-    const getNewTotalLevel = (building: IBuildingSpot): number =>
+    const getNewTotalLevel = (building: BuildingSpot): number =>
       building.level.actual
       + building.level.ongoing
       + offsets[building.fieldId];
@@ -300,17 +301,17 @@ export class BuildingQueueService {
   public correctBuildingQueue = (): void => {
     const offsets: Record<number, number> = {};
 
-    const spots = this.m_village.buildings.spots.buildings();
+    const spots = this._village.buildings.spots.buildings();
 
     spots.forEach(spot => {
       offsets[spot.fieldId] = 0;
     });
 
-    this.m_village.buildings.queue.buildings().forEach(qBuilding => {
+    this._village.buildings.queue.buildings().forEach(qBuilding => {
       const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(qBuilding, offsets);
 
       if (shouldBeRemoved) {
-        this.m_village.buildings.queue.remove(qBuilding.queueId);
+        this._village.buildings.queue.remove(qBuilding.queueId);
       } else {
         offsets[qBuilding.fieldId]++;
       }
@@ -324,7 +325,7 @@ export class BuildingQueueService {
   };
 
   public getMainBuildingLevels = (): Record<string, number> => {
-    const { buildings } = this.m_village;
+    const { buildings } = this._village;
     const mainBuilding = buildings.spots.ofType(BuildingType.MainBuilding);
     let baseMbLevel = mainBuilding ? mainBuilding.level.actual + mainBuilding.level.ongoing : 0;
 
@@ -348,13 +349,13 @@ export class BuildingQueueService {
   private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
       && accountContext.villageService.allVillages().some(otherVillage =>
-        otherVillage.id !== this.m_village.id
+        otherVillage.id !== this._village.id
         && accountContext.villageService.village(otherVillage.id).buildings.normalizedBuildingSpots().some(b => b.type === BuildingType.Palace))) {
       // iba 1 palac
       return true;
     }
 
-    const normalizedBuildings = this.m_village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
 
     const previousLevelBuildingExists = normalizedBuildings.some(b =>
       b.type === queuedBuilding.type
@@ -372,8 +373,8 @@ export class BuildingQueueService {
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(queuedBuilding.type);
 
-    if ((conditions.capital === CapitalCondition.Prohibited && this.m_village.isCapital)
-      || (conditions.capital === CapitalCondition.Required && !this.m_village.isCapital)) {
+    if ((conditions.capital === CapitalCondition.Prohibited && this._village.isCapital)
+      || (conditions.capital === CapitalCondition.Required && !this._village.isCapital)) {
       return true;
     }
 
@@ -457,8 +458,8 @@ export class BuildingQueueService {
 
   private onUpdate = async (): Promise<void> => {
     const promise = Promise.all([
-      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.m_village.id }),
-      publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.m_village.id }),
+      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this._village.id }),
+      publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this._village.id }),
     ]);
 
     this.serializeQueue();

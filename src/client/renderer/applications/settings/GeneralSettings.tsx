@@ -18,22 +18,22 @@ import {
 } from '*/graphql_operations/settings.graphql';
 
 import {
-  IGeneralSettings,
-  IGetGeneralSettingsQuery,
-  IOnGeneralSettingsChangedSubscription,
-  IResetSettingsMutation,
-  IResetSettingsMutationVariables,
-  IUpdateGeneralSettingsInput,
-  IUpdateGeneralSettingsMutation,
-  IUpdateGeneralSettingsMutationVariables,
+  GeneralSettings,
+  GetGeneralSettingsQuery,
+  OnGeneralSettingsChangedSubscription,
+  ResetSettingsMutation,
+  ResetSettingsMutationVariables,
   SettingsType,
+  UpdateGeneralSettingsInput,
+  UpdateGeneralSettingsMutation,
+  UpdateGeneralSettingsMutationVariables,
 } from '../../_types/graphql';
 
 const Container: React.FC = () => {
-  const [settings, setSettings] = useState<IGeneralSettings>();
-  const { data, loading } = useQuery<IGetGeneralSettingsQuery>(GetGeneralSettings);
+  const [settings, setSettings] = useState<GeneralSettings>();
+  const { data, loading } = useQuery<GetGeneralSettingsQuery>(GetGeneralSettings);
 
-  useSubscription<IOnGeneralSettingsChangedSubscription>(OnGeneralSettingsChanged, {
+  useSubscription<OnGeneralSettingsChangedSubscription>(OnGeneralSettingsChanged, {
     onSubscriptionData: ({ subscriptionData }) => {
       if (!subscriptionData.loading && subscriptionData.data) {
         setSettings(subscriptionData.data.generalSettingsChanged);
@@ -57,7 +57,7 @@ const Container: React.FC = () => {
 export { Container as GeneralSettings };
 
 type Props = {
-  readonly settings: IGeneralSettings;
+  readonly settings: GeneralSettings;
 };
 
 const GeneralSettings: React.FC<Props> = (props) => {
@@ -66,10 +66,10 @@ const GeneralSettings: React.FC<Props> = (props) => {
   } = props;
 
   const [state, setState] = useState(settings);
-  const input: IUpdateGeneralSettingsInput = {
+  const input: UpdateGeneralSettingsInput = {
     ...state,
   };
-  const [updateSettings] = useMutation<IUpdateGeneralSettingsMutation, IUpdateGeneralSettingsMutationVariables>(UpdateGeneralSettings, {
+  const [updateSettings] = useMutation<UpdateGeneralSettingsMutation, UpdateGeneralSettingsMutationVariables>(UpdateGeneralSettings, {
     variables: { settings: input },
   });
 
@@ -89,7 +89,7 @@ const GeneralSettings: React.FC<Props> = (props) => {
     }
   }, [settings, state, updateSettings]);
 
-  const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(
+  const [resetSettings] = useMutation<ResetSettingsMutation, ResetSettingsMutationVariables>(
     ResetSettings,
     { variables: { type: SettingsType.General } },
   );

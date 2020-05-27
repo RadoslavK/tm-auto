@@ -1,43 +1,23 @@
-import {
-  AdventureCriteria,
-  IAutoAdventureSettings,
-} from '../../../_types/graphql';
-import { merge } from '../../../../_shared/merge';
-import { Fields } from '../../../../_shared/types';
+import { mergeDefaults } from '../../../../_shared/merge';
+import { AdventureCriteria } from '../../../../_shared/types/adventureCriteria';
+import { PartialFields } from '../../../../_shared/types/fields.type';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const getDefaults = (): Fields<AutoAdventureSettings> => ({
-  adventureCriteria: AdventureCriteria.Closest,
-  allow: true,
-
-  coolDown: new CoolDown({
+export class AutoAdventureSettings {
+  public readonly adventureCriteria: AdventureCriteria = AdventureCriteria.Closest;
+  public readonly allow: boolean = true;
+  public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 13 }),
     min: new Duration({ minutes: 8 }),
-  }),
-  hardMinHealth: 50,
-  maxTravelTime: new Duration({ hours: 1 }),
-  normalMinHealth: 30,
-  preferHard: false,
-  preferredVillageId: null,
-});
+  });
+  public readonly hardMinHealth: number = 50;
+  public readonly maxTravelTime: Duration = new Duration({ hours: 1 });
+  public readonly normalMinHealth: number = 30;
+  public readonly preferHard: boolean = false;
+  public readonly preferredVillageId: number | null = null;
 
-export class AutoAdventureSettings implements IAutoAdventureSettings {
-  public allow: boolean;
-  public coolDown: CoolDown;
-
-  public adventureCriteria: AdventureCriteria;
-  public preferHard: boolean;
-  public normalMinHealth: number;
-  public hardMinHealth: number;
-  public maxTravelTime: Duration;
-  public preferredVillageId: number | null;
-
-  constructor(params: Partial<IAutoAdventureSettings> = {}) {
-    Object.assign(this, merge(getDefaults, {
-      ...params,
-      coolDown: params.coolDown && new CoolDown(params.coolDown),
-      maxTravelTime: params.maxTravelTime && new Duration(params.maxTravelTime),
-    }));
+  constructor(params: PartialFields<AutoAdventureSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }

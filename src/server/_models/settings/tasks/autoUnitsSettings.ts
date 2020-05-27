@@ -1,57 +1,35 @@
-import {
-  IAutoUnitsBuildingSettings,
-  IAutoUnitsSettings,
-  IAutoUnitsUnitSettings,
-} from '../../../_types/graphql';
-import { merge } from '../../../../_shared/merge';
-import { Fields } from '../../../../_shared/types';
+import { mergeDefaults } from '../../../../_shared/merge';
 import { BuildingType } from '../../../../_shared/types/buildingType';
+import { PartialFields } from '../../../../_shared/types/fields.type';
 import { accountContext } from '../../../accountContext';
 import { unitInfoService } from '../../../services/info/unitInfoService';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
-const getDefaultUnitSettings = (): Fields<AutoUnitsUnitSettings> => ({
-  autoBuild: false,
-  index: 0,
-  targetAmount: 0,
-  trainForever: false,
-});
+export class AutoUnitsUnitSettings {
+  public readonly autoBuild: boolean = false;
+  public readonly index: number = 0;
+  public readonly targetAmount: number = 0;
+  public readonly trainForever: boolean = false;
 
-export class AutoUnitsUnitSettings implements IAutoUnitsUnitSettings {
-  index: number;
-  autoBuild: boolean;
-  trainForever: boolean;
-  targetAmount: number;
-
-  constructor(params: Partial<IAutoUnitsUnitSettings> = {}) {
-    Object.assign(this, merge(getDefaultUnitSettings, params));
+  constructor(params: PartialFields<AutoUnitsUnitSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }
 
-const getDefaults = (): Fields<AutoUnitsBuildingSettings> => ({
-  allow: true,
-  maxBuildTime: new Duration({ hours: 1 }),
-  units: [],
-});
+export class AutoUnitsBuildingSettings {
+  public readonly allow: boolean = true;
+  public readonly maxBuildTime: Duration = new Duration({ hours: 1 });
+  public units: AutoUnitsUnitSettings[] = [];
 
-export class AutoUnitsBuildingSettings implements IAutoUnitsBuildingSettings {
-  allow: boolean;
-  maxBuildTime: Duration;
-  units: AutoUnitsUnitSettings[];
-
-  constructor(params: Partial<IAutoUnitsBuildingSettings> = {}) {
-    Object.assign(this, merge(getDefaults, {
-      ...params,
-      maxBuildTime: params.maxBuildTime && new Duration(params.maxBuildTime),
-      units: params.units && params.units.map(u => new AutoUnitsUnitSettings(u)),
-    }));
+  constructor(params: PartialFields<AutoUnitsBuildingSettings> = {}) {
+    mergeDefaults(this, params);
   }
 }
 
-const unitsMap: Map<BuildingType, IAutoUnitsUnitSettings[]> = new Map();
+const unitsMap: Map<BuildingType, AutoUnitsUnitSettings[]> = new Map();
 
-const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] => {
+const getUnitsOfType = (buildingType: BuildingType): AutoUnitsUnitSettings[] => {
   let units = unitsMap.get(buildingType);
 
   if (units) {
@@ -70,48 +48,35 @@ const getUnitsOfType = (buildingType: BuildingType): IAutoUnitsUnitSettings[] =>
   return units;
 };
 
-const getDefaultSettings = (): Fields<AutoUnitsSettings> => ({
-  allow: false,
-  barracks: new AutoUnitsBuildingSettings({
+export class AutoUnitsSettings {
+  public readonly allow: boolean = false;
+
+  public readonly barracks: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Barracks),
-  }),
-  coolDown: new CoolDown({
+  });
+
+  public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 12 }),
     min: new Duration({ minutes: 7 }),
-  }),
-  minCrop: 0,
-  residence: new AutoUnitsBuildingSettings({
+  });
+
+  public readonly minCrop: number = 0;
+
+  public readonly residence: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
     maxBuildTime: new Duration({ hours: 12 }),
     units: getUnitsOfType(BuildingType.Residence),
-  }),
-  stable: new AutoUnitsBuildingSettings({
+  });
+
+  public readonly stable: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Stable),
-  }),
-  workshop: new AutoUnitsBuildingSettings({
+  });
+
+  public readonly workshop: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Workshop),
-  }),
-});
+  });
 
-export class AutoUnitsSettings implements IAutoUnitsSettings {
-  public allow: boolean;
-  public coolDown: CoolDown;
-
-  public minCrop: number;
-
-  public barracks: AutoUnitsBuildingSettings;
-  public stable: AutoUnitsBuildingSettings;
-  public workshop: AutoUnitsBuildingSettings;
-  public residence: AutoUnitsBuildingSettings;
-
-  constructor(params: Partial<IAutoUnitsSettings> = {}) {
-    Object.assign(this, merge(getDefaultSettings, {
-      ...params,
-      barracks: params.barracks && new AutoUnitsBuildingSettings(params.barracks),
-      coolDown: params.coolDown && new CoolDown(params.coolDown),
-      residence: params.residence && new AutoUnitsBuildingSettings(params.residence),
-      stable: params.stable && new AutoUnitsBuildingSettings(params.stable),
-      workshop: params.workshop && new AutoUnitsBuildingSettings(params.workshop),
-    }));
+  constructor(params: PartialFields<AutoUnitsSettings> = {}) {
+    mergeDefaults(this, params);
   }
 
   public forBuilding = (type: BuildingType): AutoUnitsBuildingSettings => {

@@ -59,7 +59,7 @@ class AccountContextMock extends AccountContext {
 
     const villages: Village[] = [
       new Village({
-        coords: new Coords({ x: 0, y: 0 }),
+        coords: new Coords(),
         id: 1,
         name: 'Village 1',
         resources: new VillageResources({
@@ -101,11 +101,8 @@ class AccountContextMock extends AccountContext {
     this.villageService.setCapital(villages[0].coords);
     this.villageService.currentVillageId = villages[0].id;
 
-    this.gameInfo = {
-      ...this.gameInfo,
-      speed: 3,
-      tribe: Tribe.Teutons,
-    };
+    this.gameInfo.speed = 3;
+    this.gameInfo.tribe = Tribe.Teutons;
   }
 }
 

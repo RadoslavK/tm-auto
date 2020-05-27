@@ -1,13 +1,13 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { IQueuedBuilding } from '../../../_types/graphql';
+import { QueuedBuilding as QueuedBuildingModel } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { Cost } from './Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
 
 type Props = {
-  readonly building: IQueuedBuilding;
+  readonly building: QueuedBuildingModel;
 };
 
 const useStyles = makeStyles<unknown, Props>({

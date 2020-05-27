@@ -6,23 +6,23 @@ import { getWithMinimumSafe } from '../../../utils/getWithMaximum';
 import { BuildingInProgress } from './buildingInProgress';
 
 export class BuildingsInProgress {
-  private m_buildings: readonly BuildingInProgress[] = [];
+  private _buildings: readonly BuildingInProgress[] = [];
 
-  public buildings = (): readonly BuildingInProgress[] => this.m_buildings;
+  public buildings = (): readonly BuildingInProgress[] => this._buildings;
 
   public set = (buildings: readonly BuildingInProgress[]): void => {
-    this.m_buildings = buildings;
+    this._buildings = buildings;
   };
 
   public isSpotFree = (type: BuildingSpotType): boolean =>
     type === BuildingSpotType.Any
-      ? !this.m_buildings.length
-      : !this.m_buildings.some(x => getBuildingSpotType(x.type) === type);
+      ? !this._buildings.length
+      : !this._buildings.some(x => getBuildingSpotType(x.type) === type);
 
   public getTimeOfBuildingCompletion = (type: BuildingSpotType): Date | undefined => {
     const filteredSequence = type === BuildingSpotType.Any
-      ? this.m_buildings.slice()
-      : this.m_buildings.filter(x => getBuildingSpotType(x.type) === type);
+      ? this._buildings.slice()
+      : this._buildings.filter(x => getBuildingSpotType(x.type) === type);
 
     if (!filteredSequence.length) {
       return;

@@ -1,15 +1,15 @@
-import { Boxed } from '../../../_shared/types';
+import { PartialFields } from '../../../_shared/types/fields.type';
 import { fileService } from '../fileService';
 
-export class InternalSettingsService<TParams extends Boxed<TParams>, TSettings extends TParams> {
+export class InternalSettingsService<TSettings> {
   private settings: TSettings;
   private loaded: boolean;
 
-  constructor(private SettingsConstructor: { new(params?: Partial<TParams>): TSettings }, private path: string) {}
+  constructor(private path: string, private DefaultSettings: { new(params?: PartialFields<TSettings>): TSettings }) {}
 
   public get = (): TSettings => {
     if (!this.loaded) {
-      this.settings = fileService.loadInstance<TSettings>(this.path, this.SettingsConstructor);
+      this.settings = fileService.loadInstance<TSettings>(this.path, this.DefaultSettings);
       this.loaded = true;
     }
 

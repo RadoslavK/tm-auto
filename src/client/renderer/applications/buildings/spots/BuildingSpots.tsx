@@ -12,13 +12,13 @@ import {
 import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IBuildingSpot,
-  IBuildingsUpdatedSubscription,
-  IBuildingsUpdatedSubscriptionVariables,
-  IGetBuildingSpotsQuery,
-  IGetBuildingSpotsQueryVariables,
-  IOnQueueUpdatedSubscription,
-  IOnQueueUpdatedSubscriptionVariables,
+  BuildingSpot as BuildingSpotModel,
+  BuildingsUpdatedSubscription,
+  BuildingsUpdatedSubscriptionVariables,
+  GetBuildingSpotsQuery,
+  GetBuildingSpotsQueryVariables,
+  OnQueueUpdatedSubscription,
+  OnQueueUpdatedSubscriptionVariables,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingSpot } from './BuildingSpot';
@@ -35,7 +35,7 @@ type Props = {
   readonly className: string;
 };
 
-const mapBuilding = (building: IBuildingSpot, index: number): JSX.Element => (
+const mapBuilding = (building: BuildingSpotModel, index: number): JSX.Element => (
   <BuildingSpot
     key={index}
     building={building}
@@ -49,18 +49,18 @@ export const BuildingSpots: React.FC<Props> = (props) => {
 
   const classes = useStyles({});
   const { villageId } = useVillageContext();
-  const { data, loading, refetch } = useQuery<IGetBuildingSpotsQuery, IGetBuildingSpotsQueryVariables>(GetBuildingSpots, {
+  const { data, loading, refetch } = useQuery<GetBuildingSpotsQuery, GetBuildingSpotsQueryVariables>(GetBuildingSpots, {
     variables: { villageId },
   });
 
-  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     onSubscriptionData: () => {
       refetch();
     },
     variables: { villageId },
   });
 
-  useSubscription<IOnQueueUpdatedSubscription, IOnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
+  useSubscription<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
     onSubscriptionData: () => {
       refetch();
     },

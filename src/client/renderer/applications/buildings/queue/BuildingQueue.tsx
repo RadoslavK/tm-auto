@@ -14,14 +14,14 @@ import {
 } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
-  IBuildingsUpdatedSubscription,
-  IBuildingsUpdatedSubscriptionVariables,
-  IClearQueueMutation,
-  IClearQueueMutationVariables,
-  IGetQueuedBuildingsQuery,
-  IGetQueuedBuildingsQueryVariables,
-  IOnQueueUpdatedSubscription,
-  IOnQueueUpdatedSubscriptionVariables,
+  BuildingsUpdatedSubscription,
+  BuildingsUpdatedSubscriptionVariables,
+  ClearQueueMutation,
+  ClearQueueMutationVariables,
+  GetQueuedBuildingsQuery,
+  GetQueuedBuildingsQueryVariables,
+  OnQueueUpdatedSubscription,
+  OnQueueUpdatedSubscriptionVariables,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { Cost } from './Cost';
@@ -50,23 +50,23 @@ export const BuildingQueue: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   const { villageId } = useVillageContext();
-  const { data, loading, refetch } = useQuery<IGetQueuedBuildingsQuery, IGetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
+  const { data, loading, refetch } = useQuery<GetQueuedBuildingsQuery, GetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
     variables: { villageId },
   });
 
-  useSubscription<IBuildingsUpdatedSubscription, IBuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
+  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
     onSubscriptionData: () => {
       refetch();
     },
     variables: { villageId },
   });
 
-  useSubscription<IOnQueueUpdatedSubscription, IOnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
+  useSubscription<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
     onSubscriptionData: () => refetch(),
     variables: { villageId },
   });
 
-  const [clearQueue] = useMutation<IClearQueueMutation, IClearQueueMutationVariables>(ClearQueue, {
+  const [clearQueue] = useMutation<ClearQueueMutation, ClearQueueMutationVariables>(ClearQueue, {
     variables: { villageId },
   });
 

@@ -17,22 +17,22 @@ import { Duration } from '../../../_shared/components/controls/Duration';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
 import {
   AdventureCriteria,
-  IAutoAdventureSettings,
-  ICoolDown,
-  IDuration,
-  IResetSettingsMutation,
-  IResetSettingsMutationVariables,
-  IUpdateAutoAdventureSettingsInput,
-  IUpdateAutoAdventureSettingsMutation,
-  IUpdateAutoAdventureSettingsMutationVariables,
+  AutoAdventureSettings as AutoAdventureSettingsModel,
+  CoolDown as CoolDownModel,
+  Duration as DurationModel,
+  ResetSettingsMutation,
+  ResetSettingsMutationVariables,
   SettingsType,
   TaskType,
+  UpdateAutoAdventureSettingsInput,
+  UpdateAutoAdventureSettingsMutation,
+  UpdateAutoAdventureSettingsMutationVariables,
 } from '../../../_types/graphql';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { useVillages } from '../../../hooks/villages/useVillages';
 
 type Props = {
-  readonly settings: IAutoAdventureSettings;
+  readonly settings: AutoAdventureSettingsModel;
 };
 
 const getCriteriaString = (criteria: AdventureCriteria): string => {
@@ -60,11 +60,11 @@ export const AutoAdventureSettings: React.FC<Props> = (props) => {
   } = props;
 
   const [state, setState] = useState(settings);
-  const input: IUpdateAutoAdventureSettingsInput = {
+  const input: UpdateAutoAdventureSettingsInput = {
     ...state,
   };
 
-  const [updateSettings] = useMutation<IUpdateAutoAdventureSettingsMutation, IUpdateAutoAdventureSettingsMutationVariables>(UpdateAutoAdventureSettings, {
+  const [updateSettings] = useMutation<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>(UpdateAutoAdventureSettings, {
     variables: { settings: input },
   });
 
@@ -86,14 +86,14 @@ export const AutoAdventureSettings: React.FC<Props> = (props) => {
 
   const villages = useVillages();
 
-  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: IDuration) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), []);
+  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: DurationModel) => setState(prevState => ({ ...prevState, maxTravelTime: newMaxTravelTime })), []);
 
-  const [resetSettings] = useMutation<IResetSettingsMutation, IResetSettingsMutationVariables>(
+  const [resetSettings] = useMutation<ResetSettingsMutation, ResetSettingsMutationVariables>(
     ResetSettings,
     { variables: { type: SettingsType.AutoAdventure } },
   );
 
-  const onCooldownChange = useCallback((updatedCooldown: ICoolDown): void => {
+  const onCooldownChange = useCallback((updatedCooldown: CoolDownModel): void => {
     setState(prevState => ({
       ...prevState,
       coolDown: updatedCooldown,

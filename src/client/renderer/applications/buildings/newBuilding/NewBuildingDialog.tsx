@@ -5,8 +5,8 @@ import React from 'react';
 import { GetAvailableNewBuildings } from '*/graphql_operations/building.graphql';
 
 import {
-  IGetAvailableNewBuildingsQuery,
-  IGetAvailableNewBuildingsQueryVariables,
+  GetAvailableNewBuildingsQuery,
+  GetAvailableNewBuildingsQueryVariables,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { NewBuildingItem } from './NewBuildingItem';
@@ -35,7 +35,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: 
 
   const classes = useStyles({});
   const { villageId } = useVillageContext();
-  const { data, loading } = useQuery<IGetAvailableNewBuildingsQuery, IGetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
+  const { data, loading } = useQuery<GetAvailableNewBuildingsQuery, GetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
     variables: { input: { fieldId, villageId } },
   });
 

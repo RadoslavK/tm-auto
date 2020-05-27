@@ -3,15 +3,15 @@ import { useQuery } from '@apollo/react-hooks';
 import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
 
 import {
-  IGetAutoUnitsSettingsQuery,
-  IGetAutoUnitsSettingsQueryVariables,
+  GetAutoUnitsSettingsQuery,
+  GetAutoUnitsSettingsQueryVariables,
 } from '../../../_types/graphql';
 import { useVillageContext } from '../../villages/context/villageContext';
 
-export const useGetAutoUnitsSettings = (): IGetAutoUnitsSettingsQuery['autoUnitsSettings'] | null => {
+export const useGetAutoUnitsSettings = (): GetAutoUnitsSettingsQuery['autoUnitsSettings'] | null => {
   const { villageId } = useVillageContext();
 
-  const { data, loading } = useQuery<IGetAutoUnitsSettingsQuery, IGetAutoUnitsSettingsQueryVariables>(
+  const { data, loading } = useQuery<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>(
     GetAutoUnitsSettings,
     { variables: { villageId } },
   );

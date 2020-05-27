@@ -1,7 +1,7 @@
+import { BotEvent } from '../_graphql/subscriptions/botEvent';
+import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
 import { Coords } from '../_models/coords';
 import { Village } from '../_models/village/village';
-import { BotEvent } from '../graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../graphql/subscriptions/pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
@@ -17,17 +17,17 @@ export class VillageService {
     publishPayloadEvent(BotEvent.ActiveVillageIdChanged, { villageId });
   }
 
-  private readonly m_villages: Record<string, Village> = {};
+  private readonly _villages: Record<string, Village> = {};
 
-  public allVillages = (): readonly Village[] => Object.values(this.m_villages);
+  public allVillages = (): readonly Village[] => Object.values(this._villages);
 
-  public village = (villageId: number): Village => this.m_villages[villageId];
+  public village = (villageId: number): Village => this._villages[villageId];
 
   public currentVillage = (): Village => this.village(this.currentVillageId);
 
   public updateVillages = (villages: readonly Village[]): void => {
     const oldVillages = Object
-      .values(this.m_villages)
+      .values(this._villages)
       .filter(v => !villages.some(x => x.id === v.id));
 
     oldVillages.forEach(village => {
@@ -36,18 +36,18 @@ export class VillageService {
     });
 
     const newVillages = villages
-      .filter(v => !this.m_villages[v.id]);
+      .filter(v => !this._villages[v.id]);
 
     Object
-      .keys(this.m_villages)
+      .keys(this._villages)
       .forEach(villageId => {
         if (oldVillages.some(v => v.id === +villageId)) {
-          delete this.m_villages[villageId];
+          delete this._villages[villageId];
         }
       });
 
     newVillages.forEach(village => {
-      this.m_villages[village.id] = village;
+      this._villages[village.id] = village;
     });
   };
 
@@ -63,7 +63,7 @@ export class VillageService {
     const village = this.villageByCoords(coords);
 
     if (!village) {
-      throw new Error(`No village at coords ${coords.toString()} was found`);
+      throw new Error(`No village at coords ${coords} was found`);
     }
 
     const previousCapitalVillage = this.capitalVillage();

@@ -13,18 +13,18 @@ import { UpdateAutoUnitsUnitSettings } from '*/graphql_operations/settings.graph
 import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
 
 import {
-  IAutoUnitsUnitSettings,
-  IGetUnitInfoQuery,
-  IGetUnitInfoQueryVariables,
-  IUpdateAutoUnitsUnitSettingsMutation,
-  IUpdateAutoUnitsUnitSettingsMutationVariables,
+  AutoUnitsUnitSettings,
+  GetUnitInfoQuery,
+  GetUnitInfoQueryVariables,
+  UpdateAutoUnitsUnitSettingsMutation,
+  UpdateAutoUnitsUnitSettingsMutationVariables,
 } from '../../../_types/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 
 type Props = {
   readonly className?: string;
-  readonly settings: IAutoUnitsUnitSettings;
+  readonly settings: AutoUnitsUnitSettings;
 };
 
 type StyleProps = {
@@ -69,7 +69,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
 
   const { villageId } = useVillageContext();
 
-  const { data, loading } = useQuery<IGetUnitInfoQuery, IGetUnitInfoQueryVariables>(GetUnitInfo, {
+  const { data, loading } = useQuery<GetUnitInfoQuery, GetUnitInfoQueryVariables>(GetUnitInfo, {
     variables: { index: settings.index },
   });
 
@@ -81,7 +81,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
     trainForever,
   } = state;
 
-  const [updateSettings] = useMutation<IUpdateAutoUnitsUnitSettingsMutation, IUpdateAutoUnitsUnitSettingsMutationVariables>(UpdateAutoUnitsUnitSettings, {
+  const [updateSettings] = useMutation<UpdateAutoUnitsUnitSettingsMutation, UpdateAutoUnitsUnitSettingsMutationVariables>(UpdateAutoUnitsUnitSettings, {
     variables: {
       settings: {
         autoBuild: state.autoBuild,

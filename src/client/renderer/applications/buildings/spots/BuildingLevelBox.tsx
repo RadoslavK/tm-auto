@@ -1,11 +1,11 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { IBuildingSpotLevel } from '../../../_types/graphql';
+import { BuildingSpotLevel } from '../../../_types/graphql';
 
 type Props = {
   readonly className?: string;
-  readonly level: IBuildingSpotLevel;
+  readonly level: BuildingSpotLevel;
 };
 
 enum BuildingState {

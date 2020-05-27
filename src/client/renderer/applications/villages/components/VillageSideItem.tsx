@@ -5,7 +5,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { IGetVillagesQuery } from '../../../_types/graphql';
+import { GetVillagesQuery } from '../../../_types/graphql';
 import { formatVillageName } from '../../../utils/formatVillageName';
 
 type StylesProps = {
@@ -33,7 +33,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly isVillageActive: boolean;
   readonly isVillageSelected: boolean;
-  readonly village: IGetVillagesQuery['villages'][0];
+  readonly village: GetVillagesQuery['villages'][0];
 };
 
 export const VillageSideItem: React.FC<Props> = ({
