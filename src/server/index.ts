@@ -2,8 +2,10 @@ import { ApolloLink } from 'apollo-link';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { createErrorLink } from '../_shared/graphql/createErrorLink';
-import { resolvers } from './_graphql/resolvers';
-import { loadTypeDefs } from './_graphql/typedefs/loadTypeDefs';
+import {
+  loadResolvers,
+  loadTypeDefs,
+} from './_graphql/resolvers';
 import { createIpcExecutor } from './createIpcExecutor';
 import { createSchemaLink } from './createSchemaLink';
 
@@ -12,6 +14,9 @@ const socketName = process.argv[2];
 process.on('warning', e => console.warn(e.stack));
 
 const init = async (): Promise<void> => {
+  const typeDefs = await loadTypeDefs();
+  const resolvers = await loadResolvers();
+
   const schema = makeExecutableSchema({
     logger: { log: error => console.warn(error) },
     resolverValidationOptions: {
@@ -19,7 +24,7 @@ const init = async (): Promise<void> => {
       requireResolversForResolveType: true,
     },
     resolvers,
-    typeDefs: await loadTypeDefs(),
+    typeDefs,
   });
 
   const errorLink = createErrorLink();

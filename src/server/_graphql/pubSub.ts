@@ -3,11 +3,9 @@ import {
   withFilter,
 } from 'graphql-subscriptions';
 
-import { SubscriptionSubscribeFn } from '../../_types/graphql';
-import {
-  BotEvent,
-  BotEventPayloads,
-} from './botEvent';
+import { SubscriptionSubscribeFn } from '../_types/graphql';
+import { BotEvent } from '../events/botEvent';
+import { BotEventPayloads } from '../events/botEventPayloads';
 
 type Extends<T, X> = T extends X ? true : false;
 

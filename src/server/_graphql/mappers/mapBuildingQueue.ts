@@ -13,7 +13,7 @@ import {
 } from '../../services/buildingQueueService';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
-import { mapResources } from '../resolvers/villageResolvers';
+import { mapResources } from './villageMappers';
 
 const mapCost = (cost: CostModel): Cost => ({
   buildTime: cost.buildTime,

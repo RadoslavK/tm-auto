@@ -1,5 +1,4 @@
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
+import { publishPayloadEvent } from '../_graphql/pubSub';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits';
@@ -11,6 +10,7 @@ import {
 import { Timestamp } from '../_models/misc/timestamp';
 import { generateId } from '../../_shared/generateId';
 import { accountContext } from '../accountContext';
+import { BotEvent } from '../events/botEvent';
 import { buildingInfoService } from './info/buildingInfoService';
 import { unitInfoService } from './info/unitInfoService';
 

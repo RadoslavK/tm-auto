@@ -1,11 +1,11 @@
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
+import { publishPayloadEvent } from '../_graphql/pubSub';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
 import { BuildingSpot } from '../_types/graphql';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
+import { BotEvent } from '../events/botEvent';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';

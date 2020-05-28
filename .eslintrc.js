@@ -70,7 +70,7 @@ module.exports = {
     'function-paren-newline': ['error', 'multiline-arguments'],
     'implicit-arrow-linebreak': 'off',
     'import/no-cycle': 'warn',
-    'import/no-default-export': 'error',
+    'import/no-default-export': 'warn',
     'import/no-unresolved': 'error',
     'import/order': 'off',
     // https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html

@@ -1,9 +1,9 @@
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
+import { publishPayloadEvent } from '../_graphql/pubSub';
 import {
   TaskType,
   VillageTaskType,
 } from '../_types/graphql';
+import { BotEvent } from '../events/botEvent';
 
 const getDefaultExecutionTime = (): Date => new Date(1970, 1, 1);
 

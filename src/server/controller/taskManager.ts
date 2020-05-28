@@ -1,11 +1,11 @@
 import { TravianPath } from '../_enums/travianPath';
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
 import {
   publishEvent,
   publishPayloadEvent,
-} from '../_graphql/subscriptions/pubSub';
+} from '../_graphql/pubSub';
 import { getAllEnumValues } from '../../_shared/enumUtils';
 import { accountContext } from '../accountContext';
+import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { randomElement } from '../utils/randomElement';
 import { shuffle } from '../utils/shuffle';

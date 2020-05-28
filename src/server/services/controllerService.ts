@@ -1,7 +1,6 @@
 import fs from 'fs';
 
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
-import { publishEvent } from '../_graphql/subscriptions/pubSub';
+import { publishEvent } from '../_graphql/pubSub';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
 import {
@@ -22,6 +21,7 @@ import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo'
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/taskManager';
+import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';

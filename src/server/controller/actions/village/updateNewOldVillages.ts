@@ -1,6 +1,6 @@
-import { BotEvent } from '../../../_graphql/subscriptions/botEvent';
-import { publishEvent } from '../../../_graphql/subscriptions/pubSub';
+import { publishEvent } from '../../../_graphql/pubSub';
 import { accountContext } from '../../../accountContext';
+import { BotEvent } from '../../../events/botEvent';
 import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId';
 import { parseVillages } from '../../../parsers/villages/parseVillages';
 

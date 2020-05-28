@@ -1,25 +1,18 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { IResolvers } from '@graphql-tools/utils';
-import { mergeResolvers } from 'graphql-tools';
+import { DocumentNode } from 'graphql';
+import {
+  loadFiles,
+  mergeResolvers,
+  mergeTypeDefs,
+} from 'graphql-tools';
 
-import { accountResolvers } from './accountResolvers';
-import { buildingResolvers } from './buildingResolvers';
-import { controllerResolvers } from './controllerResolvers';
-import { heroResolvers } from './heroResolvers';
-import { logsResolvers } from './logsResolvers';
-import { nextExecutionResolvers } from './nextExecutionResolvers';
-import { settingsResolvers } from './settingsResolvers';
-import { unitResolvers } from './unitResolvers';
-import { villageResolvers } from './villageResolvers';
+export const loadResolvers = async () => {
+  const files = await loadFiles(__dirname, { ignoreIndex: true, recursive: true });
 
-export const resolvers = mergeResolvers([
-  villageResolvers,
-  controllerResolvers,
-  buildingResolvers,
-  settingsResolvers,
-  heroResolvers,
-  accountResolvers,
-  logsResolvers,
-  unitResolvers,
-  nextExecutionResolvers,
-] as IResolvers[]) as IResolvers;
+  return mergeResolvers(files);
+};
+
+export const loadTypeDefs = async (): Promise<DocumentNode> => {
+  const typesArray = await loadFiles(__dirname, { extensions: ['graphql'], recursive: true });
+
+  return mergeTypeDefs(typesArray);
+};

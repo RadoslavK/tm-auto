@@ -1,7 +1,7 @@
-import { BotEvent } from '../_graphql/subscriptions/botEvent';
-import { publishPayloadEvent } from '../_graphql/subscriptions/pubSub';
+import { publishPayloadEvent } from '../_graphql/pubSub';
 import { Coords } from '../_models/coords';
 import { Village } from '../_models/village/village';
+import { BotEvent } from '../events/botEvent';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 

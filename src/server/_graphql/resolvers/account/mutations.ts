@@ -1,7 +1,7 @@
-import { accountService } from '../../services/accountService';
-import { Resolvers } from './_types';
+import { Resolvers } from '../../_types';
+import { accountService } from '../../../services/accountService';
 
-export const accountResolvers: Resolvers = {
+export default <Resolvers>{
   Mutation: {
     createAccount: async (_, args) => {
       if (accountService.accountExists(args)) {
@@ -25,15 +25,5 @@ export const accountResolvers: Resolvers = {
       await accountService.updateAccount(args);
       return true;
     },
-  },
-
-  Query: {
-    account: (_, args) => accountService.getAccount(args.accountId),
-
-    accounts: () => accountService.getAccounts(),
-
-    currentAccount: () => accountService.getCurrentAccount(),
-
-    lastSignedAccountId: () => accountService.lastSignedAccountId(),
   },
 };

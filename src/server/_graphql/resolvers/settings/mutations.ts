@@ -1,49 +1,25 @@
-import { GeneralSettings } from '../../_models/settings/generalSettings';
-import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
-import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
-import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
-import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
+import { Resolvers } from '../../_types';
+import { GeneralSettings } from '../../../_models/settings/generalSettings';
+import { GeneralVillageSettings } from '../../../_models/settings/generalVillageSettings';
+import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
+import { AutoBuildSettings } from '../../../_models/settings/tasks/autoBuildSettings';
+import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
 import {
   AutoUnitsBuildingSettings,
   AutoUnitsSettings,
   AutoUnitsUnitSettings,
-} from '../../_models/settings/tasks/autoUnitsSettings';
-import { BuildingType } from '../../../_shared/types/buildingType';
+} from '../../../_models/settings/tasks/autoUnitsSettings';
+import { BuildingType } from '../../../../_shared/types/buildingType';
 import {
   SettingsType,
   VillageSettingsType,
-} from '../../../_shared/types/settingsType';
-import { accountContext } from '../../accountContext';
-import { unitInfoService } from '../../services/info/unitInfoService';
-import { BotEvent } from '../subscriptions/botEvent';
-import {
-  publishPayloadEvent,
-  subscribeToEvent,
-} from '../subscriptions/pubSub';
-import { Resolvers } from './_types';
+} from '../../../../_shared/types/settingsType';
+import { accountContext } from '../../../accountContext';
+import { BotEvent } from '../../../events/botEvent';
+import { unitInfoService } from '../../../services/info/unitInfoService';
+import { publishPayloadEvent } from '../../pubSub';
 
-export const settingsResolvers: Resolvers = {
-  ITaskSettings: {
-    __resolveType: (settings) => {
-      if (settings instanceof AutoAdventureSettings) {
-        return 'AutoAdventureSettings';
-      }
-
-      if (settings instanceof AutoBuildSettings) {
-        return 'AutoBuildSettings';
-      }
-
-      if (settings instanceof AutoUnitsSettings) {
-        return 'AutoUnitsSettings';
-      }
-
-      if (settings instanceof AutoPartySettings) {
-        return 'AutoPartySettings';
-      }
-
-      return null;
-    },
-  },
+export default <Resolvers>{
   Mutation: {
     resetSettings: async (_, args): Promise<boolean> => {
       switch (args.type) {
@@ -263,44 +239,5 @@ export const settingsResolvers: Resolvers = {
       accountContext.settingsService.village(villageId).general.update(new GeneralVillageSettings(settings));
       return true;
     },
-  },
-
-  Query: {
-    autoBuildSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoBuild.get(),
-    autoPartySettings: (_, args) => accountContext.settingsService.village(args.villageId).autoParty.get(),
-    autoUnitsSettings: (_, args) => accountContext.settingsService.village(args.villageId).autoUnits.get(),
-    generalSettings: () => accountContext.settingsService.general.get(),
-    generalVillageSettings: (_, args) => accountContext.settingsService.village(args.villageId).general.get(),
-    hero: () => accountContext.settingsService.hero.get(),
-  },
-
-  Subscription: {
-    autoAdventureSettingsChanged: subscribeToEvent(BotEvent.AutoAdventureSettingsChanged, {
-      resolve: payload => payload.settings,
-    }),
-
-    autoBuildSettingsChanged: subscribeToEvent(BotEvent.AutoBuildSettingsChanged, {
-      filter: (payload, args) => payload.villageId === args.villageId,
-      resolve: payload => payload.settings,
-    }),
-
-    autoPartySettingsChanged: subscribeToEvent(BotEvent.AutoPartySettingsChanged, {
-      filter: (payload, args) => payload.villageId === args.villageId,
-      resolve: payload => payload.settings,
-    }),
-
-    autoUnitsSettingsChanged: subscribeToEvent(BotEvent.AutoUnitsSettingsChanged, {
-      filter: (payload, args) => payload.villageId === args.villageId,
-      resolve: payload => payload.settings,
-    }),
-
-    generalSettingsChanged: subscribeToEvent(BotEvent.GeneralSettingsChanged, {
-      resolve: payload => payload.settings,
-    }),
-
-    generalVillageSettingsChanged: subscribeToEvent(BotEvent.GeneralVillageSettingsChanged, {
-      filter: (payload, args) => payload.villageId === args.villageId,
-      resolve: payload => payload.settings,
-    }),
   },
 };
