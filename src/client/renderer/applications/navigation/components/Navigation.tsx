@@ -7,7 +7,10 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import { BotState } from '../../../_types/graphql';
+import { useBotState } from '../../../hooks/useBotState';
 import { BotStateToggle } from './BotStateToggle';
+import { SignOut } from './SignOut';
 
 const navigationPaths: readonly string[] = [
   '/villages',
@@ -19,6 +22,12 @@ const navigationPaths: readonly string[] = [
 export const Navigation: React.FC = () => {
   const { pathname } = useLocation();
   const [lastVillagesPath, setLastVillagesPath] = useState<string>();
+
+  const botState = useBotState();
+
+  if (!botState) {
+    return null;
+  }
 
   const currentItemIndex = navigationPaths.findIndex(path => pathname.startsWith(path));
 
@@ -64,7 +73,13 @@ export const Navigation: React.FC = () => {
           onClick={onTabClick}
           to={getTabPath(3, navigationPaths[3])}
         />
-        <Tab component={BotStateToggle} />
+        <Tab
+          botState={botState}
+          component={BotStateToggle}
+        />
+        {botState === BotState.Paused && (
+          <Tab component={SignOut} />
+        )}
       </Tabs>
     </AppBar>
   );
