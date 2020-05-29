@@ -33,7 +33,7 @@ import {
   GetAccountsQuery,
   GetLastSignedAccountIdQuery,
   UpdateUserAccountInput,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useBotState } from '../../../hooks/useBotState';
 import { useCreateAccount } from '../hooks/useCreateAccount';
 import { useDeleteAccountMutation } from '../hooks/useDeleteAccountMutation';

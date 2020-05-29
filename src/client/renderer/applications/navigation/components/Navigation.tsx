@@ -7,7 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { BotState } from '../../../_types/graphql';
+import { BotState } from '../../../_graphql/types/graphql.type';
 import { useBotState } from '../../../hooks/useBotState';
 import { BotStateToggle } from './BotStateToggle';
 import { SignOut } from './SignOut';

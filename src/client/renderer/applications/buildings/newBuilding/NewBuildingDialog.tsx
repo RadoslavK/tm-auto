@@ -7,7 +7,7 @@ import { GetAvailableNewBuildings } from '*/graphql_operations/building.graphql'
 import {
   GetAvailableNewBuildingsQuery,
   GetAvailableNewBuildingsQueryVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { NewBuildingItem } from './NewBuildingItem';
 

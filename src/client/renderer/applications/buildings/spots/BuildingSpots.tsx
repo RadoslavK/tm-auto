@@ -19,7 +19,7 @@ import {
   GetBuildingSpotsQueryVariables,
   OnQueueUpdatedSubscription,
   OnQueueUpdatedSubscriptionVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingSpot } from './BuildingSpot';
 

@@ -68,6 +68,7 @@ declare module '*/graphql_operations/logs.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const LogEntry: DocumentNode;
+export const Timestamp: DocumentNode;
 export const Coords: DocumentNode;
 export const GetLogs: DocumentNode;
 export const OnLogEntryAdded: DocumentNode;

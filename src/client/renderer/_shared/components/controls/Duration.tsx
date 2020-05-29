@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { Duration as DurationModel } from '../../../_types/graphql';
+import { Duration as DurationModel } from '../../../_graphql/types/graphql.type';
 
 const useStyles = makeStyles({
   input: {

@@ -16,7 +16,7 @@ import {
   AutoAdventureSettings as AutoAdventureSettingsModel,
   GetHeroSettingsQuery,
   OnAutoAdventureSettingsChangedSubscription,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { HeroInformation } from '../../hero/components/HeroInformation';
 import { AutoAdventureSettings } from './AutoAdventureSettings';
 

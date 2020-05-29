@@ -8,7 +8,7 @@ import {
 import {
   DeleteAccountMutation,
   DeleteAccountMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useDeleteAccountMutation = (accountId: DeleteAccountMutationVariables['accountId']) => {
   const [deleteAccount, deleteAccountResult] = useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(

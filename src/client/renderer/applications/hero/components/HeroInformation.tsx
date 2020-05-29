@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { HeroState } from '../../../_types/graphql';
+import { HeroState } from '../../../_graphql/types/graphql.type';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { useHeroInformation } from '../hooks/useHeroInformation';
 

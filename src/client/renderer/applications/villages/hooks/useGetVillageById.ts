@@ -5,7 +5,7 @@ import { GetVillageById } from '*/graphql_operations/village.graphql';
 import {
   GetVillageByIdQuery,
   GetVillageByIdQueryVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useOnVillageUpdate } from './useOnVillageUpdate';
 
 export const useGetVillageById = (villageId: number) => {

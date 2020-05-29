@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { TextLogEntryContentPayload } from '../../../../_types/graphql';
+import { TextLogEntryContent } from '../../../../_graphql/types/graphql.type';
 
 type Props = {
   readonly className?: string;
-  readonly content: TextLogEntryContentPayload;
+  readonly content: TextLogEntryContent;
 };
 
 export const TextLogContent: React.FC<Props> = ({ className, content }) => (

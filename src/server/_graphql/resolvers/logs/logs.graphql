@@ -1,38 +1,26 @@
-type TextLogEntryContentPayload {
+type TextLogEntryContent {
     message: String!
 }
 
-type TextLogEntryContent {
-    text: TextLogEntryContentPayload!
-}
-
-type AutoBuildLogEntryContentPayload {
+type AutoBuildLogEntryContent {
     name: String!
     type: Int!
     level: Int!
     fieldId: Int!
 }
 
-type AutoBuildLogEntryContent {
-    autoBuild: AutoBuildLogEntryContentPayload!
-}
-
-type AutoUnitsLogEntryContentPayload {
+type AutoUnitsLogEntryContent {
     amount: Int!
     index: Int!
     tribe: Int!
     unitName: String!
 }
 
-type AutoUnitsLogEntryContent {
-    autoUnits: AutoUnitsLogEntryContentPayload!
-}
-
 union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent
 
 type LogEntry {
     id: ID!
-    timestamp: Int!
+    timestamp: Timestamp!
     village: Village
     content: LogEntryContent!
 }

@@ -11,7 +11,7 @@ import {
 import {
   GetVillagesQuery,
   UpdateVillagesSubscription,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 
 export const useVillages = (): GetVillagesQuery['villages'] | null => {
   const { data, loading, refetch } = useQuery<GetVillagesQuery>(GetVillages);

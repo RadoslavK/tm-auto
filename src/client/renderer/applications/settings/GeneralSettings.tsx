@@ -27,7 +27,7 @@ import {
   UpdateGeneralSettingsInput,
   UpdateGeneralSettingsMutation,
   UpdateGeneralSettingsMutationVariables,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 
 const Container: React.FC = () => {
   const [settings, setSettings] = useState<GeneralSettings>();

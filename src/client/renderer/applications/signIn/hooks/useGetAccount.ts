@@ -5,7 +5,7 @@ import { GetAccount } from '*/graphql_operations/account.graphql';
 import {
   GetAccountQuery,
   GetAccountQueryVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useGetAccount = (accountId: string): GetAccountQuery['account'] | null => {
   const { data, loading } = useQuery<GetAccountQuery, GetAccountQueryVariables>(

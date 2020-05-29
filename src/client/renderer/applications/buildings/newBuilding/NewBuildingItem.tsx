@@ -8,7 +8,7 @@ import { GetMaxBuildingLevel } from '*/graphql_operations/building.graphql';
 import {
   GetMaxBuildingLevelQuery,
   GetMaxBuildingLevelQueryVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { imageLinks } from '../../../utils/imageLinks';

@@ -11,7 +11,7 @@ import {
 import {
   BotState,
   GetBotStateQuery,
-} from '../_types/graphql';
+} from '../_graphql/types/graphql.type';
 
 export const useBotState = (): BotState | null => {
   const { data, loading, refetch } = useQuery<GetBotStateQuery>(GetBotState);

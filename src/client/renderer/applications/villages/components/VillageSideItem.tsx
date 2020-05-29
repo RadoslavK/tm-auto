@@ -5,7 +5,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { GetVillagesQuery } from '../../../_types/graphql';
+import { GetVillagesQuery } from '../../../_graphql/types/graphql.type';
 import { formatVillageName } from '../../../utils/formatVillageName';
 
 type StylesProps = {

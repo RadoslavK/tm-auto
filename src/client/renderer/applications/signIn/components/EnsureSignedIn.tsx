@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BotState } from '../../../_types/graphql';
+import { BotState } from '../../../_graphql/types/graphql.type';
 import { useBotState } from '../../../hooks/useBotState';
 import { SignInForm } from './SignInForm';
 

@@ -14,7 +14,7 @@ import {
   CrannyCapacityQuery,
   CrannyCapacityQueryVariables,
   VillageCrannyCapacity,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageContext } from '../context/villageContext';
 
 export const useCrannyCapacity = (): VillageCrannyCapacity | null => {

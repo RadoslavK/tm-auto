@@ -1,9 +1,9 @@
 import { Resolvers } from '../../_types';
-import { AvailableNewBuilding } from '../../../_types/graphql';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { AvailableBuildingTypesService } from '../../../services/availableBuildingTypesService';
 import { buildingInfoService } from '../../../services/info/buildingInfoService';
+import { AvailableNewBuilding } from '../../graphql.type';
 
 export default <Resolvers>{
   Query: {

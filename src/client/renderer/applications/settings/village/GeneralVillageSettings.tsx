@@ -29,7 +29,7 @@ import {
   UpdateGeneralVillageSettingsMutation,
   UpdateGeneralVillageSettingsMutationVariables,
   VillageSettingsType,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const Container: React.FC = () => {

@@ -16,7 +16,7 @@ import {
   GetHeroInformationQuery,
   HeroInformationFragment,
   OnHeroInformationUpdatedSubscription,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useHeroInformation = () => {
   const [heroInformation, setHeroInformation] = useState<HeroInformationFragment>();

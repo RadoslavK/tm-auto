@@ -1,7 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { VillageResources } from '../../../_types/graphql';
+import { VillageResources } from '../../../_graphql/types/graphql.type';
 import { createFormatter } from '../../../utils/numberFormatting';
 import { Resource } from './Resource';
 

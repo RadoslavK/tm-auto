@@ -5,7 +5,7 @@ import { UpdateAutoUnitsBuildingSettings } from '*/graphql_operations/settings.g
 import {
   UpdateAutoUnitsBuildingSettingsMutation,
   UpdateAutoUnitsBuildingSettingsMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useUpdateAutoUnitsBuildingSettingsMutation = () => {
   const [updateSettings] = useMutation<UpdateAutoUnitsBuildingSettingsMutation, UpdateAutoUnitsBuildingSettingsMutationVariables>(

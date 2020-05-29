@@ -1,4 +1,3 @@
-import { Hero } from '../_models/hero/hero';
 import { LogEntry } from '../_models/logs/logEntry';
 import { GeneralSettings } from '../_models/settings/generalSettings';
 import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
@@ -24,10 +23,6 @@ export type BotEventPayloads = {
   [BotEvent.LogEntryAdded]: {
     readonly logEntry: LogEntry;
   },
-
-  [BotEvent.HeroInformationUpdated]: {
-    readonly heroInformation: Hero;
-  }
 
   [BotEvent.GeneralSettingsChanged]: {
     readonly settings: GeneralSettings;

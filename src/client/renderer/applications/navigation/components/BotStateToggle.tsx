@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 import React from 'react';
 
-import { BotState } from '../../../_types/graphql';
+import { BotState } from '../../../_graphql/types/graphql.type';
 import { useToggleBotState } from '../../../hooks/useToggleBotState';
 
 const getToggleText = (botState: BotState): string => {

@@ -5,7 +5,7 @@ import { SignIn } from '*/graphql_operations/controller.graphql';
 import {
   SignInMutation,
   SignInMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useSignInMutation = (accountId: SignInMutationVariables['accountId']) => {
   const [executeSignIn] = useMutation<SignInMutation, SignInMutationVariables>(

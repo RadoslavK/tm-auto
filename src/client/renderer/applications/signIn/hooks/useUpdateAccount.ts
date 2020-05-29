@@ -8,7 +8,7 @@ import {
 import {
   UpdateAccountMutation,
   UpdateAccountMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useUpdateAccount = (account: UpdateAccountMutationVariables['account']) => {
   const [updateAccount, updateAccountResult] = useMutation<UpdateAccountMutation, UpdateAccountMutationVariables>(

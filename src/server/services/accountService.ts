@@ -2,7 +2,7 @@ import {
   MutationCreateAccountArgs,
   MutationUpdateAccountArgs,
   UserAccount,
-} from '../_types/graphql';
+} from '../_graphql/graphql.type';
 import { generateId } from '../../_shared/generateId';
 import { mergeDefaults } from '../../_shared/merge';
 import { PartialFields } from '../../_shared/types/fields.type';

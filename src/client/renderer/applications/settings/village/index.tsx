@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 
-import { VillageSettingsType } from '../../../_types/graphql';
+import { VillageSettingsType } from '../../../_graphql/types/graphql.type';
 import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { useVillageContext } from '../../villages/context/villageContext';

@@ -18,7 +18,6 @@ import {
   UpdateAutoUnitsSettings,
 } from '*/graphql_operations/settings.graphql';
 
-import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import {
   AutoUnitsSettings,
   CoolDown as CoolDownModel,
@@ -32,7 +31,8 @@ import {
   UpdateAutoUnitsSettingsMutation,
   UpdateAutoUnitsSettingsMutationVariables,
   VillageSettingsType,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 

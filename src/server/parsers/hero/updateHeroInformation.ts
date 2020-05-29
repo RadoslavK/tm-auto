@@ -1,4 +1,4 @@
-import { publishPayloadEvent } from '../../_graphql/pubSub';
+import { publishEvent } from '../../_graphql/pubSub';
 import { HeroState } from '../../../_shared/types/heroState';
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
@@ -171,5 +171,5 @@ export const updateHeroInformation = async (): Promise<void> => {
 
   hero.hasAvailableAdventures = adventureCount > 0;
 
-  publishPayloadEvent(BotEvent.HeroInformationUpdated, { heroInformation: hero });
+  publishEvent(BotEvent.HeroInformationUpdated);
 };

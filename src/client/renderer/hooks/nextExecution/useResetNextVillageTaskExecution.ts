@@ -5,7 +5,7 @@ import { ResetNextVillageTaskExecution } from '*/graphql_operations/nextTaskExec
 import {
   ResetNextVillageTaskExecutionMutation,
   ResetNextVillageTaskExecutionMutationVariables,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 
 export const useResetNextVillageTaskExecution = () => {
   const [resetNextVillageTaskExecution] = useMutation<ResetNextVillageTaskExecutionMutation, ResetNextVillageTaskExecutionMutationVariables>(

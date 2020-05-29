@@ -2,9 +2,9 @@ import { withFilter } from 'graphql-subscriptions';
 import { $$asyncIterator } from 'iterall';
 import pubSub from 'pubsub-js';
 
-import { SubscriptionSubscribeFn } from '../_types/graphql';
 import { BotEvent } from '../events/botEvent';
 import { BotEventPayloads } from '../events/botEventPayloads';
+import { SubscriptionSubscribeFn } from './graphql.type';
 
 type Extends<T, X> = T extends X ? true : false;
 

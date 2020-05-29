@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Duration as DurationModel } from '../../../_types/graphql';
+import { Duration as DurationModel } from '../../../_graphql/types/graphql.type';
 import { Duration } from '../controls/Duration';
 
 type Props = {

@@ -1,10 +1,10 @@
-import { CoolDown } from '../../_models/coolDown';
-import { Duration } from '../../_models/duration';
-import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import {
   AdventureCriteria,
   TaskType,
-} from '../../_types/graphql';
+} from '../../_graphql/graphql.type';
+import { CoolDown } from '../../_models/coolDown';
+import { Duration } from '../../_models/duration';
+import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';

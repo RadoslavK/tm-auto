@@ -6,11 +6,11 @@ import React, {
   useState,
 } from 'react';
 
-import { Duration } from '../../../_shared/components/controls/Duration';
 import {
   AutoUnitsBuildingSettings,
   Duration as DurationModel,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
+import { Duration } from '../../../_shared/components/controls/Duration';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { areShallowEqual } from '../../../utils/areShallowEqual';
 import { imageLinks } from '../../../utils/imageLinks';

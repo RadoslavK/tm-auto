@@ -429,41 +429,29 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export type TextLogEntryContentPayload = {
+export type TextLogEntryContent = {
   readonly message: Scalars['String'];
 };
 
-export type TextLogEntryContent = {
-  readonly text: TextLogEntryContentPayload;
-};
-
-export type AutoBuildLogEntryContentPayload = {
+export type AutoBuildLogEntryContent = {
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
   readonly level: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
 };
 
-export type AutoBuildLogEntryContent = {
-  readonly autoBuild: AutoBuildLogEntryContentPayload;
-};
-
-export type AutoUnitsLogEntryContentPayload = {
+export type AutoUnitsLogEntryContent = {
   readonly amount: Scalars['Int'];
   readonly index: Scalars['Int'];
   readonly tribe: Scalars['Int'];
   readonly unitName: Scalars['String'];
 };
 
-export type AutoUnitsLogEntryContent = {
-  readonly autoUnits: AutoUnitsLogEntryContentPayload;
-};
-
 export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent;
 
 export type LogEntry = {
   readonly id: Scalars['ID'];
-  readonly timestamp: Scalars['Int'];
+  readonly timestamp: Timestamp;
   readonly village: Maybe<Village>;
   readonly content: LogEntryContent;
 };
@@ -922,12 +910,14 @@ export type OnHeroInformationUpdatedSubscriptionVariables = {};
 export type OnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: HeroInformationFragment };
 
 export type LogEntryFragment = (
-  Pick<LogEntry, 'id' | 'timestamp'>
-  & { readonly village: Maybe<(
+  Pick<LogEntry, 'id'>
+  & { readonly timestamp: TimestampFragment, readonly village: Maybe<(
     Pick<Village, 'id' | 'name'>
     & { readonly coords: CoordsFragment }
-  )>, readonly content: { readonly text: Pick<TextLogEntryContentPayload, 'message'> } | { readonly autoBuild: Pick<AutoBuildLogEntryContentPayload, 'fieldId' | 'level' | 'name' | 'type'> } | { readonly autoUnits: Pick<AutoUnitsLogEntryContentPayload, 'amount' | 'index' | 'tribe' | 'unitName'> } }
+  )>, readonly content: Pick<TextLogEntryContent, 'message'> | Pick<AutoBuildLogEntryContent, 'fieldId' | 'level' | 'name' | 'type'> | Pick<AutoUnitsLogEntryContent, 'amount' | 'index' | 'tribe' | 'unitName'> }
 );
+
+export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
 
 export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
 

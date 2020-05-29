@@ -1,12 +1,12 @@
 import fs from 'fs';
 
-import { publishEvent } from '../_graphql/pubSub';
-import { CoolDown } from '../_models/coolDown';
-import { Duration } from '../_models/duration';
 import {
   BotState,
   MutationSignInArgs,
-} from '../_types/graphql';
+} from '../_graphql/graphql.type';
+import { publishEvent } from '../_graphql/pubSub';
+import { CoolDown } from '../_models/coolDown';
+import { Duration } from '../_models/duration';
 import { accountContext } from '../accountContext';
 import {
   getPage,

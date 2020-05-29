@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import {
   Duration,
   VillageTaskType,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageContext } from '../../../applications/villages/context/villageContext';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useResetNextVillageTaskExecution } from '../../../hooks/nextExecution/useResetNextVillageTaskExecution';

@@ -1,4 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { Resources as ResourcesModel } from '../_models/misc/resources';
+import { BuildingInProgress as BuildingInProgressModel } from '../_models/buildings/inProgress/buildingInProgress';
+import { Hero as HeroModel } from '../_models/hero/hero';
+import { LogEntry as LogEntryModel } from '../_models/logs/logEntry';
+import { TextLogEntryContent as TextLogEntryContentModel } from '../_models/logs/content/text';
+import { AutoBuildLogEntryContent as AutoBuildLogEntryContentModel } from '../_models/logs/content/autoBuild';
+import { AutoUnitsLogEntryContent as AutoUnitsLogEntryContentModel } from '../_models/logs/content/autoUnits';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -443,40 +450,25 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export type TextLogEntryContentPayload = {
-  readonly __typename?: 'TextLogEntryContentPayload';
+export type TextLogEntryContent = {
+  readonly __typename?: 'TextLogEntryContent';
   readonly message: Scalars['String'];
 };
 
-export type TextLogEntryContent = {
-  readonly __typename?: 'TextLogEntryContent';
-  readonly text: TextLogEntryContentPayload;
-};
-
-export type AutoBuildLogEntryContentPayload = {
-  readonly __typename?: 'AutoBuildLogEntryContentPayload';
+export type AutoBuildLogEntryContent = {
+  readonly __typename?: 'AutoBuildLogEntryContent';
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
   readonly level: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
 };
 
-export type AutoBuildLogEntryContent = {
-  readonly __typename?: 'AutoBuildLogEntryContent';
-  readonly autoBuild: AutoBuildLogEntryContentPayload;
-};
-
-export type AutoUnitsLogEntryContentPayload = {
-  readonly __typename?: 'AutoUnitsLogEntryContentPayload';
+export type AutoUnitsLogEntryContent = {
+  readonly __typename?: 'AutoUnitsLogEntryContent';
   readonly amount: Scalars['Int'];
   readonly index: Scalars['Int'];
   readonly tribe: Scalars['Int'];
   readonly unitName: Scalars['String'];
-};
-
-export type AutoUnitsLogEntryContent = {
-  readonly __typename?: 'AutoUnitsLogEntryContent';
-  readonly autoUnits: AutoUnitsLogEntryContentPayload;
 };
 
 export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent;
@@ -484,7 +476,7 @@ export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | A
 export type LogEntry = {
   readonly __typename?: 'LogEntry';
   readonly id: Scalars['ID'];
-  readonly timestamp: Scalars['Int'];
+  readonly timestamp: Timestamp;
   readonly village: Maybe<Village>;
   readonly content: LogEntryContent;
 };
@@ -494,19 +486,9 @@ export type Timestamp = {
   readonly totalSeconds: Scalars['Int'];
 };
 
-export type Resources = {
-  readonly __typename?: 'Resources';
-  readonly wood: Scalars['Int'];
-  readonly clay: Scalars['Int'];
-  readonly iron: Scalars['Int'];
-  readonly crop: Scalars['Int'];
-  readonly freeCrop: Scalars['Int'];
-  readonly total: Scalars['Int'];
-};
-
 export type Cost = {
   readonly __typename?: 'Cost';
-  readonly resources: Resources;
+  readonly resources: ResourcesModel;
   readonly buildTime: Duration;
 };
 
@@ -804,9 +786,9 @@ export type VillageCapacity = {
 
 export type VillageResources = {
   readonly __typename?: 'VillageResources';
-  readonly amount: Resources;
+  readonly amount: ResourcesModel;
   readonly capacity: VillageCapacity;
-  readonly production: Resources;
+  readonly production: ResourcesModel;
 };
 
 export type Village = {
@@ -912,23 +894,20 @@ export type ResolversTypes = {
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   AvailableNewBuilding: ResolverTypeWrapper<AvailableNewBuilding>;
   Subscription: ResolverTypeWrapper<{}>;
-  BuildingInProgress: ResolverTypeWrapper<BuildingInProgress>;
+  BuildingInProgress: ResolverTypeWrapper<BuildingInProgressModel>;
   BotState: BotState;
   CreateUserAccountInput: CreateUserAccountInput;
   UpdateUserAccountInput: UpdateUserAccountInput;
   HeroState: HeroState;
-  HeroInformation: ResolverTypeWrapper<HeroInformation>;
-  TextLogEntryContentPayload: ResolverTypeWrapper<TextLogEntryContentPayload>;
-  TextLogEntryContent: ResolverTypeWrapper<TextLogEntryContent>;
-  AutoBuildLogEntryContentPayload: ResolverTypeWrapper<AutoBuildLogEntryContentPayload>;
-  AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContent>;
-  AutoUnitsLogEntryContentPayload: ResolverTypeWrapper<AutoUnitsLogEntryContentPayload>;
-  AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContent>;
+  HeroInformation: ResolverTypeWrapper<HeroModel>;
+  TextLogEntryContent: ResolverTypeWrapper<TextLogEntryContentModel>;
+  AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContentModel>;
+  AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContentModel>;
   LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'];
-  LogEntry: ResolverTypeWrapper<Omit<LogEntry, 'content'> & { content: ResolversTypes['LogEntryContent'] }>;
+  LogEntry: ResolverTypeWrapper<LogEntryModel>;
   Timestamp: ResolverTypeWrapper<Timestamp>;
-  Resources: ResolverTypeWrapper<Resources>;
-  Cost: ResolverTypeWrapper<Cost>;
+  Resources: ResolverTypeWrapper<ResourcesModel>;
+  Cost: ResolverTypeWrapper<Omit<Cost, 'resources'> & { resources: ResolversTypes['Resources'] }>;
   Coords: ResolverTypeWrapper<Coords>;
   Duration: ResolverTypeWrapper<Duration>;
   CoolDown: ResolverTypeWrapper<CoolDown>;
@@ -937,8 +916,8 @@ export type ResolversTypes = {
   TimestampInput: TimestampInput;
   TaskType: TaskType;
   VillageTaskType: VillageTaskType;
-  QueuedBuilding: ResolverTypeWrapper<QueuedBuilding>;
-  BuildingQueue: ResolverTypeWrapper<BuildingQueue>;
+  QueuedBuilding: ResolverTypeWrapper<Omit<QueuedBuilding, 'cost'> & { cost: ResolversTypes['Cost'] }>;
+  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, totalCost: ResolversTypes['Cost'] }>;
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
   QueuedBuildingManipulationInput: QueuedBuildingManipulationInput;
@@ -971,8 +950,8 @@ export type ResolversTypes = {
   VillageSettingsType: VillageSettingsType;
   UnitInfo: ResolverTypeWrapper<UnitInfo>;
   VillageCapacity: ResolverTypeWrapper<VillageCapacity>;
-  VillageResources: ResolverTypeWrapper<VillageResources>;
-  Village: ResolverTypeWrapper<Village>;
+  VillageResources: ResolverTypeWrapper<Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversTypes['Resources'], production: ResolversTypes['Resources'] }>;
+  Village: ResolverTypeWrapper<Omit<Village, 'resources'> & { resources: ResolversTypes['VillageResources'] }>;
   VillageCrannyCapacity: ResolverTypeWrapper<VillageCrannyCapacity>;
 };
 
@@ -992,23 +971,20 @@ export type ResolversParentTypes = {
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   AvailableNewBuilding: AvailableNewBuilding;
   Subscription: {};
-  BuildingInProgress: BuildingInProgress;
+  BuildingInProgress: BuildingInProgressModel;
   BotState: BotState;
   CreateUserAccountInput: CreateUserAccountInput;
   UpdateUserAccountInput: UpdateUserAccountInput;
   HeroState: HeroState;
-  HeroInformation: HeroInformation;
-  TextLogEntryContentPayload: TextLogEntryContentPayload;
-  TextLogEntryContent: TextLogEntryContent;
-  AutoBuildLogEntryContentPayload: AutoBuildLogEntryContentPayload;
-  AutoBuildLogEntryContent: AutoBuildLogEntryContent;
-  AutoUnitsLogEntryContentPayload: AutoUnitsLogEntryContentPayload;
-  AutoUnitsLogEntryContent: AutoUnitsLogEntryContent;
+  HeroInformation: HeroModel;
+  TextLogEntryContent: TextLogEntryContentModel;
+  AutoBuildLogEntryContent: AutoBuildLogEntryContentModel;
+  AutoUnitsLogEntryContent: AutoUnitsLogEntryContentModel;
   LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'];
-  LogEntry: Omit<LogEntry, 'content'> & { content: ResolversParentTypes['LogEntryContent'] };
+  LogEntry: LogEntryModel;
   Timestamp: Timestamp;
-  Resources: Resources;
-  Cost: Cost;
+  Resources: ResourcesModel;
+  Cost: Omit<Cost, 'resources'> & { resources: ResolversParentTypes['Resources'] };
   Coords: Coords;
   Duration: Duration;
   CoolDown: CoolDown;
@@ -1017,8 +993,8 @@ export type ResolversParentTypes = {
   TimestampInput: TimestampInput;
   TaskType: TaskType;
   VillageTaskType: VillageTaskType;
-  QueuedBuilding: QueuedBuilding;
-  BuildingQueue: BuildingQueue;
+  QueuedBuilding: Omit<QueuedBuilding, 'cost'> & { cost: ResolversParentTypes['Cost'] };
+  BuildingQueue: Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, totalCost: ResolversParentTypes['Cost'] };
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
   QueuedBuildingManipulationInput: QueuedBuildingManipulationInput;
@@ -1051,8 +1027,8 @@ export type ResolversParentTypes = {
   VillageSettingsType: VillageSettingsType;
   UnitInfo: UnitInfo;
   VillageCapacity: VillageCapacity;
-  VillageResources: VillageResources;
-  Village: Village;
+  VillageResources: Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversParentTypes['Resources'], production: ResolversParentTypes['Resources'] };
+  Village: Omit<Village, 'resources'> & { resources: ResolversParentTypes['VillageResources'] };
   VillageCrannyCapacity: VillageCrannyCapacity;
 };
 
@@ -1198,17 +1174,12 @@ export type HeroInformationResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
-export type TextLogEntryContentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContentPayload'] = ResolversParentTypes['TextLogEntryContentPayload']> = {
+export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
   message: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
-export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
-  text: Resolver<ResolversTypes['TextLogEntryContentPayload'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
-};
-
-export type AutoBuildLogEntryContentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContentPayload'] = ResolversParentTypes['AutoBuildLogEntryContentPayload']> = {
+export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1216,21 +1187,11 @@ export type AutoBuildLogEntryContentPayloadResolvers<ContextType = any, ParentTy
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
-export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
-  autoBuild: Resolver<ResolversTypes['AutoBuildLogEntryContentPayload'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsLogEntryContentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContentPayload'] = ResolversParentTypes['AutoUnitsLogEntryContentPayload']> = {
+export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
   amount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   unitName: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
-  autoUnits: Resolver<ResolversTypes['AutoUnitsLogEntryContentPayload'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -1240,7 +1201,7 @@ export type LogEntryContentResolvers<ContextType = any, ParentType extends Resol
 
 export type LogEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntry'] = ResolversParentTypes['LogEntry']> = {
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  timestamp: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
   content: Resolver<ResolversTypes['LogEntryContent'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
@@ -1452,11 +1413,8 @@ export type Resolvers<ContextType = any> = {
   Subscription: SubscriptionResolvers<ContextType>;
   BuildingInProgress: BuildingInProgressResolvers<ContextType>;
   HeroInformation: HeroInformationResolvers<ContextType>;
-  TextLogEntryContentPayload: TextLogEntryContentPayloadResolvers<ContextType>;
   TextLogEntryContent: TextLogEntryContentResolvers<ContextType>;
-  AutoBuildLogEntryContentPayload: AutoBuildLogEntryContentPayloadResolvers<ContextType>;
   AutoBuildLogEntryContent: AutoBuildLogEntryContentResolvers<ContextType>;
-  AutoUnitsLogEntryContentPayload: AutoUnitsLogEntryContentPayloadResolvers<ContextType>;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContentResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   LogEntry: LogEntryResolvers<ContextType>;

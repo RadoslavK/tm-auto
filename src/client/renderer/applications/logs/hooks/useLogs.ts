@@ -16,7 +16,7 @@ import {
   GetLogsQuery,
   LogEntryFragment,
   OnLogEntryAddedSubscription,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useLogs = () => {
   const queryResult = useQuery<GetLogsQuery>(GetLogs);

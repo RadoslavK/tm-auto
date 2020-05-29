@@ -18,7 +18,7 @@ import {
   GetUnitInfoQueryVariables,
   UpdateAutoUnitsUnitSettingsMutation,
   UpdateAutoUnitsUnitSettingsMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 

@@ -3,7 +3,6 @@ import { VillageCrannyCapacity } from '../../../_models/village/villageCrannyCap
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { accountContext } from '../../../accountContext';
 import { crannyInfoService } from '../../../services/crannyInfoService';
-import { mapVillage } from '../../mappers/villageMappers';
 
 export default <Resolvers>{
   Query: {
@@ -35,8 +34,8 @@ export default <Resolvers>{
         );
     },
 
-    village: (_, args) => mapVillage(accountContext.villageService.village(args.villageId)),
+    village: (_, args) => accountContext.villageService.village(args.villageId),
 
-    villages: () => accountContext.villageService.allVillages().map(x => mapVillage(x)),
+    villages: () => accountContext.villageService.allVillages(),
   },
 };

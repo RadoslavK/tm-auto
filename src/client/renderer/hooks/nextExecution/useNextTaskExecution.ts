@@ -19,7 +19,7 @@ import {
   NextTaskExecutionQueryVariables,
   TaskType,
   Timestamp,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
 export const useNextTaskExecution = (task: TaskType): number => {

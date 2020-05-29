@@ -1,4 +1,4 @@
-import { BuildingSpot } from '../../_types/graphql';
+import { BuildingSpot } from '../../_graphql/graphql.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';

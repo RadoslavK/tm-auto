@@ -3,7 +3,7 @@ import React from 'react';
 import {
   CoolDown as CoolDownModel,
   Duration as DurationModel,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { Duration } from './Duration';
 
 type Props = {

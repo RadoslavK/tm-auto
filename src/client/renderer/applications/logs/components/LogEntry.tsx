@@ -7,7 +7,7 @@ import {
   AutoUnitsLogEntryContent,
   LogEntryFragment,
   TextLogEntryContent,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
@@ -19,16 +19,16 @@ type Props = {
   readonly logEntry: LogEntryFragment;
 };
 
-const isTextEntry = (content: Content): content is TextLogEntryContent => (content as TextLogEntryContent).text !== undefined;
-const isAutoBuildEntry = (content: Content): content is AutoBuildLogEntryContent => (content as AutoBuildLogEntryContent).autoBuild !== undefined;
-const isAutoUnitsEntry = (content: Content): content is AutoUnitsLogEntryContent => (content as AutoUnitsLogEntryContent).autoUnits !== undefined;
+const isTextEntry = (content: Content): content is TextLogEntryContent => (content as TextLogEntryContent).message !== undefined;
+const isAutoBuildEntry = (content: Content): content is AutoBuildLogEntryContent => (content as AutoBuildLogEntryContent).fieldId !== undefined;
+const isAutoUnitsEntry = (content: Content): content is AutoUnitsLogEntryContent => (content as AutoUnitsLogEntryContent).unitName !== undefined;
 
 const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.Element => {
   if (isTextEntry(content)) {
     return (
       <TextLogContent
         className={className}
-        content={content.text}
+        content={content}
       />
     );
   }
@@ -37,7 +37,7 @@ const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.E
     return (
       <AutoBuildLogContent
         className={className}
-        content={content.autoBuild}
+        content={content}
       />
     );
   }
@@ -46,7 +46,7 @@ const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.E
     return (
       <AutoUnitsLogContent
         className={className}
-        content={content.autoUnits}
+        content={content}
       />
     );
   }
@@ -94,7 +94,7 @@ export const LogEntry: React.FC<Props> = ({ logEntry }) => {
   return (
     <div className={classes.root}>
       <span className={classes.timestamp}>
-        {new Date(logEntry.timestamp * 1000).toLocaleString()}
+        {new Date(logEntry.timestamp.totalSeconds * 1000).toLocaleString()}
       </span>
       {villageNode}
       <span className={classes.content}>

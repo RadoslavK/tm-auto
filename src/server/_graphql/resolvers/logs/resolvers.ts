@@ -1,23 +1,21 @@
 import { Resolvers } from '../../_types';
-import {
-  AutoBuildLogEntryContent,
-  AutoUnitsLogEntryContent,
-  TextLogEntryContent,
-} from '../../../_types/graphql';
+import { AutoBuildLogEntryContent } from '../../../_models/logs/content/autoBuild';
+import { AutoUnitsLogEntryContent } from '../../../_models/logs/content/autoUnits';
+import { TextLogEntryContent } from '../../../_models/logs/content/text';
 
 export default <Resolvers>{
   LogEntryContent: {
     //  receives the GraphQL model already
     __resolveType: (content) => {
-      if ((content as TextLogEntryContent).text !== undefined) {
+      if (content instanceof TextLogEntryContent) {
         return 'TextLogEntryContent';
       }
 
-      if ((content as AutoBuildLogEntryContent).autoBuild !== undefined) {
+      if (content instanceof AutoBuildLogEntryContent) {
         return 'AutoBuildLogEntryContent';
       }
 
-      if ((content as AutoUnitsLogEntryContent).autoUnits !== undefined) {
+      if (content instanceof AutoUnitsLogEntryContent) {
         return 'AutoUnitsLogEntryContent';
       }
 

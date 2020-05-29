@@ -5,7 +5,7 @@ import { SetNextVillageTaskExecution } from '*/graphql_operations/nextTaskExecut
 import {
   SetNextVillageTaskExecutionMutation,
   SetNextVillageTaskExecutionMutationVariables,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 
 export const useSetNextVillageTaskExecution = () => {
   const [setNextVillageTaskExecution] = useMutation<SetNextVillageTaskExecutionMutation, SetNextVillageTaskExecutionMutationVariables>(

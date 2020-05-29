@@ -1,4 +1,4 @@
-import { Village } from '../_types/graphql';
+import { Village } from '../_graphql/types/graphql.type';
 
 type VillageType = Pick<Village, 'name' | 'coords'> & Pick<Partial<Village>, 'isCapital'>;
 

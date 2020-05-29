@@ -8,7 +8,7 @@ import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 import {
   EnqueueBuildingMutation,
   EnqueueBuildingMutationVariables,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
 type Params = {

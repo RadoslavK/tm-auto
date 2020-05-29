@@ -1,7 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { BuildingSpotLevel } from '../../../_types/graphql';
+import { BuildingSpotLevel } from '../../../_graphql/types/graphql.type';
 
 type Props = {
   readonly className?: string;

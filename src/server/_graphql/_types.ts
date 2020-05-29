@@ -1,4 +1,4 @@
-import { Resolvers as InnerResolvers } from '../_types/graphql';
+import { Resolvers as InnerResolvers } from './graphql.type';
 
 export type Resolvers = {
   [TResolver in keyof InnerResolvers]?: Partial<InnerResolvers[TResolver]>;

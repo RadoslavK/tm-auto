@@ -15,7 +15,7 @@ import {
 import {
   ActiveVillageIdChangedSubscription,
   ActiveVillageIdQuery,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 
 export const useActiveVillageId = (): number | undefined => {
   const [activeVillageId, setActiveVillageId] = useState<number>();

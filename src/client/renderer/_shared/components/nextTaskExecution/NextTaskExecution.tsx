@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import {
   Duration,
   TaskType,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useNextTaskExecution } from '../../../hooks/nextExecution/useNextTaskExecution';
 import { useResetNextTaskExecution } from '../../../hooks/nextExecution/useResetNextTaskExecution';
 import { useSetNextTaskExecution } from '../../../hooks/nextExecution/useSetNextTaskExecution';

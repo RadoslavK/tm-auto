@@ -5,7 +5,7 @@ import { GetAutoUnitsSettings } from '*/graphql_operations/settings.graphql';
 import {
   GetAutoUnitsSettingsQuery,
   GetAutoUnitsSettingsQueryVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
 import { useVillageContext } from '../../villages/context/villageContext';
 
 export const useGetAutoUnitsSettings = (): GetAutoUnitsSettingsQuery['autoUnitsSettings'] | null => {

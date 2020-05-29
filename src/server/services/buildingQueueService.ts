@@ -1,8 +1,8 @@
+import { BuildingSpot } from '../_graphql/graphql.type';
 import { publishPayloadEvent } from '../_graphql/pubSub';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
-import { BuildingSpot } from '../_types/graphql';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';

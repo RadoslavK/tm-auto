@@ -9,7 +9,7 @@ import {
   BotState,
   StartBotMutation,
   StopBotMutation,
-} from '../_types/graphql';
+} from '../_graphql/types/graphql.type';
 import { useBotState } from './useBotState';
 
 export const useToggleBotState = (): (() => Promise<void>) | null => {

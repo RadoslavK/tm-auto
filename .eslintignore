@@ -2,8 +2,9 @@
 /node_modules
 /_codegen-plugins
 /_eslint
-**/*.graphql
-**/_types/graphql.ts
-**/_types/graphql_modules.d.ts
-**/*.json
+*.graphql
+graphql.type.ts
+graphql_modules.d.ts
+*.json
+*.yml
 index.html

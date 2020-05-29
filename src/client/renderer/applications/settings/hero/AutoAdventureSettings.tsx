@@ -12,9 +12,6 @@ import {
   UpdateAutoAdventureSettings,
 } from '*/graphql_operations/settings.graphql';
 
-import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { Duration } from '../../../_shared/components/controls/Duration';
-import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
 import {
   AdventureCriteria,
   AutoAdventureSettings as AutoAdventureSettingsModel,
@@ -27,7 +24,10 @@ import {
   UpdateAutoAdventureSettingsInput,
   UpdateAutoAdventureSettingsMutation,
   UpdateAutoAdventureSettingsMutationVariables,
-} from '../../../_types/graphql';
+} from '../../../_graphql/types/graphql.type';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown';
+import { Duration } from '../../../_shared/components/controls/Duration';
+import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { useVillages } from '../../../hooks/villages/useVillages';
 

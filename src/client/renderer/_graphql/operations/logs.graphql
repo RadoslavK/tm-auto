@@ -2,7 +2,9 @@
 
 fragment LogEntry on LogEntry {
     id
-    timestamp
+    timestamp {
+        ...Timestamp
+    }
     village {
         id
         coords {
@@ -12,25 +14,19 @@ fragment LogEntry on LogEntry {
     }
     content {
         ... on TextLogEntryContent {
-            text {
-                message
-            }
+            message
         }
         ... on AutoBuildLogEntryContent {
-            autoBuild {
-                fieldId
-                level
-                name
-                type
-            }
+            fieldId
+            level
+            name
+            type
         }
         ... on AutoUnitsLogEntryContent {
-            autoUnits {
-                amount
-                index
-                tribe
-                unitName
-            }
+            amount
+            index
+            tribe
+            unitName
         }
     }
 }

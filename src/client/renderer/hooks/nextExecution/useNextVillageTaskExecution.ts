@@ -19,7 +19,7 @@ import {
   NextVillageTaskExecutionQueryVariables,
   Timestamp,
   VillageTaskType,
-} from '../../_types/graphql';
+} from '../../_graphql/types/graphql.type';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
 export const useNextVillageTaskExecution = (villageId: number, task: VillageTaskType): number => {
