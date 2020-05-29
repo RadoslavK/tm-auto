@@ -3,6 +3,7 @@
     ".eslintrc.js",
     "webpack.*.js",
     "hot-reload.server.js",
-    "babel.config.js"
+    "babel.config.js",
+    "generateGraphqlTypes.js"
   ]
 }

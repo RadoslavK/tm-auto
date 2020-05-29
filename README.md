@@ -14,9 +14,9 @@ data processed during bot running are stored in .data folder
 				general
 				hero
 			
-ked sa zmeni graphql schema treba vygenerovat
-a aj prvy krat, neviem ci z toho nevytvara tne fragmentJson
--yarn run generate:types
+ked sa zmeni graphql schema treba vygenerovat typy: generate-types command
+tento generator generuje fragment types json potrebny pre klienta
+-yarn run generate-types
 			
 debugging - yarn run debug
 -vo WS nastavit attach to remote process
@@ -28,8 +28,6 @@ node 13.7 +
 
 ked sa kopiruju lokalne moduly tak najprv treba zmazat z nich node_modules lebo sa to vsetko prekopiruje
 a az potom dat yarn add lokalny modul
-
-upgrade all packages to latest
-npx yarn-upgrade-all
+viz _eslint
 
 linter has lower typescript support. like 3.7.5

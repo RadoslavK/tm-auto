@@ -16,32 +16,32 @@ export type UserAccount = {
 };
 
 export type Query = {
-  readonly account: Maybe<UserAccount>;
   readonly accounts: ReadonlyArray<UserAccount>;
-  readonly activeVillageId: Scalars['Int'];
-  readonly autoBuildSettings: AutoBuildSettings;
-  readonly autoPartySettings: AutoPartySettings;
-  readonly autoUnitsSettings: AutoUnitsSettings;
-  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
-  readonly botState: BotState;
-  readonly buildingQueue: BuildingQueue;
-  readonly buildingSpots: BuildingSpots;
-  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
-  readonly crannyCapacity: VillageCrannyCapacity;
+  readonly account: Maybe<UserAccount>;
   readonly currentAccount: UserAccount;
-  readonly generalSettings: GeneralSettings;
-  readonly generalVillageSettings: GeneralVillageSettings;
-  readonly hero: HeroSettings;
-  readonly heroInformation: HeroInformation;
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
-  readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
+  readonly buildingSpots: BuildingSpots;
   readonly maxBuildingLevel: Scalars['Int'];
-  readonly nextTaskExecution: Timestamp;
+  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly botState: BotState;
+  readonly heroInformation: HeroInformation;
+  readonly logsEntries: ReadonlyArray<LogEntry>;
   readonly nextTasksExecution: Timestamp;
+  readonly nextTaskExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
+  readonly buildingQueue: BuildingQueue;
+  readonly generalSettings: GeneralSettings;
+  readonly hero: HeroSettings;
+  readonly generalVillageSettings: GeneralVillageSettings;
+  readonly autoBuildSettings: AutoBuildSettings;
+  readonly autoUnitsSettings: AutoUnitsSettings;
+  readonly autoPartySettings: AutoPartySettings;
   readonly unitInfo: UnitInfo;
+  readonly activeVillageId: Scalars['Int'];
   readonly village: Maybe<Village>;
   readonly villages: ReadonlyArray<Village>;
+  readonly crannyCapacity: VillageCrannyCapacity;
 };
 
 
@@ -50,28 +50,8 @@ export type QueryAccountArgs = {
 };
 
 
-export type QueryAutoBuildSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoPartySettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoUnitsSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
 export type QueryAvailableNewBuildingsArgs = {
   input: AvailableNewBuildingsInput;
-};
-
-
-export type QueryBuildingQueueArgs = {
-  villageId: Scalars['Int'];
 };
 
 
@@ -80,23 +60,13 @@ export type QueryBuildingSpotsArgs = {
 };
 
 
-export type QueryBuildingsInProgressArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryCrannyCapacityArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryGeneralVillageSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
 export type QueryMaxBuildingLevelArgs = {
   buildingType: Scalars['Int'];
+};
+
+
+export type QueryBuildingsInProgressArgs = {
+  villageId: Scalars['Int'];
 };
 
 
@@ -111,6 +81,31 @@ export type QueryNextVillageTaskExecutionArgs = {
 };
 
 
+export type QueryBuildingQueueArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoBuildSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoUnitsSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
 export type QueryUnitInfoArgs = {
   index: Scalars['Int'];
 };
@@ -120,40 +115,40 @@ export type QueryVillageArgs = {
   villageId: Scalars['Int'];
 };
 
+
+export type QueryCrannyCapacityArgs = {
+  villageId: Scalars['Int'];
+};
+
 export type Mutation = {
-  readonly clearQueue: Scalars['Boolean'];
   readonly createAccount: Maybe<Scalars['String']>;
+  readonly updateAccount: Scalars['Boolean'];
   readonly deleteAccount: Scalars['Boolean'];
+  readonly signIn: Maybe<Scalars['Boolean']>;
+  readonly signOut: Maybe<Scalars['Boolean']>;
+  readonly startBot: Scalars['Boolean'];
+  readonly stopBot: Scalars['Boolean'];
+  readonly setNextTaskExecution: Scalars['Boolean'];
+  readonly setNextVillageTaskExecution: Scalars['Boolean'];
+  readonly resetNextTaskExecution: Scalars['Boolean'];
+  readonly resetNextVillageTaskExecution: Scalars['Boolean'];
+  readonly clearQueue: Scalars['Boolean'];
   readonly dequeueBuilding: Scalars['Boolean'];
   readonly dequeueBuildingAtField: Scalars['Boolean'];
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingDown: Scalars['Boolean'];
   readonly moveQueuedBuildingUp: Scalars['Boolean'];
-  readonly resetNextTaskExecution: Scalars['Boolean'];
-  readonly resetNextVillageTaskExecution: Scalars['Boolean'];
-  readonly resetSettings: Scalars['Boolean'];
-  readonly resetVillageSettings: Scalars['Boolean'];
-  readonly setNextTaskExecution: Scalars['Boolean'];
-  readonly setNextVillageTaskExecution: Scalars['Boolean'];
-  readonly signIn: Maybe<Scalars['Boolean']>;
-  readonly signOut: Maybe<Scalars['Boolean']>;
-  readonly startBot: Scalars['Boolean'];
-  readonly stopBot: Scalars['Boolean'];
-  readonly updateAccount: Scalars['Boolean'];
+  readonly updateGeneralSettings: Scalars['Boolean'];
   readonly updateAutoAdventureSettings: Scalars['Boolean'];
+  readonly updateGeneralVillageSettings: Scalars['Boolean'];
   readonly updateAutoBuildVillageSettings: Scalars['Boolean'];
-  readonly updateAutoPartySettings: Scalars['Boolean'];
+  readonly updateAutoUnitsUnitSettings: Scalars['Boolean'];
   readonly updateAutoUnitsBuildingSettings: Scalars['Boolean'];
   readonly updateAutoUnitsSettings: Scalars['Boolean'];
-  readonly updateAutoUnitsUnitSettings: Scalars['Boolean'];
-  readonly updateGeneralSettings: Scalars['Boolean'];
-  readonly updateGeneralVillageSettings: Scalars['Boolean'];
-};
-
-
-export type MutationClearQueueArgs = {
-  villageId: Scalars['Int'];
+  readonly updateAutoPartySettings: Scalars['Boolean'];
+  readonly resetSettings: Scalars['Boolean'];
+  readonly resetVillageSettings: Scalars['Boolean'];
 };
 
 
@@ -162,8 +157,47 @@ export type MutationCreateAccountArgs = {
 };
 
 
+export type MutationUpdateAccountArgs = {
+  account: UpdateUserAccountInput;
+};
+
+
 export type MutationDeleteAccountArgs = {
   accountId: Scalars['String'];
+};
+
+
+export type MutationSignInArgs = {
+  accountId: Scalars['ID'];
+};
+
+
+export type MutationSetNextTaskExecutionArgs = {
+  task: TaskType;
+  delay: DurationInput;
+};
+
+
+export type MutationSetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+  delay: DurationInput;
+};
+
+
+export type MutationResetNextTaskExecutionArgs = {
+  task: TaskType;
+};
+
+
+export type MutationResetNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: VillageTaskType;
+};
+
+
+export type MutationClearQueueArgs = {
+  villageId: Scalars['Int'];
 };
 
 
@@ -198,48 +232,8 @@ export type MutationMoveQueuedBuildingUpArgs = {
 };
 
 
-export type MutationResetNextTaskExecutionArgs = {
-  task: TaskType;
-};
-
-
-export type MutationResetNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'];
-  task: VillageTaskType;
-};
-
-
-export type MutationResetSettingsArgs = {
-  type: SettingsType;
-};
-
-
-export type MutationResetVillageSettingsArgs = {
-  villageId: Scalars['Int'];
-  type: VillageSettingsType;
-};
-
-
-export type MutationSetNextTaskExecutionArgs = {
-  task: TaskType;
-  delay: DurationInput;
-};
-
-
-export type MutationSetNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'];
-  task: VillageTaskType;
-  delay: DurationInput;
-};
-
-
-export type MutationSignInArgs = {
-  accountId: Scalars['ID'];
-};
-
-
-export type MutationUpdateAccountArgs = {
-  account: UpdateUserAccountInput;
+export type MutationUpdateGeneralSettingsArgs = {
+  settings: UpdateGeneralSettingsInput;
 };
 
 
@@ -248,13 +242,18 @@ export type MutationUpdateAutoAdventureSettingsArgs = {
 };
 
 
+export type MutationUpdateGeneralVillageSettingsArgs = {
+  settings: UpdateGeneralVillageSettingsInput;
+};
+
+
 export type MutationUpdateAutoBuildVillageSettingsArgs = {
   settings: UpdateAutoBuildVillageSettingsInput;
 };
 
 
-export type MutationUpdateAutoPartySettingsArgs = {
-  settings: UpdateAutoPartySettingsInput;
+export type MutationUpdateAutoUnitsUnitSettingsArgs = {
+  settings: UpdateAutoUnitsUnitSettingsInput;
 };
 
 
@@ -268,18 +267,19 @@ export type MutationUpdateAutoUnitsSettingsArgs = {
 };
 
 
-export type MutationUpdateAutoUnitsUnitSettingsArgs = {
-  settings: UpdateAutoUnitsUnitSettingsInput;
+export type MutationUpdateAutoPartySettingsArgs = {
+  settings: UpdateAutoPartySettingsInput;
 };
 
 
-export type MutationUpdateGeneralSettingsArgs = {
-  settings: UpdateGeneralSettingsInput;
+export type MutationResetSettingsArgs = {
+  type: SettingsType;
 };
 
 
-export type MutationUpdateGeneralVillageSettingsArgs = {
-  settings: UpdateGeneralVillageSettingsInput;
+export type MutationResetVillageSettingsArgs = {
+  villageId: Scalars['Int'];
+  type: VillageSettingsType;
 };
 
 export type BuildingSpotLevel = {
@@ -320,53 +320,28 @@ export type AvailableNewBuilding = {
 };
 
 export type Subscription = {
-  readonly activeVillageIdChanged: Scalars['Int'];
-  readonly autoAdventureSettingsChanged: AutoAdventureSettings;
-  readonly autoBuildSettingsChanged: AutoBuildSettings;
-  readonly autoPartySettingsChanged: AutoPartySettings;
-  readonly autoUnitsSettingsChanged: AutoUnitsSettings;
   readonly buildingsUpdated: Scalars['Boolean'];
-  readonly crannyCapacityChanged: Scalars['Boolean'];
-  readonly generalSettingsChanged: GeneralSettings;
-  readonly generalVillageSettingsChanged: GeneralVillageSettings;
-  readonly heroInformationUpdated: HeroInformation;
-  readonly nextTaskExecutionChanged: Timestamp;
-  readonly nextTasksExecutionChanged: Timestamp;
-  readonly nextVillageTaskExecutionChanged: Timestamp;
   readonly onBotRunningChanged: Scalars['Boolean'];
+  readonly heroInformationUpdated: HeroInformation;
   readonly onLogEntryAdded: LogEntry;
+  readonly nextTasksExecutionChanged: Timestamp;
+  readonly nextTaskExecutionChanged: Timestamp;
+  readonly nextVillageTaskExecutionChanged: Timestamp;
   readonly onQueueUpdated: Scalars['Boolean'];
+  readonly generalSettingsChanged: GeneralSettings;
+  readonly autoAdventureSettingsChanged: AutoAdventureSettings;
+  readonly generalVillageSettingsChanged: GeneralVillageSettings;
+  readonly autoBuildSettingsChanged: AutoBuildSettings;
+  readonly autoUnitsSettingsChanged: AutoUnitsSettings;
+  readonly autoPartySettingsChanged: AutoPartySettings;
   readonly updateVillage: Scalars['Boolean'];
   readonly updateVillages: Scalars['Boolean'];
-};
-
-
-export type SubscriptionAutoBuildSettingsChangedArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type SubscriptionAutoPartySettingsChangedArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type SubscriptionAutoUnitsSettingsChangedArgs = {
-  villageId: Scalars['Int'];
+  readonly activeVillageIdChanged: Scalars['Int'];
+  readonly crannyCapacityChanged: Scalars['Boolean'];
 };
 
 
 export type SubscriptionBuildingsUpdatedArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type SubscriptionCrannyCapacityChangedArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type SubscriptionGeneralVillageSettingsChangedArgs = {
   villageId: Scalars['Int'];
 };
 
@@ -383,6 +358,31 @@ export type SubscriptionNextVillageTaskExecutionChangedArgs = {
 
 
 export type SubscriptionOnQueueUpdatedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionGeneralVillageSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionAutoBuildSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionAutoUnitsSettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionAutoPartySettingsChangedArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type SubscriptionCrannyCapacityChangedArgs = {
   villageId: Scalars['Int'];
 };
 

@@ -10,9 +10,7 @@
     "node": ">=13.7"
   },
   "scripts": {
-    "debug-webpack-renderer-config": "node-nightly --inspect-brk ./node_modules/webpack/bin/webpack.js --config ./webpack.renderer.config.js",
-    "debug": "electron-forge start -- --remote-debugging-port=9222 --inspect",
-    "generate:types": "graphql-codegen --config codegen.yml",
+    "generate-types": "node generateGraphqlTypes",
     "lint": "eslint \"src/**/*\"",
     "lint-errors": "eslint \"src/**/*\" --quiet",
     "start-m": "webpack --config webpack.main.config.js --mode development&& electron .webpack/main",
@@ -55,7 +53,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@graphql-codegen/cli": "^1.15.0",
+    "@graphql-codegen/core": "^1.15.0",
     "@graphql-codegen/fragment-matcher": "^1.15.0",
     "@graphql-codegen/typescript": "^1.15.0",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.15.0",
