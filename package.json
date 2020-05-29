@@ -13,7 +13,7 @@
     "generate-types": "node generateGraphqlTypes",
     "lint": "eslint \"src/**/*\"",
     "lint-errors": "eslint \"src/**/*\" --quiet",
-    "start-m": "webpack --config webpack.main.config.js --mode development&& electron .webpack/main",
+    "start-m": "webpack --config webpack.main.config.js --mode development&& electron .webpack/main --remote-debugging-port=9222 --inspect",
     "start-r": "node hot-reload.server.js"
   },
   "dependencies": {
