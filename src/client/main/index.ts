@@ -43,7 +43,19 @@ const createClientWindow = async (socketName: string): Promise<void> => {
   // Auto-hide main app menu - show it after pressing 'Alt' key
   clientWin.setAutoHideMenuBar(true);
 
-  await clientWin.loadURL('http://localhost:8080/');
+  let loaded = false;
+
+  do {
+    try {
+      await clientWin.loadURL('http://localhost:8080/');
+
+      loaded = true;
+    } catch {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 3000);
+      });
+    }
+  } while (!loaded);
 
   clientWin.maximize();
 

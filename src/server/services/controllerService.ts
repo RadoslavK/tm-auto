@@ -5,7 +5,6 @@ import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
 import {
   BotState,
-  GeneralSettings,
   MutationSignInArgs,
 } from '../_types/graphql';
 import { accountContext } from '../accountContext';
@@ -26,6 +25,38 @@ import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
+
+type HandleErrorResult = {
+  readonly allowContinue: boolean;
+};
+
+// TODO add error state in client and also log
+const handleError = async (error: Error): Promise<HandleErrorResult> => {
+  console.error(error.stack);
+  // try to make screenshot
+  try {
+    const page = await getPage();
+    const now = new Date();
+    const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+
+    if (!fs.existsSync('.screenshots')) {
+      fs.mkdirSync('.screenshots');
+    }
+
+    await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
+    await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
+  } catch (screenshotError) {
+    console.error(screenshotError.stack);
+  }
+
+  await killBrowser();
+
+  // TODO: allow continue if the error was cause by puppeteer timeout? internal errors should always throw
+  // and puppeteer errors that didnt find dom elements are probably valid too cause mark up could changed and we
+  // dont reflect changes
+  return { allowContinue: false };
+};
 
 class ControllerService {
   private _timeout: NodeJS.Timeout;
@@ -50,7 +81,7 @@ class ControllerService {
       accountId,
     } = input;
 
-    let generalSettings: GeneralSettings;
+    let allowContinue = true;
 
     try {
       if (this.botState !== BotState.None) {
@@ -79,11 +110,18 @@ class ControllerService {
 
       await updatePlayerInfo();
     } catch (error) {
-      console.error(error.stack);
-      await this.signOut();
-    } finally {
-      generalSettings = accountContext.settingsService.general.get();
+      const result = await handleError(error);
+      allowContinue = result.allowContinue;
     }
+
+    if (!allowContinue) {
+      //  todo: show some message that bot did not even signed in
+      this.signOut();
+
+      return;
+    }
+
+    const generalSettings = accountContext.settingsService.general.get();
 
     if (generalSettings.autoStart) {
       await this.start();
@@ -92,7 +130,7 @@ class ControllerService {
     }
   };
 
-  public signOut = (): void => {
+  public signOut = async (): Promise<void> => {
     accountService.setCurrentAccountId(null);
     this.setState(BotState.None);
   };
@@ -103,6 +141,8 @@ class ControllerService {
   };
 
   private execute = async (): Promise<void> => {
+    let allowContinue = true;
+
     try {
       await ensureLoggedIn();
 
@@ -112,24 +152,14 @@ class ControllerService {
 
       await this._taskManager.execute();
     } catch (error) {
-      console.error(error.stack);
-      // try to make screenshot
-      try {
-        const page = await getPage();
-        const now = new Date();
-        const format = `${now.getDate()}-${now.getMonth()}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+      const result = await handleError(error);
+      allowContinue = result.allowContinue;
+    }
 
-        if (!fs.existsSync('./screenshots')) {
-          fs.mkdirSync('./screenshots');
-        }
+    if (!allowContinue) {
+      this.setState(BotState.Paused);
 
-        await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
-        await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack, { flag: 'w' });
-      } catch (screenshotError) {
-        console.error(screenshotError.stack);
-      }
-
-      await killBrowser();
+      return;
     }
 
     const nextTimeout = this._tasksCoolDown.getRandomDelay();
