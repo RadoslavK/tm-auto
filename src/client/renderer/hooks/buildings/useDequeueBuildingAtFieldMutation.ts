@@ -1,7 +1,7 @@
 import {
   MutationTuple,
   useMutation,
-} from '@apollo/react-hooks';
+} from '@apollo/client';
 
 import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
 

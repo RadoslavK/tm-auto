@@ -1,7 +1,7 @@
 import {
   useQuery,
   useSubscription,
-} from '@apollo/react-hooks';
+} from '@apollo/client';
 import React, {
   useEffect,
   useState,

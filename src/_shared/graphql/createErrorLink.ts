@@ -1,5 +1,5 @@
-import { ApolloLink } from 'apollo-link';
-import { onError } from 'apollo-link-error';
+import { ApolloLink } from '@apollo/client';
+import { onError } from '@apollo/link-error';
 
 export const createErrorLink = (): ApolloLink => onError(({ graphQLErrors, networkError, operation }) => {
   if (graphQLErrors) {

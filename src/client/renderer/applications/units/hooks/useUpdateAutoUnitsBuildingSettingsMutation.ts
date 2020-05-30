@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { UpdateAutoUnitsBuildingSettings } from '*/graphql_operations/settings.graphql';
 

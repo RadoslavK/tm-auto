@@ -1,7 +1,5 @@
-// TODO: remove in the future because types can be normally imported https://github.com/benmosher/eslint-plugin-import/issues/1618
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ExecutionResult } from '@apollo/react-common';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
+import { FetchResult } from '@apollo/client/link/core/types';
 
 import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 
@@ -17,7 +15,7 @@ type Params = {
   readonly targetLevel?: number;
 };
 
-type ReturnType = (targetLevel?: number) => Promise<ExecutionResult<EnqueueBuildingMutation>>;
+type ReturnType = (targetLevel?: number) => Promise<FetchResult<EnqueueBuildingMutation>>;
 
 export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
   const { villageId } = useVillageContext();
@@ -38,7 +36,7 @@ export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
     createOptions(params),
   );
 
-  return (targetLevel?: number): Promise<ExecutionResult<EnqueueBuildingMutation>> => {
+  return (targetLevel?: number): Promise<FetchResult<EnqueueBuildingMutation>> => {
     const options = targetLevel
       ? createOptions({
         ...params,

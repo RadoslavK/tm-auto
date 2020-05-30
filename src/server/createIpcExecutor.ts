@@ -1,7 +1,7 @@
 import {
   ApolloLink,
   execute as executeLink,
-} from 'apollo-link';
+} from '@apollo/client';
 import { parse as parseQuery } from 'graphql';
 
 import { GraphqlHandlerPayload } from '../_shared/graphql/models';

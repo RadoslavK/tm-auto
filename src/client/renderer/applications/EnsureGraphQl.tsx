@@ -1,16 +1,15 @@
-import { ApolloProvider } from '@apollo/react-hooks';
 import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+} from '@apollo/client';
+import { InMemoryCache } from '@apollo/client/cache';
 import React, {
   useEffect,
   useState,
 } from 'react';
 
-import introspectionQueryResultData from '../_graphql/fragmentTypes.json';
+import { possibleTypes } from '../_graphql/fragmentTypes.json';
 import { createIpcLink } from '../_graphql/utils/createIpcLink';
 import { IpcClient } from '../_ipc/ipcUtils';
 import { createErrorLink } from '../../../_shared/graphql/createErrorLink';
@@ -31,14 +30,12 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
 
       const link = ApolloLink.from([errorLink, ipcLink]);
 
-      const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
-
       const client = new ApolloClient({
-        cache: new InMemoryCache({ fragmentMatcher }),
+        cache: new InMemoryCache({ possibleTypes }),
         defaultOptions: {
           mutate: {
             errorPolicy: 'none',
-            fetchPolicy: 'network-only',
+            fetchPolicy: 'no-cache',
           },
           query: {
             errorPolicy: 'none',

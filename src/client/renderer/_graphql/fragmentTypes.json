@@ -1,39 +1,15 @@
 {
-  "__schema": {
-    "types": [
-      {
-        "kind": "UNION",
-        "name": "LogEntryContent",
-        "possibleTypes": [
-          {
-            "name": "TextLogEntryContent"
-          },
-          {
-            "name": "AutoBuildLogEntryContent"
-          },
-          {
-            "name": "AutoUnitsLogEntryContent"
-          }
-        ]
-      },
-      {
-        "kind": "INTERFACE",
-        "name": "ITaskSettings",
-        "possibleTypes": [
-          {
-            "name": "AutoBuildSettings"
-          },
-          {
-            "name": "AutoAdventureSettings"
-          },
-          {
-            "name": "AutoUnitsSettings"
-          },
-          {
-            "name": "AutoPartySettings"
-          }
-        ]
-      }
+  "possibleTypes": {
+    "LogEntryContent": [
+      "TextLogEntryContent",
+      "AutoBuildLogEntryContent",
+      "AutoUnitsLogEntryContent"
+    ],
+    "ITaskSettings": [
+      "AutoBuildSettings",
+      "AutoAdventureSettings",
+      "AutoUnitsSettings",
+      "AutoPartySettings"
     ]
   }
 }

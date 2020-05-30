@@ -2,7 +2,7 @@ import {
   useMutation,
   useQuery,
   useSubscription,
-} from '@apollo/react-hooks';
+} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useCallback,

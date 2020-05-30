@@ -1,4 +1,4 @@
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink } from '@apollo/client';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { createErrorLink } from '../_shared/graphql/createErrorLink';

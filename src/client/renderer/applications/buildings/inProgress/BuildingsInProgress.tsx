@@ -1,7 +1,7 @@
 import {
   useQuery,
   useSubscription,
-} from '@apollo/react-hooks';
+} from '@apollo/client';
 import React from 'react';
 
 import { BuildingsUpdated } from '*/graphql_operations/building.graphql';

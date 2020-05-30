@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { SetNextTaskExecution } from '*/graphql_operations/nextTaskExecution.graphql';
 

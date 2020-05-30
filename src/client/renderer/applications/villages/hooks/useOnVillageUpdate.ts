@@ -1,4 +1,4 @@
-import { useSubscription } from '@apollo/react-hooks';
+import { useSubscription } from '@apollo/client';
 
 import { UpdateVillage } from '*/graphql_operations/village.graphql';
 

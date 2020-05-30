@@ -2,7 +2,7 @@ import {
   ApolloLink,
   FetchResult,
   Observable,
-} from 'apollo-link';
+} from '@apollo/client';
 import { print as printQuery } from 'graphql';
 
 import { IpcClient } from '../../_ipc/ipcUtils';

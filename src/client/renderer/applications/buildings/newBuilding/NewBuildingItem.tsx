@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Dialog } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useState } from 'react';

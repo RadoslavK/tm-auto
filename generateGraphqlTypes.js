@@ -158,6 +158,7 @@ const generateGraphqlFragmentTypes = async () => {
   const documents = await loadClientDocuments();
 
   const matcherConfig = {
+    apolloClientVersion: 3,
     modulePathPrefix: 'graphql_operations/',
   };
 

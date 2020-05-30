@@ -3,8 +3,8 @@ import {
   FetchResult,
   Observable,
   Operation,
-} from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
+} from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
 import {
   execute,
   ExecutionArgs,
