@@ -28,6 +28,7 @@ export type Query = {
   readonly botState: BotState;
   readonly heroInformation: HeroInformation;
   readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly mentorTasks: ReadonlyArray<MentorTask>;
   readonly nextTasksExecution: Timestamp;
   readonly nextTaskExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
@@ -325,6 +326,7 @@ export type Subscription = {
   readonly onBotRunningChanged: Scalars['Boolean'];
   readonly heroInformationUpdated: HeroInformation;
   readonly onLogEntryAdded: LogEntry;
+  readonly onMentorTasksUpdated: ReadonlyArray<MentorTask>;
   readonly nextTasksExecutionChanged: Timestamp;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextVillageTaskExecutionChanged: Timestamp;
@@ -461,6 +463,11 @@ export type LogEntry = {
   readonly timestamp: Timestamp;
   readonly village: Maybe<Village>;
   readonly content: LogEntryContent;
+};
+
+export type MentorTask = {
+  readonly completed: Scalars['Boolean'];
+  readonly id: Scalars['String'];
 };
 
 export type Timestamp = {
@@ -935,6 +942,18 @@ export type OnLogEntryAddedSubscriptionVariables = {};
 
 
 export type OnLogEntryAddedSubscription = { readonly onLogEntryAdded: LogEntryFragment };
+
+export type MentorTaskFragment = Pick<MentorTask, 'completed' | 'id'>;
+
+export type GetMentorTasksQueryVariables = {};
+
+
+export type GetMentorTasksQuery = { readonly mentorTasks: ReadonlyArray<MentorTaskFragment> };
+
+export type OnMentorTasksUpdatedSubscriptionVariables = {};
+
+
+export type OnMentorTasksUpdatedSubscription = { readonly onMentorTasksUpdated: ReadonlyArray<MentorTaskFragment> };
 
 
 export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;

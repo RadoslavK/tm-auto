@@ -7,17 +7,15 @@ export enum BotEvent {
   BotRunningChanged = 'BotRunningChanged',
   BuildingsUpdated = 'BuildingsUpdated',
   CrannyCapacityUpdated = 'CrannyCapacityUpdated',
-
   GeneralSettingsChanged = 'GeneralSettingsChanged',
   GeneralVillageSettingsChanged = 'GeneralVillageSettingsChanged',
   HeroInformationUpdated = 'HeroInformationUpdated',
   LogEntryAdded = 'LogEntryAdded',
+  MentorTasksUpdated = 'MentorTasksUpdated',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
   NextTasksExecutionChanged = 'NextTasksExecutionChanged',
-
   NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
   QueuedUpdated = 'QueueUpdated',
   VillageUpdated = 'VillageUpdated',
-
-  VillagesUpdated = 'VillagesUpdated'
+  VillagesUpdated = 'VillagesUpdated',
 }

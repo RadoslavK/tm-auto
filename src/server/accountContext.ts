@@ -3,6 +3,7 @@ import { Tribe } from '../_shared/types/tribe';
 import { Coords } from './_models/coords';
 import { GameInfo } from './_models/gameInfo';
 import { Hero } from './_models/hero/hero';
+import { MentorTask } from './_models/mentor/mentorTask';
 import { Resources } from './_models/misc/resources';
 import { Village } from './_models/village/village';
 import { VillageCapacity } from './_models/village/villageCapacity';
@@ -21,6 +22,7 @@ class AccountContext {
 
   public gameInfo: GameInfo;
   public hero: Hero;
+  public mentorTasks: readonly MentorTask[];
 
   public initialize = (): void => {
     this.villageService = new VillageService();
@@ -30,6 +32,7 @@ class AccountContext {
 
     this.gameInfo = new GameInfo();
     this.hero = new Hero();
+    this.mentorTasks = [];
   };
 }
 

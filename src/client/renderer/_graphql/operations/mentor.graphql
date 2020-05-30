@@ -1,0 +1,16 @@
+fragment MentorTask on MentorTask {
+    completed
+    id
+}
+
+query GetMentorTasks {
+    mentorTasks {
+        ...MentorTask
+    }
+}
+
+subscription OnMentorTasksUpdated {
+    onMentorTasksUpdated {
+        ...MentorTask
+    }
+}

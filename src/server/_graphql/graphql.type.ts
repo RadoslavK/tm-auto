@@ -39,6 +39,7 @@ export type Query = {
   readonly botState: BotState;
   readonly heroInformation: HeroModel;
   readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly mentorTasks: ReadonlyArray<MentorTask>;
   readonly nextTasksExecution: Timestamp;
   readonly nextTaskExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
@@ -343,6 +344,7 @@ export type Subscription = {
   readonly onBotRunningChanged: Scalars['Boolean'];
   readonly heroInformationUpdated: HeroModel;
   readonly onLogEntryAdded: LogEntryModel;
+  readonly onMentorTasksUpdated: ReadonlyArray<MentorTask>;
   readonly nextTasksExecutionChanged: Timestamp;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextVillageTaskExecutionChanged: Timestamp;
@@ -485,6 +487,12 @@ export type LogEntry = {
   readonly timestamp: Timestamp;
   readonly village: Maybe<Village>;
   readonly content: LogEntryContent;
+};
+
+export type MentorTask = {
+  readonly __typename?: 'MentorTask';
+  readonly completed: Scalars['Boolean'];
+  readonly id: Scalars['String'];
 };
 
 export type Timestamp = {
@@ -922,6 +930,7 @@ export type ResolversTypes = {
   AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContentModel>;
   LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'];
   LogEntry: ResolverTypeWrapper<LogEntryModel>;
+  MentorTask: ResolverTypeWrapper<MentorTask>;
   Timestamp: ResolverTypeWrapper<Timestamp>;
   Resources: ResolverTypeWrapper<ResourcesModel>;
   Cost: ResolverTypeWrapper<Omit<Cost, 'resources'> & { resources: ResolversTypes['Resources'] }>;
@@ -1000,6 +1009,7 @@ export type ResolversParentTypes = {
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContentModel;
   LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'];
   LogEntry: LogEntryModel;
+  MentorTask: MentorTask;
   Timestamp: Timestamp;
   Resources: ResourcesModel;
   Cost: Omit<Cost, 'resources'> & { resources: ResolversParentTypes['Resources'] };
@@ -1070,6 +1080,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   botState: Resolver<ResolversTypes['BotState'], ParentType, ContextType>;
   heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
   logsEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
+  mentorTasks: Resolver<ReadonlyArray<ResolversTypes['MentorTask']>, ParentType, ContextType>;
   nextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   nextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextTaskExecutionArgs, 'task'>>;
   nextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
@@ -1160,6 +1171,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   onBotRunningChanged: SubscriptionResolver<ResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>;
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
   onLogEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "onLogEntryAdded", ParentType, ContextType>;
+  onMentorTasksUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['MentorTask']>, "onMentorTasksUpdated", ParentType, ContextType>;
   nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
   nextVillageTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextVillageTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextVillageTaskExecutionChangedArgs, 'villageId' | 'task'>>;
@@ -1223,6 +1235,12 @@ export type LogEntryResolvers<ContextType = any, ParentType extends ResolversPar
   timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
   content: Resolver<ResolversTypes['LogEntryContent'], ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
+export type MentorTaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['MentorTask'] = ResolversParentTypes['MentorTask']> = {
+  completed: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -1437,6 +1455,7 @@ export type Resolvers<ContextType = any> = {
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContentResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   LogEntry: LogEntryResolvers<ContextType>;
+  MentorTask: MentorTaskResolvers<ContextType>;
   Timestamp: TimestampResolvers<ContextType>;
   Resources: ResourcesResolvers<ContextType>;
   Cost: CostResolvers<ContextType>;

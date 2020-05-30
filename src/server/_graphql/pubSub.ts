@@ -20,11 +20,6 @@ export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutP
 
 type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayloads[TEvent] : undefined;
 
-type Options<TEvent, TArgs, TResult> = {
-  readonly filter?: (payload: EventPayload<TEvent>, subscriptionVariables: TArgs) => boolean;
-  readonly resolve: (payload: EventPayload<TEvent>) => TResult;
-};
-
 class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<EventPayload<TEvent>> {
   private pullQueue: ((value: IteratorResult<EventPayload<TEvent>>) => void)[];
   private pushQueue: EventPayload<TEvent>[];
@@ -113,6 +108,11 @@ class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<Even
     pubSub.unsubscribe(subscriptionId);
   };
 }
+
+type Options<TEvent, TArgs, TResult> = {
+  readonly filter?: (payload: EventPayload<TEvent>, subscriptionVariables: TArgs) => boolean;
+  readonly resolve: (payload: EventPayload<TEvent>) => TResult;
+};
 
 export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TParent, TContext>(
   event: TEvent,

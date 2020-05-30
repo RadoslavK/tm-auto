@@ -126,6 +126,7 @@ module.exports = {
     'quote-props': 'error',
     quotes: 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'react/jsx-one-expression-per-line': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react/button-has-type': 'off',
     // Too restrictive: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/destructuring-assignment.md

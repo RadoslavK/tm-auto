@@ -6,10 +6,7 @@ import {
 } from 'react-router-dom';
 
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NexTasksExecution';
-import { Logs } from '../../logs/components/Logs';
-import { GeneralSettings } from '../../settings/GeneralSettings';
-import { HeroSettings } from '../../settings/hero/HeroSettings';
-import { Villages } from '../../villages/components/Villages';
+import { navigationApps } from './Navigation';
 
 export const MainRoutes: React.FC = () => (
   <div>
@@ -20,22 +17,13 @@ export const MainRoutes: React.FC = () => (
         path="/"
         render={() => <Redirect to="/villages" />}
       />
-      <Route
-        component={Villages}
-        path="/villages"
-      />
-      <Route
-        component={GeneralSettings}
-        path="/settings"
-      />
-      <Route
-        component={HeroSettings}
-        path="/hero"
-      />
-      <Route
-        component={Logs}
-        path="/logs"
-      />
+      {navigationApps.map((app) => (
+        <Route
+          key={app.path}
+          component={app.component}
+          path={app.path}
+        />
+      ))}
       <Redirect to="/villages" />
     </Switch>
   </div>

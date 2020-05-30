@@ -1,4 +1,5 @@
 import { LogEntry } from '../_models/logs/logEntry';
+import { MentorTask } from '../_models/mentor/mentorTask';
 import { GeneralSettings } from '../_models/settings/generalSettings';
 import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
 import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings';
@@ -73,5 +74,9 @@ export type BotEventPayloads = {
 
   [BotEvent.CrannyCapacityUpdated]: {
     readonly villageId: number;
+  }
+
+  [BotEvent.MentorTasksUpdated]: {
+    readonly tasks: readonly MentorTask[];
   }
 };

@@ -1,0 +1,12 @@
+type MentorTask {
+    completed: Boolean!
+    id: String!
+}
+
+extend type Query {
+    mentorTasks: [MentorTask!]!
+}
+
+extend type Subscription {
+    onMentorTasksUpdated: [MentorTask!]!
+}

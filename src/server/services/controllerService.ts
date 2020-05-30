@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { TimeoutError } from 'puppeteer/Errors';
 
 import {
   BotState,
@@ -26,7 +27,6 @@ import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
-import { TimeoutError } from 'puppeteer/Errors';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;

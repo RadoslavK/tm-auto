@@ -77,6 +77,17 @@ export const OnLogEntryAdded: DocumentNode;
 }
     
 
+declare module '*/graphql_operations/mentor.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const MentorTask: DocumentNode;
+export const GetMentorTasks: DocumentNode;
+export const OnMentorTasksUpdated: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/graphql_operations/misc.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

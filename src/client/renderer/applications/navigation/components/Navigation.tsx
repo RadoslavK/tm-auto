@@ -9,14 +9,26 @@ import {
 
 import { BotState } from '../../../_graphql/types/graphql.type';
 import { useBotState } from '../../../hooks/useBotState';
+import { Logs } from '../../logs/components/Logs';
+import { Mentor } from '../../mentor/Mentor';
+import { GeneralSettings } from '../../settings/GeneralSettings';
+import { HeroSettings } from '../../settings/hero/HeroSettings';
+import { Villages } from '../../villages/components/Villages';
 import { BotStateToggle } from './BotStateToggle';
 import { SignOut } from './SignOut';
 
-const navigationPaths: readonly string[] = [
-  '/villages',
-  '/hero',
-  '/settings',
-  '/logs',
+type NavigationApp = {
+  readonly component: React.ComponentType;
+  readonly label: string;
+  readonly path: string;
+};
+
+export const navigationApps: readonly NavigationApp[] = [
+  { component: Villages, label: 'Villages', path: '/villages' },
+  { component: HeroSettings, label: 'Hero', path: '/hero' },
+  { component: GeneralSettings, label: 'Settings', path: '/settings' },
+  { component: Mentor, label: 'Mentor', path: '/mentor' },
+  { component: Logs, label: 'Logs', path: '/logs' },
 ];
 
 export const Navigation: React.FC = () => {
@@ -29,13 +41,13 @@ export const Navigation: React.FC = () => {
     return null;
   }
 
-  const currentItemIndex = navigationPaths.findIndex(path => pathname.startsWith(path));
+  const currentItemIndex = navigationApps.findIndex(app => pathname.startsWith(app.path));
 
   if (currentItemIndex === -1) {
     return null;
   }
 
-  const onTabClick = (): void => {
+  const markLastVillagePath = (): void => {
     if (pathname.startsWith('/villages')) {
       setLastVillagesPath(pathname);
     }
@@ -50,29 +62,17 @@ export const Navigation: React.FC = () => {
         indicatorColor="primary"
         value={currentItemIndex}
       >
-        <Tab
-          component={Link}
-          label="Villages"
-          to={getTabPath(0, lastVillagesPath || navigationPaths[0])}
-        />
-        <Tab
-          component={Link}
-          label="Hero"
-          onClick={onTabClick}
-          to={getTabPath(1, navigationPaths[1])}
-        />
-        <Tab
-          component={Link}
-          label="Settings"
-          onClick={onTabClick}
-          to={getTabPath(2, navigationPaths[2])}
-        />
-        <Tab
-          component={Link}
-          label="Logs"
-          onClick={onTabClick}
-          to={getTabPath(3, navigationPaths[3])}
-        />
+        {navigationApps.map((app, index) => (
+          <Tab
+            key={app.path}
+            component={Link}
+            label={app.label}
+            onClick={index === 0 ? undefined : markLastVillagePath}
+            to={getTabPath(index, index === 0
+              ? navigationApps[0].path
+              : lastVillagesPath || navigationApps[index].path)}
+          />
+        ))}
         <Tab
           botState={botState}
           component={BotStateToggle}

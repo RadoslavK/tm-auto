@@ -12,6 +12,7 @@ import { shuffle } from '../utils/shuffle';
 import { updateBuildings } from './actions/buildings/updateBuildings';
 import { ensurePage } from './actions/ensurePage';
 import { ensureVillageSelected } from './actions/ensureVillageSelected';
+import { updateMentorTasks } from './actions/mentor/updateMentorTasks';
 import { updatePlayerInfo } from './actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages';
 import { updateResources } from './actions/village/updateResources';
@@ -60,6 +61,7 @@ export class TaskManager {
     await updateNewOldVillages();
     await updateHeroInformation();
     await updatePlayerInfo();
+    await updateMentorTasks();
 
     for (const task of this._generalTasks) {
       await task.execute();
