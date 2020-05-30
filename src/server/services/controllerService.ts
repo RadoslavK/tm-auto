@@ -26,6 +26,7 @@ import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
+import { TimeoutError } from 'puppeteer/Errors';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
@@ -47,6 +48,8 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
     await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
     await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
+
+    accountContext.logsService.logError(error.message);
   } catch (screenshotError) {
     console.error(screenshotError.stack);
   }
@@ -56,7 +59,7 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
   // TODO: allow continue if the error was cause by puppeteer timeout? internal errors should always throw
   // and puppeteer errors that didnt find dom elements are probably valid too cause mark up could changed and we
   // dont reflect changes
-  return { allowContinue: false };
+  return { allowContinue: error instanceof TimeoutError };
 };
 
 class ControllerService {

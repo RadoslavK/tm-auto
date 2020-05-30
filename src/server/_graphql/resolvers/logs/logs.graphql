@@ -1,5 +1,11 @@
+enum TextLogEntryType {
+    Info
+    Error
+}
+
 type TextLogEntryContent {
     message: String!
+    messageType: TextLogEntryType!
 }
 
 type AutoBuildLogEntryContent {

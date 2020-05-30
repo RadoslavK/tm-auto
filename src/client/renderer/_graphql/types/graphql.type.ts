@@ -430,8 +430,14 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
+
 export type TextLogEntryContent = {
   readonly message: Scalars['String'];
+  readonly messageType: TextLogEntryType;
 };
 
 export type AutoBuildLogEntryContent = {
@@ -915,7 +921,7 @@ export type LogEntryFragment = (
   & { readonly timestamp: TimestampFragment, readonly village: Maybe<(
     Pick<Village, 'id' | 'name'>
     & { readonly coords: CoordsFragment }
-  )>, readonly content: Pick<TextLogEntryContent, 'message'> | Pick<AutoBuildLogEntryContent, 'fieldId' | 'level' | 'name' | 'type'> | Pick<AutoUnitsLogEntryContent, 'amount' | 'index' | 'tribe' | 'unitName'> }
+  )>, readonly content: Pick<TextLogEntryContent, 'message' | 'messageType'> | Pick<AutoBuildLogEntryContent, 'fieldId' | 'level' | 'name' | 'type'> | Pick<AutoUnitsLogEntryContent, 'amount' | 'index' | 'tribe' | 'unitName'> }
 );
 
 

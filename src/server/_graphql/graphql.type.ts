@@ -450,9 +450,15 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
+
 export type TextLogEntryContent = {
   readonly __typename?: 'TextLogEntryContent';
   readonly message: Scalars['String'];
+  readonly messageType: TextLogEntryType;
 };
 
 export type AutoBuildLogEntryContent = {
@@ -910,6 +916,7 @@ export type ResolversTypes = {
   UpdateUserAccountInput: UpdateUserAccountInput;
   HeroState: HeroState;
   HeroInformation: ResolverTypeWrapper<HeroModel>;
+  TextLogEntryType: TextLogEntryType;
   TextLogEntryContent: ResolverTypeWrapper<TextLogEntryContentModel>;
   AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContentModel>;
   AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContentModel>;
@@ -987,6 +994,7 @@ export type ResolversParentTypes = {
   UpdateUserAccountInput: UpdateUserAccountInput;
   HeroState: HeroState;
   HeroInformation: HeroModel;
+  TextLogEntryType: TextLogEntryType;
   TextLogEntryContent: TextLogEntryContentModel;
   AutoBuildLogEntryContent: AutoBuildLogEntryContentModel;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContentModel;
@@ -1186,6 +1194,7 @@ export type HeroInformationResolvers<ContextType = any, ParentType extends Resol
 
 export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
   message: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  messageType: Resolver<ResolversTypes['TextLogEntryType'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 

@@ -9,6 +9,7 @@ import {
 } from '../_models/logs/logEntry';
 import { Timestamp } from '../_models/misc/timestamp';
 import { generateId } from '../../_shared/generateId';
+import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -27,9 +28,19 @@ export class LogsService {
   public logText = (message: string, fromVillage = false): void => {
     const content = new TextLogEntryContent({
       message,
+      type: TextLogEntryType.Info,
     });
 
     this.log(content, fromVillage);
+  };
+
+  public logError = (message: string): void => {
+    const content = new TextLogEntryContent({
+      message,
+      type: TextLogEntryType.Error,
+    });
+
+    this.log(content);
   };
 
   public logAutoBuild = (building: QueuedBuilding): void => {
@@ -62,7 +73,7 @@ export class LogsService {
     this.log(content, true);
   };
 
-  private log = (content: LogEntryContent, fromVillage: boolean): void => {
+  private log = (content: LogEntryContent, fromVillage = false): void => {
     const id = generateId();
     const timestamp = new Timestamp({ totalSeconds: Math.round(Date.now() / 1000) });
     const village = fromVillage ? accountContext.villageService.currentVillage() : null;

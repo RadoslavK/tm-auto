@@ -15,6 +15,7 @@ fragment LogEntry on LogEntry {
     content {
         ... on TextLogEntryContent {
             message
+            messageType
         }
         ... on AutoBuildLogEntryContent {
             fieldId

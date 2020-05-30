@@ -22,4 +22,8 @@ export default <Resolvers>{
       return null;
     },
   },
+
+  TextLogEntryContent: {
+    messageType: c => c.type,
+  },
 };
