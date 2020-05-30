@@ -89,6 +89,7 @@ const generateResolverTypes = async () => {
     schema,
   });
 
+  //  Replace mapper types in nested properties
   Object
     .entries(typeReplacements)
     .forEach(([type, replacement]) => {
@@ -113,7 +114,7 @@ const generateOperationTypes = async () => {
     ...baseConfig,
   };
 
-  const output = await codegen({
+  let output = await codegen({
     config: commonConfig,
     documents,
     pluginMap: {
@@ -126,6 +127,29 @@ const generateOperationTypes = async () => {
     ],
     schema,
   });
+
+  //  TODO: delete duplicate fragments workaround
+  const fragments = [];
+
+  output = output
+    .split(/\r?\n/)
+    .reduce((reducedOutput, line) => {
+      const match = /(export type .*?Fragment = .*?;)/.exec(line);
+
+      if (!match) {
+        return `${reducedOutput}\n${line}`;
+      }
+
+      const fragment = match[1];
+
+      if (fragments.includes(fragment)) {
+        return reducedOutput;
+      }
+
+      fragments.push(fragment);
+
+      return `${reducedOutput}\n${line}`;
+    }, '');
 
   fs.writeFileSync('./src/client/renderer/_graphql/types/graphql.type.ts', output);
 };

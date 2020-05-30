@@ -1,3 +1,4 @@
+
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -917,9 +918,7 @@ export type LogEntryFragment = (
   )>, readonly content: Pick<TextLogEntryContent, 'message'> | Pick<AutoBuildLogEntryContent, 'fieldId' | 'level' | 'name' | 'type'> | Pick<AutoUnitsLogEntryContent, 'amount' | 'index' | 'tribe' | 'unitName'> }
 );
 
-export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
 
-export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
 
 export type GetLogsQueryVariables = {};
 
@@ -931,13 +930,11 @@ export type OnLogEntryAddedSubscriptionVariables = {};
 
 export type OnLogEntryAddedSubscription = { readonly onLogEntryAdded: LogEntryFragment };
 
-export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
 
 export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
 
 export type CostFragment = { readonly resources: ResourcesFragment, readonly buildTime: DurationFragment };
 
-export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
 
 export type VillageFragment = (
   Pick<Village, 'id' | 'name'>
@@ -953,7 +950,6 @@ export type NextTaskExecutionQueryVariables = {
 
 export type NextTaskExecutionQuery = { readonly nextTaskExecution: TimestampFragment };
 
-export type TimestampFragment = Pick<Timestamp, 'totalSeconds'>;
 
 export type NextVillageTaskExecutionQueryVariables = {
   villageId: Scalars['Int'];
@@ -1080,11 +1076,8 @@ export type GetQueuedBuildingsQuery = { readonly buildingQueue: { readonly build
       & { readonly cost: CostFragment }
     )>, readonly totalCost: CostFragment } };
 
-export type CostFragment = { readonly resources: ResourcesFragment, readonly buildTime: DurationFragment };
 
-export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
 
-export type DurationFragment = Pick<Duration, 'days' | 'hours' | 'minutes' | 'seconds'>;
 
 export type OnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['Int'];
@@ -1115,7 +1108,6 @@ type TaskSettings_AutoPartySettings_Fragment = (
 
 export type TaskSettingsFragment = TaskSettings_AutoBuildSettings_Fragment | TaskSettings_AutoAdventureSettings_Fragment | TaskSettings_AutoUnitsSettings_Fragment | TaskSettings_AutoPartySettings_Fragment;
 
-export type DurationFragment = Pick<Duration, 'days' | 'hours' | 'minutes' | 'seconds'>;
 
 export type AutoUnitsUnitSettingsFragment = Pick<AutoUnitsUnitSettings, 'autoBuild' | 'index' | 'targetAmount' | 'trainForever'>;
 
@@ -1324,9 +1316,7 @@ export type GetVillageByIdQuery = { readonly village: Maybe<(
     & { readonly coords: CoordsFragment, readonly resources: { readonly amount: ResourcesFragment, readonly capacity: Pick<VillageCapacity, 'granary' | 'warehouse'>, readonly production: ResourcesFragment } }
   )> };
 
-export type CoordsFragment = Pick<Coords, 'x' | 'y'>;
 
-export type ResourcesFragment = Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop' | 'freeCrop' | 'total'>;
 
 export type GetVillagesQueryVariables = {};
 
