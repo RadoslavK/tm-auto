@@ -5,7 +5,13 @@ import {
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
-puppeteer.use(pluginStealth());
+const stealth = pluginStealth();
+// TODO: workaround as typings changed in the original puppeteer or puppeteer extra but on this plugin
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+stealth.onBrowser = () => {};
+
+puppeteer.use(stealth);
 
 const chromeOptions = {
   executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
