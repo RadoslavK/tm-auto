@@ -62,7 +62,9 @@ export const BuildingQueue: React.FC<Props> = (props) => {
   });
 
   useSubscription<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
-    onSubscriptionData: () => refetch(),
+    onSubscriptionData: () => {
+      refetch();
+    },
     variables: { villageId },
   });
 

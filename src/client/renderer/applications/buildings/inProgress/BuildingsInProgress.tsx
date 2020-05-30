@@ -30,7 +30,9 @@ export const BuildingsInProgress: React.FC<Props> = (props) => {
   const { data, loading, refetch } = useQuery<GetBuildingsInProgressQuery, GetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, { variables: { villageId } });
 
   useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
-    onSubscriptionData: () => refetch(),
+    onSubscriptionData: () => {
+      refetch();
+    },
     variables: { villageId },
   });
 

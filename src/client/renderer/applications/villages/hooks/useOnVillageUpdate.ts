@@ -6,6 +6,8 @@ import { UpdateVillageSubscription } from '../../../_graphql/types/graphql.type'
 
 export const useOnVillageUpdate = (callback: () => void): void => {
   useSubscription<UpdateVillageSubscription>(UpdateVillage, {
-    onSubscriptionData: callback,
+    onSubscriptionData: () => {
+      callback();
+    },
   });
 };

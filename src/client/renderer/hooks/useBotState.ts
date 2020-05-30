@@ -17,7 +17,9 @@ export const useBotState = (): BotState | null => {
   const { data, loading, refetch } = useQuery<GetBotStateQuery>(GetBotState);
 
   useSubscription(OnBotRunningChanged, {
-    onSubscriptionData: () => refetch(),
+    onSubscriptionData: () => {
+      refetch();
+    },
   });
 
   return loading || !data

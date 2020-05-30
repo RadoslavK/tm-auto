@@ -32,6 +32,7 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
 
       const client = new ApolloClient({
         cache: new InMemoryCache({ possibleTypes }),
+        connectToDevTools: true,
         defaultOptions: {
           mutate: {
             errorPolicy: 'none',

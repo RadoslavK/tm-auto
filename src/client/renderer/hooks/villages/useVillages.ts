@@ -17,7 +17,9 @@ export const useVillages = (): GetVillagesQuery['villages'] | null => {
   const { data, loading, refetch } = useQuery<GetVillagesQuery>(GetVillages);
 
   useSubscription<UpdateVillagesSubscription>(UpdateVillages, {
-    onSubscriptionData: () => refetch(),
+    onSubscriptionData: () => {
+      refetch();
+    },
   });
 
   return loading || !data
