@@ -265,6 +265,7 @@ const SignInForm: React.FC<Props> = (props) => {
   const [showSubmitMessage, setShowSubmitMessage] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [hasSubmitError, setHasSubmitError] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   const botState = useBotState();
 
@@ -272,6 +273,11 @@ const SignInForm: React.FC<Props> = (props) => {
 
   const executeSignIn = useSignInMutation(selectedAccountId);
   const { deleteAccount, deleteAccountResult } = useDeleteAccountMutation(selectedAccountId);
+
+  const signIn = (): void => {
+    setIsSigningIn(false);
+    executeSignIn();
+  };
 
   useEffect(() => {
     const { data, loading } = deleteAccountResult;
@@ -312,7 +318,7 @@ const SignInForm: React.FC<Props> = (props) => {
     return null;
   }
 
-  const disabled = botState === BotState.Pending;
+  const disabled = botState === BotState.Pending || isSigningIn;
 
   return (
     <>
@@ -326,7 +332,7 @@ const SignInForm: React.FC<Props> = (props) => {
             component="h1"
             variant="h5"
           >
-            Sign in
+            TM Auto
           </Typography>
           <div className={classes.form}>
             <Accounts
@@ -339,7 +345,7 @@ const SignInForm: React.FC<Props> = (props) => {
               color="primary"
               disabled={disabled || !selectedAccountId}
               fullWidth
-              onClick={() => executeSignIn()}
+              onClick={signIn}
               variant="contained"
             >
               Sign In
