@@ -12,9 +12,9 @@ const removeUndefinedFields = <T>(obj: T): Partial<T> => Object
     [key]: value,
   }), {}) as Partial<T>;
 
-// also ignore dates because there is nothing to merge
+// should we merge Maps too?
 // eslint-disable-next-line @typescript-eslint/ban-types
-const isObject = (obj: any): obj is object => obj && typeof obj === 'object' && !(obj instanceof Date);
+const isObject = (obj: any): obj is object => obj && typeof obj === 'object' && Object.prototype.toString.call(obj) === '[object Object]';
 
 export const mergeDefaults = <T>(target: T, source: PartialFields<T>): T => {
   Object.entries(removeUndefinedFields(source)).forEach((sourceEntry) => {
