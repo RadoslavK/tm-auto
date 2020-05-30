@@ -25,7 +25,7 @@ export const mergeDefaults = <T>(target: T, source: PartialFields<T>): T => {
 
     // TODO compute updated object first and use Objec.assign
     if (isObject(targetValue) && isObject(sourceValue)) {
-      target[key] = mergeDefaults(Object.create(targetValue), sourceValue);
+      target[key] = mergeDefaults(targetValue, sourceValue);
     } else {
       target[key] = sourceValue;
     }
