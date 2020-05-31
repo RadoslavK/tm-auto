@@ -1,5 +1,3 @@
-import { ElementHandle } from 'puppeteer';
-
 import {
   getBuildingSpotPath,
   TravianPath,
@@ -11,9 +9,12 @@ import {
 } from '../../utils/buildingUtils';
 import { validateUrl } from '../../utils/validateUrl';
 
-const navigateByLink = async (path: string): Promise<boolean> => {
+const navigateByLink = async (path: string, exact: boolean): Promise<boolean> => {
   const page = await getPage();
-  const link = await page.$(`[href="${path}"]`);
+  const selector = exact
+    ? `[href="${path}"]`
+    : `[href^="${path}"]`;
+  const link = await page.$(selector);
 
   if (!link) {
     return false;
@@ -31,9 +32,12 @@ const navigateByLink = async (path: string): Promise<boolean> => {
   return true;
 };
 
-const navigateByOnClick = async (path: string): Promise<boolean> => {
+const navigateByOnClick = async (path: string, exact: boolean): Promise<boolean> => {
   const page = await getPage();
-  const link = await page.$(`[onclick="window.location.href='${path}'"]`);
+  const selector = exact
+    ? `[onclick="window.location.href='${path}'"]`
+    : `[onclick^="window.location.href='${path}"]`;
+  const link = await page.$(selector);
 
   if (!link) {
     return false;
@@ -51,11 +55,13 @@ const navigateByOnClick = async (path: string): Promise<boolean> => {
   return true;
 };
 
-const navigateByJQuery = async (path: string): Promise<boolean> => {
+const navigateByJQuery = async (path: string, exact: boolean): Promise<boolean> => {
   const page = await getPage();
   const pageContent = await page.content();
 
-  const regexpPattern = `"id":"(.*?)","redirectUrl":"${path}"`;
+  const regexpPattern = exact
+    ? `"id":"(.*?)","redirectUrl":"${path}"`
+    : `"id":"(.*?)","redirectUrl":"${path}.*?"`;
   const redirectElementIdMatch = new RegExp(regexpPattern).exec(pageContent);
 
   if (!redirectElementIdMatch) {
@@ -82,36 +88,16 @@ const navigateByJQuery = async (path: string): Promise<boolean> => {
   return true;
 };
 
-const getRidOfOnBoardingUi = async (): Promise<void> => {
-  const page = await getPage();
-  let forwardOnBoardingElement: ElementHandle | null = null;
-
-  do {
-    try {
-      forwardOnBoardingElement = await page.$('.chevronForward:not(.hide)');
-
-      if (forwardOnBoardingElement) {
-        await forwardOnBoardingElement.click();
-      }
-    } catch {
-      break;
-    }
-  } while (forwardOnBoardingElement);
-};
-
-const navigate = async (path: string): Promise<void> => {
-  //  maybe stupid UI onboarding is blocking buttons or something
-  await getRidOfOnBoardingUi();
-
-  if (await navigateByLink(path)) {
+const navigate = async (path: string, exact: boolean): Promise<void> => {
+  if (await navigateByLink(path, exact)) {
     return;
   }
 
-  if (await navigateByOnClick(path)) {
+  if (await navigateByOnClick(path, exact)) {
     return;
   }
 
-  if (await navigateByJQuery(path)) {
+  if (await navigateByJQuery(path, exact)) {
     return;
   }
 
@@ -129,7 +115,7 @@ export const ensurePage = async (path: string, exact = false): Promise<void> => 
     return;
   }
 
-  await navigate(path);
+  await navigate(path, exact);
 
   await validateUrl([path], exact);
 };
