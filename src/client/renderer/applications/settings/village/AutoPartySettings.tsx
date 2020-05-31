@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import {
   AutoPartySettings as AutoPartySettingsModel,
@@ -74,11 +75,15 @@ export const AutoPartySettings: React.FC = () => {
     }
   }, [settings]);
 
+  const [debounceUpdate] = useDebouncedCallback((updatedSettings: UpdateAutoPartySettingsInput) => {
+    updateSettings({ variables: { villageId, settings: updatedSettings } });
+  }, 1000);
+
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: state } });
+      debounceUpdate(state);
     }
-  }, [hasChanges, state, updateSettings, villageId]);
+  }, [hasChanges, state, debounceUpdate]);
 
   const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
     setState(prevState => prevState && ({

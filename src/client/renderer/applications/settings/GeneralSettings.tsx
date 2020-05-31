@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import {
   GeneralSettings as GeneralSettingsModel,
@@ -63,11 +64,15 @@ export const GeneralSettings: React.FC = () => {
     }
   }, [settings]);
 
+  const [debounceUpdate] = useDebouncedCallback((updatedSettings: UpdateGeneralSettingsInput) => {
+    updateSettings({ variables: { settings: updatedSettings } });
+  }, 1000);
+
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { settings: state } });
+      debounceUpdate(state);
     }
-  }, [hasChanges, state, updateSettings]);
+  }, [hasChanges, state, debounceUpdate]);
 
   if (!state) {
     return null;

@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import {
   AutoBuildSettings as AutoBuildSettingsModel,
@@ -133,11 +134,15 @@ export const AutoBuildSettings: React.FC = () => {
     }
   }, [settings]);
 
+  const [debounceUpdate] = useDebouncedCallback((updatedSettings: Settings) => {
+    updateSettings({ variables: { villageId, settings: getSettingsFromState(updatedSettings) } });
+  }, 1000);
+
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: getSettingsFromState(state) } });
+      debounceUpdate(state);
     }
-  }, [state, hasChanges, updateSettings, villageId]);
+  }, [state, hasChanges, debounceUpdate]);
 
   const onCoolDownChange = useCallback((updatedCoolDown: CoolDownModel): void => {
     setState(prevState => prevState && ({

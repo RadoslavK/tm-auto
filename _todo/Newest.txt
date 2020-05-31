@@ -1,0 +1,12 @@
+po delete account nejde kliknut na create..
+
+validate schema before run
+
+ked je nejaky bottask CD mensi tak overridnut ten globalny
+
+use hero resources for buildings/units.. and mentor tasks.. dat tam nejaky task get extra resources -> quest/hero
+
+update pictures.. have both versions
+
+roman total queue time - prienik fields a infrastruktury.. a ukazovat obidva
+ukazovat odhadovanu dobu nez bude mat surky na dalsiu stavbu v queue a farebne znazornit ci vobec ma a tak

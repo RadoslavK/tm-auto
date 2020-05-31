@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import {
   GeneralVillageSettings as GeneralVillageSettingsModel,
@@ -70,11 +71,15 @@ export const GeneralVillageSettings: React.FC = () => {
     }
   }, [settings]);
 
+  const [debounceUpdate] = useDebouncedCallback((updatedSettings: UpdateGeneralVillageSettingsInput) => {
+    updateSettings({ variables: { villageId, settings: updatedSettings } });
+  }, 1000);
+
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: state } });
+      debounceUpdate(state);
     }
-  }, [hasChanges, state, updateSettings, villageId]);
+  }, [hasChanges, state, debounceUpdate]);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
