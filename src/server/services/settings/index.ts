@@ -34,6 +34,7 @@ export class SettingsService {
     }
 
     settings = new VillageSettingsService(villageId);
+    this.villages.set(villageId, settings);
     return settings;
   };
 }

@@ -25,7 +25,7 @@ export class InternalSettingsService<TSettings> {
   };
 
   public merge = (updated: PartialFields<TSettings>): TSettings => {
-    mergeDefaults(this.settings, updated);
+    mergeDefaults(this.get(), updated);
     this.save();
 
     return this.settings;
