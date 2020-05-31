@@ -97,6 +97,10 @@ export const AutoPartySettings: React.FC = () => {
     return null;
   }
 
+  const onReset = () => {
+    resetSettings({ variables: { villageId } });
+  };
+
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
       checked,
@@ -147,7 +151,7 @@ export const AutoPartySettings: React.FC = () => {
     <div>
       <Button
         color="primary"
-        onClick={() => resetSettings()}
+        onClick={onReset}
         type="button"
         variant="contained"
       >
