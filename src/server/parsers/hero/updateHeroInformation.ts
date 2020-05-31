@@ -1,8 +1,8 @@
-import { publishEvent } from '../../_graphql/pubSub';
 import { HeroState } from '../../../_shared/types/heroState';
 import { accountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { BotEvent } from '../../events/botEvent';
+import { publishEvent } from '../../pubSub';
 import { gameInfoService } from '../../services/info/gameInfoService';
 
 const parseHealth = async (): Promise<number> => {

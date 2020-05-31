@@ -1,18 +1,13 @@
-import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import React from 'react';
-
-import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
-import { GetBuildingsInProgress } from '*/graphql_operations/buildingInProgress.graphql';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
-  BuildingsUpdatedSubscription,
-  BuildingsUpdatedSubscriptionVariables,
   GetBuildingsInProgressQuery,
-  GetBuildingsInProgressQueryVariables,
-} from '../../../_graphql/types/graphql.type';
+  useBuildingsInProgressUpdatedSubscription,
+  useGetBuildingsInProgressQuery,
+} from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingInProgress } from './BuildingInProgress';
 
@@ -20,29 +15,41 @@ type Props = {
   readonly className?: string;
 };
 
-export const BuildingsInProgress: React.FC<Props> = (props) => {
-  const {
-    className,
-  } = props;
-
+const useBuildingsInProgress = () => {
   const { villageId } = useVillageContext();
 
-  const { data, loading, refetch } = useQuery<GetBuildingsInProgressQuery, GetBuildingsInProgressQueryVariables>(GetBuildingsInProgress, { variables: { villageId } });
+  const [buildingsInProgress, setBuildingsInProgress] = useState<GetBuildingsInProgressQuery['buildingsInProgress']>();
 
-  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
-    onSubscriptionData: () => {
-      refetch();
+  const queryResult = useGetBuildingsInProgressQuery({ variables: { villageId } });
+
+  useEffect(() => {
+    if (!queryResult.loading && queryResult.data) {
+      setBuildingsInProgress(queryResult.data.buildingsInProgress);
+    }
+  }, [queryResult]);
+
+  useBuildingsInProgressUpdatedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (data && !loading) {
+        setBuildingsInProgress(data.buildingsInProgressUpdated);
+      }
     },
     variables: { villageId },
   });
 
-  if (loading || !data) {
+  return buildingsInProgress;
+};
+
+export const BuildingsInProgress: React.FC<Props> = ({ className }) => {
+  const buildingsInProgress = useBuildingsInProgress();
+
+  if (!buildingsInProgress) {
     return null;
   }
 
   return (
     <div className={className}>
-      {data.buildingsInProgress.map((building) => (
+      {buildingsInProgress.map((building) => (
         <BuildingInProgress
           key={`${building.fieldId}|${building.level}`}
           building={building}

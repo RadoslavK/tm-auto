@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 
+import { useGetAccountsQuery } from '../../../_graphql/graphqlHooks';
 import { getServerShortcut } from '../../../utils/getServerShortcut';
-import { useAccounts } from '../hooks/useAccounts';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -67,15 +67,17 @@ type Props = {
 };
 
 export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selectedId }) => {
-  const accounts = useAccounts();
+  const accountsQueryResult = useGetAccountsQuery();
+
+  const accounts = accountsQueryResult?.data?.accounts;
 
   useEffect(() => {
-    if (!selectedId && accounts && accounts.length) {
+    if (!selectedId && !accountsQueryResult.loading && accounts && accounts.length) {
       onAccountChanged(accounts[0].id);
     } else if (selectedId && accounts && !accounts.some(account => account.id === selectedId)) {
       onAccountChanged('');
     }
-  }, [accounts, onAccountChanged, selectedId]);
+  }, [accountsQueryResult, accounts, onAccountChanged, selectedId]);
 
   const classes = useStyles();
 

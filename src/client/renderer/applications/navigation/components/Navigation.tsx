@@ -7,7 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { BotState } from '../../../_graphql/types/graphql.type';
+import { BotState } from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
 import { Logs } from '../../logs/components/Logs';
 import { Mentor } from '../../mentor/Mentor';
@@ -68,8 +68,8 @@ export const Navigation: React.FC = () => {
             component={Link}
             label={app.label}
             onClick={index === 0 ? undefined : markLastVillagePath}
-            to={getTabPath(index, index === 0
-              ? navigationApps[0].path
+            to={getTabPath(index, index !== 0
+              ? navigationApps[index].path
               : lastVillagesPath || navigationApps[index].path)}
           />
         ))}

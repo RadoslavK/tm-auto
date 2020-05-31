@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import {
   Dialog,
   DialogActions,
@@ -25,21 +24,20 @@ import React, {
   useState,
 } from 'react';
 
-import { GetLastSignedAccountId } from '*/graphql_operations/account.graphql';
-
 import {
   BotState,
   CreateUserAccountInput,
+  GetAccountsDocument,
   GetAccountsQuery,
-  GetLastSignedAccountIdQuery,
   UpdateUserAccountInput,
-} from '../../../_graphql/types/graphql.type';
+  useCreateAccountMutation,
+  useDeleteAccountMutation,
+  useGetAccountQuery,
+  useGetLastSignedAccountIdQuery,
+  useSignInMutation,
+  useUpdateAccountMutation,
+} from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
-import { useCreateAccount } from '../hooks/useCreateAccount';
-import { useDeleteAccountMutation } from '../hooks/useDeleteAccountMutation';
-import { useGetAccount } from '../hooks/useGetAccount';
-import { useSignInMutation } from '../hooks/useSignInMutation';
-import { useUpdateAccount } from '../hooks/useUpdateAccount';
 import { Accounts } from './Accounts';
 
 const useStyles = makeStyles(theme => ({
@@ -105,19 +103,19 @@ const FormDialog: React.FC<FormDialogProps> = ({
 }) => {
   const classes = useStyles();
 
-  const account = useGetAccount(selectedAccountId);
+  const accountQueryResult = useGetAccountQuery({ variables: { accountId: selectedAccountId } });
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [server, setServer] = useState('');
 
   useEffect(() => {
-    if (account && type === DialogType.Update) {
-      setUsername(account.username);
-      setPassword(account.password);
-      setServer(account.server);
+    if (!accountQueryResult.loading && accountQueryResult.data && accountQueryResult.data.account && type === DialogType.Update) {
+      setUsername(accountQueryResult.data.account.username);
+      setPassword(accountQueryResult.data.account.password);
+      setServer(accountQueryResult.data.account.server);
     }
-  }, [account, type]);
+  }, [accountQueryResult, type]);
 
   const newAccount: CreateUserAccountInput = {
     password,
@@ -130,8 +128,14 @@ const FormDialog: React.FC<FormDialogProps> = ({
     id: selectedAccountId,
   };
 
-  const { createAccount, createAccountResult } = useCreateAccount(newAccount);
-  const { updateAccount, updateAccountResult } = useUpdateAccount(updatedAccount);
+  const [createAccount, createAccountResult] = useCreateAccountMutation({
+    variables: { account: newAccount },
+    refetchQueries: [{ query: GetAccountsDocument }],
+  });
+  const [updateAccount, updateAccountResult] = useUpdateAccountMutation({
+    variables: { account: updatedAccount },
+    refetchQueries: [{ query: GetAccountsDocument }],
+  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -239,7 +243,7 @@ const FormDialog: React.FC<FormDialogProps> = ({
 };
 
 const SignInFormContainer: React.FC = () => {
-  const { data, loading } = useQuery<GetLastSignedAccountIdQuery>(GetLastSignedAccountId);
+  const { data, loading } = useGetLastSignedAccountIdQuery();
 
   if (loading || !data) {
     return null;
@@ -271,8 +275,11 @@ const SignInForm: React.FC<Props> = (props) => {
 
   const [dialogType, setDialogType] = useState(DialogType.None);
 
-  const executeSignIn = useSignInMutation(selectedAccountId);
-  const { deleteAccount, deleteAccountResult } = useDeleteAccountMutation(selectedAccountId);
+  const [executeSignIn] = useSignInMutation({ variables: { accountId: selectedAccountId } });
+  const [deleteAccount, deleteAccountResult] = useDeleteAccountMutation({
+    variables: { accountId: selectedAccountId },
+    refetchQueries: [{ query: GetAccountsDocument }],
+  });
 
   const signIn = (): void => {
     setIsSigningIn(false);

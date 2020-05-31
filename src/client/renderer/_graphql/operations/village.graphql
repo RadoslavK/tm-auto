@@ -6,7 +6,7 @@ fragment VillageCrannyCapacity on VillageCrannyCapacity {
     total
 }
 
-query GetVillageById($villageId: Int!) {
+query GetVillage($villageId: Int!) {
     village(villageId: $villageId) {
         coords {
             ...Coords
@@ -49,18 +49,39 @@ query CrannyCapacity($villageId: Int!) {
     }
 }
 
-subscription UpdateVillage {
-    updateVillage
+subscription VillageUpdated($villageId: Int!) {
+    villageUpdated(villageId: $villageId) {
+        coords {
+            ...Coords
+        }
+        id
+        name
+        resources {
+            amount {
+                ...Resources
+            }
+            capacity {
+                granary
+                warehouse
+            }
+            production {
+                ...Resources
+            }
+        }
+    }
 }
 
-subscription UpdateVillages {
-    updateVillages
+subscription VillagesUpdated {
+    villagesUpdated {
+        id
+        name
+        coords {
+            ...Coords
+        }
+        isCapital
+    }
 }
 
 subscription ActiveVillageIdChanged {
     activeVillageIdChanged
-}
-
-subscription CrannyCapacityChanged($villageId: Int!) {
-    crannyCapacityChanged(villageId: $villageId)
 }

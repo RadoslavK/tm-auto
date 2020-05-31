@@ -1,13 +1,9 @@
 import fs from 'fs';
 import { TimeoutError } from 'puppeteer/Errors';
 
-import {
-  BotState,
-  MutationSignInArgs,
-} from '../_graphql/graphql.type';
-import { publishEvent } from '../_graphql/pubSub';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
+import { BotState } from '../../_shared/types/botState';
 import { accountContext } from '../accountContext';
 import {
   getPage,
@@ -24,6 +20,7 @@ import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/taskManager';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
+import { publishEvent } from '../pubSub';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
@@ -80,11 +77,7 @@ class ControllerService {
     return publishEvent(BotEvent.BotRunningChanged);
   };
 
-  public signIn = async (input: MutationSignInArgs): Promise<void> => {
-    const {
-      accountId,
-    } = input;
-
+  public signIn = async (accountId: string): Promise<void> => {
     let allowContinue = true;
 
     try {

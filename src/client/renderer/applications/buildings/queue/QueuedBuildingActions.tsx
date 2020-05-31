@@ -1,27 +1,15 @@
-import { useMutation } from '@apollo/client';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import clsx from 'clsx';
 import React from 'react';
 
 import {
-  DequeueBuilding,
-  MoveQueuedBuildingAsHighAsPossible,
-  MoveQueuedBuildingDown,
-  MoveQueuedBuildingUp,
-} from '*/graphql_operations/queuedBuilding.graphql';
-
-import {
-  DequeueBuildingMutation,
-  DequeueBuildingMutationVariables,
-  MoveQueuedBuildingAsHighAsPossibleMutation,
-  MoveQueuedBuildingAsHighAsPossibleMutationVariables,
-  MoveQueuedBuildingDownMutation,
-  MoveQueuedBuildingDownMutationVariables,
-  MoveQueuedBuildingUpMutation,
-  MoveQueuedBuildingUpMutationVariables,
   QueuedBuilding,
   QueuedBuildingManipulationInput,
-} from '../../../_graphql/types/graphql.type';
+  useDequeueBuildingMutation,
+  useMoveQueuedBuildingAsHighAsPossibleMutation,
+  useMoveQueuedBuildingDownMutation,
+  useMoveQueuedBuildingUpMutation,
+} from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 
@@ -79,12 +67,11 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
     variables: { input },
   };
 
-  const [moveToTop] = useMutation<MoveQueuedBuildingAsHighAsPossibleMutation, MoveQueuedBuildingAsHighAsPossibleMutationVariables>(MoveQueuedBuildingAsHighAsPossible, {
-    variables: { queueId, villageId },
-  });
-  const [moveDown] = useMutation<MoveQueuedBuildingDownMutation, MoveQueuedBuildingDownMutationVariables>(MoveQueuedBuildingDown, options);
-  const [moveUp] = useMutation<MoveQueuedBuildingUpMutation, MoveQueuedBuildingUpMutationVariables>(MoveQueuedBuildingUp, options);
-  const [dequeue] = useMutation<DequeueBuildingMutation, DequeueBuildingMutationVariables>(DequeueBuilding, options);
+  const [moveToTop] = useMoveQueuedBuildingAsHighAsPossibleMutation({ variables: { queueId, villageId } });
+
+  const [moveDown] = useMoveQueuedBuildingDownMutation(options);
+  const [moveUp] = useMoveQueuedBuildingUpMutation(options);
+  const [dequeue] = useDequeueBuildingMutation(options);
 
   const classes = useStyles({});
 

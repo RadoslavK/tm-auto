@@ -21,11 +21,4 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
     this.autoUnits = new InternalSettingsService(villageSettingsPath.autoUnits, AutoUnitsSettings);
     this.general = new InternalSettingsService(villageSettingsPath.general, GeneralVillageSettings);
   }
-
-  public get = (): VillageSettings => ({
-    autoBuild: this.autoBuild.get(),
-    autoParty: this.autoParty.get(),
-    autoUnits: this.autoUnits.get(),
-    general: this.general.get(),
-  });
 }

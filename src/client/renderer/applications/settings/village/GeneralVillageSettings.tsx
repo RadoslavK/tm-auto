@@ -1,116 +1,80 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
 import {
-  GetGeneralVillageSettings,
-  OnGeneralVillageSettingsChanged,
-  ResetVillageSettings,
-  UpdateGeneralVillageSettings,
-} from '*/graphql_operations/settings.graphql';
-
-import {
-  GeneralVillageSettings,
-  GetGeneralVillageSettingsQuery,
-  GetGeneralVillageSettingsQueryVariables,
-  OnGeneralVillageSettingsChangedSubscription,
-  OnGeneralVillageSettingsChangedSubscriptionVariables,
-  ResetVillageSettingsMutation,
-  ResetVillageSettingsMutationVariables,
+  GeneralVillageSettings as GeneralVillageSettingsModel,
   UpdateGeneralVillageSettingsInput,
-  UpdateGeneralVillageSettingsMutation,
-  UpdateGeneralVillageSettingsMutationVariables,
-  VillageSettingsType,
-} from '../../../_graphql/types/graphql.type';
+  useGetGeneralVillageSettingsQuery,
+  useResetGeneralVillageSettingsMutation,
+  useUpdateGeneralVillageSettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const Container: React.FC = () => {
+const useGeneralVillageSettings = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<GeneralVillageSettings>();
-  const { data, loading } = useQuery<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>(GetGeneralVillageSettings, {
-    variables: { villageId },
-  });
+  const [settings, setSettings] = useState<GeneralVillageSettingsModel>();
 
-  useSubscription<OnGeneralVillageSettingsChangedSubscription, OnGeneralVillageSettingsChangedSubscriptionVariables>(OnGeneralVillageSettingsChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        setSettings(subscriptionData.data.generalVillageSettingsChanged);
-      }
-    },
-    variables: { villageId },
-  });
+  const queryResult = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!loading && data) {
-      setSettings(data.generalVillageSettings);
+    if (!queryResult.loading && queryResult.data) {
+      setSettings(queryResult.data.generalVillageSettings);
     }
-  }, [loading, data]);
+  }, [queryResult]);
 
-  if (!settings) {
-    return null;
-  }
-
-  return (
-    <GeneralVillageSettings
-      key={villageId}
-      settings={settings}
-      villageId={villageId}
-    />
-  );
-};
-
-export { Container as GeneralVillageSettings };
-
-type Props = {
-  readonly settings: GeneralVillageSettings;
-  readonly villageId: number;
-};
-
-const GeneralVillageSettings: React.FC<Props> = (props) => {
-  const {
-    settings,
-    villageId,
-  } = props;
-
-  const [state, setState] = useState(settings);
-  const input: UpdateGeneralVillageSettingsInput = {
-    ...state,
-    villageId,
-  };
-
-  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
-    variables: { type: VillageSettingsType.General, villageId },
-  });
-
-  const [updateSettings] = useMutation<UpdateGeneralVillageSettingsMutation, UpdateGeneralVillageSettingsMutationVariables>(
-    UpdateGeneralVillageSettings,
-    { variables: { settings: input } },
-  );
-
-  const isInitialMount = useRef(true);
+  const [updateSettings, updateSettingsResults] = useUpdateGeneralVillageSettingsMutation();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      setState(settings);
+    if (!updateSettingsResults.loading && updateSettingsResults.data) {
+      setSettings(updateSettingsResults.data.updateGeneralVillageSettings);
+    }
+  }, [updateSettingsResults]);
+
+  const [resetSettings, resetSettingsResult] = useResetGeneralVillageSettingsMutation();
+
+  useEffect(() => {
+    if (!resetSettingsResult.loading && resetSettingsResult.data) {
+      setSettings(resetSettingsResult.data.resetGeneralVillageSettings);
+    }
+  }, [resetSettingsResult]);
+
+  return {
+    settings,
+    updateSettings,
+    resetSettings,
+  };
+};
+
+export const GeneralVillageSettings: React.FC = () => {
+  const {
+    resetSettings,
+    settings,
+    updateSettings,
+  } = useGeneralVillageSettings();
+
+  const { villageId } = useVillageSettingsContext();
+
+  const [state, setState] = useState<UpdateGeneralVillageSettingsInput>();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    if (settings) {
+      setState({
+        allowTasks: settings.allowTasks,
+      });
+      setHasChanges(false);
     }
   }, [settings]);
 
   useEffect(() => {
-    if (state !== settings) {
-      updateSettings();
+    if (state && hasChanges) {
+      updateSettings({ variables: { villageId, settings: state } });
     }
-  }, [settings, state, updateSettings]);
+  }, [hasChanges, state, updateSettings, villageId]);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -118,10 +82,19 @@ const GeneralVillageSettings: React.FC<Props> = (props) => {
       name,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
+  };
+
+  if (!state) {
+    return null;
+  }
+
+  const onReset = () => {
+    resetSettings({ variables: { villageId } });
   };
 
   const {
@@ -132,7 +105,7 @@ const GeneralVillageSettings: React.FC<Props> = (props) => {
     <div>
       <Button
         color="primary"
-        onClick={() => resetSettings()}
+        onClick={onReset}
         type="button"
         variant="contained"
       >

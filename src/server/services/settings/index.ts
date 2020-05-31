@@ -1,3 +1,4 @@
+import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
 import { GeneralSettings } from '../../_models/settings/generalSettings';
 import { HeroSettings } from '../../_models/settings/heroSettings';
 import { VillageSettings } from '../../_models/settings/villageSettings';
@@ -9,7 +10,9 @@ import { VillageSettingsService } from './village';
 
 export class SettingsService {
   public general: InternalSettingsService<GeneralSettings>;
+
   public hero: ComplexSettingsServiceType<HeroSettings>;
+  public autoMentor: InternalSettingsService<AutoMentorSettings>;
 
   private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
 
@@ -20,9 +23,10 @@ export class SettingsService {
 
     this.general = new InternalSettingsService(accountSettingsPath.general, GeneralSettings);
     this.hero = new HeroSettingsService();
+    this.autoMentor = new InternalSettingsService(accountSettingsPath.autoMentor, AutoMentorSettings);
   }
 
-  public village = (villageId: number): ComplexSettingsServiceType<VillageSettings> => {
+  public village = (villageId: number): VillageSettingsService => {
     let settings = this.villages.get(villageId);
 
     if (settings) {

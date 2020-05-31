@@ -4,6 +4,6 @@
     "webpack.*.js",
     "hot-reload.server.js",
     "babel.config.js",
-    "generateGraphqlTypes.js"
+    "generateGraphqlTypes.ts"
   ]
 }

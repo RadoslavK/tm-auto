@@ -1,4 +1,4 @@
-import { Timestamp } from '../_graphql/types/graphql.type';
+import { Timestamp } from '../_graphql/graphqlHooks';
 
 export const getSecondsUntilTimestamp = (timestamp: Timestamp): number => Math.max(
   0,

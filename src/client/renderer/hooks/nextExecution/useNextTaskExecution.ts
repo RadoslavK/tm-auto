@@ -1,36 +1,22 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import {
   useEffect,
   useState,
 } from 'react';
 
 import {
-  NextTaskExecution,
-  NextTaskExecutionChanged,
-} from '*/graphql_operations/nextTaskExecution.graphql';
-
-import {
-  NextTaskExecutionChangedSubscription,
-  NextTaskExecutionChangedSubscriptionVariables,
-  NextTaskExecutionQuery,
-  NextTaskExecutionQueryVariables,
   TaskType,
   Timestamp,
-} from '../../_graphql/types/graphql.type';
+  useNextTaskExecutionChangedSubscription,
+  useNextTaskExecutionQuery,
+  useResetNextTaskExecutionMutation,
+  useSetNextTaskExecutionMutation,
+} from '../../_graphql/graphqlHooks';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
-export const useNextTaskExecution = (task: TaskType): number => {
+export const useNextTaskExecution = (task: TaskType) => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);
 
-  const variables = { task };
-
-  const nextExecutionResult = useQuery<NextTaskExecutionQuery, NextTaskExecutionQueryVariables>(
-    NextTaskExecution,
-    { variables },
-  );
+  const nextExecutionResult = useNextTaskExecutionQuery({ variables: { task } });
 
   const updateNextExecution = (nextTaskExecution: Timestamp): void => {
     const difference = getSecondsUntilTimestamp(nextTaskExecution);
@@ -39,24 +25,39 @@ export const useNextTaskExecution = (task: TaskType): number => {
   };
 
   useEffect(() => {
-    const { data, loading } = nextExecutionResult;
-
-    if (!loading && data) {
-      updateNextExecution(data.nextTaskExecution);
+    if (!nextExecutionResult.loading && nextExecutionResult.data) {
+      updateNextExecution(nextExecutionResult.data.nextTaskExecution);
     }
   }, [nextExecutionResult]);
 
-  useSubscription<NextTaskExecutionChangedSubscription, NextTaskExecutionChangedSubscriptionVariables>(
-    NextTaskExecutionChanged,
-    {
-      onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-        if (!loading && data) {
-          updateNextExecution(data.nextTaskExecutionChanged);
-        }
-      },
-      variables,
-    },
-  );
+  const [setNextTaskExecution, updateResult] = useSetNextTaskExecutionMutation();
 
-  return nextExecutionIn;
+  useEffect(() => {
+    if (!updateResult.loading && updateResult.data) {
+      updateNextExecution(updateResult.data.setNextTaskExecution);
+    }
+  }, [updateResult]);
+
+  const [resetNextTaskExecution, resetResult] = useResetNextTaskExecutionMutation();
+
+  useEffect(() => {
+    if (!resetResult.loading && resetResult.data) {
+      updateNextExecution(resetResult.data.resetNextTaskExecution);
+    }
+  }, [resetResult]);
+
+  useNextTaskExecutionChangedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (!loading && data) {
+        updateNextExecution(data.nextTaskExecutionChanged);
+      }
+    },
+    variables: { task },
+  });
+
+  return {
+    nextExecutionIn,
+    setNextTaskExecution,
+    resetNextTaskExecution,
+  };
 };

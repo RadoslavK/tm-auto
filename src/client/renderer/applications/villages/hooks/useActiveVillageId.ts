@@ -1,44 +1,29 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import {
   useEffect,
   useState,
 } from 'react';
 
 import {
-  ActiveVillageId,
-  ActiveVillageIdChanged,
-} from '*/graphql_operations/village.graphql';
-
-import {
-  ActiveVillageIdChangedSubscription,
-  ActiveVillageIdQuery,
-} from '../../../_graphql/types/graphql.type';
+  useActiveVillageIdChangedSubscription,
+  useActiveVillageIdQuery,
+} from '../../../_graphql/graphqlHooks';
 
 export const useActiveVillageId = (): number | undefined => {
   const [activeVillageId, setActiveVillageId] = useState<number>();
 
-  const activeVillageIdQueryResult = useQuery<ActiveVillageIdQuery>(ActiveVillageId);
+  const queryResult = useActiveVillageIdQuery();
 
   useEffect(() => {
-    const { data, loading } = activeVillageIdQueryResult;
-
-    if (loading || !data) {
-      return;
+    if (!queryResult.loading && queryResult.data) {
+      setActiveVillageId(queryResult.data.activeVillageId);
     }
+  }, [queryResult]);
 
-    setActiveVillageId(data.activeVillageId);
-  }, [activeVillageIdQueryResult]);
-
-  useSubscription<ActiveVillageIdChangedSubscription>(ActiveVillageIdChanged, {
+  useActiveVillageIdChangedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (loading || !data) {
-        return;
+      if (!loading && data) {
+        setActiveVillageId(data.activeVillageIdChanged);
       }
-
-      setActiveVillageId(data.activeVillageIdChanged);
     },
   });
 

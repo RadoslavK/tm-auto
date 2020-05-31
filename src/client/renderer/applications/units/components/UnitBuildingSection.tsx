@@ -9,13 +9,13 @@ import React, {
 import {
   AutoUnitsBuildingSettings,
   Duration as DurationModel,
-} from '../../../_graphql/types/graphql.type';
+  useUpdateAutoUnitsBuildingSettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { areShallowEqual } from '../../../utils/areShallowEqual';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
-import { useUpdateAutoUnitsBuildingSettingsMutation } from '../hooks/useUpdateAutoUnitsBuildingSettingsMutation';
 import { UnitSettings } from './UnitSettings';
 
 type StylesProps = {
@@ -69,7 +69,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
   const [maxBuildTime, setMaxBuildTime] = useState(settings.maxBuildTime);
   const [allow, setAllow] = useState(settings.allow);
 
-  const updateSettings = useUpdateAutoUnitsBuildingSettingsMutation();
+  const [updateSettings] = useUpdateAutoUnitsBuildingSettingsMutation();
 
   useEffect(() => {
     if (allow === settings.allow && areShallowEqual(maxBuildTime, settings.maxBuildTime)) {
@@ -78,11 +78,11 @@ export const UnitBuildingSection: React.FC<Props> = ({
 
     updateSettings({
       variables: {
+        buildingType,
+        villageId,
         settings: {
           allow,
-          buildingType,
           maxBuildTime,
-          villageId,
         },
       },
     });

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/types/graphql.type';
+import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/graphqlHooks';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { imageLinks } from '../../../utils/imageLinks';

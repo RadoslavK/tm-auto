@@ -1,38 +1,18 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import {
   useEffect,
   useState,
 } from 'react';
 
 import {
-  GetLogs,
-  OnLogEntryAdded,
-} from '*/graphql_operations/logs.graphql';
-
-import {
-  GetLogsQuery,
   LogEntryFragment,
-  OnLogEntryAddedSubscription,
-} from '../../../_graphql/types/graphql.type';
+  useGetLogsQuery,
+  useOnLogEntryAddedSubscription,
+} from '../../../_graphql/graphqlHooks';
 
 export const useLogs = () => {
-  const queryResult = useQuery<GetLogsQuery>(GetLogs);
   const [entries, setEntries] = useState<LogEntryFragment[]>([]);
 
-  useSubscription<OnLogEntryAddedSubscription>(OnLogEntryAdded, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (subscriptionData.loading || !subscriptionData.data) {
-        return;
-      }
-
-      const entry = subscriptionData.data.onLogEntryAdded;
-
-      setEntries(prevEntries => [...prevEntries, entry]);
-    },
-  });
+  const queryResult = useGetLogsQuery();
 
   useEffect(() => {
     const { data, loading } = queryResult;
@@ -43,6 +23,18 @@ export const useLogs = () => {
 
     setEntries([...data.logsEntries]);
   }, [queryResult]);
+
+  useOnLogEntryAddedSubscription({
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (subscriptionData.loading || !subscriptionData.data) {
+        return;
+      }
+
+      const entry = subscriptionData.data.onLogEntryAdded;
+
+      setEntries(prevEntries => [...prevEntries, entry]);
+    },
+  });
 
   return entries;
 };

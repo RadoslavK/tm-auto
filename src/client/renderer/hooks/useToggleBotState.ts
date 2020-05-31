@@ -1,21 +1,15 @@
-import { useMutation } from '@apollo/client';
-
-import {
-  StartBot,
-  StopBot,
-} from '*/graphql_operations/controller.graphql';
-
 import {
   BotState,
-  StartBotMutation,
-  StopBotMutation,
-} from '../_graphql/types/graphql.type';
+  useStartBotMutation,
+  useStopBotMutation,
+} from '../_graphql/graphqlHooks';
 import { useBotState } from './useBotState';
 
 export const useToggleBotState = (): (() => Promise<void>) | null => {
   const botState = useBotState();
-  const [startBot] = useMutation<StartBotMutation>(StartBot);
-  const [stopBot] = useMutation<StopBotMutation>(StopBot);
+
+  const [startBot] = useStartBotMutation();
+  const [stopBot] = useStopBotMutation();
 
   if (botState === BotState.Stopping) {
     return null;

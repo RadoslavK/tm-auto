@@ -1,40 +1,61 @@
 import { CoolDown } from '../../_models/coolDown';
-import {
-  TaskType,
-  VillageTaskType,
-} from '../../../_shared/types/taskType';
+import { TaskType } from '../../../_shared/types/taskType';
 
-export type BotTaskResult = {
+export type BotTaskWithCoolDownResult = {
   readonly nextCoolDown?: CoolDown | null;
 };
 
-type BotTaskBase = {
+export type BotTaskBase = {
   readonly allowExecution: () => boolean;
-  readonly coolDown: () => CoolDown;
-  readonly execute: () => Promise<BotTaskResult | void>;
-};
-
-export type BotTask = BotTaskBase & {
   readonly type: TaskType;
 };
 
-export type VillageBotTask = BotTaskBase & {
-  readonly type: VillageTaskType;
+export type BotTask = BotTaskBase & {
+  readonly execute: () => Promise<void>;
 };
 
-export class BotTaskEngine {
-  private readonly _task: BotTask | VillageBotTask;
+export type BotTaskWithCoolDown = BotTaskBase & {
+  readonly allowExecution: () => boolean;
+  readonly coolDown: () => CoolDown;
+  readonly execute: () => Promise<BotTaskWithCoolDownResult | void>;
+};
+
+export interface IBotTaskEngine {
+  execute: () => Promise<void>;
+  isExecutionReady: () => boolean;
+}
+
+export class BotTaskEngine implements IBotTaskEngine {
+  protected readonly _task: BotTask;
+
+  constructor(task: BotTask) {
+    this._task = task;
+  }
+
+  public isExecutionReady = (): boolean => this._task.allowExecution();
+
+  public execute = async (): Promise<void> => {
+    if (!this.isExecutionReady()) {
+      return;
+    }
+
+    await this._task.execute();
+  };
+}
+
+export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
+  protected readonly _task: BotTaskWithCoolDown;
   private readonly _setNextExecution: (nextExecution: Date) => void;
   private readonly _getNextExecution: () => Date;
 
-  constructor(task: BotTask | VillageBotTask, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
+  constructor(task: BotTaskWithCoolDown, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
     this._task = task;
     this._setNextExecution = setNextExecution;
     this._getNextExecution = getNextExecution;
   }
 
   public isExecutionReady = (): boolean => this._task.allowExecution()
-    && this._getNextExecution() < new Date();
+    && (!this._getNextExecution || this._getNextExecution() < new Date());
 
   public execute = async (): Promise<void> => {
     if (!this.isExecutionReady()) {

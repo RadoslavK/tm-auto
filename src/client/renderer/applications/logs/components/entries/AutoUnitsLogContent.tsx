@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
 
-import { AutoUnitsLogEntryContent } from '../../../../_graphql/types/graphql.type';
+import { AutoUnitsLogEntryContent } from '../../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../../utils/imageLinks';
 
 type StylesProps = {

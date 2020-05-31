@@ -7,7 +7,7 @@ import {
   AutoUnitsLogEntryContent,
   LogEntryFragment,
   TextLogEntryContent,
-} from '../../../_graphql/types/graphql.type';
+} from '../../../_graphql/graphqlHooks';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';

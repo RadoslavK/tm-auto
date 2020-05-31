@@ -18,10 +18,7 @@ module.exports = {
   },
   plugins,
   resolve: {
-    alias: {
-      '*/graphql_operations': `${__dirname}/src/client/renderer/_graphql/operations`,
-    },
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json', '.graphql'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
     modules: ['src', 'node_modules'],
   },
   target: 'web',

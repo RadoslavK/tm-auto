@@ -1,0 +1,29 @@
+enum PartyType {
+    Small
+    Large
+}
+
+type AutoPartySettings {
+    coolDown: CoolDown!
+    allow: Boolean!
+
+    minCulturePoints: Int!
+    partyType: PartyType!
+}
+
+input UpdateAutoPartySettingsInput {
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    minCulturePoints: Int!
+    partyType: PartyType!
+}
+
+extend type Query {
+    autoPartySettings(villageId: Int!): AutoPartySettings!
+}
+
+extend type Mutation {
+    updateAutoPartySettings(villageId: Int!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
+    resetAutoPartySettings(villageId: Int!): AutoPartySettings!
+}

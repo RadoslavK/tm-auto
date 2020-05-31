@@ -1,7 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { QueuedBuilding as QueuedBuildingModel } from '../../../_graphql/types/graphql.type';
+import { QueuedBuilding as QueuedBuildingModel } from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { Cost } from './Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';

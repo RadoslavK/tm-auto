@@ -1,13 +1,7 @@
-import { useQuery } from '@apollo/client';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { GetAvailableNewBuildings } from '*/graphql_operations/building.graphql';
-
-import {
-  GetAvailableNewBuildingsQuery,
-  GetAvailableNewBuildingsQueryVariables,
-} from '../../../_graphql/types/graphql.type';
+import { useGetAvailableNewBuildingsQuery } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { NewBuildingItem } from './NewBuildingItem';
 
@@ -35,9 +29,8 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: 
 
   const classes = useStyles({});
   const { villageId } = useVillageContext();
-  const { data, loading } = useQuery<GetAvailableNewBuildingsQuery, GetAvailableNewBuildingsQueryVariables>(GetAvailableNewBuildings, {
-    variables: { input: { fieldId, villageId } },
-  });
+
+  const { data, loading } = useGetAvailableNewBuildingsQuery({ variables: { input: { fieldId, villageId } } });
 
   if (loading || !data) {
     return null;

@@ -1,7 +1,7 @@
-import { publishPayloadEvent } from '../_graphql/pubSub';
 import { Coords } from '../_models/coords';
 import { Village } from '../_models/village/village';
 import { BotEvent } from '../events/botEvent';
+import { publishPayloadEvent } from '../pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 

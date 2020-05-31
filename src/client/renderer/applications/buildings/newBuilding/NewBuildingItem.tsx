@@ -1,14 +1,8 @@
-import { useQuery } from '@apollo/client';
 import { Dialog } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useState } from 'react';
 
-import { GetMaxBuildingLevel } from '*/graphql_operations/building.graphql';
-
-import {
-  GetMaxBuildingLevelQuery,
-  GetMaxBuildingLevelQueryVariables,
-} from '../../../_graphql/types/graphql.type';
+import { useGetMaxBuildingLevelQuery } from '../../../_graphql/graphqlHooks';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { imageLinks } from '../../../utils/imageLinks';
@@ -49,9 +43,8 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
   const classes = useStyles(props);
 
   const enqueue = useEnqueueBuildingMutation({ buildingType: type, fieldId });
-  const maxLevelResult = useQuery<GetMaxBuildingLevelQuery, GetMaxBuildingLevelQueryVariables>(GetMaxBuildingLevel, {
-    variables: { buildingType: type },
-  });
+
+  const maxLevelResult = useGetMaxBuildingLevelQuery({ variables: { buildingType: type } });
 
   if (maxLevelResult.loading || !maxLevelResult.data) {
     return null;

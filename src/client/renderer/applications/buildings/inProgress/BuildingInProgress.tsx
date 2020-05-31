@@ -4,7 +4,7 @@ import React from 'react';
 import {
   BuildingInProgress as BuildingInProgressModel,
   Timestamp,
-} from '../../../_graphql/types/graphql.type';
+} from '../../../_graphql/graphqlHooks';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';

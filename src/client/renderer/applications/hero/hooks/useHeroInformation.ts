@@ -1,26 +1,18 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import {
   useEffect,
   useState,
 } from 'react';
 
 import {
-  GetHeroInformation,
-  OnHeroInformationUpdated,
-} from '*/graphql_operations/hero.graphql';
-
-import {
-  GetHeroInformationQuery,
   HeroInformationFragment,
-  OnHeroInformationUpdatedSubscription,
-} from '../../../_graphql/types/graphql.type';
+  useGetHeroInformationQuery,
+  useOnHeroInformationUpdatedSubscription,
+} from '../../../_graphql/graphqlHooks';
 
 export const useHeroInformation = () => {
   const [heroInformation, setHeroInformation] = useState<HeroInformationFragment>();
-  const { data, loading } = useQuery<GetHeroInformationQuery>(GetHeroInformation);
+
+  const { data, loading } = useGetHeroInformationQuery();
 
   useEffect(() => {
     if (loading || !data) {
@@ -30,7 +22,7 @@ export const useHeroInformation = () => {
     setHeroInformation(data.heroInformation);
   }, [data, loading]);
 
-  useSubscription<OnHeroInformationUpdatedSubscription>(OnHeroInformationUpdated, {
+  useOnHeroInformationUpdatedSubscription({
     onSubscriptionData: ({ subscriptionData }) => {
       if (subscriptionData.loading || !subscriptionData.data) {
         return;

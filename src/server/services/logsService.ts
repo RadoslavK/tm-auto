@@ -1,4 +1,3 @@
-import { publishPayloadEvent } from '../_graphql/pubSub';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits';
@@ -12,6 +11,7 @@ import { generateId } from '../../_shared/generateId';
 import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
+import { publishPayloadEvent } from '../pubSub';
 import { buildingInfoService } from './info/buildingInfoService';
 import { unitInfoService } from './info/unitInfoService';
 

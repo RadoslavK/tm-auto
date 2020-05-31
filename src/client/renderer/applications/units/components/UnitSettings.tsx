@@ -1,7 +1,3 @@
-import {
-  useMutation,
-  useQuery,
-} from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React, {
@@ -9,16 +5,11 @@ import React, {
   useState,
 } from 'react';
 
-import { UpdateAutoUnitsUnitSettings } from '*/graphql_operations/settings.graphql';
-import { GetUnitInfo } from '*/graphql_operations/unit.graphql';
-
 import {
   AutoUnitsUnitSettings,
-  GetUnitInfoQuery,
-  GetUnitInfoQueryVariables,
-  UpdateAutoUnitsUnitSettingsMutation,
-  UpdateAutoUnitsUnitSettingsMutationVariables,
-} from '../../../_graphql/types/graphql.type';
+  useGetUnitInfoQuery,
+  useUpdateAutoUnitsUnitSettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 
@@ -69,9 +60,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
 
   const { villageId } = useVillageContext();
 
-  const { data, loading } = useQuery<GetUnitInfoQuery, GetUnitInfoQueryVariables>(GetUnitInfo, {
-    variables: { index: settings.index },
-  });
+  const { data, loading } = useGetUnitInfoQuery({ variables: { index: settings.index } });
 
   const [state, setState] = useState(settings);
 
@@ -81,14 +70,14 @@ export const UnitSettings: React.FC<Props> = (props) => {
     trainForever,
   } = state;
 
-  const [updateSettings] = useMutation<UpdateAutoUnitsUnitSettingsMutation, UpdateAutoUnitsUnitSettingsMutationVariables>(UpdateAutoUnitsUnitSettings, {
+  const [updateSettings] = useUpdateAutoUnitsUnitSettingsMutation({
     variables: {
+      villageId,
       settings: {
         autoBuild: state.autoBuild,
         targetAmount: state.targetAmount,
         trainForever: state.trainForever,
-        unitIndex: settings.index,
-        villageId,
+        index: settings.index,
       },
     },
   });

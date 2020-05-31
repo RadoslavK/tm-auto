@@ -1,5 +1,9 @@
-import { BuildingSpot } from '../../_graphql/graphql.type';
+// TODO refactor so we dont need to import graphql dependency
+import { BuildingSpot } from '../../_types/graphql.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
+import { accountContext } from '../../accountContext';
+import { BotEvent } from '../../events/botEvent';
+import { publishPayloadEvent } from '../../pubSub';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
@@ -23,6 +27,11 @@ export class Buildings {
       spot.level.actual = b.level;
       spot.type = b.type;
     });
+
+    // todo refactor to service behavior
+    const { id } = accountContext.villageService.currentVillage();
+
+    publishPayloadEvent(BotEvent.BuildingSpotsUpdated, { villageId: id });
   };
 
   public updateOngoing = (buildingsInProgress: readonly BuildingInProgress[]): void => {
@@ -33,6 +42,12 @@ export class Buildings {
       });
 
     this.ongoing.set(buildingsInProgress);
+
+    // TODO, refactor into service so only a service publishes payloads
+
+    const { id } = accountContext.villageService.currentVillage();
+
+    publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: id });
   };
 
   public normalizedBuildingSpots = (): readonly BuildingSpot[] => this.spots.buildings().map((b): BuildingSpot => {

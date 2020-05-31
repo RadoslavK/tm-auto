@@ -1,36 +1,20 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-import {
   useEffect,
   useState,
 } from 'react';
 
 import {
-  NextVillageTaskExecution,
-  NextVillageTaskExecutionChanged,
-} from '*/graphql_operations/nextTaskExecution.graphql';
-
-import {
-  NextVillageTaskExecutionChangedSubscription,
-  NextVillageTaskExecutionChangedSubscriptionVariables,
-  NextVillageTaskExecutionQuery,
-  NextVillageTaskExecutionQueryVariables,
+  TaskType,
   Timestamp,
-  VillageTaskType,
-} from '../../_graphql/types/graphql.type';
+  useNextVillageTaskExecutionChangedSubscription,
+  useNextVillageTaskExecutionQuery,
+  useResetNextVillageTaskExecutionMutation,
+  useSetNextVillageTaskExecutionMutation,
+} from '../../_graphql/graphqlHooks';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
-export const useNextVillageTaskExecution = (villageId: number, task: VillageTaskType): number => {
+export const useNextVillageTaskExecution = (villageId: number, task: TaskType) => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);
-
-  const variables = { task, villageId };
-
-  const nextExecutionResult = useQuery<NextVillageTaskExecutionQuery, NextVillageTaskExecutionQueryVariables>(
-    NextVillageTaskExecution,
-    { variables },
-  );
 
   const updateNextExecution = (timestamp: Timestamp): void => {
     const difference = getSecondsUntilTimestamp(timestamp);
@@ -38,25 +22,42 @@ export const useNextVillageTaskExecution = (villageId: number, task: VillageTask
     setNextExecutionIn(difference);
   };
 
+  const queryResult = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
+
   useEffect(() => {
-    const { data, loading } = nextExecutionResult;
-
-    if (!loading && data) {
-      updateNextExecution(data.nextVillageTaskExecution);
+    if (!queryResult.loading && queryResult.data) {
+      updateNextExecution(queryResult.data.nextVillageTaskExecution);
     }
-  }, [nextExecutionResult]);
+  }, [queryResult]);
 
-  useSubscription<NextVillageTaskExecutionChangedSubscription, NextVillageTaskExecutionChangedSubscriptionVariables>(
-    NextVillageTaskExecutionChanged,
-    {
-      onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-        if (!loading && data) {
-          updateNextExecution(data.nextVillageTaskExecutionChanged);
-        }
-      },
-      variables,
+  const [setNextVillageTaskExecution, updateResult] = useSetNextVillageTaskExecutionMutation();
+
+  useEffect(() => {
+    if (!updateResult.loading && updateResult.data) {
+      updateNextExecution(updateResult.data.setNextVillageTaskExecution);
+    }
+  }, [updateResult]);
+
+  const [resetNextVillageTaskExecution, resetResult] = useResetNextVillageTaskExecutionMutation();
+
+  useEffect(() => {
+    if (!resetResult.loading && resetResult.data) {
+      updateNextExecution(resetResult.data.resetNextVillageTaskExecution);
+    }
+  }, [resetResult]);
+
+  useNextVillageTaskExecutionChangedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (!loading && data) {
+        updateNextExecution(data.nextVillageTaskExecutionChanged);
+      }
     },
-  );
+    variables: { task, villageId },
+  });
 
-  return nextExecutionIn;
+  return {
+    nextExecutionIn,
+    setNextVillageTaskExecution,
+    resetNextVillageTaskExecution,
+  };
 };

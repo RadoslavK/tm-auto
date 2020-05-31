@@ -5,7 +5,6 @@ import React, {
   useState,
 } from 'react';
 
-import { VillageSettingsType } from '../../../_graphql/types/graphql.type';
 import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { useVillageContext } from '../../villages/context/villageContext';
@@ -49,10 +48,17 @@ type Props = {
   readonly tab: string;
 };
 
-const getSettingsTab = (tab: string): VillageSettingsType => {
+enum VillageSettingsTabType {
+  AutoBuild,
+  AutoUnits,
+  AutoParty,
+  General,
+}
+
+const getSettingsTab = (tab: string): VillageSettingsTabType => {
   switch (tab) {
-    case 'buildings': return VillageSettingsType.AutoBuild;
-    case 'units': return VillageSettingsType.AutoUnits;
+    case 'buildings': return VillageSettingsTabType.AutoBuild;
+    case 'units': return VillageSettingsTabType.AutoUnits;
     default: throw new Error(`Unknown village tab: ${tab}`);
   }
 };
@@ -69,7 +75,7 @@ export const VillageSettings: React.FC<Props> = (props) => {
     setSelectedVillageId(villageId);
   }, [villageId]);
 
-  const [selectedTab, setSelectedTab] = useState<VillageSettingsType>(getSettingsTab(tab));
+  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(getSettingsTab(tab));
 
   const isInitialMount = useRef(true);
   useEffect(() => {
@@ -88,10 +94,10 @@ export const VillageSettings: React.FC<Props> = (props) => {
 
   const renderSettings = (): JSX.Element => {
     switch (selectedTab) {
-      case VillageSettingsType.General: return <GeneralVillageSettings />;
-      case VillageSettingsType.AutoBuild: return <AutoBuildSettings />;
-      case VillageSettingsType.AutoUnits: return <AutoUnitsSettings />;
-      case VillageSettingsType.AutoParty: return <AutoPartySettings />;
+      case VillageSettingsTabType.General: return <GeneralVillageSettings />;
+      case VillageSettingsTabType.AutoBuild: return <AutoBuildSettings />;
+      case VillageSettingsTabType.AutoUnits: return <AutoUnitsSettings />;
+      case VillageSettingsTabType.AutoParty: return <AutoPartySettings />;
       default: throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
   };
@@ -119,24 +125,24 @@ export const VillageSettings: React.FC<Props> = (props) => {
       </div>
       <div>
         <TabLink
-          isSelected={selectedTab === VillageSettingsType.General}
+          isSelected={selectedTab === VillageSettingsTabType.General}
           label="General"
-          onSelect={() => setSelectedTab(VillageSettingsType.General)}
+          onSelect={() => setSelectedTab(VillageSettingsTabType.General)}
         />
         <TabLink
-          isSelected={selectedTab === VillageSettingsType.AutoBuild}
+          isSelected={selectedTab === VillageSettingsTabType.AutoBuild}
           label="Auto Build"
-          onSelect={() => setSelectedTab(VillageSettingsType.AutoBuild)}
+          onSelect={() => setSelectedTab(VillageSettingsTabType.AutoBuild)}
         />
         <TabLink
-          isSelected={selectedTab === VillageSettingsType.AutoUnits}
+          isSelected={selectedTab === VillageSettingsTabType.AutoUnits}
           label="Auto Units"
-          onSelect={() => setSelectedTab(VillageSettingsType.AutoUnits)}
+          onSelect={() => setSelectedTab(VillageSettingsTabType.AutoUnits)}
         />
         <TabLink
-          isSelected={selectedTab === VillageSettingsType.AutoParty}
+          isSelected={selectedTab === VillageSettingsTabType.AutoParty}
           label="Auto Party"
-          onSelect={() => setSelectedTab(VillageSettingsType.AutoParty)}
+          onSelect={() => setSelectedTab(VillageSettingsTabType.AutoParty)}
         />
       </div>
       <VillageSettingsContext.Provider value={{ villageId: selectedVillageId }}>

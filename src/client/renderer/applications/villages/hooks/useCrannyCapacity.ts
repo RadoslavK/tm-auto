@@ -1,41 +1,48 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
+  useEffect,
+  useState,
+} from 'react';
 
 import {
-  CrannyCapacity,
-  CrannyCapacityChanged,
-} from '*/graphql_operations/village.graphql';
-
-import {
-  CrannyCapacityChangedSubscription,
-  CrannyCapacityChangedSubscriptionVariables,
   CrannyCapacityQuery,
-  CrannyCapacityQueryVariables,
-  VillageCrannyCapacity,
-} from '../../../_graphql/types/graphql.type';
+  useBuildingsInProgressUpdatedSubscription,
+  useBuildingSpotsUpdatedSubscription,
+  useCrannyCapacityQuery,
+  useOnQueueUpdatedSubscription,
+} from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../context/villageContext';
 
-export const useCrannyCapacity = (): VillageCrannyCapacity | null => {
+export const useCrannyCapacity = () => {
   const { villageId } = useVillageContext();
 
-  const crannyCapacityResult = useQuery<CrannyCapacityQuery, CrannyCapacityQueryVariables>(
-    CrannyCapacity,
-    { variables: { villageId } },
-  );
+  const [capacity, setCapacity] = useState<CrannyCapacityQuery['crannyCapacity']>();
 
-  useSubscription<CrannyCapacityChangedSubscription, CrannyCapacityChangedSubscriptionVariables>(
-    CrannyCapacityChanged,
-    {
-      onSubscriptionData: () => {
-        crannyCapacityResult.refetch();
-      },
-      variables: { villageId },
-    },
-  );
+  const queryResult = useCrannyCapacityQuery({ variables: { villageId } });
 
-  return !crannyCapacityResult.loading && crannyCapacityResult.data
-    ? crannyCapacityResult.data.crannyCapacity
-    : null;
+  useEffect(() => {
+    if (!queryResult.loading && queryResult.data) {
+      setCapacity(queryResult.data.crannyCapacity);
+    }
+  }, [queryResult]);
+
+  const onSubscriptionData = () => {
+    queryResult.refetch();
+  };
+
+  useBuildingSpotsUpdatedSubscription({
+    onSubscriptionData,
+    variables: { villageId },
+  });
+
+  useBuildingsInProgressUpdatedSubscription({
+    onSubscriptionData,
+    variables: { villageId },
+  });
+
+  useOnQueueUpdatedSubscription({
+    onSubscriptionData,
+    variables: { villageId },
+  });
+
+  return capacity;
 };

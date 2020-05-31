@@ -6,7 +6,7 @@ query NextTaskExecution($task: TaskType!) {
     }
 }
 
-query NextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!) {
+query NextVillageTaskExecution($villageId: Int!, $task: TaskType!) {
     nextVillageTaskExecution(villageId: $villageId, task: $task) {
         ...Timestamp
     }
@@ -19,19 +19,39 @@ query NextTasksExecution {
 }
 
 mutation SetNextTaskExecution($task: TaskType!, $delay: DurationInput!) {
-    setNextTaskExecution(task: $task, delay: $delay)
+    setNextTaskExecution(task: $task, delay: $delay) {
+        ...Timestamp
+    }
 }
 
-mutation SetNextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!, $delay: DurationInput!) {
-    setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay)
+mutation SetNextTasksExecution($delay: DurationInput!) {
+    setNextTasksExecution(delay: $delay) {
+        ...Timestamp
+    }
+}
+
+mutation SetNextVillageTaskExecution($villageId: Int!, $task: TaskType!, $delay: DurationInput!) {
+    setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
+        ...Timestamp
+    }
 }
 
 mutation ResetNextTaskExecution($task: TaskType!) {
-    resetNextTaskExecution(task: $task)
+    resetNextTaskExecution(task: $task) {
+        ...Timestamp
+    }
 }
 
-mutation ResetNextVillageTaskExecution($villageId: Int!, $task: VillageTaskType!) {
-    resetNextVillageTaskExecution(villageId: $villageId, task: $task)
+mutation ResetNextTasksExecution {
+    resetNextTasksExecution {
+        ...Timestamp
+    }
+}
+
+mutation ResetNextVillageTaskExecution($villageId: Int!, $task: TaskType!) {
+    resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
+        ...Timestamp
+    }
 }
 
 subscription NextTasksExecutionChanged {
@@ -46,7 +66,7 @@ subscription NextTaskExecutionChanged($task: TaskType!) {
     }
 }
 
-subscription NextVillageTaskExecutionChanged($villageId: Int!, $task: VillageTaskType!) {
+subscription NextVillageTaskExecutionChanged($villageId: Int!, $task: TaskType!) {
     nextVillageTaskExecutionChanged(villageId: $villageId, task: $task) {
         ...Timestamp
     }

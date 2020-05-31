@@ -46,11 +46,6 @@ module.exports = [
     test: /\.(jpg|png|svg|ico|icns)$/,
   },
   {
-    exclude: /node_modules/,
-    loader: 'graphql-tag/loader',
-    test: /\.(graphql|gql)$/,
-  },
-  {
     loader: 'file-loader',
     options: {
       name: '[name].[ext]',

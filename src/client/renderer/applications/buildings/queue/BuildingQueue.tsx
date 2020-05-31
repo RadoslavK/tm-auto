@@ -1,28 +1,15 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React from 'react';
-
-import { BuildingsUpdated } from '*/graphql_operations/building.graphql';
-import {
-  ClearQueue,
-  GetQueuedBuildings,
-  OnQueueUpdated,
-} from '*/graphql_operations/queuedBuilding.graphql';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
-  BuildingsUpdatedSubscription,
-  BuildingsUpdatedSubscriptionVariables,
-  ClearQueueMutation,
-  ClearQueueMutationVariables,
   GetQueuedBuildingsQuery,
-  GetQueuedBuildingsQueryVariables,
-  OnQueueUpdatedSubscription,
-  OnQueueUpdatedSubscriptionVariables,
-} from '../../../_graphql/types/graphql.type';
+  useClearQueueMutation,
+  useGetQueuedBuildingsQuery,
+  useOnQueueUpdatedSubscription,
+} from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { Cost } from './Cost';
 import { QueuedBuilding } from './QueuedBuilding';
@@ -42,43 +29,43 @@ const useStyles = makeStyles({
   },
 });
 
-export const BuildingQueue: React.FC<Props> = (props) => {
-  const {
-    className,
-  } = props;
+const useBuildingQueue = () => {
+  const { villageId } = useVillageContext();
 
+  const [buildingQueue, setBuildingQueue] = useState<GetQueuedBuildingsQuery['buildingQueue']>();
+
+  const queryResult = useGetQueuedBuildingsQuery({ variables: { villageId } });
+
+  useEffect(() => {
+    if (!queryResult.loading && queryResult.data) {
+      setBuildingQueue(queryResult.data.buildingQueue);
+    }
+  }, [queryResult]);
+
+  useOnQueueUpdatedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (!loading && data) {
+        setBuildingQueue(data.onQueueUpdated);
+      }
+    },
+    variables: { villageId },
+  });
+
+  return buildingQueue;
+};
+
+export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const classes = useStyles();
 
   const { villageId } = useVillageContext();
-  const { data, loading, refetch } = useQuery<GetQueuedBuildingsQuery, GetQueuedBuildingsQueryVariables>(GetQueuedBuildings, {
-    variables: { villageId },
-  });
 
-  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
-    onSubscriptionData: () => {
-      refetch();
-    },
-    variables: { villageId },
-  });
+  const buildingQueue = useBuildingQueue();
 
-  useSubscription<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
-    onSubscriptionData: () => {
-      refetch();
-    },
-    variables: { villageId },
-  });
+  const [clearQueue] = useClearQueueMutation({ variables: { villageId } });
 
-  const [clearQueue] = useMutation<ClearQueueMutation, ClearQueueMutationVariables>(ClearQueue, {
-    variables: { villageId },
-  });
-
-  if (loading || !data) {
+  if (!buildingQueue) {
     return null;
   }
-
-  const {
-    buildingQueue,
-  } = data;
 
   const onClear = async (): Promise<void> => {
     await clearQueue();

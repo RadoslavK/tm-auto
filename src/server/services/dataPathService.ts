@@ -7,6 +7,7 @@ type HeroSettingsPath = {
 };
 
 type AccountSettingsPath = {
+  readonly autoMentor: string;
   readonly general: string;
   readonly hero: HeroSettingsPath;
 };
@@ -67,6 +68,7 @@ class DataPathService {
     const lPath = path.join(basePath, 'settings');
 
     return {
+      autoMentor: path.join(lPath, 'autoMentor.json'),
       general: path.join(lPath, 'general.json'),
       hero: this.createHeroSettingsPath(lPath),
     };

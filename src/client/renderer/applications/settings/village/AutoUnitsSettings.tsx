@@ -1,130 +1,101 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
 import {
-  GetAutoUnitsSettings,
-  OnAutoUnitsSettingsChanged,
-  ResetVillageSettings,
-  UpdateAutoUnitsSettings,
-} from '*/graphql_operations/settings.graphql';
-
-import {
-  AutoUnitsSettings,
+  AutoUnitsSettings as AutoUnitsSettingsModel,
   CoolDown as CoolDownModel,
-  GetAutoUnitsSettingsQuery,
-  GetAutoUnitsSettingsQueryVariables,
-  OnAutoUnitsSettingsChangedSubscription,
-  OnAutoUnitsSettingsChangedSubscriptionVariables,
-  ResetVillageSettingsMutation,
-  ResetVillageSettingsMutationVariables,
   UpdateAutoUnitsSettingsInput,
-  UpdateAutoUnitsSettingsMutation,
-  UpdateAutoUnitsSettingsMutationVariables,
-  VillageSettingsType,
-} from '../../../_graphql/types/graphql.type';
+  useGetAutoUnitsSettingsQuery,
+  useResetAutoUnitsSettingsMutation,
+  useUpdateAutoUnitsSettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const Container: React.FC = () => {
+const useAutoUnitsSettings = () => {
   const { villageId } = useVillageSettingsContext();
-  const [settings, setSettings] = useState<AutoUnitsSettings>();
-  const { data, loading } = useQuery<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>(GetAutoUnitsSettings, {
-    variables: { villageId },
-  });
+  const [settings, setSettings] = useState<AutoUnitsSettingsModel>();
 
-  useSubscription<OnAutoUnitsSettingsChangedSubscription, OnAutoUnitsSettingsChangedSubscriptionVariables>(OnAutoUnitsSettingsChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        setSettings(subscriptionData.data.autoUnitsSettingsChanged);
-      }
-    },
-    variables: { villageId },
-  });
+  const queryResult = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!loading && data) {
-      setSettings(data.autoUnitsSettings);
+    if (!queryResult.loading && queryResult.data) {
+      setSettings(queryResult.data.autoUnitsSettings);
     }
-  }, [loading, data]);
+  }, [queryResult]);
 
-  if (!settings) {
-    return null;
-  }
+  const [updateSettings, updateResult] = useUpdateAutoUnitsSettingsMutation();
 
-  return (
-    <AutoUnitsSettings
-      key={villageId}
-      settings={settings}
-      villageId={villageId}
-    />
-  );
-};
+  useEffect(() => {
+    if (!updateResult.loading && updateResult.data) {
+      setSettings(updateResult.data.updateAutoUnitsSettings);
+    }
+  }, [updateResult]);
 
-export { Container as AutoUnitsSettings };
+  const [resetSettings, resetSettingsResult] = useResetAutoUnitsSettingsMutation();
 
-type Props = {
-  readonly settings: AutoUnitsSettings;
-  readonly villageId: number;
-};
+  useEffect(() => {
+    if (!resetSettingsResult.loading && resetSettingsResult.data) {
+      setSettings(resetSettingsResult.data.resetAutoUnitsSettings);
+    }
+  }, [resetSettingsResult]);
 
-const AutoUnitsSettings: React.FC<Props> = (props) => {
-  const {
+  return {
     settings,
-    villageId,
-  } = props;
-
-  const [state, setState] = useState<Omit<UpdateAutoUnitsSettingsInput, 'villageId'>>({
-    allow: settings.allow,
-    coolDown: settings.coolDown,
-    minCrop: settings.minCrop,
-  });
-
-  const input: UpdateAutoUnitsSettingsInput = {
-    villageId,
-    ...state,
+    updateSettings,
+    resetSettings,
   };
+};
 
-  const [updateSettings] = useMutation<UpdateAutoUnitsSettingsMutation, UpdateAutoUnitsSettingsMutationVariables>(UpdateAutoUnitsSettings, {
-    variables: { settings: input },
-  });
+export const AutoUnitsSettings: React.FC = () => {
+  const { villageId } = useVillageSettingsContext();
 
-  useEffect(() => {
-    if (state !== settings) {
-      updateSettings();
-    }
-  }, [settings, state, updateSettings]);
+  const [state, setState] = useState<UpdateAutoUnitsSettingsInput>();
+  const [hasChanges, setHasChanges] = useState(false);
 
-  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
-    variables: { type: VillageSettingsType.AutoUnits, villageId },
-  });
-
-  const isInitialMount = useRef(true);
+  const {
+    resetSettings,
+    settings,
+    updateSettings,
+  } = useAutoUnitsSettings();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      setState(settings);
+    if (settings) {
+      setState({
+        allow: settings.allow,
+        coolDown: settings.coolDown,
+        minCrop: settings.minCrop,
+      });
+      setHasChanges(false);
     }
   }, [settings]);
 
-  const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
-    setState(prevState => ({
+  useEffect(() => {
+    if (state && hasChanges) {
+      updateSettings({ variables: { villageId, settings: state } });
+    }
+  }, [state, hasChanges, updateSettings, villageId]);
+
+  const onCoolDownChange = useCallback((coolDown: CoolDownModel): void => {
+    setState(prevState => prevState && ({
       ...prevState,
-      coolDown: updatedCooldown,
+      coolDown,
     }));
+    setHasChanges(true);
   }, []);
+
+  if (!state) {
+    return null;
+  }
+
+  const onReset = () => {
+    resetSettings({ variables: { villageId } });
+  };
 
   const {
     allow,
@@ -138,17 +109,21 @@ const AutoUnitsSettings: React.FC<Props> = (props) => {
       name,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
   };
 
   const onNumberChange = createOnNumberChanged({
-    callback: (name, value) => setState(prevState => ({
-      ...prevState,
-      [name]: +value,
-    })),
+    callback: (name, value) => {
+      setState(prevState => prevState && ({
+        ...prevState,
+        [name]: +value,
+      }));
+      setHasChanges(true);
+    },
     minValue: 0,
   });
 
@@ -156,7 +131,7 @@ const AutoUnitsSettings: React.FC<Props> = (props) => {
     <div>
       <Button
         color="primary"
-        onClick={() => resetSettings()}
+        onClick={onReset}
         type="button"
         variant="contained"
       >

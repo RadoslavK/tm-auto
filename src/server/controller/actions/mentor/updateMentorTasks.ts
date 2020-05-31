@@ -1,15 +1,17 @@
-import { publishPayloadEvent } from '../../../_graphql/pubSub';
 import { MentorTask } from '../../../_models/mentor/mentorTask';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
-import { BotEvent } from '../../../events/botEvent';
 
 export const updateMentorTasks = async (): Promise<void> => {
+  if (1 === 1) {
+    return;
+  }
+
   const page = await getPage();
 
   const taskNodes = await page.$$('#mentorTaskList li.quest');
 
-  const tasks = await Promise.all(taskNodes.map(async (taskNode) => {
+  accountContext.mentorTasks = await Promise.all(taskNodes.map(async (taskNode) => {
     const id = await taskNode
       .getProperty('data-questid')
       .then(p => p.jsonValue());
@@ -27,7 +29,4 @@ export const updateMentorTasks = async (): Promise<void> => {
       id,
     });
   }));
-
-  accountContext.mentorTasks = tasks;
-  publishPayloadEvent(BotEvent.MentorTasksUpdated, { tasks });
 };

@@ -11,25 +11,29 @@ fragment BuildingSpot on BuildingSpot {
     name
 }
 
-query GetBuildingSpots($villageId: Int!) {
-    buildingSpots(villageId: $villageId) {
-        infrastructure {
+fragment BuildingSpots on BuildingSpots {
+    infrastructure {
+        ...BuildingSpot
+    }
+    resources {
+        wood {
             ...BuildingSpot
         }
-        resources {
-            wood {
-                ...BuildingSpot
-            }
-            clay {
-                ...BuildingSpot
-            }
-            iron {
-                ...BuildingSpot
-            }
-            crop {
-                ...BuildingSpot
-            }
+        clay {
+            ...BuildingSpot
         }
+        iron {
+            ...BuildingSpot
+        }
+        crop {
+            ...BuildingSpot
+        }
+    }
+}
+
+query GetBuildingSpots($villageId: Int!) {
+    buildingSpots(villageId: $villageId) {
+        ...BuildingSpots
     }
 }
 
@@ -44,6 +48,8 @@ query GetMaxBuildingLevel($buildingType: Int!) {
     maxBuildingLevel(buildingType: $buildingType)
 }
 
-subscription BuildingsUpdated($villageId: Int!) {
-    buildingsUpdated(villageId: $villageId)
+subscription BuildingSpotsUpdated($villageId: Int!) {
+    buildingSpotsUpdated(villageId: $villageId) {
+        ...BuildingSpots
+    }
 }

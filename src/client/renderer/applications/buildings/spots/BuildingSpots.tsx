@@ -1,25 +1,15 @@
-import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React from 'react';
-
-import {
-  BuildingsUpdated,
-  GetBuildingSpots,
-} from '*/graphql_operations/building.graphql';
-import { OnQueueUpdated } from '*/graphql_operations/queuedBuilding.graphql';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   BuildingSpot as BuildingSpotModel,
-  BuildingsUpdatedSubscription,
-  BuildingsUpdatedSubscriptionVariables,
   GetBuildingSpotsQuery,
-  GetBuildingSpotsQueryVariables,
-  OnQueueUpdatedSubscription,
-  OnQueueUpdatedSubscriptionVariables,
-} from '../../../_graphql/types/graphql.type';
+  useBuildingSpotsUpdatedSubscription,
+  useGetBuildingSpotsQuery,
+} from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingSpot } from './BuildingSpot';
 
@@ -42,36 +32,43 @@ const mapBuilding = (building: BuildingSpotModel, index: number): JSX.Element =>
   />
 );
 
+const useBuildingSpots = () => {
+  const { villageId } = useVillageContext();
+
+  const [buildingSpots, setBuildingSpots] = useState<GetBuildingSpotsQuery['buildingSpots']>();
+
+  const queryResult = useGetBuildingSpotsQuery({ variables: { villageId } });
+
+  useEffect(() => {
+    if (!queryResult.loading && queryResult.data) {
+      setBuildingSpots(queryResult.data.buildingSpots);
+    }
+  }, [queryResult]);
+
+  useBuildingSpotsUpdatedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (!loading && data) {
+        setBuildingSpots(data.buildingSpotsUpdated);
+      }
+    },
+    variables: { villageId },
+  });
+
+  return buildingSpots;
+};
+
 export const BuildingSpots: React.FC<Props> = (props) => {
   const {
     className,
   } = props;
 
   const classes = useStyles({});
-  const { villageId } = useVillageContext();
-  const { data, loading, refetch } = useQuery<GetBuildingSpotsQuery, GetBuildingSpotsQueryVariables>(GetBuildingSpots, {
-    variables: { villageId },
-  });
 
-  useSubscription<BuildingsUpdatedSubscription, BuildingsUpdatedSubscriptionVariables>(BuildingsUpdated, {
-    onSubscriptionData: () => {
-      refetch();
-    },
-    variables: { villageId },
-  });
+  const buildingSpots = useBuildingSpots();
 
-  useSubscription<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>(OnQueueUpdated, {
-    onSubscriptionData: () => {
-      refetch();
-    },
-    variables: { villageId },
-  });
-
-  if (loading || !data) {
+  if (!buildingSpots) {
     return null;
   }
-
-  const { buildingSpots } = data;
 
   return (
     <div className={className}>

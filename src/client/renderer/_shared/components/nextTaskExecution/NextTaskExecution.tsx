@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import {
   Duration,
   TaskType,
-} from '../../../_graphql/types/graphql.type';
+} from '../../../_graphql/graphqlHooks';
 import { useNextTaskExecution } from '../../../hooks/nextExecution/useNextTaskExecution';
-import { useResetNextTaskExecution } from '../../../hooks/nextExecution/useResetNextTaskExecution';
-import { useSetNextTaskExecution } from '../../../hooks/nextExecution/useSetNextTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { NextExecutionForm } from './NextExecutionForm';
@@ -17,11 +15,13 @@ type Props = {
 };
 
 export const NextTaskExecution: React.FC<Props> = ({ task }) => {
-  const nextExecutionIn = useNextTaskExecution(task);
-  const nextExecutionTimer = useCountDown(nextExecutionIn);
+  const {
+    nextExecutionIn,
+    resetNextTaskExecution,
+    setNextTaskExecution,
+  } = useNextTaskExecution(task);
 
-  const setNextTaskExecution = useSetNextTaskExecution();
-  const resetNextTaskExecution = useResetNextTaskExecution();
+  const nextExecutionTimer = useCountDown(nextExecutionIn);
 
   const [isFormShown, setIsFormShown] = useState(false);
 

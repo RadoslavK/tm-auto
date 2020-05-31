@@ -1,4 +1,4 @@
-import { Duration } from '../_graphql/types/graphql.type';
+import { Duration } from '../_graphql/graphqlHooks';
 import { Duration as DurationModel } from '../../../server/_models/duration';
 
 export const formatTimeFromDuration = (duration: Duration): string => {

@@ -1,9 +1,7 @@
 export enum TaskType {
-  AutoAdventure = 'AutoAdventure'
-}
-
-export enum VillageTaskType {
+  AutoAdventure = 'AutoAdventure',
+  AutoMentor = 'AutoMentor',
   AutoBuild = 'AutoBuild',
   AutoParty = 'AutoParty',
-  AutoUnits = 'AutoUnits'
+  AutoUnits = 'AutoUnits',
 }

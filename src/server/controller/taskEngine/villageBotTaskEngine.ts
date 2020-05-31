@@ -1,24 +1,35 @@
 import { Village } from '../../_models/village/village';
 import { accountContext } from '../../accountContext';
 import {
+  BotTask,
+  BotTaskBase,
   BotTaskEngine,
-  VillageBotTask,
+  BotTaskEngineWithCoolDown,
+  BotTaskWithCoolDown,
+  IBotTaskEngine,
 } from './botTaskEngine';
 
-export class VillageBotTasksEngine {
-  private readonly _tasks: readonly BotTaskEngine[];
+const isTaskWithCooldown = (task: BotTaskBase): task is BotTaskWithCoolDown =>
+  (task as BotTaskWithCoolDown).coolDown !== undefined;
 
-  constructor(village: Village, tasks: { new(village: Village): VillageBotTask }[]) {
+export class VillageBotTasksEngine {
+  private readonly _tasks: readonly IBotTaskEngine[];
+
+  constructor(village: Village, tasks: { new(village: Village): BotTask | BotTaskWithCoolDown }[]) {
     this._tasks = tasks.map(Task => {
       const task = new Task(village);
 
-      return new BotTaskEngine(
-        task,
-        () => accountContext.nextExecutionService.getForVillage(village.id, task.type),
-        nextExecution => {
-          accountContext.nextExecutionService.setForVillage(village.id, task.type, nextExecution);
-        },
-      );
+      if (isTaskWithCooldown(task)) {
+        return new BotTaskEngineWithCoolDown(
+          task,
+          () => accountContext.nextExecutionService.getForVillage(village.id, task.type),
+          nextExecution => {
+            accountContext.nextExecutionService.setForVillage(village.id, task.type, nextExecution);
+          },
+        );
+      }
+
+      return new BotTaskEngine(task);
     });
   }
 

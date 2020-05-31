@@ -1,98 +1,81 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
 import {
-  GetGeneralSettings,
-  OnGeneralSettingsChanged,
-  ResetSettings,
-  UpdateGeneralSettings,
-} from '*/graphql_operations/settings.graphql';
-
-import {
-  GeneralSettings,
-  GetGeneralSettingsQuery,
-  OnGeneralSettingsChangedSubscription,
-  ResetSettingsMutation,
-  ResetSettingsMutationVariables,
-  SettingsType,
+  GeneralSettings as GeneralSettingsModel,
   UpdateGeneralSettingsInput,
-  UpdateGeneralSettingsMutation,
-  UpdateGeneralSettingsMutationVariables,
-} from '../../_graphql/types/graphql.type';
+  useGetGeneralSettingsQuery,
+  useResetGeneralSettingsMutation,
+  useUpdateGeneralSettingsMutation,
+} from '../../_graphql/graphqlHooks';
 
-const Container: React.FC = () => {
-  const [settings, setSettings] = useState<GeneralSettings>();
-  const { data, loading } = useQuery<GetGeneralSettingsQuery>(GetGeneralSettings);
+const useGeneralSettings = () => {
+  const [settings, setSettings] = useState<GeneralSettingsModel>();
 
-  useSubscription<OnGeneralSettingsChangedSubscription>(OnGeneralSettingsChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        setSettings(subscriptionData.data.generalSettingsChanged);
-      }
-    },
-  });
+  const queryResult = useGetGeneralSettingsQuery();
 
   useEffect(() => {
-    if (!loading && data) {
-      setSettings(data.generalSettings);
+    if (!queryResult.loading && queryResult.data) {
+      setSettings(queryResult.data.generalSettings);
     }
-  }, [data, loading]);
+  }, [queryResult]);
 
-  if (!settings) {
-    return null;
-  }
-
-  return <GeneralSettings settings={settings} />;
-};
-
-export { Container as GeneralSettings };
-
-type Props = {
-  readonly settings: GeneralSettings;
-};
-
-const GeneralSettings: React.FC<Props> = (props) => {
-  const {
-    settings,
-  } = props;
-
-  const [state, setState] = useState(settings);
-  const input: UpdateGeneralSettingsInput = {
-    ...state,
-  };
-  const [updateSettings] = useMutation<UpdateGeneralSettingsMutation, UpdateGeneralSettingsMutationVariables>(UpdateGeneralSettings, {
-    variables: { settings: input },
-  });
-
-  const isInitialMount = useRef(true);
+  const [updateSettings, updateResult] = useUpdateGeneralSettingsMutation();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
+    if (!updateResult.loading && updateResult.data) {
+      setSettings(updateResult.data.updateGeneralSettings);
+    }
+  }, [updateResult]);
+
+  const [resetSettings, resetResult] = useResetGeneralSettingsMutation();
+
+  useEffect(() => {
+    if (!resetResult.loading && resetResult.data) {
+      setSettings(resetResult.data.resetGeneralSettings);
+    }
+  }, [resetResult]);
+
+  return {
+    settings,
+    updateSettings,
+    resetSettings,
+  };
+};
+
+export const GeneralSettings: React.FC = () => {
+  const [state, setState] = useState<UpdateGeneralSettingsInput>();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const {
+    resetSettings,
+    settings,
+    updateSettings,
+  } = useGeneralSettings();
+
+  useEffect(() => {
+    if (settings) {
       setState(settings);
+      setHasChanges(false);
     }
   }, [settings]);
 
   useEffect(() => {
-    if (state !== settings) {
-      updateSettings();
+    if (state && hasChanges) {
+      updateSettings({ variables: { settings: state } });
     }
-  }, [settings, state, updateSettings]);
+  }, [hasChanges, state, updateSettings]);
 
-  const [resetSettings] = useMutation<ResetSettingsMutation, ResetSettingsMutationVariables>(
-    ResetSettings,
-    { variables: { type: SettingsType.General } },
-  );
+  if (!state) {
+    return null;
+  }
+
+  const onReset = () => {
+    resetSettings();
+  };
 
   const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const {
@@ -100,10 +83,11 @@ const GeneralSettings: React.FC<Props> = (props) => {
       name,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
   };
 
   const {
@@ -120,7 +104,7 @@ const GeneralSettings: React.FC<Props> = (props) => {
       <div>
         <Button
           color="primary"
-          onClick={() => resetSettings()}
+          onClick={onReset}
           type="button"
           variant="contained"
         >

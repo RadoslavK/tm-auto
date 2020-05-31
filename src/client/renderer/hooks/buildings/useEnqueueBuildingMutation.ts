@@ -1,12 +1,9 @@
-import { useMutation } from '@apollo/client';
 import { FetchResult } from '@apollo/client/link/core/types';
-
-import { EnqueueBuilding } from '*/graphql_operations/queuedBuilding.graphql';
 
 import {
   EnqueueBuildingMutation,
-  EnqueueBuildingMutationVariables,
-} from '../../_graphql/types/graphql.type';
+  useEnqueueBuildingMutation as _useEnqueueBuildingMutation,
+} from '../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
 type Params = {
@@ -31,10 +28,7 @@ export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
     },
   });
 
-  const [mutate] = useMutation<EnqueueBuildingMutation, EnqueueBuildingMutationVariables>(
-    EnqueueBuilding,
-    createOptions(params),
-  );
+  const [mutate] = _useEnqueueBuildingMutation(createOptions(params));
 
   return (targetLevel?: number): Promise<FetchResult<EnqueueBuildingMutation>> => {
     const options = targetLevel

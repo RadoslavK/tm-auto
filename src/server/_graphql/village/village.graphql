@@ -1,0 +1,37 @@
+type VillageCapacity {
+    granary: Int!
+    warehouse: Int!
+}
+
+type VillageResources {
+    amount: Resources!
+    capacity: VillageCapacity!
+    production: Resources!
+}
+
+type Village {
+    id: Int!
+    coords: Coords!
+    name: String!
+    resources: VillageResources!
+    isCapital: Boolean!
+}
+
+type VillageCrannyCapacity {
+    actual: Int!
+    ongoing: Int!
+    total: Int!
+}
+
+extend type Query {
+    activeVillageId: Int!
+    village(villageId: Int!): Village
+    villages: [Village!]!
+    crannyCapacity(villageId: Int!): VillageCrannyCapacity!
+}
+
+extend type Subscription {
+    villageUpdated(villageId: Int!): Village!
+    villagesUpdated: [Village!]!
+    activeVillageIdChanged: Int!
+}

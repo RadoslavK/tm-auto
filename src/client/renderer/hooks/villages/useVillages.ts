@@ -1,28 +1,32 @@
 import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-
-import {
-  GetVillages,
-  UpdateVillages,
-} from '*/graphql_operations/village.graphql';
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   GetVillagesQuery,
-  UpdateVillagesSubscription,
-} from '../../_graphql/types/graphql.type';
+  useGetVillagesQuery,
+  useVillagesUpdatedSubscription,
+} from '../../_graphql/graphqlHooks';
 
-export const useVillages = (): GetVillagesQuery['villages'] | null => {
-  const { data, loading, refetch } = useQuery<GetVillagesQuery>(GetVillages);
+export const useVillages = () => {
+  const [villages, setVillages] = useState<GetVillagesQuery['villages']>();
 
-  useSubscription<UpdateVillagesSubscription>(UpdateVillages, {
-    onSubscriptionData: () => {
-      refetch();
+  const queryResult = useGetVillagesQuery();
+
+  useEffect(() => {
+    if (!queryResult.loading && queryResult.data) {
+      setVillages(queryResult.data.villages);
+    }
+  }, [queryResult]);
+
+  useVillagesUpdatedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
+      if (!loading && data) {
+        setVillages(data.villagesUpdated);
+      }
     },
   });
 
-  return loading || !data
-    ? null
-    : data.villages;
+  return villages;
 };

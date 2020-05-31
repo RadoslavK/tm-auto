@@ -1,43 +1,47 @@
 import { TravianPath } from '../_enums/travianPath';
-import {
-  publishEvent,
-  publishPayloadEvent,
-} from '../_graphql/pubSub';
 import { getAllEnumValues } from '../../_shared/enumUtils';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
+import { publishPayloadEvent } from '../pubSub';
 import { randomElement } from '../utils/randomElement';
 import { shuffle } from '../utils/shuffle';
 import { updateBuildings } from './actions/buildings/updateBuildings';
 import { ensurePage } from './actions/ensurePage';
 import { ensureVillageSelected } from './actions/ensureVillageSelected';
-import { updateMentorTasks } from './actions/mentor/updateMentorTasks';
 import { updatePlayerInfo } from './actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages';
 import { updateResources } from './actions/village/updateResources';
-import { BotTaskEngine } from './taskEngine/botTaskEngine';
+import {
+  BotTaskEngine,
+  BotTaskEngineWithCoolDown,
+  IBotTaskEngine,
+} from './taskEngine/botTaskEngine';
 import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine';
-import { AutoAdventureTask } from './villageTasks/autoAdventureTask';
-import { AutoBuildTask } from './villageTasks/autoBuildTask';
-import { AutoPartyTask } from './villageTasks/autoPartyTask';
-import { AutoUnitsTask } from './villageTasks/autoUnitsTask';
+import { AutoMentorTask } from './tasks/autoMentorTask';
+import { AutoAdventureTask } from './tasks/village/autoAdventureTask';
+import { AutoBuildTask } from './tasks/village/autoBuildTask';
+import { AutoPartyTask } from './tasks/village/autoPartyTask';
+import { AutoUnitsTask } from './tasks/village/autoUnitsTask';
 
 export class TaskManager {
-  private readonly _generalTasks: readonly BotTaskEngine[];
-  //  special handling
-  private readonly _autoAdventureTask: BotTaskEngine;
+  private readonly _generalTasks: readonly IBotTaskEngine[];
   private readonly _villageTasks: Record<number, VillageBotTasksEngine>;
-  private readonly _finalTasks: readonly BotTaskEngine[];
+  private readonly _finalTasks: readonly IBotTaskEngine[];
+
+  //  special handling
+  private readonly _autoAdventureTask: BotTaskEngineWithCoolDown;
 
   constructor() {
-    this._generalTasks = [];
+    this._generalTasks = [
+      new BotTaskEngine(new AutoMentorTask()),
+    ];
     this._finalTasks = [];
     this._villageTasks = {};
 
     const autoAdventureTask = new AutoAdventureTask();
 
-    this._autoAdventureTask = new BotTaskEngine(
+    this._autoAdventureTask = new BotTaskEngineWithCoolDown(
       autoAdventureTask,
       () => accountContext.nextExecutionService.get(autoAdventureTask.type),
       nextExecution => {
@@ -61,7 +65,6 @@ export class TaskManager {
     await updateNewOldVillages();
     await updateHeroInformation();
     await updatePlayerInfo();
-    await updateMentorTasks();
 
     for (const task of this._generalTasks) {
       await task.execute();
@@ -101,11 +104,7 @@ export class TaskManager {
 
       await taskEngine.execute();
 
-      await Promise.all([
-        publishPayloadEvent(BotEvent.BuildingsUpdated, { villageId: village.id }),
-        publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: village.id }),
-        publishEvent(BotEvent.VillageUpdated),
-      ]);
+      publishPayloadEvent(BotEvent.VillageUpdated, { village });
     }
   };
 

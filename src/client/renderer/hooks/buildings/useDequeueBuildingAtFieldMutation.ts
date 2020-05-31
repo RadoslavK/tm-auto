@@ -1,14 +1,10 @@
-import {
-  MutationTuple,
-  useMutation,
-} from '@apollo/client';
-
-import { DequeueBuildingAtField } from '*/graphql_operations/queuedBuilding.graphql';
+import { MutationTuple } from '@apollo/client';
 
 import {
   DequeueBuildingAtFieldMutation,
   DequeueBuildingAtFieldMutationVariables,
-} from '../../_graphql/types/graphql.type';
+  useDequeueBuildingAtFieldMutation as _useDequeueBuildingAtFieldMutation,
+} from '../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
 type Params = {
@@ -21,16 +17,13 @@ type ReturnType = MutationTuple<DequeueBuildingAtFieldMutation, DequeueBuildingA
 export const useDequeueBuildingAtFieldMutation = ({ deleteAll, fieldId }: Params): ReturnType => {
   const { villageId } = useVillageContext();
 
-  return useMutation<DequeueBuildingAtFieldMutation, DequeueBuildingAtFieldMutationVariables>(
-    DequeueBuildingAtField,
-    {
-      variables: {
-        input: {
-          deleteAll,
-          fieldId,
-          villageId,
-        },
+  return _useDequeueBuildingAtFieldMutation({
+    variables: {
+      input: {
+        deleteAll,
+        fieldId,
+        villageId,
       },
     },
-  );
+  });
 };

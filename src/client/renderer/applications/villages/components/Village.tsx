@@ -17,7 +17,7 @@ import { Buildings } from '../../buildings/Buildings';
 import { VillageSettings } from '../../settings/village';
 import { Units } from '../../units/components/Units';
 import { VillageContext } from '../context/villageContext';
-import { useGetVillageById } from '../hooks/useGetVillageById';
+import { useVillage } from '../hooks/useVillage';
 import { CrannyCapacity } from './CrannyCapacity';
 import { Resources } from './Resources';
 
@@ -32,25 +32,21 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   const openSettings = (): void => setShowSettings(true);
   const closeSettings = (): void => setShowSettings(false);
 
-  const villageResult = useGetVillageById(villageId);
+  const village = useVillage(villageId);
 
   const history = useHistory();
 
   useEffect(() => {
-    if (!villageResult) {
-      return;
-    }
-
-    if (!villageResult.village) {
+    if (village === null) {
       history.push('/villages');
     }
-  }, [villageResult, history]);
+  }, [village, history]);
 
-  if (!villageResult || !villageResult.village) {
+  if (!village) {
     return null;
   }
 
-  const { resources } = villageResult.village;
+  const { resources } = village;
 
   return (
     <div>

@@ -1,84 +1,59 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
 import {
-  GetAutoBuildSettings,
-  OnAutoBuildSettingsChanged,
-  ResetVillageSettings,
-  UpdateAutoBuildVillageSettings,
-} from '*/graphql_operations/settings.graphql';
-
-import {
-  AutoBuildSettings,
+  AutoBuildSettings as AutoBuildSettingsModel,
   CoolDown as CoolDownModel,
-  GetAutoBuildSettingsQuery,
-  GetAutoBuildSettingsQueryVariables,
-  OnAutoBuildSettingsChangedSubscription,
-  OnAutoBuildSettingsChangedSubscriptionVariables,
-  ResetVillageSettingsMutation,
-  ResetVillageSettingsMutationVariables,
-  UpdateAutoBuildVillageSettingsInput,
-  UpdateAutoBuildVillageSettingsMutation,
-  UpdateAutoBuildVillageSettingsMutationVariables,
-  VillageSettingsType,
-} from '../../../_graphql/types/graphql.type';
+  UpdateAutoBuildSettingsInput,
+  useGetAutoBuildSettingsQuery,
+  useResetAutoBuildSettingsMutation,
+  useUpdateAutoBuildSettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const Container: React.FC = () => {
+const useAutoBuildSettings = () => {
   const { villageId } = useVillageSettingsContext();
-  const [settings, setSettings] = useState<AutoBuildSettings>();
-  const { data, loading } = useQuery<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>(GetAutoBuildSettings, {
-    variables: { villageId },
-  });
 
-  useSubscription<OnAutoBuildSettingsChangedSubscription, OnAutoBuildSettingsChangedSubscriptionVariables>(OnAutoBuildSettingsChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        setSettings(subscriptionData.data.autoBuildSettingsChanged);
-      }
-    },
-    variables: { villageId },
-  });
+  const [settings, setSettings] = useState<AutoBuildSettingsModel>();
+
+  const queryResult = useGetAutoBuildSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!loading && data) {
-      setSettings(data.autoBuildSettings);
+    if (!queryResult.loading && queryResult.data) {
+      setSettings(queryResult.data.autoBuildSettings);
     }
-  }, [loading, data]);
+  }, [queryResult]);
 
-  if (!settings) {
-    return null;
-  }
+  const [updateSettings, updateResult] = useUpdateAutoBuildSettingsMutation();
 
-  return (
-    <AutoBuildSettings
-      key={villageId}
-      settings={settings}
-      villageId={villageId}
-    />
-  );
+  useEffect(() => {
+    if (!updateResult.loading && updateResult.data) {
+      setSettings(updateResult.data.updateAutoBuildSettings);
+    }
+  }, [updateResult]);
+
+  const [resetSettings, resetResult] = useResetAutoBuildSettingsMutation();
+
+  useEffect(() => {
+    if (!resetResult.loading && resetResult.data) {
+      setSettings(resetResult.data.resetAutoBuildSettings);
+    }
+  }, [resetResult]);
+
+  return {
+    settings,
+    updateSettings,
+    resetSettings,
+  };
 };
 
-export { Container as AutoBuildSettings };
-
-type Props = {
-  readonly settings: AutoBuildSettings;
-  readonly villageId: number;
-};
-
-type Settings = Omit<AutoBuildSettings, 'autoStorage'> & {
+type Settings = Omit<AutoBuildSettingsModel, 'autoStorage'> & {
   readonly allowAutoGranary: boolean;
   readonly allowAutoWarehouse: boolean;
   readonly allowFreeSpots: boolean;
@@ -86,7 +61,7 @@ type Settings = Omit<AutoBuildSettings, 'autoStorage'> & {
   readonly autoWarehouseOverflowLevel: number;
 };
 
-const getStateFromSettings = (settings: AutoBuildSettings): Settings => {
+const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
   const {
     autoStorage: {
       allowFreeSpots,
@@ -112,54 +87,73 @@ const getStateFromSettings = (settings: AutoBuildSettings): Settings => {
   };
 };
 
-const AutoBuildSettings: React.FC<Props> = (props) => {
+// TODO: refactor this lol
+const getSettingsFromState = (state: Settings): UpdateAutoBuildSettingsInput => {
   const {
-    settings,
-    villageId,
-  } = props;
+    allowAutoGranary,
+    allowAutoWarehouse,
+    allowFreeSpots,
+    autoGranaryOverflowLevel,
+    autoWarehouseOverflowLevel,
+    ...otherState
+  } = state;
 
-  const [state, setState] = useState(getStateFromSettings(settings));
-
-  const input: UpdateAutoBuildVillageSettingsInput = {
-    villageId,
-    ...state,
+  return {
+    ...otherState,
+    autoStorage: {
+      allowFreeSpots,
+      granary: {
+        allow: allowAutoGranary,
+        overflowLevel: autoGranaryOverflowLevel,
+      },
+      warehouse: {
+        allow: allowAutoWarehouse,
+        overflowLevel: autoWarehouseOverflowLevel,
+      },
+    },
   };
+};
 
-  const [updateSettings] = useMutation<UpdateAutoBuildVillageSettingsMutation, UpdateAutoBuildVillageSettingsMutationVariables>(
-    UpdateAutoBuildVillageSettings,
-    { variables: { settings: input } },
-  );
+export const AutoBuildSettings: React.FC = () => {
+  const { villageId } = useVillageSettingsContext();
 
-  const isInitialMount = useRef(true);
-  const settingsUpdated = useRef(false);
+  const [state, setState] = useState<Settings>();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const {
+    resetSettings,
+    settings,
+    updateSettings,
+  } = useAutoBuildSettings();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
+    if (settings) {
       setState(getStateFromSettings(settings));
-      settingsUpdated.current = false;
+      setHasChanges(false);
     }
   }, [settings]);
 
   useEffect(() => {
-    if (settingsUpdated.current) {
-      updateSettings();
-    } else {
-      settingsUpdated.current = true;
+    if (state && hasChanges) {
+      updateSettings({ variables: { villageId, settings: getSettingsFromState(state) } });
     }
-  }, [state, updateSettings]);
+  }, [state, hasChanges, updateSettings, villageId]);
 
-  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
-    variables: { type: VillageSettingsType.AutoBuild, villageId },
-  });
-
-  const onCooldownChange = useCallback((updatedCooldown: CoolDownModel): void => {
-    setState(prevState => ({
+  const onCoolDownChange = useCallback((updatedCoolDown: CoolDownModel): void => {
+    setState(prevState => prevState && ({
       ...prevState,
-      coolDown: updatedCooldown,
+      coolDown: updatedCoolDown,
     }));
+    setHasChanges(true);
   }, []);
+
+  if (!state) {
+    return null;
+  }
+
+  const onReset = () => {
+    resetSettings({ variables: { villageId } });
+  };
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -167,10 +161,11 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
       name,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
   };
 
   const {
@@ -185,10 +180,13 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
     minCrop,
   } = state;
 
-  const updateState = <TValue extends unknown>(name: string, value: TValue) => setState(prevState => ({
-    ...prevState,
-    [name]: value,
-  }));
+  const updateState = <TValue extends unknown>(name: string, value: TValue) => {
+    setState(prevState => prevState && ({
+      ...prevState,
+      [name]: value,
+    }));
+    setHasChanges(true);
+  };
 
   const onMinCropChanged = createOnNumberChanged({
     callback: updateState,
@@ -205,7 +203,7 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
     <div>
       <Button
         color="primary"
-        onClick={() => resetSettings()}
+        onClick={onReset}
         type="button"
         variant="contained"
       >
@@ -226,7 +224,7 @@ const AutoBuildSettings: React.FC<Props> = (props) => {
       <div>
         <label>Cooldown</label>
         <CoolDown
-          onChange={onCooldownChange}
+          onChange={onCoolDownChange}
           value={coolDown}
         />
       </div>

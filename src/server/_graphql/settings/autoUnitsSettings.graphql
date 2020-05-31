@@ -1,0 +1,53 @@
+type AutoUnitsUnitSettings {
+    index: Int!
+    autoBuild: Boolean!
+    trainForever: Boolean!
+    targetAmount: Int!
+}
+
+input UpdateAutoUnitsUnitSettingsInput {
+    index: Int!
+    autoBuild: Boolean!
+    trainForever: Boolean!
+    targetAmount: Int!
+}
+
+type AutoUnitsBuildingSettings {
+    allow: Boolean!
+    maxBuildTime: Duration!
+    units: [AutoUnitsUnitSettings!]!
+}
+
+input UpdateAutoUnitsBuildingSettingsInput {
+    allow: Boolean!
+    maxBuildTime: DurationInput!
+}
+
+type AutoUnitsSettings {
+    allow: Boolean!
+    coolDown: CoolDown!
+
+    minCrop: Int!
+    barracks: AutoUnitsBuildingSettings!
+    stable: AutoUnitsBuildingSettings!
+    workshop: AutoUnitsBuildingSettings!
+    residence: AutoUnitsBuildingSettings!
+}
+
+input UpdateAutoUnitsSettingsInput {
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    minCrop: Int!
+}
+
+extend type Query {
+    autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+}
+
+extend type Mutation {
+    updateAutoUnitsSettings(villageId: Int!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
+    updateAutoUnitsBuildingSettings(villageId: Int!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsBuildingSettings!
+    updateAutoUnitsUnitSettings(villageId: Int!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsUnitSettings!
+    resetAutoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+}

@@ -1,22 +1,14 @@
-import {
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
-
-import {
-  GetBotState,
-  OnBotRunningChanged,
-} from '*/graphql_operations/controller.graphql';
 
 import {
   BotState,
-  GetBotStateQuery,
-} from '../_graphql/types/graphql.type';
+  useGetBotStateQuery,
+  useOnBotRunningChangedSubscription,
+} from '../_graphql/graphqlHooks';
 
 export const useBotState = (): BotState | null => {
-  const { data, loading, refetch } = useQuery<GetBotStateQuery>(GetBotState);
+  const { data, loading, refetch } = useGetBotStateQuery();
 
-  useSubscription(OnBotRunningChanged, {
+  useOnBotRunningChangedSubscription({
     onSubscriptionData: () => {
       refetch();
     },

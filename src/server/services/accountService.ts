@@ -1,13 +1,15 @@
-import {
-  MutationCreateAccountArgs,
-  MutationUpdateAccountArgs,
-  UserAccount,
-} from '../_graphql/graphql.type';
 import { generateId } from '../../_shared/generateId';
 import { mergeDefaults } from '../../_shared/merge';
 import { PartialFields } from '../../_shared/types/fields.type';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
+
+type UserAccount = {
+  readonly id: string;
+  readonly username: string;
+  readonly password: string;
+  readonly server: string;
+};
 
 class AccountsData {
   public readonly accounts: UserAccount[] = [];
@@ -33,17 +35,17 @@ class AccountService {
     return this.accountsData.accounts;
   };
 
-  public createAccount = async (args: MutationCreateAccountArgs): Promise<UserAccount> => {
+  public createAccount = async (account: Omit<UserAccount, 'id'>): Promise<UserAccount> => {
     const id = generateId();
 
-    const correctedServerMatch = /(.*travian.com)\/?/.exec(args.account.server);
+    const correctedServerMatch = /(.*travian.com)\/?/.exec(account.server);
 
     if (!correctedServerMatch) {
-      throw new Error(`Invalid server url: ${args.account.server}`);
+      throw new Error(`Invalid server url: ${account.server}`);
     }
 
     const newAccount: UserAccount = {
-      ...args.account,
+      ...account,
       id,
       server: correctedServerMatch[1],
     };
@@ -54,13 +56,13 @@ class AccountService {
     return newAccount;
   };
 
-  public accountExists = (args: MutationCreateAccountArgs | MutationUpdateAccountArgs): boolean => {
-    if ('id' in args.account) {
-      const accountId = args.account.id;
-      return this.getAccounts().some(acc => acc.id !== accountId && acc.server === args.account.server && acc.username === args.account.username);
+  public accountExists = (account: Omit<UserAccount, 'id'> & { readonly id?: string }): boolean => {
+    if ('id' in account) {
+      const accountId = account.id;
+      return this.getAccounts().some(acc => acc.id !== accountId && acc.server === account.server && acc.username === account.username);
     }
 
-    return this.getAccounts().some(acc => acc.server === args.account.server && acc.username === args.account.username);
+    return this.getAccounts().some(acc => acc.server === account.server && acc.username === account.username);
   };
 
   public deleteAccount = async (id: string): Promise<void> => {
@@ -81,11 +83,7 @@ class AccountService {
     this.saveAccounts();
   };
 
-  public updateAccount = async (args: MutationUpdateAccountArgs): Promise<void> => {
-    const {
-      account,
-    } = args;
-
+  public updateAccount = async (account: UserAccount): Promise<void> => {
     const accountIndex = this.accountsData.accounts.findIndex(acc => acc.id === account.id);
     this.accountsData.accounts[accountIndex] = account;
     return this.saveAccounts();

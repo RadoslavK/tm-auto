@@ -1,11 +1,12 @@
-import { BuildingSpot } from '../_graphql/graphql.type';
-import { publishPayloadEvent } from '../_graphql/pubSub';
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { Village } from '../_models/village/village';
+// TODO refactor the same thing.. no g dependencies other than resolvers
+import { BuildingSpot } from '../_types/graphql.type';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
+import { publishPayloadEvent } from '../pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -457,12 +458,9 @@ export class BuildingQueueService {
   };
 
   private onUpdate = async (): Promise<void> => {
-    const promise = Promise.all([
+    await Promise.all([
       publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this._village.id }),
-      publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this._village.id }),
+      this.serializeQueue(),
     ]);
-
-    this.serializeQueue();
-    await promise;
   };
 }

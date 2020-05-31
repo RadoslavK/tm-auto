@@ -1,10 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { VillageTaskType } from '../../../_graphql/types/graphql.type';
+import {
+  TaskType,
+  useGetAutoUnitsSettingsQuery,
+} from '../../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { useGetAutoUnitsSettings } from '../hooks/useAutoUnitsSettings';
+import { useVillageContext } from '../../villages/context/villageContext';
 import { UnitBuildingSection } from './UnitBuildingSection';
 
 const useStyles = makeStyles({
@@ -19,15 +22,18 @@ const useStyles = makeStyles({
 
 export const Units: React.FC = () => {
   const classes = useStyles();
-  const settings = useGetAutoUnitsSettings();
+  const { villageId } = useVillageContext();
+  const { data, loading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
-  if (!settings) {
+  if (loading || !data) {
     return null;
   }
 
+  const settings = data.autoUnitsSettings;
+
   return (
     <div>
-      <NextVillageTaskExecution task={VillageTaskType.AutoUnits} />
+      <NextVillageTaskExecution task={TaskType.AutoUnits} />
       <div className={classes.buildings}>
         <UnitBuildingSection
           buildingType={BuildingType.Barracks}

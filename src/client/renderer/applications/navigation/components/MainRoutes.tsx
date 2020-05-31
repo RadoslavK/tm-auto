@@ -15,7 +15,7 @@ export const MainRoutes: React.FC = () => (
       <Route
         exact
         path="/"
-        render={() => <Redirect to="/villages" />}
+        render={() => <Redirect to={navigationApps[0].path} />}
       />
       {navigationApps.map((app) => (
         <Route
@@ -24,7 +24,7 @@ export const MainRoutes: React.FC = () => (
           path={app.path}
         />
       ))}
-      <Redirect to="/villages" />
+      <Redirect to={navigationApps[0].path} />
     </Switch>
   </div>
 );

@@ -4,12 +4,6 @@
       "TextLogEntryContent",
       "AutoBuildLogEntryContent",
       "AutoUnitsLogEntryContent"
-    ],
-    "ITaskSettings": [
-      "AutoBuildSettings",
-      "AutoAdventureSettings",
-      "AutoUnitsSettings",
-      "AutoPartySettings"
     ]
   }
 }

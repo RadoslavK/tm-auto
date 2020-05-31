@@ -28,26 +28,32 @@ mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: ID!) {
     moveQueuedBuildingAsHighAsPossible(villageId: $villageId, queueId: $queueId)
 }
 
-query GetQueuedBuildings($villageId: Int!) {
-    buildingQueue(villageId: $villageId) {
-        buildings {
-            canMoveDown
-            canMoveUp
-            cost {
-                ...Cost
-            }
-            name
-            level
-            type
-            queueId
-            fieldId
-        }
-        totalCost {
+fragment BuildingQueue on BuildingQueue {
+    buildings {
+        canMoveDown
+        canMoveUp
+        cost {
             ...Cost
         }
+        name
+        level
+        type
+        queueId
+        fieldId
+    }
+    totalCost {
+        ...Cost
+    }
+}
+
+query GetQueuedBuildings($villageId: Int!) {
+    buildingQueue(villageId: $villageId) {
+        ...BuildingQueue
     }
 }
 
 subscription OnQueueUpdated($villageId: Int!) {
-    onQueueUpdated(villageId: $villageId)
+    onQueueUpdated(villageId: $villageId) {
+        ...BuildingQueue
+    }
 }

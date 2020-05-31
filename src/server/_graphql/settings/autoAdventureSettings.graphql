@@ -1,0 +1,39 @@
+enum AdventureCriteria {
+    Closest
+    Furthest
+    Random
+    FirstToExpire
+}
+
+type AutoAdventureSettings {
+    allow: Boolean!
+    coolDown: CoolDown!
+
+    adventureCriteria: AdventureCriteria!
+    preferHard: Boolean!
+    normalMinHealth: Int!
+    hardMinHealth: Int!
+    maxTravelTime: Duration!
+    preferredVillageId: Int
+}
+
+input UpdateAutoAdventureSettingsInput {
+    allow: Boolean!
+    coolDown: CoolDownInput!
+
+    adventureCriteria: AdventureCriteria!
+    preferHard: Boolean!
+    normalMinHealth: Int!
+    hardMinHealth: Int!
+    maxTravelTime: DurationInput!
+    preferredVillageId: Int
+}
+
+extend type Query {
+    autoAdventureSettings: AutoAdventureSettings!
+}
+
+extend type Mutation {
+    updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
+    resetAutoAdventureSettings: AutoAdventureSettings!
+}

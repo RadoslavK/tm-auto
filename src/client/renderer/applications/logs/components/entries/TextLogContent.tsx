@@ -5,7 +5,7 @@ import React from 'react';
 import {
   TextLogEntryContent,
   TextLogEntryType,
-} from '../../../../_graphql/types/graphql.type';
+} from '../../../../_graphql/graphqlHooks';
 
 type StylesProps = {
   readonly isError: boolean;

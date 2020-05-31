@@ -5,7 +5,7 @@ import { createErrorLink } from '../_shared/graphql/createErrorLink';
 import {
   loadResolvers,
   loadTypeDefs,
-} from './_graphql/resolvers';
+} from './_graphql';
 import { createIpcExecutor } from './createIpcExecutor';
 import { createSchemaLink } from './createSchemaLink';
 

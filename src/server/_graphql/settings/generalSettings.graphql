@@ -1,0 +1,24 @@
+type GeneralSettings {
+    allowTasks: Boolean!
+    autoStart: Boolean!
+    autoBuild: Boolean!
+    autoUnits: Boolean!
+    autoParty: Boolean!
+}
+
+input UpdateGeneralSettingsInput {
+    allowTasks: Boolean!
+    autoBuild: Boolean!
+    autoUnits: Boolean!
+    autoStart: Boolean!
+    autoParty: Boolean!
+}
+
+extend type Query {
+    generalSettings: GeneralSettings!
+}
+
+extend type Mutation {
+    updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
+    resetGeneralSettings: GeneralSettings!
+}

@@ -1,122 +1,96 @@
-import {
-  useMutation,
-  useQuery,
-  useSubscription,
-} from '@apollo/client';
 import { Button } from '@material-ui/core';
 import React, {
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
 import {
-  GetAutoPartySettings,
-  OnAutoPartySettingsChanged,
-  ResetVillageSettings,
-  UpdateAutoPartySettings,
-} from '*/graphql_operations/settings.graphql';
-
-import {
-  AutoPartySettings,
+  AutoPartySettings as AutoPartySettingsModel,
   CoolDown as CoolDownModel,
-  GetAutoPartySettingsQuery,
-  GetAutoPartySettingsQueryVariables,
-  OnAutoPartySettingsChangedSubscription,
-  OnAutoPartySettingsChangedSubscriptionVariables,
   PartyType,
-  ResetVillageSettingsMutation,
-  ResetVillageSettingsMutationVariables,
   UpdateAutoPartySettingsInput,
-  UpdateAutoPartySettingsMutation,
-  UpdateAutoPartySettingsMutationVariables,
-  VillageSettingsType,
-} from '../../../_graphql/types/graphql.type';
+  useGetAutoPartySettingsQuery,
+  useResetAutoPartySettingsMutation,
+  useUpdateAutoPartySettingsMutation,
+} from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const Container: React.FC = () => {
+const useAutoPartySettings = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<AutoPartySettings>();
-  const { data, loading } = useQuery<GetAutoPartySettingsQuery, GetAutoPartySettingsQueryVariables>(GetAutoPartySettings, {
-    variables: { villageId },
-  });
+  const [settings, setSettings] = useState<AutoPartySettingsModel>();
 
-  useSubscription<OnAutoPartySettingsChangedSubscription, OnAutoPartySettingsChangedSubscriptionVariables>(OnAutoPartySettingsChanged, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (!subscriptionData.loading && subscriptionData.data) {
-        setSettings(subscriptionData.data.autoPartySettingsChanged);
-      }
-    },
-    variables: { villageId },
-  });
+  const queryResult = useGetAutoPartySettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!loading && data) {
-      setSettings(data.autoPartySettings);
+    if (!queryResult.loading && queryResult.data) {
+      setSettings(queryResult.data.autoPartySettings);
     }
-  }, [loading, data]);
+  }, [queryResult]);
 
-  if (!settings) {
-    return null;
-  }
-
-  return (
-    <AutoPartySettings
-      key={villageId}
-      settings={settings}
-      villageId={villageId}
-    />
-  );
-};
-
-export { Container as AutoPartySettings };
-
-type Props = {
-  readonly settings: AutoPartySettings;
-  readonly villageId: number;
-};
-
-const AutoPartySettings: React.FC<Props> = (props) => {
-  const {
-    settings,
-    villageId,
-  } = props;
-
-  const [state, setState] = useState(settings);
-  const input: UpdateAutoPartySettingsInput = {
-    ...state,
-    villageId,
-  };
-
-  const [resetSettings] = useMutation<ResetVillageSettingsMutation, ResetVillageSettingsMutationVariables>(ResetVillageSettings, {
-    variables: { type: VillageSettingsType.AutoParty, villageId },
-  });
-
-  const [updateSettings] = useMutation<UpdateAutoPartySettingsMutation, UpdateAutoPartySettingsMutationVariables>(
-    UpdateAutoPartySettings,
-    { variables: { settings: input } },
-  );
-
-  const isInitialMount = useRef(true);
+  const [updateSettings, updateResult] = useUpdateAutoPartySettingsMutation();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
+    if (!updateResult.loading && updateResult.data) {
+      setSettings(updateResult.data.updateAutoPartySettings);
+    }
+  }, [updateResult]);
+
+  const [resetSettings, resetResult] = useResetAutoPartySettingsMutation();
+
+  useEffect(() => {
+    if (!resetResult.loading && resetResult.data) {
+      setSettings(resetResult.data.resetAutoPartySettings);
+    }
+  }, [resetResult]);
+
+  return {
+    settings,
+    updateSettings,
+    resetSettings,
+  };
+};
+
+export const AutoPartySettings: React.FC = () => {
+  const { villageId } = useVillageSettingsContext();
+
+  const [state, setState] = useState<UpdateAutoPartySettingsInput>();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const {
+    resetSettings,
+    settings,
+    updateSettings,
+  } = useAutoPartySettings();
+
+  useEffect(() => {
+    if (settings) {
       setState(settings);
+      setHasChanges(false);
     }
   }, [settings]);
 
   useEffect(() => {
-    if (state !== settings) {
-      updateSettings();
+    if (state && hasChanges) {
+      updateSettings({ variables: { villageId, settings: state } });
     }
-  }, [settings, state, updateSettings]);
+  }, [hasChanges, state, updateSettings, villageId]);
+
+  const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
+    setState(prevState => prevState && ({
+      ...prevState,
+      coolDown: updatedCooldown,
+    }));
+    setHasChanges(true);
+  }, []);
+
+  if (!state) {
+    return null;
+  }
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -124,26 +98,23 @@ const AutoPartySettings: React.FC<Props> = (props) => {
       name,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
   };
 
   const onNumberChange = createOnNumberChanged({
-    callback: (name, value) => setState(prevState => ({
-      ...prevState,
-      [name]: +value,
-    })),
+    callback: (name, value) => {
+      setState(prevState => prevState && ({
+        ...prevState,
+        [name]: +value,
+      }));
+      setHasChanges(true);
+    },
     minValue: 0,
   });
-
-  const onCoolDownChange = useCallback((updatedCooldown: CoolDownModel): void => {
-    setState(prevState => ({
-      ...prevState,
-      coolDown: updatedCooldown,
-    }));
-  }, []);
 
   const onPartyTypeChange = (e: React.FormEvent<HTMLSelectElement>): void => {
     const {
@@ -151,10 +122,11 @@ const AutoPartySettings: React.FC<Props> = (props) => {
       value,
     } = e.currentTarget;
 
-    setState(prevState => ({
+    setState(prevState => prevState && ({
       ...prevState,
       [name]: value,
     }));
+    setHasChanges(true);
   };
 
   const {

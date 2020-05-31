@@ -2,10 +2,10 @@ import { Button } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useSignOutMutation } from '../../signIn/hooks/useSignOutMutation';
+import { useSignOutMutation } from '../../../_graphql/graphqlHooks';
 
 export const SignOut: React.FC = React.forwardRef<any, any>((_pros, ref) => {
-  const signOut = useSignOutMutation();
+  const [signOut] = useSignOutMutation();
 
   const history = useHistory();
 

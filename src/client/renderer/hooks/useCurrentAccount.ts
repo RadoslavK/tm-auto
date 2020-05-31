@@ -1,11 +1,10 @@
-import { useQuery } from '@apollo/client';
-
-import { GetCurrentAccount } from '*/graphql_operations/account.graphql';
-
-import { GetCurrentAccountQuery } from '../_graphql/types/graphql.type';
+import {
+  GetCurrentAccountQuery,
+  useGetCurrentAccountQuery,
+} from '../_graphql/graphqlHooks';
 
 export const useCurrentAccount = (): GetCurrentAccountQuery['currentAccount'] | null => {
-  const { data, loading } = useQuery<GetCurrentAccountQuery>(GetCurrentAccount);
+  const { data, loading } = useGetCurrentAccountQuery();
 
   return loading || !data
     ? null

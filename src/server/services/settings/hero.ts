@@ -12,8 +12,4 @@ export class HeroSettingsService implements ComplexSettingsServiceType<HeroSetti
 
     this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(heroSettingsPath.autoAdventure, AutoAdventureSettings);
   }
-
-  public get = (): HeroSettings => ({
-    autoAdventure: this.autoAdventure.get(),
-  });
 }

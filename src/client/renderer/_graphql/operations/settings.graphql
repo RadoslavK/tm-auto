@@ -1,15 +1,18 @@
 #import "./misc.graphql"
 
-fragment TaskSettings on ITaskSettings {
-    allow
-    coolDown {
-        min {
-            ...Duration
-        }
-        max {
-            ...Duration
-        }
+fragment CoolDown on CoolDown {
+    min {
+        ...Duration
     }
+    max {
+        ...Duration
+    }
+}
+
+fragment AutoMentorSettings on AutoMentorSettings {
+    allow
+    disabledRewardIds
+    reserveResourceRewardsForOtherTasks
 }
 
 fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
@@ -38,7 +41,10 @@ fragment GeneralSettings on GeneralSettings {
 }
 
 fragment AutoAdventureSettings on AutoAdventureSettings {
-    ...TaskSettings
+    allow
+    coolDown {
+        ...CoolDown
+    }
     adventureCriteria
     hardMinHealth
     normalMinHealth
@@ -69,7 +75,10 @@ fragment AutoStorageSettings on AutoStorageSettings {
 }
 
 fragment AutoBuildSettings on AutoBuildSettings {
-    ...TaskSettings
+    allow
+    coolDown {
+        ...CoolDown
+    }
     autoCropFields
     minCrop
     autoStorage {
@@ -78,7 +87,10 @@ fragment AutoBuildSettings on AutoBuildSettings {
 }
 
 fragment AutoUnitsSettings on AutoUnitsSettings {
-    ...TaskSettings
+    allow
+    coolDown {
+        ...CoolDown
+    }
     minCrop
     barracks {
         ...AutoUnitsBuildingSettings
@@ -95,9 +107,24 @@ fragment AutoUnitsSettings on AutoUnitsSettings {
 }
 
 fragment AutoPartySettings on AutoPartySettings {
-    ...TaskSettings
+    allow
+    coolDown {
+        ...CoolDown
+    }
     minCulturePoints
     partyType
+}
+
+query GetAutoMentorSettings {
+    autoMentorSettings {
+        ...AutoMentorSettings
+    }
+}
+
+mutation UpdateAutoMentorSettings($settings: UpdateAutoMentorSettingsInput!) {
+    updateAutoMentorSettings(settings: $settings) {
+        ...AutoMentorSettings
+    }
 }
 
 query GetGeneralSettings {
@@ -106,11 +133,9 @@ query GetGeneralSettings {
     }
 }
 
-query GetHeroSettings {
-    hero {
-        autoAdventure {
-            ...AutoAdventureSettings
-        }
+query GetAutoAdventureSettings {
+    autoAdventureSettings {
+        ...AutoAdventureSettings
     }
 }
 
@@ -139,77 +164,91 @@ query GetAutoPartySettings($villageId: Int!) {
 }
 
 mutation UpdateGeneralSettings($settings: UpdateGeneralSettingsInput!) {
-    updateGeneralSettings(settings: $settings)
-}
-
-mutation UpdateAutoAdventureSettings($settings: UpdateAutoAdventureSettingsInput!) {
-    updateAutoAdventureSettings(settings: $settings)
-}
-
-mutation UpdateGeneralVillageSettings($settings: UpdateGeneralVillageSettingsInput!) {
-    updateGeneralVillageSettings(settings: $settings)
-}
-
-mutation UpdateAutoBuildVillageSettings($settings: UpdateAutoBuildVillageSettingsInput!) {
-    updateAutoBuildVillageSettings(settings: $settings)
-}
-
-mutation UpdateAutoUnitsUnitSettings($settings: UpdateAutoUnitsUnitSettingsInput!) {
-    updateAutoUnitsUnitSettings(settings: $settings)
-}
-
-mutation UpdateAutoUnitsBuildingSettings($settings: UpdateAutoUnitsBuildingSettingsInput!) {
-    updateAutoUnitsBuildingSettings(settings: $settings)
-}
-
-mutation UpdateAutoUnitsSettings($settings: UpdateAutoUnitsSettingsInput!) {
-    updateAutoUnitsSettings(settings: $settings)
-}
-
-mutation UpdateAutoPartySettings($settings: UpdateAutoPartySettingsInput!) {
-    updateAutoPartySettings(settings: $settings)
-}
-
-mutation ResetSettings($type: SettingsType!) {
-    resetSettings(type: $type)
-}
-
-mutation ResetVillageSettings($villageId: Int!, $type: VillageSettingsType!) {
-    resetVillageSettings(villageId: $villageId, type: $type)
-}
-
-subscription OnGeneralSettingsChanged {
-    generalSettingsChanged {
+    updateGeneralSettings(settings: $settings) {
         ...GeneralSettings
     }
 }
 
-subscription OnAutoAdventureSettingsChanged {
-    autoAdventureSettingsChanged {
+mutation UpdateAutoAdventureSettings($settings: UpdateAutoAdventureSettingsInput!) {
+    updateAutoAdventureSettings(settings: $settings) {
         ...AutoAdventureSettings
     }
 }
 
-subscription OnGeneralVillageSettingsChanged($villageId: Int!) {
-    generalVillageSettingsChanged(villageId: $villageId) {
+mutation UpdateGeneralVillageSettings($villageId: Int!, $settings: UpdateGeneralVillageSettingsInput!) {
+    updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
         ...GeneralVillageSettings
     }
 }
 
-subscription OnAutoBuildSettingsChanged($villageId: Int!) {
-    autoBuildSettingsChanged(villageId: $villageId) {
+mutation UpdateAutoBuildSettings($villageId: Int!, $settings: UpdateAutoBuildSettingsInput!) {
+    updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
         ...AutoBuildSettings
     }
 }
 
-subscription OnAutoUnitsSettingsChanged($villageId: Int!) {
-    autoUnitsSettingsChanged(villageId: $villageId) {
+mutation UpdateAutoUnitsUnitSettings($villageId: Int!, $settings: UpdateAutoUnitsUnitSettingsInput!) {
+    updateAutoUnitsUnitSettings(villageId: $villageId, settings: $settings) {
+        ...AutoUnitsUnitSettings
+    }
+}
+
+mutation UpdateAutoUnitsBuildingSettings($villageId: Int!, $buildingType: Int!, $settings: UpdateAutoUnitsBuildingSettingsInput!) {
+    updateAutoUnitsBuildingSettings(villageId: $villageId, buildingType: $buildingType, settings: $settings) {
+        ...AutoUnitsBuildingSettings
+    }
+}
+
+mutation UpdateAutoUnitsSettings($villageId: Int!, $settings: UpdateAutoUnitsSettingsInput!) {
+    updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {
         ...AutoUnitsSettings
     }
 }
 
-subscription OnAutoPartySettingsChanged($villageId: Int!) {
-    autoPartySettingsChanged(villageId: $villageId) {
+mutation UpdateAutoPartySettings($villageId: Int!, $settings: UpdateAutoPartySettingsInput!) {
+    updateAutoPartySettings(villageId: $villageId, settings: $settings) {
         ...AutoPartySettings
+    }
+}
+
+mutation ResetAutoAdventureSettings {
+    resetAutoAdventureSettings {
+        ...AutoAdventureSettings
+    }
+}
+
+mutation ResetAutoBuildSettings($villageId: Int!) {
+    resetAutoBuildSettings(villageId: $villageId) {
+        ...AutoBuildSettings
+    }
+}
+
+mutation ResetAutoMentorSettings {
+    resetAutoMentorSettings {
+        ...AutoMentorSettings
+    }
+}
+
+mutation ResetAutoPartySettings($villageId: Int!) {
+    resetAutoPartySettings(villageId: $villageId) {
+        ...AutoPartySettings
+    }
+}
+
+mutation ResetAutoUnitsSettings($villageId: Int!) {
+    resetAutoUnitsSettings(villageId: $villageId) {
+        ...AutoUnitsSettings
+    }
+}
+
+mutation ResetGeneralSettings {
+    resetGeneralSettings {
+        ...GeneralSettings
+    }
+}
+
+mutation ResetGeneralVillageSettings($villageId: Int!) {
+    resetGeneralVillageSettings(villageId: $villageId) {
+        ...GeneralVillageSettings
     }
 }

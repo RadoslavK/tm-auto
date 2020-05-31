@@ -1,0 +1,20 @@
+type AutoMentorSettings {
+    allow: Boolean!
+    disabledRewardIds: [String!]!
+    reserveResourceRewardsForOtherTasks: Boolean!
+}
+
+input UpdateAutoMentorSettingsInput {
+    allow: Boolean!
+    disabledIds: [String!]!
+    reserveResourceOnesForOtherTasks: Boolean!
+}
+
+extend type Query {
+    autoMentorSettings: AutoMentorSettings!
+}
+
+extend type Mutation {
+    updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
+    resetAutoMentorSettings: AutoMentorSettings!
+}
