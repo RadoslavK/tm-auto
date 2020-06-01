@@ -113,16 +113,6 @@ export const AutoMentorSettings: React.FC = () => {
             type="checkbox"
           />
         </div>
-        <div>
-          <label htmlFor="completeTasks">Complete tasks</label>
-          <input
-            checked={state.completeTasks}
-            id="completeTasks"
-            name="completeTasks"
-            onChange={onChange}
-            type="checkbox"
-          />
-        </div>
       </div>
     </div>
   );

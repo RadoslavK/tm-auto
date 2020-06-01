@@ -1,5 +1,9 @@
 ked je nejaky bottask CD mensi tak overridnut ten globalny
 
+graphql throws error when starting building new cranny level. got NAN instead of integer
+
+collapsible building queue
+
 
 eventy nech sa riadia iba cez servisu... event servisa s tym pubsub
 

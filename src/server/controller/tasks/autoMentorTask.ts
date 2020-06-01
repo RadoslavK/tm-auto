@@ -2,7 +2,6 @@ import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
 import { TaskType } from '../../../_shared/types/taskType';
 import { accountContext } from '../../accountContext';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward';
-import { completableTaskActions } from '../actions/mentor/completableTaskActions';
 import { updateMentorTasks } from '../actions/mentor/updateMentorTasks';
 import { BotTask } from '../taskEngine/botTaskEngine';
 
@@ -10,16 +9,13 @@ export class AutoMentorTask implements BotTask {
   private settings = (): AutoMentorSettings => accountContext.settingsService.autoMentor.get();
 
   public allowExecution = (): boolean => {
-    const { acceptRewards, completeTasks } = this.settings();
+    const { acceptRewards } = this.settings();
 
-    return acceptRewards || completeTasks;
+    return acceptRewards;
   };
 
   public execute = async (): Promise<void> => {
-    const {
-      acceptRewards,
-      completeTasks,
-    } = this.settings();
+    const { acceptRewards } = this.settings();
 
     let hadAutomatedTasks = false;
 
@@ -31,15 +27,6 @@ export class AutoMentorTask implements BotTask {
           await acceptTaskReward(task);
 
           hadAutomatedTasks = true;
-        } else if (completeTasks) {
-          const completeAction = completableTaskActions.get(task.id);
-
-          if (completeAction) {
-            accountContext.logsService.logText(`Completing task: ${task.id}`);
-            await completeAction();
-
-            hadAutomatedTasks = true;
-          }
         }
       }
     } while (hadAutomatedTasks);

@@ -682,12 +682,10 @@ export type UpdateAutoBuildSettingsInput = {
 export type AutoMentorSettings = {
   readonly __typename?: 'AutoMentorSettings';
   readonly acceptRewards: Scalars['Boolean'];
-  readonly completeTasks: Scalars['Boolean'];
 };
 
 export type UpdateAutoMentorSettingsInput = {
   readonly acceptRewards: Scalars['Boolean'];
-  readonly completeTasks: Scalars['Boolean'];
 };
 
 export enum PartyType {
@@ -1310,7 +1308,6 @@ export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends Res
 
 export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
   acceptRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  completeTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
