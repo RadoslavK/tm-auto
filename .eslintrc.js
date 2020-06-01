@@ -109,15 +109,7 @@ module.exports = {
       'error',
       { classes: true, functions: false, variables: true },
     ],
-    'object-curly-newline': [
-      'error',
-      {
-        ExportDeclaration: { consistent: true, minProperties: 2, multiline: true },
-        ImportDeclaration: { consistent: true, minProperties: 2, multiline: true },
-        ObjectExpression: { consistent: true, minProperties: 5, multiline: true },
-        ObjectPattern: { consistent: true, minProperties: 5, multiline: true },
-      },
-    ],
+    'object-curly-newline': 'off',
     'object-curly-spacing': 'error',
     'operator-linebreak': 'error',
     'prefer-destructuring': 'error',

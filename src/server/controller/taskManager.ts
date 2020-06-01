@@ -9,6 +9,7 @@ import { shuffle } from '../utils/shuffle';
 import { updateBuildings } from './actions/buildings/updateBuildings';
 import { ensurePage } from './actions/ensurePage';
 import { ensureVillageSelected } from './actions/ensureVillageSelected';
+import { updateHeroResources } from './actions/hero/updateHeroResources';
 import { updatePlayerInfo } from './actions/player/updatePlayerInfo';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages';
 import { updateResources } from './actions/village/updateResources';
@@ -64,6 +65,8 @@ export class TaskManager {
     await ensurePage(randomElement(getAllEnumValues(TravianPath)));
     await updateNewOldVillages();
     await updateHeroInformation();
+    //  TODO: can have some cd too
+    await updateHeroResources();
     //  TODO: maybe add cooldown on this, stuff like that should not change when
     // bot is running anywa and it triggers going to profile page all the time
     await updatePlayerInfo();
