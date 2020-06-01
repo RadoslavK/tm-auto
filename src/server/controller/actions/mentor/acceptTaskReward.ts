@@ -1,10 +1,11 @@
 import { MentorTask } from '../../../_models/mentor/mentorTask';
+import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 
 export const acceptTaskReward = async (task: MentorTask): Promise<void> => {
   const page = await getPage();
 
-  const taskNode = await page.$(`#mentorTaskList li.quest[data-questid=${task.id}]`);
+  const taskNode = await page.$(`#mentorTaskList li.quest[data-questid="${task.id}"]`);
 
   if (!taskNode) {
     throw new Error(`Did not find mentor task: ${task.id}`);
@@ -14,6 +15,8 @@ export const acceptTaskReward = async (task: MentorTask): Promise<void> => {
 
   const claimSelector = `button.green[questid=${task.id}]`;
   const claim = await page.waitForSelector(claimSelector);
+
+  accountContext.logsService.logText(`Accepting mentor task: ${task.id}`);
 
   await Promise.all([
     claim.click(),

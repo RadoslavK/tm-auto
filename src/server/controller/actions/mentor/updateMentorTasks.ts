@@ -3,24 +3,17 @@ import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 
 export const updateMentorTasks = async (): Promise<void> => {
-  if (1 === 1) {
-    return;
-  }
-
   const page = await getPage();
 
   const taskNodes = await page.$$('#mentorTaskList li.quest');
 
   accountContext.mentorTasks = await Promise.all(taskNodes.map(async (taskNode) => {
-    const id = await taskNode
-      .getProperty('data-questid')
-      .then(p => p.jsonValue());
+    const id = await page.evaluate((node: Element) => node.getAttribute('data-questid'), taskNode);
 
-    if (!id || typeof id !== 'string') {
+    if (!id) {
       throw new Error('Did not find id of mentor task');
     }
 
-    // const id = await page.evaluate(e => e.getAttribute('data-questid'), taskNode);
     const svgCheck = await taskNode.$('svg');
     const completed = !!svgCheck;
 

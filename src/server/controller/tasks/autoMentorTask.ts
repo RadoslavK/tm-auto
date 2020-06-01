@@ -35,6 +35,7 @@ export class AutoMentorTask implements BotTask {
           const completeAction = completableTaskActions.get(task.id);
 
           if (completeAction) {
+            accountContext.logsService.logText(`Completing task: ${task.id}`);
             await completeAction();
 
             hadAutomatedTasks = true;
