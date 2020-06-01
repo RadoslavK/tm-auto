@@ -4,7 +4,7 @@ import { TimeoutError } from 'puppeteer/Errors';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
 import { BotState } from '../../_shared/types/botState';
-import { accountContext } from '../accountContext';
+import { AccountContext, accountContext } from '../accountContext';
 import {
   getPage,
   killBrowser,
@@ -60,7 +60,7 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
 };
 
 class ControllerService {
-  private _timeout: NodeJS.Timeout;
+  private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
 
   private _tasksCoolDown: CoolDown = new CoolDown({
@@ -88,7 +88,7 @@ class ControllerService {
       this.setState(BotState.Pending);
 
       await accountService.setCurrentAccountId(accountId);
-      accountContext.initialize();
+      Object.assign(accountContext, new AccountContext());
 
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();

@@ -6,7 +6,7 @@ import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
 export class VillageService {
-  private _currentVillageId: number;
+  private _currentVillageId: number = 0;
 
   get currentVillageId(): number {
     return this._currentVillageId;

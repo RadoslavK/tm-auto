@@ -14,26 +14,15 @@ import { NextExecutionService } from './services/nextExecutionService';
 import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService';
 
-class AccountContext {
-  public villageService: VillageService;
-  public settingsService: SettingsService;
-  public logsService: LogsService;
-  public nextExecutionService: NextExecutionService;
+export class AccountContext {
+  public villageService: VillageService = new VillageService();
+  public settingsService: SettingsService = new SettingsService();
+  public logsService: LogsService = new LogsService();
+  public nextExecutionService: NextExecutionService = new NextExecutionService();
 
-  public gameInfo: GameInfo;
-  public hero: Hero;
-  public mentorTasks: readonly MentorTask[];
-
-  public initialize = (): void => {
-    this.villageService = new VillageService();
-    this.settingsService = new SettingsService();
-    this.logsService = new LogsService();
-    this.nextExecutionService = new NextExecutionService();
-
-    this.gameInfo = new GameInfo();
-    this.hero = new Hero();
-    this.mentorTasks = [];
-  };
+  public gameInfo: GameInfo = new GameInfo();
+  public hero: Hero = new Hero();
+  public mentorTasks: readonly MentorTask[] = [];
 }
 
 // TODO: make better mocking
@@ -57,8 +46,6 @@ class AccountContextMock extends AccountContext {
       lastSignedAccountId: '1',
     };
     (accountService as any).accountsLoaded = true;
-
-    this.initialize();
 
     const villages: Village[] = [
       new Village({

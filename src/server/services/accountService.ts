@@ -22,14 +22,13 @@ class AccountsData {
 
 class AccountService {
   private currentAccountId: string | null = null;
-  private accountsData: AccountsData;
-  private accountsLoaded = false;
+  private accountsData: AccountsData | null = null;
 
   private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath, this.accountsData);
 
   public getAccounts = (): readonly UserAccount[] => {
-    if (!this.accountsLoaded) {
-      this.load();
+    if (!this.accountsData) {
+      return this.getAccountsData().accounts;
     }
 
     return this.accountsData.accounts;
@@ -50,7 +49,7 @@ class AccountService {
       server: correctedServerMatch[1],
     };
 
-    this.accountsData.accounts.push(newAccount);
+    this.getAccountsData().accounts.push(newAccount);
     await this.saveAccounts();
 
     return newAccount;
@@ -66,7 +65,7 @@ class AccountService {
   };
 
   public deleteAccount = async (id: string): Promise<void> => {
-    const accountIndex = this.accountsData.accounts.findIndex(acc => acc.id === id);
+    const accountIndex = this.getAccountsData().accounts.findIndex(acc => acc.id === id);
 
     if (accountIndex === -1) {
       throw new Error(`Account with ${id} was not found`);
@@ -75,17 +74,20 @@ class AccountService {
     const accountPath = dataPathService.baseAccountPath(id);
     await fileService.delete(accountPath);
 
-    if (this.accountsData.lastSignedAccountId === id) {
-      this.accountsData.lastSignedAccountId = null;
+    const accountsData = this.getAccountsData();
+
+    if (accountsData.lastSignedAccountId === id) {
+      accountsData.lastSignedAccountId = null;
     }
 
-    this.accountsData.accounts.splice(accountIndex, 1);
+    accountsData.accounts.splice(accountIndex, 1);
     this.saveAccounts();
   };
 
   public updateAccount = async (account: UserAccount): Promise<void> => {
-    const accountIndex = this.accountsData.accounts.findIndex(acc => acc.id === account.id);
-    this.accountsData.accounts[accountIndex] = account;
+    const accountsData = this.getAccountsData();
+    const accountIndex = accountsData.accounts.findIndex(acc => acc.id === account.id);
+    accountsData.accounts[accountIndex] = account;
     return this.saveAccounts();
   };
 
@@ -109,23 +111,20 @@ class AccountService {
     this.currentAccountId = id;
 
     if (id) {
-      this.accountsData.lastSignedAccountId = id;
+      this.getAccountsData().lastSignedAccountId = id;
     }
 
     return this.saveAccounts();
   };
 
   public lastSignedAccountId = (): string | null => {
-    if (!this.accountsLoaded) {
-      this.load();
-    }
-
-    return this.accountsData.lastSignedAccountId;
+    return this.getAccountsData().lastSignedAccountId;
   };
 
-  private load = (): void => {
+  private getAccountsData = (): AccountsData => {
     this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
-    this.accountsLoaded = true;
+
+    return this.accountsData;
   };
 }
 

@@ -1,10 +1,12 @@
+import { mergeDefaults } from '../../../../_shared/merge';
+import { PartialFields } from '../../../../_shared/types/fields.type';
 import { TextLogEntryType } from '../../../../_shared/types/textLogEntryType';
 
 export class TextLogEntryContent {
-  public readonly message: string;
-  public readonly type: TextLogEntryType;
+  public readonly message: string = '';
+  public readonly type: TextLogEntryType = TextLogEntryType.Info;
 
-  constructor(params: TextLogEntryContent) {
-    Object.assign(this, params);
+  constructor(params: PartialFields<TextLogEntryContent> = {}) {
+    mergeDefaults(this, params);
   }
 }

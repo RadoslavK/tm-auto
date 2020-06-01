@@ -5,15 +5,13 @@ import { PartialFields } from '../../../_shared/types/fields.type';
 import { fileService } from '../fileService';
 
 export class InternalSettingsService<TSettings> {
-  private settings: TSettings;
-  private loaded: boolean;
+  private settings: TSettings | null = null;
 
   constructor(private path: string, private SettingsConstructor: { new(params?: PartialFields<TSettings>): TSettings }) {}
 
   public get = (): TSettings => {
-    if (!this.loaded) {
+    if (!this.settings) {
       this.settings = fileService.loadInstance<TSettings>(this.path, this.SettingsConstructor);
-      this.loaded = true;
     }
 
     return this.settings;
@@ -27,10 +25,12 @@ export class InternalSettingsService<TSettings> {
   };
 
   public merge = (updated: PartialFields<TSettings>): TSettings => {
-    mergeDefaults(this.get(), updated);
+    const settings = this.get();
+
+    mergeDefaults(settings, updated);
     this.debouncedSave();
 
-    return this.settings;
+    return settings;
   };
 
   public reset = (): TSettings => {

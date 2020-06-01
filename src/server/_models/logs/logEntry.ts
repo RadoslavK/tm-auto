@@ -10,10 +10,10 @@ export type LogEntryContent =
   | AutoUnitsLogEntryContent;
 
 export class LogEntry {
-  public readonly content: LogEntryContent;
-  public readonly id: string;
-  public readonly timestamp: Timestamp;
-  public readonly village: Village | null;
+  public readonly content: LogEntryContent = new TextLogEntryContent();
+  public readonly id: string = '';
+  public readonly timestamp: Timestamp = new Timestamp();
+  public readonly village: Village | null = null;
 
   constructor(params: LogEntry) {
     Object.assign(this, params);
