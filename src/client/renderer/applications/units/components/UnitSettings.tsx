@@ -63,6 +63,12 @@ export const UnitSettings: React.FC<Props> = (props) => {
   const { data, loading } = useGetUnitInfoQuery({ variables: { index: settings.index } });
 
   const [state, setState] = useState(settings);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    setState(settings);
+    setHasChanges(false);
+  }, [settings]);
 
   const {
     autoBuild,
@@ -70,27 +76,20 @@ export const UnitSettings: React.FC<Props> = (props) => {
     trainForever,
   } = state;
 
-  const [updateSettings] = useUpdateAutoUnitsUnitSettingsMutation({
-    variables: {
-      villageId,
-      settings: {
-        autoBuild: state.autoBuild,
-        targetAmount: state.targetAmount,
-        trainForever: state.trainForever,
-        index: settings.index,
-      },
-    },
-  });
+  const [updateSettings] = useUpdateAutoUnitsUnitSettingsMutation();
 
   const classes = useStyles({ autoBuild, trainForever, unitIndex: settings.index });
 
   useEffect(() => {
-    if (state === settings) {
-      return;
+    if (hasChanges) {
+      updateSettings({
+        variables: {
+          villageId,
+          settings: state,
+        },
+      });
     }
-
-    updateSettings();
-  }, [state, settings, updateSettings]);
+  }, [state, hasChanges, updateSettings, villageId]);
 
   if (loading || !data) {
     return null;
@@ -106,6 +105,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
       ...prevState,
       [name]: checked,
     }));
+    setHasChanges(true);
   };
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
@@ -122,6 +122,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
       ...prevState,
       [name]: +value,
     }));
+    setHasChanges(true);
   };
 
   const toggleAutoBuild = (): void => {
@@ -129,6 +130,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
       ...prevState,
       autoBuild: !prevState.autoBuild,
     }));
+    setHasChanges(true);
   };
 
   return (

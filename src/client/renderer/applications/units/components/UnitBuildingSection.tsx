@@ -9,11 +9,11 @@ import React, {
 import {
   AutoUnitsBuildingSettings,
   Duration as DurationModel,
+  UpdateAutoUnitsBuildingSettingsInput,
   useUpdateAutoUnitsBuildingSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { areShallowEqual } from '../../../utils/areShallowEqual';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { UnitSettings } from './UnitSettings';
@@ -59,39 +59,49 @@ export const UnitBuildingSection: React.FC<Props> = ({
   className,
   settings,
 }) => {
+  const [state, setState] = useState<UpdateAutoUnitsBuildingSettingsInput>({
+    allow: settings.allow,
+    maxBuildTime: settings.maxBuildTime,
+  });
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    setState({
+      allow: settings.allow,
+      maxBuildTime: settings.maxBuildTime,
+    });
+    setHasChanges(false);
+  }, [settings]);
+
   const classes = useStyles({
     buildingType,
-    isAllowed: settings.allow,
+    isAllowed: state.allow,
   });
 
   const { villageId } = useVillageContext();
 
-  const [maxBuildTime, setMaxBuildTime] = useState(settings.maxBuildTime);
-  const [allow, setAllow] = useState(settings.allow);
-
   const [updateSettings] = useUpdateAutoUnitsBuildingSettingsMutation();
 
   useEffect(() => {
-    if (allow === settings.allow && areShallowEqual(maxBuildTime, settings.maxBuildTime)) {
-      return;
-    }
-
-    updateSettings({
-      variables: {
-        buildingType,
-        villageId,
-        settings: {
-          allow,
-          maxBuildTime,
+    if (hasChanges) {
+      updateSettings({
+        variables: {
+          buildingType,
+          villageId,
+          settings: state,
         },
-      },
-    });
-  }, [settings, allow, buildingType, villageId, maxBuildTime, updateSettings]);
+      });
+    }
+  }, [state, buildingType, villageId, updateSettings, hasChanges]);
 
-  const toggleAllow = () => setAllow(!allow);
+  const toggleAllow = () => {
+    setState(prevState => ({ ...prevState, allow: !prevState.allow }));
+    setHasChanges(true);
+  };
 
   const updateMaxBuildTime = useCallback((newValue: DurationModel) => {
-    setMaxBuildTime(newValue);
+    setState(prevState => ({ ...prevState, maxBuildTime: newValue }));
+    setHasChanges(true);
   }, []);
 
   return (
@@ -107,7 +117,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
           </label>
           <Duration
             onChange={updateMaxBuildTime}
-            value={maxBuildTime}
+            value={state.maxBuildTime}
           />
         </div>
       </div>

@@ -1,3 +1,5 @@
+ked sa resetnu settingy z toho modalu tak sa ovplyvnia aj settingy pod nimi ale tym ze neni subscribtion tak sa neprerenderuju...
+
 ked je nejaky bottask CD mensi tak overridnut ten globalny
 
 graphql throws error when starting building new cranny level. got NAN instead of integer
