@@ -12,6 +12,8 @@ export class AutoBuildSettings {
   });
   readonly autoCropFields: boolean = false;
   readonly minCrop: number = 0;
+  readonly useHeroResources: boolean = false;
+
   readonly autoStorage: AutoStorageSettings = new AutoStorageSettings();
 
   constructor(params: PartialFields<AutoBuildSettings> = {}) {

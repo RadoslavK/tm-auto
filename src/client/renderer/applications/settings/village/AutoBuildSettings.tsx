@@ -178,6 +178,7 @@ export const AutoBuildSettings: React.FC = () => {
     autoWarehouseOverflowLevel,
     coolDown,
     minCrop,
+    useHeroResources,
   } = state;
 
   const updateState = <TValue extends unknown>(name: string, value: TValue) => {
@@ -246,6 +247,17 @@ export const AutoBuildSettings: React.FC = () => {
           checked={allowFreeSpots}
           id="allowFreeSpots"
           name="allowFreeSpots"
+          onChange={onChange}
+          type="checkbox"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="useHeroResources">Use hero resources</label>
+        <input
+          checked={useHeroResources}
+          id="useHeroResources"
+          name="useHeroResources"
           onChange={onChange}
           type="checkbox"
         />

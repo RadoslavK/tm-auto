@@ -666,6 +666,7 @@ export type AutoBuildSettings = {
   readonly coolDown: CoolDown;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
+  readonly useHeroResources: Scalars['Boolean'];
   readonly autoStorage: AutoStorageSettings;
 };
 
@@ -674,6 +675,7 @@ export type UpdateAutoBuildSettingsInput = {
   readonly coolDown: CoolDownInput;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
+  readonly useHeroResources: Scalars['Boolean'];
   readonly autoStorage: UpdateAutoStorageSettingsInput;
 };
 
@@ -1301,6 +1303,7 @@ export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends Res
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
   autoCropFields: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoStorage: Resolver<ResolversTypes['AutoStorageSettings'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };

@@ -8,6 +8,7 @@ import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { unitInfoService } from '../../../services/info/unitInfoService';
+import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import {
   ensureBuildingSpotPage,
@@ -180,12 +181,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
       const input = await page.$(`[name=t${inputUnitIndex}]`);
 
       if (input) {
-        await input.focus();
-        await page.keyboard.down('Control');
-        await page.keyboard.press('A');
-        await page.keyboard.up('Control');
-        await page.keyboard.down('Backspace');
-        await input.type(amount.toString());
+        await replaceInputText(page, input, amount.toString());
       }
     }
 

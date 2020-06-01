@@ -25,6 +25,7 @@ type AutoBuildSettings {
     coolDown: CoolDown!
     autoCropFields: Boolean!
     minCrop: Int!
+    useHeroResources: Boolean!
 
     autoStorage: AutoStorageSettings!
 }
@@ -34,6 +35,7 @@ input UpdateAutoBuildSettingsInput {
     coolDown: CoolDownInput!
     autoCropFields: Boolean!
     minCrop: Int!
+    useHeroResources: Boolean!
 
     autoStorage: UpdateAutoStorageSettingsInput!
 }

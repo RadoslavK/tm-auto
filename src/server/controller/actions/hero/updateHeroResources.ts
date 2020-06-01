@@ -2,14 +2,8 @@ import { TravianPath } from '../../../_enums/travianPath';
 import { Resources } from '../../../_models/misc/resources';
 import { accountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
+import { heroItemIds } from '../../../constants/heroItemIds';
 import { ensurePage } from '../ensurePage';
-
-const itemIds = {
-  wood: 145,
-  clay: 146,
-  iron: 147,
-  crop: 148,
-};
 
 export const updateHeroResources = async (): Promise<void> => {
   const page = await getPage();
@@ -24,10 +18,10 @@ export const updateHeroResources = async (): Promise<void> => {
       : 0;
   };
 
-  const wood = await getResource(itemIds.wood);
-  const clay = await getResource(itemIds.clay);
-  const iron = await getResource(itemIds.iron);
-  const crop = await getResource(itemIds.crop);
+  const wood = await getResource(heroItemIds.wood);
+  const clay = await getResource(heroItemIds.clay);
+  const iron = await getResource(heroItemIds.iron);
+  const crop = await getResource(heroItemIds.crop);
 
   accountContext.hero.resources = new Resources({ wood, clay, iron, crop });
 };

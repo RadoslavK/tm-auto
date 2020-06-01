@@ -22,6 +22,7 @@ import {
   ensureBuildingSpotPage,
   ensurePage,
 } from '../../../actions/ensurePage';
+import { claimHeroResources } from '../../../actions/hero/claimHeroResources';
 import { updateActualResources } from '../../../actions/village/updateResources';
 import {
   BotTaskWithCoolDown,
@@ -111,12 +112,34 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   private startBuildingIfQueueIsFree = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
     const settings = this.settings();
     const cost = buildingInfoService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
-    const resources = cost.resources.add(new Resources({ crop: settings.minCrop }));
+    const requiredResources = cost.resources.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
+    const warehouseCapacity = this._village.resources.capacity.warehouse;
+    const granaryCapacity = this._village.resources.capacity.granary;
     const currentResources = this._village.resources.amount;
+    const heroResources = accountContext.hero.resources;
+    const totalResources = settings.useHeroResources
+      ? currentResources
+        .add(heroResources)
+        .mergeMin(new Resources({
+          wood: warehouseCapacity,
+          clay: warehouseCapacity,
+          iron: warehouseCapacity,
+          crop: granaryCapacity,
+          freeCrop: currentResources.freeCrop,
+        }))
+      : currentResources;
 
-    if (currentResources.areGreaterOrEqualThan(resources)) {
+    if (totalResources.areGreaterOrEqualThan(requiredResources)) {
+      if (settings.useHeroResources) {
+        const resourcesNeeded = requiredResources.subtract(currentResources);
+
+        if (resourcesNeeded.getTotal() > 0) {
+          await claimHeroResources(resourcesNeeded);
+        }
+      }
+
       await this.startBuilding(queuedBuilding, isQueued);
     } else if (currentResources.freeCrop < cost.resources.freeCrop && settings.autoCropFields) {
       // need cropland

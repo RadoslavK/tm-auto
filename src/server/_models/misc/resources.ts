@@ -21,11 +21,11 @@ export class Resources {
   });
 
   public subtract = (subtraction: Resources): Resources => new Resources({
-    clay: this.clay - subtraction.clay,
-    crop: this.crop - subtraction.crop,
-    freeCrop: this.freeCrop - subtraction.freeCrop,
-    iron: this.iron - subtraction.iron,
-    wood: this.wood - subtraction.wood,
+    clay: Math.max(this.clay - subtraction.clay, 0),
+    crop: Math.max(this.crop - subtraction.crop, 0),
+    freeCrop: Math.max(this.freeCrop - subtraction.freeCrop, 0),
+    iron: Math.max(this.iron - subtraction.iron, 0),
+    wood: Math.max(this.wood - subtraction.wood, 0),
   });
 
   public multiply = (multiplicator: number): Resources => new Resources({
@@ -34,6 +34,14 @@ export class Resources {
     freeCrop: this.freeCrop * multiplicator,
     iron: this.iron * multiplicator,
     wood: this.wood * multiplicator,
+  });
+
+  public mergeMin = (other: Resources): Resources => new Resources({
+    wood: Math.min(this.wood, other.wood),
+    clay: Math.min(this.clay, other.clay),
+    iron: Math.min(this.iron, other.iron),
+    crop: Math.min(this.crop, other.crop),
+    freeCrop: Math.min(this.freeCrop, other.freeCrop),
   });
 
   public getRequiredWarehouseSize = (): number =>

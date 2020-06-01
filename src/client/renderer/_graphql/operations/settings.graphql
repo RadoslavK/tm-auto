@@ -83,6 +83,7 @@ fragment AutoBuildSettings on AutoBuildSettings {
     autoStorage {
         ...AutoStorageSettings
     }
+    useHeroResources
 }
 
 fragment AutoUnitsSettings on AutoUnitsSettings {
