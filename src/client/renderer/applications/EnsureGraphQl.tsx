@@ -4,6 +4,8 @@ import {
   ApolloProvider,
 } from '@apollo/client';
 import { InMemoryCache } from '@apollo/client/cache';
+import { CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, {
   useEffect,
   useState,
@@ -14,12 +16,23 @@ import { createIpcLink } from '../_graphql/utils/createIpcLink';
 import { IpcClient } from '../_ipc/ipcUtils';
 import { createErrorLink } from '../../../_shared/graphql/createErrorLink';
 
+const useStyles = makeStyles({
+  loaderContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '98vh',
+  },
+});
+
 type Props = {
   readonly socketName: string;
 };
 
 export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
   const [apolloClient, setApolloClient] = useState<ApolloClient<unknown>>();
+
+  const classes = useStyles();
 
   useEffect(() => {
     const ipcClient = new IpcClient(socketName);
@@ -64,5 +77,9 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
         {children}
       </ApolloProvider>
     )
-    : null;
+    : (
+      <div className={classes.loaderContainer}>
+        <CircularProgress size={444} />
+      </div>
+    );
 };
