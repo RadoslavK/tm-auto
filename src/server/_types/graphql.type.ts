@@ -679,15 +679,13 @@ export type UpdateAutoBuildSettingsInput = {
 
 export type AutoMentorSettings = {
   readonly __typename?: 'AutoMentorSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly disabledRewardIds: ReadonlyArray<Scalars['String']>;
-  readonly reserveResourceRewardsForOtherTasks: Scalars['Boolean'];
+  readonly acceptRewards: Scalars['Boolean'];
+  readonly completeTasks: Scalars['Boolean'];
 };
 
 export type UpdateAutoMentorSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly disabledIds: ReadonlyArray<Scalars['String']>;
-  readonly reserveResourceOnesForOtherTasks: Scalars['Boolean'];
+  readonly acceptRewards: Scalars['Boolean'];
+  readonly completeTasks: Scalars['Boolean'];
 };
 
 export enum PartyType {
@@ -1308,9 +1306,8 @@ export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends Res
 };
 
 export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  disabledRewardIds: Resolver<ReadonlyArray<ResolversTypes['String']>, ParentType, ContextType>;
-  reserveResourceRewardsForOtherTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  acceptRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  completeTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 

@@ -5,17 +5,11 @@ eventy nech sa riadia iba cez servisu... event servisa s tym pubsub
 
 
 
-use hero resources for buildings/units.. and mentor tasks.. dat tam nejaky task get extra resources -> quest/hero
-tasky splnit hned lebo to padne herovi.. a potom z hera vyberat
-
-
-
+use hero resources for buildings/units
 
 
 roman total queue time - prienik fields a infrastruktury.. a ukazovat obidva
 ukazovat odhadovanu dobu nez bude mat surky na dalsiu stavbu v queue a farebne znazornit ci vobec ma a tak
-
-
 
 
 

@@ -1,13 +1,11 @@
 type AutoMentorSettings {
-    allow: Boolean!
-    disabledRewardIds: [String!]!
-    reserveResourceRewardsForOtherTasks: Boolean!
+    acceptRewards: Boolean!
+    completeTasks: Boolean!
 }
 
 input UpdateAutoMentorSettingsInput {
-    allow: Boolean!
-    disabledIds: [String!]!
-    reserveResourceOnesForOtherTasks: Boolean!
+    acceptRewards: Boolean!
+    completeTasks: Boolean!
 }
 
 extend type Query {

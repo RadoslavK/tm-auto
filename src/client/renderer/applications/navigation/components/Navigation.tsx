@@ -10,9 +10,8 @@ import {
 import { BotState } from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
 import { Logs } from '../../logs/components/Logs';
-import { Mentor } from '../../mentor/Mentor';
-import { GeneralSettings } from '../../settings/GeneralSettings';
 import { HeroSettings } from '../../settings/hero/HeroSettings';
+import { Settings } from '../../settings/Settings';
 import { Villages } from '../../villages/components/Villages';
 import { BotStateToggle } from './BotStateToggle';
 import { SignOut } from './SignOut';
@@ -26,8 +25,7 @@ type NavigationApp = {
 export const navigationApps: readonly NavigationApp[] = [
   { component: Villages, label: 'Villages', path: '/villages' },
   { component: HeroSettings, label: 'Hero', path: '/hero' },
-  { component: GeneralSettings, label: 'Settings', path: '/settings' },
-  { component: Mentor, label: 'Mentor', path: '/mentor' },
+  { component: Settings, label: 'Settings', path: '/settings' },
   { component: Logs, label: 'Logs', path: '/logs' },
 ];
 

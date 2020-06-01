@@ -1,8 +1,6 @@
-import { MentorTask } from '../../_models/mentor/mentorTask';
 import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
 import { TaskType } from '../../../_shared/types/taskType';
 import { accountContext } from '../../accountContext';
-import { resourceMentorTaskRewards } from '../../constants/resourceMentorTaskRewards';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward';
 import { completableTaskActions } from '../actions/mentor/completableTaskActions';
 import { updateMentorTasks } from '../actions/mentor/updateMentorTasks';
@@ -11,32 +9,29 @@ import { BotTask } from '../taskEngine/botTaskEngine';
 export class AutoMentorTask implements BotTask {
   private settings = (): AutoMentorSettings => accountContext.settingsService.autoMentor.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean => {
+    const { acceptRewards, completeTasks } = this.settings();
 
-  private canAcceptTaskReward = (task: MentorTask): boolean => {
-    const {
-      disabledRewardIds,
-      reserveResourceRewardsForOtherTasks,
-    } = this.settings();
-
-    return task.completed
-      && !disabledRewardIds.includes(task.id)
-      && (!resourceMentorTaskRewards.get(task.id)
-        || !reserveResourceRewardsForOtherTasks);
+    return acceptRewards || completeTasks;
   };
 
   public execute = async (): Promise<void> => {
+    const {
+      acceptRewards,
+      completeTasks,
+    } = this.settings();
+
     let hadAutomatedTasks = false;
 
     do {
       await updateMentorTasks();
 
       for (const task of accountContext.mentorTasks) {
-        if (this.canAcceptTaskReward(task)) {
+        if (acceptRewards && task.completed) {
           await acceptTaskReward(task);
 
           hadAutomatedTasks = true;
-        } else {
+        } else if (completeTasks) {
           const completeAction = completableTaskActions.get(task.id);
 
           if (completeAction) {

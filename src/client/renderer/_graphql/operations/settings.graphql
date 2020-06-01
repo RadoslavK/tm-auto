@@ -10,9 +10,8 @@ fragment CoolDown on CoolDown {
 }
 
 fragment AutoMentorSettings on AutoMentorSettings {
-    allow
-    disabledRewardIds
-    reserveResourceRewardsForOtherTasks
+    acceptRewards
+    completeTasks
 }
 
 fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
