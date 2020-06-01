@@ -1,10 +1,13 @@
 po delete account nejde kliknut na create..
 
+sending hero adventure nelogujke
+
 validate schema before run
 
 ked je nejaky bottask CD mensi tak overridnut ten globalny
 
 use hero resources for buildings/units.. and mentor tasks.. dat tam nejaky task get extra resources -> quest/hero
+tasky splnit hned lebo to padne herovi.. a potom z hera vyberat
 
 update pictures.. have both versions
 

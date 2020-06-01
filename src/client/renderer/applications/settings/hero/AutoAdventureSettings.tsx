@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 
 import {
   AdventureCriteria,
@@ -93,15 +92,11 @@ export const AutoAdventureSettings: React.FC = () => {
     }
   }, [settings]);
 
-  const [debounceUpdate] = useDebouncedCallback((updatedSettings: UpdateAutoAdventureSettingsInput) => {
-    updateSettings({ variables: { settings: updatedSettings } });
-  }, 1000);
-
   useEffect(() => {
     if (state && hasChanges) {
-      debounceUpdate(state);
+      updateSettings({ variables: { settings: state } });
     }
-  }, [state, hasChanges, debounceUpdate]);
+  }, [state, hasChanges, updateSettings]);
 
   const villages = useVillages();
 

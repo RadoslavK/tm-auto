@@ -1,3 +1,5 @@
+import { debounce } from 'debounce';
+
 import { mergeDefaults } from '../../../_shared/merge';
 import { PartialFields } from '../../../_shared/types/fields.type';
 import { fileService } from '../fileService';
@@ -21,12 +23,12 @@ export class InternalSettingsService<TSettings> {
   public update = (settings: TSettings): void => {
     this.settings = settings;
 
-    this.save();
+    this.debouncedSave();
   };
 
   public merge = (updated: PartialFields<TSettings>): TSettings => {
     mergeDefaults(this.get(), updated);
-    this.save();
+    this.debouncedSave();
 
     return this.settings;
   };
@@ -34,10 +36,14 @@ export class InternalSettingsService<TSettings> {
   public reset = (): TSettings => {
     this.settings = new this.SettingsConstructor();
 
+    this.debouncedSave();
+
     return this.settings;
   };
 
   private save = async (): Promise<void> => {
     await fileService.save(this.path, this.settings);
   };
+
+  private debouncedSave = debounce(this.save, 333);
 }
