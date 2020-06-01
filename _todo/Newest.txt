@@ -10,3 +10,9 @@ update pictures.. have both versions
 
 roman total queue time - prienik fields a infrastruktury.. a ukazovat obidva
 ukazovat odhadovanu dobu nez bude mat surky na dalsiu stavbu v queue a farebne znazornit ci vobec ma a tak
+
+restart server from main when it crashes
+
+multilevel click dialog dat u tej budovy nech je lahsie kliknut .. tether?
+
+nejak spravit cache first nech moze pekne renderovat... akurat to neaktualizovalo hodnoty

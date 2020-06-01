@@ -11,8 +11,8 @@
   },
   "scripts": {
     "generate-types": "ts-node --compiler-options={\\\"module\\\":\\\"CommonJS\\\"} generateGraphqlTypes",
-    "lint": "eslint \"src/**/*\"",
-    "lint-errors": "eslint \"src/**/*\" --quiet",
+    "lint": "eslint --cache \"src/**/*\"",
+    "lint-errors": "yarn lint --quiet",
     "typecheck": "tsc",
     "start-m": "webpack --config webpack.main.config.js --mode development&& electron .webpack/main --remote-debugging-port=9222 --inspect",
     "start-r": "node hot-reload.server.js"
