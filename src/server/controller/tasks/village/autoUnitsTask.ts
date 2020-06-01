@@ -175,7 +175,9 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
         index: +uIndex,
       });
 
-      const input = await page.$(`[name=t${uIndex}]`);
+      const { tribe } = accountContext.gameInfo;
+      const inputUnitIndex = +uIndex - (10 * (tribe - 1));
+      const input = await page.$(`[name=t${inputUnitIndex}]`);
 
       if (input) {
         await input.focus();
