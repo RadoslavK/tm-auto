@@ -5,8 +5,9 @@ import { Types } from '@graphql-codegen/plugin-helpers';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import fs from 'fs';
 
+const localSchema = './src/client/**/localSchema/**/*.graphql';
 const schema = './src/server/**/*.graphql';
-const documents = './src/client/**/*.graphql';
+const documents = './src/client/**/operations/**/*.graphql';
 
 const hooksPath = './src/client/renderer/_graphql/graphqlHooks.ts';
 const serverTypesPath = './src/server/_types/graphql.type.ts';
@@ -100,7 +101,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
 
   const outputs: Types.FileOutput[] = await generate({
     documents,
-    schema,
+    schema: [schema, localSchema],
     generates: {
       [hooksPath]: {
         plugins: [
@@ -147,7 +148,7 @@ const generateGraphqlFragmentTypes = async (): Promise<void> => {
 
   await generate({
     documents,
-    schema,
+    schema: [schema, localSchema],
     generates: {
       [fragmentsPath]: {
         plugins: [{ 'fragment-matcher': matcherConfig }],

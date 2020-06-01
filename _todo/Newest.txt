@@ -1,21 +1,35 @@
-po delete account nejde kliknut na create..
-
 sending hero adventure nelogujke
 
-validate schema before run
-
 ked je nejaky bottask CD mensi tak overridnut ten globalny
+
+
+
+eventy nech sa riadia iba cez servisu... event servisa s tym pubsub
+preklik z logu na villages nezachova otvoreny podtab. radsej to ulozit mimo navigation niekde do lokalneho storu
+
+
+
 
 use hero resources for buildings/units.. and mentor tasks.. dat tam nejaky task get extra resources -> quest/hero
 tasky splnit hned lebo to padne herovi.. a potom z hera vyberat
 
-update pictures.. have both versions
+
+
+
 
 roman total queue time - prienik fields a infrastruktury.. a ukazovat obidva
 ukazovat odhadovanu dobu nez bude mat surky na dalsiu stavbu v queue a farebne znazornit ci vobec ma a tak
 
-restart server from main when it crashes
+
+
+
 
 multilevel click dialog dat u tej budovy nech je lahsie kliknut .. tether?
 
 nejak spravit cache first nech moze pekne renderovat... akurat to neaktualizovalo hodnoty
+
+update pictures.. have both versions
+
+validate schema before run
+graphql errors logovat do suboru
+restart server from main when it crashes
