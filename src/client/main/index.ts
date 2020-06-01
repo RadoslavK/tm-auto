@@ -33,6 +33,7 @@ let clientWin: null | BrowserWindow;
 
 const createClientWindow = async (socketName: string): Promise<void> => {
   clientWin = new BrowserWindow({
+    icon: path.join(__dirname, '..', '..', '..', 'resources', 'images', 'TMAuto.ico'),
     show: false,
     webPreferences: {
       nodeIntegration: false,
