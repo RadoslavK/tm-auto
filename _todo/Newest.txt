@@ -1,12 +1,7 @@
-sending hero adventure nelogujke
-
 ked je nejaky bottask CD mensi tak overridnut ten globalny
 
 
-
 eventy nech sa riadia iba cez servisu... event servisa s tym pubsub
-preklik z logu na villages nezachova otvoreny podtab. radsej to ulozit mimo navigation niekde do lokalneho storu
-
 
 
 

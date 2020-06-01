@@ -134,28 +134,16 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
       }
     }
 
-    const linkElement = await page.$(`#${selectedLinkElementId}`);
+    const sendLinkElement = await page.$(`#${selectedLinkElementId}`);
 
-    if (!linkElement) {
+    if (!sendLinkElement) {
       throw new Error('Link element for selected adventure was not found');
-    }
-
-    await Promise.all([
-      linkElement.click(),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    ]);
-
-    const sendToAdventureButton = await page.$('[class="adventureSendButton"] [class="green "]');
-
-    // cant send. no rally points, cant do yet etc
-    if (!sendToAdventureButton) {
-      return;
     }
 
     accountContext.logsService.logText('Sending hero to adventure');
 
     await Promise.all([
-      sendToAdventureButton.click(),
+      sendLinkElement.click(),
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
   };
