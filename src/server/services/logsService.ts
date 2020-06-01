@@ -9,7 +9,7 @@ import {
 import { Timestamp } from '../_models/misc/timestamp';
 import { generateId } from '../../_shared/generateId';
 import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
-import { accountContext } from '../accountContext';
+import { getAccountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { publishPayloadEvent } from '../pubSub';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -60,7 +60,7 @@ export class LogsService {
       index,
     } = params;
 
-    const { tribe } = accountContext.gameInfo;
+    const { tribe } = getAccountContext().gameInfo;
     const { name } = unitInfoService.getUnitInfo(index);
 
     const content = new AutoUnitsLogEntryContent({
@@ -76,7 +76,7 @@ export class LogsService {
   private log = (content: LogEntryContent, fromVillage = false): void => {
     const id = generateId();
     const timestamp = new Timestamp({ totalSeconds: Math.round(Date.now() / 1000) });
-    const village = fromVillage ? accountContext.villageService.currentVillage() : null;
+    const village = fromVillage ? getAccountContext().villageService.currentVillage() : null;
 
     this.addEntry(new LogEntry({
       content,

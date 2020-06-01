@@ -4,7 +4,7 @@ import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdven
 import { AdventureCriteria } from '../../../../_shared/types/adventureCriteria';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { TaskType } from '../../../../_shared/types/taskType';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { gameInfoService } from '../../../services/info/gameInfoService';
 import {
@@ -20,24 +20,24 @@ import {
 export class AutoAdventureTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoAdventure;
 
-  private settings = (): AutoAdventureSettings => accountContext.settingsService.hero.autoAdventure.get();
+  private settings = (): AutoAdventureSettings => getAccountContext().settingsService.hero.autoAdventure.get();
 
   public allowExecution = (): boolean => {
     const settings = this.settings();
-    const { hero } = accountContext;
+    const { hero } = getAccountContext();
 
-    const { currentVillageId } = accountContext.villageService;
+    const { currentVillageId } = getAccountContext().villageService;
     return settings.allow && settings.preferredVillageId === currentVillageId && settings.preferredVillageId === hero.villageId;
   };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
-    const village = accountContext.villageService.currentVillage();
+    const village = getAccountContext().villageService.currentVillage();
     const settings = this.settings();
 
     const { spots } = village.buildings;
-    const { hero } = accountContext;
+    const { hero } = getAccountContext();
 
     if (!spots.isBuilt(BuildingType.RallyPoint)
     || !hero.canGoToAdventure()) {
@@ -140,7 +140,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
       throw new Error('Link element for selected adventure was not found');
     }
 
-    accountContext.logsService.logText('Sending hero to adventure');
+    getAccountContext().logsService.logText('Sending hero to adventure');
 
     await Promise.all([
       sendLinkElement.click(),

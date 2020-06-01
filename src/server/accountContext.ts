@@ -95,5 +95,14 @@ class AccountContextMock extends AccountContext {
   }
 }
 
-export const accountContext = new AccountContext();
-// export const accountContext = new AccountContextMock();
+let _accountContext: AccountContext | null = null;
+
+export const getAccountContext = (): AccountContext => {
+  if (!_accountContext) {
+    _accountContext = new AccountContext();
+  }
+
+  return _accountContext;
+};
+
+// export const accountContext = new AccountContext();

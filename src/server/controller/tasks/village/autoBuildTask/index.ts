@@ -10,7 +10,7 @@ import { Village } from '../../../../_models/village/village';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { TaskType } from '../../../../../_shared/types/taskType';
 import { Tribe } from '../../../../../_shared/types/tribe';
-import { accountContext } from '../../../../accountContext';
+import { getAccountContext } from '../../../../accountContext';
 import { getPage } from '../../../../browser/getPage';
 import { fieldIds } from '../../../../constants/fieldIds';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
@@ -41,9 +41,9 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     this._buildings = village.buildings;
   }
 
-  private settings = (): AutoBuildSettings => accountContext.settingsService.village(this._village.id).autoBuild.get();
+  private settings = (): AutoBuildSettings => getAccountContext().settingsService.village(this._village.id).autoBuild.get();
 
-  public allowExecution = (): boolean => accountContext.settingsService.general.get().autoBuild
+  public allowExecution = (): boolean => getAccountContext().settingsService.general.get().autoBuild
     && this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -61,7 +61,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const isRoman = accountContext.gameInfo.tribe === Tribe.Romans;
+    const isRoman = getAccountContext().gameInfo.tribe === Tribe.Romans;
 
     let finishedAt: Date | undefined;
     if (isRoman) {
@@ -117,7 +117,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     const warehouseCapacity = this._village.resources.capacity.warehouse;
     const granaryCapacity = this._village.resources.capacity.granary;
     const currentResources = this._village.resources.amount;
-    const heroResources = accountContext.hero.resources;
+    const heroResources = getAccountContext().hero.resources;
     const totalResources = settings.useHeroResources
       ? currentResources
         .add(heroResources)
@@ -148,7 +148,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         return;
       }
 
-      accountContext.logsService.logText('Not enough free crop. Building crop land next', true);
+      getAccountContext().logsService.logText('Not enough free crop. Building crop land next', true);
 
       const lowestLevelCropLand = this._buildings.spots.buildings()
         .filter(b => b.type === BuildingType.Crop)
@@ -189,7 +189,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   };
 
   private startBuilding = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
-    accountContext.logsService.logAutoBuild(queuedBuilding);
+    getAccountContext().logsService.logAutoBuild(queuedBuilding);
 
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);

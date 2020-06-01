@@ -1,5 +1,5 @@
 import { Village } from '../../_models/village/village';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import {
   BotTask,
   BotTaskBase,
@@ -22,9 +22,9 @@ export class VillageBotTasksEngine {
       if (isTaskWithCooldown(task)) {
         return new BotTaskEngineWithCoolDown(
           task,
-          () => accountContext.nextExecutionService.getForVillage(village.id, task.type),
+          () => getAccountContext().nextExecutionService.getForVillage(village.id, task.type),
           nextExecution => {
-            accountContext.nextExecutionService.setForVillage(village.id, task.type, nextExecution);
+            getAccountContext().nextExecutionService.setForVillage(village.id, task.type, nextExecution);
           },
         );
       }

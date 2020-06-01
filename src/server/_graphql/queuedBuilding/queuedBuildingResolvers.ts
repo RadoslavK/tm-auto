@@ -6,7 +6,7 @@ import {
   QueuedBuilding,
 } from '../../_types/graphql.type';
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 import {
@@ -18,7 +18,7 @@ import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
 const createBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueueModel) => BuildingQueue => {
   const mbLevels = queueService.getMainBuildingLevels();
-  const { speed } = accountContext.gameInfo;
+  const { speed } = getAccountContext().gameInfo;
   let totalCost = new CostModel();
 
   return (queue: BuildingQueueModel): BuildingQueue => {
@@ -52,7 +52,7 @@ const createBuildingQueueFactory = (queueService: BuildingQueueService): (queue:
 };
 
 const getBuildingQueue = (villageId: number) => {
-  const village = accountContext.villageService.village(villageId);
+  const village = getAccountContext().villageService.village(villageId);
   const { queue } = village.buildings;
   const queueService = new BuildingQueueService(villageId);
   const createBuildingQueue = createBuildingQueueFactory(queueService);

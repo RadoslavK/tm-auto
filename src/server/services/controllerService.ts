@@ -6,7 +6,7 @@ import { Duration } from '../_models/duration';
 import { BotState } from '../../_shared/types/botState';
 import {
   AccountContext,
-  accountContext,
+  getAccountContext,
 } from '../accountContext';
 import {
   getPage,
@@ -48,7 +48,7 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
     await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
 
-    accountContext.logsService.logError(error.message);
+    getAccountContext().logsService.logError(error.message);
   } catch (screenshotError) {
     console.error(screenshotError.stack);
   }
@@ -87,7 +87,7 @@ class ControllerService {
       this.setState(BotState.Pending);
 
       await accountService.setCurrentAccountId(accountId);
-      Object.assign(accountContext, new AccountContext());
+      Object.assign(getAccountContext, new AccountContext());
 
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();
@@ -95,7 +95,7 @@ class ControllerService {
       await initPlayerInfo();
       await updateHeroInformation();
 
-      const allVillages = accountContext.villageService.allVillages();
+      const allVillages = getAccountContext().villageService.allVillages();
 
       for (const village of shuffle(allVillages)) {
         await new BuildingQueueService(village.id).loadQueue();
@@ -117,7 +117,7 @@ class ControllerService {
       return;
     }
 
-    const generalSettings = accountContext.settingsService.general.get();
+    const generalSettings = getAccountContext().settingsService.general.get();
 
     if (generalSettings.autoStart) {
       await this.start();
@@ -162,7 +162,7 @@ class ControllerService {
 
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
-    accountContext.nextExecutionService.setTasks(nextExecution);
+    getAccountContext().nextExecutionService.setTasks(nextExecution);
 
     this._timeout = setTimeout(async () => {
       await this.execute();

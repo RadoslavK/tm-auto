@@ -3,7 +3,7 @@ import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySett
 import { Village } from '../../../_models/village/village';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { TaskType } from '../../../../_shared/types/taskType';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
 import { partyInfoService } from '../../../services/info/partyInfoService';
@@ -22,9 +22,9 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     this._village = village;
   }
 
-  private settings = (): AutoPartySettings => accountContext.settingsService.village(this._village.id).autoParty.get();
+  private settings = (): AutoPartySettings => getAccountContext().settingsService.village(this._village.id).autoParty.get();
 
-  public allowExecution = (): boolean => accountContext.settingsService.general.get().autoParty
+  public allowExecution = (): boolean => getAccountContext().settingsService.general.get().autoParty
     && this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -70,7 +70,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
 
     const nextCoolDown = CoolDown.fromDuration(partyDuration);
 
-    accountContext.logsService.logText(`Throwing ${partyType} parties`, true);
+    getAccountContext().logsService.logText(`Throwing ${partyType} parties`, true);
 
     return {
       nextCoolDown,

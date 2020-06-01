@@ -1,5 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress';
 import {
   parseFieldSpots,
@@ -13,7 +13,7 @@ import { ensurePage } from '../ensurePage';
 export const updateBuildings = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
-  const village = accountContext.villageService.currentVillage();
+  const village = getAccountContext().villageService.currentVillage();
   const fieldSpots = gameInfoService.hasNewUI
     ? await parseFieldSpotsNew()
     : await parseFieldSpots();

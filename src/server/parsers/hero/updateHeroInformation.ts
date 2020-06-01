@@ -1,5 +1,5 @@
 import { HeroState } from '../../../_shared/types/heroState';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { BotEvent } from '../../events/botEvent';
 import { publishEvent } from '../../pubSub';
@@ -151,7 +151,7 @@ const parseHeroVillageIdNew = async (): Promise<number> => {
 };
 
 export const updateHeroInformation = async (): Promise<void> => {
-  const { hero } = accountContext;
+  const { hero } = getAccountContext();
 
   hero.villageId = gameInfoService.hasNewUI
     ? await parseHeroVillageIdNew()

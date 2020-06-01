@@ -1,5 +1,5 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { publishPayloadEvent } from '../../pubSub';
 import { ActualBuilding } from './actual/actualBuilding';
@@ -20,7 +20,7 @@ export class Buildings {
       spot.type = b.type;
     });
 
-    const { id } = accountContext.villageService.currentVillage();
+    const { id } = getAccountContext().villageService.currentVillage();
 
     publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: id });
   };
@@ -41,7 +41,7 @@ export class Buildings {
 
     this.ongoing.set(buildingsInProgress);
 
-    const { id } = accountContext.villageService.currentVillage();
+    const { id } = getAccountContext().villageService.currentVillage();
 
     publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: id });
   };
@@ -65,7 +65,7 @@ export class Buildings {
         }
       });
 
-    const { id } = accountContext.villageService.currentVillage();
+    const { id } = getAccountContext().villageService.currentVillage();
 
     publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: id });
   };

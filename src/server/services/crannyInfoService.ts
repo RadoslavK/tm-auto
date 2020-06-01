@@ -1,5 +1,5 @@
 import { Tribe } from '../../_shared/types/tribe';
-import { accountContext } from '../accountContext';
+import { getAccountContext } from '../accountContext';
 
 const capacities: Record<number, number> = {
   1: 200,
@@ -20,7 +20,7 @@ class CrannyInfoService {
       return 0;
     }
 
-    const { tribe } = accountContext.gameInfo;
+    const { tribe } = getAccountContext().gameInfo;
 
     const multiplier = tribe === Tribe.Gauls
       ? 1.5

@@ -1,17 +1,17 @@
 import { VillageCrannyCapacity } from '../../_models/village/villageCrannyCapacity';
 import { Resolvers } from '../../_types/resolvers.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 import { crannyInfoService } from '../../services/crannyInfoService';
 
 export default <Resolvers>{
   Query: {
-    activeVillageId: () => accountContext.villageService.currentVillageId,
+    activeVillageId: () => getAccountContext().villageService.currentVillageId,
 
     crannyCapacity: (_, args) => {
-      const crannies = accountContext.villageService.village(args.villageId).buildings.spots.buildings().filter(s => s.type === BuildingType.Cranny);
+      const crannies = getAccountContext().villageService.village(args.villageId).buildings.spots.buildings().filter(s => s.type === BuildingType.Cranny);
 
       const emptyCapacity = new VillageCrannyCapacity();
 
@@ -36,9 +36,9 @@ export default <Resolvers>{
         );
     },
 
-    village: (_, args) => accountContext.villageService.village(args.villageId),
+    village: (_, args) => getAccountContext().villageService.village(args.villageId),
 
-    villages: () => accountContext.villageService.allVillages(),
+    villages: () => getAccountContext().villageService.allVillages(),
   },
 
   Subscription: {

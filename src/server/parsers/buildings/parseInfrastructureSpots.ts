@@ -2,7 +2,7 @@ import { TravianPath } from '../../_enums/travianPath';
 import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { fieldIds } from '../../constants/fieldIds';
 import { isInfrastructure } from '../../utils/buildingUtils';
@@ -13,7 +13,7 @@ const acceptedUrls: readonly string[] = [
 ];
 
 const getWallType = (): BuildingType => {
-  const { tribe } = accountContext.gameInfo;
+  const { tribe } = getAccountContext().gameInfo;
 
   switch (tribe) {
     case Tribe.Egyptians:

@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 
-const getService = (villageId: number) => accountContext.settingsService.village(villageId).autoParty;
+const getService = (villageId: number) => getAccountContext().settingsService.village(villageId).autoParty;
 
 export default <Resolvers> {
   Query: {

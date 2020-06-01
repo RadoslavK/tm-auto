@@ -4,7 +4,7 @@ import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { TaskType } from '../../../../_shared/types/taskType';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { unitInfoService } from '../../../services/info/unitInfoService';
@@ -32,10 +32,10 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     this._units = village.units;
   }
 
-  private settings = (): AutoUnitsSettings => accountContext.settingsService.village(this._village.id).autoUnits.get();
+  private settings = (): AutoUnitsSettings => getAccountContext().settingsService.village(this._village.id).autoUnits.get();
 
   public allowExecution = (): boolean =>
-    accountContext.settingsService.general.get().autoUnits
+    getAccountContext().settingsService.general.get().autoUnits
     && this.settings().allow
     && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(x => this.allowForBuilding(x));
 
@@ -145,7 +145,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
         return;
       }
 
-      const { speed } = accountContext.gameInfo;
+      const { speed } = getAccountContext().gameInfo;
       const buildTime = getActualUnitBuildTime(originalBuildTime, speed, unitBuilding.level.actual);
 
       // by queue time
@@ -170,12 +170,12 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     const page = await getPage();
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {
-      accountContext.logsService.logAutoUnits({
+      getAccountContext().logsService.logAutoUnits({
         amount,
         index: +uIndex,
       });
 
-      const { tribe } = accountContext.gameInfo;
+      const { tribe } = getAccountContext().gameInfo;
       const inputUnitIndex = +uIndex - (10 * (tribe - 1));
       const input = await page.$(`[name=t${inputUnitIndex}]`);
 

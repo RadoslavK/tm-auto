@@ -120,7 +120,9 @@ class AccountService {
   public lastSignedAccountId = (): string | null => this.getAccountsData().lastSignedAccountId;
 
   private getAccountsData = (): AccountsData => {
-    this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
+    if (!this.accountsData) {
+      this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
+    }
 
     return this.accountsData;
   };

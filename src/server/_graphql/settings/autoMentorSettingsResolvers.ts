@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 
-const getService = () => accountContext.settingsService.autoMentor;
+const getService = () => getAccountContext().settingsService.autoMentor;
 
 export default <Resolvers> {
   Query: {

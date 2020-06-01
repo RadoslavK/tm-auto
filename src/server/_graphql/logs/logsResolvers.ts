@@ -2,7 +2,7 @@ import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits';
 import { TextLogEntryContent } from '../../_models/logs/content/text';
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 
@@ -31,7 +31,7 @@ export default <Resolvers>{
   },
 
   Query: {
-    logsEntries: () => accountContext.logsService.logEntries(),
+    logsEntries: () => getAccountContext().logsService.logEntries(),
   },
 
   Subscription: {

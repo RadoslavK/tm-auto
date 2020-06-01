@@ -3,7 +3,7 @@ import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { BuildingSpot } from '../_models/buildings/spots/buildingSpot';
 import { Village } from '../_models/village/village';
 import { BuildingType } from '../../_shared/types/buildingType';
-import { accountContext } from '../accountContext';
+import { getAccountContext } from '../accountContext';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -29,7 +29,7 @@ export class BuildingQueueService {
   private readonly _filePath: string;
 
   constructor(villageId: number) {
-    this._village = accountContext.villageService.village(villageId);
+    this._village = getAccountContext().villageService.village(villageId);
     this._filePath = dataPathService.villagePath(villageId).queue;
   }
 
@@ -336,9 +336,9 @@ export class BuildingQueueService {
 
   private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
-      && accountContext.villageService.allVillages().some(otherVillage =>
+      && getAccountContext().villageService.allVillages().some(otherVillage =>
         otherVillage.id !== this._village.id
-        && accountContext.villageService.village(otherVillage.id).buildings.spots.buildings().some(b => b.type === BuildingType.Palace))) {
+        && getAccountContext().villageService.village(otherVillage.id).buildings.spots.buildings().some(b => b.type === BuildingType.Palace))) {
       // iba 1 palac
       return true;
     }

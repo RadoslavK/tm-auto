@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { accountService } from '../../services/accountService';
 import { ensurePage } from './ensurePage';
@@ -21,7 +21,7 @@ export const ensureLoggedIn = async (): Promise<void> => {
     return;
   }
 
-  accountContext.logsService.logText(`Logging in as ${account.username}`);
+  getAccountContext().logsService.logText(`Logging in as ${account.username}`);
 
   await page.waitForSelector('form[name=login] button[type=submit]');
 
@@ -29,5 +29,5 @@ export const ensureLoggedIn = async (): Promise<void> => {
   await page.type('form[name=login] input[name=password]', account.password);
   await page.click('form[name=login] button[type=submit]');
 
-  accountContext.logsService.logText('Logged in.');
+  getAccountContext().logsService.logText('Logged in.');
 };

@@ -1,5 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { parseAllyId } from '../../../parsers/player/parseAllyId';
 import { parseCapitalVillageCoords } from '../../../parsers/player/parseCapitalVillageCoords';
 import { BuildingQueueService } from '../../../services/buildingQueueService';
@@ -9,12 +9,12 @@ export const updatePlayerInfo = async (): Promise<void> => {
   await ensurePage(TravianPath.PlayerProfile);
 
   const capitalCoords = await parseCapitalVillageCoords();
-  const { capitalChanged } = accountContext.villageService.setCapital(capitalCoords);
+  const { capitalChanged } = getAccountContext().villageService.setCapital(capitalCoords);
 
-  accountContext.gameInfo.allyId = await parseAllyId();
+  getAccountContext().gameInfo.allyId = await parseAllyId();
 
   if (capitalChanged) {
-    const { currentVillageId } = accountContext.villageService;
+    const { currentVillageId } = getAccountContext().villageService;
     new BuildingQueueService(currentVillageId).correctBuildingQueue();
   }
 };

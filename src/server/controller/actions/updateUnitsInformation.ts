@@ -2,7 +2,7 @@ import { ElementHandle } from 'puppeteer';
 
 import { Coords } from '../../_models/coords';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { parseNumber } from '../../utils/numberUtils';
 import { ensureBuildingSpotPage } from './ensurePage';
@@ -73,7 +73,7 @@ const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<UnitAmoun
 };
 
 export const updateUnitsInformation = async (): Promise<void> => {
-  const village = accountContext.villageService.currentVillage();
+  const village = getAccountContext().villageService.currentVillage();
 
   const rallyPoint = village.buildings.spots.ofType(BuildingType.RallyPoint);
 
@@ -102,7 +102,7 @@ export const updateUnitsInformation = async (): Promise<void> => {
       continue;
     }
 
-    const originVillage = accountContext.villageService.villageByCoords(new Coords({ x: originX, y: originY }));
+    const originVillage = getAccountContext().villageService.villageByCoords(new Coords({ x: originX, y: originY }));
 
     if (!originVillage) {
       //  not from this account's village

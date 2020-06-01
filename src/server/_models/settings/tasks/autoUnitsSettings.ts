@@ -1,7 +1,7 @@
 import { mergeDefaults } from '../../../../_shared/merge';
 import { BuildingType } from '../../../../_shared/types/buildingType';
 import { PartialFields } from '../../../../_shared/types/fields.type';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { unitInfoService } from '../../../services/info/unitInfoService';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
@@ -36,7 +36,7 @@ const getUnitsOfType = (buildingType: BuildingType): AutoUnitsUnitSettings[] => 
     return units;
   }
 
-  const { tribe } = accountContext.gameInfo;
+  const { tribe } = getAccountContext().gameInfo;
 
   units = unitInfoService
     .getAllInfos()

@@ -1,5 +1,5 @@
 import { MentorTask } from '../../../_models/mentor/mentorTask';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 
 export const acceptTaskReward = async (task: MentorTask): Promise<void> => {
@@ -16,7 +16,7 @@ export const acceptTaskReward = async (task: MentorTask): Promise<void> => {
   const claimSelector = `button.green[questid=${task.id}]`;
   const claim = await page.waitForSelector(claimSelector);
 
-  accountContext.logsService.logText(`Accepting mentor task: ${task.id}`);
+  getAccountContext().logsService.logText(`Accepting mentor task: ${task.id}`);
 
   await Promise.all([
     claim.click(),

@@ -1,14 +1,14 @@
 import { AvailableNewBuilding } from '../../_types/graphql.type';
 import { Resolvers } from '../../_types/resolvers.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 
 const getBuildingSpots = (villageId: number) => {
-  const normalizedSpots = accountContext.villageService.village(villageId).buildings.spots.buildings();
+  const normalizedSpots = getAccountContext().villageService.village(villageId).buildings.spots.buildings();
 
   return {
     infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),

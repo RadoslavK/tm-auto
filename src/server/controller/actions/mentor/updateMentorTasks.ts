@@ -1,5 +1,5 @@
 import { MentorTask } from '../../../_models/mentor/mentorTask';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 
 export const updateMentorTasks = async (): Promise<void> => {
@@ -7,7 +7,7 @@ export const updateMentorTasks = async (): Promise<void> => {
 
   const taskNodes = await page.$$('#mentorTaskList li.quest');
 
-  accountContext.mentorTasks = await Promise.all(taskNodes.map(async (taskNode) => {
+  getAccountContext().mentorTasks = await Promise.all(taskNodes.map(async (taskNode) => {
     const id = await page.evaluate((node: Element) => node.getAttribute('data-questid'), taskNode);
 
     if (!id) {

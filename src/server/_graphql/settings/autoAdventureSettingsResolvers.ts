@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 
-const getService = () => accountContext.settingsService.hero.autoAdventure;
+const getService = () => getAccountContext().settingsService.hero.autoAdventure;
 
 export default <Resolvers> {
   Query: {

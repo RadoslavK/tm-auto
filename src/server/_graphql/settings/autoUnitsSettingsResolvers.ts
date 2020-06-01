@@ -1,9 +1,9 @@
 import { Resolvers } from '../../_types/resolvers.type';
 import { mergeDefaults } from '../../../_shared/merge';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { unitInfoService } from '../../services/info/unitInfoService';
 
-const getService = (villageId: number) => accountContext.settingsService.village(villageId).autoUnits;
+const getService = (villageId: number) => getAccountContext().settingsService.village(villageId).autoUnits;
 
 export default <Resolvers> {
   Query: {

@@ -1,13 +1,13 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 
 export default <Resolvers>{
   Query: {
-    generalSettings: () => accountContext.settingsService.general.get(),
+    generalSettings: () => getAccountContext().settingsService.general.get(),
   },
 
   Mutation: {
-    updateGeneralSettings: (_, args) => accountContext.settingsService.general.merge(args.settings),
-    resetGeneralSettings: () => accountContext.settingsService.general.reset(),
+    updateGeneralSettings: (_, args) => getAccountContext().settingsService.general.merge(args.settings),
+    resetGeneralSettings: () => getAccountContext().settingsService.general.reset(),
   },
 };

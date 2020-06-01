@@ -6,7 +6,7 @@ import { Village } from '../_models/village/village';
 import { getAllEnumValues } from '../../_shared/enumUtils';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { Tribe } from '../../_shared/types/tribe';
-import { accountContext } from '../accountContext';
+import { getAccountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
 import { buildingInfoService } from './info/buildingInfoService';
 
@@ -14,11 +14,11 @@ export class AvailableBuildingTypesService {
   private readonly _village: Village;
 
   constructor(villageId: number) {
-    this._village = accountContext.villageService.village(villageId);
+    this._village = getAccountContext().villageService.village(villageId);
   }
 
   public availableBuildingTypes = (fieldId: number): readonly BuildingType[] => {
-    const { tribe } = accountContext.gameInfo;
+    const { tribe } = getAccountContext().gameInfo;
 
     const buildingTypes: BuildingType[] = [];
 
@@ -133,7 +133,7 @@ export class AvailableBuildingTypesService {
     }
 
     if (conditions.playerTribe !== null
-      && conditions.playerTribe !== accountContext.gameInfo.tribe) {
+      && conditions.playerTribe !== getAccountContext().gameInfo.tribe) {
       return false;
     }
 

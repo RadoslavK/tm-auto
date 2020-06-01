@@ -1,5 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath';
-import { accountContext } from '../../../accountContext';
+import { getAccountContext } from '../../../accountContext';
 import { parseVillageCapacity } from '../../../parsers/villages/parseVillageCapacity';
 import { parseVillageProduction } from '../../../parsers/villages/parseVillageProduction';
 import { parseVillageResources } from '../../../parsers/villages/parseVillageResources';
@@ -8,7 +8,7 @@ import { ensurePage } from '../ensurePage';
 export const updateResources = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
-  const village = accountContext.villageService.currentVillage();
+  const village = getAccountContext().villageService.currentVillage();
   const resources = await parseVillageResources();
   const capacity = await parseVillageCapacity();
   const production = await parseVillageProduction();
@@ -19,6 +19,6 @@ export const updateResources = async (): Promise<void> => {
 };
 
 export const updateActualResources = async (): Promise<void> => {
-  const village = accountContext.villageService.currentVillage();
+  const village = getAccountContext().villageService.currentVillage();
   village.resources.amount = await parseVillageResources();
 };

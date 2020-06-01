@@ -1,5 +1,5 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { accountContext } from '../../accountContext';
+import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
@@ -13,13 +13,13 @@ export default <Resolvers> {
   },
 
   Query: {
-    buildingsInProgress: (_, args) => accountContext.villageService.village(args.villageId).buildings.ongoing.buildings(),
+    buildingsInProgress: (_, args) => getAccountContext().villageService.village(args.villageId).buildings.ongoing.buildings(),
   },
 
   Subscription: {
     buildingsInProgressUpdated: subscribeToEvent(BotEvent.BuildingsInProgressUpdated, {
       filter: (payload, args) => payload.villageId === args.villageId,
-      resolve: p => accountContext.villageService.village(p.villageId).buildings.ongoing.buildings(),
+      resolve: p => getAccountContext().villageService.village(p.villageId).buildings.ongoing.buildings(),
     }),
   },
 };
