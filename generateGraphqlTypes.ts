@@ -117,6 +117,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
   let output = outputs[0].content;
 
   //  TODO: delete duplicate fragments workaround
+  //  https://github.com/dotansimha/graphql-code-generator/issues/4143
   const fragments: string[] = [];
 
   output = output

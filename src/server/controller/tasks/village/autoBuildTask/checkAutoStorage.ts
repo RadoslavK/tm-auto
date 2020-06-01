@@ -114,7 +114,6 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
 
       buildingsToBuild.push(queuedBuilding);
     } else {
-      // TODO do we want to allow only if there is none maxed already?
       if (!settings.allowFreeSpots) {
         continue;
       }

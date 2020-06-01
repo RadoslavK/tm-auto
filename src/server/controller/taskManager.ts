@@ -65,10 +65,7 @@ export class TaskManager {
     await ensurePage(randomElement(getAllEnumValues(TravianPath)));
     await updateNewOldVillages();
     await updateHeroInformation();
-    //  TODO: can have some cd too
     await updateHeroResources();
-    //  TODO: maybe add cooldown on this, stuff like that should not change when
-    // bot is running anywa and it triggers going to profile page all the time
     await updatePlayerInfo();
 
     for (const task of this._generalTasks) {

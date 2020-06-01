@@ -14,7 +14,6 @@ type Props = {
 };
 
 export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
-  // TODO: rename selected village or smth
   const { villageId } = useVillageContext();
 
   const {

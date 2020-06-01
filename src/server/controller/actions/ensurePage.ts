@@ -126,14 +126,18 @@ export type TabInformation = {
 };
 
 export const ensureBuildingSpotPage = async (fieldId: number, tab?: TabInformation): Promise<void> => {
-  //  TODO: spravit to efektivnejsie a celkovo ensure navigaciu. ked uz je na tej budove tak sa nemusi davat na resource fieldy atd
-  if (isResourceField(fieldId)) {
-    await ensurePage(TravianPath.ResourceFieldsOverview);
-  } else if (isInfrastructure(fieldId)) {
-    await ensurePage(TravianPath.InfrastructureOverview);
-  }
+  const page = await getPage();
+  const spotPath = getBuildingSpotPath(fieldId);
 
-  await ensurePage(getBuildingSpotPath(fieldId), true);
+  if (spotPath !== page.url()) {
+    if (isResourceField(fieldId)) {
+      await ensurePage(TravianPath.ResourceFieldsOverview);
+    } else if (isInfrastructure(fieldId)) {
+      await ensurePage(TravianPath.InfrastructureOverview);
+    }
+
+    await ensurePage(spotPath, true);
+  }
 
   if (tab === undefined) {
     return;

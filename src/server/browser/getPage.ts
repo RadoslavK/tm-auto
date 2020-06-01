@@ -7,6 +7,7 @@ import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
 const stealth = pluginStealth();
 // TODO: workaround as typings changed in the original puppeteer or puppeteer extra but on this plugin
+// https://github.com/berstend/puppeteer-extra/issues/211
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 stealth.onBrowser = () => {};
@@ -27,7 +28,6 @@ const initializePage = async (b: Browser): Promise<Page> => {
   const lPage = await b.newPage();
 
   lPage.on('console', consoleMessageObject => {
-    //  TODO what can we log from here
     if (consoleMessageObject.type() !== 'warning') {
       console.debug(consoleMessageObject.text());
     }

@@ -25,7 +25,6 @@ export class AccountContext {
   public mentorTasks: readonly MentorTask[] = [];
 }
 
-// TODO: make better mocking
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars

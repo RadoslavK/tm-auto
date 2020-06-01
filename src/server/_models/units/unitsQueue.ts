@@ -1,4 +1,3 @@
-// todo rewrite to service
 import { Duration } from '../duration';
 
 export class UnitsQueue {

@@ -17,7 +17,6 @@ export class InternalSettingsService<TSettings> {
     return this.settings;
   };
 
-  // TODO check if needed
   public update = (settings: TSettings): void => {
     this.settings = settings;
 

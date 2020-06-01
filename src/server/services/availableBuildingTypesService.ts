@@ -127,7 +127,6 @@ export class AvailableBuildingTypesService {
   };
 
   private newBuildingMeetsConditions = (type: BuildingType, conditions: BuildingConditions): boolean => {
-    // TODO detect if artefacts are in village
     if (type === BuildingType.GreatGranary
       || type === BuildingType.GreatWarehouse) {
       return false;

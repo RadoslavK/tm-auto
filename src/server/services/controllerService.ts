@@ -4,7 +4,10 @@ import { TimeoutError } from 'puppeteer/Errors';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
 import { BotState } from '../../_shared/types/botState';
-import { AccountContext, accountContext } from '../accountContext';
+import {
+  AccountContext,
+  accountContext,
+} from '../accountContext';
 import {
   getPage,
   killBrowser,
@@ -29,7 +32,6 @@ type HandleErrorResult = {
   readonly allowContinue: boolean;
 };
 
-// TODO add error state in client and also log
 const handleError = async (error: Error): Promise<HandleErrorResult> => {
   console.error(error.stack);
   // try to make screenshot
@@ -53,9 +55,6 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
 
   await killBrowser();
 
-  // TODO: allow continue if the error was cause by puppeteer timeout? internal errors should always throw
-  // and puppeteer errors that didnt find dom elements are probably valid too cause mark up could changed and we
-  // dont reflect changes
   return { allowContinue: error instanceof TimeoutError };
 };
 
@@ -113,7 +112,6 @@ class ControllerService {
     }
 
     if (!allowContinue) {
-      //  todo: show some message that bot did not even signed in
       this.signOut();
 
       return;
@@ -185,7 +183,6 @@ class ControllerService {
   };
 }
 
-// TODO: make better mocking
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars

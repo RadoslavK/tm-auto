@@ -87,7 +87,6 @@ const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
   };
 };
 
-// TODO: refactor this lol
 const getSettingsFromState = (state: Settings): UpdateAutoBuildSettingsInput => {
   const {
     allowAutoGranary,

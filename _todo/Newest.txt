@@ -22,3 +22,11 @@ graphql errors logovat do suboru
 restart server from main when it crashes
 
 use optimistic update -> cache rewrite na clientovi
+
+refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
+
+dynamically update village name
+
+add cooldown to some basic non task related stuff like checking profile of player and updating hero resources
+
+if bot fails to sign in then show error message in UI

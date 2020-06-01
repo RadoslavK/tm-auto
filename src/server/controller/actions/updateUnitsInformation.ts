@@ -7,10 +7,6 @@ import { getPage } from '../../browser/getPage';
 import { parseNumber } from '../../utils/numberUtils';
 import { ensureBuildingSpotPage } from './ensurePage';
 
-//  TODO add support of dorf3
-
-//  TODO finish and check with various unit movements.. raid,support, coming back, trapped etc
-
 enum MovementType {
   Attack = 'Attack',
   InVillage = 'InVillage',

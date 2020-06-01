@@ -40,7 +40,6 @@ module.exports = {
     '@typescript-eslint',
     'tm-auto',
     'sort-destructure-keys',
-    // TODO add prettier
   ],
   rules: {
     '@typescript-eslint/camelcase': 'off',

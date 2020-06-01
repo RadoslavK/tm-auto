@@ -1,7 +1,6 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { UnitsQueue } from './unitsQueue';
 
-// TODO rewrite to service
 export class Units {
   private _counts: Map<number, number> = new Map();
 

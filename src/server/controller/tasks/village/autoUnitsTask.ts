@@ -120,7 +120,6 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
       //  max by count
       if (!unitToBuild.trainForever) {
-        // TODO if no unitCounts then check rally point
         const totalAmount = unitQueue.getQueuedCount(uIndex) + this._units.getCount(uIndex);
 
         maxPossibleAmountToBuild = Math.min(

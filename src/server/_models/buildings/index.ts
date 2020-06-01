@@ -20,7 +20,6 @@ export class Buildings {
       spot.type = b.type;
     });
 
-    // todo refactor to service behavior
     const { id } = accountContext.villageService.currentVillage();
 
     publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: id });
@@ -41,8 +40,6 @@ export class Buildings {
       });
 
     this.ongoing.set(buildingsInProgress);
-
-    // TODO, refactor into service so only a service publishes payloads
 
     const { id } = accountContext.villageService.currentVillage();
 

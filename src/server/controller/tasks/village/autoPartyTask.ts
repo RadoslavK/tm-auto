@@ -45,7 +45,6 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       return;
     }
 
-    //  TODO, ensure bere cely spot
     await ensureBuildingSpotPage(townHall.fieldId);
     const page = await getPage();
     const content = await page.content();

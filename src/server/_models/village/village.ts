@@ -10,7 +10,6 @@ export class Village {
   public readonly coords: Coords = new Coords();
   public readonly id: number = 0;
   public isCapital: boolean = false;
-  // TODO dynamically update
   public name: string = '';
   public readonly units: Units = new Units();
   public readonly resources: VillageResources = new VillageResources();

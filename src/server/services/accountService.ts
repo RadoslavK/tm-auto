@@ -117,9 +117,7 @@ class AccountService {
     return this.saveAccounts();
   };
 
-  public lastSignedAccountId = (): string | null => {
-    return this.getAccountsData().lastSignedAccountId;
-  };
+  public lastSignedAccountId = (): string | null => this.getAccountsData().lastSignedAccountId;
 
   private getAccountsData = (): AccountsData => {
     this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
