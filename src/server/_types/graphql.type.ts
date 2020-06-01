@@ -375,7 +375,7 @@ export type AvailableNewBuilding = {
 export type Subscription = {
   readonly __typename?: 'Subscription';
   readonly activeVillageIdChanged: Scalars['Int'];
-  readonly buildingSpotsUpdated: BuildingSpots;
+  readonly actualBuildingLevelsUpdate: Scalars['Boolean'];
   readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgress>;
   readonly heroInformationUpdated: HeroModel;
   readonly nextTaskExecutionChanged: Timestamp;
@@ -389,7 +389,7 @@ export type Subscription = {
 };
 
 
-export type SubscriptionBuildingSpotsUpdatedArgs = {
+export type SubscriptionActualBuildingLevelsUpdateArgs = {
   villageId: Scalars['Int'];
 };
 
@@ -1151,7 +1151,7 @@ export type AvailableNewBuildingResolvers<ContextType = any, ParentType extends 
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   activeVillageIdChanged: SubscriptionResolver<ResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>;
-  buildingSpotsUpdated: SubscriptionResolver<ResolversTypes['BuildingSpots'], "buildingSpotsUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingSpotsUpdatedArgs, 'villageId'>>;
+  actualBuildingLevelsUpdate: SubscriptionResolver<ResolversTypes['Boolean'], "actualBuildingLevelsUpdate", ParentType, ContextType, RequireFields<SubscriptionActualBuildingLevelsUpdateArgs, 'villageId'>>;
   buildingsInProgressUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, "buildingsInProgressUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingsInProgressUpdatedArgs, 'villageId'>>;
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;

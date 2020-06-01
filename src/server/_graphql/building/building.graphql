@@ -42,5 +42,5 @@ extend type Query {
 }
 
 extend type Subscription {
-    buildingSpotsUpdated(villageId: Int!): BuildingSpots!
+    actualBuildingLevelsUpdate(villageId: Int!): Boolean!
 }

@@ -2,7 +2,7 @@ export enum BotEvent {
   ActiveVillageIdChanged = 'ActiveVillageIdChanged',
   BotRunningChanged = 'BotRunningChanged',
   BuildingsInProgressUpdated = 'BuildingsInProgressUpdated',
-  BuildingSpotsUpdated = 'BuildingSpotsUpdated',
+  ActualBuildingLevelsUpdated = 'ActualBuildingLevelsUpdated',
   CrannyCapacityUpdated = 'CrannyCapacityUpdated',
   HeroInformationUpdated = 'HeroInformationUpdated',
   LogEntryAdded = 'LogEntryAdded',

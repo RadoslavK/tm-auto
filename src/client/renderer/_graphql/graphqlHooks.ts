@@ -360,7 +360,7 @@ export type AvailableNewBuilding = {
 
 export type Subscription = {
   readonly activeVillageIdChanged: Scalars['Int'];
-  readonly buildingSpotsUpdated: BuildingSpots;
+  readonly actualBuildingLevelsUpdate: Scalars['Boolean'];
   readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgress>;
   readonly heroInformationUpdated: HeroInformation;
   readonly nextTaskExecutionChanged: Timestamp;
@@ -374,7 +374,7 @@ export type Subscription = {
 };
 
 
-export type SubscriptionBuildingSpotsUpdatedArgs = {
+export type SubscriptionActualBuildingLevelsUpdateArgs = {
   villageId: Scalars['Int'];
 };
 
@@ -842,12 +842,12 @@ export type GetMaxBuildingLevelQueryVariables = {
 
 export type GetMaxBuildingLevelQuery = Pick<Query, 'maxBuildingLevel'>;
 
-export type BuildingSpotsUpdatedSubscriptionVariables = {
+export type ActualBuildingLevelsUpdateSubscriptionVariables = {
   villageId: Scalars['Int'];
 };
 
 
-export type BuildingSpotsUpdatedSubscription = { readonly buildingSpotsUpdated: BuildingSpotsFragment };
+export type ActualBuildingLevelsUpdateSubscription = Pick<Subscription, 'actualBuildingLevelsUpdate'>;
 
 export type BuildingInProgressFragment = (
   Pick<BuildingInProgress, 'level' | 'name' | 'type' | 'fieldId'>
@@ -1665,29 +1665,29 @@ export function useGetMaxBuildingLevelLazyQuery(baseOptions?: ApolloReactHooks.L
 export type GetMaxBuildingLevelQueryHookResult = ReturnType<typeof useGetMaxBuildingLevelQuery>;
 export type GetMaxBuildingLevelLazyQueryHookResult = ReturnType<typeof useGetMaxBuildingLevelLazyQuery>;
 export type GetMaxBuildingLevelQueryResult = ApolloReactCommon.QueryResult<GetMaxBuildingLevelQuery, GetMaxBuildingLevelQueryVariables>;
-export const BuildingSpotsUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"BuildingSpotsUpdated"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingSpotsUpdated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpots"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingSpot"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingSpot"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"actual"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"ongoing"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queued"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingSpots"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingSpots"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"infrastructure"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpot"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpot"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpot"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpot"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingSpot"},"directives":[]}]}}]}}]}}]};
+export const ActualBuildingLevelsUpdateDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"ActualBuildingLevelsUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"actualBuildingLevelsUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[]}]}}]};
 
 /**
- * __useBuildingSpotsUpdatedSubscription__
+ * __useActualBuildingLevelsUpdateSubscription__
  *
- * To run a query within a React component, call `useBuildingSpotsUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useBuildingSpotsUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useActualBuildingLevelsUpdateSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useActualBuildingLevelsUpdateSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useBuildingSpotsUpdatedSubscription({
+ * const { data, loading, error } = useActualBuildingLevelsUpdateSubscription({
  *   variables: {
  *      villageId: // value for 'villageId'
  *   },
  * });
  */
-export function useBuildingSpotsUpdatedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<BuildingSpotsUpdatedSubscription, BuildingSpotsUpdatedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<BuildingSpotsUpdatedSubscription, BuildingSpotsUpdatedSubscriptionVariables>(BuildingSpotsUpdatedDocument, baseOptions);
+export function useActualBuildingLevelsUpdateSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<ActualBuildingLevelsUpdateSubscription, ActualBuildingLevelsUpdateSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<ActualBuildingLevelsUpdateSubscription, ActualBuildingLevelsUpdateSubscriptionVariables>(ActualBuildingLevelsUpdateDocument, baseOptions);
       }
-export type BuildingSpotsUpdatedSubscriptionHookResult = ReturnType<typeof useBuildingSpotsUpdatedSubscription>;
-export type BuildingSpotsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<BuildingSpotsUpdatedSubscription>;
+export type ActualBuildingLevelsUpdateSubscriptionHookResult = ReturnType<typeof useActualBuildingLevelsUpdateSubscription>;
+export type ActualBuildingLevelsUpdateSubscriptionResult = ApolloReactCommon.SubscriptionResult<ActualBuildingLevelsUpdateSubscription>;
 export const GetBuildingsInProgressDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuildingsInProgress"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingsInProgress"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingInProgress"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingInProgress"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingInProgress"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"finishedAt"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Timestamp"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Timestamp"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Timestamp"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalSeconds"},"arguments":[],"directives":[]}]}}]};
 
 /**

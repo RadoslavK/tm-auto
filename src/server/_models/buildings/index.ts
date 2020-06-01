@@ -31,7 +31,7 @@ export class Buildings {
     // todo refactor to service behavior
     const { id } = accountContext.villageService.currentVillage();
 
-    publishPayloadEvent(BotEvent.BuildingSpotsUpdated, { villageId: id });
+    publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: id });
   };
 
   public updateOngoing = (buildingsInProgress: readonly BuildingInProgress[]): void => {

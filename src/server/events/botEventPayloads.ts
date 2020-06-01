@@ -5,7 +5,7 @@ import { TaskType } from '../../_shared/types/taskType';
 import { BotEvent } from './botEvent';
 
 export type BotEventPayloads = {
-  [BotEvent.BuildingSpotsUpdated]: {
+  [BotEvent.ActualBuildingLevelsUpdated]: {
     readonly villageId: number;
   },
 

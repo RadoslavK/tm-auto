@@ -42,9 +42,9 @@ export default <Resolvers>{
   },
 
   Subscription: {
-    buildingSpotsUpdated: subscribeToEvent(BotEvent.BuildingSpotsUpdated, {
+    actualBuildingLevelsUpdate: subscribeToEvent(BotEvent.ActualBuildingLevelsUpdated, {
       filter: (payload, variables) => payload.villageId === variables.villageId,
-      resolve: p => getBuildingSpots(p.villageId),
+      resolve: () => true,
     }),
   },
 };

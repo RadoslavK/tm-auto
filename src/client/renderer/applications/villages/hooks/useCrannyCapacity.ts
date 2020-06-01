@@ -5,8 +5,8 @@ import {
 
 import {
   CrannyCapacityQuery,
+  useActualBuildingLevelsUpdateSubscription,
   useBuildingsInProgressUpdatedSubscription,
-  useBuildingSpotsUpdatedSubscription,
   useCrannyCapacityQuery,
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
@@ -29,7 +29,7 @@ export const useCrannyCapacity = () => {
     queryResult.refetch();
   };
 
-  useBuildingSpotsUpdatedSubscription({
+  useActualBuildingLevelsUpdateSubscription({
     onSubscriptionData,
     variables: { villageId },
   });

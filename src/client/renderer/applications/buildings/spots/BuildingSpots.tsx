@@ -7,8 +7,10 @@ import React, {
 import {
   BuildingSpot as BuildingSpotModel,
   GetBuildingSpotsQuery,
-  useBuildingSpotsUpdatedSubscription,
+  useActualBuildingLevelsUpdateSubscription,
+  useBuildingsInProgressUpdatedSubscription,
   useGetBuildingSpotsQuery,
+  useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { BuildingSpot } from './BuildingSpot';
@@ -45,11 +47,21 @@ const useBuildingSpots = () => {
     }
   }, [queryResult]);
 
-  useBuildingSpotsUpdatedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        setBuildingSpots(data.buildingSpotsUpdated);
-      }
+  useActualBuildingLevelsUpdateSubscription({
+    onSubscriptionData: () => {
+      queryResult.refetch();
+    },
+    variables: { villageId },
+  });
+  useBuildingsInProgressUpdatedSubscription({
+    onSubscriptionData: () => {
+      queryResult.refetch();
+    },
+    variables: { villageId },
+  });
+  useOnQueueUpdatedSubscription({
+    onSubscriptionData: () => {
+      queryResult.refetch();
     },
     variables: { villageId },
   });
