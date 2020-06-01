@@ -24,29 +24,29 @@ const useAutoPartySettings = () => {
 
   const [settings, setSettings] = useState<AutoPartySettingsModel>();
 
-  const queryResult = useGetAutoPartySettingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetAutoPartySettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.autoPartySettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.autoPartySettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateResult] = useUpdateAutoPartySettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoPartySettingsMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      setSettings(updateResult.data.updateAutoPartySettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateAutoPartySettings);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetResult] = useResetAutoPartySettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoPartySettingsMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      setSettings(resetResult.data.resetAutoPartySettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetAutoPartySettings);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,

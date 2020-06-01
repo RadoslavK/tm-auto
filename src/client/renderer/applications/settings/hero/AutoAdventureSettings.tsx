@@ -44,29 +44,29 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
 const useAutoAdventureSettings = () => {
   const [settings, setSettings] = useState<AutoAdventureSettingsModel>();
 
-  const queryResult = useGetAutoAdventureSettingsQuery();
+  const { data: queryData, loading: queryLoading } = useGetAutoAdventureSettingsQuery();
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.autoAdventureSettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.autoAdventureSettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateResult] = useUpdateAutoAdventureSettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoAdventureSettingsMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      setSettings(updateResult.data.updateAutoAdventureSettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateAutoAdventureSettings);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetResult] = useResetAutoAdventureSettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoAdventureSettingsMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      setSettings(resetResult.data.resetAutoAdventureSettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetAutoAdventureSettings);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,

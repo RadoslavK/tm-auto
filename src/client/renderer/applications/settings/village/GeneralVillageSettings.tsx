@@ -18,29 +18,29 @@ const useGeneralVillageSettings = () => {
 
   const [settings, setSettings] = useState<GeneralVillageSettingsModel>();
 
-  const queryResult = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.generalVillageSettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.generalVillageSettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateSettingsResults] = useUpdateGeneralVillageSettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateGeneralVillageSettingsMutation();
 
   useEffect(() => {
-    if (!updateSettingsResults.loading && updateSettingsResults.data) {
-      setSettings(updateSettingsResults.data.updateGeneralVillageSettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateGeneralVillageSettings);
     }
-  }, [updateSettingsResults]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetSettingsResult] = useResetGeneralVillageSettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetGeneralVillageSettingsMutation();
 
   useEffect(() => {
-    if (!resetSettingsResult.loading && resetSettingsResult.data) {
-      setSettings(resetSettingsResult.data.resetGeneralVillageSettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetGeneralVillageSettings);
     }
-  }, [resetSettingsResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,

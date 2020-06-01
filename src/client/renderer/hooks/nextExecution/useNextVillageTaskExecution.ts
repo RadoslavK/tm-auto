@@ -22,29 +22,29 @@ export const useNextVillageTaskExecution = (villageId: number, task: TaskType) =
     setNextExecutionIn(difference);
   };
 
-  const queryResult = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
+  const { data: queryData, loading: queryLoading } = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      updateNextExecution(queryResult.data.nextVillageTaskExecution);
+    if (!queryLoading && queryData) {
+      updateNextExecution(queryData.nextVillageTaskExecution);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [setNextVillageTaskExecution, updateResult] = useSetNextVillageTaskExecutionMutation();
+  const [setNextVillageTaskExecution, { data: updateData, loading: updateLoading }] = useSetNextVillageTaskExecutionMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      updateNextExecution(updateResult.data.setNextVillageTaskExecution);
+    if (!updateLoading && updateData) {
+      updateNextExecution(updateData.setNextVillageTaskExecution);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetNextVillageTaskExecution, resetResult] = useResetNextVillageTaskExecutionMutation();
+  const [resetNextVillageTaskExecution, { data: resetData, loading: resetLoading }] = useResetNextVillageTaskExecutionMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      updateNextExecution(resetResult.data.resetNextVillageTaskExecution);
+    if (!resetLoading && resetData) {
+      updateNextExecution(resetData.resetNextVillageTaskExecution);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   useNextVillageTaskExecutionChangedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

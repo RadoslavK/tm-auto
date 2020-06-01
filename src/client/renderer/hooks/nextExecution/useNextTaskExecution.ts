@@ -16,7 +16,7 @@ import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 export const useNextTaskExecution = (task: TaskType) => {
   const [nextExecutionIn, setNextExecutionIn] = useState(0);
 
-  const nextExecutionResult = useNextTaskExecutionQuery({ variables: { task } });
+  const { data: queryData, loading: queryLoading } = useNextTaskExecutionQuery({ variables: { task } });
 
   const updateNextExecution = (nextTaskExecution: Timestamp): void => {
     const difference = getSecondsUntilTimestamp(nextTaskExecution);
@@ -25,26 +25,26 @@ export const useNextTaskExecution = (task: TaskType) => {
   };
 
   useEffect(() => {
-    if (!nextExecutionResult.loading && nextExecutionResult.data) {
-      updateNextExecution(nextExecutionResult.data.nextTaskExecution);
+    if (!queryLoading && queryData) {
+      updateNextExecution(queryData.nextTaskExecution);
     }
-  }, [nextExecutionResult]);
+  }, [queryData, queryLoading]);
 
-  const [setNextTaskExecution, updateResult] = useSetNextTaskExecutionMutation();
+  const [setNextTaskExecution, { data: updateData, loading: updateLoading }] = useSetNextTaskExecutionMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      updateNextExecution(updateResult.data.setNextTaskExecution);
+    if (!updateLoading && updateData) {
+      updateNextExecution(updateData.setNextTaskExecution);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetNextTaskExecution, resetResult] = useResetNextTaskExecutionMutation();
+  const [resetNextTaskExecution, { data: resetData, loading: resetLoading }] = useResetNextTaskExecutionMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      updateNextExecution(resetResult.data.resetNextTaskExecution);
+    if (!resetLoading && resetData) {
+      updateNextExecution(resetData.resetNextTaskExecution);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   useNextTaskExecutionChangedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

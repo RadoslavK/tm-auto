@@ -128,11 +128,11 @@ const FormDialog: React.FC<FormDialogProps> = ({
     id: selectedAccountId,
   };
 
-  const [createAccount, createAccountResult] = useCreateAccountMutation({
+  const [createAccount, { data: createAccData, loading: createAccLoading }] = useCreateAccountMutation({
     variables: { account: newAccount },
     refetchQueries: [{ query: GetAccountsDocument }],
   });
-  const [updateAccount, updateAccountResult] = useUpdateAccountMutation({
+  const [updateAccount, { data: updateAccData, loading: updateAccLoading }] = useUpdateAccountMutation({
     variables: { account: updatedAccount },
     refetchQueries: [{ query: GetAccountsDocument }],
   });
@@ -140,26 +140,20 @@ const FormDialog: React.FC<FormDialogProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const { data, loading } = createAccountResult;
+    if (!createAccLoading && createAccData) {
+      const newAccountId = createAccData.createAccount;
 
-    if (loading || !data) {
-      return;
+      setIsSubmitting(false);
+      onCreate(newAccountId || null);
     }
-
-    const newAccountId = data.createAccount;
-
-    setIsSubmitting(false);
-    onCreate(newAccountId || null);
-  }, [createAccountResult, onCreate]);
+  }, [createAccData, createAccLoading, onCreate]);
 
   useEffect(() => {
-    if (updateAccountResult.loading || !updateAccountResult.data) {
-      return;
+    if (!updateAccLoading && updateAccData) {
+      setIsSubmitting(false);
+      onUpdate(updateAccData.updateAccount);
     }
-
-    setIsSubmitting(false);
-    onUpdate(updateAccountResult.data.updateAccount);
-  }, [updateAccountResult, onUpdate]);
+  }, [updateAccData, updateAccLoading, onUpdate]);
 
   const submitAccount = async (): Promise<void> => {
     if (type === DialogType.Update) {
@@ -276,7 +270,7 @@ const SignInForm: React.FC<Props> = (props) => {
   const [dialogType, setDialogType] = useState(DialogType.None);
 
   const [executeSignIn] = useSignInMutation({ variables: { accountId: selectedAccountId } });
-  const [deleteAccount, deleteAccountResult] = useDeleteAccountMutation({
+  const [deleteAccount, { data: deleteAccData, loading: deleteAccLoading }] = useDeleteAccountMutation({
     variables: { accountId: selectedAccountId },
     refetchQueries: [{ query: GetAccountsDocument }],
   });
@@ -287,16 +281,12 @@ const SignInForm: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    const { data, loading } = deleteAccountResult;
-
-    if (loading || !data) {
-      return;
+    if (!deleteAccLoading && deleteAccData) {
+      setDialogType(DialogType.None);
+      setSubmitMessage('Account deleted');
+      setShowSubmitMessage(true);
     }
-
-    setDialogType(DialogType.None);
-    setSubmitMessage('Account deleted');
-    setShowSubmitMessage(true);
-  }, [deleteAccountResult]);
+  }, [deleteAccData, deleteAccLoading]);
 
   const onUpdate = (success: boolean): void => {
     if (!success) {

@@ -22,29 +22,29 @@ const useAutoBuildSettings = () => {
 
   const [settings, setSettings] = useState<AutoBuildSettingsModel>();
 
-  const queryResult = useGetAutoBuildSettingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetAutoBuildSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.autoBuildSettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.autoBuildSettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateResult] = useUpdateAutoBuildSettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoBuildSettingsMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      setSettings(updateResult.data.updateAutoBuildSettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateAutoBuildSettings);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetResult] = useResetAutoBuildSettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoBuildSettingsMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      setSettings(resetResult.data.resetAutoBuildSettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetAutoBuildSettings);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,

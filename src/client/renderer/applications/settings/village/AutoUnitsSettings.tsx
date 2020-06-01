@@ -21,29 +21,29 @@ const useAutoUnitsSettings = () => {
   const { villageId } = useVillageSettingsContext();
   const [settings, setSettings] = useState<AutoUnitsSettingsModel>();
 
-  const queryResult = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.autoUnitsSettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.autoUnitsSettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateResult] = useUpdateAutoUnitsSettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoUnitsSettingsMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      setSettings(updateResult.data.updateAutoUnitsSettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateAutoUnitsSettings);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetSettingsResult] = useResetAutoUnitsSettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoUnitsSettingsMutation();
 
   useEffect(() => {
-    if (!resetSettingsResult.loading && resetSettingsResult.data) {
-      setSettings(resetSettingsResult.data.resetAutoUnitsSettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetAutoUnitsSettings);
     }
-  }, [resetSettingsResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,

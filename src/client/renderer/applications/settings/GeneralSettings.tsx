@@ -15,29 +15,29 @@ import {
 const useGeneralSettings = () => {
   const [settings, setSettings] = useState<GeneralSettingsModel>();
 
-  const queryResult = useGetGeneralSettingsQuery();
+  const { data: queryData, loading: queryLoading } = useGetGeneralSettingsQuery();
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setSettings(queryResult.data.generalSettings);
+    if (!queryLoading && queryData) {
+      setSettings(queryData.generalSettings);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
-  const [updateSettings, updateResult] = useUpdateGeneralSettingsMutation();
+  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateGeneralSettingsMutation();
 
   useEffect(() => {
-    if (!updateResult.loading && updateResult.data) {
-      setSettings(updateResult.data.updateGeneralSettings);
+    if (!updateLoading && updateData) {
+      setSettings(updateData.updateGeneralSettings);
     }
-  }, [updateResult]);
+  }, [updateData, updateLoading]);
 
-  const [resetSettings, resetResult] = useResetGeneralSettingsMutation();
+  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetGeneralSettingsMutation();
 
   useEffect(() => {
-    if (!resetResult.loading && resetResult.data) {
-      setSettings(resetResult.data.resetGeneralSettings);
+    if (!resetLoading && resetData) {
+      setSettings(resetData.resetGeneralSettings);
     }
-  }, [resetResult]);
+  }, [resetData, resetLoading]);
 
   return {
     settings,
