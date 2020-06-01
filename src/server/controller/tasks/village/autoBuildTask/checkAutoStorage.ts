@@ -89,8 +89,9 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     const lowestLevelBuildingInVillage = getWithMinimum(
       village
         .buildings
-        .normalizedBuildingSpots()
-        .filter(b => b.type === neededBuildingType && b.level.actual !== b.level.max),
+        .spots
+        .buildings()
+        .filter(b => b.type === neededBuildingType && b.level.actual !== buildingInfoService.getBuildingInfo(b.type).maxLevel),
       b => b.level.actual,
     );
 
@@ -105,7 +106,7 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
       // exists and not max level
       const queuedBuilding = new QueuedBuilding({
         fieldId: lowestLevelBuildingInVillage.fieldId,
-        level: lowestLevelBuildingInVillage.level.total + 1,
+        level: lowestLevelBuildingInVillage.level.getTotal() + 1,
         //  id is not important is it wont be placed into the queue
         queueId: '',
         type: lowestLevelBuildingInVillage.type,

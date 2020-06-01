@@ -11,7 +11,7 @@ export default <Resolvers>{
     activeVillageId: () => accountContext.villageService.currentVillageId,
 
     crannyCapacity: (_, args) => {
-      const crannies = accountContext.villageService.village(args.villageId).buildings.normalizedBuildingSpots().filter(s => s.type === BuildingType.Cranny);
+      const crannies = accountContext.villageService.village(args.villageId).buildings.spots.buildings().filter(s => s.type === BuildingType.Cranny);
 
       const emptyCapacity = new VillageCrannyCapacity();
 
@@ -24,7 +24,7 @@ export default <Resolvers>{
           (capacity, cranny) => {
             const actual = crannyInfoService.getCapacity(cranny.level.actual);
             const ongoing = crannyInfoService.getCapacity(cranny.level.actual + cranny.level.ongoing);
-            const total = crannyInfoService.getCapacity(cranny.level.total);
+            const total = crannyInfoService.getCapacity(cranny.level.getTotal());
 
             return capacity.add(new VillageCrannyCapacity({
               actual,

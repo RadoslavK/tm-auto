@@ -30,6 +30,7 @@ const generateResolverTypes = async (): Promise<void> => {
       AutoBuildLogEntryContent: '../_models/logs/content/autoBuild#AutoBuildLogEntryContent',
       AutoUnitsLogEntryContent: '../_models/logs/content/autoUnits#AutoUnitsLogEntryContent',
       BuildingInProgress: '../_models/buildings/inProgress/buildingInProgress#BuildingInProgress',
+      BuildingSpot: '../_models/buildings/spots/buildingSpot#BuildingSpot',
       HeroInformation: '../_models/hero/hero#Hero',
       LogEntry: '../_models/logs/logEntry#LogEntry',
       Resources: '../_models/misc/resources#Resources',

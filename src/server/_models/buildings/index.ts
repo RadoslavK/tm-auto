@@ -1,20 +1,12 @@
-// TODO refactor so we dont need to import graphql dependency
-import { BuildingSpot } from '../../_types/graphql.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { accountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { publishPayloadEvent } from '../../pubSub';
-import { buildingInfoService } from '../../services/info/buildingInfoService';
+import { ActualBuilding } from './actual/actualBuilding';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
 import { BuildingQueue } from './queue/buildingQueue';
 import { BuildingSpots } from './spots/buildingSpots';
-
-export type ActualBuilding = {
-  readonly fieldId: number;
-  readonly level: number;
-  readonly type: BuildingType;
-};
 
 export class Buildings {
   public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();
@@ -38,7 +30,14 @@ export class Buildings {
     this.spots
       .buildings()
       .forEach(spot => {
-        spot.level.ongoing = buildingsInProgress.filter(bip => bip.fieldId === spot.fieldId).length;
+        const ongoingForSpot = buildingsInProgress.filter(bip => bip.fieldId === spot.fieldId);
+        const ongoingLevel = ongoingForSpot.length;
+
+        spot.level.ongoing = ongoingLevel;
+
+        if (spot.type === BuildingType.None && ongoingLevel) {
+          spot.type = ongoingForSpot[0].type;
+        }
       });
 
     this.ongoing.set(buildingsInProgress);
@@ -50,27 +49,33 @@ export class Buildings {
     publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: id });
   };
 
-  public normalizedBuildingSpots = (): readonly BuildingSpot[] => this.spots.buildings().map((b): BuildingSpot => {
-    const queued = this.queue.buildings().filter(bb => bb.fieldId === b.fieldId);
-    const ongoing = this.ongoing.buildings().filter(bb => bb.fieldId === b.fieldId);
-    // eslint-disable-next-line unicorn/no-nested-ternary
-    const type = b.type || (ongoing.length ? ongoing[0].type : (queued.length ? queued[0].type : BuildingType.None));
-    const info = buildingInfoService.getBuildingInfo(type);
+  public updateSpotsQueuedState = (): void => {
+    const queuedBuildings = this.queue.buildings();
 
-    return {
-      fieldId: b.fieldId,
-      level: {
-        ...b.level,
-        max: info.maxLevel,
-        total: b.level.getTotal(),
-      },
-      name: info.name,
-      type,
-    };
-  });
+    this
+      .spots
+      .buildings()
+      .forEach(spot => {
+        const queuedForSpot = queuedBuildings.filter(b => b.fieldId === spot.fieldId);
+        const queuedLevel = queuedForSpot.length;
+
+        spot.level.queued = queuedLevel;
+
+        if (spot.type === BuildingType.None && queuedLevel) {
+          spot.type = queuedForSpot[0].type;
+        } else if (spot.type !== BuildingType.None && spot.level.getTotal() === 0) {
+          spot.type = BuildingType.None;
+        }
+      });
+
+    const { id } = accountContext.villageService.currentVillage();
+
+    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: id });
+  };
 
   public freeFieldIds = (): readonly number[] => this
-    .normalizedBuildingSpots()
-    .filter(b => b.level.total === 0)
+    .spots
+    .buildings()
+    .filter(b => b.level.getTotal() === 0)
     .map(b => b.fieldId);
 }

@@ -95,7 +95,7 @@ export class AvailableBuildingTypesService {
             return;
           }
 
-          const normalizedBuildingSlots = this._village.buildings.normalizedBuildingSpots();
+          const normalizedBuildingSlots = this._village.buildings.spots.buildings();
           const spotsOfType = normalizedBuildingSlots.filter(b => b.type === type);
 
           // max count = 1
@@ -110,7 +110,7 @@ export class AvailableBuildingTypesService {
             }
 
             // requirements for more than 1 building of that type
-            if (!spotsOfType.some(b => b.level.total === buildingInfoService.getBuildingInfo(b.type).maxLevel)) {
+            if (!spotsOfType.some(b => b.level.getTotal() === buildingInfoService.getBuildingInfo(b.type).maxLevel)) {
               return;
             }
           }
@@ -144,7 +144,7 @@ export class AvailableBuildingTypesService {
       return false;
     }
 
-    const normalizedBuildingSpots = this._village.buildings.normalizedBuildingSpots();
+    const normalizedBuildingSpots = this._village.buildings.spots.buildings();
 
     // vsetky budovy aj v queue
     const buildings = normalizedBuildingSpots.filter(b => b.type === type);
@@ -154,7 +154,7 @@ export class AvailableBuildingTypesService {
         return false;
       }
     } else {
-      const completedBuildingExists = buildings.some(b => b.level.total === buildingInfoService.getBuildingInfo(b.type).maxLevel);
+      const completedBuildingExists = buildings.some(b => b.level.getTotal() === buildingInfoService.getBuildingInfo(b.type).maxLevel);
 
       if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level
@@ -171,7 +171,7 @@ export class AvailableBuildingTypesService {
     for (let i = 0; i < conditions.requiredBuildings.length; i++) {
       const requiredBuilding = conditions.requiredBuildings[i];
       const requiredBuildingExists = normalizedBuildingSpots.some(
-        b => b.level.total >= requiredBuilding.level
+        b => b.level.getTotal() >= requiredBuilding.level
           && b.type === requiredBuilding.type,
       );
 

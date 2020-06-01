@@ -13,9 +13,8 @@ import { Tribe } from '../../../../../_shared/types/tribe';
 import { accountContext } from '../../../../accountContext';
 import { getPage } from '../../../../browser/getPage';
 import { fieldIds } from '../../../../constants/fieldIds';
-import { BotEvent } from '../../../../events/botEvent';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
-import { publishPayloadEvent } from '../../../../pubSub';
+import { BuildingQueueService } from '../../../../services/buildingQueueService';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import { isInfrastructure } from '../../../../utils/buildingUtils';
 import {
@@ -236,14 +235,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
     if (isQueued) {
       // might be a temporary created object to insta build
-      this._buildings.queue.remove(queuedBuilding.queueId);
-      this._buildings.spots.at(queuedBuilding.fieldId).level.queued--;
-
-      // todo refactor
-
-      const { id } = accountContext.villageService.currentVillage();
-
-      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: id });
+      const queueService = new BuildingQueueService(this._village.id);
+      queueService.dequeueBuilding(queuedBuilding.queueId);
     }
   };
 }

@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { ActualBuilding } from '../../_models/buildings';
+import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
 
@@ -35,11 +35,11 @@ export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
 
     const type = +typeMatch[1];
 
-    return {
+    return new ActualBuilding({
       fieldId: index + 1,
       level,
       type,
-    };
+    });
   }));
 };
 

@@ -4,13 +4,7 @@ graphql throws error when starting building new cranny level. got NAN instead of
 
 collapsible building queue
 
-
-eventy nech sa riadia iba cez servisu... event servisa s tym pubsub
-
-
-
-use hero resources for buildings/units
-
+use hero resources for units
 
 roman total queue time - prienik fields a infrastruktury.. a ukazovat obidva
 ukazovat odhadovanu dobu nez bude mat surky na dalsiu stavbu v queue a farebne znazornit ci vobec ma a tak

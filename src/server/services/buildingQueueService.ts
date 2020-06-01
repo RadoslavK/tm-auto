@@ -1,12 +1,9 @@
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
+import { BuildingSpot } from '../_models/buildings/spots/buildingSpot';
 import { Village } from '../_models/village/village';
-// TODO refactor the same thing.. no g dependencies other than resolvers
-import { BuildingSpot } from '../_types/graphql.type';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { accountContext } from '../accountContext';
-import { BotEvent } from '../events/botEvent';
-import { publishPayloadEvent } from '../pubSub';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -77,7 +74,6 @@ export class BuildingQueueService {
 
       this._village.buildings.queue.add(qBuilding);
 
-      spot.level.queued++;
       enqueued = true;
     }
 
@@ -175,11 +171,6 @@ export class BuildingQueueService {
     }
 
     this._village.buildings.queue.clear();
-    const spots = this._village.buildings.spots.buildings();
-
-    spots.forEach(spot => {
-      spot.level.queued = 0;
-    });
 
     this.onUpdate();
   };
@@ -210,7 +201,7 @@ export class BuildingQueueService {
     let qBuildingWithPossiblyAffectedRequirements: QueuedBuilding;
     let theOtherBuilding: BuildingSpot | undefined;
 
-    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.spots.buildings();
 
     if (isMovingUp) {
       qBuildingWithPossiblyAffectedRequirements = building;
@@ -250,7 +241,7 @@ export class BuildingQueueService {
   };
 
   private willQueuedBuildingStillMeetItsRequirements = (checkedBuilding: QueuedBuilding, offsets: Record<number, number>): boolean => {
-    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.spots.buildings();
 
     const getNewTotalLevel = (building: BuildingSpot): number =>
       building.level.actual
@@ -318,10 +309,6 @@ export class BuildingQueueService {
       }
     });
 
-    spots.forEach(spot => {
-      spot.level.queued = offsets[spot.fieldId];
-    });
-
     this.onUpdate();
   };
 
@@ -351,12 +338,12 @@ export class BuildingQueueService {
     if (queuedBuilding.type === BuildingType.Palace
       && accountContext.villageService.allVillages().some(otherVillage =>
         otherVillage.id !== this._village.id
-        && accountContext.villageService.village(otherVillage.id).buildings.normalizedBuildingSpots().some(b => b.type === BuildingType.Palace))) {
+        && accountContext.villageService.village(otherVillage.id).buildings.spots.buildings().some(b => b.type === BuildingType.Palace))) {
       // iba 1 palac
       return true;
     }
 
-    const normalizedBuildings = this._village.buildings.normalizedBuildingSpots();
+    const normalizedBuildings = this._village.buildings.spots.buildings();
 
     const previousLevelBuildingExists = normalizedBuildings.some(b =>
       b.type === queuedBuilding.type
@@ -458,9 +445,7 @@ export class BuildingQueueService {
   };
 
   private onUpdate = async (): Promise<void> => {
-    await Promise.all([
-      publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this._village.id }),
-      this.serializeQueue(),
-    ]);
+    this._village.buildings.updateSpotsQueuedState();
+    await this.serializeQueue();
   };
 }

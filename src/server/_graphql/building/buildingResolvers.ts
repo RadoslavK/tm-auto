@@ -8,7 +8,7 @@ import { AvailableBuildingTypesService } from '../../services/availableBuildingT
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 
 const getBuildingSpots = (villageId: number) => {
-  const normalizedSpots = accountContext.villageService.village(villageId).buildings.normalizedBuildingSpots();
+  const normalizedSpots = accountContext.villageService.village(villageId).buildings.spots.buildings();
 
   return {
     infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
@@ -21,7 +21,16 @@ const getBuildingSpots = (villageId: number) => {
   };
 };
 
-export default <Resolvers>{
+export default <Resolvers> {
+  BuildingSpot: {
+    level: spot => ({
+      ...spot.level,
+      total: spot.level.getTotal(),
+      max: buildingInfoService.getBuildingInfo(spot.type).maxLevel,
+    }),
+    name: spot => buildingInfoService.getBuildingInfo(spot.type).name,
+  },
+
   Query: {
     availableNewBuildings: (_, args) => {
       const {

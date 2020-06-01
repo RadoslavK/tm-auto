@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { ActualBuilding } from '../../_models/buildings';
+import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
 import { accountContext } from '../../accountContext';
@@ -76,11 +76,11 @@ export const parseInfrastructureSpots = async (): Promise<readonly ActualBuildin
       type = getWallType();
     }
 
-    return {
+    return new ActualBuilding({
       fieldId,
       level,
       type,
-    };
+    });
   }));
 
   const uniqueFieldIds: number[] = [];
