@@ -1,3 +1,0 @@
-pouzit nove trav ikonky na suroviny a  tak
-
-namiesto allow checkboxu dat nejaky toggle - enable/disable

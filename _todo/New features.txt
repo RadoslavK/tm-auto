@@ -1,5 +1,0 @@
-building mode templates
---vytvorit sablonu, podobne ako v secondvillagebot su tie Level podla toho stava budovy
---uzivatel si v UI vytvori sablonu
-
-building queue... umoznit spojit budovy dokopy a bude to ukazovat totalny cas, res atd.. tato skupina sa bude dat odstranit tiez alebo rozbalit.
