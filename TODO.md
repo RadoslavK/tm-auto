@@ -71,7 +71,6 @@ NOVE NE TAK DOLEZITE
 * If the settings in opened modal are editing and settings in the background are related to them, they are not updated. I think its only reset option.
     * Because they are not subscribed to changes
 * Graphql throws error when starting building new cranny level. got NAN instead of integer
-* AutoUnits does not respect settings CoolDown
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
 
 ## Bot Detection
