@@ -57,11 +57,9 @@ export class Buildings {
       .buildings()
       .forEach(spot => {
         const queuedForSpot = queuedBuildings.filter(b => b.fieldId === spot.fieldId);
-        const queuedLevel = getMaximum(queuedBuildings.map(b => b.level));
+        spot.level.queued = getMaximum(queuedForSpot.map(b => b.level));
 
-        spot.level.queued = queuedLevel;
-
-        if (spot.type === BuildingType.None && queuedLevel) {
+        if (spot.type === BuildingType.None && spot.level.queued) {
           spot.type = queuedForSpot[0].type;
         } else if (
           spot.type > BuildingType.Crop
