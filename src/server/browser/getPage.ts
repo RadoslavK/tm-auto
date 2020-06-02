@@ -16,7 +16,9 @@ puppeteer.use(stealth);
 
 const chromeOptions = {
   executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
-  headless: false,
+  //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
+  //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
+  headless: true,
   slowMo: 25,
   userDataDir: './.data/browser_data',
 };
