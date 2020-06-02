@@ -74,7 +74,6 @@ NOVE NE TAK DOLEZITE
 * Use hero resources - check if hero is in the same village
 * AutoUnits does not respect settings CoolDown
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
-* [?] Infinite loop when accepting task rewards!
 
 ## Bot Detection
 

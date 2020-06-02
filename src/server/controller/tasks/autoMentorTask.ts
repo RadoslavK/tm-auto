@@ -17,9 +17,11 @@ export class AutoMentorTask implements BotTask {
   public execute = async (): Promise<void> => {
     const { acceptRewards } = this.settings();
 
-    let hadAutomatedTasks = false;
+    let hadAutomatedTasks: boolean;
 
     do {
+      hadAutomatedTasks = false;
+
       await updateMentorTasks();
 
       for (const task of getAccountContext().mentorTasks) {
