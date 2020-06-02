@@ -1,3 +1,5 @@
+import { ElementHandle } from 'puppeteer';
+
 import {
   getBuildingSpotPath,
   TravianPath,
@@ -11,10 +13,19 @@ import { validateUrl } from '../../utils/validateUrl';
 
 const navigateByLink = async (path: string, exact: boolean): Promise<boolean> => {
   const page = await getPage();
-  const selector = exact
-    ? `[href="${path}"]`
-    : `[href^="${path}"]`;
-  const link = await page.$(selector);
+  const selectors = exact
+    ? [`[href="${path}"]`, `[href^="${path}?"]`]
+    : [`[href^="${path}"]`];
+
+  let link: ElementHandle | null = null;
+
+  for (const selector of selectors) {
+    link = await page.$(selector);
+
+    if (link) {
+      break;
+    }
+  }
 
   if (!link) {
     return false;
