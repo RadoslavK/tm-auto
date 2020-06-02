@@ -1,5 +1,6 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { getAccountContext } from '../../accountContext';
+import { fieldIds } from '../../constants/fieldIds';
 import { BotEvent } from '../../events/botEvent';
 import { publishPayloadEvent } from '../../pubSub';
 import { ActualBuilding } from './actual/actualBuilding';
@@ -60,7 +61,12 @@ export class Buildings {
 
         if (spot.type === BuildingType.None && queuedLevel) {
           spot.type = queuedForSpot[0].type;
-        } else if (spot.type !== BuildingType.None && spot.level.getTotal() === 0) {
+        } else if (
+          spot.type > BuildingType.Crop
+          && spot.fieldId !== fieldIds.RallyPoint
+          && spot.fieldId !== fieldIds.Wall
+          && spot.level.getTotal() === 0
+        ) {
           spot.type = BuildingType.None;
         }
       });

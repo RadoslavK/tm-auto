@@ -16,10 +16,9 @@ export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
   const nodes = await page.$$('#village_map > div');
 
   return Promise.all(nodes.map(async (node, index): Promise<ActualBuilding> => {
-    const classNameProperty = await node.getProperty('className');
-    const className = await classNameProperty.jsonValue();
+    const className = await page.evaluate((el: Element) => el.className, node);
 
-    const levelMatch = /level(\d+)/.exec(className as string);
+    const levelMatch = /level(\d+)/.exec(className);
 
     if (!levelMatch) {
       throw new Error('Failed to parse field level');
@@ -27,7 +26,7 @@ export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
 
     const level = +levelMatch[1];
 
-    const typeMatch = /gid(\d+)/.exec(className as string);
+    const typeMatch = /gid(\d+)/.exec(className);
 
     if (!typeMatch) {
       throw new Error('Failed to parse building type');
