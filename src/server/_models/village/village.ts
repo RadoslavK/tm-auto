@@ -1,12 +1,18 @@
 import { mergeDefaults } from '../../../_shared/merge';
 import { PartialFields } from '../../../_shared/types/fields.type';
+import { BotEvent } from '../../events/botEvent';
+import { publishPayloadEvent } from '../../pubSub';
 import { Buildings } from '../buildings';
 import { Coords } from '../coords';
 import { Units } from '../units';
 import { VillageResources } from './villageResources';
 
 export class Village {
-  public readonly buildings: Buildings = new Buildings();
+  public readonly buildings: Buildings = new Buildings(
+    () => publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: this.id }),
+    () => publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: this.id }),
+    () => publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.id }),
+  );
   public readonly coords: Coords = new Coords();
   public readonly id: number = 0;
   public isCapital: boolean = false;

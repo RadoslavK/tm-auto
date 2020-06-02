@@ -1,6 +1,5 @@
 import { LogEntry } from '../_models/logs/logEntry';
 import { Village } from '../_models/village/village';
-import { VillageCrannyCapacity } from '../_models/village/villageCrannyCapacity';
 import { TaskType } from '../../_shared/types/taskType';
 import { BotEvent } from './botEvent';
 
@@ -43,11 +42,6 @@ export type BotEventPayloads = {
     readonly task: TaskType;
     readonly villageId: number;
   },
-
-  [BotEvent.CrannyCapacityUpdated]: {
-    readonly villageId: number;
-    readonly capacity: VillageCrannyCapacity
-  }
 
   [BotEvent.VillageUpdated]: {
     readonly village: Village;

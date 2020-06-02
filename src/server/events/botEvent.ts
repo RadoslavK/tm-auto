@@ -4,7 +4,6 @@ export enum BotEvent {
   BotRunningChanged = 'BotRunningChanged',
   BuildingsInProgressUpdated = 'BuildingsInProgressUpdated',
   ActualBuildingLevelsUpdated = 'ActualBuildingLevelsUpdated',
-  CrannyCapacityUpdated = 'CrannyCapacityUpdated',
   HeroInformationUpdated = 'HeroInformationUpdated',
   LogEntryAdded = 'LogEntryAdded',
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',

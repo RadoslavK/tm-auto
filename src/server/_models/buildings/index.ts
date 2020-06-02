@@ -1,8 +1,5 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { getAccountContext } from '../../accountContext';
 import { fieldIds } from '../../constants/fieldIds';
-import { BotEvent } from '../../events/botEvent';
-import { publishPayloadEvent } from '../../pubSub';
 import { ActualBuilding } from './actual/actualBuilding';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
@@ -14,6 +11,12 @@ export class Buildings {
   public readonly spots: BuildingSpots = new BuildingSpots();
   public readonly queue: BuildingQueue = new BuildingQueue();
 
+  constructor(
+    private onActualUpdated: () => void,
+    private onOngoingUpdated: () => void,
+    private onQueuedUpdated: () => void,
+  ) {}
+
   public updateActual = (buildings: readonly ActualBuilding[]): void => {
     buildings.forEach(b => {
       const spot = this.spots.at(b.fieldId);
@@ -21,9 +24,7 @@ export class Buildings {
       spot.type = b.type;
     });
 
-    const { id } = getAccountContext().villageService.currentVillage();
-
-    publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: id });
+    this.onActualUpdated();
   };
 
   public updateOngoing = (buildingsInProgress: readonly BuildingInProgress[]): void => {
@@ -41,10 +42,7 @@ export class Buildings {
       });
 
     this.ongoing.set(buildingsInProgress);
-
-    const { id } = getAccountContext().villageService.currentVillage();
-
-    publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: id });
+    this.onOngoingUpdated();
   };
 
   public updateSpotsQueuedState = (): void => {
@@ -71,9 +69,7 @@ export class Buildings {
         }
       });
 
-    const { id } = getAccountContext().villageService.currentVillage();
-
-    publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: id });
+    this.onQueuedUpdated();
   };
 
   public freeFieldIds = (): readonly number[] => this
