@@ -96,7 +96,7 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     );
 
     const levelOfLowestLevelBuildingInVillage = lowestLevelBuildingInVillage
-      ? lowestLevelBuildingInVillage.level.actual + lowestLevelBuildingInVillage.level.ongoing
+      ? lowestLevelBuildingInVillage.level.getActualAndOngoing()
       : 0;
 
     if (qBuilding && qBuilding.level === levelOfLowestLevelBuildingInVillage + 1) {

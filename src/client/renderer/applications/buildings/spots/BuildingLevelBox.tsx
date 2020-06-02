@@ -44,8 +44,7 @@ const getLevelState = (props: Props): BuildingState => {
 
   const isCompleted = level.actual === level.max;
   const isMaxed = level.total === level.max;
-  const totalOngoing = level.total - level.queued;
-  const isOngoingMaxed = totalOngoing === level.max;
+  const isOngoingMaxed = level.ongoing === level.max;
 
   if (isCompleted) {
     return BuildingState.Completed;
@@ -68,7 +67,6 @@ export const BuildingLevelBox: React.FC<Props> = (props) => {
     level,
   } = props;
 
-  const totalOngoing = level.actual + level.ongoing;
   const levelState = getLevelState(props);
   const classes = useStyles({ levelState });
 
@@ -78,15 +76,15 @@ export const BuildingLevelBox: React.FC<Props> = (props) => {
         {level.actual}
       </span>
 
-      {level.ongoing > 0 && (
+      {level.ongoing && (
         <span className={classes.ongoingLevel}>
-          {totalOngoing}
+          {level.ongoing}
         </span>
       )}
 
-      {level.queued > 0 && (
+      {level.queued && (
         <span className={classes.totalLevel}>
-          {level.total}
+          {level.queued}
         </span>
       )}
     </div>

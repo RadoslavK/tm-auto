@@ -117,7 +117,7 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
           >
             +
           </button>
-          {building.level.queued > 0 && (
+          {building.level.queued && (
             <button
               onClick={onDequeue}
               type="button"

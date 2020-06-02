@@ -335,8 +335,8 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
 export type BuildingSpotLevel = {
   readonly __typename?: 'BuildingSpotLevel';
   readonly actual: Scalars['Int'];
-  readonly ongoing: Scalars['Int'];
-  readonly queued: Scalars['Int'];
+  readonly ongoing: Maybe<Scalars['Int']>;
+  readonly queued: Maybe<Scalars['Int']>;
   readonly max: Scalars['Int'];
   readonly total: Scalars['Int'];
 };
@@ -1118,8 +1118,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type BuildingSpotLevelResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpotLevel'] = ResolversParentTypes['BuildingSpotLevel']> = {
   actual: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  ongoing: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  queued: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  ongoing: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  queued: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   max: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;

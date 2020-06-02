@@ -1,7 +1,7 @@
 type BuildingSpotLevel {
     actual: Int!
-    ongoing: Int!
-    queued: Int!
+    ongoing: Int
+    queued: Int
     max: Int!
     total: Int!
 }

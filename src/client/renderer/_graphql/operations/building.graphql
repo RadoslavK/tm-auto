@@ -4,8 +4,8 @@ fragment BuildingSpot on BuildingSpot {
         actual
         ongoing
         queued
-        total
         max
+        total
     }
     type
     name

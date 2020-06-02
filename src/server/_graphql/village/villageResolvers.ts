@@ -23,7 +23,7 @@ export default <Resolvers>{
         .reduce<VillageCrannyCapacity>(
           (capacity, cranny) => {
             const actual = crannyInfoService.getCapacity(cranny.level.actual);
-            const ongoing = crannyInfoService.getCapacity(cranny.level.actual + cranny.level.ongoing);
+            const ongoing = crannyInfoService.getCapacity(cranny.level.getActualAndOngoing());
             const total = crannyInfoService.getCapacity(cranny.level.getTotal());
 
             return capacity.add(new VillageCrannyCapacity({

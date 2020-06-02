@@ -1,5 +1,6 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { fieldIds } from '../../constants/fieldIds';
+import { getMaximum } from '../../utils/getWithMaximum';
 import { ActualBuilding } from './actual/actualBuilding';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';
@@ -35,7 +36,7 @@ export class Buildings {
       .buildings()
       .forEach(spot => {
         const ongoingForSpot = buildingsInProgress.filter(bip => bip.fieldId === spot.fieldId);
-        const ongoingLevel = ongoingForSpot.length;
+        const ongoingLevel = getMaximum(ongoingForSpot.map(bip => bip.level));
 
         spot.level.ongoing = ongoingLevel;
 
@@ -56,7 +57,7 @@ export class Buildings {
       .buildings()
       .forEach(spot => {
         const queuedForSpot = queuedBuildings.filter(b => b.fieldId === spot.fieldId);
-        const queuedLevel = queuedForSpot.length;
+        const queuedLevel = getMaximum(queuedBuildings.map(b => b.level));
 
         spot.level.queued = queuedLevel;
 

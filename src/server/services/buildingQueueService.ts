@@ -250,8 +250,7 @@ export class BuildingQueueService {
     const normalizedBuildings = this._village.buildings.spots.buildings();
 
     const getNewTotalLevel = (building: BuildingSpot): number =>
-      building.level.actual
-      + building.level.ongoing
+      building.level.getActualAndOngoing()
       + offsets[building.fieldId];
 
     const { conditions } = buildingInfoService.getBuildingInfo(checkedBuilding.type);
@@ -328,7 +327,7 @@ export class BuildingQueueService {
   public getMainBuildingLevels = (): Record<string, number> => {
     const { buildings } = this._village;
     const mainBuilding = buildings.spots.ofType(BuildingType.MainBuilding);
-    let baseMbLevel = mainBuilding ? mainBuilding.level.actual + mainBuilding.level.ongoing : 0;
+    let baseMbLevel = mainBuilding ? mainBuilding.level.getActualAndOngoing() : 0;
 
     return buildings.queue
       .buildings()
@@ -364,8 +363,7 @@ export class BuildingQueueService {
         b.type === queuedBuilding.type
         && b.fieldId === queuedBuilding.fieldId
         && (
-          b.level.actual
-          + b.level.ongoing
+          b.level.getActualAndOngoing()
           + providedOffsets[queuedBuilding.fieldId]
           + 1
         ) === queuedBuilding.level);
@@ -385,7 +383,7 @@ export class BuildingQueueService {
     if (queuedBuilding.level === 1) {
       // dolezite iba ked sa stava nove
       const prohibitedBuildingExists = normalizedBuildings.some(
-        b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId] > 0
+        b => b.level.getActualAndOngoing() + providedOffsets[b.fieldId] > 0
           && conditions.prohibitedBuildingTypes.includes(b.type),
       );
 
@@ -400,7 +398,7 @@ export class BuildingQueueService {
         if (conditions.isUnique) {
           // existuje nejaka budova, rozstavana alebo v queue az po tialto
           const existingBuilding = sameTypeBuildings.find(
-            b => b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
+            b => b.level.getActualAndOngoing() + providedOffsets[b.fieldId]
               > 0,
           );
 
@@ -413,8 +411,7 @@ export class BuildingQueueService {
             b => ({
               fieldId: b.fieldId,
               totalLevel:
-                b.level.actual
-                + b.level.ongoing
+                b.level.getActualAndOngoing()
                 + providedOffsets[b.fieldId],
             }),
           )
@@ -442,7 +439,7 @@ export class BuildingQueueService {
         const requiredBuilding = conditions.requiredBuildings[i];
         const requiredBuildingExists = normalizedBuildings.some(
           b => b.type === requiredBuilding.type
-            && b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
+            && b.level.getActualAndOngoing() + providedOffsets[b.fieldId]
             >= requiredBuilding.level,
         );
 
