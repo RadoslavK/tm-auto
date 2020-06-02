@@ -38,6 +38,7 @@ export class BuildingQueueService {
   public loadQueue = async (): Promise<void> => {
     const buildings = fileService.load<QueuedBuilding[]>(this._filePath, []);
     this._village.buildings.queue.set(buildings);
+    this._village.buildings.updateSpotsQueuedState();
   };
 
   public enqueueBuilding = (building: EnqueuedBuilding): void => {
@@ -356,18 +357,21 @@ export class BuildingQueueService {
 
     const normalizedBuildings = this._village.buildings.spots.buildings();
 
-    const previousLevelBuildingExists = normalizedBuildings.some(b =>
-      b.type === queuedBuilding.type
-      && b.fieldId === queuedBuilding.fieldId
-      && (b.level.actual
-      + b.level.ongoing
-      + providedOffsets[queuedBuilding.fieldId]
-      + 1)
-      === queuedBuilding.level);
+    // if buildings lvl >= 2, the building with previous level should exist on the same field
+    if (queuedBuilding.level >= 2) {
+      const previousLevelBuildingExists = normalizedBuildings.some(b =>
+        b.type === queuedBuilding.type
+        && b.fieldId === queuedBuilding.fieldId
+        && (
+          b.level.actual
+          + b.level.ongoing
+          + providedOffsets[queuedBuilding.fieldId]
+          + 1
+        ) === queuedBuilding.level);
 
-    // mala by existovat budova s predoslym lvl
-    if (!previousLevelBuildingExists) {
-      return true;
+      if (!previousLevelBuildingExists) {
+        return true;
+      }
     }
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(queuedBuilding.type);
@@ -433,23 +437,18 @@ export class BuildingQueueService {
         }
       }
 
-      if (queuedBuilding.level === 1) {
-        // dolezite iba ked sa stava nove
-        for (let i = 0; i < conditions.requiredBuildings.length; i++) {
-          const requiredBuilding = conditions.requiredBuildings[i];
-          const requiredBuildingExists = normalizedBuildings.some(
-            b => b.type === requiredBuilding.type
-              && b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
-              >= requiredBuilding.level,
-          );
+      for (let i = 0; i < conditions.requiredBuildings.length; i++) {
+        const requiredBuilding = conditions.requiredBuildings[i];
+        const requiredBuildingExists = normalizedBuildings.some(
+          b => b.type === requiredBuilding.type
+            && b.level.actual + b.level.ongoing + providedOffsets[b.fieldId]
+            >= requiredBuilding.level,
+        );
 
-          if (!requiredBuildingExists) {
-            return true;
-          }
+        if (!requiredBuildingExists) {
+          return true;
         }
       }
-
-      return false;
     }
 
     return false;

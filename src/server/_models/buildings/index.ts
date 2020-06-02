@@ -21,7 +21,10 @@ export class Buildings {
     buildings.forEach(b => {
       const spot = this.spots.at(b.fieldId);
       spot.level.actual = b.level;
-      spot.type = b.type;
+
+      if (b.type !== BuildingType.None || spot.level.getTotal() === 0) {
+        spot.type = b.type;
+      }
     });
 
     this.onActualUpdated();

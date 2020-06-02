@@ -73,8 +73,6 @@ NOVE NE TAK DOLEZITE
 * Graphql throws error when starting building new cranny level. got NAN instead of integer
 * Use hero resources - check if hero is in the same village
 * AutoUnits does not respect settings CoolDown
-* Buildings of same type on multiple fields are cleared automatically
-    * eg having crannies. Lvl 7-10, 1-10, 1-10... it kept only the 7-10 for some reason
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
 * [?] Infinite loop when accepting task rewards!
 
@@ -104,6 +102,8 @@ NOVE NE TAK DOLEZITE
     * Similar to which module.
     * Make it have possible versions of configs and results rather than having one with complex types.
 * refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
+* Get rid of refetch queries and refetch
+* Use CONSTANTS_NAMING for enum values. At least on graphql
 
 ## Performance
 
