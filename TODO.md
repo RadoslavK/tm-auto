@@ -5,6 +5,7 @@ NOVE NE TAK DOLEZITE
 
 ## New features
 
+* Show what task is the bot actually performing
 * Move block of queued buildings. Up/Down/To the top.. Is it enough to check the possilities only for the first item?
 * Reset everything to default
 * Allow creating own defaults

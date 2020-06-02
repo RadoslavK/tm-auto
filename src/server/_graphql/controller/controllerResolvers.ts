@@ -5,6 +5,7 @@ import { controllerService } from '../../services/controllerService';
 
 export default <Resolvers>{
   Query: {
+    isBotActive: () => controllerService.isActive(),
     botState: () => controllerService.state(),
   },
 
@@ -31,6 +32,9 @@ export default <Resolvers>{
   },
 
   Subscription: {
+    botActivityChanged: subscribeToEvent(BotEvent.BotActivityChanged, {
+      resolve: p => p.isActive,
+    }),
     onBotRunningChanged: subscribeToEvent(BotEvent.BotRunningChanged, {
       resolve: () => true,
     }),

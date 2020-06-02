@@ -38,6 +38,7 @@ export type Query = {
   readonly generalSettings: GeneralSettings;
   readonly generalVillageSettings: GeneralVillageSettings;
   readonly heroInformation: HeroInformation;
+  readonly isBotActive: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logsEntries: ReadonlyArray<LogEntry>;
   readonly maxBuildingLevel: Scalars['Int'];
@@ -361,6 +362,7 @@ export type AvailableNewBuilding = {
 export type Subscription = {
   readonly activeVillageIdChanged: Scalars['Int'];
   readonly actualBuildingLevelsUpdate: Scalars['Boolean'];
+  readonly botActivityChanged: Scalars['Boolean'];
   readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgress>;
   readonly heroInformationUpdated: HeroInformation;
   readonly nextTaskExecutionChanged: Timestamp;
@@ -873,6 +875,11 @@ export type GetBotStateQueryVariables = {};
 
 export type GetBotStateQuery = Pick<Query, 'botState'>;
 
+export type IsBotActiveQueryVariables = {};
+
+
+export type IsBotActiveQuery = Pick<Query, 'isBotActive'>;
+
 export type StartBotMutationVariables = {};
 
 
@@ -899,6 +906,11 @@ export type OnBotRunningChangedSubscriptionVariables = {};
 
 
 export type OnBotRunningChangedSubscription = Pick<Subscription, 'onBotRunningChanged'>;
+
+export type OnBotActivityChangedSubscriptionVariables = {};
+
+
+export type OnBotActivityChangedSubscription = Pick<Subscription, 'botActivityChanged'>;
 
 export type HeroInformationFragment = (
   Pick<HeroInformation, 'health' | 'state'>
@@ -1762,6 +1774,32 @@ export function useGetBotStateLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetBotStateQueryHookResult = ReturnType<typeof useGetBotStateQuery>;
 export type GetBotStateLazyQueryHookResult = ReturnType<typeof useGetBotStateLazyQuery>;
 export type GetBotStateQueryResult = ApolloReactCommon.QueryResult<GetBotStateQuery, GetBotStateQueryVariables>;
+export const IsBotActiveDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IsBotActive"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isBotActive"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useIsBotActiveQuery__
+ *
+ * To run a query within a React component, call `useIsBotActiveQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsBotActiveQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsBotActiveQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIsBotActiveQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<IsBotActiveQuery, IsBotActiveQueryVariables>) {
+        return ApolloReactHooks.useQuery<IsBotActiveQuery, IsBotActiveQueryVariables>(IsBotActiveDocument, baseOptions);
+      }
+export function useIsBotActiveLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsBotActiveQuery, IsBotActiveQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<IsBotActiveQuery, IsBotActiveQueryVariables>(IsBotActiveDocument, baseOptions);
+        }
+export type IsBotActiveQueryHookResult = ReturnType<typeof useIsBotActiveQuery>;
+export type IsBotActiveLazyQueryHookResult = ReturnType<typeof useIsBotActiveLazyQuery>;
+export type IsBotActiveQueryResult = ApolloReactCommon.QueryResult<IsBotActiveQuery, IsBotActiveQueryVariables>;
 export const StartBotDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"StartBot"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"startBot"},"arguments":[],"directives":[]}]}}]};
 export type StartBotMutationFn = ApolloReactCommon.MutationFunction<StartBotMutation, StartBotMutationVariables>;
 
@@ -1885,6 +1923,28 @@ export function useOnBotRunningChangedSubscription(baseOptions?: ApolloReactHook
       }
 export type OnBotRunningChangedSubscriptionHookResult = ReturnType<typeof useOnBotRunningChangedSubscription>;
 export type OnBotRunningChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnBotRunningChangedSubscription>;
+export const OnBotActivityChangedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnBotActivityChanged"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"botActivityChanged"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useOnBotActivityChangedSubscription__
+ *
+ * To run a query within a React component, call `useOnBotActivityChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnBotActivityChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnBotActivityChangedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnBotActivityChangedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnBotActivityChangedSubscription, OnBotActivityChangedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnBotActivityChangedSubscription, OnBotActivityChangedSubscriptionVariables>(OnBotActivityChangedDocument, baseOptions);
+      }
+export type OnBotActivityChangedSubscriptionHookResult = ReturnType<typeof useOnBotActivityChangedSubscription>;
+export type OnBotActivityChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnBotActivityChangedSubscription>;
 export const GetHeroInformationDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHeroInformation"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroInformation"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroInformation"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroInformation"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroInformation"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"health"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"state"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"village"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
 
 /**

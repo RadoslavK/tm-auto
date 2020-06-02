@@ -6,10 +6,12 @@ import {
 } from 'react-router-dom';
 
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NexTasksExecution';
+import { BotActivity } from '../../BotActivity';
 import { navigationApps } from './Navigation';
 
 export const MainRoutes: React.FC = () => (
   <div>
+    <BotActivity />
     <NextTasksExecution />
     <Switch>
       <Route

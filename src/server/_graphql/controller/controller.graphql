@@ -27,9 +27,11 @@ type Mutation {
 }
 
 type Query {
+    isBotActive: Boolean!
     botState: BotState!
 }
 
 extend type Subscription {
+    botActivityChanged: Boolean!
     onBotRunningChanged: Boolean!
 }

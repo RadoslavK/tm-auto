@@ -47,6 +47,7 @@ export type Query = {
   readonly generalSettings: GeneralSettings;
   readonly generalVillageSettings: GeneralVillageSettings;
   readonly heroInformation: HeroModel;
+  readonly isBotActive: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logsEntries: ReadonlyArray<LogEntry>;
   readonly maxBuildingLevel: Scalars['Int'];
@@ -377,6 +378,7 @@ export type Subscription = {
   readonly __typename?: 'Subscription';
   readonly activeVillageIdChanged: Scalars['Int'];
   readonly actualBuildingLevelsUpdate: Scalars['Boolean'];
+  readonly botActivityChanged: Scalars['Boolean'];
   readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgress>;
   readonly heroInformationUpdated: HeroModel;
   readonly nextTaskExecutionChanged: Timestamp;
@@ -1061,6 +1063,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
   generalVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<QueryGeneralVillageSettingsArgs, 'villageId'>>;
   heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
+  isBotActive: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastSignedAccountId: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logsEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
   maxBuildingLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryMaxBuildingLevelArgs, 'buildingType'>>;
@@ -1151,6 +1154,7 @@ export type AvailableNewBuildingResolvers<ContextType = any, ParentType extends 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   activeVillageIdChanged: SubscriptionResolver<ResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>;
   actualBuildingLevelsUpdate: SubscriptionResolver<ResolversTypes['Boolean'], "actualBuildingLevelsUpdate", ParentType, ContextType, RequireFields<SubscriptionActualBuildingLevelsUpdateArgs, 'villageId'>>;
+  botActivityChanged: SubscriptionResolver<ResolversTypes['Boolean'], "botActivityChanged", ParentType, ContextType>;
   buildingsInProgressUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, "buildingsInProgressUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingsInProgressUpdatedArgs, 'villageId'>>;
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;

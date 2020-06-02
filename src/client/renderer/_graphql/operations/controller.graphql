@@ -2,6 +2,10 @@ query GetBotState {
     botState
 }
 
+query IsBotActive {
+    isBotActive
+}
+
 mutation StartBot {
     startBot
 }
@@ -20,4 +24,8 @@ mutation SignOut {
 
 subscription OnBotRunningChanged {
     onBotRunningChanged
+}
+
+subscription OnBotActivityChanged {
+    botActivityChanged
 }

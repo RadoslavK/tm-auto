@@ -23,7 +23,10 @@ import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/taskManager';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
-import { publishEvent } from '../pubSub';
+import {
+  publishEvent,
+  publishPayloadEvent,
+} from '../pubSub';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
@@ -61,6 +64,7 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
 class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
+  private _isActive: boolean = false;
 
   private _tasksCoolDown: CoolDown = new CoolDown({
     max: new Duration({ seconds: 35 }),
@@ -69,11 +73,20 @@ class ControllerService {
 
   private botState: BotState = BotState.None;
 
+  public isActive = (): boolean => this._isActive;
+
   public state = (): BotState => this.botState;
 
   private setState = async (state: BotState): Promise<void> => {
     this.botState = state;
-    return publishEvent(BotEvent.BotRunningChanged);
+
+    await publishEvent(BotEvent.BotRunningChanged);
+  };
+
+  private setActivity = async (activity: boolean): Promise<void> => {
+    this._isActive = activity;
+
+    await publishPayloadEvent(BotEvent.BotActivityChanged, { isActive: activity });
   };
 
   public signIn = async (accountId: string): Promise<void> => {
@@ -137,6 +150,7 @@ class ControllerService {
   };
 
   private execute = async (): Promise<void> => {
+    this.setActivity(true);
     let allowContinue = true;
 
     try {
@@ -153,6 +167,7 @@ class ControllerService {
     }
 
     if (!allowContinue) {
+      this.setActivity(false);
       this.setState(BotState.Paused);
 
       return;
@@ -163,6 +178,7 @@ class ControllerService {
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
     getAccountContext().nextExecutionService.setTasks(nextExecution);
+    this.setActivity(false);
 
     this._timeout = setTimeout(async () => {
       await this.execute();

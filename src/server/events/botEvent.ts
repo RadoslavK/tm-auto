@@ -1,4 +1,5 @@
 export enum BotEvent {
+  BotActivityChanged = 'BotActivityChanged',
   ActiveVillageIdChanged = 'ActiveVillageIdChanged',
   BotRunningChanged = 'BotRunningChanged',
   BuildingsInProgressUpdated = 'BuildingsInProgressUpdated',
