@@ -32,6 +32,9 @@ fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
 
 fragment GeneralSettings on GeneralSettings {
     allowTasks
+    tasksCoolDown {
+        ...CoolDown
+    }
     autoStart
     autoBuild
     autoUnits

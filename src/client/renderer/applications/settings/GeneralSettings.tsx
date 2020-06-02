@@ -1,16 +1,19 @@
 import { Button } from '@material-ui/core';
 import React, {
+  useCallback,
   useEffect,
   useState,
 } from 'react';
 
 import {
+  CoolDown as CoolDownModel,
   GeneralSettings as GeneralSettingsModel,
   UpdateGeneralSettingsInput,
   useGetGeneralSettingsQuery,
   useResetGeneralSettingsMutation,
   useUpdateGeneralSettingsMutation,
 } from '../../_graphql/graphqlHooks';
+import { CoolDown } from '../../_shared/components/controls/CoolDown';
 
 const useGeneralSettings = () => {
   const [settings, setSettings] = useState<GeneralSettingsModel>();
@@ -69,6 +72,14 @@ export const GeneralSettings: React.FC = () => {
     }
   }, [hasChanges, state, updateSettings]);
 
+  const onCoolDownChange = useCallback((updatedCoolDown: CoolDownModel): void => {
+    setState(prevState => prevState && ({
+      ...prevState,
+      tasksCoolDown: updatedCoolDown,
+    }));
+    setHasChanges(true);
+  }, []);
+
   if (!state) {
     return null;
   }
@@ -96,6 +107,7 @@ export const GeneralSettings: React.FC = () => {
     autoParty,
     autoStart,
     autoUnits,
+    tasksCoolDown,
   } = state;
 
   return (
@@ -131,6 +143,14 @@ export const GeneralSettings: React.FC = () => {
             name="allowTasks"
             onChange={onChange}
             type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label>Cooldown</label>
+          <CoolDown
+            onChange={onCoolDownChange}
+            value={tasksCoolDown}
           />
         </div>
 

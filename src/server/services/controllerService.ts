@@ -1,8 +1,6 @@
 import fs from 'fs';
 import { TimeoutError } from 'puppeteer/Errors';
 
-import { CoolDown } from '../_models/coolDown';
-import { Duration } from '../_models/duration';
 import { BotState } from '../../_shared/types/botState';
 import {
   AccountContext,
@@ -65,11 +63,6 @@ class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
   private _isActive: boolean = false;
-
-  private _tasksCoolDown: CoolDown = new CoolDown({
-    max: new Duration({ seconds: 35 }),
-    min: new Duration({ seconds: 10 }),
-  });
 
   private botState: BotState = BotState.None;
 
@@ -173,7 +166,8 @@ class ControllerService {
       return;
     }
 
-    const nextTimeout = this._tasksCoolDown.getRandomDelay();
+    const { tasksCoolDown } = getAccountContext().settingsService.general.get();
+    const nextTimeout = tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);

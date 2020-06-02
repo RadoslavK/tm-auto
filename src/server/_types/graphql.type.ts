@@ -758,6 +758,7 @@ export type UpdateAutoUnitsSettingsInput = {
 export type GeneralSettings = {
   readonly __typename?: 'GeneralSettings';
   readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDown;
   readonly autoStart: Scalars['Boolean'];
   readonly autoBuild: Scalars['Boolean'];
   readonly autoUnits: Scalars['Boolean'];
@@ -766,6 +767,7 @@ export type GeneralSettings = {
 
 export type UpdateGeneralSettingsInput = {
   readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDownInput;
   readonly autoBuild: Scalars['Boolean'];
   readonly autoUnits: Scalars['Boolean'];
   readonly autoStart: Scalars['Boolean'];
@@ -1352,6 +1354,7 @@ export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends Res
 
 export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
   allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  tasksCoolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
   autoStart: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

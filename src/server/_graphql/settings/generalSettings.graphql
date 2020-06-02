@@ -1,5 +1,6 @@
 type GeneralSettings {
     allowTasks: Boolean!
+    tasksCoolDown: CoolDown!
     autoStart: Boolean!
     autoBuild: Boolean!
     autoUnits: Boolean!
@@ -8,6 +9,7 @@ type GeneralSettings {
 
 input UpdateGeneralSettingsInput {
     allowTasks: Boolean!
+    tasksCoolDown: CoolDownInput!
     autoBuild: Boolean!
     autoUnits: Boolean!
     autoStart: Boolean!
