@@ -117,10 +117,10 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     const warehouseCapacity = this._village.resources.capacity.warehouse;
     const granaryCapacity = this._village.resources.capacity.granary;
     const currentResources = this._village.resources.amount;
-    const heroResources = getAccountContext().hero.resources;
-    const totalResources = settings.useHeroResources
+    const { hero } = getAccountContext();
+    const totalResources = settings.useHeroResources && hero.villageId === this._village.id
       ? currentResources
-        .add(heroResources)
+        .add(hero.resources)
         .mergeMin(new Resources({
           wood: warehouseCapacity,
           clay: warehouseCapacity,
