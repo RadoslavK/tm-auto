@@ -47,6 +47,7 @@ export default <Resolvers>{
     }),
 
     villageUpdated: subscribeToEvent(BotEvent.VillageUpdated, {
+      filter: (p, args) => p.village.id === args.villageId,
       resolve: p => p.village,
     }),
 
