@@ -229,14 +229,14 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       ]);
     }
 
-    const ongoing = await parseBuildingsInProgress();
-    this._buildings.updateOngoing(ongoing);
-    await updateActualResources();
-
     if (isQueued) {
       // might be a temporary created object to insta build
       const queueService = new BuildingQueueService(this._village.id);
-      queueService.dequeueBuilding(queuedBuilding.queueId);
+      queueService.dequeueBuilding(queuedBuilding.queueId, false);
     }
+
+    const ongoing = await parseBuildingsInProgress();
+    this._buildings.updateOngoing(ongoing);
+    await updateActualResources();
   };
 }

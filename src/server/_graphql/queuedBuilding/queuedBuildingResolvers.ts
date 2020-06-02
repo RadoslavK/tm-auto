@@ -84,7 +84,7 @@ export default <Resolvers> {
       } = args.input;
 
       const queueManager = new BuildingQueueService(villageId);
-      queueManager.dequeueBuilding(queueId);
+      queueManager.dequeueBuilding(queueId, true);
 
       return true;
     },

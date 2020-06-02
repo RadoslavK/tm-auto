@@ -83,13 +83,14 @@ export class BuildingQueueService {
     }
   };
 
-  public dequeueBuilding = (queueId: string): void => {
+  public dequeueBuilding = (queueId: string, correctQueue: boolean): void => {
     const removedCount = this._village.buildings.queue.remove(queueId);
+
     if (removedCount <= 0) {
       return;
     }
 
-    if (!this.correctBuildingQueue()) {
+    if (!correctQueue || !this.correctBuildingQueue().wasQueryCorrected) {
       this.onUpdate();
     }
   };
@@ -295,7 +296,7 @@ export class BuildingQueueService {
     return true;
   };
 
-  public correctBuildingQueue = (): boolean => {
+  public correctBuildingQueue = () => {
     const offsets: Record<number, number> = {};
 
     const spots = this._village.buildings.spots.buildings();
@@ -321,7 +322,7 @@ export class BuildingQueueService {
       this.onUpdate();
     }
 
-    return wasQueryCorrected;
+    return { wasQueryCorrected };
   };
 
   public getMainBuildingLevels = (): Record<string, number> => {
