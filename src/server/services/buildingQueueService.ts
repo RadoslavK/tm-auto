@@ -24,6 +24,10 @@ export enum MovingDirection {
   Down = 1,
 }
 
+type RangeToRemove = {
+  readonly buildings: readonly QueuedBuilding[];
+};
+
 export class BuildingQueueService {
   private readonly _village: Village;
   private readonly _filePath: string;
@@ -66,14 +70,23 @@ export class BuildingQueueService {
       }
 
       const queueId = `${fieldId}-${type}-${level}-${Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8)}`;
-      const qBuilding = {
+      const qBuilding = new QueuedBuilding({
         fieldId,
         level,
         queueId,
         type,
-      };
+      });
+
+      const lastQueuedBuilding = this._village.buildings.queue.peekLast();
 
       this._village.buildings.queue.add(qBuilding);
+      qBuilding.canMoveUp = i === 1
+        ? this.canMoveQueuedBuilding(queueId, MovingDirection.Up)
+        : false;
+
+      if (lastQueuedBuilding) {
+        lastQueuedBuilding.canMoveDown = qBuilding.canMoveUp;
+      }
 
       enqueued = true;
     }
@@ -83,15 +96,54 @@ export class BuildingQueueService {
     }
   };
 
-  public dequeueBuilding = (queueId: string, correctQueue: boolean): void => {
-    const removedCount = this._village.buildings.queue.remove(queueId);
+  private updateCanMoveFlags = (rangeToRemove: RangeToRemove): void => {
+    const firstBuilding = rangeToRemove.buildings[0];
+    const lastBuilding = rangeToRemove.buildings[rangeToRemove.buildings.length - 1];
 
-    if (removedCount <= 0) {
-      return;
+    const previousBuilding = this._village.buildings.queue.getPrevious(firstBuilding.queueId);
+    const followingBuilding = this._village.buildings.queue.getFollowing(lastBuilding.queueId);
+
+    if (previousBuilding) {
+      previousBuilding.canMoveDown = this.canMoveQueuedBuilding(previousBuilding.queueId, MovingDirection.Up);
+    }
+    if (followingBuilding) {
+      followingBuilding.canMoveUp = this.canMoveQueuedBuilding(followingBuilding.queueId, MovingDirection.Down);
+    }
+  };
+
+  public removeAndCorrectQueue = (queueIds: string[] = []): void => {
+    const rangesToRemove = this.correctBuildingQueue(queueIds);
+
+    for (const rangeToRemove of rangesToRemove) {
+      this.updateCanMoveFlags(rangeToRemove);
     }
 
-    if (!correctQueue || !this.correctBuildingQueue().wasQueryCorrected) {
+    const idsToRemove = rangesToRemove.flatMap(range => range.buildings).map(b => b.queueId);
+    const removedCount = this._village.buildings.queue.removeBulk(idsToRemove);
+
+    if (removedCount) {
       this.onUpdate();
+    }
+  };
+
+  public dequeueBuilding = (queueId: string, correctQueue: boolean): void => {
+    if (correctQueue) {
+      //  handles updates too
+      this.removeAndCorrectQueue([queueId]);
+    } else {
+      const bToRemove = this._village.buildings.queue.buildings().find(b => b.queueId === queueId);
+
+      if (!bToRemove) {
+        return;
+      }
+
+      this.updateCanMoveFlags({ buildings: [bToRemove] });
+
+      const removedCount = this._village.buildings.queue.remove(queueId);
+
+      if (removedCount > 0) {
+        this.onUpdate();
+      }
     }
   };
 
@@ -101,32 +153,68 @@ export class BuildingQueueService {
       fieldId,
     } = input;
 
-    const removedCount = deleteAll
-      ? this._village.buildings.queue.removeAllAtField(fieldId)
-      : this._village.buildings.queue.removeLastAtField(fieldId);
+    if (deleteAll) {
+      const buildings = this._village.buildings.queue.getAllAtField(fieldId);
+      this.removeAndCorrectQueue(buildings.map(b => b.queueId));
+    } else {
+      const building = this._village.buildings.queue.getLastAtField(fieldId);
 
-    if (removedCount <= 0) {
-      return;
-    }
+      if (!building) {
+        return;
+      }
 
-    if (!this.correctBuildingQueue().wasQueryCorrected) {
-      this.onUpdate();
+      this.removeAndCorrectQueue([building.queueId]);
     }
   };
 
-  public moveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
-    if (!this.canMoveQueuedBuilding(queueId, direction)) {
-      return false;
+  public moveQueuedBuilding = (queueId: string, direction: MovingDirection): void => {
+    const building = this._village.buildings.queue.buildings().find(b => b.queueId === queueId);
+
+    if (!building) {
+      return;
     }
 
-    if (direction === MovingDirection.Up) {
-      this._village.buildings.queue.moveUp(queueId);
-    } else {
-      this._village.buildings.queue.moveDown(queueId);
+    if (direction === MovingDirection.Up && !building.canMoveUp
+      || direction === MovingDirection.Down && !building.canMoveDown) {
+      return;
+    }
+
+    const index = this._village.buildings.queue.buildings().indexOf(building);
+    const newIndex = index + direction;
+
+    if (newIndex < 0 || newIndex > (this._village.buildings.queue.buildings().length - 1)) {
+      return;
+    }
+
+    const otherBuilding = this._village.buildings.queue.buildings()[newIndex];
+
+    this._village.buildings.queue.swap(index, newIndex);
+
+    const higherBuilding = direction === MovingDirection.Down
+      ? otherBuilding
+      : building;
+
+    const lowerBuilding = direction === MovingDirection.Down
+      ? building
+      : otherBuilding;
+
+    higherBuilding.canMoveUp = this.canMoveQueuedBuilding(higherBuilding.queueId, MovingDirection.Up);
+    lowerBuilding.canMoveDown = this.canMoveQueuedBuilding(lowerBuilding.queueId, MovingDirection.Down);
+    // they can swap back
+    higherBuilding.canMoveDown = true;
+    lowerBuilding.canMoveUp = true;
+
+    const previousBuilding = this._village.buildings.queue.getPrevious(higherBuilding.queueId);
+    const followingBuilding = this._village.buildings.queue.getFollowing(lowerBuilding.queueId);
+
+    if (previousBuilding) {
+      previousBuilding.canMoveDown = this.canMoveQueuedBuilding(previousBuilding.queueId, MovingDirection.Down);
+    }
+    if (followingBuilding) {
+      followingBuilding.canMoveUp = this.canMoveQueuedBuilding(followingBuilding.queueId, MovingDirection.Up);
     }
 
     this.onUpdate();
-    return true;
   };
 
   public moveAsHighAsPossible = (queueId: string): void => {
@@ -167,7 +255,31 @@ export class BuildingQueueService {
       return;
     }
 
-    this._village.buildings.queue.move(queueIndex, newIndex);
+    movedBuilding.canMoveUp = false;
+    movedBuilding.canMoveDown = true;
+
+    const initialPreviousBuilding = this._village.buildings.queue.getPrevious(movedBuilding.queueId);
+    const initialFollowingBuilding = this._village.buildings.queue.getFollowing(movedBuilding.queueId);
+
+    if (initialPreviousBuilding) {
+      initialPreviousBuilding.canMoveDown = this.canMoveQueuedBuilding(initialPreviousBuilding.queueId, MovingDirection.Down);
+    }
+    if (initialFollowingBuilding) {
+      initialFollowingBuilding.canMoveUp = this.canMoveQueuedBuilding(initialFollowingBuilding.queueId, MovingDirection.Up);
+    }
+
+    this._village.buildings.queue.swap(queueIndex, newIndex);
+
+    const previousBuilding = this._village.buildings.queue.getPrevious(movedBuilding.queueId);
+    const followingBuilding = this._village.buildings.queue.getFollowing(movedBuilding.queueId);
+
+    if (previousBuilding) {
+      previousBuilding.canMoveDown = false;
+    }
+    if (followingBuilding) {
+      followingBuilding.canMoveUp = true;
+    }
+
     this.onUpdate();
   };
 
@@ -181,7 +293,7 @@ export class BuildingQueueService {
     this.onUpdate();
   };
 
-  public canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
+  private canMoveQueuedBuilding = (queueId: string, direction: MovingDirection): boolean => {
     const queueIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
 
     if (queueIndex === -1) {
@@ -295,7 +407,7 @@ export class BuildingQueueService {
     return true;
   };
 
-  public correctBuildingQueue = () => {
+  private correctBuildingQueue = (queueIdsToBeRemoved: string[] = []): readonly RangeToRemove[] => {
     const offsets: Record<number, number> = {};
 
     const spots = this._village.buildings.spots.buildings();
@@ -304,24 +416,43 @@ export class BuildingQueueService {
       offsets[spot.fieldId] = 0;
     });
 
-    let wasQueryCorrected: boolean = false;
+    const buildings = this._village.buildings.queue.buildings();
 
-    this._village.buildings.queue.buildings().forEach(qBuilding => {
-      const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(qBuilding, offsets);
+    const ranges: RangeToRemove[] = [];
 
-      if (shouldBeRemoved) {
-        this._village.buildings.queue.remove(qBuilding.queueId);
-        wasQueryCorrected = true;
+    let lastIndexToRemove = -1;
+    let lastRangeBuildings: QueuedBuilding[] = [];
+
+    const push = (index: number, bToRemove: QueuedBuilding): void => {
+      if (index - lastIndexToRemove === 1) {
+        lastRangeBuildings.push(bToRemove);
       } else {
-        offsets[qBuilding.fieldId]++;
+        ranges.push({ buildings: lastRangeBuildings });
+        lastRangeBuildings = [bToRemove];
       }
-    });
+    };
 
-    if (wasQueryCorrected) {
-      this.onUpdate();
+    for (const [i, qBuilding] of buildings.entries()) {
+      if (queueIdsToBeRemoved.includes(qBuilding.queueId)) {
+        push(i, qBuilding);
+      } else {
+        const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(qBuilding, offsets);
+
+        if (shouldBeRemoved) {
+          push(i, qBuilding);
+        } else {
+          offsets[qBuilding.fieldId]++;
+        }
+      }
+
+      lastIndexToRemove = i;
     }
 
-    return { wasQueryCorrected };
+    if (lastRangeBuildings.length) {
+      ranges.push({ buildings: lastRangeBuildings });
+    }
+
+    return ranges;
   };
 
   public getMainBuildingLevels = (): Record<string, number> => {

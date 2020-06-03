@@ -53,7 +53,6 @@ NOVE NE TAK DOLEZITE
 * Use hero resources for other tasks
     * AutoUnits
     * [?] AutoParties
-* Extend building info with culture points
 * Extend unit info with capacity, defense, move speed...
 * Watch auction for items, prices.. maybe buy or sell too. And show pop up if something relevant appeared.
 * Resources balancing between villages / Trade Routes
@@ -63,7 +62,6 @@ NOVE NE TAK DOLEZITE
 * Attack someone, aim with catapults
 * Reports and surroundings analysis
 * Read messages
-* [?] Market - what is this
 * Auto Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
 
 ## Bugs
@@ -73,6 +71,7 @@ NOVE NE TAK DOLEZITE
     * Because they are not subscribed to changes
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
 * When just started app and created account -> it is not preselected. Tested with already existing accounts that were loaded.
+* Reload window breaks the IPC + GraphQL functionality
 
 ## Bot Detection
 
@@ -108,9 +107,7 @@ NOVE NE TAK DOLEZITE
 
 * GraphQL Cache
     * Cache-first - problem with showing updates
-* Optimistic Cache Re-Write on Updates
-* Pre-compute the information about queued buildings possibilities to move up/down/to top
-    * when the queue is updated so we do need to check again when moving and when queuing the UI
+* Optimistic Cache Re-Write on Update
 * Enqueuing buildings have poor performance from UI
 * Store rendered content when switching app tabs
 

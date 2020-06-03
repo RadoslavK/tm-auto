@@ -16,38 +16,33 @@ import {
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
-const createBuildingQueueFactory = (queueService: BuildingQueueService): (queue: BuildingQueueModel) => BuildingQueue => {
-  const mbLevels = queueService.getMainBuildingLevels();
+const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, number>): BuildingQueue => {
   const { speed } = getAccountContext().gameInfo;
   let totalCost = new CostModel();
 
-  return (queue: BuildingQueueModel): BuildingQueue => {
-    const buildings = queue.buildings().map((building: QueuedBuildingModel): QueuedBuilding => {
-      const cost = buildingInfoService.getBuildingInfo(building.type).costs[building.level];
-      const mbLevel = mbLevels[building.queueId];
-      const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
+  const buildings = queue.buildings().map((building: QueuedBuildingModel): QueuedBuilding => {
+    const cost = buildingInfoService.getBuildingInfo(building.type).costs[building.level];
+    const mbLevel = mbLevels[building.queueId];
+    const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
 
-      totalCost = totalCost.add(new CostModel({
+    totalCost = totalCost.add(new CostModel({
+      buildTime: actualBuildTime,
+      resources: cost.resources,
+    }));
+
+    return ({
+      ...building,
+      cost: {
+        ...cost,
         buildTime: actualBuildTime,
-        resources: cost.resources,
-      }));
-
-      return ({
-        ...building,
-        canMoveDown: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Down),
-        canMoveUp: queueService.canMoveQueuedBuilding(building.queueId, MovingDirection.Up),
-        cost: {
-          ...cost,
-          buildTime: actualBuildTime,
-        },
-        name: buildingInfoService.getBuildingInfo(building.type).name,
-      });
+      },
+      name: buildingInfoService.getBuildingInfo(building.type).name,
     });
+  });
 
-    return {
-      buildings,
-      totalCost,
-    };
+  return {
+    buildings,
+    totalCost,
   };
 };
 
@@ -55,9 +50,9 @@ const getBuildingQueue = (villageId: number) => {
   const village = getAccountContext().villageService.village(villageId);
   const { queue } = village.buildings;
   const queueService = new BuildingQueueService(villageId);
-  const createBuildingQueue = createBuildingQueueFactory(queueService);
+  const mbLevels = queueService.getMainBuildingLevels();
 
-  return createBuildingQueue(queue);
+  return mapBuildingQueue(queue, mbLevels);
 };
 
 export default <Resolvers> {
@@ -126,7 +121,8 @@ export default <Resolvers> {
       } = args.input;
 
       const queueManager = new BuildingQueueService(villageId);
-      return queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
+      queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
+      return true;
     },
 
     moveQueuedBuildingUp: (_, args) => {
@@ -136,7 +132,8 @@ export default <Resolvers> {
       } = args.input;
 
       const queueManager = new BuildingQueueService(villageId);
-      return queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
+      queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
+      return true;
     },
   },
 

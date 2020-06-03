@@ -15,6 +15,6 @@ export const updatePlayerInfo = async (): Promise<void> => {
 
   if (capitalChanged) {
     const { currentVillageId } = getAccountContext().villageService;
-    new BuildingQueueService(currentVillageId).correctBuildingQueue();
+    new BuildingQueueService(currentVillageId).removeAndCorrectQueue();
   }
 };

@@ -19,27 +19,42 @@ export class BuildingQueue {
     ? this._buildings[0]
     : this._buildings.find(x => getBuildingSpotType(x.type) === type);
 
-  public removeLastAtField = (fieldId: number): number => {
-    const buildingToRemove = this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
+  public peekLast = (): QueuedBuilding | undefined => this._buildings.length
+    ? this._buildings[this._buildings.length - 1]
+    : undefined;
 
-    if (buildingToRemove) {
-      this.remove(buildingToRemove.queueId);
-      return 1;
+  public getPrevious = (queueId: string): QueuedBuilding | undefined => {
+    const index = this._buildings.findIndex(b => b.queueId === queueId);
+
+    if (index <= 0) {
+      return;
     }
 
-    return 0;
+    return this._buildings[index - 1];
   };
 
-  public removeAllAtField = (fieldId: number): number => {
-    const originalCount = this._buildings.length;
-    this._buildings = this._buildings.filter(b => b.fieldId !== fieldId);
+  public getFollowing = (queueId: string): QueuedBuilding | undefined => {
+    const index = this._buildings.findIndex(b => b.queueId === queueId);
 
-    return originalCount - this._buildings.length;
+    if (index === -1 || index >= (this._buildings.length - 1)) {
+      return;
+    }
+
+    return this._buildings[index + 1];
   };
 
-  public remove = (queueId: string): number => {
+  public getAllAtField = (fieldId: number): readonly QueuedBuilding[] =>
+    this.buildings().filter(b => b.fieldId === fieldId);
+
+  public getLastAtField = (fieldId: number): QueuedBuilding | undefined =>
+    this._buildings.slice().reverse().find(b => b.fieldId === fieldId);
+
+  public remove = (queueId: string): number =>
+    this.removeBulk([queueId]);
+
+  public removeBulk = (queueIds: string[]): number => {
     const originalCount = this._buildings.length;
-    this._buildings = this._buildings.filter(b => b.queueId !== queueId);
+    this._buildings = this._buildings.filter(b => !queueIds.includes(b.queueId));
 
     return originalCount - this._buildings.length;
   };
@@ -50,47 +65,63 @@ export class BuildingQueue {
 
   public buildings = (): readonly QueuedBuilding[] => this._buildings;
 
-  public moveUp = (queueId: string): void => {
+  public moveUp = (queueId: string): boolean => {
     if (this._buildings.length <= 1) {
-      return;
+      return false;
     }
 
     const index = this._buildings.findIndex(b => b.queueId === queueId);
 
     if (index === -1) {
-      return;
+      return false;
+    }
+
+    const building = this._buildings[index];
+
+    if (!building.canMoveUp) {
+      return false;
     }
 
     const newIndex = index - 1;
 
     if (newIndex < 0) {
-      return;
+      return false;
     }
 
-    this.move(index, newIndex);
+    this.swap(index, newIndex);
+
+    return true;
   };
 
-  public moveDown = (queueId: string): void => {
+  public moveDown = (queueId: string): boolean => {
     if (this._buildings.length <= 1) {
-      return;
+      return false;
     }
 
     const index = this._buildings.findIndex(b => b.queueId === queueId);
 
     if (index === -1) {
-      return;
+      return false;
+    }
+
+    const building = this._buildings[index];
+
+    if (!building.canMoveDown) {
+      return false;
     }
 
     const newIndex = index + 1;
 
     if (newIndex >= this._buildings.length) {
-      return;
+      return false;
     }
 
-    this.move(index, newIndex);
+    this.swap(index, newIndex);
+
+    return true;
   };
 
-  public move = (oldIndex: number, newIndex: number): void => {
+  public swap = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0]);
   };
 }
