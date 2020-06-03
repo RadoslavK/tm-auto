@@ -13,6 +13,7 @@ type BuildingInfo = {
   readonly category: BuildingCategory;
   readonly conditions: BuildingConditions;
   readonly costs: Record<string, Cost>;
+  readonly culturePoints: Record<string, number>;
   readonly maxLevel: number;
   readonly name: string;
   readonly type: number;

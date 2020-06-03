@@ -56,9 +56,10 @@ export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpee
 
   totalSeconds /= gameSpeed;
 
-  if (!isMainBuilding) {
-    // MB has already corrected values
-    totalSeconds *= mainBuildingLevel > 0 ? 0.964 ** (mainBuildingLevel - 1) : 5;
+  // MB has already corrected values
+  if (!isMainBuilding && mainBuildingLevel > 0) {
+    totalSeconds /= 5;
+    totalSeconds *= 0.964 ** (mainBuildingLevel - 1);
   }
 
   totalSeconds = roundToNearest10(totalSeconds);

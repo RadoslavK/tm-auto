@@ -68,7 +68,6 @@ NOVE NE TAK DOLEZITE
 
 ## Bugs
 
-* [?] Estimated time of building completion is wrong? For lvl 7 Cranny on 3x Speed. Showed 10 seconds less
 * [?] Bot said is building lvl7 but started building lvl6 for example and removed rest of the queue for the same fieldId.
 * If the settings in opened modal are editing and settings in the background are related to them, they are not updated. I think its only reset option.
     * Because they are not subscribed to changes
