@@ -109,7 +109,7 @@ export class BuildingQueueService {
       return;
     }
 
-    if (!this.correctBuildingQueue()) {
+    if (!this.correctBuildingQueue().wasQueryCorrected) {
       this.onUpdate();
     }
   };
