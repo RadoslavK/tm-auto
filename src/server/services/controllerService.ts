@@ -35,6 +35,13 @@ type HandleErrorResult = {
 
 const handleError = async (error: Error): Promise<HandleErrorResult> => {
   console.error(error.stack);
+
+  try {
+    getAccountContext().logsService.logError(error.message);
+  } catch (logError) {
+    console.error(logError.stack);
+  }
+
   // try to make screenshot
   try {
     const page = await getPage();
@@ -48,9 +55,13 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
     await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
     await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
-
-    getAccountContext().logsService.logError(error.message);
   } catch (screenshotError) {
+    try {
+      getAccountContext().logsService.logError(screenshotError.message);
+    } catch (logError) {
+      console.error(logError.stack);
+    }
+
     console.error(screenshotError.stack);
   }
 
