@@ -37,7 +37,7 @@ class AccountService {
   public createAccount = async (account: Omit<UserAccount, 'id'>): Promise<UserAccount> => {
     const id = generateId();
 
-    const correctedServerMatch = /(.*travian.com)\/?/.exec(account.server);
+    const correctedServerMatch = /(.*travian\.[^/]*)/.exec(account.server);
 
     if (!correctedServerMatch) {
       throw new Error(`Invalid server url: ${account.server}`);
