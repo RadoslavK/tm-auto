@@ -32,7 +32,7 @@ export const useLogs = () => {
 
       const entry = subscriptionData.data.onLogEntryAdded;
 
-      setEntries(prevEntries => [...prevEntries, entry]);
+      setEntries(prevEntries => [entry, ...prevEntries]);
     },
   });
 

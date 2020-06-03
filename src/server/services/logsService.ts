@@ -87,7 +87,7 @@ export class LogsService {
   };
 
   private addEntry = (logEntry: LogEntry): void => {
-    this.entries.push(logEntry);
+    this.entries.unshift(logEntry);
     publishPayloadEvent(BotEvent.LogEntryAdded, { logEntry });
   };
 }
