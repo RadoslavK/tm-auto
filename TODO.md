@@ -72,6 +72,7 @@ NOVE NE TAK DOLEZITE
 * If the settings in opened modal are editing and settings in the background are related to them, they are not updated. I think its only reset option.
     * Because they are not subscribed to changes
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
+* When just started app and created account -> it is not preselected. Tested with already existing accounts that were loaded.
 
 ## Bot Detection
 

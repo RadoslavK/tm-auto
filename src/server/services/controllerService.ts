@@ -5,6 +5,7 @@ import { BotState } from '../../_shared/types/botState';
 import {
   AccountContext,
   getAccountContext,
+  resetAccountContext,
 } from '../accountContext';
 import {
   getPage,
@@ -88,6 +89,8 @@ class ControllerService {
   };
 
   public signIn = async (accountId: string): Promise<void> => {
+    resetAccountContext();
+
     let allowContinue = true;
 
     try {

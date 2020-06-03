@@ -105,4 +105,8 @@ export const getAccountContext = (): AccountContext => {
   return _accountContext;
 };
 
+export const resetAccountContext = () => {
+  _accountContext = null;
+};
+
 // export const accountContext = new AccountContext();
