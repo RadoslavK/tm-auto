@@ -11,6 +11,7 @@ NOVE NE TAK DOLEZITE
 * Allow creating own defaults
 * Have preferences for how to spend resources, how much on units, buildings, what ratios of units, how etc.
     * and how much min resources to leave
+    * also something like have at least for the next building queue before building units etc
 * Option to turn off dual queue for Roman
     * If its on then show possible if res and infrastructure can be built at the same time the whole duration
         * have a toggle for this
@@ -41,6 +42,7 @@ NOVE NE TAK DOLEZITE
     * Or sort by level..
 * If bot fails to sign in then show error message in UI
 * Add cooldown to some basic non task related stuff like checking profile of player and updating hero resources
+    * Profile checking.. Ally id is possible to parse from any view so just capital in that task
 * Dynamically update village names
 * Building mode templates
     * Create a template similar to SecondVillageBot to build buildings based on a state
@@ -100,6 +102,7 @@ NOVE NE TAK DOLEZITE
 * refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
 * Get rid of refetch queries and refetch
 * Use CONSTANTS_NAMING for enum values. At least on graphql
+* Use mapper for union log entry in schema
 
 ## Performance
 
@@ -109,6 +112,7 @@ NOVE NE TAK DOLEZITE
 * Pre-compute the information about queued buildings possibilities to move up/down/to top
     * when the queue is updated so we do need to check again when moving and when queuing the UI
 * Enqueuing buildings have poor performance from UI
+* Store rendered content when switching app tabs
 
 ## Error Handling / Fault Tolerance
 

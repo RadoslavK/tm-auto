@@ -35,34 +35,28 @@ type HandleErrorResult = {
 
 const handleError = async (error: Error): Promise<HandleErrorResult> => {
   console.error(error.stack);
+  getAccountContext().logsService.logError(error.message);
 
-  try {
-    getAccountContext().logsService.logError(error.message);
-  } catch (logError) {
-    console.error(logError.stack);
-  }
+  const now = new Date();
+  const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
 
   // try to make screenshot
   try {
     const page = await getPage();
-    const now = new Date();
-    const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
 
     if (!fs.existsSync('.screenshots')) {
       fs.mkdirSync('.screenshots');
     }
 
-    await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
     await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
     await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
-  } catch (screenshotError) {
-    try {
-      getAccountContext().logsService.logError(screenshotError.message);
-    } catch (logError) {
-      console.error(logError.stack);
-    }
 
+    await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
+  } catch (screenshotError) {
     console.error(screenshotError.stack);
+    getAccountContext().logsService.logError(screenshotError.message);
+
+    await fs.promises.writeFile(`.screenshots/${format}-screenshot-error.txt`, screenshotError.stack ?? '', { flag: 'w' });
   }
 
   await killBrowser();
