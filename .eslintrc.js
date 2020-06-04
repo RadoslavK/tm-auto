@@ -10,6 +10,7 @@ module.exports = {
     'plugin:promise/recommended',
     'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     'plugin:unicorn/recommended',
+    'plugin:react-hooks/recommended',
   ],
   overrides: [
     {

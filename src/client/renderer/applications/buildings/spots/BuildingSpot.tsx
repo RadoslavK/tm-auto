@@ -28,13 +28,8 @@ const useStyles = makeStyles<unknown, Props>({
     background: '#b1b5b9',
     fontWeight: 'bold',
   },
-  queueButtons: ({ building }) => {
-    const isMaxed = building.type > 0 && building.level.total === building.level.max;
-
-    return {
-      flex: 1,
-      visibility: isMaxed ? 'hidden' : undefined,
-    };
+  queueButtons: {
+    flex: 1,
   },
   root: props => ({
     alignItems: 'flex-start',
@@ -111,12 +106,14 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
           <BuildingLevelBox level={building.level} />
         )}
         <div className={classes.queueButtons}>
-          <button
-            onClick={onEnqueue}
-            type="button"
-          >
-            +
-          </button>
+          {(building.type === 0 || building.level.total < building.level.max) && (
+            <button
+              onClick={onEnqueue}
+              type="button"
+            >
+              +
+            </button>
+          )}
           {building.level.queued && (
             <button
               onClick={onDequeue}
