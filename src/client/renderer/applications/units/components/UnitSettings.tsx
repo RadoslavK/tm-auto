@@ -138,6 +138,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
       <div
         className={classes.unitImage}
         onClick={toggleAutoBuild}
+        title={data.unitInfo.name}
       />
       <div className={classes.unitInfo}>
         <div>
