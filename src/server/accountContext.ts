@@ -9,15 +9,30 @@ import { Village } from './_models/village/village';
 import { VillageCapacity } from './_models/village/villageCapacity';
 import { VillageResources } from './_models/village/villageResources';
 import { accountService } from './services/accountService';
+import { BuildingQueueService } from './services/buildingQueueService';
 import { LogsService } from './services/logsService';
 import { NextExecutionService } from './services/nextExecutionService';
 import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService';
 
 export class AccountContext {
+  private _buildingQueueServices: Map<number, BuildingQueueService> = new Map<number, BuildingQueueService>();
+
   public villageService: VillageService = new VillageService();
   public settingsService: SettingsService = new SettingsService();
   public logsService: LogsService = new LogsService();
+  public buildingQueueService = {
+    for: (villageId: number): BuildingQueueService => {
+      let service = this._buildingQueueServices.get(villageId);
+
+      if (!service) {
+        service = new BuildingQueueService(villageId);
+        this._buildingQueueServices.set(villageId, service);
+      }
+
+      return service;
+    },
+  };
   public nextExecutionService: NextExecutionService = new NextExecutionService();
 
   public gameInfo: GameInfo = new GameInfo();

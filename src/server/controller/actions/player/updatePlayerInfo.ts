@@ -2,7 +2,6 @@ import { TravianPath } from '../../../_enums/travianPath';
 import { getAccountContext } from '../../../accountContext';
 import { parseAllyId } from '../../../parsers/player/parseAllyId';
 import { parseCapitalVillageCoords } from '../../../parsers/player/parseCapitalVillageCoords';
-import { BuildingQueueService } from '../../../services/buildingQueueService';
 import { ensurePage } from '../ensurePage';
 
 export const updatePlayerInfo = async (): Promise<void> => {
@@ -15,6 +14,7 @@ export const updatePlayerInfo = async (): Promise<void> => {
 
   if (capitalChanged) {
     const { currentVillageId } = getAccountContext().villageService;
-    new BuildingQueueService(currentVillageId).removeAndCorrectQueue();
+    const queueService = getAccountContext().buildingQueueService.for(currentVillageId);
+    queueService.removeAndCorrectQueue();
   }
 };

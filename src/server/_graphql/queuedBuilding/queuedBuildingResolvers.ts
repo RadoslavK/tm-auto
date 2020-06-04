@@ -9,10 +9,7 @@ import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
-import {
-  BuildingQueueService,
-  MovingDirection,
-} from '../../services/buildingQueueService';
+import { MovingDirection } from '../../services/buildingQueueService';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
@@ -49,7 +46,7 @@ const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, nu
 const getBuildingQueue = (villageId: number) => {
   const village = getAccountContext().villageService.village(villageId);
   const { queue } = village.buildings;
-  const queueService = new BuildingQueueService(villageId);
+  const queueService = getAccountContext().buildingQueueService.for(villageId);
   const mbLevels = queueService.getMainBuildingLevels();
 
   return mapBuildingQueue(queue, mbLevels);
@@ -59,7 +56,7 @@ export default <Resolvers> {
   Query: {
     buildingQueue: (_, args): BuildingQueue => getBuildingQueue(args.villageId),
     canMoveBuildingToIndex: (_, { index, queueId, villageId }) => {
-      const queueService = new BuildingQueueService(villageId);
+      const queueService = getAccountContext().buildingQueueService.for(villageId);
 
       return queueService.canMoveBuildingToIndex(queueId, index);
     },
@@ -71,7 +68,7 @@ export default <Resolvers> {
         villageId,
       } = args;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.clearQueue();
 
       return true;
@@ -83,7 +80,7 @@ export default <Resolvers> {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.dequeueBuilding(queueId, true);
 
       return true;
@@ -95,7 +92,7 @@ export default <Resolvers> {
         ...input
       } = args.input;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.dequeueBuildingAtField(input);
 
       return true;
@@ -107,14 +104,14 @@ export default <Resolvers> {
         ...enqueuedBuilding
       } = args.input;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.enqueueBuilding(enqueuedBuilding);
 
       return true;
     },
 
     moveQueuedBuildingAsHighAsPossible: (_, args) => {
-      const queueManager = new BuildingQueueService(args.villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(args.villageId);
       queueManager.moveAsHighAsPossible(args.queueId);
       return true;
     },
@@ -125,7 +122,7 @@ export default <Resolvers> {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
       return true;
     },
@@ -136,13 +133,13 @@ export default <Resolvers> {
         villageId,
       } = args.input;
 
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
       return true;
     },
 
     moveQueuedBuildingToIndex: (_, { index, queueId, villageId }) => {
-      const queueManager = new BuildingQueueService(villageId);
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveBuildingToIndex(queueId, index);
       return true;
     },

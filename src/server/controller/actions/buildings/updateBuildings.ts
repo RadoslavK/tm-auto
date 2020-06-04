@@ -6,7 +6,6 @@ import {
   parseFieldSpotsNew,
 } from '../../../parsers/buildings/parseFieldSpots';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots';
-import { BuildingQueueService } from '../../../services/buildingQueueService';
 import { gameInfoService } from '../../../services/info/gameInfoService';
 import { ensurePage } from '../ensurePage';
 
@@ -27,6 +26,6 @@ export const updateBuildings = async (): Promise<void> => {
   const infrastructureSpots = await parseInfrastructureSpots();
   village.buildings.updateActual(infrastructureSpots);
 
-  const queueService = new BuildingQueueService(village.id);
+  const queueService = getAccountContext().buildingQueueService.for(village.id);
   queueService.removeAndCorrectQueue();
 };

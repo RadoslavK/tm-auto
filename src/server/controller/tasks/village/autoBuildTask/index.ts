@@ -14,7 +14,6 @@ import { getAccountContext } from '../../../../accountContext';
 import { getPage } from '../../../../browser/getPage';
 import { fieldIds } from '../../../../constants/fieldIds';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
-import { BuildingQueueService } from '../../../../services/buildingQueueService';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import { isInfrastructure } from '../../../../utils/buildingUtils';
 import {
@@ -231,7 +230,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
     if (isQueued) {
       // might be a temporary created object to insta build
-      const queueService = new BuildingQueueService(this._village.id);
+      const queueService = getAccountContext().buildingQueueService.for(this._village.id);
       queueService.dequeueBuilding(queuedBuilding.queueId, false);
     }
 

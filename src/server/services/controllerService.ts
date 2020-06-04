@@ -28,7 +28,6 @@ import {
 } from '../pubSub';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
-import { BuildingQueueService } from './buildingQueueService';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
@@ -112,7 +111,8 @@ class ControllerService {
       const allVillages = getAccountContext().villageService.allVillages();
 
       for (const village of shuffle(allVillages)) {
-        await new BuildingQueueService(village.id).loadQueue();
+        const buildingQueueService = getAccountContext().buildingQueueService.for(village.id);
+        await buildingQueueService.loadQueue();
         await ensureVillageSelected(village.id);
 
         await updateResources();
