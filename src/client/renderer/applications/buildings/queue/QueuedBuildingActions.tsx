@@ -4,11 +4,8 @@ import React from 'react';
 
 import {
   QueuedBuilding,
-  QueuedBuildingManipulationInput,
   useDequeueBuildingMutation,
   useMoveQueuedBuildingAsHighAsPossibleMutation,
-  useMoveQueuedBuildingDownMutation,
-  useMoveQueuedBuildingUpMutation,
 } from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
@@ -28,20 +25,8 @@ const useStyles = makeStyles({
     height: '2em',
     width: '2em',
   },
-  moveDown: {
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    backgroundImage: `url("${imageLinks.actions.queue.moveDown}")`,
-  },
   moveToTop: {
     backgroundImage: `url("${imageLinks.actions.queue.moveToTop}")`,
-  },
-  moveUp: {
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    backgroundImage: `url("${imageLinks.actions.queue.moveUp}")`,
   },
   root: {
     display: 'flex',
@@ -53,31 +38,19 @@ const useStyles = makeStyles({
 export const QueuedBuildingActions: React.FC<Props> = (props) => {
   const {
     building: {
-      canMoveDown,
-      canMoveUp,
       queueId,
     },
     className,
   } = props;
 
   const { villageId } = useVillageContext();
-  const input: QueuedBuildingManipulationInput = { queueId, villageId };
-
-  const options = {
-    variables: { input },
-  };
 
   const [moveToTop] = useMoveQueuedBuildingAsHighAsPossibleMutation({ variables: { queueId, villageId } });
-
-  const [moveDown] = useMoveQueuedBuildingDownMutation(options);
-  const [moveUp] = useMoveQueuedBuildingUpMutation(options);
-  const [dequeue] = useDequeueBuildingMutation(options);
+  const [dequeue] = useDequeueBuildingMutation({ variables: { input: { queueId, villageId } } });
 
   const classes = useStyles({});
 
   const onMoveToTop = () => moveToTop();
-  const onMoveDown = canMoveDown ? () => moveDown() : undefined;
-  const onMoveUp = canMoveUp ? () => moveUp() : undefined;
   const onDequeue = () => dequeue();
 
   return (
@@ -85,18 +58,6 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
       <button
         className={clsx(classes.image, classes.moveToTop)}
         onClick={onMoveToTop}
-        type="button"
-      />
-      <button
-        className={clsx(classes.image, classes.moveUp)}
-        disabled={!canMoveUp}
-        onClick={onMoveUp}
-        type="button"
-      />
-      <button
-        className={clsx(classes.image, classes.moveDown)}
-        disabled={!canMoveDown}
-        onClick={onMoveDown}
         type="button"
       />
       <button

@@ -152,9 +152,7 @@ export type Mutation = {
   readonly dequeueBuildingAtField: Scalars['Boolean'];
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
-  readonly moveQueuedBuildingDown: Scalars['Boolean'];
   readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
-  readonly moveQueuedBuildingUp: Scalars['Boolean'];
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
   readonly resetAutoMentorSettings: AutoMentorSettings;
@@ -201,7 +199,7 @@ export type MutationDeleteAccountArgs = {
 
 
 export type MutationDequeueBuildingArgs = {
-  input: QueuedBuildingManipulationInput;
+  input: DequeueBuildingInput;
 };
 
 
@@ -221,20 +219,10 @@ export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
 };
 
 
-export type MutationMoveQueuedBuildingDownArgs = {
-  input: QueuedBuildingManipulationInput;
-};
-
-
 export type MutationMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['Int'];
   queueId: Scalars['String'];
   index: Scalars['Int'];
-};
-
-
-export type MutationMoveQueuedBuildingUpArgs = {
-  input: QueuedBuildingManipulationInput;
 };
 
 
@@ -587,8 +575,6 @@ export type TimestampInput = {
 
 export type QueuedBuilding = {
   readonly __typename?: 'QueuedBuilding';
-  readonly canMoveDown: Scalars['Boolean'];
-  readonly canMoveUp: Scalars['Boolean'];
   readonly level: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
@@ -614,7 +600,7 @@ export type EnqueueBuildingInput = {
   readonly targetLevel: Maybe<Scalars['Int']>;
 };
 
-export type QueuedBuildingManipulationInput = {
+export type DequeueBuildingInput = {
   readonly queueId: Scalars['ID'];
   readonly villageId: Scalars['Int'];
 };
@@ -946,7 +932,7 @@ export type ResolversTypes = {
   BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, totalCost: ResolversTypes['Cost'] }>;
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
-  QueuedBuildingManipulationInput: QueuedBuildingManipulationInput;
+  DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   AdventureCriteria: AdventureCriteria;
   AutoAdventureSettings: ResolverTypeWrapper<AutoAdventureSettings>;
@@ -1021,7 +1007,7 @@ export type ResolversParentTypes = {
   BuildingQueue: Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, totalCost: ResolversParentTypes['Cost'] };
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
-  QueuedBuildingManipulationInput: QueuedBuildingManipulationInput;
+  DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   AdventureCriteria: AdventureCriteria;
   AutoAdventureSettings: AutoAdventureSettings;
@@ -1102,9 +1088,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   dequeueBuildingAtField: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDequeueBuildingAtFieldArgs, 'input'>>;
   enqueueBuilding: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
-  moveQueuedBuildingDown: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingDownArgs, 'input'>>;
   moveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
-  moveQueuedBuildingUp: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingUpArgs, 'input'>>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
   resetAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationResetAutoBuildSettingsArgs, 'villageId'>>;
   resetAutoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;
@@ -1279,8 +1263,6 @@ export type CoolDownResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueuedBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuilding'] = ResolversParentTypes['QueuedBuilding']> = {
-  canMoveDown: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  canMoveUp: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

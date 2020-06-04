@@ -9,7 +9,6 @@ import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
-import { MovingDirection } from '../../services/buildingQueueService';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
 
@@ -113,28 +112,6 @@ export default <Resolvers> {
     moveQueuedBuildingAsHighAsPossible: (_, args) => {
       const queueManager = getAccountContext().buildingQueueService.for(args.villageId);
       queueManager.moveAsHighAsPossible(args.queueId);
-      return true;
-    },
-
-    moveQueuedBuildingDown: (_, args) => {
-      const {
-        queueId,
-        villageId,
-      } = args.input;
-
-      const queueManager = getAccountContext().buildingQueueService.for(villageId);
-      queueManager.moveQueuedBuilding(queueId, MovingDirection.Down);
-      return true;
-    },
-
-    moveQueuedBuildingUp: (_, args) => {
-      const {
-        queueId,
-        villageId,
-      } = args.input;
-
-      const queueManager = getAccountContext().buildingQueueService.for(villageId);
-      queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
       return true;
     },
 

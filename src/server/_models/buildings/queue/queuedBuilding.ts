@@ -7,8 +7,6 @@ export class QueuedBuilding {
   public readonly level: number = 0;
   public readonly queueId: string = '';
   public readonly type: BuildingType = BuildingType.None;
-  public canMoveUp: boolean = false;
-  public canMoveDown: boolean = false;
 
   constructor(params: PartialFields<QueuedBuilding> = {}) {
     mergeDefaults(this, params);

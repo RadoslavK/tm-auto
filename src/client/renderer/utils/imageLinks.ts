@@ -20,9 +20,7 @@ export const imageLinks = {
   actions: {
     delete: `${baseUrl}/red_cross.png`,
     queue: {
-      moveDown: `${baseUrl}/arrow_down.png`,
       moveToTop: `${baseUrl}/double_arrow_up.png`,
-      moveUp: `${baseUrl}/arrow_up.png`,
     },
   },
 

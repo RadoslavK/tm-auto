@@ -1,6 +1,4 @@
 type QueuedBuilding {
-    canMoveDown: Boolean!
-    canMoveUp: Boolean!
     level: Int!
     name: String!
     type: Int!
@@ -30,15 +28,8 @@ input EnqueueBuildingInput {
     targetLevel: Int
 }
 
-extend type Mutation {
-    clearQueue(villageId: Int!): Boolean!
-    dequeueBuilding(input: QueuedBuildingManipulationInput!): Boolean!
-    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
-    enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
-    moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
-}
 
-input QueuedBuildingManipulationInput {
+input DequeueBuildingInput {
     queueId: ID!
     villageId: Int!
 }
@@ -50,9 +41,12 @@ input DequeueBuildingAtFieldInput {
 }
 
 extend type Mutation {
-    moveQueuedBuildingDown(input: QueuedBuildingManipulationInput!): Boolean!
-    moveQueuedBuildingUp(input: QueuedBuildingManipulationInput!): Boolean!
+    clearQueue(villageId: Int!): Boolean!
+    dequeueBuilding(input: DequeueBuildingInput!): Boolean!
+    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
+    enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
     moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+    moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
 }
 
 type Subscription {

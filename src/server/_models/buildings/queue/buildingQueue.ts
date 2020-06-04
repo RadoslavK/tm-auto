@@ -19,30 +19,6 @@ export class BuildingQueue {
     ? this._buildings[0]
     : this._buildings.find(x => getBuildingSpotType(x.type) === type);
 
-  public peekLast = (): QueuedBuilding | undefined => this._buildings.length
-    ? this._buildings[this._buildings.length - 1]
-    : undefined;
-
-  public getPrevious = (queueId: string): QueuedBuilding | undefined => {
-    const index = this._buildings.findIndex(b => b.queueId === queueId);
-
-    if (index <= 0) {
-      return;
-    }
-
-    return this._buildings[index - 1];
-  };
-
-  public getFollowing = (queueId: string): QueuedBuilding | undefined => {
-    const index = this._buildings.findIndex(b => b.queueId === queueId);
-
-    if (index === -1 || index >= (this._buildings.length - 1)) {
-      return;
-    }
-
-    return this._buildings[index + 1];
-  };
-
   public getAllAtField = (fieldId: number): readonly QueuedBuilding[] =>
     this.buildings().filter(b => b.fieldId === fieldId);
 
@@ -65,63 +41,7 @@ export class BuildingQueue {
 
   public buildings = (): readonly QueuedBuilding[] => this._buildings;
 
-  public moveUp = (queueId: string): boolean => {
-    if (this._buildings.length <= 1) {
-      return false;
-    }
-
-    const index = this._buildings.findIndex(b => b.queueId === queueId);
-
-    if (index === -1) {
-      return false;
-    }
-
-    const building = this._buildings[index];
-
-    if (!building.canMoveUp) {
-      return false;
-    }
-
-    const newIndex = index - 1;
-
-    if (newIndex < 0) {
-      return false;
-    }
-
-    this.move(index, newIndex);
-
-    return true;
-  };
-
-  public moveDown = (queueId: string): boolean => {
-    if (this._buildings.length <= 1) {
-      return false;
-    }
-
-    const index = this._buildings.findIndex(b => b.queueId === queueId);
-
-    if (index === -1) {
-      return false;
-    }
-
-    const building = this._buildings[index];
-
-    if (!building.canMoveDown) {
-      return false;
-    }
-
-    const newIndex = index + 1;
-
-    if (newIndex >= this._buildings.length) {
-      return false;
-    }
-
-    this.move(index, newIndex);
-
-    return true;
-  };
-
-  public move = (oldIndex: number, newIndex: number): void => {
+  public moveTo = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0]);
   };
 }

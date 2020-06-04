@@ -8,20 +8,12 @@ mutation EnqueueBuilding($input: EnqueueBuildingInput!) {
     enqueueBuilding(input: $input)
 }
 
-mutation DequeueBuilding($input: QueuedBuildingManipulationInput!) {
+mutation DequeueBuilding($input: DequeueBuildingInput!) {
     dequeueBuilding(input: $input)
 }
 
 mutation DequeueBuildingAtField($input: DequeueBuildingAtFieldInput!) {
     dequeueBuildingAtField(input: $input)
-}
-
-mutation MoveQueuedBuildingDown($input: QueuedBuildingManipulationInput!) {
-    moveQueuedBuildingDown(input: $input)
-}
-
-mutation MoveQueuedBuildingUp($input: QueuedBuildingManipulationInput!) {
-    moveQueuedBuildingUp(input: $input)
 }
 
 mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: ID!) {
@@ -30,8 +22,6 @@ mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: ID!) {
 
 fragment BuildingQueue on BuildingQueue {
     buildings {
-        canMoveDown
-        canMoveUp
         cost {
             ...Cost
         }
