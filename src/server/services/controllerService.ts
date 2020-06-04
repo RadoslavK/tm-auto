@@ -151,6 +151,14 @@ class ControllerService {
   };
 
   private execute = async (): Promise<void> => {
+    if (getAccountContext().nextExecutionService.tasks() > new Date()) {
+      this._timeout = setTimeout(async () => {
+        await this.execute();
+      }, 1000);
+
+      return;
+    }
+
     this.setActivity(true);
     let allowContinue = true;
 
@@ -184,7 +192,7 @@ class ControllerService {
 
     this._timeout = setTimeout(async () => {
       await this.execute();
-    }, nextTimeout * 1000);
+    }, 1000);
   };
 
   public stop = async (): Promise<void> => {

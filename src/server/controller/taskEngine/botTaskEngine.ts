@@ -55,7 +55,7 @@ export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
   }
 
   public isExecutionReady = (): boolean => this._task.allowExecution()
-    && (!this._getNextExecution || this._getNextExecution() < new Date());
+    && (!this._getNextExecution || this._getNextExecution() <= new Date());
 
   public execute = async (): Promise<void> => {
     if (!this.isExecutionReady()) {
