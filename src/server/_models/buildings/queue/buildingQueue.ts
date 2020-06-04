@@ -88,7 +88,7 @@ export class BuildingQueue {
       return false;
     }
 
-    this.swap(index, newIndex);
+    this.move(index, newIndex);
 
     return true;
   };
@@ -116,12 +116,12 @@ export class BuildingQueue {
       return false;
     }
 
-    this.swap(index, newIndex);
+    this.move(index, newIndex);
 
     return true;
   };
 
-  public swap = (oldIndex: number, newIndex: number): void => {
+  public move = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0]);
   };
 }

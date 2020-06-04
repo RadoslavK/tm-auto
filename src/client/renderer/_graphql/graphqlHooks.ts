@@ -33,6 +33,7 @@ export type Query = {
   readonly buildingQueue: BuildingQueue;
   readonly buildingSpots: BuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly canMoveBuildingToIndex: Scalars['Boolean'];
   readonly crannyCapacity: VillageCrannyCapacity;
   readonly currentAccount: UserAccount;
   readonly generalSettings: GeneralSettings;
@@ -91,6 +92,13 @@ export type QueryBuildingsInProgressArgs = {
 };
 
 
+export type QueryCanMoveBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
 export type QueryCrannyCapacityArgs = {
   villageId: Scalars['Int'];
 };
@@ -135,6 +143,7 @@ export type Mutation = {
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingDown: Scalars['Boolean'];
+  readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
   readonly moveQueuedBuildingUp: Scalars['Boolean'];
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
@@ -204,6 +213,13 @@ export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
 
 export type MutationMoveQueuedBuildingDownArgs = {
   input: QueuedBuildingManipulationInput;
+};
+
+
+export type MutationMoveQueuedBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
 };
 
 
@@ -1117,12 +1133,30 @@ export type GetQueuedBuildingsQueryVariables = {
 
 export type GetQueuedBuildingsQuery = { readonly buildingQueue: BuildingQueueFragment };
 
+export type CanMoveQueuedBuildingToIndexQueryVariables = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type CanMoveQueuedBuildingToIndexQuery = Pick<Query, 'canMoveBuildingToIndex'>;
+
 export type OnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['Int'];
 };
 
 
 export type OnQueueUpdatedSubscription = { readonly onQueueUpdated: BuildingQueueFragment };
+
+export type MoveQueuedBuildingToIndexMutationVariables = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type MoveQueuedBuildingToIndexMutation = Pick<Mutation, 'moveQueuedBuildingToIndex'>;
 
 export type CoolDownFragment = { readonly min: DurationFragment, readonly max: DurationFragment };
 
@@ -2565,6 +2599,35 @@ export function useGetQueuedBuildingsLazyQuery(baseOptions?: ApolloReactHooks.La
 export type GetQueuedBuildingsQueryHookResult = ReturnType<typeof useGetQueuedBuildingsQuery>;
 export type GetQueuedBuildingsLazyQueryHookResult = ReturnType<typeof useGetQueuedBuildingsLazyQuery>;
 export type GetQueuedBuildingsQueryResult = ApolloReactCommon.QueryResult<GetQueuedBuildingsQuery, GetQueuedBuildingsQueryVariables>;
+export const CanMoveQueuedBuildingToIndexDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CanMoveQueuedBuildingToIndex"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"index"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"canMoveBuildingToIndex"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}}},{"kind":"Argument","name":{"kind":"Name","value":"index"},"value":{"kind":"Variable","name":{"kind":"Name","value":"index"}}}],"directives":[]}]}}]};
+
+/**
+ * __useCanMoveQueuedBuildingToIndexQuery__
+ *
+ * To run a query within a React component, call `useCanMoveQueuedBuildingToIndexQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCanMoveQueuedBuildingToIndexQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCanMoveQueuedBuildingToIndexQuery({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *      queueId: // value for 'queueId'
+ *      index: // value for 'index'
+ *   },
+ * });
+ */
+export function useCanMoveQueuedBuildingToIndexQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CanMoveQueuedBuildingToIndexQuery, CanMoveQueuedBuildingToIndexQueryVariables>) {
+        return ApolloReactHooks.useQuery<CanMoveQueuedBuildingToIndexQuery, CanMoveQueuedBuildingToIndexQueryVariables>(CanMoveQueuedBuildingToIndexDocument, baseOptions);
+      }
+export function useCanMoveQueuedBuildingToIndexLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CanMoveQueuedBuildingToIndexQuery, CanMoveQueuedBuildingToIndexQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CanMoveQueuedBuildingToIndexQuery, CanMoveQueuedBuildingToIndexQueryVariables>(CanMoveQueuedBuildingToIndexDocument, baseOptions);
+        }
+export type CanMoveQueuedBuildingToIndexQueryHookResult = ReturnType<typeof useCanMoveQueuedBuildingToIndexQuery>;
+export type CanMoveQueuedBuildingToIndexLazyQueryHookResult = ReturnType<typeof useCanMoveQueuedBuildingToIndexLazyQuery>;
+export type CanMoveQueuedBuildingToIndexQueryResult = ApolloReactCommon.QueryResult<CanMoveQueuedBuildingToIndexQuery, CanMoveQueuedBuildingToIndexQueryVariables>;
 export const OnQueueUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnQueueUpdated"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onQueueUpdated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingQueue"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Cost"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Cost"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"buildTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingQueue"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingQueue"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"canMoveDown"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"canMoveUp"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Cost"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Cost"},"directives":[]}]}}]}}]};
 
 /**
@@ -2588,6 +2651,34 @@ export function useOnQueueUpdatedSubscription(baseOptions?: ApolloReactHooks.Sub
       }
 export type OnQueueUpdatedSubscriptionHookResult = ReturnType<typeof useOnQueueUpdatedSubscription>;
 export type OnQueueUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnQueueUpdatedSubscription>;
+export const MoveQueuedBuildingToIndexDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveQueuedBuildingToIndex"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"index"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveQueuedBuildingToIndex"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}}},{"kind":"Argument","name":{"kind":"Name","value":"index"},"value":{"kind":"Variable","name":{"kind":"Name","value":"index"}}}],"directives":[]}]}}]};
+export type MoveQueuedBuildingToIndexMutationFn = ApolloReactCommon.MutationFunction<MoveQueuedBuildingToIndexMutation, MoveQueuedBuildingToIndexMutationVariables>;
+
+/**
+ * __useMoveQueuedBuildingToIndexMutation__
+ *
+ * To run a mutation, you first call `useMoveQueuedBuildingToIndexMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveQueuedBuildingToIndexMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveQueuedBuildingToIndexMutation, { data, loading, error }] = useMoveQueuedBuildingToIndexMutation({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *      queueId: // value for 'queueId'
+ *      index: // value for 'index'
+ *   },
+ * });
+ */
+export function useMoveQueuedBuildingToIndexMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MoveQueuedBuildingToIndexMutation, MoveQueuedBuildingToIndexMutationVariables>) {
+        return ApolloReactHooks.useMutation<MoveQueuedBuildingToIndexMutation, MoveQueuedBuildingToIndexMutationVariables>(MoveQueuedBuildingToIndexDocument, baseOptions);
+      }
+export type MoveQueuedBuildingToIndexMutationHookResult = ReturnType<typeof useMoveQueuedBuildingToIndexMutation>;
+export type MoveQueuedBuildingToIndexMutationResult = ApolloReactCommon.MutationResult<MoveQueuedBuildingToIndexMutation>;
+export type MoveQueuedBuildingToIndexMutationOptions = ApolloReactCommon.BaseMutationOptions<MoveQueuedBuildingToIndexMutation, MoveQueuedBuildingToIndexMutationVariables>;
 export const GetAutoMentorSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoMentorSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoMentorSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoMentorSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoMentorSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoMentorSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acceptRewards"},"arguments":[],"directives":[]}]}}]};
 
 /**

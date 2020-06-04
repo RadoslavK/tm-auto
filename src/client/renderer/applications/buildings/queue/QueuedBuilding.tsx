@@ -1,23 +1,24 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
+import { useDrag } from 'react-dnd';
 
 import { QueuedBuilding as QueuedBuildingModel } from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { Cost } from './Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
 
-type Props = {
-  readonly building: QueuedBuildingModel;
+type StyleProps = {
+  readonly buildingType: number;
 };
 
-const useStyles = makeStyles<unknown, Props>({
+const useStyles = makeStyles<unknown, StyleProps>({
   actions: {
     '& button': {
       display: 'block',
     },
   },
   buildingImage: props => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: '7em',
@@ -42,15 +43,34 @@ const useStyles = makeStyles<unknown, Props>({
   },
 });
 
+type Props = {
+  readonly building: QueuedBuildingModel;
+  readonly queueIndex: number;
+};
+
 export const QueuedBuilding: React.FC<Props> = (props) => {
   const {
     building,
+    queueIndex,
   } = props;
 
-  const classes = useStyles(props);
+  const classes = useStyles({
+    buildingType: building.type,
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: 'QueuedBuilding', queueId: building.queueId, buildingType: building.type, queueIndex },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
   return (
-    <div className={classes.root}>
+    <div
+      ref={drag}
+      className={classes.root}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
       <QueuedBuildingActions
         building={building}
         className={classes.actions}
@@ -58,9 +78,7 @@ export const QueuedBuilding: React.FC<Props> = (props) => {
       <div className={classes.imageWithFieldId}>
         <div className={classes.buildingImage} />
         <div>
-          [
-          {building.fieldId}
-          ]
+          [{building.fieldId}]
         </div>
       </div>
       <div className={classes.info}>

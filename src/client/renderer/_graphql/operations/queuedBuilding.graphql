@@ -52,8 +52,16 @@ query GetQueuedBuildings($villageId: Int!) {
     }
 }
 
+query CanMoveQueuedBuildingToIndex($villageId: Int!, $queueId: String!, $index: Int!) {
+    canMoveBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+}
+
 subscription OnQueueUpdated($villageId: Int!) {
     onQueueUpdated(villageId: $villageId) {
         ...BuildingQueue
     }
+}
+
+mutation MoveQueuedBuildingToIndex($villageId: Int!, $queueId: String!, $index: Int!) {
+    moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
 }

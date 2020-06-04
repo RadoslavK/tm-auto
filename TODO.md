@@ -33,7 +33,6 @@ NOVE NE TAK DOLEZITE
 * Hero set next cooldown based on having adventures >= 1 and hero comming back from one
 * Better experience with enqueing buildings.. For example set all res fields of type to lvl1.
 * With plus account allow having 2 buildings in queue at the same time. 3 for romans?
-* Dragging building in queue - would help if the queued building had precomputed if it can be moved up
 * Filter villages by name in the UI
 * Have an option to rename village in the UI. Have Village groups
 * Allow options to sort/filter logs

@@ -11,6 +11,10 @@ import {
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
+import {
+  BuildingQueueDropArea,
+  DropPosition,
+} from './BuildingQueueDropArea';
 import { Cost } from './Cost';
 import { QueuedBuilding } from './QueuedBuilding';
 
@@ -58,9 +62,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const classes = useStyles();
 
   const { villageId } = useVillageContext();
-
   const buildingQueue = useBuildingQueue();
-
   const [clearQueue] = useClearQueueMutation({ variables: { villageId } });
 
   if (!buildingQueue) {
@@ -82,11 +84,19 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
       </button>
       <Cost cost={buildingQueue.totalCost} />
       <div className={classes.buildings}>
-        {buildingQueue.buildings.map((building) => (
-          <QueuedBuilding
+        {buildingQueue.buildings.map((building, index) => (
+          <BuildingQueueDropArea
             key={building.queueId}
-            building={building}
-          />
+            getDropPosition={queueIndex => queueIndex > index
+              ? DropPosition.Above
+              : DropPosition.Below}
+            queueIndex={index}
+          >
+            <QueuedBuilding
+              building={building}
+              queueIndex={index}
+            />
+          </BuildingQueueDropArea>
         ))}
       </div>
     </div>

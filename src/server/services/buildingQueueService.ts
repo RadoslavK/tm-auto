@@ -28,6 +28,22 @@ type RangeToRemove = {
   readonly buildings: readonly QueuedBuilding[];
 };
 
+// key - fieldId, value - number of queued buildings on that field
+class Offsets {
+  private _offsets: Map<number, number> = new Map<number, number>();
+
+  public getFor = (fieldId: number): number =>
+    this._offsets.get(fieldId) ?? 0;
+
+  public increaseFor = (fieldId: number): void => {
+    this._offsets.set(fieldId, this.getFor(fieldId) + 1);
+  };
+
+  public decreaseFor = (fieldId: number): void => {
+    this._offsets.set(fieldId, Math.max(this.getFor(fieldId) - 1, 0));
+  };
+}
+
 export class BuildingQueueService {
   private readonly _village: Village;
   private readonly _filePath: string;
@@ -188,7 +204,7 @@ export class BuildingQueueService {
 
     const otherBuilding = this._village.buildings.queue.buildings()[newIndex];
 
-    this._village.buildings.queue.swap(index, newIndex);
+    this._village.buildings.queue.move(index, newIndex);
 
     const higherBuilding = direction === MovingDirection.Down
       ? otherBuilding
@@ -218,14 +234,8 @@ export class BuildingQueueService {
   };
 
   public moveAsHighAsPossible = (queueId: string): void => {
-    // key: fieldId, value: queued offset
-    const offsets: Record<number, number> = {};
+    const offsets = new Offsets();
     const queuedBuildings = this._village.buildings.queue.buildings();
-
-    const spots = this._village.buildings.spots.buildings();
-    spots.forEach(spot => {
-      offsets[spot.fieldId] = 0;
-    });
 
     const movedBuilding = queuedBuildings.find(b => b.queueId === queueId);
 
@@ -248,7 +258,7 @@ export class BuildingQueueService {
       }
 
       const qBuilding = queuedBuildings[i];
-      offsets[qBuilding.fieldId]++;
+      offsets.increaseFor(qBuilding.fieldId);
     }
 
     if (newIndex === undefined) {
@@ -268,7 +278,7 @@ export class BuildingQueueService {
       initialFollowingBuilding.canMoveUp = this.canMoveQueuedBuilding(initialFollowingBuilding.queueId, MovingDirection.Up);
     }
 
-    this._village.buildings.queue.swap(queueIndex, newIndex);
+    this._village.buildings.queue.move(queueIndex, newIndex);
 
     const previousBuilding = this._village.buildings.queue.getPrevious(movedBuilding.queueId);
     const followingBuilding = this._village.buildings.queue.getFollowing(movedBuilding.queueId);
@@ -279,6 +289,66 @@ export class BuildingQueueService {
     if (followingBuilding) {
       followingBuilding.canMoveUp = true;
     }
+
+    this.onUpdate();
+  };
+
+  public canMoveBuildingToIndex = (queueId: string, newIndex: number): boolean => {
+    const buildings = this._village.buildings.queue.buildings();
+    const currentIndex = buildings.findIndex(b => b.queueId === queueId);
+    const building = buildings[currentIndex];
+
+    if (currentIndex === newIndex) {
+      return false;
+    }
+
+    const isGoingDown = currentIndex < newIndex;
+
+    if (isGoingDown) {
+      // if going down then recalculate for every building on the way
+      const offsets = new Offsets();
+
+      for (const [i, qBuilding] of buildings.entries()) {
+        if (qBuilding.queueId === queueId) {
+          continue;
+        }
+
+        if (isGoingDown && !this.willQueuedBuildingStillMeetItsRequirements(qBuilding, offsets)) {
+          return false;
+        }
+
+        if (i === newIndex) {
+          break;
+        }
+
+        offsets.increaseFor(qBuilding.fieldId);
+      }
+
+      return true;
+    }
+
+    // going up
+    const offsets = new Offsets();
+
+    for (const [i, qBuilding] of buildings.entries()) {
+      if (i === newIndex) {
+        break;
+      }
+
+      offsets.increaseFor(qBuilding.fieldId);
+    }
+
+    return this.willQueuedBuildingStillMeetItsRequirements(building, offsets);
+  };
+
+  public moveBuildingToIndex = (queueId: string, newIndex: number): void => {
+    const currentIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === queueId);
+
+    if (!this.canMoveBuildingToIndex(queueId, newIndex)) {
+      return;
+    }
+
+    this._village.buildings.queue.move(currentIndex, newIndex);
 
     this.onUpdate();
   };
@@ -334,23 +404,18 @@ export class BuildingQueueService {
     }
 
     // need to calculate offset till its position
-    const offsets: Record<number, number> = {};
+    const offsets = new Offsets();
     const queuedBuildings = this._village.buildings.queue.buildings();
-
-    const spots = this._village.buildings.spots.buildings();
-    spots.forEach(spot => {
-      offsets[spot.fieldId] = 0;
-    });
 
     for (const qBuilding of queuedBuildings) {
       if (qBuilding.queueId === qBuildingWithPossiblyAffectedRequirements.queueId) {
         break;
       }
 
-      offsets[qBuilding.fieldId]++;
+      offsets.increaseFor(qBuilding.fieldId);
     }
 
-    offsets[theOtherBuilding.fieldId]--;
+    offsets.decreaseFor(theOtherBuilding.fieldId);
 
     return this.willQueuedBuildingStillMeetItsRequirements(
       qBuildingWithPossiblyAffectedRequirements,
@@ -358,12 +423,12 @@ export class BuildingQueueService {
     );
   };
 
-  private willQueuedBuildingStillMeetItsRequirements = (checkedBuilding: QueuedBuilding, offsets: Record<number, number>): boolean => {
+  private willQueuedBuildingStillMeetItsRequirements = (checkedBuilding: QueuedBuilding, offsets: Offsets): boolean => {
     const normalizedBuildings = this._village.buildings.spots.buildings();
 
     const getNewTotalLevel = (building: BuildingSpot): number =>
       building.level.getActualAndOngoing()
-      + offsets[building.fieldId];
+      + offsets.getFor(building.fieldId);
 
     const { conditions } = buildingInfoService.getBuildingInfo(checkedBuilding.type);
 
@@ -408,13 +473,7 @@ export class BuildingQueueService {
   };
 
   private correctBuildingQueue = (queueIdsToBeRemoved: string[] = []): readonly RangeToRemove[] => {
-    const offsets: Record<number, number> = {};
-
-    const spots = this._village.buildings.spots.buildings();
-
-    spots.forEach(spot => {
-      offsets[spot.fieldId] = 0;
-    });
+    const offsets = new Offsets();
 
     const buildings = this._village.buildings.queue.buildings();
 
@@ -441,7 +500,7 @@ export class BuildingQueueService {
         if (shouldBeRemoved) {
           push(i, qBuilding);
         } else {
-          offsets[qBuilding.fieldId]++;
+          offsets.increaseFor(qBuilding.fieldId);
         }
       }
 
@@ -477,7 +536,7 @@ export class BuildingQueueService {
       }, {} as Record<string, number>);
   };
 
-  private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Record<number, number>): boolean => {
+  private shouldRemoveBuildingFromQueue = (queuedBuilding: QueuedBuilding, providedOffsets: Offsets): boolean => {
     if (queuedBuilding.type === BuildingType.Palace
       && getAccountContext().villageService.allVillages().some(otherVillage =>
         otherVillage.id !== this._village.id
@@ -495,7 +554,7 @@ export class BuildingQueueService {
         && b.fieldId === queuedBuilding.fieldId
         && (
           b.level.getActualAndOngoing()
-          + providedOffsets[queuedBuilding.fieldId]
+          + providedOffsets.getFor(queuedBuilding.fieldId)
           + 1
         ) === queuedBuilding.level);
 
@@ -514,7 +573,7 @@ export class BuildingQueueService {
     if (queuedBuilding.level === 1) {
       // dolezite iba ked sa stava nove
       const prohibitedBuildingExists = normalizedBuildings.some(
-        b => b.level.getActualAndOngoing() + providedOffsets[b.fieldId] > 0
+        b => b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId) > 0
           && conditions.prohibitedBuildingTypes.includes(b.type),
       );
 
@@ -529,7 +588,7 @@ export class BuildingQueueService {
         if (conditions.isUnique) {
           // existuje nejaka budova, rozstavana alebo v queue az po tialto
           const existingBuilding = sameTypeBuildings.find(
-            b => b.level.getActualAndOngoing() + providedOffsets[b.fieldId]
+            b => b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId)
               > 0,
           );
 
@@ -543,7 +602,7 @@ export class BuildingQueueService {
               fieldId: b.fieldId,
               totalLevel:
                 b.level.getActualAndOngoing()
-                + providedOffsets[b.fieldId],
+                + providedOffsets.getFor(b.fieldId),
             }),
           )
             .filter(b => b.totalLevel > 0);
@@ -570,7 +629,7 @@ export class BuildingQueueService {
         const requiredBuilding = conditions.requiredBuildings[i];
         const requiredBuildingExists = normalizedBuildings.some(
           b => b.type === requiredBuilding.type
-            && b.level.getActualAndOngoing() + providedOffsets[b.fieldId]
+            && b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId)
             >= requiredBuilding.level,
         );
 

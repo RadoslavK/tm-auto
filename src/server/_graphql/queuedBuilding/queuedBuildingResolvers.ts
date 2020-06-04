@@ -58,6 +58,11 @@ const getBuildingQueue = (villageId: number) => {
 export default <Resolvers> {
   Query: {
     buildingQueue: (_, args): BuildingQueue => getBuildingQueue(args.villageId),
+    canMoveBuildingToIndex: (_, { index, queueId, villageId }) => {
+      const queueService = new BuildingQueueService(villageId);
+
+      return queueService.canMoveBuildingToIndex(queueId, index);
+    },
   },
 
   Mutation: {
@@ -133,6 +138,12 @@ export default <Resolvers> {
 
       const queueManager = new BuildingQueueService(villageId);
       queueManager.moveQueuedBuilding(queueId, MovingDirection.Up);
+      return true;
+    },
+
+    moveQueuedBuildingToIndex: (_, { index, queueId, villageId }) => {
+      const queueManager = new BuildingQueueService(villageId);
+      queueManager.moveBuildingToIndex(queueId, index);
       return true;
     },
   },

@@ -16,6 +16,7 @@ type BuildingQueue {
 
 extend type Query {
     buildingQueue(villageId: Int!): BuildingQueue!
+    canMoveBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
 }
 
 input ClearQueueInput {
@@ -51,6 +52,7 @@ input DequeueBuildingAtFieldInput {
 extend type Mutation {
     moveQueuedBuildingDown(input: QueuedBuildingManipulationInput!): Boolean!
     moveQueuedBuildingUp(input: QueuedBuildingManipulationInput!): Boolean!
+    moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
 }
 
 type Subscription {

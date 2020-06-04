@@ -42,6 +42,7 @@ export type Query = {
   readonly buildingQueue: BuildingQueue;
   readonly buildingSpots: BuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly canMoveBuildingToIndex: Scalars['Boolean'];
   readonly crannyCapacity: VillageCrannyCapacity;
   readonly currentAccount: UserAccount;
   readonly generalSettings: GeneralSettings;
@@ -100,6 +101,13 @@ export type QueryBuildingsInProgressArgs = {
 };
 
 
+export type QueryCanMoveBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
 export type QueryCrannyCapacityArgs = {
   villageId: Scalars['Int'];
 };
@@ -145,6 +153,7 @@ export type Mutation = {
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingDown: Scalars['Boolean'];
+  readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
   readonly moveQueuedBuildingUp: Scalars['Boolean'];
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
@@ -214,6 +223,13 @@ export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
 
 export type MutationMoveQueuedBuildingDownArgs = {
   input: QueuedBuildingManipulationInput;
+};
+
+
+export type MutationMoveQueuedBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
 };
 
 
@@ -1060,6 +1076,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   buildingQueue: Resolver<ResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<QueryBuildingQueueArgs, 'villageId'>>;
   buildingSpots: Resolver<ResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<QueryBuildingSpotsArgs, 'villageId'>>;
   buildingsInProgress: Resolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<QueryBuildingsInProgressArgs, 'villageId'>>;
+  canMoveBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
   crannyCapacity: Resolver<ResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<QueryCrannyCapacityArgs, 'villageId'>>;
   currentAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType>;
   generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
@@ -1086,6 +1103,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   enqueueBuilding: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingDown: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingDownArgs, 'input'>>;
+  moveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
   moveQueuedBuildingUp: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingUpArgs, 'input'>>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
   resetAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationResetAutoBuildSettingsArgs, 'villageId'>>;

@@ -6,6 +6,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 import { EnsureGraphQl } from './EnsureGraphQl';
@@ -49,7 +51,9 @@ export const App: React.FC = () => {
               <Navigation />
               <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <MainRoutes />
+                <DndProvider backend={HTML5Backend}>
+                  <MainRoutes />
+                </DndProvider>
               </main>
             </div>
           </EnsureTitle>
