@@ -47,6 +47,7 @@ class Offsets {
 export class BuildingQueueService {
   private readonly _village: Village;
   private readonly _filePath: string;
+  private readonly _canMoveToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
 
   constructor(villageId: number) {
     this._village = getAccountContext().villageService.village(villageId);
@@ -293,7 +294,24 @@ export class BuildingQueueService {
     this.onUpdate();
   };
 
+  private updateCanMoveToIndexFlags = (queueId: string, newIndex: number, flag: boolean): void => {
+    let flags = this._canMoveToIndexFlags.get(queueId);
+
+    if (!flags) {
+      flags = new Map<number, boolean>();
+    }
+
+    flags.set(newIndex, flag);
+  };
+
   public canMoveBuildingToIndex = (queueId: string, newIndex: number): boolean => {
+    const flags = this._canMoveToIndexFlags.get(queueId);
+    const flag = flags && flags.get(newIndex);
+
+    if (flag !== undefined) {
+      return flag;
+    }
+
     const buildings = this._village.buildings.queue.buildings();
     const currentIndex = buildings.findIndex(b => b.queueId === queueId);
     const building = buildings[currentIndex];
@@ -314,6 +332,7 @@ export class BuildingQueueService {
         }
 
         if (isGoingDown && !this.willQueuedBuildingStillMeetItsRequirements(qBuilding, offsets)) {
+          this.updateCanMoveToIndexFlags(queueId, newIndex, false);
           return false;
         }
 
@@ -324,6 +343,7 @@ export class BuildingQueueService {
         offsets.increaseFor(qBuilding.fieldId);
       }
 
+      this.updateCanMoveToIndexFlags(queueId, newIndex, true);
       return true;
     }
 
@@ -338,7 +358,9 @@ export class BuildingQueueService {
       offsets.increaseFor(qBuilding.fieldId);
     }
 
-    return this.willQueuedBuildingStillMeetItsRequirements(building, offsets);
+    const result = this.willQueuedBuildingStillMeetItsRequirements(building, offsets);
+    this.updateCanMoveToIndexFlags(queueId, newIndex, result);
+    return result;
   };
 
   public moveBuildingToIndex = (queueId: string, newIndex: number): void => {
@@ -644,6 +666,7 @@ export class BuildingQueueService {
 
   private onUpdate = async (): Promise<void> => {
     this._village.buildings.updateSpotsQueuedState();
+    this._canMoveToIndexFlags.clear();
     await this.serializeQueue();
   };
 }
