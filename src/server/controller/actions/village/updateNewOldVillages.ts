@@ -7,8 +7,11 @@ import { publishPayloadEvent } from '../../../pubSub';
 export const updateNewOldVillages = async (): Promise<void> => {
   const villages = await parseVillages();
 
-  getAccountContext().villageService.updateVillages(villages);
-  getAccountContext().villageService.currentVillageId = await parseActiveVillageId();
+  const { villageService } = getAccountContext();
+  villageService.updateVillages(villages);
+  villageService.currentVillageId = await parseActiveVillageId();
 
-  publishPayloadEvent(BotEvent.VillagesUpdated, { villages });
+  const currentVillages = villageService.allVillages();
+
+  publishPayloadEvent(BotEvent.VillagesUpdated, { villages: currentVillages });
 };

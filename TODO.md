@@ -5,8 +5,13 @@ NOVE NE TAK DOLEZITE
 
 ## New features
 
+* Building Queue
+    * Collapsible
+    * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
+
 * Show what task is the bot actually performing
-* Move block of queued buildings. Up/Down/To the top.. Is it enough to check the possilities only for the first item?
+* Block of queued buildings
+    * Drag, Move to the top, delete
 * Reset everything to default
 * Allow creating own defaults
 * Have preferences for how to spend resources, how much on units, buildings, what ratios of units, how etc.
@@ -20,7 +25,7 @@ NOVE NE TAK DOLEZITE
     * Double queue: allow only delete because its just a view
 * Reload logs from previous run... settings keep, a time range
 * Bot settings from the UI - headless, executable path and user data path
-* Add relevant tooltips in UI?
+* Add relevant tooltips in UI
 * If the next building in queue is not possible to build in the moment (lack res). Tooltip how much res needed and when enough res will be in the village.
 * For village capacity show similar to cranny. Maybe find a better solution to show such information cause it would be cluttered af
 * Alarms/Notifications
@@ -42,13 +47,9 @@ NOVE NE TAK DOLEZITE
 * If bot fails to sign in then show error message in UI
 * Add cooldown to some basic non task related stuff like checking profile of player and updating hero resources
     * Profile checking.. Ally id is possible to parse from any view so just capital in that task
-* Dynamically update village names
 * Building mode templates
     * Create a template similar to SecondVillageBot to build buildings based on a state
     * User will be able to create the template in the UI
-* Building Queue
-    * Collapsible
-    * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
 * Use hero resources for other tasks
     * AutoUnits
     * [?] AutoParties
@@ -90,6 +91,7 @@ NOVE NE TAK DOLEZITE
 * Use new icons for resources, buildings, nations... Maybe have 2 versions for buildings
 * Use some big toggle instead of Checkboxes for allow
 * Show the Multi-level enqueue dialog close to the cursor/clicked building - React-Tether?
+* shift rclick -> dequeue all, shift lclick select level to keep
 
 ## Code Quality
 

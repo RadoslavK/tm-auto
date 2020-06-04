@@ -17,46 +17,52 @@ export class VillageService {
     publishPayloadEvent(BotEvent.ActiveVillageIdChanged, { villageId });
   }
 
-  private readonly _villages: Record<string, Village> = {};
+  private _villages: Village[] = [];
 
-  public allVillages = (): readonly Village[] => Object.values(this._villages);
+  public allVillages = (): readonly Village[] => this._villages;
 
-  public village = (villageId: number): Village => this._villages[villageId];
+  public village = (villageId: number): Village => {
+    const vill = this._villages.find(v => v.id === villageId);
+
+    if (!vill) {
+      throw new Error(`Village with id ${villageId} does not exist`);
+    }
+
+    return vill;
+  };
 
   public currentVillage = (): Village => this.village(this.currentVillageId);
 
   public updateVillages = (villages: readonly Village[]): void => {
-    const oldVillages = Object
-      .values(this._villages)
-      .filter(v => !villages.some(x => x.id === v.id));
+    const oldVillages: Village[] = [];
 
-    oldVillages.forEach(village => {
-      const villageDataPath = dataPathService.baseVillagePath(village.id);
-      fileService.delete(villageDataPath);
-    });
+    for (const existingVillage of this._villages) {
+      const updatedVillage = villages.find(v => v.id === existingVillage.id);
 
-    const newVillages = villages
-      .filter(v => !this._villages[v.id]);
+      if (!updatedVillage) {
+        // old village to be deleted
+        const villageDataPath = dataPathService.baseVillagePath(existingVillage.id);
+        fileService.delete(villageDataPath);
+        oldVillages.push(existingVillage);
+      } else {
+        existingVillage.name = updatedVillage.name;
+      }
+    }
 
-    Object
-      .keys(this._villages)
-      .forEach(villageId => {
-        if (oldVillages.some(v => v.id === +villageId)) {
-          delete this._villages[villageId];
-        }
+    // add new villages
+    villages
+      .filter(v => !this._villages.some(existingVillage => existingVillage.id === v.id))
+      .forEach(village => {
+        this._villages.push(village);
       });
 
-    newVillages.forEach(village => {
-      this._villages[village.id] = village;
-    });
+    this._villages = this._villages.filter(v => !oldVillages.includes(v));
   };
 
-  public villageByCoords = (coords: Coords): Village | undefined => this
-    .allVillages()
+  public villageByCoords = (coords: Coords): Village | undefined => this._villages
     .find(x => x.coords.x === coords.x && x.coords.y === coords.y);
 
-  public capitalVillage = (): Village | undefined => this
-    .allVillages()
+  public capitalVillage = (): Village | undefined => this._villages
     .find(x => x.isCapital);
 
   public setCapital = (coords: Coords): { readonly capitalChanged: boolean; } => {
