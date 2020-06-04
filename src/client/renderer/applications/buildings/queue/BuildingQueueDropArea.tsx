@@ -1,14 +1,17 @@
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { DragObjectWithType } from 'react-dnd/lib/interfaces';
 
 import {
+  QueuedBuilding as QueuedBuildingModel,
   useCanMoveQueuedBuildingToIndexLazyQuery,
   useMoveQueuedBuildingToIndexMutation,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
+import { QueuedBuildingComponent } from './QueuedBuildingComponent';
 
-export type MovedBuilding = DragObjectWithType & {
+type MovedBuilding = DragObjectWithType & {
   readonly queueId: string;
   readonly queueIndex: number;
   readonly buildingType: number;
@@ -19,12 +22,23 @@ export enum DropPosition {
   Below = 'Below',
 }
 
+type StylesProps = {
+  readonly canBeMoved: boolean;
+};
+
+const useStyles = makeStyles<unknown, StylesProps>({
+  buildingPlaceholder: {
+    backgroundColor: props => props.canBeMoved ? 'green' : 'red',
+  },
+});
+
 type Props = {
+  readonly getBuilding: (movedBuildingIndex: number) => QueuedBuildingModel;
   readonly queueIndex: number;
   readonly getDropPosition: (queueIndex: number) => DropPosition;
 };
 
-export const BuildingQueueDropArea: React.FC<Props> = ({ children, getDropPosition, queueIndex }) => {
+export const BuildingQueueDropArea: React.FC<Props> = ({ children, getBuilding, getDropPosition, queueIndex }) => {
   const { villageId } = useVillageContext();
   const [moveQueuedBuildingToIndex] = useMoveQueuedBuildingToIndexMutation();
 
@@ -62,15 +76,21 @@ export const BuildingQueueDropArea: React.FC<Props> = ({ children, getDropPositi
 
   const canDroppedBuildingBeMovedHere = !queryLoading && queryData?.canMoveBuildingToIndex;
 
+  const classes = useStyles({ canBeMoved: !!canDroppedBuildingBeMovedHere });
+
   return (
     <div ref={drop}>
-      <span style={{ backgroundColor: canDroppedBuildingBeMovedHere ? 'green' : 'red' }}>
-        {isOver && dropPosition === DropPosition.Above && 'IS OVER!!'}
-      </span>
+      {isOver && dropPosition === DropPosition.Above && movedBuilding && (
+        <div className={classes.buildingPlaceholder}>
+          <QueuedBuildingComponent building={getBuilding(movedBuilding.queueIndex)} />
+        </div>
+      )}
       {children}
-      <span style={{ backgroundColor: canDroppedBuildingBeMovedHere ? 'green' : 'red' }}>
-        {isOver && dropPosition === DropPosition.Below && 'IS OVER!!'}
-      </span>
+      {isOver && dropPosition === DropPosition.Below && movedBuilding && (
+        <div className={classes.buildingPlaceholder}>
+          <QueuedBuildingComponent building={getBuilding(movedBuilding.queueIndex)} />
+        </div>
+      )}
     </div>
   );
 };

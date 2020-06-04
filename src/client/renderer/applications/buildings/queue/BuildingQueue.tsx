@@ -87,6 +87,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
         {buildingQueue.buildings.map((building, index) => (
           <BuildingQueueDropArea
             key={building.queueId}
+            getBuilding={movedBuildingIndex => buildingQueue.buildings[movedBuildingIndex]}
             getDropPosition={queueIndex => queueIndex > index
               ? DropPosition.Above
               : DropPosition.Below}

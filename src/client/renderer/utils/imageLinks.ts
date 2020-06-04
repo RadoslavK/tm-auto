@@ -1,5 +1,10 @@
 import { BuildingType } from '../../../_shared/types/buildingType';
 
+export enum BuildingImageSize {
+  Small,
+  Normal,
+}
+
 const baseUrl = 'images';
 
 const resources = {
@@ -26,7 +31,13 @@ export const imageLinks = {
     resources,
   },
 
-  getBuilding: (buildingType: BuildingType): string => `${baseUrl}/buildings/${buildingType}.png`,
+  getBuilding: (buildingType: BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
+    if (size === BuildingImageSize.Normal) {
+      return `${baseUrl}/buildings/${buildingType}.png`;
+    }
+
+    return `${baseUrl}/buildings/small/${buildingType}.png`;
+  },
 
   getUnit: (unitIndex: number): string => `${baseUrl}/units/u${unitIndex}.gif`,
 
