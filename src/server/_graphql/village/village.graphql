@@ -30,6 +30,10 @@ extend type Query {
     crannyCapacity(villageId: Int!): VillageCrannyCapacity!
 }
 
+extend type Mutation {
+    refreshVillage(villageId: Int!): Boolean!
+}
+
 extend type Subscription {
     villageUpdated(villageId: Int!): Village!
     villagesUpdated: [Village!]!

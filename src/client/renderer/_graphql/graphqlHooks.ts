@@ -143,6 +143,7 @@ export type Mutation = {
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly refreshVillage: Scalars['Boolean'];
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
   readonly resetAutoMentorSettings: AutoMentorSettings;
@@ -213,6 +214,11 @@ export type MutationMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['Int'];
   queueId: Scalars['String'];
   index: Scalars['Int'];
+};
+
+
+export type MutationRefreshVillageArgs = {
+  villageId: Scalars['Int'];
 };
 
 
@@ -1372,6 +1378,13 @@ export type CrannyCapacityQueryVariables = {
 
 
 export type CrannyCapacityQuery = { readonly crannyCapacity: VillageCrannyCapacityFragment };
+
+export type RefreshVillageMutationVariables = {
+  villageId: Scalars['Int'];
+};
+
+
+export type RefreshVillageMutation = Pick<Mutation, 'refreshVillage'>;
 
 export type VillageUpdatedSubscriptionVariables = {
   villageId: Scalars['Int'];
@@ -3338,6 +3351,32 @@ export function useCrannyCapacityLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type CrannyCapacityQueryHookResult = ReturnType<typeof useCrannyCapacityQuery>;
 export type CrannyCapacityLazyQueryHookResult = ReturnType<typeof useCrannyCapacityLazyQuery>;
 export type CrannyCapacityQueryResult = ApolloReactCommon.QueryResult<CrannyCapacityQuery, CrannyCapacityQueryVariables>;
+export const RefreshVillageDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RefreshVillage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"refreshVillage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[]}]}}]};
+export type RefreshVillageMutationFn = ApolloReactCommon.MutationFunction<RefreshVillageMutation, RefreshVillageMutationVariables>;
+
+/**
+ * __useRefreshVillageMutation__
+ *
+ * To run a mutation, you first call `useRefreshVillageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshVillageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshVillageMutation, { data, loading, error }] = useRefreshVillageMutation({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *   },
+ * });
+ */
+export function useRefreshVillageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RefreshVillageMutation, RefreshVillageMutationVariables>) {
+        return ApolloReactHooks.useMutation<RefreshVillageMutation, RefreshVillageMutationVariables>(RefreshVillageDocument, baseOptions);
+      }
+export type RefreshVillageMutationHookResult = ReturnType<typeof useRefreshVillageMutation>;
+export type RefreshVillageMutationResult = ApolloReactCommon.MutationResult<RefreshVillageMutation>;
+export type RefreshVillageMutationOptions = ApolloReactCommon.BaseMutationOptions<RefreshVillageMutation, RefreshVillageMutationVariables>;
 export const VillageUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"VillageUpdated"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"villageUpdated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"capacity"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"production"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}}]};
 
 /**

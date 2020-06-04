@@ -17,6 +17,7 @@ import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
 import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
 import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo';
+import { refreshVillage } from '../controller/actions/village/refreshVillage';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
 import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/taskManager';
@@ -68,6 +69,7 @@ class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
   private _isActive: boolean = false;
+  private _refreshRequests: Set<number> = new Set<number>();
 
   private botState: BotState = BotState.None;
 
@@ -151,6 +153,12 @@ class ControllerService {
   };
 
   private execute = async (): Promise<void> => {
+    for (const villageId of this._refreshRequests) {
+      await refreshVillage(villageId);
+    }
+
+    this._refreshRequests.clear();
+
     if (getAccountContext().nextExecutionService.tasks() > new Date()) {
       this._timeout = setTimeout(async () => {
         await this.execute();
@@ -206,6 +214,10 @@ class ControllerService {
     await killBrowser();
 
     this.setState(BotState.Paused);
+  };
+
+  public requestVillageRefresh = (villageId: number) => {
+    this._refreshRequests.add(villageId);
   };
 }
 

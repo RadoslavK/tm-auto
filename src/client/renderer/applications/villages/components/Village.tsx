@@ -13,6 +13,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import { useRefreshVillageMutation } from '../../../_graphql/graphqlHooks';
 import { Buildings } from '../../buildings/Buildings';
 import { VillageSettings } from '../../settings/village';
 import { Units } from '../../units/components/Units';
@@ -36,6 +37,12 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const history = useHistory();
 
+  const [refreshVillage] = useRefreshVillageMutation({ variables: { villageId } });
+
+  const onRefreshVillage = () => {
+    refreshVillage();
+  };
+
   useEffect(() => {
     if (village === null) {
       history.push('/villages');
@@ -53,11 +60,11 @@ export const Village: React.FC<Props> = ({ villageId }) => {
       <VillageContext.Provider value={{ villageId }}>
         <Resources resources={resources} />
         <CrannyCapacity />
-        <button
-          onClick={openSettings}
-          type="button"
-        >
+        <button onClick={openSettings}>
           Settings
+        </button>
+        <button onClick={onRefreshVillage}>
+          Refresh
         </button>
         <div>
           <Link to={`${match.url}/buildings`}>Buildings</Link>

@@ -153,6 +153,7 @@ export type Mutation = {
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly refreshVillage: Scalars['Boolean'];
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
   readonly resetAutoMentorSettings: AutoMentorSettings;
@@ -223,6 +224,11 @@ export type MutationMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['Int'];
   queueId: Scalars['String'];
   index: Scalars['Int'];
+};
+
+
+export type MutationRefreshVillageArgs = {
+  villageId: Scalars['Int'];
 };
 
 
@@ -1089,6 +1095,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   enqueueBuilding: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
+  refreshVillage: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRefreshVillageArgs, 'villageId'>>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
   resetAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationResetAutoBuildSettingsArgs, 'villageId'>>;
   resetAutoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;

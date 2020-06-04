@@ -4,6 +4,7 @@ import { BuildingType } from '../../../_shared/types/buildingType';
 import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
+import { controllerService } from '../../services/controllerService';
 import { crannyInfoService } from '../../services/crannyInfoService';
 
 export default <Resolvers>{
@@ -39,6 +40,14 @@ export default <Resolvers>{
     village: (_, args) => getAccountContext().villageService.village(args.villageId),
 
     villages: () => getAccountContext().villageService.allVillages(),
+  },
+
+  Mutation: {
+    refreshVillage: (_, args) => {
+      controllerService.requestVillageRefresh(args.villageId);
+
+      return true;
+    },
   },
 
   Subscription: {

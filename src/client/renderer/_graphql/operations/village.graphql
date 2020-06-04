@@ -49,6 +49,10 @@ query CrannyCapacity($villageId: Int!) {
     }
 }
 
+mutation RefreshVillage($villageId: Int!) {
+    refreshVillage(villageId: $villageId)
+}
+
 subscription VillageUpdated($villageId: Int!) {
     villageUpdated(villageId: $villageId) {
         coords {
