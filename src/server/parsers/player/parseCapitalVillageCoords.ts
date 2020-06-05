@@ -1,3 +1,5 @@
+import { ElementHandle } from 'puppeteer';
+
 import { TravianPath } from '../../_enums/travianPath';
 import { Coords } from '../../_models/coords';
 import { getPage } from '../../browser/getPage';
@@ -12,12 +14,16 @@ export const parseCapitalVillageCoords = async (): Promise<Coords> => {
   const page = await getPage();
 
   const villageElements = await page.$$('table#villages > tbody > tr');
+  let capitalVillageElement: ElementHandle | null = null;
 
-  const capitalVillageElement = await villageElements.find(async (villageElement) => {
+  for (const villageElement of villageElements) {
     const capitalVillageTag = await villageElement.$('.mainVillage');
 
-    return capitalVillageTag !== null;
-  });
+    if (capitalVillageTag) {
+      capitalVillageElement = villageElement;
+      break;
+    }
+  }
 
   if (!capitalVillageElement) {
     throw new Error('No capital village was found');
