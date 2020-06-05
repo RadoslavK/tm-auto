@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, {
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
@@ -44,27 +43,21 @@ const TabLink: React.FC<LinkProps> = (props) => {
   );
 };
 
-type Props = {
-  readonly tab: string;
-};
-
-enum VillageSettingsTabType {
+export enum VillageSettingsTabType {
   AutoBuild,
   AutoUnits,
   AutoParty,
   General,
 }
 
-const getSettingsTab = (tab: string): VillageSettingsTabType => {
-  switch (tab) {
-    case 'buildings': return VillageSettingsTabType.AutoBuild;
-    case 'units': return VillageSettingsTabType.AutoUnits;
-    default: throw new Error(`Unknown village tab: ${tab}`);
-  }
+type Props = {
+  readonly getTabType: (tab: string) => VillageSettingsTabType;
+  readonly tab: string;
 };
 
 export const VillageSettings: React.FC<Props> = (props) => {
   const {
+    getTabType,
     tab,
   } = props;
 
@@ -75,16 +68,11 @@ export const VillageSettings: React.FC<Props> = (props) => {
     setSelectedVillageId(villageId);
   }, [villageId]);
 
-  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(getSettingsTab(tab));
+  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(getTabType(tab));
 
-  const isInitialMount = useRef(true);
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      setSelectedTab(getSettingsTab(tab));
-    }
-  }, [tab]);
+    setSelectedTab(getTabType(tab));
+  }, [tab, getTabType]);
 
   const villages = useVillages();
 

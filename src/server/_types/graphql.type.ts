@@ -699,24 +699,21 @@ export type UpdateAutoMentorSettingsInput = {
   readonly acceptRewards: Scalars['Boolean'];
 };
 
-export enum PartyType {
-  Small = 'Small',
-  Large = 'Large'
-}
-
 export type AutoPartySettings = {
   readonly __typename?: 'AutoPartySettings';
   readonly coolDown: CoolDown;
-  readonly allow: Scalars['Boolean'];
-  readonly minCulturePoints: Scalars['Int'];
-  readonly partyType: PartyType;
+  readonly allowSmall: Scalars['Boolean'];
+  readonly allowLarge: Scalars['Boolean'];
+  readonly minCulturePointsSmall: Scalars['Int'];
+  readonly minCulturePointsLarge: Scalars['Int'];
 };
 
 export type UpdateAutoPartySettingsInput = {
-  readonly allow: Scalars['Boolean'];
+  readonly allowSmall: Scalars['Boolean'];
+  readonly allowLarge: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
-  readonly minCulturePoints: Scalars['Int'];
-  readonly partyType: PartyType;
+  readonly minCulturePointsSmall: Scalars['Int'];
+  readonly minCulturePointsLarge: Scalars['Int'];
 };
 
 export type AutoUnitsUnitSettings = {
@@ -951,7 +948,6 @@ export type ResolversTypes = {
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
   AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettings>;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
-  PartyType: PartyType;
   AutoPartySettings: ResolverTypeWrapper<AutoPartySettings>;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
   AutoUnitsUnitSettings: ResolverTypeWrapper<AutoUnitsUnitSettings>;
@@ -1026,7 +1022,6 @@ export type ResolversParentTypes = {
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
   AutoMentorSettings: AutoMentorSettings;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
-  PartyType: PartyType;
   AutoPartySettings: AutoPartySettings;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
   AutoUnitsUnitSettings: AutoUnitsUnitSettings;
@@ -1327,9 +1322,10 @@ export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends Re
 
 export type AutoPartySettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoPartySettings'] = ResolversParentTypes['AutoPartySettings']> = {
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  minCulturePoints: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  partyType: Resolver<ResolversTypes['PartyType'], ParentType, ContextType>;
+  allowSmall: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  allowLarge: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  minCulturePointsSmall: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  minCulturePointsLarge: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 

@@ -8,14 +8,12 @@ import React, {
 import {
   AutoPartySettings as AutoPartySettingsModel,
   CoolDown as CoolDownModel,
-  PartyType,
   UpdateAutoPartySettingsInput,
   useGetAutoPartySettingsQuery,
   useResetAutoPartySettingsMutation,
   useUpdateAutoPartySettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
@@ -120,27 +118,13 @@ export const AutoPartySettings: React.FC = () => {
     minValue: 0,
   });
 
-  const onPartyTypeChange = (e: React.FormEvent<HTMLSelectElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
-
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: value,
-    }));
-    setHasChanges(true);
-  };
-
   const {
-    allow,
+    allowLarge,
+    allowSmall,
     coolDown,
-    minCulturePoints,
-    partyType,
+    minCulturePointsLarge,
+    minCulturePointsSmall,
   } = state;
-
-  const allPartyTypes = getAllEnumValues(PartyType);
 
   return (
     <div>
@@ -154,11 +138,22 @@ export const AutoPartySettings: React.FC = () => {
       </Button>
 
       <div>
-        <label htmlFor="allow">Allow</label>
+        <label htmlFor="allowSmall">Hold small parties</label>
         <input
-          checked={allow}
-          id="allow"
-          name="allow"
+          checked={allowSmall}
+          id="allowSmall"
+          name="allowSmall"
+          onChange={onChange}
+          type="checkbox"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="allowLarge">Hold large parties</label>
+        <input
+          checked={allowLarge}
+          id="allowLarge"
+          name="allowLarge"
           onChange={onChange}
           type="checkbox"
         />
@@ -173,33 +168,25 @@ export const AutoPartySettings: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="minCulturePoints">Min culture points</label>
+        <label htmlFor="minCulturePointsSmall">Min cp for small party</label>
         <input
-          id="minCulturePoints"
-          name="minCulturePoints"
+          id="minCulturePointsSmall"
+          name="minCulturePointsSmall"
           onChange={onNumberChange}
           type="number"
-          value={minCulturePoints}
+          value={minCulturePointsSmall}
         />
       </div>
 
       <div>
-        <label htmlFor="partyType">Min culture points</label>
-        <select
-          id="partyType"
-          name="partyType"
-          onChange={onPartyTypeChange}
-          value={partyType}
-        >
-          {allPartyTypes.map(pType => (
-            <option
-              key={pType}
-              value={pType}
-            >
-              {pType}
-            </option>
-          ))}
-        </select>
+        <label htmlFor="minCulturePointsLarge">Min cp for large party</label>
+        <input
+          id="minCulturePointsLarge"
+          name="minCulturePointsLarge"
+          onChange={onNumberChange}
+          type="number"
+          value={minCulturePointsLarge}
+        />
       </div>
     </div>
   );

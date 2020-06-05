@@ -109,12 +109,13 @@ fragment AutoUnitsSettings on AutoUnitsSettings {
 }
 
 fragment AutoPartySettings on AutoPartySettings {
-    allow
+    allowSmall
+    allowLarge
     coolDown {
         ...CoolDown
     }
-    minCulturePoints
-    partyType
+    minCulturePointsSmall
+    minCulturePointsLarge
 }
 
 query GetAutoMentorSettings {

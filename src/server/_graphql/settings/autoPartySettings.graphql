@@ -1,22 +1,19 @@
-enum PartyType {
-    Small
-    Large
-}
-
 type AutoPartySettings {
     coolDown: CoolDown!
-    allow: Boolean!
+    allowSmall: Boolean!
+    allowLarge: Boolean!
 
-    minCulturePoints: Int!
-    partyType: PartyType!
+    minCulturePointsSmall: Int!
+    minCulturePointsLarge: Int!
 }
 
 input UpdateAutoPartySettingsInput {
-    allow: Boolean!
+    allowSmall: Boolean!
+    allowLarge: Boolean!
     coolDown: CoolDownInput!
 
-    minCulturePoints: Int!
-    partyType: PartyType!
+    minCulturePointsSmall: Int!
+    minCulturePointsLarge: Int!
 }
 
 extend type Query {

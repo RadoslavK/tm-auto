@@ -3,7 +3,18 @@ import { getPage } from '../browser/getPage';
 
 export const getPartyDuration = async (): Promise<Duration | null> => {
   const page = await getPage();
-  const duration = await page.$eval('[class="dur"] > span', x => x.getAttribute('value'));
 
-  return duration ? Duration.fromSeconds(+duration) : null;
+  const durationNode = await page.$('.dur > span');
+
+  if (!durationNode) {
+    return null;
+  }
+
+  const duration = await page.evaluate((x: Element) => x.getAttribute('value'), durationNode);
+
+  if (!duration) {
+    throw new Error('Did not find duration value');
+  }
+
+  return Duration.fromSeconds(+duration);
 };

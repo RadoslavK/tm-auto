@@ -6,7 +6,7 @@ NOVE NE TAK DOLEZITE
 ## New features
 
 * Building Queue
-    * Collapsible
+    * Scrollbar on building queue rather than whole app
     * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
 
 * Show what task is the bot actually performing
