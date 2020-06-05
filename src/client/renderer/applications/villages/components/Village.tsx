@@ -11,6 +11,7 @@ import {
   RouteComponentProps,
   Switch,
   useHistory,
+  useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 
@@ -26,18 +27,20 @@ import { VillageContext } from '../context/villageContext';
 import { useVillage } from '../hooks/useVillage';
 import { CrannyCapacity } from './CrannyCapacity';
 import { Resources } from './Resources';
+import { VillageTasksActivity } from './VillageTasksActivity';
 
 type NavigationItem = {
   readonly label: string;
   readonly component: React.ComponentType;
   readonly path: string;
-  readonly tabType: VillageSettingsTabType;
+  readonly tabType?: VillageSettingsTabType;
 };
 
 const navigation: readonly NavigationItem[] = [
   { label: 'Buildings', path: 'buildings', component: Buildings, tabType: VillageSettingsTabType.AutoBuild },
   { label: 'Units', path: 'units', component: Units, tabType: VillageSettingsTabType.AutoUnits },
   { label: 'Parties', path: 'parties', component: Parties, tabType: VillageSettingsTabType.AutoParty },
+  { label: 'Tasks', path: 'tasks-activity', component: VillageTasksActivity },
 ];
 
 type Props = {
@@ -67,15 +70,21 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     }
   }, [village, history]);
 
-  const getTabType = useCallback((tab: string) => {
+  const getTabType = useCallback((tab: string): VillageSettingsTabType => {
     const navPart = navigation.find(n => n.path === tab);
 
     if (!navPart) {
       throw new Error(`Unknown tab type for path: ${tab} request`);
     }
 
+    if (navPart.tabType === undefined) {
+      throw new Error(`Request tab type for path that has none! path: ${tab}`);
+    }
+
     return navPart.tabType;
   }, []);
+
+  const location = useLocation();
 
   if (!village) {
     return null;
@@ -83,14 +92,20 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const { resources } = village;
 
+  const currentNavMatch = new RegExp(`${match.url}/(.*)/?`).exec(location.pathname);
+  const currentNav = currentNavMatch && currentNavMatch[1];
+  const showSettingsButton = navigation.find(x => x.path === currentNav)?.tabType !== undefined;
+
   return (
     <div>
       <VillageContext.Provider value={{ villageId }}>
         <Resources resources={resources} />
         <CrannyCapacity />
-        <button onClick={openSettings}>
-          Settings
-        </button>
+        {showSettingsButton && (
+          <button onClick={openSettings}>
+            Settings
+          </button>
+        )}
         <button onClick={onRefreshVillage}>
           Refresh
         </button>
