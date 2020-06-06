@@ -1,0 +1,23 @@
+fragment GeneralSettings on GeneralSettings {
+    chromePath
+    dataPath
+    headlessChrome
+}
+
+query GetGeneralSettings {
+    generalSettings {
+        ...GeneralSettings
+    }
+}
+
+mutation UpdateGeneralSettings($settings: UpdateGeneralSettingsInput!) {
+    updateGeneralSettings(settings: $settings) {
+        ...GeneralSettings
+    }
+}
+
+mutation ResetGeneralSettings {
+    resetGeneralSettings {
+        ...GeneralSettings
+    }
+}

@@ -14,6 +14,7 @@ import { EnsureGraphQl } from './EnsureGraphQl';
 import { EnsureTitle } from './EnsureTitle';
 import { MainRoutes } from './navigation/components/MainRoutes';
 import { Navigation } from './navigation/components/Navigation';
+import { GeneralSettings } from './settings/GeneralSettings';
 import { EnsureSignedIn } from './signIn/components/EnsureSignedIn';
 
 const useStyles = makeStyles(theme => ({
@@ -52,6 +53,7 @@ export const App: React.FC = () => {
               <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <DndProvider backend={HTML5Backend}>
+                  <GeneralSettings />
                   <MainRoutes />
                 </DndProvider>
               </main>

@@ -1,13 +1,18 @@
 import { Resolvers } from '../../_types/resolvers.type';
-import { getAccountContext } from '../../accountContext';
+import { getGeneralSettingsService } from '../../services/settings/general';
 
-export default <Resolvers>{
+export default <Resolvers> {
   Query: {
-    generalSettings: () => getAccountContext().settingsService.general.get(),
+    generalSettings: () => getGeneralSettingsService().get(),
   },
 
   Mutation: {
-    updateGeneralSettings: (_, args) => getAccountContext().settingsService.general.merge(args.settings),
-    resetGeneralSettings: () => getAccountContext().settingsService.general.reset(),
+    updateGeneralSettings: (_, { settings }) =>
+      getGeneralSettingsService().merge({
+        ...settings,
+        chromePath: settings.chromePath || undefined,
+        dataPath: settings.dataPath || undefined,
+      }),
+    resetGeneralSettings: () => getGeneralSettingsService().reset(),
   },
 };

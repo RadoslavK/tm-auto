@@ -11,6 +11,7 @@ import logsResolvers from './logs/logsResolvers';
 import miscResolvers from './misc/miscResolvers';
 import nextTaskExecutionResolvers from './nextTaskExecution/nextTaskExecutionResolvers';
 import queuedBuildingResolvers from './queuedBuilding/queuedBuildingResolvers';
+import accountSettingsResolvers from './settings/accountSettingsResolvers';
 import autoAdventureSettingsResolvers from './settings/autoAdventureSettingsResolvers';
 import autoBuildSettingsResolvers from './settings/autoBuildSettingsResolvers';
 import autoMentorSettingsResolvers from './settings/autoMentorSettingsResolvers';
@@ -36,6 +37,7 @@ export const loadResolvers = (): Resolvers => mergeResolvers([
   autoMentorSettingsResolvers,
   autoPartySettingsResolvers,
   autoUnitsSettingsResolvers,
+  accountSettingsResolvers,
   generalSettingsResolvers,
   generalVillageSettingsResolvers,
   unitResolvers,

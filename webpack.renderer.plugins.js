@@ -12,7 +12,7 @@ const webpack = require('webpack');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -55,5 +55,14 @@ module.exports = [
   new HtmlWebpackPlugin({
     template: './src/client/static/index.html',
   }),
-  new CleanWebpackPlugin(),
+  new RemovePlugin({
+    before: {
+      root: isDevelopment ? '.webpack/renderer' : '.dist/renderer',
+      test: [{
+        folder: '.',
+        method: () => true,
+        recursive: true,
+      }],
+    },
+  }),
 ].filter(Boolean);

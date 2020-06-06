@@ -1,0 +1,30 @@
+#import "../misc.graphql"
+
+fragment AccountSettings on AccountSettings {
+    allowTasks
+    tasksCoolDown {
+        ...CoolDown
+    }
+    autoStart
+    autoBuild
+    autoUnits
+    autoParty
+}
+
+query GetAccountSettings {
+    accountSettings {
+        ...AccountSettings
+    }
+}
+
+mutation UpdateAccountSettings($settings: UpdateAccountSettingsInput!) {
+    updateAccountSettings(settings: $settings) {
+        ...AccountSettings
+    }
+}
+
+mutation ResetAccountSettings {
+    resetAccountSettings {
+        ...AccountSettings
+    }
+}

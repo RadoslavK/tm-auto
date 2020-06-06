@@ -2,6 +2,7 @@ import { Coords } from '../_models/coords';
 import { Village } from '../_models/village/village';
 import { BotEvent } from '../events/botEvent';
 import { publishPayloadEvent } from '../pubSub';
+import { accountService } from './accountService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
@@ -40,8 +41,9 @@ export class VillageService {
       const updatedVillage = villages.find(v => v.id === existingVillage.id);
 
       if (!updatedVillage) {
+        const accountId = accountService.getCurrentAccount().id;
         // old village to be deleted
-        const villageDataPath = dataPathService.baseVillagePath(existingVillage.id);
+        const villageDataPath = dataPathService.baseVillagePath(accountId, existingVillage.id);
         fileService.delete(villageDataPath);
         oldVillages.push(existingVillage);
       } else {

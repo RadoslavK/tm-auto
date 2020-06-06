@@ -23,7 +23,6 @@ NOVE NE TAK DOLEZITE
     * Have a toggle for this
     * Double queue: allow only delete because its just a view
 * Reload logs from previous run... settings keep, a time range
-* Bot settings from the UI - headless, executable path and user data path
 * Add relevant tooltips in UI
 * If the next building in queue is not possible to build in the moment (lack res). Tooltip how much res needed and when enough res will be in the village.
 * For village capacity show similar to cranny. Maybe find a better solution to show such information cause it would be cluttered af

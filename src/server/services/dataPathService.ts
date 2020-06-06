@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { accountService } from './accountService';
+import { getGeneralSettingsService } from './settings/general';
 
 type HeroSettingsPath = {
   readonly autoAdventure: string;
@@ -28,24 +28,25 @@ type VillagePath = {
   readonly settings: VillageSettingsPath;
 };
 
-class DataPathService {
-  private basePath = '.data';
-  public accountsPath: string;
+export class DataPathService {
+  static generalPath = () => path.join(__dirname, '.data/settings/general.json');
 
-  constructor() {
-    this.accountsPath = path.join(this.basePath, 'accounts.json');
-  }
+  private basePath = () =>
+    getGeneralSettingsService().get().dataPath;
 
-  public accountPath = (): AccountPath => {
-    const lPath = this.baseAccountPath();
+  public accountsPath = () =>
+    path.join(this.basePath(), 'accounts.json');
+
+  public accountPath = (accountId: string): AccountPath => {
+    const lPath = this.baseAccountPath(accountId);
 
     return {
       settings: this.createAccountSettingsPath(lPath),
     };
   };
 
-  public villagePath = (villageId: number): VillagePath => {
-    const lPath = this.baseVillagePath(villageId);
+  public villagePath = (accountId: string, villageId: number): VillagePath => {
+    const lPath = this.baseVillagePath(accountId, villageId);
 
     return {
       queue: path.join(lPath, 'queue.json'),
@@ -82,17 +83,11 @@ class DataPathService {
     };
   };
 
-  public baseVillagePath = (villageId: number): string => path.join(this.baseAccountPath(), 'villages', villageId.toString());
+  public baseVillagePath = (accountId: string, villageId: number): string =>
+    path.join(this.baseAccountPath(accountId), 'villages', villageId.toString());
 
-  public baseAccountPath = (id?: string): string => {
-    if (id) {
-      return path.join(this.basePath, 'accounts', id);
-    }
-
-    const userAccount = accountService.getCurrentAccount();
-
-    return path.join(this.basePath, 'accounts', userAccount.id);
-  };
+  public baseAccountPath = (id: string): string =>
+    path.join(this.basePath(), 'accounts', id);
 }
 
 export const dataPathService = new DataPathService();

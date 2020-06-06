@@ -7,8 +7,8 @@ import { InternalSettingsService } from './internalSettingsService';
 export class HeroSettingsService implements ComplexSettingsServiceType<HeroSettings> {
   public autoAdventure: InternalSettingsService<AutoAdventureSettings>;
 
-  constructor() {
-    const heroSettingsPath = dataPathService.accountPath().settings.hero;
+  constructor(accountId: string) {
+    const heroSettingsPath = dataPathService.accountPath(accountId).settings.hero;
 
     this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(heroSettingsPath.autoAdventure, AutoAdventureSettings);
   }

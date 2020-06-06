@@ -4,8 +4,8 @@ import { dirname } from 'path';
 import { PartialFields } from '../../_shared/types/fields.type';
 
 class FileService {
-  public save = async (path: string, object: unknown): Promise<void> => {
-    const folder = dirname(path);
+  public save = async (targetPath: string, object: unknown): Promise<void> => {
+    const folder = dirname(targetPath);
     const serializedObject = JSON.stringify(object);
     const options: MakeDirectoryOptions = {
       recursive: true,
@@ -13,12 +13,12 @@ class FileService {
 
     await fs.promises.mkdir(folder, options);
 
-    return fs.promises.writeFile(path, serializedObject, { flag: 'w' });
+    return fs.promises.writeFile(targetPath, serializedObject, { flag: 'w' });
   };
 
-  public loadInstance = <T extends unknown>(path: string, constructor: { new(params?: PartialFields<T>): T }, defaultValue?: T | undefined): T => {
+  public loadInstance = <T extends unknown>(targetPath: string, constructor: { new(params?: PartialFields<T>): T }, defaultValue?: T | undefined): T => {
     try {
-      const file = fs.readFileSync(path);
+      const file = fs.readFileSync(targetPath);
       const params: T = JSON.parse(file.toString());
       return new constructor(params);
     } catch {
@@ -26,25 +26,25 @@ class FileService {
     }
   };
 
-  public load = <T extends unknown>(path: string, defaultValue: T): T => {
+  public load = <T extends unknown>(targetPath: string, defaultValue: T): T => {
     try {
-      const file = fs.readFileSync(path);
+      const file = fs.readFileSync(targetPath);
       return JSON.parse(file.toString()) as T;
     } catch {
       return defaultValue;
     }
   };
 
-  public delete = async (path: string): Promise<void> => new Promise(resolve => {
+  public delete = async (targetPath: string): Promise<void> => new Promise(resolve => {
     try {
-      if (fs.existsSync(path)) {
-        fs.rmdir(path, { recursive: true }, () => resolve());
+      if (fs.existsSync(targetPath)) {
+        fs.rmdir(targetPath, { recursive: true }, () => resolve());
       } else {
         resolve();
       }
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to delete account at ${path}`);
+      throw new Error(`Failed to delete account at ${targetPath}`);
     }
   });
 }

@@ -108,6 +108,7 @@ const createBackgroundProcess = (socketName: string): void => {
     const options: ForkOptions = {
       execArgv: [
         '--inspect=9220',
+        '--enable-source-maps',
       ],
       execPath: currentNodePath || undefined,
       silent: true,

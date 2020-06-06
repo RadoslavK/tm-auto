@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { AccountSettings } from './AccountSettings';
 import { AutoMentorSettings } from './AutoMentorSettings';
-import { GeneralSettings } from './GeneralSettings';
 
 export const Settings: React.FunctionComponent = () => (
   <>
-    <GeneralSettings />
+    <AccountSettings />
     <AutoMentorSettings />
   </>
 );

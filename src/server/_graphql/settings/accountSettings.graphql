@@ -1,0 +1,26 @@
+type AccountSettings {
+    allowTasks: Boolean!
+    tasksCoolDown: CoolDown!
+    autoStart: Boolean!
+    autoBuild: Boolean!
+    autoUnits: Boolean!
+    autoParty: Boolean!
+}
+
+input UpdateAccountSettingsInput {
+    allowTasks: Boolean!
+    tasksCoolDown: CoolDownInput!
+    autoBuild: Boolean!
+    autoUnits: Boolean!
+    autoStart: Boolean!
+    autoParty: Boolean!
+}
+
+extend type Query {
+    accountSettings: AccountSettings!
+}
+
+extend type Mutation {
+    updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
+    resetAccountSettings: AccountSettings!
+}

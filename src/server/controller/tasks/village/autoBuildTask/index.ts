@@ -42,7 +42,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
   private settings = (): AutoBuildSettings => getAccountContext().settingsService.village(this._village.id).autoBuild.get();
 
-  public allowExecution = (): boolean => getAccountContext().settingsService.general.get().autoBuild
+  public allowExecution = (): boolean => getAccountContext().settingsService.account.get().autoBuild
     && this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;

@@ -1,5 +1,5 @@
+import { AccountSettings } from '../../_models/settings/accountSettings';
 import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
-import { GeneralSettings } from '../../_models/settings/generalSettings';
 import { HeroSettings } from '../../_models/settings/heroSettings';
 import { VillageSettings } from '../../_models/settings/villageSettings';
 import { dataPathService } from '../dataPathService';
@@ -9,20 +9,20 @@ import { InternalSettingsService } from './internalSettingsService';
 import { VillageSettingsService } from './village';
 
 export class SettingsService {
-  public general: InternalSettingsService<GeneralSettings>;
+  public account: InternalSettingsService<AccountSettings>;
 
   public hero: ComplexSettingsServiceType<HeroSettings>;
   public autoMentor: InternalSettingsService<AutoMentorSettings>;
 
   private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
 
-  constructor() {
-    const accountSettingsPath = dataPathService.accountPath().settings;
+  constructor(private accountId: string) {
+    const accountSettingsPath = dataPathService.accountPath(accountId).settings;
 
     this.villages = new Map();
 
-    this.general = new InternalSettingsService(accountSettingsPath.general, GeneralSettings);
-    this.hero = new HeroSettingsService();
+    this.account = new InternalSettingsService(accountSettingsPath.general, AccountSettings);
+    this.hero = new HeroSettingsService(accountId);
     this.autoMentor = new InternalSettingsService(accountSettingsPath.autoMentor, AutoMentorSettings);
   }
 
@@ -33,7 +33,7 @@ export class SettingsService {
       return settings;
     }
 
-    settings = new VillageSettingsService(villageId);
+    settings = new VillageSettingsService(this.accountId, villageId);
     this.villages.set(villageId, settings);
     return settings;
   };

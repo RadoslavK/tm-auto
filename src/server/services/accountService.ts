@@ -21,10 +21,22 @@ class AccountsData {
 }
 
 class AccountService {
-  private currentAccountId: string | null = null;
   private accountsData: AccountsData | null = null;
+  private currentAccountId: string | null = null;
 
-  private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath, this.accountsData);
+  private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath(), this.accountsData);
+
+  public setCurrentAccountId = (id: string | null) => {
+    this.currentAccountId = id;
+
+    if (!id) {
+      return;
+    }
+
+    this.getAccountsData().lastSignedAccountId = this.currentAccountId;
+
+    this.saveAccounts();
+  };
 
   public getAccounts = (): readonly UserAccount[] => {
     if (!this.accountsData) {
@@ -107,21 +119,11 @@ class AccountService {
     return account;
   };
 
-  public setCurrentAccountId = async (id: string | null): Promise<void> => {
-    this.currentAccountId = id;
-
-    if (id) {
-      this.getAccountsData().lastSignedAccountId = id;
-    }
-
-    return this.saveAccounts();
-  };
-
   public lastSignedAccountId = (): string | null => this.getAccountsData().lastSignedAccountId;
 
   private getAccountsData = (): AccountsData => {
     if (!this.accountsData) {
-      this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath, AccountsData);
+      this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath(), AccountsData);
     }
 
     return this.accountsData;

@@ -1,6 +1,7 @@
 const path = require('path');
 const rules = require('./webpack.rules');
-const plugins = require('./webpack.main.plugins');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -14,7 +15,18 @@ module.exports = {
   module: {
     rules,
   },
-  plugins,
+  plugins: [
+    new RemovePlugin({
+      before: {
+        root: isDevelopment ? '.webpack/main' : '.dist/main',
+        test: [{
+          folder: '.',
+          method: () => true,
+          recursive: true,
+        }],
+      },
+    }),
+  ],
   output: {
     path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'main'),
   },

@@ -1,14 +1,5 @@
 #import "./misc.graphql"
 
-fragment CoolDown on CoolDown {
-    min {
-        ...Duration
-    }
-    max {
-        ...Duration
-    }
-}
-
 fragment AutoMentorSettings on AutoMentorSettings {
     acceptRewards
 }
@@ -28,17 +19,6 @@ fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
     units {
         ...AutoUnitsUnitSettings
     }
-}
-
-fragment GeneralSettings on GeneralSettings {
-    allowTasks
-    tasksCoolDown {
-        ...CoolDown
-    }
-    autoStart
-    autoBuild
-    autoUnits
-    autoParty
 }
 
 fragment AutoAdventureSettings on AutoAdventureSettings {
@@ -130,12 +110,6 @@ mutation UpdateAutoMentorSettings($settings: UpdateAutoMentorSettingsInput!) {
     }
 }
 
-query GetGeneralSettings {
-    generalSettings {
-        ...GeneralSettings
-    }
-}
-
 query GetAutoAdventureSettings {
     autoAdventureSettings {
         ...AutoAdventureSettings
@@ -163,12 +137,6 @@ query GetAutoUnitsSettings($villageId: Int!) {
 query GetAutoPartySettings($villageId: Int!) {
     autoPartySettings(villageId: $villageId) {
         ...AutoPartySettings
-    }
-}
-
-mutation UpdateGeneralSettings($settings: UpdateGeneralSettingsInput!) {
-    updateGeneralSettings(settings: $settings) {
-        ...GeneralSettings
     }
 }
 
@@ -244,11 +212,7 @@ mutation ResetAutoUnitsSettings($villageId: Int!) {
     }
 }
 
-mutation ResetGeneralSettings {
-    resetGeneralSettings {
-        ...GeneralSettings
-    }
-}
+
 
 mutation ResetGeneralVillageSettings($villageId: Int!) {
     resetGeneralVillageSettings(villageId: $villageId) {

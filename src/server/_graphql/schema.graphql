@@ -23,6 +23,7 @@ type Query {
   nextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
   buildingQueue(villageId: Int!): BuildingQueue!
   canMoveBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  accountSettings: AccountSettings!
   autoAdventureSettings: AutoAdventureSettings!
   autoBuildSettings(villageId: Int!): AutoBuildSettings!
   autoMentorSettings: AutoMentorSettings!
@@ -57,6 +58,8 @@ type Mutation {
   enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
   moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
   moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
+  updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
+  resetAccountSettings: AccountSettings!
   updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
   resetAutoAdventureSettings: AutoAdventureSettings!
   updateAutoBuildSettings(villageId: Int!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
@@ -300,6 +303,24 @@ input DequeueBuildingAtFieldInput {
   villageId: Int!
 }
 
+type AccountSettings {
+  allowTasks: Boolean!
+  tasksCoolDown: CoolDown!
+  autoStart: Boolean!
+  autoBuild: Boolean!
+  autoUnits: Boolean!
+  autoParty: Boolean!
+}
+
+input UpdateAccountSettingsInput {
+  allowTasks: Boolean!
+  tasksCoolDown: CoolDownInput!
+  autoBuild: Boolean!
+  autoUnits: Boolean!
+  autoStart: Boolean!
+  autoParty: Boolean!
+}
+
 enum AdventureCriteria {
   Closest
   Furthest
@@ -435,21 +456,15 @@ input UpdateAutoUnitsSettingsInput {
 }
 
 type GeneralSettings {
-  allowTasks: Boolean!
-  tasksCoolDown: CoolDown!
-  autoStart: Boolean!
-  autoBuild: Boolean!
-  autoUnits: Boolean!
-  autoParty: Boolean!
+  dataPath: String!
+  chromePath: String!
+  headlessChrome: Boolean!
 }
 
 input UpdateGeneralSettingsInput {
-  allowTasks: Boolean!
-  tasksCoolDown: CoolDownInput!
-  autoBuild: Boolean!
-  autoUnits: Boolean!
-  autoStart: Boolean!
-  autoParty: Boolean!
+  dataPath: String!
+  chromePath: String!
+  headlessChrome: Boolean!
 }
 
 type GeneralVillageSettings {

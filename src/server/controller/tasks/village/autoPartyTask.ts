@@ -25,7 +25,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
 
   private settings = (): AutoPartySettings => getAccountContext().settingsService.village(this._village.id).autoParty.get();
 
-  public allowExecution = (): boolean => getAccountContext().settingsService.general.get().autoParty
+  public allowExecution = (): boolean => getAccountContext().settingsService.account.get().autoParty
     && (this.settings().allowSmall || this.settings().allowLarge);
 
   public coolDown = (): CoolDown => this.settings().coolDown;

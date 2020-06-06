@@ -51,3 +51,12 @@ fragment Duration on Duration {
     minutes
     seconds
 }
+
+fragment CoolDown on CoolDown {
+    min {
+        ...Duration
+    }
+    max {
+        ...Duration
+    }
+}

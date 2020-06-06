@@ -1,9 +1,12 @@
+import path from 'path';
 import {
   Browser,
   Page,
 } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
+
+import { getGeneralSettingsService } from '../services/settings/general';
 
 const stealth = pluginStealth();
 // TODO: workaround as typings changed in the original puppeteer or puppeteer extra but on this plugin
@@ -14,14 +17,14 @@ stealth.onBrowser = () => {};
 
 puppeteer.use(stealth);
 
-const chromeOptions = {
-  executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+const getChromeOptions = () => ({
+  executablePath: getGeneralSettingsService().get().chromePath,
   //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
   //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
-  headless: true,
+  headless: getGeneralSettingsService().get().headlessChrome,
   slowMo: 25,
-  userDataDir: './.data/browser_data',
-};
+  userDataDir: path.join(getGeneralSettingsService().get().dataPath, 'browser_data'),
+});
 
 let browser: Browser | null;
 let page: Page | null;
@@ -52,7 +55,7 @@ const initializePage = async (b: Browser): Promise<Page> => {
 
 export const getPage = async (): Promise<Page> => {
   if (!browser) {
-    browser = await puppeteer.launch(chromeOptions);
+    browser = await puppeteer.launch(getChromeOptions());
   }
 
   const pages = await browser.pages();

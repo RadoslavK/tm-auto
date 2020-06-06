@@ -10,7 +10,7 @@ import fs from 'fs';
 import { printSchema } from 'graphql';
 
 const localSchema = './src/client/renderer/_graphql/**/localSchema/**/*.graphql';
-const schema = './src/server/_graphql/**/*.graphql';
+const schema = './src/server/_graphql/**/!(schema).graphql';
 const documents = './src/client/renderer/_graphql/**/operations/**/*.graphql';
 
 const hooksPath = './src/client/renderer/_graphql/graphqlHooks.ts';

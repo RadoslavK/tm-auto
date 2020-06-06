@@ -4,6 +4,7 @@ import { BuildingSpot } from '../_models/buildings/spots/buildingSpot';
 import { Village } from '../_models/village/village';
 import { BuildingType } from '../../_shared/types/buildingType';
 import { getAccountContext } from '../accountContext';
+import { accountService } from './accountService';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -45,8 +46,9 @@ export class BuildingQueueService {
   private readonly _canMoveToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
 
   constructor(villageId: number) {
+    const { id: accountId } = accountService.getCurrentAccount();
     this._village = getAccountContext().villageService.village(villageId);
-    this._filePath = dataPathService.villagePath(villageId).queue;
+    this._filePath = dataPathService.villagePath(accountId, villageId).queue;
   }
 
   private serializeQueue = async (): Promise<void> => fileService.save(this._filePath, this._village.buildings.queue.buildings());

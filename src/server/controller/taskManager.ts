@@ -52,7 +52,7 @@ export class TaskManager {
   }
 
   public execute = async (): Promise<void> => {
-    if (!getAccountContext().settingsService.general.get().allowTasks) {
+    if (!getAccountContext().settingsService.account.get().allowTasks) {
       return;
     }
 

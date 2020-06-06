@@ -35,7 +35,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
   private settings = (): AutoUnitsSettings => getAccountContext().settingsService.village(this._village.id).autoUnits.get();
 
   public allowExecution = (): boolean =>
-    getAccountContext().settingsService.general.get().autoUnits
+    getAccountContext().settingsService.account.get().autoUnits
     && this.settings().allow
     && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(x => this.allowForBuilding(x));
 

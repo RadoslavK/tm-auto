@@ -1,9 +1,8 @@
 const path = require('path');
-const plugins = require('./webpack.main.plugins');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const nodeExternals = require('webpack-node-externals');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -34,25 +33,31 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    ...plugins,
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.join(__dirname, 'src', 'server', '_graphql', 'schema.graphql'),
-          to: path.join(__dirname, 'dist/server/'),
-        },
-      ],
-    }),
-  ],
+  node: {
+    __dirname: false,
+  },
   output: {
     path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'server'),
   },
+  plugins: [
+    new RemovePlugin({
+      before: {
+        root: isDevelopment ? '.webpack/server' : 'dist/server',
+        test: [{
+          folder: '.',
+          method: () => true,
+        }],
+        exclude: ['.data'],
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '*/serverSchema.graphql': `${__dirname}/src/server/_graphql/schema.graphql`,
+      // '*/building-infos.json': `${__dirname}/resources/building-infos.json`,
+      // '*/unit-infos.json': `${__dirname}/resources/unit-infos.json`,
     },
-    extensions: ['.js', '.ts', '.graphql'],
+    extensions: ['.js', '.ts', '.graphql', '.json'],
   },
   target: 'node',
 };

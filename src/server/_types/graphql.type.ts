@@ -30,6 +30,7 @@ export type UserAccount = {
 export type Query = {
   readonly __typename?: 'Query';
   readonly account: Maybe<UserAccount>;
+  readonly accountSettings: AccountSettings;
   readonly accounts: ReadonlyArray<UserAccount>;
   readonly activeVillageId: Scalars['Int'];
   readonly autoAdventureSettings: AutoAdventureSettings;
@@ -154,6 +155,7 @@ export type Mutation = {
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
   readonly refreshVillage: Scalars['Boolean'];
+  readonly resetAccountSettings: AccountSettings;
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
   readonly resetAutoMentorSettings: AutoMentorSettings;
@@ -172,6 +174,7 @@ export type Mutation = {
   readonly startBot: Scalars['Boolean'];
   readonly stopBot: Scalars['Boolean'];
   readonly updateAccount: Scalars['Boolean'];
+  readonly updateAccountSettings: AccountSettings;
   readonly updateAutoAdventureSettings: AutoAdventureSettings;
   readonly updateAutoBuildSettings: AutoBuildSettings;
   readonly updateAutoMentorSettings: AutoMentorSettings;
@@ -288,6 +291,11 @@ export type MutationSignInArgs = {
 
 export type MutationUpdateAccountArgs = {
   account: UpdateUserAccountInput;
+};
+
+
+export type MutationUpdateAccountSettingsArgs = {
+  settings: UpdateAccountSettingsInput;
 };
 
 
@@ -617,6 +625,25 @@ export type DequeueBuildingAtFieldInput = {
   readonly villageId: Scalars['Int'];
 };
 
+export type AccountSettings = {
+  readonly __typename?: 'AccountSettings';
+  readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDown;
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
+export type UpdateAccountSettingsInput = {
+  readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDownInput;
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
 export enum AdventureCriteria {
   Closest = 'Closest',
   Furthest = 'Furthest',
@@ -762,21 +789,15 @@ export type UpdateAutoUnitsSettingsInput = {
 
 export type GeneralSettings = {
   readonly __typename?: 'GeneralSettings';
-  readonly allowTasks: Scalars['Boolean'];
-  readonly tasksCoolDown: CoolDown;
-  readonly autoStart: Scalars['Boolean'];
-  readonly autoBuild: Scalars['Boolean'];
-  readonly autoUnits: Scalars['Boolean'];
-  readonly autoParty: Scalars['Boolean'];
+  readonly dataPath: Scalars['String'];
+  readonly chromePath: Scalars['String'];
+  readonly headlessChrome: Scalars['Boolean'];
 };
 
 export type UpdateGeneralSettingsInput = {
-  readonly allowTasks: Scalars['Boolean'];
-  readonly tasksCoolDown: CoolDownInput;
-  readonly autoBuild: Scalars['Boolean'];
-  readonly autoUnits: Scalars['Boolean'];
-  readonly autoStart: Scalars['Boolean'];
-  readonly autoParty: Scalars['Boolean'];
+  readonly dataPath: Scalars['String'];
+  readonly chromePath: Scalars['String'];
+  readonly headlessChrome: Scalars['Boolean'];
 };
 
 export type GeneralVillageSettings = {
@@ -937,6 +958,8 @@ export type ResolversTypes = {
   EnqueueBuildingInput: EnqueueBuildingInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
+  AccountSettings: ResolverTypeWrapper<AccountSettings>;
+  UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   AdventureCriteria: AdventureCriteria;
   AutoAdventureSettings: ResolverTypeWrapper<AutoAdventureSettings>;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
@@ -1011,6 +1034,8 @@ export type ResolversParentTypes = {
   EnqueueBuildingInput: EnqueueBuildingInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
+  AccountSettings: AccountSettings;
+  UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   AdventureCriteria: AdventureCriteria;
   AutoAdventureSettings: AutoAdventureSettings;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
@@ -1051,6 +1076,7 @@ export type UserAccountResolvers<ContextType = any, ParentType extends Resolvers
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   account: Resolver<Maybe<ResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
+  accountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
   accounts: Resolver<ReadonlyArray<ResolversTypes['UserAccount']>, ParentType, ContextType>;
   activeVillageId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   autoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
@@ -1091,6 +1117,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   moveQueuedBuildingAsHighAsPossible: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
   refreshVillage: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRefreshVillageArgs, 'villageId'>>;
+  resetAccountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
   resetAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationResetAutoBuildSettingsArgs, 'villageId'>>;
   resetAutoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;
@@ -1109,6 +1136,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   startBot: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   stopBot: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   updateAccount: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateAccountArgs, 'account'>>;
+  updateAccountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType, RequireFields<MutationUpdateAccountSettingsArgs, 'settings'>>;
   updateAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoAdventureSettingsArgs, 'settings'>>;
   updateAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoBuildSettingsArgs, 'villageId' | 'settings'>>;
   updateAutoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoMentorSettingsArgs, 'settings'>>;
@@ -1280,6 +1308,16 @@ export type BuildingQueueResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
+export type AccountSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountSettings'] = ResolversParentTypes['AccountSettings']> = {
+  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  tasksCoolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  autoStart: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoParty: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
 export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoAdventureSettings'] = ResolversParentTypes['AutoAdventureSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
@@ -1356,12 +1394,9 @@ export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends Res
 };
 
 export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
-  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  tasksCoolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  autoStart: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoParty: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  headlessChrome: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -1429,6 +1464,7 @@ export type Resolvers<ContextType = any> = {
   CoolDown: CoolDownResolvers<ContextType>;
   QueuedBuilding: QueuedBuildingResolvers<ContextType>;
   BuildingQueue: BuildingQueueResolvers<ContextType>;
+  AccountSettings: AccountSettingsResolvers<ContextType>;
   AutoAdventureSettings: AutoAdventureSettingsResolvers<ContextType>;
   AutoStorageOptionSettings: AutoStorageOptionSettingsResolvers<ContextType>;
   AutoStorageSettings: AutoStorageSettingsResolvers<ContextType>;

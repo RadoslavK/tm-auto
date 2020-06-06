@@ -3,9 +3,9 @@ import { TimeoutError } from 'puppeteer/Errors';
 
 import { BotState } from '../../_shared/types/botState';
 import {
-  AccountContext,
   getAccountContext,
   resetAccountContext,
+  setAccountContext,
 } from '../accountContext';
 import {
   getPage,
@@ -90,7 +90,8 @@ class ControllerService {
   };
 
   public signIn = async (accountId: string): Promise<void> => {
-    resetAccountContext();
+    setAccountContext(accountId);
+    accountService.setCurrentAccountId(accountId);
 
     let allowContinue = true;
 
@@ -100,9 +101,6 @@ class ControllerService {
       }
 
       this.setState(BotState.Pending);
-
-      await accountService.setCurrentAccountId(accountId);
-      Object.assign(getAccountContext, new AccountContext());
 
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();
@@ -133,7 +131,7 @@ class ControllerService {
       return;
     }
 
-    const generalSettings = getAccountContext().settingsService.general.get();
+    const generalSettings = getAccountContext().settingsService.account.get();
 
     if (generalSettings.autoStart) {
       await this.start();
@@ -143,6 +141,7 @@ class ControllerService {
   };
 
   public signOut = async (): Promise<void> => {
+    resetAccountContext();
     accountService.setCurrentAccountId(null);
     this.setState(BotState.None);
   };
@@ -190,7 +189,7 @@ class ControllerService {
       return;
     }
 
-    const { tasksCoolDown } = getAccountContext().settingsService.general.get();
+    const { tasksCoolDown } = getAccountContext().settingsService.account.get();
     const nextTimeout = tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();
