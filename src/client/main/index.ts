@@ -8,11 +8,11 @@ import {
   app,
   BrowserWindow,
   ipcMain,
-  protocol,
   session,
 } from 'electron';
 import fs from 'fs';
-import * as path from 'path';
+import path from 'path';
+import url from 'url';
 import which from 'which';
 
 import { findOpenSocket } from './ipc/findOpenSocket';
@@ -33,11 +33,11 @@ let clientWin: null | BrowserWindow;
 
 const createClientWindow = async (socketName: string): Promise<void> => {
   clientWin = new BrowserWindow({
-    icon: path.join(__dirname, '..', '..', '..', 'resources', 'images', 'TMAuto.ico'),
+    icon: isDevelopment ? undefined : path.join(app.getAppPath(), '..', 'renderer', 'images', 'TMAuto.ico'),
     show: false,
     webPreferences: {
       nodeIntegration: false,
-      preload: 'C:\\Users\\Radek\\Downloads\\programs\\tm-auto\\.webpack\\main\\preload.js',
+      preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
 
@@ -46,17 +46,25 @@ const createClientWindow = async (socketName: string): Promise<void> => {
 
   let loaded = false;
 
-  do {
-    try {
-      await clientWin.loadURL('http://localhost:8080/');
+  if (isDevelopment) {
+    do {
+      try {
+        await clientWin.loadURL('http://localhost:8080/');
 
-      loaded = true;
-    } catch {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 3000);
-      });
-    }
-  } while (!loaded);
+        loaded = true;
+      } catch {
+        await new Promise((resolve) => {
+          global.setTimeout(resolve, 3000);
+        });
+      }
+    } while (!loaded);
+  } else {
+    await clientWin.loadURL(url.format({
+      pathname: path.join(app.getAppPath(), '..', 'renderer', 'index.html'),
+      protocol: 'file:',
+      slashes: true,
+    }));
+  }
 
   clientWin.maximize();
 
@@ -96,47 +104,63 @@ const createBackgroundProcess = (socketName: string): void => {
     console.error('No current node path found');
   }
 
-  const options: ForkOptions = {
-    env: {
-      TS_NODE_COMPILER_OPTIONS: '{"module":"commonjs"}',
-    },
-    execArgv: [
-      ...(isDevelopment ? ['--inspect=9220'] : []),
-      '-r',
-      'ts-node/register',
-    ],
-    execPath: currentNodePath || undefined,
-    silent: true,
-  };
+  if (isDevelopment) {
+    const options: ForkOptions = {
+      execArgv: [
+        '--inspect=9220',
+      ],
+      execPath: currentNodePath || undefined,
+      silent: true,
+    };
 
-  const filePath = path.join(__dirname, '..', '..', 'server', 'index.ts');
+    const filePath = path.join(app.getAppPath(), '..', 'server', 'index.js');
 
-  serverProcess = fork(
-    filePath,
-    [socketName],
-    options,
-  );
+    serverProcess = fork(
+      filePath,
+      [socketName],
+      options,
+    );
 
-  //  logging
-  serverProcess.on('data', (data) => {
-    console.log(data);
-  });
+    //  logging
+    serverProcess.on('data', (data) => {
+      console.log(data);
+    });
 
-  serverProcess.stderr?.pipe(process.stderr);
-  serverProcess.stdout?.pipe(process.stdout);
+    serverProcess.stderr?.pipe(process.stderr);
+    serverProcess.stdout?.pipe(process.stdout);
 
-  serverProcess.on('exit', (code) => {
-    console.log(`server exited with code ${code}`);
-  });
+    serverProcess.on('exit', (code) => {
+      console.log(`server exited with code ${code}`);
+    });
 
-  serverProcess.on('disconnect', () => {
-    console.log('server disconnected');
-  });
+    serverProcess.on('disconnect', () => {
+      console.log('server disconnected');
+    });
 
-  serverProcess.on('error', (error) => {
-    console.error('Server crashed with error');
-    console.error(error);
-  });
+    serverProcess.on('error', (error) => {
+      console.error('Server crashed with error');
+      console.error(error);
+    });
+  } else {
+    const options: ForkOptions = {
+      env: {
+        NODE_ENV: 'production',
+      },
+      execPath: currentNodePath || undefined,
+      silent: true,
+    };
+
+    const filePath = path.join(app.getAppPath(), '..', 'server', 'index.js');
+
+    serverProcess = fork(
+      filePath,
+      [socketName],
+      options,
+    );
+
+    serverProcess.stderr?.pipe(process.stderr);
+    serverProcess.stdout?.pipe(process.stdout);
+  }
 };
 
 type Extension = {
@@ -178,18 +202,6 @@ const installDevTools = async (): Promise<void> => {
 };
 
 app.on('ready', async () => {
-  protocol.interceptFileProtocol('file', (request, callback) => {
-    // eslint-disable-next-line unicorn/prefer-string-slice
-    const url = request.url.substr(7); /* all urls start with 'file://' */
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    callback({ path: path.normalize(`${__dirname}/${url}`) });
-  }, (err) => {
-    if (err) {
-      console.error('Failed to register protocol');
-    }
-  });
-
   if (isDevelopment) {
     await installDevTools();
   }

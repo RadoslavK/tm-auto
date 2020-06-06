@@ -148,7 +148,7 @@ module.exports = {
     'import/resolver': {
       node: {},
       webpack: {
-        config: 'webpack.renderer.config.js',
+        config: 'webpack.server.config.js',
       },
     },
     react: {

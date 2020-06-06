@@ -2,7 +2,7 @@
   "name": "tm-auto",
   "version": "1.0.0",
   "author": "Buckyx",
-  "main": ".webpack/main",
+  "main": "dist/main/index.js",
   "title": "TM Auto",
   "private": true,
   "license": "MIT",
@@ -15,8 +15,32 @@
     "lint-errors": "yarn lint --quiet",
     "lint-fix-errors": "yarn lint-errors --fix",
     "typecheck": "tsc",
-    "start-m": "webpack --config webpack.main.config.js --mode development&& electron .webpack/main --remote-debugging-port=9222 --inspect",
-    "start-r": "node hot-reload.server.js"
+    "build-server": "set NODE_ENV=production&& webpack --config webpack.server.config.js",
+    "build-main": "set NODE_ENV=production&& webpack --config webpack.main.config.js",
+    "build-renderer": "set NODE_ENV=production&& webpack --config webpack.renderer.config.js",
+    "build": "set NODE_ENV=production&& yarn build-main&& yarn build-renderer&& yarn build-server",
+    "release": "electron-builder",
+    "start-m": "webpack --config webpack.server.config.js&& webpack --config webpack.main.config.js && electron .webpack/main --remote-debugging-port=9222 --inspect",
+    "start-r": "node hot-reload.server.js",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "tm.auto",
+    "asar": false,
+    "productName": "TM Auto",
+    "copyright": "Copyright © 2020 ${author}",
+    "win": {
+      "target": "portable"
+    },
+    "icon": "./resources/images/TMAuto256.png",
+    "directories": {
+      "buildResources": "dist",
+      "output": "pack"
+    },
+    "files": [
+      "dist/**/*"
+    ],
+    "nodeVersion": "current"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.50",
@@ -77,9 +101,11 @@
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
     "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.0.1",
     "css-loader": "^3.5.3",
     "electron": "^9.0.0",
+    "electron-builder": "^22.7.0",
     "eslint": "^7.1.0",
     "eslint-config-airbnb-typescript": "^7.2.1",
     "eslint-formatter-pretty": "^3.0.1",
@@ -110,6 +136,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
+    "webpack-node-externals": "^1.7.2",
     "zen-observable-ts": "^0.8.21"
   }
 }

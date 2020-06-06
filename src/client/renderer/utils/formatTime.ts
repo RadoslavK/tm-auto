@@ -1,5 +1,4 @@
 import { Duration } from '../_graphql/graphqlHooks';
-import { Duration as DurationModel } from '../../../server/_models/duration';
 
 export const formatTimeFromDuration = (duration: Duration): string => {
   const {
@@ -16,4 +15,22 @@ export const formatTimeFromDuration = (duration: Duration): string => {
   return `${days}:${correctedHours}:${correctedMinutes}:${correctedSeconds}`;
 };
 
-export const formatTimeFromSeconds = (seconds: number): string => formatTimeFromDuration(DurationModel.fromSeconds(seconds));
+export const formatTimeFromSeconds = (totalSeconds: number): string => {
+  // TODO better shared models
+  const days = Math.floor(totalSeconds / 86400);
+  const daySeconds = days * 86400;
+  const hours = Math.floor((totalSeconds - daySeconds) / 3600);
+  const hourSeconds = hours * 3600;
+  const minutes = Math.floor((totalSeconds - daySeconds - hourSeconds) / 60);
+  const minuteSeconds = minutes * 60;
+  const seconds = totalSeconds - daySeconds - hourSeconds - minuteSeconds;
+
+  const duration: Duration = {
+    days,
+    hours,
+    minutes,
+    seconds,
+  };
+
+  return formatTimeFromDuration(duration);
+};

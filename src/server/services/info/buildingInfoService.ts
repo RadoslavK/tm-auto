@@ -1,13 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
 import { BuildingCategory } from '../../_enums/buildingCategory';
 import { BuildingConditions } from '../../_models/buildings/buildingConditions';
 import { Cost } from '../../_models/misc/cost';
 import { mapRecord } from '../../../_shared/objectUtils';
 import { BuildingType } from '../../../_shared/types/buildingType';
-
-const buildingsInfoPath = path.join(__dirname, '..', '..', '..', '..', 'resources', 'building-infos.json');
+import { Fields } from '../../../_shared/types/fields.type';
+import buildingInfos from '../../../../resources/building-infos.json';
 
 type BuildingInfo = {
   readonly category: BuildingCategory;
@@ -34,23 +31,24 @@ class BuildingInfoService {
 
   private infos = (): Map<BuildingType, BuildingInfo> => {
     if (!this.buildingInfos) {
-      const buildingInfos = new Map();
-
-      const loadedBuildingInfos = JSON.parse(fs.readFileSync(buildingsInfoPath).toString()) as Record<string, BuildingInfo>;
+      const infosMap = new Map();
 
       Object
-        .entries(loadedBuildingInfos)
+        .entries(buildingInfos)
         .forEach(([key, value]) => {
-          //  correct classes
+          const bInfo: BuildingInfo = value as any;
+
+          const costs = mapRecord(bInfo.costs as Record<string, Fields<Cost>>, c => new Cost(c));
+
           const buildingInfo: BuildingInfo = {
-            ...value,
-            costs: mapRecord(value.costs, c => new Cost(c)),
+            ...bInfo,
+            costs,
           };
 
-          buildingInfos.set(+key, buildingInfo);
+          infosMap.set(+key, buildingInfo);
         });
 
-      this.buildingInfos = buildingInfos;
+      this.buildingInfos = infosMap;
     }
 
     return this.buildingInfos;

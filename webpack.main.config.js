@@ -1,10 +1,11 @@
 const path = require('path');
 const rules = require('./webpack.rules');
+const plugins = require('./webpack.main.plugins');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: isDevelopment ? 'source-map' : undefined,
   entry: {
     index: path.join(__dirname, 'src', 'client', 'main', 'index.ts'),
     preload: path.join(__dirname, 'src', 'client', 'main', 'preload.ts'),
@@ -13,11 +14,9 @@ module.exports = {
   module: {
     rules,
   },
-  node: {
-    __dirname: true,
-  },
+  plugins,
   output: {
-    path: path.join(__dirname, '.webpack', 'main'),
+    path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'main'),
   },
   resolve: {
     extensions: ['.js', '.ts'],

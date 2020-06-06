@@ -6,6 +6,8 @@
 .idea
 # produced build
 .webpack
+dist
+pack
 
 yarn-error.log
 node_modules

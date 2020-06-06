@@ -9,7 +9,7 @@ export const useCountDown = (seconds: number): number => {
   useEffect(() => {
     setTimer(seconds);
 
-    const id = setInterval(() => {
+    const id = window.setInterval(() => {
       setTimer(prevTimer => Math.max(0, prevTimer - 1));
     }, 1000);
 

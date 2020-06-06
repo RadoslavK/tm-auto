@@ -160,7 +160,7 @@ class ControllerService {
     this._refreshRequests.clear();
 
     if (getAccountContext().nextExecutionService.tasks() > new Date()) {
-      this._timeout = setTimeout(async () => {
+      this._timeout = global.setTimeout(async () => {
         await this.execute();
       }, 1000);
 
@@ -198,7 +198,7 @@ class ControllerService {
     getAccountContext().nextExecutionService.setTasks(nextExecution);
     this.setActivity(false);
 
-    this._timeout = setTimeout(async () => {
+    this._timeout = global.setTimeout(async () => {
       await this.execute();
     }, 1000);
   };

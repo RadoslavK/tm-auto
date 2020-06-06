@@ -1,11 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-
 import { Cost } from '../../_models/misc/cost';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
-
-const unitsInfoPath = path.join(__dirname, '..', '..', '..', '..', 'resources', 'unit-infos.json');
+import unitInfos from '../../../../resources/unit-infos.json';
 
 type UnitInfo = {
   readonly buildingType: BuildingType;
@@ -32,11 +28,10 @@ class UnitInfoService {
 
   private infos = (): Map<number, UnitInfo> => {
     if (!this.unitInfos) {
-      const loadedIUnitInfos = JSON.parse(fs.readFileSync(unitsInfoPath).toString()) as Record<string, UnitInfo>;
-      const unitInfos = new Map();
+      const infosMap = new Map();
 
       Object
-        .entries(loadedIUnitInfos)
+        .entries(unitInfos)
         .forEach(([key, value]) => {
           //  internally there are not classes so we need to create them
           const correctValue: UnitInfo = {
@@ -44,10 +39,10 @@ class UnitInfoService {
             cost: new Cost(value.cost),
           };
 
-          unitInfos.set(+key, correctValue);
+          infosMap.set(+key, correctValue);
         });
 
-      this.unitInfos = unitInfos;
+      this.unitInfos = infosMap;
     }
 
     return this.unitInfos;

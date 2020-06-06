@@ -3,18 +3,35 @@ import { generate } from '@graphql-codegen/cli';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Types } from '@graphql-codegen/plugin-helpers';
 // eslint-disable-next-line import/no-extraneous-dependencies
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { loadSchema } from '@graphql-tools/load';
 import fs from 'fs';
+import { printSchema } from 'graphql';
 
-const localSchema = './src/client/**/localSchema/**/*.graphql';
-const schema = './src/server/**/*.graphql';
-const documents = './src/client/**/operations/**/*.graphql';
+const localSchema = './src/client/renderer/_graphql/**/localSchema/**/*.graphql';
+const schema = './src/server/_graphql/**/*.graphql';
+const documents = './src/client/renderer/_graphql/**/operations/**/*.graphql';
 
 const hooksPath = './src/client/renderer/_graphql/graphqlHooks.ts';
 const serverTypesPath = './src/server/_types/graphql.type.ts';
 const fragmentsPath = './src/client/renderer/_graphql/fragmentTypes.json';
+const schemaPath = './src/server/_graphql/schema.graphql';
 
 const commonConfig = {
   maybeValue: 'T | null',
+};
+
+const generateSchemaFile = async (): Promise<void> => {
+  const mergedSchema = await loadSchema(schema, {
+    loaders: [
+      new GraphQLFileLoader(),
+    ],
+  });
+
+  const printedSchema = printSchema(mergedSchema);
+
+  fs.writeFileSync(schemaPath, printedSchema);
 };
 
 const generateResolverTypes = async (): Promise<void> => {
@@ -159,6 +176,7 @@ const generateGraphqlFragmentTypes = async (): Promise<void> => {
   }, true);
 };
 
+generateSchemaFile();
 generateResolverTypes();
 generateOperationTypesAndHooks();
 generateGraphqlFragmentTypes();

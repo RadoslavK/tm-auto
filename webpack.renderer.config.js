@@ -1,20 +1,22 @@
 const path = require('path');
-const plugins = require('./webpack.plugins');
+const plugins = require('./webpack.renderer.plugins');
 const rules = require('./webpack.rules');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: isDevelopment ? 'source-map' : undefined,
   entry: {
-    index: ['webpack-hot-middleware/client', path.join(__dirname, 'src', 'client', 'renderer', 'index.tsx')],
+    index: isDevelopment
+      ? ['webpack-hot-middleware/client', path.join(__dirname, 'src', 'client', 'renderer', 'index.tsx')]
+      : path.join(__dirname, 'src', 'client', 'renderer', 'index.tsx'),
   },
   mode: isDevelopment ? 'development' : 'production',
   module: {
     rules,
   },
   output: {
-    path: path.join(__dirname, '.webpack', 'renderer'),
+    path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'renderer'),
   },
   plugins,
   resolve: {

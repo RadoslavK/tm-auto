@@ -1,0 +1,490 @@
+type UserAccount {
+  id: String!
+  username: String!
+  password: String!
+  server: String!
+}
+
+type Query {
+  accounts: [UserAccount!]!
+  account(accountId: String!): UserAccount
+  currentAccount: UserAccount!
+  lastSignedAccountId: String
+  availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
+  buildingSpots(villageId: Int!): BuildingSpots!
+  maxBuildingLevel(buildingType: Int!): Int!
+  buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
+  isBotActive: Boolean!
+  botState: BotState!
+  heroInformation: HeroInformation!
+  logsEntries: [LogEntry!]!
+  nextTasksExecution: Timestamp!
+  nextTaskExecution(task: TaskType!): Timestamp!
+  nextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
+  buildingQueue(villageId: Int!): BuildingQueue!
+  canMoveBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  autoAdventureSettings: AutoAdventureSettings!
+  autoBuildSettings(villageId: Int!): AutoBuildSettings!
+  autoMentorSettings: AutoMentorSettings!
+  autoPartySettings(villageId: Int!): AutoPartySettings!
+  autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+  generalSettings: GeneralSettings!
+  generalVillageSettings(villageId: Int!): GeneralVillageSettings!
+  unitInfo(index: Int!): UnitInfo!
+  activeVillageId: Int!
+  village(villageId: Int!): Village
+  villages: [Village!]!
+  crannyCapacity(villageId: Int!): VillageCrannyCapacity!
+}
+
+type Mutation {
+  createAccount(account: CreateUserAccountInput!): String
+  updateAccount(account: UpdateUserAccountInput!): Boolean!
+  deleteAccount(accountId: String!): Boolean!
+  signIn(accountId: ID!): Boolean
+  signOut: Boolean
+  startBot: Boolean!
+  stopBot: Boolean!
+  setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
+  setNextTasksExecution(delay: DurationInput!): Timestamp!
+  setNextVillageTaskExecution(villageId: Int!, task: TaskType!, delay: DurationInput!): Timestamp!
+  resetNextTaskExecution(task: TaskType!): Timestamp!
+  resetNextTasksExecution: Timestamp!
+  resetNextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
+  clearQueue(villageId: Int!): Boolean!
+  dequeueBuilding(input: DequeueBuildingInput!): Boolean!
+  dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
+  enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
+  moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
+  updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
+  resetAutoAdventureSettings: AutoAdventureSettings!
+  updateAutoBuildSettings(villageId: Int!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
+  resetAutoBuildSettings(villageId: Int!): AutoBuildSettings!
+  updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
+  resetAutoMentorSettings: AutoMentorSettings!
+  updateAutoPartySettings(villageId: Int!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
+  resetAutoPartySettings(villageId: Int!): AutoPartySettings!
+  updateAutoUnitsSettings(villageId: Int!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
+  updateAutoUnitsBuildingSettings(villageId: Int!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsBuildingSettings!
+  updateAutoUnitsUnitSettings(villageId: Int!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsUnitSettings!
+  resetAutoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+  updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
+  resetGeneralSettings: GeneralSettings!
+  updateGeneralVillageSettings(villageId: Int!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
+  resetGeneralVillageSettings(villageId: Int!): GeneralVillageSettings!
+  refreshVillage(villageId: Int!): Boolean!
+}
+
+type BuildingSpotLevel {
+  actual: Int!
+  ongoing: Int
+  queued: Int
+  max: Int!
+  total: Int!
+}
+
+type BuildingSpot {
+  fieldId: Int!
+  level: BuildingSpotLevel!
+  name: String!
+  type: Int!
+}
+
+type ResourceFields {
+  wood: [BuildingSpot!]!
+  clay: [BuildingSpot!]!
+  iron: [BuildingSpot!]!
+  crop: [BuildingSpot!]!
+}
+
+type BuildingSpots {
+  infrastructure: [BuildingSpot!]!
+  resources: ResourceFields!
+}
+
+input AvailableNewBuildingsInput {
+  fieldId: Int!
+  villageId: Int!
+}
+
+type AvailableNewBuilding {
+  type: Int!
+  name: String!
+}
+
+type Subscription {
+  actualBuildingLevelsUpdate(villageId: Int!): Boolean!
+  buildingsInProgressUpdated(villageId: Int!): [BuildingInProgress!]!
+  botActivityChanged: Boolean!
+  onBotRunningChanged: Boolean!
+  heroInformationUpdated: HeroInformation!
+  onLogEntryAdded: LogEntry!
+  nextTasksExecutionChanged: Timestamp!
+  nextTaskExecutionChanged(task: TaskType!): Timestamp!
+  nextVillageTaskExecutionChanged(villageId: Int!, task: TaskType!): Timestamp!
+  onQueueUpdated(villageId: Int!): BuildingQueue!
+  villageUpdated(villageId: Int!): Village!
+  villagesUpdated: [Village!]!
+  activeVillageIdChanged: Int!
+}
+
+type BuildingInProgress {
+  level: Int!
+  finishedAt: Timestamp!
+  name: String!
+  type: Int!
+  fieldId: Int!
+}
+
+enum BotState {
+  None
+  Pending
+  Running
+  Stopping
+  Paused
+}
+
+input CreateUserAccountInput {
+  username: String!
+  password: String!
+  server: String!
+}
+
+input UpdateUserAccountInput {
+  id: ID!
+  username: String!
+  password: String!
+  server: String!
+}
+
+enum HeroState {
+  Unknown
+  InVillage
+  Dead
+  Reviving
+  OnAdventure
+}
+
+type HeroInformation {
+  health: Int!
+  state: HeroState!
+  village: Village
+}
+
+enum TextLogEntryType {
+  Info
+  Error
+}
+
+type TextLogEntryContent {
+  message: String!
+  messageType: TextLogEntryType!
+}
+
+type AutoBuildLogEntryContent {
+  name: String!
+  type: Int!
+  level: Int!
+  fieldId: Int!
+}
+
+type AutoUnitsLogEntryContent {
+  amount: Int!
+  index: Int!
+  tribe: Int!
+  unitName: String!
+}
+
+union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent
+
+type LogEntry {
+  id: ID!
+  timestamp: Timestamp!
+  village: Village
+  content: LogEntryContent!
+}
+
+enum TaskType {
+  AutoAdventure
+  AutoBuild
+  AutoUnits
+  AutoParty
+  AutoMentor
+}
+
+type Timestamp {
+  totalSeconds: Int!
+}
+
+type Resources {
+  wood: Int!
+  clay: Int!
+  iron: Int!
+  crop: Int!
+  freeCrop: Int!
+  total: Int!
+}
+
+type Cost {
+  resources: Resources!
+  buildTime: Duration!
+}
+
+type Coords {
+  x: Int!
+  y: Int!
+}
+
+type Duration {
+  days: Int!
+  hours: Int!
+  minutes: Int!
+  seconds: Int!
+}
+
+type CoolDown {
+  min: Duration!
+  max: Duration!
+}
+
+input CoolDownInput {
+  min: DurationInput!
+  max: DurationInput!
+}
+
+input DurationInput {
+  days: Int!
+  hours: Int!
+  minutes: Int!
+  seconds: Int!
+}
+
+input TimestampInput {
+  totalSeconds: Int!
+}
+
+type QueuedBuilding {
+  level: Int!
+  name: String!
+  type: Int!
+  queueId: ID!
+  cost: Cost!
+  fieldId: Int!
+}
+
+type BuildingQueue {
+  buildings: [QueuedBuilding!]!
+  totalCost: Cost!
+}
+
+input ClearQueueInput {
+  villageId: Int!
+}
+
+input EnqueueBuildingInput {
+  fieldId: Int!
+  type: Int!
+  villageId: Int!
+  targetLevel: Int
+}
+
+input DequeueBuildingInput {
+  queueId: ID!
+  villageId: Int!
+}
+
+input DequeueBuildingAtFieldInput {
+  deleteAll: Boolean!
+  fieldId: Int!
+  villageId: Int!
+}
+
+enum AdventureCriteria {
+  Closest
+  Furthest
+  Random
+  FirstToExpire
+}
+
+type AutoAdventureSettings {
+  allow: Boolean!
+  coolDown: CoolDown!
+  adventureCriteria: AdventureCriteria!
+  preferHard: Boolean!
+  normalMinHealth: Int!
+  hardMinHealth: Int!
+  maxTravelTime: Duration!
+  preferredVillageId: Int
+}
+
+input UpdateAutoAdventureSettingsInput {
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  adventureCriteria: AdventureCriteria!
+  preferHard: Boolean!
+  normalMinHealth: Int!
+  hardMinHealth: Int!
+  maxTravelTime: DurationInput!
+  preferredVillageId: Int
+}
+
+type AutoStorageOptionSettings {
+  allow: Boolean!
+  overflowLevel: Int!
+}
+
+input UpdateAutoStorageOptionSettingsInput {
+  allow: Boolean!
+  overflowLevel: Int!
+}
+
+type AutoStorageSettings {
+  allowFreeSpots: Boolean!
+  granary: AutoStorageOptionSettings!
+  warehouse: AutoStorageOptionSettings!
+}
+
+input UpdateAutoStorageSettingsInput {
+  allowFreeSpots: Boolean!
+  granary: UpdateAutoStorageOptionSettingsInput!
+  warehouse: UpdateAutoStorageOptionSettingsInput!
+}
+
+type AutoBuildSettings {
+  allow: Boolean!
+  coolDown: CoolDown!
+  autoCropFields: Boolean!
+  minCrop: Int!
+  useHeroResources: Boolean!
+  autoStorage: AutoStorageSettings!
+}
+
+input UpdateAutoBuildSettingsInput {
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  autoCropFields: Boolean!
+  minCrop: Int!
+  useHeroResources: Boolean!
+  autoStorage: UpdateAutoStorageSettingsInput!
+}
+
+type AutoMentorSettings {
+  acceptRewards: Boolean!
+}
+
+input UpdateAutoMentorSettingsInput {
+  acceptRewards: Boolean!
+}
+
+type AutoPartySettings {
+  coolDown: CoolDown!
+  allowSmall: Boolean!
+  allowLarge: Boolean!
+  minCulturePointsSmall: Int!
+  minCulturePointsLarge: Int!
+}
+
+input UpdateAutoPartySettingsInput {
+  allowSmall: Boolean!
+  allowLarge: Boolean!
+  coolDown: CoolDownInput!
+  minCulturePointsSmall: Int!
+  minCulturePointsLarge: Int!
+}
+
+type AutoUnitsUnitSettings {
+  index: Int!
+  autoBuild: Boolean!
+  trainForever: Boolean!
+  targetAmount: Int!
+}
+
+input UpdateAutoUnitsUnitSettingsInput {
+  index: Int!
+  autoBuild: Boolean!
+  trainForever: Boolean!
+  targetAmount: Int!
+}
+
+type AutoUnitsBuildingSettings {
+  allow: Boolean!
+  maxBuildTime: Duration!
+  units: [AutoUnitsUnitSettings!]!
+}
+
+input UpdateAutoUnitsBuildingSettingsInput {
+  allow: Boolean!
+  maxBuildTime: DurationInput!
+}
+
+type AutoUnitsSettings {
+  allow: Boolean!
+  coolDown: CoolDown!
+  minCrop: Int!
+  barracks: AutoUnitsBuildingSettings!
+  stable: AutoUnitsBuildingSettings!
+  workshop: AutoUnitsBuildingSettings!
+  residence: AutoUnitsBuildingSettings!
+}
+
+input UpdateAutoUnitsSettingsInput {
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  minCrop: Int!
+}
+
+type GeneralSettings {
+  allowTasks: Boolean!
+  tasksCoolDown: CoolDown!
+  autoStart: Boolean!
+  autoBuild: Boolean!
+  autoUnits: Boolean!
+  autoParty: Boolean!
+}
+
+input UpdateGeneralSettingsInput {
+  allowTasks: Boolean!
+  tasksCoolDown: CoolDownInput!
+  autoBuild: Boolean!
+  autoUnits: Boolean!
+  autoStart: Boolean!
+  autoParty: Boolean!
+}
+
+type GeneralVillageSettings {
+  allowTasks: Boolean!
+}
+
+input UpdateGeneralVillageSettingsInput {
+  allowTasks: Boolean!
+}
+
+type UnitInfo {
+  name: String!
+}
+
+type VillageCapacity {
+  granary: Int!
+  warehouse: Int!
+}
+
+type VillageResources {
+  amount: Resources!
+  capacity: VillageCapacity!
+  production: Resources!
+}
+
+type Village {
+  id: Int!
+  coords: Coords!
+  name: String!
+  resources: VillageResources!
+  isCapital: Boolean!
+}
+
+type VillageCrannyCapacity {
+  actual: Int!
+  ongoing: Int!
+  total: Int!
+}

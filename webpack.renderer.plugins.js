@@ -11,6 +11,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -44,11 +46,14 @@ module.exports = [
         globOptions: {
           ignore: ['**/*.json'],
         },
-        to: path.join(__dirname, '.webpack/renderer'),
+        to: isDevelopment
+          ? path.join(__dirname, '.webpack/renderer')
+          : path.join(__dirname, 'dist/renderer'),
       },
     ],
   }),
   new HtmlWebpackPlugin({
     template: './src/client/static/index.html',
   }),
+  new CleanWebpackPlugin(),
 ].filter(Boolean);

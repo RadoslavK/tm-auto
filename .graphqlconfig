@@ -1,0 +1,9 @@
+{
+  "name": "TM Auto Schema",
+  "projects": {
+    "server": {
+      "includes": ["src/server/_graphql/**"],
+      "excludes": ["schema.graphql"]
+    }
+  }
+}

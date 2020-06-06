@@ -8,10 +8,9 @@ NOVE NE TAK DOLEZITE
 * Building Queue
     * Scrollbar on building queue rather than whole app
     * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
-
+    * Block of queued buildings
+        * Drag, Move to the top, delete
 * Show what task is the bot actually performing
-* Block of queued buildings
-    * Drag, Move to the top, delete
 * Reset everything to default
 * Allow creating own defaults
 * Have preferences for how to spend resources, how much on units, buildings, what ratios of units, how etc.
