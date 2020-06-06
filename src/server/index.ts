@@ -1,5 +1,6 @@
 import { ApolloLink } from '@apollo/client';
-import { makeExecutableSchema } from 'graphql-tools';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import serverSchema from '*/serverSchema.graphql';
 

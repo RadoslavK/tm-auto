@@ -3,7 +3,8 @@
   "compilerOptions": {
     "noEmit": false,
     "outDir": "dist/server",
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "target": "ES2019"
   },
   "exclude": [
     "src/client/**/*",

@@ -33,11 +33,11 @@ let clientWin: null | BrowserWindow;
 
 const createClientWindow = async (socketName: string): Promise<void> => {
   clientWin = new BrowserWindow({
-    icon: isDevelopment ? undefined : path.join(app.getAppPath(), '..', 'renderer', 'images', 'TMAuto.ico'),
+    icon: isDevelopment ? undefined : path.join(__dirname, '..', 'renderer', 'images', 'TMAuto.ico'),
     show: false,
     webPreferences: {
       nodeIntegration: false,
-      preload: path.join(app.getAppPath(), 'preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
@@ -60,7 +60,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
     } while (!loaded);
   } else {
     await clientWin.loadURL(url.format({
-      pathname: path.join(app.getAppPath(), '..', 'renderer', 'index.html'),
+      pathname: path.join(__dirname, '..', 'renderer', 'index.html'),
       protocol: 'file:',
       slashes: true,
     }));
@@ -114,7 +114,7 @@ const createBackgroundProcess = (socketName: string): void => {
       silent: true,
     };
 
-    const filePath = path.join(app.getAppPath(), '..', 'server', 'index.js');
+    const filePath = path.join(__dirname, '..', 'server', 'index.js');
 
     serverProcess = fork(
       filePath,
@@ -151,7 +151,7 @@ const createBackgroundProcess = (socketName: string): void => {
       silent: true,
     };
 
-    const filePath = path.join(app.getAppPath(), '..', 'server', 'index.js');
+    const filePath = path.join(__dirname, '..', 'server', 'index.js');
 
     serverProcess = fork(
       filePath,

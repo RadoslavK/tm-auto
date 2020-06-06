@@ -15,6 +15,9 @@ module.exports = {
   module: {
     rules,
   },
+  node: {
+    __dirname: false,
+  },
   plugins: [
     new RemovePlugin({
       before: {

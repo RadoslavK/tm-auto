@@ -23,7 +23,6 @@ export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> =
   return new ApolloLink((operation): Observable<FetchResult> | null => {
     const handleRequest = (observer: ZenObservable.SubscriptionObserver<FetchResult>): void => {
       const request: SerializableGraphQLRequest = {
-        context: operation.getContext(),
         operationName: operation.operationName,
         query: printQuery(operation.query),
         variables: operation.variables,

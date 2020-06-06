@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { TimeoutError } from 'puppeteer/Errors';
 
 import { BotState } from '../../_shared/types/botState';
@@ -29,6 +30,7 @@ import {
 } from '../pubSub';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
+import { getGeneralSettingsService } from './settings/general';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
@@ -40,24 +42,26 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
 
   const now = new Date();
   const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+  const dir = getGeneralSettingsService().get().dataPath;
+  const directory = path.join(dir, '.screenshots');
 
   // try to make screenshot
   try {
     const page = await getPage();
 
-    if (!fs.existsSync('.screenshots')) {
-      fs.mkdirSync('.screenshots');
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory);
     }
 
-    await fs.promises.writeFile(`.screenshots/${format}.txt`, error.stack ?? '', { flag: 'w' });
-    await fs.promises.writeFile(`.screenshots/${format}.html`, await page.content(), { flag: 'w' });
+    await fs.promises.writeFile(path.join(`${format}.txt`), error.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(path.join(`${format}.html`), await page.content(), { flag: 'w' });
 
-    await page.screenshot({ fullPage: true, path: `.screenshots/${format}.png` });
+    await page.screenshot({ fullPage: true, path: path.join(`${format}.png`) });
   } catch (screenshotError) {
     console.error(screenshotError.stack);
     getAccountContext().logsService.logError(screenshotError.message);
 
-    await fs.promises.writeFile(`.screenshots/${format}-screenshot-error.txt`, screenshotError.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(path.join(`${format}-screenshot-error.txt`), screenshotError.stack ?? '', { flag: 'w' });
   }
 
   await killBrowser();

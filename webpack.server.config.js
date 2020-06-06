@@ -1,7 +1,5 @@
 const path = require('path');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const nodeExternals = require('webpack-node-externals');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -11,13 +9,22 @@ module.exports = {
   entry: {
     index: path.join(__dirname, 'src', 'server', 'index.ts'),
   },
-  externals: [nodeExternals({})],
+  externals: {
+    puppeteer: 'require("puppeteer")',
+    'puppeteer-extra': 'require("puppeteer-extra")',
+    'puppeteer-extra-plugin-stealth': 'require("puppeteer-extra-plugin-stealth")',
+  },
   mode: isDevelopment ? 'development' : 'production',
   module: {
     rules: [
       {
         test: /\.graphql$/,
         loader: 'graphql-tag/loader',
+      },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
       },
       {
         test: /\.ts$/,

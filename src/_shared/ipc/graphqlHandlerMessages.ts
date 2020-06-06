@@ -14,7 +14,10 @@ export const createGraphqlHandlerDataMessage = (data: any) => ({
 }) as const;
 
 export const createGraphqlHandlerErrorMessage = (error: Error) => ({
-  error,
+  error: {
+    message: error.message,
+    stack: error.stack,
+  },
   type: GraphqlHandlerMessageType.Error,
 }) as const;
 

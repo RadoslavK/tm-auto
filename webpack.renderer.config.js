@@ -20,7 +20,7 @@ module.exports = {
   },
   plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json', '.mjs'],
     modules: ['src', 'node_modules'],
   },
   target: 'web',
