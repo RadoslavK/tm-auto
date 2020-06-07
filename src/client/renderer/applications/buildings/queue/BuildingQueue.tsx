@@ -30,6 +30,8 @@ const useStyles = makeStyles({
   buildings: {
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'auto',
+    maxHeight: '62vh',
   },
 });
 

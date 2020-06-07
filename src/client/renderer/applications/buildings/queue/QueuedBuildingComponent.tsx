@@ -20,8 +20,8 @@ const useStyles = makeStyles<unknown, StyleProps>({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
-    height: '7em',
-    width: '7em',
+    height: '4rem',
+    width: '4rem',
   }),
   imageWithFieldId: {
     alignItems: 'center',

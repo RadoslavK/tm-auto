@@ -38,8 +38,8 @@ const useStyles = makeStyles<unknown, Props>({
     border: '1px solid black',
     display: 'flex',
     flexFlow: 'column',
-    height: '108px',
-    width: '108px',
+    height: '6rem',
+    width: '6rem',
   }),
 });
 
