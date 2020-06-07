@@ -53,15 +53,15 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
       fs.mkdirSync(directory);
     }
 
-    await fs.promises.writeFile(path.join(`${format}.txt`), error.stack ?? '', { flag: 'w' });
-    await fs.promises.writeFile(path.join(`${format}.html`), await page.content(), { flag: 'w' });
+    await fs.promises.writeFile(path.join(directory, `${format}.txt`), error.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(path.join(directory, `${format}.html`), await page.content(), { flag: 'w' });
 
-    await page.screenshot({ fullPage: true, path: path.join(`${format}.png`) });
+    await page.screenshot({ fullPage: true, path: path.join(directory, `${format}.png`) });
   } catch (screenshotError) {
     console.error(screenshotError.stack);
     getAccountContext().logsService.logError(screenshotError.message);
 
-    await fs.promises.writeFile(path.join(`${format}-screenshot-error.txt`), screenshotError.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(path.join(directory, `${format}-screenshot-error.txt`), screenshotError.stack ?? '', { flag: 'w' });
   }
 
   await killBrowser();
