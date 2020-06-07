@@ -5,6 +5,9 @@ NOVE NE TAK DOLEZITE
 
 ## New features
 
+* reload settings button from that folder.. copy service settings etc and refresh all structures on UI - refetch queries or subscriptions?
+* Allow Refresh village when bot is paused
+* Use video feature to speed up building construction
 * Building Queue
     * Scrollbar on building queue rather than whole app
     * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
@@ -70,6 +73,7 @@ NOVE NE TAK DOLEZITE
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
 * When just started app and created account -> it is not preselected. Tested with already existing accounts that were loaded.
 * Reload window breaks the IPC + GraphQL functionality
+* GraphQL plugin does not ignore the generated schema, then there is invalid highlighting and code navigation
 
 ## Bot Detection
 
