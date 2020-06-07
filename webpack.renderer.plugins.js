@@ -15,6 +15,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'renderer');
 
 module.exports = [
   isDevelopment && new webpack.HotModuleReplacementPlugin(),
@@ -46,9 +47,7 @@ module.exports = [
         globOptions: {
           ignore: ['**/*.json'],
         },
-        to: isDevelopment
-          ? path.join(__dirname, '.webpack/renderer')
-          : path.join(__dirname, 'dist/renderer'),
+        to: path.join(__dirname, directory),
       },
     ],
   }),
@@ -57,7 +56,7 @@ module.exports = [
   }),
   new RemovePlugin({
     before: {
-      root: isDevelopment ? '.webpack/renderer' : '.dist/renderer',
+      root: directory,
       test: [{
         folder: '.',
         method: () => true,

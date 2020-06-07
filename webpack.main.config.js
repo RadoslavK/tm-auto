@@ -4,6 +4,7 @@ const rules = require('./webpack.rules');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'main');
 
 module.exports = {
   devtool: isDevelopment ? 'source-map' : undefined,
@@ -21,7 +22,7 @@ module.exports = {
   plugins: [
     new RemovePlugin({
       before: {
-        root: isDevelopment ? '.webpack/main' : '.dist/main',
+        root: directory,
         test: [{
           folder: '.',
           method: () => true,
@@ -31,7 +32,7 @@ module.exports = {
     }),
   ],
   output: {
-    path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'main'),
+    path: path.join(__dirname, directory),
   },
   resolve: {
     extensions: ['.js', '.ts'],

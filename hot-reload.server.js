@@ -21,6 +21,7 @@ app.use(
   webpackDevMiddleware(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath,
+    writeToDisk: true,
   }),
 );
 

@@ -2,7 +2,7 @@
   "name": "tm-auto",
   "version": "1.0.0",
   "author": "Buckyx",
-  "main": "dist/main/index.js",
+  "main": ".webpack/main",
   "title": "TM Auto",
   "private": true,
   "license": "MIT",
@@ -18,10 +18,10 @@
     "build-server": "set NODE_ENV=production&& webpack --config webpack.server.config.js",
     "build-main": "set NODE_ENV=production&& webpack --config webpack.main.config.js",
     "build-renderer": "set NODE_ENV=production&& webpack --config webpack.renderer.config.js",
-    "build": "set NODE_ENV=production&& yarn build-main&& yarn build-renderer&& yarn build-server",
+    "build": "yarn build-main&& yarn build-renderer&& yarn build-server",
     "release": "electron-builder --dir",
-    "start-m": "webpack --config webpack.server.config.js&& webpack --config webpack.main.config.js && electron .webpack/main --remote-debugging-port=9222 --inspect",
-    "start-r": "node hot-reload.server.js",
+    "start-m": "set NODE_ENV=development&& webpack --config webpack.server.config.js&& webpack --config webpack.main.config.js && electron . --remote-debugging-port=9222 --inspect",
+    "start-r": "set NODE_ENV=development&& node hot-reload.server.js",
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {

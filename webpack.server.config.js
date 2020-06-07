@@ -3,6 +3,7 @@ const path = require('path');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'server');
 
 module.exports = {
   devtool: isDevelopment ? 'source-map' : undefined,
@@ -44,12 +45,12 @@ module.exports = {
     __dirname: false,
   },
   output: {
-    path: path.join(__dirname, isDevelopment ? '.webpack' : 'dist', 'server'),
+    path: path.join(__dirname, directory),
   },
   plugins: [
     new RemovePlugin({
       before: {
-        root: isDevelopment ? '.webpack/server' : 'dist/server',
+        root: directory,
         test: [{
           folder: '.',
           method: () => true,
@@ -61,8 +62,6 @@ module.exports = {
   resolve: {
     alias: {
       '*/serverSchema.graphql': `${__dirname}/src/server/_graphql/schema.graphql`,
-      // '*/building-infos.json': `${__dirname}/resources/building-infos.json`,
-      // '*/unit-infos.json': `${__dirname}/resources/unit-infos.json`,
     },
     extensions: ['.js', '.ts', '.graphql', '.json'],
   },

@@ -1,12 +1,10 @@
-.screenshots
 # internally generated files for program execution
-.data
 .eslintcache
 # IDE files
 .idea
 # produced build
 .webpack
-dist
+app/dist
 pack
 
 yarn-error.log
