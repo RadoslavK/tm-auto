@@ -29,15 +29,12 @@ module.exports = [
   new UnusedFilesWebpackPlugin({
     globOptions: {
       ignore: [
-        'src/client/main/preload.ts',
-        'src/client/main/index.ts',
-        'src/server/**/*.ts',
         '**/*.type.ts',
         '**/*.d.ts',
       ],
     },
     patterns: [
-      'src/**/*.ts?(x)',
+      'src/client/renderer/**/*.ts?(x)',
     ],
   }),
   new CopyWebpackPlugin({

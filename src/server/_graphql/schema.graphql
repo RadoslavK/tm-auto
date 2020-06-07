@@ -391,11 +391,13 @@ input UpdateAutoBuildSettingsInput {
 }
 
 type AutoMentorSettings {
-  acceptRewards: Boolean!
+  acceptTaskRewards: Boolean!
+  acceptDailyRewards: Boolean!
 }
 
 input UpdateAutoMentorSettingsInput {
-  acceptRewards: Boolean!
+  acceptTaskRewards: Boolean!
+  acceptDailyRewards: Boolean!
 }
 
 type AutoPartySettings {

@@ -719,11 +719,13 @@ export type UpdateAutoBuildSettingsInput = {
 
 export type AutoMentorSettings = {
   readonly __typename?: 'AutoMentorSettings';
-  readonly acceptRewards: Scalars['Boolean'];
+  readonly acceptTaskRewards: Scalars['Boolean'];
+  readonly acceptDailyRewards: Scalars['Boolean'];
 };
 
 export type UpdateAutoMentorSettingsInput = {
-  readonly acceptRewards: Scalars['Boolean'];
+  readonly acceptTaskRewards: Scalars['Boolean'];
+  readonly acceptDailyRewards: Scalars['Boolean'];
 };
 
 export type AutoPartySettings = {
@@ -848,11 +850,16 @@ export type VillageCrannyCapacity = {
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = {
+export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
 
+export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
+  selectionSet: string;
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
@@ -902,7 +909,7 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type isTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -1071,7 +1078,7 @@ export type UserAccountResolvers<ContextType = any, ParentType extends Resolvers
   username: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   server: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -1154,7 +1161,7 @@ export type BuildingSpotLevelResolvers<ContextType = any, ParentType extends Res
   queued: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   max: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type BuildingSpotResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpot'] = ResolversParentTypes['BuildingSpot']> = {
@@ -1162,7 +1169,7 @@ export type BuildingSpotResolvers<ContextType = any, ParentType extends Resolver
   level: Resolver<ResolversTypes['BuildingSpotLevel'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type ResourceFieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceFields'] = ResolversParentTypes['ResourceFields']> = {
@@ -1170,19 +1177,19 @@ export type ResourceFieldsResolvers<ContextType = any, ParentType extends Resolv
   clay: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
   iron: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
   crop: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type BuildingSpotsResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpots'] = ResolversParentTypes['BuildingSpots']> = {
   infrastructure: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
   resources: Resolver<ResolversTypes['ResourceFields'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AvailableNewBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['AvailableNewBuilding'] = ResolversParentTypes['AvailableNewBuilding']> = {
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -1207,20 +1214,20 @@ export type BuildingInProgressResolvers<ContextType = any, ParentType extends Re
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type HeroInformationResolvers<ContextType = any, ParentType extends ResolversParentTypes['HeroInformation'] = ResolversParentTypes['HeroInformation']> = {
   health: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   state: Resolver<ResolversTypes['HeroState'], ParentType, ContextType>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
   message: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   messageType: Resolver<ResolversTypes['TextLogEntryType'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
@@ -1228,7 +1235,7 @@ export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType exte
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
@@ -1236,7 +1243,7 @@ export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType exte
   index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   unitName: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type LogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntryContent'] = ResolversParentTypes['LogEntryContent']> = {
@@ -1248,12 +1255,12 @@ export type LogEntryResolvers<ContextType = any, ParentType extends ResolversPar
   timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
   content: Resolver<ResolversTypes['LogEntryContent'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type TimestampResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timestamp'] = ResolversParentTypes['Timestamp']> = {
   totalSeconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type ResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Resources'] = ResolversParentTypes['Resources']> = {
@@ -1263,19 +1270,19 @@ export type ResourcesResolvers<ContextType = any, ParentType extends ResolversPa
   crop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   freeCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type CostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cost'] = ResolversParentTypes['Cost']> = {
   resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   buildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type CoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coords'] = ResolversParentTypes['Coords']> = {
   x: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   y: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type DurationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Duration'] = ResolversParentTypes['Duration']> = {
@@ -1283,13 +1290,13 @@ export type DurationResolvers<ContextType = any, ParentType extends ResolversPar
   hours: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   minutes: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   seconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type CoolDownResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoolDown'] = ResolversParentTypes['CoolDown']> = {
   min: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   max: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type QueuedBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuilding'] = ResolversParentTypes['QueuedBuilding']> = {
@@ -1299,13 +1306,13 @@ export type QueuedBuildingResolvers<ContextType = any, ParentType extends Resolv
   queueId: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   cost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
   buildings: Resolver<ReadonlyArray<ResolversTypes['QueuedBuilding']>, ParentType, ContextType>;
   totalCost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AccountSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountSettings'] = ResolversParentTypes['AccountSettings']> = {
@@ -1315,7 +1322,7 @@ export type AccountSettingsResolvers<ContextType = any, ParentType extends Resol
   autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoParty: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoAdventureSettings'] = ResolversParentTypes['AutoAdventureSettings']> = {
@@ -1327,20 +1334,20 @@ export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends
   hardMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maxTravelTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   preferredVillageId: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoStorageOptionSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageOptionSettings'] = ResolversParentTypes['AutoStorageOptionSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   overflowLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoStorageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageSettings'] = ResolversParentTypes['AutoStorageSettings']> = {
   allowFreeSpots: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   granary: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
   warehouse: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildSettings'] = ResolversParentTypes['AutoBuildSettings']> = {
@@ -1350,12 +1357,13 @@ export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends Res
   minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   autoStorage: Resolver<ResolversTypes['AutoStorageSettings'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
-  acceptRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  acceptTaskRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  acceptDailyRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoPartySettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoPartySettings'] = ResolversParentTypes['AutoPartySettings']> = {
@@ -1364,7 +1372,7 @@ export type AutoPartySettingsResolvers<ContextType = any, ParentType extends Res
   allowLarge: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCulturePointsSmall: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   minCulturePointsLarge: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoUnitsUnitSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsUnitSettings'] = ResolversParentTypes['AutoUnitsUnitSettings']> = {
@@ -1372,14 +1380,14 @@ export type AutoUnitsUnitSettingsResolvers<ContextType = any, ParentType extends
   autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   trainForever: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   targetAmount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsBuildingSettings'] = ResolversParentTypes['AutoUnitsBuildingSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   maxBuildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   units: Resolver<ReadonlyArray<ResolversTypes['AutoUnitsUnitSettings']>, ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsSettings'] = ResolversParentTypes['AutoUnitsSettings']> = {
@@ -1390,37 +1398,37 @@ export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends Res
   stable: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
   workshop: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
   residence: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
   dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   headlessChrome: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type GeneralVillageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralVillageSettings'] = ResolversParentTypes['GeneralVillageSettings']> = {
   allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type UnitInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnitInfo'] = ResolversParentTypes['UnitInfo']> = {
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type VillageCapacityResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageCapacity'] = ResolversParentTypes['VillageCapacity']> = {
   granary: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   warehouse: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type VillageResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageResources'] = ResolversParentTypes['VillageResources']> = {
   amount: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   capacity: Resolver<ResolversTypes['VillageCapacity'], ParentType, ContextType>;
   production: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type VillageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Village'] = ResolversParentTypes['Village']> = {
@@ -1429,14 +1437,14 @@ export type VillageResolvers<ContextType = any, ParentType extends ResolversPare
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   resources: Resolver<ResolversTypes['VillageResources'], ParentType, ContextType>;
   isCapital: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type VillageCrannyCapacityResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageCrannyCapacity'] = ResolversParentTypes['VillageCrannyCapacity']> = {
   actual: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   ongoing: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type Resolvers<ContextType = any> = {

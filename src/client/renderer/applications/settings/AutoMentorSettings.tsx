@@ -72,7 +72,7 @@ export const AutoMentorSettings: React.FC = () => {
     return null;
   }
 
-  const onChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
+  const onCheckBoxChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const {
       checked,
       name,
@@ -104,12 +104,22 @@ export const AutoMentorSettings: React.FC = () => {
       </div>
       <div>
         <div>
-          <label htmlFor="acceptRewards">Accept rewards</label>
+          <label htmlFor="acceptTaskRewards">Accept task rewards</label>
           <input
-            checked={state.acceptRewards}
-            id="acceptRewards"
-            name="acceptRewards"
-            onChange={onChange}
+            checked={state.acceptTaskRewards}
+            id="acceptTaskRewards"
+            name="acceptTaskRewards"
+            onChange={onCheckBoxChange}
+            type="checkbox"
+          />
+        </div>
+        <div>
+          <label htmlFor="acceptDailyRewards">Accept daily rewards</label>
+          <input
+            checked={state.acceptDailyRewards}
+            id="acceptDailyRewards"
+            name="acceptDailyRewards"
+            onChange={onCheckBoxChange}
             type="checkbox"
           />
         </div>

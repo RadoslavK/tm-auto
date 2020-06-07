@@ -1,9 +1,11 @@
 type AutoMentorSettings {
-    acceptRewards: Boolean!
+    acceptTaskRewards: Boolean!
+    acceptDailyRewards: Boolean!
 }
 
 input UpdateAutoMentorSettingsInput {
-    acceptRewards: Boolean!
+    acceptTaskRewards: Boolean!
+    acceptDailyRewards: Boolean!
 }
 
 extend type Query {

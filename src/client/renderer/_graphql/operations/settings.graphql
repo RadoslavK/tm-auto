@@ -1,7 +1,8 @@
 #import "./misc.graphql"
 
 fragment AutoMentorSettings on AutoMentorSettings {
-    acceptRewards
+    acceptDailyRewards
+    acceptTaskRewards
 }
 
 fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
