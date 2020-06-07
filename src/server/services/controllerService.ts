@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { TimeoutError } from 'puppeteer/Errors';
 
+import { TravianPath } from '../_enums/travianPath';
 import { BotState } from '../../_shared/types/botState';
 import {
   getAccountContext,
@@ -39,6 +40,24 @@ type HandleErrorResult = {
 const handleError = async (error: Error): Promise<HandleErrorResult> => {
   console.error(error.stack);
   getAccountContext().logsService.logError(error.message);
+
+  //  Maybe its some forced dialog about server progress
+  try {
+    const page = await getPage();
+
+    const continueButton = await page.$(`[href="${TravianPath.ResourceFieldsOverview}?ok"]`);
+
+    if (continueButton) {
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        continueButton.click(),
+      ]);
+    }
+  } catch (tryContinueError) {
+    console.error(tryContinueError.stack);
+    getAccountContext().logsService.logError('Tried to continue but failed with messsage...');
+    getAccountContext().logsService.logError(tryContinueError.message);
+  }
 
   const now = new Date();
   const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
