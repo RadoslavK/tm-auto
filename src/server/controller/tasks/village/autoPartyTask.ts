@@ -48,10 +48,10 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     const smallPartyInfo = partyInfo.small;
     const largePartyInfo = partyInfo.large;
     let canDoSmallParty = allowSmall
-      && townHall.level.actual < smallPartyInfo.townHallLevel
+      && townHall.level.actual >= smallPartyInfo.townHallLevel
       && villageRes.areGreaterOrEqualThan(smallPartyInfo.cost);
     let canDoLargeParty = allowLarge
-      && townHall.level.actual < largePartyInfo.townHallLevel
+      && townHall.level.actual >= largePartyInfo.townHallLevel
       && villageRes.areGreaterOrEqualThan(largePartyInfo.cost);
 
     if (!canDoSmallParty && !canDoLargeParty) {
@@ -92,13 +92,10 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const partyType = canDoLargeParty ? 'large' : (canDoSmallParty ? 'small' : null);
+    const partyType = canDoLargeParty ? 'large' : 'small';
+    const partyNumber = canDoLargeParty ? 2 : 1;
 
-    if (!partyType) {
-      return;
-    }
-
-    const holdPartyNode = await page.$(`.green[onclick*="${getBuildingSpotPath(townHall.fieldId)}"]`);
+    const holdPartyNode = await page.$(`.green[onclick*="${getBuildingSpotPath(townHall.fieldId)}&a=${partyNumber}"]`);
 
     if (!holdPartyNode) {
       throw new Error('Did not find hold party button');
