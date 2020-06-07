@@ -1,5 +1,7 @@
 import ipc from 'node-ipc';
 
+import { generateId } from '../../../_shared/generateId';
+
 const isSocketTaken = (name: string): Promise<boolean> => new Promise(resolve => {
   ipc.connectTo(name, () => {
     ipc.of[name].on('error', () => {
@@ -15,13 +17,10 @@ const isSocketTaken = (name: string): Promise<boolean> => new Promise(resolve =>
 });
 
 export const findOpenSocket = async (namePrefix: string): Promise<string> => {
-  let currentSocket = 0;
-  let socketName = `${namePrefix}_${currentSocket}`;
+  let socketName: string;
 
   do {
-    currentSocket++;
-    socketName = `tm-auto_${currentSocket}`;
-    // eslint-disable-next-line no-await-in-loop
+    socketName = `${namePrefix}_${generateId()}`;
   } while (await isSocketTaken(socketName));
 
   return socketName;
