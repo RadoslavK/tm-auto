@@ -8,6 +8,7 @@ import { Resources } from '../../../../_models/misc/resources';
 import { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
 import { Village } from '../../../../_models/village/village';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { ClaimHeroResourcesReason } from '../../../../../_shared/types/claimHeroResourcesReason';
 import { TaskType } from '../../../../../_shared/types/taskType';
 import { Tribe } from '../../../../../_shared/types/tribe';
 import { getAccountContext } from '../../../../accountContext';
@@ -134,7 +135,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         const resourcesNeeded = requiredResources.subtract(currentResources);
 
         if (resourcesNeeded.getTotal() > 0) {
-          await claimHeroResources(resourcesNeeded);
+          await claimHeroResources(resourcesNeeded, ClaimHeroResourcesReason.AutoBuild);
         }
       }
 

@@ -1,12 +1,14 @@
 import { TravianPath } from '../../../_enums/travianPath';
 import { Resources } from '../../../_models/misc/resources';
+import { ClaimHeroResourcesReason } from '../../../../_shared/types/claimHeroResourcesReason';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { heroItemIds } from '../../../constants/heroItemIds';
 import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { ensurePage } from '../ensurePage';
 
-export const claimHeroResources = async (resources: Resources): Promise<void> => {
+export const claimHeroResources = async (resources: Resources, reason: ClaimHeroResourcesReason): Promise<void> => {
+  getAccountContext().logsService.logResourceClaim(resources, reason);
   const page = await getPage();
 
   const claimResource = async (resource: keyof Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop'>): Promise<void> => {

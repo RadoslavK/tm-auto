@@ -1,13 +1,16 @@
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits';
+import { ResourceClaimLogEntryContent } from '../_models/logs/content/resourceClaim';
 import { TextLogEntryContent } from '../_models/logs/content/text';
 import {
   LogEntry,
   LogEntryContent,
 } from '../_models/logs/logEntry';
+import { Resources } from '../_models/misc/resources';
 import { Timestamp } from '../_models/misc/timestamp';
 import { generateId } from '../../_shared/generateId';
+import { ClaimHeroResourcesReason } from '../../_shared/types/claimHeroResourcesReason';
 import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
 import { getAccountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
@@ -68,6 +71,15 @@ export class LogsService {
       index,
       tribe,
       unitName: name,
+    });
+
+    this.log(content, true);
+  };
+
+  public logResourceClaim = (resources: Resources, reason: ClaimHeroResourcesReason): void => {
+    const content = new ResourceClaimLogEntryContent({
+      reason,
+      resources,
     });
 
     this.log(content, true);

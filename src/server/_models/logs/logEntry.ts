@@ -2,12 +2,14 @@ import { Timestamp } from '../misc/timestamp';
 import { Village } from '../village/village';
 import { AutoBuildLogEntryContent } from './content/autoBuild';
 import { AutoUnitsLogEntryContent } from './content/autoUnits';
+import { ResourceClaimLogEntryContent } from './content/resourceClaim';
 import { TextLogEntryContent } from './content/text';
 
 export type LogEntryContent =
   TextLogEntryContent
   | AutoBuildLogEntryContent
-  | AutoUnitsLogEntryContent;
+  | AutoUnitsLogEntryContent
+  | ResourceClaimLogEntryContent;
 
 export class LogEntry {
   public readonly content: LogEntryContent = new TextLogEntryContent();

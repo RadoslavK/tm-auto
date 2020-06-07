@@ -3,7 +3,8 @@
     "LogEntryContent": [
       "TextLogEntryContent",
       "AutoBuildLogEntryContent",
-      "AutoUnitsLogEntryContent"
+      "AutoUnitsLogEntryContent",
+      "ResourceClaimLogEntryContent"
     ]
   }
 }

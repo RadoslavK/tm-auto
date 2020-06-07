@@ -29,6 +29,12 @@ fragment LogEntry on LogEntry {
             tribe
             unitName
         }
+        ...on ResourceClaimLogEntryContent {
+            reason
+            resources {
+                ...Resources
+            }
+        }
     }
 }
 

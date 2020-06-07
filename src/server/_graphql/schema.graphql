@@ -199,7 +199,16 @@ type AutoUnitsLogEntryContent {
   unitName: String!
 }
 
-union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent
+enum ClaimHeroResourcesReason {
+  AutoBuild
+}
+
+type ResourceClaimLogEntryContent {
+  reason: ClaimHeroResourcesReason!
+  resources: Resources!
+}
+
+union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent
 
 type LogEntry {
   id: ID!

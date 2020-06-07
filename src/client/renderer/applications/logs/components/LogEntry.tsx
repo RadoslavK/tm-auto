@@ -6,11 +6,13 @@ import {
   AutoBuildLogEntryContent,
   AutoUnitsLogEntryContent,
   LogEntryFragment,
+  ResourceClaimLogEntryContent,
   TextLogEntryContent,
 } from '../../../_graphql/graphqlHooks';
 import { formatVillageName } from '../../../utils/formatVillageName';
 import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
+import { ResourceClaimLogContent } from './entries/ResourceClaimLogContent';
 import { TextLogContent } from './entries/TextLogContent';
 
 type Content = LogEntryFragment['content'];
@@ -22,7 +24,9 @@ type Props = {
 const isTextEntry = (content: Content): content is TextLogEntryContent => (content as TextLogEntryContent).message !== undefined;
 const isAutoBuildEntry = (content: Content): content is AutoBuildLogEntryContent => (content as AutoBuildLogEntryContent).fieldId !== undefined;
 const isAutoUnitsEntry = (content: Content): content is AutoUnitsLogEntryContent => (content as AutoUnitsLogEntryContent).unitName !== undefined;
+const isResourceClaimEntry = (content: Content): content is ResourceClaimLogEntryContent => (content as ResourceClaimLogEntryContent).resources !== undefined;
 
+// TODO: refactor this
 const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.Element => {
   if (isTextEntry(content)) {
     return (
@@ -45,6 +49,15 @@ const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.E
   if (isAutoUnitsEntry(content)) {
     return (
       <AutoUnitsLogContent
+        className={className}
+        content={content}
+      />
+    );
+  }
+
+  if (isResourceClaimEntry(content)) {
+    return (
+      <ResourceClaimLogContent
         className={className}
         content={content}
       />

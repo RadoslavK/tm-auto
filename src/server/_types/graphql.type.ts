@@ -1,6 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { AutoBuildLogEntryContent as AutoBuildLogEntryContentModel } from '../_models/logs/content/autoBuild';
-import { AutoUnitsLogEntryContent as AutoUnitsLogEntryContentModel } from '../_models/logs/content/autoUnits';
 import { BuildingInProgress as BuildingInProgressModel } from '../_models/buildings/inProgress/buildingInProgress';
 import { BuildingSpot as BuildingSpotModel } from '../_models/buildings/spots/buildingSpot';
 import { Hero as HeroModel } from '../_models/hero/hero';
@@ -512,7 +510,17 @@ export type AutoUnitsLogEntryContent = {
   readonly unitName: Scalars['String'];
 };
 
-export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent;
+export enum ClaimHeroResourcesReason {
+  AutoBuild = 'AutoBuild'
+}
+
+export type ResourceClaimLogEntryContent = {
+  readonly __typename?: 'ResourceClaimLogEntryContent';
+  readonly reason: ClaimHeroResourcesReason;
+  readonly resources: ResourcesModel;
+};
+
+export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
 export type LogEntry = {
   readonly __typename?: 'LogEntry';
@@ -945,9 +953,11 @@ export type ResolversTypes = {
   HeroInformation: ResolverTypeWrapper<HeroModel>;
   TextLogEntryType: TextLogEntryType;
   TextLogEntryContent: ResolverTypeWrapper<TextLogEntryContentModel>;
-  AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContentModel>;
-  AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContentModel>;
-  LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'];
+  AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContent>;
+  AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContent>;
+  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
+  ResourceClaimLogEntryContent: ResolverTypeWrapper<Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversTypes['Resources'] }>;
+  LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'] | ResolversTypes['ResourceClaimLogEntryContent'];
   LogEntry: ResolverTypeWrapper<LogEntryModel>;
   TaskType: TaskType;
   Timestamp: ResolverTypeWrapper<Timestamp>;
@@ -1021,9 +1031,11 @@ export type ResolversParentTypes = {
   HeroInformation: HeroModel;
   TextLogEntryType: TextLogEntryType;
   TextLogEntryContent: TextLogEntryContentModel;
-  AutoBuildLogEntryContent: AutoBuildLogEntryContentModel;
-  AutoUnitsLogEntryContent: AutoUnitsLogEntryContentModel;
-  LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'];
+  AutoBuildLogEntryContent: AutoBuildLogEntryContent;
+  AutoUnitsLogEntryContent: AutoUnitsLogEntryContent;
+  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
+  ResourceClaimLogEntryContent: Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversParentTypes['Resources'] };
+  LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'] | ResolversParentTypes['ResourceClaimLogEntryContent'];
   LogEntry: LogEntryModel;
   TaskType: TaskType;
   Timestamp: Timestamp;
@@ -1246,8 +1258,14 @@ export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type ResourceClaimLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceClaimLogEntryContent'] = ResolversParentTypes['ResourceClaimLogEntryContent']> = {
+  reason: Resolver<ResolversTypes['ClaimHeroResourcesReason'], ParentType, ContextType>;
+  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type LogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntryContent'] = ResolversParentTypes['LogEntryContent']> = {
-  __resolveType: TypeResolveFn<'TextLogEntryContent' | 'AutoBuildLogEntryContent' | 'AutoUnitsLogEntryContent', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'TextLogEntryContent' | 'AutoBuildLogEntryContent' | 'AutoUnitsLogEntryContent' | 'ResourceClaimLogEntryContent', ParentType, ContextType>;
 };
 
 export type LogEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntry'] = ResolversParentTypes['LogEntry']> = {
@@ -1462,6 +1480,7 @@ export type Resolvers<ContextType = any> = {
   TextLogEntryContent: TextLogEntryContentResolvers<ContextType>;
   AutoBuildLogEntryContent: AutoBuildLogEntryContentResolvers<ContextType>;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContentResolvers<ContextType>;
+  ResourceClaimLogEntryContent: ResourceClaimLogEntryContentResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   LogEntry: LogEntryResolvers<ContextType>;
   Timestamp: TimestampResolvers<ContextType>;

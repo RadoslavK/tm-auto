@@ -44,8 +44,6 @@ const generateResolverTypes = async (): Promise<void> => {
     ...baseConfig,
     mapperTypeSuffix: 'Model',
     mappers: {
-      AutoBuildLogEntryContent: '../_models/logs/content/autoBuild#AutoBuildLogEntryContent',
-      AutoUnitsLogEntryContent: '../_models/logs/content/autoUnits#AutoUnitsLogEntryContent',
       BuildingInProgress: '../_models/buildings/inProgress/buildingInProgress#BuildingInProgress',
       BuildingSpot: '../_models/buildings/spots/buildingSpot#BuildingSpot',
       HeroInformation: '../_models/hero/hero#Hero',

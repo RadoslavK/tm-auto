@@ -1,5 +1,6 @@
 import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits';
+import { ResourceClaimLogEntryContent } from '../../_models/logs/content/resourceClaim';
 import { TextLogEntryContent } from '../../_models/logs/content/text';
 import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
@@ -13,15 +14,15 @@ export default <Resolvers>{
       if (content instanceof TextLogEntryContent) {
         return 'TextLogEntryContent';
       }
-
       if (content instanceof AutoBuildLogEntryContent) {
         return 'AutoBuildLogEntryContent';
       }
-
       if (content instanceof AutoUnitsLogEntryContent) {
         return 'AutoUnitsLogEntryContent';
       }
-
+      if (content instanceof ResourceClaimLogEntryContent) {
+        return 'ResourceClaimLogEntryContent';
+      }
       return null;
     },
   },
