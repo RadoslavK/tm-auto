@@ -34,6 +34,9 @@ export const claimHeroResources = async (resources: Resources): Promise<void> =>
       throw new Error('Did not find input for hero item resource');
     }
 
+    // TODO :It dynamically sets value to all hero resources and interferes with puppeteer
+    // https://stackoverflow.com/questions/62244878/puppeteer-does-not-return-current-value-of-the-input
+    await page.waitFor(1000);
     await replaceInputText(page, amountInput, amount.toString());
 
     const submitButton = await page.$('.green[type="submit"]');
