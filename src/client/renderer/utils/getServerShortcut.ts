@@ -1,12 +1,29 @@
-export const getServerShortcut = (server: string): string => {
-  const match = /https?:\/\/(.*?)\.(.*?)\.travian/.exec(server);
+const getOldServerShortcut = (server: string): string => {
+  const speedMatch = /(x).*\.travian.*\.(.*)\/?/.exec(server);
 
-  if (!match) {
-    throw new Error('Failed to parse server shortcut');
+  if (speedMatch && speedMatch.length === 3 && speedMatch[1] && speedMatch[2]) {
+    return `${speedMatch[2]}${speedMatch[1]}`;
   }
 
-  const type = match[1];
-  const country = match[2];
+  const match = /s(\d+).*\.travian.*\.(.*)\/?/.exec(server);
+
+  if (match && match.length === 3 && match[1] && match[2]) {
+    return `${match[2]}${match[1]}`;
+  }
+
+  throw new Error(`Failed to parse server shortcut: ${server}`);
+};
+
+export const getServerShortcut = (server: string): string => {
+  //  New formats
+  const newMatch = /https?:\/\/(.*?)\.(.*?)\.travian/.exec(server);
+
+  if (!newMatch) {
+    return getOldServerShortcut(server);
+  }
+
+  const type = newMatch[1];
+  const country = newMatch[2];
 
   const typeMatch = /tx(\d+)|ts(\d+)/.exec(type);
 
