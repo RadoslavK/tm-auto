@@ -416,7 +416,11 @@ export class BuildingQueueService {
       if (!previousLevelBuildingExists) {
         return true;
       }
+
+      return false;
     }
+
+    // it is level 1
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(queuedBuilding.type);
 
@@ -425,72 +429,66 @@ export class BuildingQueueService {
       return true;
     }
 
-    if (queuedBuilding.level === 1) {
-      // dolezite iba ked sa stava nove
-      const prohibitedBuildingExists = normalizedBuildings.some(
-        b => b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId) > 0
-          && conditions.prohibitedBuildingTypes.includes(b.type),
-      );
+    const prohibitedBuildingExists = normalizedBuildings.some(
+      b => b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId) > 0
+        && conditions.prohibitedBuildingTypes.includes(b.type),
+    );
 
-      if (prohibitedBuildingExists) {
-        return true;
-      }
+    if (prohibitedBuildingExists) {
+      return true;
+    }
 
-      if (queuedBuilding.type > BuildingType.Crop) {
-        // u resource je jedno
-        const sameTypeBuildings = normalizedBuildings.filter(b => b.type === queuedBuilding.type);
+    if (queuedBuilding.type > BuildingType.Crop) {
+      // u resource je jedno
+      const sameTypeBuildings = normalizedBuildings.filter(b => b.type === queuedBuilding.type);
 
-        if (conditions.isUnique) {
-          // existuje nejaka budova, rozstavana alebo v queue az po tialto
-          const existingBuilding = sameTypeBuildings.find(
-            b => b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId)
-              > 0,
-          );
+      if (conditions.isUnique) {
+        // existuje nejaka budova, rozstavana alebo v queue az po tialto
+        const existingBuilding = sameTypeBuildings.find(b =>
+          b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId) > 0);
 
-          if (!!existingBuilding
-            && existingBuilding.fieldId !== queuedBuilding.fieldId) {
-            return true;
-          }
-        } else {
-          const existingBuildings = sameTypeBuildings.map(
-            b => ({
-              fieldId: b.fieldId,
-              totalLevel:
-                b.level.getActualAndOngoing()
-                + providedOffsets.getFor(b.fieldId),
-            }),
-          )
-            .filter(b => b.totalLevel > 0);
+        if (existingBuilding) {
+          return true;
+        }
+      } else {
+        const existingBuildings = sameTypeBuildings.map(
+          b => ({
+            fieldId: b.fieldId,
+            totalLevel:
+              b.level.getActualAndOngoing()
+              + providedOffsets.getFor(b.fieldId),
+          }),
+        )
+          .filter(b => b.totalLevel > 0);
 
-          if (existingBuildings.length > 0) {
-            const isAnyCompleted = existingBuildings.some(b => b.totalLevel >= maxLevel);
+        if (existingBuildings.length > 0) {
+          const isAnyCompleted = existingBuildings.some(b => b.totalLevel >= maxLevel);
 
-            if (!isAnyCompleted) {
-              // ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon
-              // 1 musi zhodovat s tym co stavame
-              const anyExists = existingBuildings.some(
-                b => b.fieldId === queuedBuilding.fieldId,
-              );
+          if (!isAnyCompleted) {
+            // ked neni unikatna ani ziadna kompletna tak z tych co existuju sa aspon
+            // 1 musi zhodovat s tym co stavame
+            const anyExists = existingBuildings.some(
+              b => b.fieldId === queuedBuilding.fieldId,
+            );
 
-              if (!anyExists) {
-                return true;
-              }
+            if (!anyExists) {
+              return true;
             }
           }
         }
       }
+    }
 
-      for (let i = 0; i < conditions.requiredBuildings.length; i++) {
-        const requiredBuilding = conditions.requiredBuildings[i];
-        const requiredBuildingExists = normalizedBuildings.some(
-          b => b.type === requiredBuilding.type
-            && b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId)
-            >= requiredBuilding.level,
-        );
+    for (let i = 0; i < conditions.requiredBuildings.length; i++) {
+      const requiredBuilding = conditions.requiredBuildings[i];
+      const requiredBuildingExists = normalizedBuildings.some(
+        b => b.type === requiredBuilding.type
+          && b.level.getActualAndOngoing() + providedOffsets.getFor(b.fieldId)
+          >= requiredBuilding.level,
+      );
 
-        if (!requiredBuildingExists) {
-          return true;
-        }
+      if (!requiredBuildingExists) {
+        return true;
       }
     }
 
