@@ -5,6 +5,7 @@ NOVE NE TAK DOLEZITE
 
 ## New features
 
+* automated mentor tasks. scheduling task??? -> settle village etc
 * Autoreset tasks when changing its settings? like enqueue etc
 * If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
 * reload settings button from that folder.. copy service settings etc and refresh all structures on UI - refetch queries or subscriptions?

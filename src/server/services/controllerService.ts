@@ -3,6 +3,8 @@ import path from 'path';
 import { TimeoutError } from 'puppeteer/Errors';
 
 import { TravianPath } from '../_enums/travianPath';
+import { CoolDown } from '../_models/coolDown';
+import { Duration } from '../_models/duration';
 import { BotState } from '../../_shared/types/botState';
 import {
   getAccountContext,
@@ -35,11 +37,36 @@ import { getGeneralSettingsService } from './settings/general';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
+  readonly coolDown?: CoolDown;
 };
 
 const handleError = async (error: Error): Promise<HandleErrorResult> => {
   console.error(error.stack);
   getAccountContext().logsService.logError(error.message);
+
+  // Maybe its maintenance
+  try {
+    const page = await getPage();
+    const content = await page.content();
+
+    const hasMaintenance = content.toLowerCase().includes('maintenance');
+
+    if (hasMaintenance) {
+      getAccountContext().logsService.logText('There is a maintenance on the server, waiting 30-40 minutes...');
+
+      return {
+        allowContinue: true,
+        coolDown: new CoolDown({
+          min: new Duration({ minutes: 30 }),
+          max: new Duration({ minutes: 40 }),
+        }),
+      };
+    }
+  } catch (tryMaintenanceError) {
+    console.error(tryMaintenanceError.stack);
+    getAccountContext().logsService.logError('Tried to wait for maintenance but failed with message...');
+    getAccountContext().logsService.logError(tryMaintenanceError.message);
+  }
 
   //  Maybe its some forced dialog about server progress
   try {
@@ -48,14 +75,18 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     const continueButton = await page.$(`[href="${TravianPath.ResourceFieldsOverview}?ok"]`);
 
     if (continueButton) {
+      getAccountContext().logsService.logText('Found a dialog about server progress, continuing...');
+
       await Promise.all([
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
         continueButton.click(),
       ]);
     }
+
+    return { allowContinue: true };
   } catch (tryContinueError) {
     console.error(tryContinueError.stack);
-    getAccountContext().logsService.logError('Tried to continue but failed with messsage...');
+    getAccountContext().logsService.logError('Tried to continue the server progress dialog but failed with message...');
     getAccountContext().logsService.logError(tryContinueError.message);
   }
 
@@ -144,8 +175,8 @@ class ControllerService {
 
       await updatePlayerInfo();
     } catch (error) {
-      const result = await handleError(error);
-      allowContinue = result.allowContinue;
+      await handleError(error);
+      allowContinue = false;
     }
 
     if (!allowContinue) {
@@ -191,6 +222,7 @@ class ControllerService {
 
     this.setActivity(true);
     let allowContinue = true;
+    let coolDown: CoolDown | undefined;
 
     try {
       await ensureLoggedIn();
@@ -203,6 +235,7 @@ class ControllerService {
     } catch (error) {
       const result = await handleError(error);
       allowContinue = result.allowContinue;
+      coolDown = result.coolDown;
     }
 
     if (!allowContinue) {
@@ -212,7 +245,7 @@ class ControllerService {
       return;
     }
 
-    const { tasksCoolDown } = getAccountContext().settingsService.account.get();
+    const tasksCoolDown = coolDown || getAccountContext().settingsService.account.get().tasksCoolDown;
     const nextTimeout = tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();

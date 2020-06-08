@@ -15,7 +15,7 @@ export const ensureLoggedIn = async (): Promise<void> => {
     await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
   }
 
-  const loginForm = await page.$('form[name=login');
+  const loginForm = await page.$('form[name=login]');
 
   if (!loginForm) {
     return;
@@ -30,4 +30,10 @@ export const ensureLoggedIn = async (): Promise<void> => {
   await page.click('form[name=login] button[type=submit]');
 
   getAccountContext().logsService.logText('Logged in.');
+
+  const loginFormAfterLogIn = await page.$('form[name=login]');
+
+  if (loginFormAfterLogIn) {
+    throw new Error('Found login form after login');
+  }
 };
