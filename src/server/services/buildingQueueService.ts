@@ -44,6 +44,7 @@ export class BuildingQueueService {
   private readonly _village: Village;
   private readonly _filePath: string;
   private readonly _canMoveToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
+  private readonly _canMoveBlockToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
 
   constructor(villageId: number) {
     const { id: accountId } = accountService.getCurrentAccount();
@@ -197,6 +198,17 @@ export class BuildingQueueService {
     flags.set(newIndex, flag);
   };
 
+  private updateCanMoveBlockToIndexFlags = (topBuildingQueueId: string, bottomBuildingQueueId: string, newIndex: number, flag: boolean) => {
+    const mergedId = `${topBuildingQueueId}_${bottomBuildingQueueId}`;
+    let flags = this._canMoveBlockToIndexFlags.get(mergedId);
+
+    if (!flags) {
+      flags = new Map<number, boolean>();
+    }
+
+    flags.set(newIndex, flag);
+  };
+
   public canMoveBuildingToIndex = (queueId: string, newIndex: number): boolean => {
     const flags = this._canMoveToIndexFlags.get(queueId);
     const flag = flags && flags.get(newIndex);
@@ -207,9 +219,9 @@ export class BuildingQueueService {
 
     const buildings = this._village.buildings.queue.buildings();
     const currentIndex = buildings.findIndex(b => b.queueId === queueId);
-    const building = buildings[currentIndex];
 
     if (currentIndex === newIndex) {
+      this.updateCanMoveToIndexFlags(queueId, newIndex, false);
       return false;
     }
 
@@ -251,9 +263,84 @@ export class BuildingQueueService {
       offsets.increaseFor(qBuilding.fieldId);
     }
 
+    const building = buildings[currentIndex];
     const result = this.willQueuedBuildingStillMeetItsRequirements(building, offsets);
     this.updateCanMoveToIndexFlags(queueId, newIndex, result);
     return result;
+  };
+
+  public canMoveBuildingsBlockToIndex = (topBuildingQueueId: string, bottomBuildingQueueId: string, newIndex: number): boolean => {
+    const mergedId = `${topBuildingQueueId}_${bottomBuildingQueueId}`;
+    const flags = this._canMoveBlockToIndexFlags.get(mergedId);
+    const flag = flags && flags.get(newIndex);
+
+    if (flag !== undefined) {
+      return flag;
+    }
+
+    const buildings = this._village.buildings.queue.buildings();
+    const currentTopIndex = buildings.findIndex(b => b.queueId === topBuildingQueueId);
+    const currentBotIndex = buildings.findIndex(b => b.queueId === bottomBuildingQueueId);
+
+    if (currentTopIndex >= currentBotIndex || currentTopIndex === newIndex) {
+      this.updateCanMoveBlockToIndexFlags(topBuildingQueueId, bottomBuildingQueueId, newIndex, false);
+      return false;
+    }
+
+    const isGoingDown = currentTopIndex < newIndex;
+
+    if (isGoingDown) {
+      // if going down then recalculate for every building on the way
+      const offsets = new Offsets();
+
+      for (const [i, qBuilding] of buildings.entries()) {
+        if (i >= currentTopIndex && i <= currentBotIndex) {
+          continue;
+        }
+
+        if (isGoingDown && !this.willQueuedBuildingStillMeetItsRequirements(qBuilding, offsets)) {
+          this.updateCanMoveBlockToIndexFlags(topBuildingQueueId, bottomBuildingQueueId, newIndex, false);
+          return false;
+        }
+
+        if (i === newIndex) {
+          break;
+        }
+
+        offsets.increaseFor(qBuilding.fieldId);
+      }
+
+      this.updateCanMoveBlockToIndexFlags(topBuildingQueueId, bottomBuildingQueueId, newIndex, true);
+      return true;
+    }
+
+    // going up
+    const offsets = new Offsets();
+
+    for (const [i, qBuilding] of buildings.entries()) {
+      if (i === newIndex) {
+        break;
+      }
+
+      offsets.increaseFor(qBuilding.fieldId);
+    }
+
+    const buildingsToMoveCount = currentBotIndex - currentTopIndex + 1;
+
+    for (let i = 0; i < buildingsToMoveCount; i++) {
+      const building = buildings[currentTopIndex + i];
+      const result = this.willQueuedBuildingStillMeetItsRequirements(building, offsets);
+
+      if (!result) {
+        this.updateCanMoveBlockToIndexFlags(topBuildingQueueId, bottomBuildingQueueId, newIndex, false);
+        return false;
+      }
+
+      offsets.increaseFor(building.fieldId);
+    }
+
+    this.updateCanMoveBlockToIndexFlags(topBuildingQueueId, bottomBuildingQueueId, newIndex, true);
+    return true;
   };
 
   public moveBuildingToIndex = (queueId: string, newIndex: number): void => {
@@ -264,6 +351,34 @@ export class BuildingQueueService {
     }
 
     this._village.buildings.queue.moveTo(currentIndex, newIndex);
+
+    this.onUpdate();
+  };
+
+  public moveQueuedBuildingsBlockToIndex = (topBuildingQueueId: string, bottomBuildingQueueId: string, newIndex: number): void => {
+    const topBuildingCurrentIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === topBuildingQueueId);
+    const bottomBuildingCurrentIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === bottomBuildingQueueId);
+
+    if (topBuildingCurrentIndex >= bottomBuildingCurrentIndex) {
+      return;
+    }
+
+    if (!this.canMoveBuildingsBlockToIndex(topBuildingQueueId, bottomBuildingQueueId, newIndex)) {
+      return;
+    }
+
+    // TODO delete if below one works
+    // const buildingsToMoveCount = bottomBuildingCurrentIndex - topBuildingCurrentIndex + 1;
+    // const isMovingUp = newIndex < topBuildingCurrentIndex;
+    //
+    // for (let i = 0; i < buildingsToMoveCount; i++) {
+    //   const newIndexForTheBuilding = isMovingUp ? newIndex + i : newIndex - 1;
+    //   const movedIndex = isMovingUp ? topBuildingCurrentIndex + i : topBuildingCurrentIndex;
+    //   this._village.buildings.queue.moveTo(movedIndex, newIndexForTheBuilding);
+    // }
+
+    const buildingsToMoveCount = bottomBuildingCurrentIndex - topBuildingCurrentIndex + 1;
+    this._village.buildings.queue.moveBlockTo(topBuildingCurrentIndex, buildingsToMoveCount, newIndex);
 
     this.onUpdate();
   };
@@ -498,6 +613,7 @@ export class BuildingQueueService {
   private onUpdate = async (): Promise<void> => {
     this._village.buildings.updateSpotsQueuedState();
     this._canMoveToIndexFlags.clear();
+    this._canMoveBlockToIndexFlags.clear();
     await this.serializeQueue();
   };
 }

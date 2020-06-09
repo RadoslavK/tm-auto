@@ -2,19 +2,30 @@ type QueuedBuilding {
     level: Int!
     name: String!
     type: Int!
-    queueId: ID!
+    queueId: String!
+    queueIndex: Int!
     cost: Cost!
     fieldId: Int!
 }
 
-type BuildingQueue {
+type QueuedBuildingRange {
+    id: String!
     buildings: [QueuedBuilding!]!
+    type: Int!
+    name: String!
+    fieldId: Int!
+    cost: Cost!
+}
+
+type BuildingQueue {
+    buildingRanges: [QueuedBuildingRange!]!
     totalCost: Cost!
 }
 
 extend type Query {
     buildingQueue(villageId: Int!): BuildingQueue!
-    canMoveBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+    canMoveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+    canMoveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
 }
 
 input ClearQueueInput {
@@ -46,6 +57,7 @@ extend type Mutation {
     dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
     enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
     moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+    moveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
     moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
 }
 

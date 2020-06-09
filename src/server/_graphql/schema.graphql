@@ -22,7 +22,8 @@ type Query {
   nextTaskExecution(task: TaskType!): Timestamp!
   nextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
   buildingQueue(villageId: Int!): BuildingQueue!
-  canMoveBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  canMoveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  canMoveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
   accountSettings: AccountSettings!
   autoAdventureSettings: AutoAdventureSettings!
   autoBuildSettings(villageId: Int!): AutoBuildSettings!
@@ -57,6 +58,7 @@ type Mutation {
   dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
   enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
   moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
+  moveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
   moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
@@ -281,12 +283,22 @@ type QueuedBuilding {
   name: String!
   type: Int!
   queueId: ID!
+  queueIndex: Int!
   cost: Cost!
   fieldId: Int!
 }
 
-type BuildingQueue {
+type QueuedBuildingRange {
+  id: ID!
   buildings: [QueuedBuilding!]!
+  type: Int!
+  name: String!
+  fieldId: Int!
+  cost: Cost!
+}
+
+type BuildingQueue {
+  buildingRanges: [QueuedBuildingRange!]!
   totalCost: Cost!
 }
 

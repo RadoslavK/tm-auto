@@ -20,16 +20,34 @@ mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: ID!) {
     moveQueuedBuildingAsHighAsPossible(villageId: $villageId, queueId: $queueId)
 }
 
-fragment BuildingQueue on BuildingQueue {
+fragment QueuedBuilding on QueuedBuilding {
+    cost {
+        ...Cost
+    }
+    fieldId
+    level
+    name
+    queueId
+    queueIndex
+    type
+}
+
+fragment QueuedBuildingRange on QueuedBuildingRange {
     buildings {
-        cost {
-            ...Cost
-        }
-        name
-        level
-        type
-        queueId
-        fieldId
+        ...QueuedBuilding
+    }
+    cost {
+        ...Cost
+    }
+    fieldId
+    id
+    name
+    type
+}
+
+fragment BuildingQueue on BuildingQueue {
+    buildingRanges {
+        ...QueuedBuildingRange
     }
     totalCost {
         ...Cost
@@ -43,7 +61,11 @@ query GetQueuedBuildings($villageId: Int!) {
 }
 
 query CanMoveQueuedBuildingToIndex($villageId: Int!, $queueId: String!, $index: Int!) {
-    canMoveBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+    canMoveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+}
+
+query CanMoveQueuedBuildingsBlockToIndex ($villageId: Int!, $topBuildingQueueId: String!, $bottomBuildingQueueId: String!, $index: Int!) {
+    canMoveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
 }
 
 subscription OnQueueUpdated($villageId: Int!) {
@@ -54,4 +76,8 @@ subscription OnQueueUpdated($villageId: Int!) {
 
 mutation MoveQueuedBuildingToIndex($villageId: Int!, $queueId: String!, $index: Int!) {
     moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+}
+
+mutation MoveQueuedBuildingsBlockToIndex($villageId: Int!, $topBuildingQueueId: String!, $bottomBuildingQueueId: String!, $index: Int!) {
+    moveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
 }

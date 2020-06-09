@@ -5,6 +5,7 @@ NOVE NE TAK DOLEZITE
 
 ## New features
 
+* Use gold for some tasks. settlers or residence when chasing 2nd village
 * automated mentor tasks. scheduling task??? -> settle village etc
 * Autoreset tasks when changing its settings? like enqueue etc
 * If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
@@ -13,7 +14,6 @@ NOVE NE TAK DOLEZITE
 * Use video feature to speed up building construction
 * Building Queue
     * Scrollbar on building queue rather than whole app
-    * Merge/Show Buildings on the same field in a row. Would show total cost, and actions would affect whole block?
     * Block of queued buildings
         * Drag, Move to the top, delete
 * Show what task is the bot actually performing
@@ -109,6 +109,7 @@ NOVE NE TAK DOLEZITE
 * Use CONSTANTS_NAMING for enum values. At least on graphql
 * Use mapper for union log entry in schema
 * Enum mapping to graphql
+* Refactor code around moving building blocks - canMove method and queued building/range move drop/drag components
 
 ## Performance
 

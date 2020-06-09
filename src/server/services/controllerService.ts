@@ -54,6 +54,9 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     if (hasMaintenance) {
       getAccountContext().logsService.logText('There is a maintenance on the server, waiting 30-40 minutes...');
 
+      // Reset the page so it can be reloaded again after timeout
+      await page.goto('about:blank');
+
       return {
         allowContinue: true,
         coolDown: new CoolDown({

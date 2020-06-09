@@ -18,6 +18,12 @@ import { GeneralSettings } from './settings/GeneralSettings';
 import { EnsureSignedIn } from './signIn/components/EnsureSignedIn';
 
 const useStyles = makeStyles(theme => ({
+  '@global': {
+    html: {
+      marginLeft: 'calc(100vw - 100%)',
+      marginRight: 0,
+    },
+  },
   content: {
     backgroundColor: theme.palette.background.default,
     flexGrow: 1,
@@ -43,24 +49,24 @@ export const App: React.FC = () => {
   }
 
   return (
-    <Router>
-      <EnsureGraphQl socketName={socketName}>
-        <EnsureSignedIn>
-          <EnsureTitle>
-            <div className={classes.root}>
-              <CssBaseline />
-              <Navigation />
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>
+      <Router>
+        <EnsureGraphQl socketName={socketName}>
+          <EnsureSignedIn>
+            <EnsureTitle>
+              <div className={classes.root}>
+                <CssBaseline />
+                <Navigation />
+                <main className={classes.content}>
+                  <div className={classes.toolbar} />
                   <GeneralSettings />
                   <MainRoutes />
-                </DndProvider>
-              </main>
-            </div>
-          </EnsureTitle>
-        </EnsureSignedIn>
-      </EnsureGraphQl>
-    </Router>
+                </main>
+              </div>
+            </EnsureTitle>
+          </EnsureSignedIn>
+        </EnsureGraphQl>
+      </Router>
+    </DndProvider>
   );
 };

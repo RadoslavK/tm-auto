@@ -1,9 +1,9 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { QueuedBuilding as QueuedBuildingModel } from '../../../_graphql/graphqlHooks';
-import { imageLinks } from '../../../utils/imageLinks';
-import { Cost } from './Cost';
+import { QueuedBuilding as QueuedBuildingModel } from '../../../../_graphql/graphqlHooks';
+import { imageLinks } from '../../../../utils/imageLinks';
+import { Cost } from '../Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
 
 type StyleProps = {
@@ -44,19 +44,24 @@ const useStyles = makeStyles<unknown, StyleProps>({
 
 type Props = {
   readonly building: QueuedBuildingModel;
+  readonly isHighlight?: boolean;
+  readonly onCollapse? : () => void;
 };
 
-export const QueuedBuildingComponent: React.FC<Props> = ({ building }) => {
+export const QueuedBuildingComponent: React.FC<Props> = ({ building, isHighlight, onCollapse }) => {
   const classes = useStyles({
     buildingType: building.type,
   });
 
   return (
     <div className={classes.root}>
-      <QueuedBuildingActions
-        building={building}
-        className={classes.actions}
-      />
+      {!isHighlight && (
+        <QueuedBuildingActions
+          building={building}
+          className={classes.actions}
+          onCollapse={onCollapse}
+        />
+      )}
       <div className={classes.imageWithFieldId}>
         <div className={classes.buildingImage} />
         <div>

@@ -41,7 +41,8 @@ export type Query = {
   readonly buildingQueue: BuildingQueue;
   readonly buildingSpots: BuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
-  readonly canMoveBuildingToIndex: Scalars['Boolean'];
+  readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
   readonly crannyCapacity: VillageCrannyCapacity;
   readonly currentAccount: UserAccount;
   readonly generalSettings: GeneralSettings;
@@ -100,9 +101,17 @@ export type QueryBuildingsInProgressArgs = {
 };
 
 
-export type QueryCanMoveBuildingToIndexArgs = {
+export type QueryCanMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['Int'];
   queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
+  villageId: Scalars['Int'];
+  topBuildingQueueId: Scalars['String'];
+  bottomBuildingQueueId: Scalars['String'];
   index: Scalars['Int'];
 };
 
@@ -152,6 +161,7 @@ export type Mutation = {
   readonly enqueueBuilding: Scalars['Boolean'];
   readonly moveQueuedBuildingAsHighAsPossible: Scalars['Boolean'];
   readonly moveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly moveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
   readonly refreshVillage: Scalars['Boolean'];
   readonly resetAccountSettings: AccountSettings;
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
@@ -224,6 +234,14 @@ export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
 export type MutationMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['Int'];
   queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type MutationMoveQueuedBuildingsBlockToIndexArgs = {
+  villageId: Scalars['Int'];
+  topBuildingQueueId: Scalars['String'];
+  bottomBuildingQueueId: Scalars['String'];
   index: Scalars['Int'];
 };
 
@@ -601,13 +619,24 @@ export type QueuedBuilding = {
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
   readonly queueId: Scalars['ID'];
+  readonly queueIndex: Scalars['Int'];
   readonly cost: Cost;
   readonly fieldId: Scalars['Int'];
 };
 
+export type QueuedBuildingRange = {
+  readonly __typename?: 'QueuedBuildingRange';
+  readonly id: Scalars['ID'];
+  readonly buildings: ReadonlyArray<QueuedBuilding>;
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+  readonly fieldId: Scalars['Int'];
+  readonly cost: Cost;
+};
+
 export type BuildingQueue = {
   readonly __typename?: 'BuildingQueue';
-  readonly buildings: ReadonlyArray<QueuedBuilding>;
+  readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
   readonly totalCost: Cost;
 };
 
@@ -970,7 +999,8 @@ export type ResolversTypes = {
   DurationInput: DurationInput;
   TimestampInput: TimestampInput;
   QueuedBuilding: ResolverTypeWrapper<Omit<QueuedBuilding, 'cost'> & { cost: ResolversTypes['Cost'] }>;
-  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, totalCost: ResolversTypes['Cost'] }>;
+  QueuedBuildingRange: ResolverTypeWrapper<Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, cost: ResolversTypes['Cost'] }>;
+  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, totalCost: ResolversTypes['Cost'] }>;
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
   DequeueBuildingInput: DequeueBuildingInput;
@@ -1048,7 +1078,8 @@ export type ResolversParentTypes = {
   DurationInput: DurationInput;
   TimestampInput: TimestampInput;
   QueuedBuilding: Omit<QueuedBuilding, 'cost'> & { cost: ResolversParentTypes['Cost'] };
-  BuildingQueue: Omit<BuildingQueue, 'buildings' | 'totalCost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, totalCost: ResolversParentTypes['Cost'] };
+  QueuedBuildingRange: Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, cost: ResolversParentTypes['Cost'] };
+  BuildingQueue: Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversParentTypes['QueuedBuildingRange']>, totalCost: ResolversParentTypes['Cost'] };
   ClearQueueInput: ClearQueueInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
   DequeueBuildingInput: DequeueBuildingInput;
@@ -1108,7 +1139,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   buildingQueue: Resolver<ResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<QueryBuildingQueueArgs, 'villageId'>>;
   buildingSpots: Resolver<ResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<QueryBuildingSpotsArgs, 'villageId'>>;
   buildingsInProgress: Resolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<QueryBuildingsInProgressArgs, 'villageId'>>;
-  canMoveBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
+  canMoveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
+  canMoveQueuedBuildingsBlockToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
   crannyCapacity: Resolver<ResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<QueryCrannyCapacityArgs, 'villageId'>>;
   currentAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType>;
   generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
@@ -1135,6 +1167,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   enqueueBuilding: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
+  moveQueuedBuildingsBlockToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
   refreshVillage: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRefreshVillageArgs, 'villageId'>>;
   resetAccountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
@@ -1322,13 +1355,24 @@ export type QueuedBuildingResolvers<ContextType = any, ParentType extends Resolv
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   queueId: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  queueIndex: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   cost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
+export type QueuedBuildingRangeResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuildingRange'] = ResolversParentTypes['QueuedBuildingRange']> = {
+  id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   buildings: Resolver<ReadonlyArray<ResolversTypes['QueuedBuilding']>, ParentType, ContextType>;
+  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  cost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
+  buildingRanges: Resolver<ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, ParentType, ContextType>;
   totalCost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -1490,6 +1534,7 @@ export type Resolvers<ContextType = any> = {
   Duration: DurationResolvers<ContextType>;
   CoolDown: CoolDownResolvers<ContextType>;
   QueuedBuilding: QueuedBuildingResolvers<ContextType>;
+  QueuedBuildingRange: QueuedBuildingRangeResolvers<ContextType>;
   BuildingQueue: BuildingQueueResolvers<ContextType>;
   AccountSettings: AccountSettingsResolvers<ContextType>;
   AutoAdventureSettings: AutoAdventureSettingsResolvers<ContextType>;

@@ -44,4 +44,8 @@ export class BuildingQueue {
   public moveTo = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0]);
   };
+
+  public moveBlockTo = (oldStartIndex: number, count: number, newIndex: number): void => {
+    this._buildings.splice(newIndex, 0, ...this._buildings.splice(oldStartIndex, count));
+  };
 }

@@ -18,7 +18,9 @@ const resources = {
 
 export const imageLinks = {
   actions: {
+    collapse: `${baseUrl}/collapse.png`,
     delete: `${baseUrl}/red_cross.png`,
+    expand: `${baseUrl}/expand.png`,
     queue: {
       moveToTop: `${baseUrl}/double_arrow_up.png`,
     },

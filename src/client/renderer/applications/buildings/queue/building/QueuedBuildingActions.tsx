@@ -6,16 +6,20 @@ import {
   QueuedBuilding,
   useDequeueBuildingMutation,
   useMoveQueuedBuildingAsHighAsPossibleMutation,
-} from '../../../_graphql/graphqlHooks';
-import { imageLinks } from '../../../utils/imageLinks';
-import { useVillageContext } from '../../villages/context/villageContext';
+} from '../../../../_graphql/graphqlHooks';
+import { imageLinks } from '../../../../utils/imageLinks';
+import { useVillageContext } from '../../../villages/context/villageContext';
 
 type Props = {
   readonly building: QueuedBuilding;
   readonly className?: string;
+  readonly onCollapse?: () => void;
 };
 
 const useStyles = makeStyles({
+  collapse: {
+    backgroundImage: `url("${imageLinks.actions.collapse}")`,
+  },
   delete: {
     backgroundImage: `url("${imageLinks.actions.delete}")`,
   },
@@ -41,6 +45,7 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
       queueId,
     },
     className,
+    onCollapse,
   } = props;
 
   const { villageId } = useVillageContext();
@@ -58,13 +63,17 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
       <button
         className={clsx(classes.image, classes.moveToTop)}
         onClick={onMoveToTop}
-        type="button"
       />
       <button
         className={clsx(classes.image, classes.delete)}
         onClick={onDequeue}
-        type="button"
       />
+      {onCollapse && (
+        <button
+          className={clsx(classes.image, classes.collapse)}
+          onClick={onCollapse}
+        />
+      )}
     </div>
   );
 };
