@@ -53,11 +53,11 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
           },
           query: {
             errorPolicy: 'none',
-            fetchPolicy: 'network-only',
+            fetchPolicy: 'no-cache',
           },
           watchQuery: {
             errorPolicy: 'none',
-            fetchPolicy: 'network-only',
+            fetchPolicy: 'no-cache',
           },
         },
         link,
