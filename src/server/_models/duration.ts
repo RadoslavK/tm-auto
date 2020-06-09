@@ -3,8 +3,11 @@ import { PartialFields } from '../../_shared/types/fields.type';
 
 export class Duration {
   public readonly days: number = 0;
+
   public readonly hours: number = 0;
+
   public readonly minutes: number = 0;
+
   public readonly seconds: number = 0;
 
   constructor(params: PartialFields<Duration> = {}) {

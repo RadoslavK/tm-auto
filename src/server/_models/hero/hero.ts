@@ -5,9 +5,13 @@ import { Resources } from '../misc/resources';
 
 export class Hero {
   public hasAvailableAdventures: boolean = false;
+
   public health: number = 0;
+
   public state: HeroState = HeroState.Unknown;
+
   public villageId: number | null = null;
+
   public resources: Resources = new Resources();
 
   constructor(params: PartialFields<Hero> = {}) {

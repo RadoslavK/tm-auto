@@ -31,7 +31,9 @@ import { checkAutoStorage } from './checkAutoStorage';
 
 export class AutoBuildTask implements BotTaskWithCoolDown {
   private readonly _village: Village;
+
   private readonly _buildings: Buildings;
+
   private _addedCroplandInQueue = false;
 
   public readonly type: TaskType = TaskType.AutoBuild;

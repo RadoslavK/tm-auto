@@ -4,6 +4,7 @@ import { Duration } from './duration';
 
 export class CoolDown {
   public readonly max: Duration = new Duration();
+
   public readonly min: Duration = new Duration();
 
   constructor(params: PartialFields<CoolDown> = {}) {

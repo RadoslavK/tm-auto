@@ -124,8 +124,11 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
 
 class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
+
   private _taskManager: TaskManager | null = null;
+
   private _isActive: boolean = false;
+
   private _refreshRequests: Set<number> = new Set<number>();
 
   private botState: BotState = BotState.None;

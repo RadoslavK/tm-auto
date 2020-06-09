@@ -8,8 +8,11 @@ import { Duration } from '../../duration';
 
 export class AutoUnitsUnitSettings {
   public readonly autoBuild: boolean = false;
+
   public readonly index: number = 0;
+
   public readonly targetAmount: number = 0;
+
   public readonly trainForever: boolean = false;
 
   constructor(params: PartialFields<AutoUnitsUnitSettings> = {}) {
@@ -19,7 +22,9 @@ export class AutoUnitsUnitSettings {
 
 export class AutoUnitsBuildingSettings {
   public readonly allow: boolean = true;
+
   public readonly maxBuildTime: Duration = new Duration({ hours: 1 });
+
   public units: AutoUnitsUnitSettings[] = [];
 
   constructor(params: PartialFields<AutoUnitsBuildingSettings> = {}) {

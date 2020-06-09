@@ -45,7 +45,9 @@ export class BotTaskEngine implements IBotTaskEngine {
 
 export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
   protected readonly _task: BotTaskWithCoolDown;
+
   private readonly _setNextExecution: (nextExecution: Date) => void;
+
   private readonly _getNextExecution: () => Date;
 
   constructor(task: BotTaskWithCoolDown, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {

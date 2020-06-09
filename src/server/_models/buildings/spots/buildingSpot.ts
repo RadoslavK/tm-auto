@@ -5,7 +5,9 @@ import { BuildingSpotLevel } from './buildingSpotLevel';
 
 export class BuildingSpot {
   public fieldId: number = 0;
+
   public level: BuildingSpotLevel = new BuildingSpotLevel();
+
   public type: BuildingType = BuildingType.None;
 
   constructor(params: PartialFields<BuildingSpot> = {}) {

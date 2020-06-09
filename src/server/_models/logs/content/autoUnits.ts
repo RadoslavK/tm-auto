@@ -2,8 +2,11 @@ import { Tribe } from '../../../../_shared/types/tribe';
 
 export class AutoUnitsLogEntryContent {
   public readonly amount: number = 0;
+
   public readonly index: number = 0;
+
   public readonly tribe: Tribe = Tribe.Romans;
+
   public readonly unitName: string = '';
 
   constructor(params: AutoUnitsLogEntryContent) {

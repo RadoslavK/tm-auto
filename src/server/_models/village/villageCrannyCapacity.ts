@@ -3,7 +3,9 @@ import { PartialFields } from '../../../_shared/types/fields.type';
 
 export class VillageCrannyCapacity {
   public readonly actual: number = 0;
+
   public readonly ongoing: number = 0;
+
   public readonly total: number = 0;
 
   constructor(params: PartialFields<VillageCrannyCapacity> = {}) {

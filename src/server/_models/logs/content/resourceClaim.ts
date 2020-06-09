@@ -3,6 +3,7 @@ import { Resources } from '../../misc/resources';
 
 export class ResourceClaimLogEntryContent {
   public readonly reason: ClaimHeroResourcesReason = ClaimHeroResourcesReason.AutoBuild;
+
   public readonly resources: Resources = new Resources();
 
   constructor(params: ResourceClaimLogEntryContent) {

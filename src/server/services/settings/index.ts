@@ -12,6 +12,7 @@ export class SettingsService {
   public account: InternalSettingsService<AccountSettings>;
 
   public hero: ComplexSettingsServiceType<HeroSettings>;
+
   public autoMentor: InternalSettingsService<AutoMentorSettings>;
 
   private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;

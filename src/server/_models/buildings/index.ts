@@ -9,7 +9,9 @@ import { BuildingSpots } from './spots/buildingSpots';
 
 export class Buildings {
   public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();
+
   public readonly spots: BuildingSpots = new BuildingSpots();
+
   public readonly queue: BuildingQueue = new BuildingQueue();
 
   constructor(

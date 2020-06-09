@@ -5,6 +5,7 @@ import { Duration } from '../../duration';
 
 export class AutoPartySettings {
   public readonly allowSmall: boolean = false;
+
   public readonly allowLarge: boolean = false;
 
   public readonly coolDown: CoolDown = new CoolDown({
@@ -13,6 +14,7 @@ export class AutoPartySettings {
   });
 
   public readonly minCulturePointsSmall: number = 0;
+
   public readonly minCulturePointsLarge: number = 0;
 
   constructor(params: PartialFields<AutoPartySettings> = {}) {

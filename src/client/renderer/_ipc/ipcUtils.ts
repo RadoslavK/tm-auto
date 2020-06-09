@@ -14,9 +14,11 @@ type Listener<TPayload = unknown> = (payload: TPayload) => void;
 
 export class IpcClient {
   private replyHandlers = new Map<string, ReplyHandler<any>>();
+
   private listenersMap = new Map<string, Listener<any>[]>();
 
   private messageQueue: ClientMessage<any>[] = [];
+
   private socketClient: any | null = null;
 
   constructor(public socketName: string) {}

@@ -13,11 +13,17 @@ export class Village {
     () => publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: this.id }),
     () => publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.id }),
   );
+
   public readonly coords: Coords = new Coords();
+
   public readonly id: number = 0;
+
   public isCapital: boolean = false;
+
   public name: string = '';
+
   public readonly units: Units = new Units();
+
   public readonly resources: VillageResources = new VillageResources();
 
   constructor(params: PartialFields<Village> = {}) {

@@ -5,7 +5,9 @@ import { VillageCapacity } from './villageCapacity';
 
 export class VillageResources {
   public amount: Resources = new Resources();
+
   public capacity: VillageCapacity = new VillageCapacity();
+
   public production: Resources = new Resources();
 
   constructor(params: PartialFields<VillageResources> = {}) {

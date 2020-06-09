@@ -22,9 +22,13 @@ type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayl
 
 class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<EventPayload<TEvent>> {
   private pullQueue: ((value: IteratorResult<EventPayload<TEvent>>) => void)[];
+
   private pushQueue: EventPayload<TEvent>[];
+
   private event: TEvent;
+
   private subscribed: null | Promise<string>;
+
   private running: boolean;
 
   constructor(event: TEvent) {

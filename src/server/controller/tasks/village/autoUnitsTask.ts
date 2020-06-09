@@ -23,6 +23,7 @@ import {
 
 export class AutoUnitsTask implements BotTaskWithCoolDown {
   private readonly _village: Village;
+
   private readonly _units: Units;
 
   public readonly type: TaskType = TaskType.AutoUnits;

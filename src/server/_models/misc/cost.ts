@@ -5,6 +5,7 @@ import { Resources } from './resources';
 
 export class Cost {
   public readonly buildTime: Duration = new Duration();
+
   public readonly resources: Resources = new Resources();
 
   constructor(params: PartialFields<Cost> = {}) {

@@ -3,9 +3,13 @@ import { PartialFields } from '../../../_shared/types/fields.type';
 
 export class Resources {
   public readonly clay: number = 0;
+
   public readonly crop: number = 0;
+
   public readonly freeCrop: number = 0;
+
   public readonly iron: number = 0;
+
   public readonly wood: number = 0;
 
   constructor(params: PartialFields<Resources> = {}) {

@@ -5,8 +5,11 @@ export class Units {
   private _counts: Map<number, number> = new Map();
 
   public barracksQueue: UnitsQueue = new UnitsQueue();
+
   public stableQueue: UnitsQueue = new UnitsQueue();
+
   public workshopQueue: UnitsQueue = new UnitsQueue();
+
   public residenceQueue: UnitsQueue = new UnitsQueue();
 
   public setQueue = (type: BuildingType, queue: UnitsQueue): void => {

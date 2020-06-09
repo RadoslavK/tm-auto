@@ -11,8 +11,11 @@ export class AccountContext {
   private _buildingQueueServices: Map<number, BuildingQueueService> = new Map<number, BuildingQueueService>();
 
   public villageService: VillageService;
+
   public settingsService: SettingsService;
+
   public logsService: LogsService = new LogsService();
+
   public buildingQueueService = {
     for: (villageId: number): BuildingQueueService => {
       let service = this._buildingQueueServices.get(villageId);
@@ -25,10 +28,13 @@ export class AccountContext {
       return service;
     },
   };
+
   public nextExecutionService: NextExecutionService = new NextExecutionService();
 
   public gameInfo: GameInfo = new GameInfo();
+
   public hero: Hero = new Hero();
+
   public mentorTasks: readonly MentorTask[] = [];
 
   constructor(accountId: string) {

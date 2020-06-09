@@ -3,7 +3,9 @@ import { PartialFields } from '../../../../_shared/types/fields.type';
 
 export class BuildingSpotLevel {
   public actual: number = 0;
+
   public ongoing: number | null = null;
+
   public queued: number | null = null;
 
   constructor(params: PartialFields<BuildingSpotLevel> = {}) {

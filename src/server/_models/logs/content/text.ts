@@ -4,6 +4,7 @@ import { TextLogEntryType } from '../../../../_shared/types/textLogEntryType';
 
 export class TextLogEntryContent {
   public readonly message: string = '';
+
   public readonly type: TextLogEntryType = TextLogEntryType.Info;
 
   constructor(params: PartialFields<TextLogEntryContent> = {}) {

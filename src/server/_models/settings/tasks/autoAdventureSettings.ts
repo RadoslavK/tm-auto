@@ -6,15 +6,22 @@ import { Duration } from '../../duration';
 
 export class AutoAdventureSettings {
   public readonly adventureCriteria: AdventureCriteria = AdventureCriteria.Closest;
+
   public readonly allow: boolean = true;
+
   public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 13 }),
     min: new Duration({ minutes: 8 }),
   });
+
   public readonly hardMinHealth: number = 50;
+
   public readonly maxTravelTime: Duration = new Duration({ hours: 1 });
+
   public readonly normalMinHealth: number = 30;
+
   public readonly preferHard: boolean = false;
+
   public readonly preferredVillageId: number | null = null;
 
   constructor(params: PartialFields<AutoAdventureSettings> = {}) {

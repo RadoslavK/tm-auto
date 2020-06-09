@@ -9,8 +9,11 @@ import { InternalSettingsService } from './internalSettingsService';
 
 export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
   public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
+
   public autoParty: InternalSettingsService<VillageSettings['autoParty']>;
+
   public autoUnits: InternalSettingsService<VillageSettings['autoUnits']>;
+
   public general: InternalSettingsService<VillageSettings['general']>;
 
   constructor(accountId: string, villageId: number) {

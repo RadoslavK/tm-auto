@@ -13,8 +13,11 @@ export type LogEntryContent =
 
 export class LogEntry {
   public readonly content: LogEntryContent = new TextLogEntryContent();
+
   public readonly id: string = '';
+
   public readonly timestamp: Timestamp = new Timestamp();
+
   public readonly village: Village | null = null;
 
   constructor(params: LogEntry) {

@@ -42,8 +42,11 @@ class Offsets {
 
 export class BuildingQueueService {
   private readonly _village: Village;
+
   private readonly _filePath: string;
+
   private readonly _canMoveToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
+
   private readonly _canMoveBlockToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
 
   constructor(villageId: number) {

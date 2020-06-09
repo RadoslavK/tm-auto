@@ -13,6 +13,7 @@ type UserAccount = {
 
 class AccountsData {
   public readonly accounts: UserAccount[] = [];
+
   public lastSignedAccountId: string | null = null;
 
   constructor(params: PartialFields<AccountsData> = {}) {
@@ -22,6 +23,7 @@ class AccountsData {
 
 class AccountService {
   private accountsData: AccountsData | null = null;
+
   private currentAccountId: string | null = null;
 
   private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath(), this.accountsData);
