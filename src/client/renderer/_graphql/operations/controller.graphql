@@ -14,7 +14,7 @@ mutation StopBot {
     stopBot
 }
 
-mutation SignIn($accountId: ID!) {
+mutation SignIn($accountId: String!) {
     signIn(accountId: $accountId)
 }
 

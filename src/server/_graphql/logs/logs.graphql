@@ -38,7 +38,7 @@ union LogEntryContent =
     | ResourceClaimLogEntryContent
 
 type LogEntry {
-    id: ID!
+    id: String!
     timestamp: Timestamp!
     village: Village
     content: LogEntryContent!

@@ -16,7 +16,7 @@ mutation DequeueBuildingAtField($input: DequeueBuildingAtFieldInput!) {
     dequeueBuildingAtField(input: $input)
 }
 
-mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: ID!) {
+mutation MoveQueuedBuildingAsHighAsPossible($villageId: Int!, $queueId: String!) {
     moveQueuedBuildingAsHighAsPossible(villageId: $villageId, queueId: $queueId)
 }
 

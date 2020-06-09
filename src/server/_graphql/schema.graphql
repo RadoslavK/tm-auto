@@ -43,7 +43,7 @@ type Mutation {
   createAccount(account: CreateUserAccountInput!): String
   updateAccount(account: UpdateUserAccountInput!): Boolean!
   deleteAccount(accountId: String!): Boolean!
-  signIn(accountId: ID!): Boolean
+  signIn(accountId: String!): Boolean
   signOut: Boolean
   startBot: Boolean!
   stopBot: Boolean!
@@ -59,7 +59,7 @@ type Mutation {
   enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
   moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
   moveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
-  moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: ID!): Boolean!
+  moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: String!): Boolean!
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
   updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
@@ -157,7 +157,7 @@ input CreateUserAccountInput {
 }
 
 input UpdateUserAccountInput {
-  id: ID!
+  id: String!
   username: String!
   password: String!
   server: String!
@@ -213,7 +213,7 @@ type ResourceClaimLogEntryContent {
 union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent
 
 type LogEntry {
-  id: ID!
+  id: String!
   timestamp: Timestamp!
   village: Village
   content: LogEntryContent!
@@ -282,14 +282,14 @@ type QueuedBuilding {
   level: Int!
   name: String!
   type: Int!
-  queueId: ID!
+  queueId: String!
   queueIndex: Int!
   cost: Cost!
   fieldId: Int!
 }
 
 type QueuedBuildingRange {
-  id: ID!
+  id: String!
   buildings: [QueuedBuilding!]!
   type: Int!
   name: String!
@@ -314,7 +314,7 @@ input EnqueueBuildingInput {
 }
 
 input DequeueBuildingInput {
-  queueId: ID!
+  queueId: String!
   villageId: Int!
 }
 

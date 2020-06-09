@@ -219,7 +219,7 @@ export type MutationEnqueueBuildingArgs = {
 
 export type MutationMoveQueuedBuildingAsHighAsPossibleArgs = {
   villageId: Scalars['Int'];
-  queueId: Scalars['ID'];
+  queueId: Scalars['String'];
 };
 
 
@@ -293,7 +293,7 @@ export type MutationSetNextVillageTaskExecutionArgs = {
 
 
 export type MutationSignInArgs = {
-  accountId: Scalars['ID'];
+  accountId: Scalars['String'];
 };
 
 
@@ -465,7 +465,7 @@ export type CreateUserAccountInput = {
 };
 
 export type UpdateUserAccountInput = {
-  readonly id: Scalars['ID'];
+  readonly id: Scalars['String'];
   readonly username: Scalars['String'];
   readonly password: Scalars['String'];
   readonly server: Scalars['String'];
@@ -521,7 +521,7 @@ export type ResourceClaimLogEntryContent = {
 export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
 export type LogEntry = {
-  readonly id: Scalars['ID'];
+  readonly id: Scalars['String'];
   readonly timestamp: Timestamp;
   readonly village: Maybe<Village>;
   readonly content: LogEntryContent;
@@ -590,14 +590,14 @@ export type QueuedBuilding = {
   readonly level: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
-  readonly queueId: Scalars['ID'];
+  readonly queueId: Scalars['String'];
   readonly queueIndex: Scalars['Int'];
   readonly cost: Cost;
   readonly fieldId: Scalars['Int'];
 };
 
 export type QueuedBuildingRange = {
-  readonly id: Scalars['ID'];
+  readonly id: Scalars['String'];
   readonly buildings: ReadonlyArray<QueuedBuilding>;
   readonly type: Scalars['Int'];
   readonly name: Scalars['String'];
@@ -622,7 +622,7 @@ export type EnqueueBuildingInput = {
 };
 
 export type DequeueBuildingInput = {
-  readonly queueId: Scalars['ID'];
+  readonly queueId: Scalars['String'];
   readonly villageId: Scalars['Int'];
 };
 
@@ -955,7 +955,7 @@ export type StopBotMutationVariables = {};
 export type StopBotMutation = Pick<Mutation, 'stopBot'>;
 
 export type SignInMutationVariables = {
-  accountId: Scalars['ID'];
+  accountId: Scalars['String'];
 };
 
 
@@ -1146,7 +1146,7 @@ export type DequeueBuildingAtFieldMutation = Pick<Mutation, 'dequeueBuildingAtFi
 
 export type MoveQueuedBuildingAsHighAsPossibleMutationVariables = {
   villageId: Scalars['Int'];
-  queueId: Scalars['ID'];
+  queueId: Scalars['String'];
 };
 
 
@@ -1971,7 +1971,7 @@ export function useStopBotMutation(baseOptions?: ApolloReactHooks.MutationHookOp
 export type StopBotMutationHookResult = ReturnType<typeof useStopBotMutation>;
 export type StopBotMutationResult = ApolloReactCommon.MutationResult<StopBotMutation>;
 export type StopBotMutationOptions = ApolloReactCommon.BaseMutationOptions<StopBotMutation, StopBotMutationVariables>;
-export const SignInDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignIn"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}}],"directives":[]}]}}]};
+export const SignInDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignIn"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}}],"directives":[]}]}}]};
 export type SignInMutationFn = ApolloReactCommon.MutationFunction<SignInMutation, SignInMutationVariables>;
 
 /**
@@ -2575,7 +2575,7 @@ export function useDequeueBuildingAtFieldMutation(baseOptions?: ApolloReactHooks
 export type DequeueBuildingAtFieldMutationHookResult = ReturnType<typeof useDequeueBuildingAtFieldMutation>;
 export type DequeueBuildingAtFieldMutationResult = ApolloReactCommon.MutationResult<DequeueBuildingAtFieldMutation>;
 export type DequeueBuildingAtFieldMutationOptions = ApolloReactCommon.BaseMutationOptions<DequeueBuildingAtFieldMutation, DequeueBuildingAtFieldMutationVariables>;
-export const MoveQueuedBuildingAsHighAsPossibleDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveQueuedBuildingAsHighAsPossible"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveQueuedBuildingAsHighAsPossible"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}}}],"directives":[]}]}}]};
+export const MoveQueuedBuildingAsHighAsPossibleDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveQueuedBuildingAsHighAsPossible"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveQueuedBuildingAsHighAsPossible"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueId"}}}],"directives":[]}]}}]};
 export type MoveQueuedBuildingAsHighAsPossibleMutationFn = ApolloReactCommon.MutationFunction<MoveQueuedBuildingAsHighAsPossibleMutation, MoveQueuedBuildingAsHighAsPossibleMutationVariables>;
 
 /**

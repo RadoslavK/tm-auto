@@ -13,14 +13,14 @@ input CreateUserAccountInput {
 }
 
 input UpdateUserAccountInput {
-    id: ID!
+    id: String!
     username: String!
     password: String!
     server: String!
 }
 
 type Mutation {
-    signIn(accountId: ID!): Boolean
+    signIn(accountId: String!): Boolean
     signOut: Boolean
     startBot: Boolean!
     stopBot: Boolean!
