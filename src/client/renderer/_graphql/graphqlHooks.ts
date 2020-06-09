@@ -1,4 +1,3 @@
-
 import { DocumentNode } from 'graphql';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
@@ -12,137 +11,252 @@ export type Scalars = {
   Float: number;
 };
 
-export type UserAccount = {
-  readonly id: Scalars['String'];
+export type AccountSettings = {
+  readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDown;
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random',
+  FirstToExpire = 'FirstToExpire'
+}
+
+export type AutoAdventureSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly adventureCriteria: AdventureCriteria;
+  readonly preferHard: Scalars['Boolean'];
+  readonly normalMinHealth: Scalars['Int'];
+  readonly hardMinHealth: Scalars['Int'];
+  readonly maxTravelTime: Duration;
+  readonly preferredVillageId: Maybe<Scalars['Int']>;
+};
+
+export type AutoBuildLogEntryContent = {
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly level: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
+};
+
+export type AutoBuildSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly autoCropFields: Scalars['Boolean'];
+  readonly minCrop: Scalars['Int'];
+  readonly useHeroResources: Scalars['Boolean'];
+  readonly autoStorage: AutoStorageSettings;
+};
+
+export type AutoMentorSettings = {
+  readonly acceptTaskRewards: Scalars['Boolean'];
+  readonly acceptDailyRewards: Scalars['Boolean'];
+};
+
+export type AutoPartySettings = {
+  readonly coolDown: CoolDown;
+  readonly allowSmall: Scalars['Boolean'];
+  readonly allowLarge: Scalars['Boolean'];
+  readonly minCulturePointsSmall: Scalars['Int'];
+  readonly minCulturePointsLarge: Scalars['Int'];
+};
+
+export type AutoStorageOptionSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly overflowLevel: Scalars['Int'];
+};
+
+export type AutoStorageSettings = {
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly granary: AutoStorageOptionSettings;
+  readonly warehouse: AutoStorageOptionSettings;
+};
+
+export type AutoUnitsBuildingSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: Duration;
+  readonly units: ReadonlyArray<AutoUnitsUnitSettings>;
+};
+
+export type AutoUnitsLogEntryContent = {
+  readonly amount: Scalars['Int'];
+  readonly index: Scalars['Int'];
+  readonly tribe: Scalars['Int'];
+  readonly unitName: Scalars['String'];
+};
+
+export type AutoUnitsSettings = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly minCrop: Scalars['Int'];
+  readonly barracks: AutoUnitsBuildingSettings;
+  readonly stable: AutoUnitsBuildingSettings;
+  readonly workshop: AutoUnitsBuildingSettings;
+  readonly residence: AutoUnitsBuildingSettings;
+};
+
+export type AutoUnitsUnitSettings = {
+  readonly index: Scalars['Int'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly trainForever: Scalars['Boolean'];
+  readonly targetAmount: Scalars['Int'];
+};
+
+export type AvailableNewBuilding = {
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+};
+
+export type AvailableNewBuildingsInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export enum BotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
+
+export type BuildingInProgress = {
+  readonly level: Scalars['Int'];
+  readonly finishedAt: Timestamp;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
+};
+
+export type BuildingQueue = {
+  readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
+  readonly totalCost: Cost;
+};
+
+export type BuildingSpot = {
+  readonly fieldId: Scalars['Int'];
+  readonly level: BuildingSpotLevel;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+};
+
+export type BuildingSpotLevel = {
+  readonly actual: Scalars['Int'];
+  readonly ongoing: Maybe<Scalars['Int']>;
+  readonly queued: Maybe<Scalars['Int']>;
+  readonly max: Scalars['Int'];
+  readonly total: Scalars['Int'];
+};
+
+export type BuildingSpots = {
+  readonly infrastructure: ReadonlyArray<BuildingSpot>;
+  readonly resources: ResourceFields;
+};
+
+export enum ClaimHeroResourcesReason {
+  AutoBuild = 'AutoBuild'
+}
+
+export type ClearQueueInput = {
+  readonly villageId: Scalars['Int'];
+};
+
+export type CoolDown = {
+  readonly min: Duration;
+  readonly max: Duration;
+};
+
+export type CoolDownInput = {
+  readonly min: DurationInput;
+  readonly max: DurationInput;
+};
+
+export type Coords = {
+  readonly x: Scalars['Int'];
+  readonly y: Scalars['Int'];
+};
+
+export type Cost = {
+  readonly resources: Resources;
+  readonly buildTime: Duration;
+};
+
+export type CreateUserAccountInput = {
   readonly username: Scalars['String'];
   readonly password: Scalars['String'];
   readonly server: Scalars['String'];
 };
 
-export type Query = {
-  readonly account: Maybe<UserAccount>;
-  readonly accountSettings: AccountSettings;
-  readonly accounts: ReadonlyArray<UserAccount>;
-  readonly activeVillageId: Scalars['Int'];
-  readonly autoAdventureSettings: AutoAdventureSettings;
-  readonly autoBuildSettings: AutoBuildSettings;
-  readonly autoMentorSettings: AutoMentorSettings;
-  readonly autoPartySettings: AutoPartySettings;
-  readonly autoUnitsSettings: AutoUnitsSettings;
-  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
-  readonly botState: BotState;
-  readonly buildingQueue: BuildingQueue;
-  readonly buildingSpots: BuildingSpots;
-  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
-  readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
-  readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
-  readonly crannyCapacity: VillageCrannyCapacity;
-  readonly currentAccount: UserAccount;
-  readonly generalSettings: GeneralSettings;
-  readonly generalVillageSettings: GeneralVillageSettings;
-  readonly heroInformation: HeroInformation;
-  readonly isBotActive: Scalars['Boolean'];
-  readonly lastSignedAccountId: Maybe<Scalars['String']>;
-  readonly logsEntries: ReadonlyArray<LogEntry>;
-  readonly maxBuildingLevel: Scalars['Int'];
-  readonly nextTaskExecution: Timestamp;
-  readonly nextTasksExecution: Timestamp;
-  readonly nextVillageTaskExecution: Timestamp;
-  readonly unitInfo: UnitInfo;
+export type DequeueBuildingAtFieldInput = {
+  readonly deleteAll: Scalars['Boolean'];
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type DequeueBuildingInput = {
+  readonly queueId: Scalars['String'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type Duration = {
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
+};
+
+export type DurationInput = {
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
+};
+
+export type EnqueueBuildingInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly type: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+  readonly targetLevel: Maybe<Scalars['Int']>;
+};
+
+export type GeneralSettings = {
+  readonly dataPath: Scalars['String'];
+  readonly chromePath: Scalars['String'];
+  readonly headlessChrome: Scalars['Boolean'];
+};
+
+export type GeneralVillageSettings = {
+  readonly allowTasks: Scalars['Boolean'];
+};
+
+export type HeroInformation = {
+  readonly health: Scalars['Int'];
+  readonly state: HeroState;
   readonly village: Maybe<Village>;
-  readonly villages: ReadonlyArray<Village>;
 };
 
+export enum HeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
-export type QueryAccountArgs = {
-  accountId: Scalars['String'];
+export type LogEntry = {
+  readonly id: Scalars['String'];
+  readonly timestamp: Timestamp;
+  readonly village: Maybe<Village>;
+  readonly content: LogEntryContent;
 };
 
-
-export type QueryAutoBuildSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoPartySettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoUnitsSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAvailableNewBuildingsArgs = {
-  input: AvailableNewBuildingsInput;
-};
-
-
-export type QueryBuildingQueueArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryBuildingSpotsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryBuildingsInProgressArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryCanMoveQueuedBuildingToIndexArgs = {
-  villageId: Scalars['Int'];
-  queueId: Scalars['String'];
-  index: Scalars['Int'];
-};
-
-
-export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
-  villageId: Scalars['Int'];
-  topBuildingQueueId: Scalars['String'];
-  bottomBuildingQueueId: Scalars['String'];
-  index: Scalars['Int'];
-};
-
-
-export type QueryCrannyCapacityArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryGeneralVillageSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryMaxBuildingLevelArgs = {
-  buildingType: Scalars['Int'];
-};
-
-
-export type QueryNextTaskExecutionArgs = {
-  task: TaskType;
-};
-
-
-export type QueryNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'];
-  task: TaskType;
-};
-
-
-export type QueryUnitInfoArgs = {
-  index: Scalars['Int'];
-};
-
-
-export type QueryVillageArgs = {
-  villageId: Scalars['Int'];
-};
+export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
 export type Mutation = {
   readonly clearQueue: Scalars['Boolean'];
@@ -358,19 +472,153 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
-export type BuildingSpotLevel = {
-  readonly actual: Scalars['Int'];
-  readonly ongoing: Maybe<Scalars['Int']>;
-  readonly queued: Maybe<Scalars['Int']>;
-  readonly max: Scalars['Int'];
-  readonly total: Scalars['Int'];
+export type Query = {
+  readonly account: Maybe<UserAccount>;
+  readonly accountSettings: AccountSettings;
+  readonly accounts: ReadonlyArray<UserAccount>;
+  readonly activeVillageId: Scalars['Int'];
+  readonly autoAdventureSettings: AutoAdventureSettings;
+  readonly autoBuildSettings: AutoBuildSettings;
+  readonly autoMentorSettings: AutoMentorSettings;
+  readonly autoPartySettings: AutoPartySettings;
+  readonly autoUnitsSettings: AutoUnitsSettings;
+  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
+  readonly botState: BotState;
+  readonly buildingQueue: BuildingQueue;
+  readonly buildingSpots: BuildingSpots;
+  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
+  readonly crannyCapacity: VillageCrannyCapacity;
+  readonly currentAccount: UserAccount;
+  readonly generalSettings: GeneralSettings;
+  readonly generalVillageSettings: GeneralVillageSettings;
+  readonly heroInformation: HeroInformation;
+  readonly isBotActive: Scalars['Boolean'];
+  readonly lastSignedAccountId: Maybe<Scalars['String']>;
+  readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly maxBuildingLevel: Scalars['Int'];
+  readonly nextTaskExecution: Timestamp;
+  readonly nextTasksExecution: Timestamp;
+  readonly nextVillageTaskExecution: Timestamp;
+  readonly unitInfo: UnitInfo;
+  readonly village: Maybe<Village>;
+  readonly villages: ReadonlyArray<Village>;
 };
 
-export type BuildingSpot = {
-  readonly fieldId: Scalars['Int'];
-  readonly level: BuildingSpotLevel;
+
+export type QueryAccountArgs = {
+  accountId: Scalars['String'];
+};
+
+
+export type QueryAutoBuildSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoUnitsSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAvailableNewBuildingsArgs = {
+  input: AvailableNewBuildingsInput;
+};
+
+
+export type QueryBuildingQueueArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryBuildingSpotsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryBuildingsInProgressArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryCanMoveQueuedBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
+  villageId: Scalars['Int'];
+  topBuildingQueueId: Scalars['String'];
+  bottomBuildingQueueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type QueryCrannyCapacityArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryMaxBuildingLevelArgs = {
+  buildingType: Scalars['Int'];
+};
+
+
+export type QueryNextTaskExecutionArgs = {
+  task: TaskType;
+};
+
+
+export type QueryNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: TaskType;
+};
+
+
+export type QueryUnitInfoArgs = {
+  index: Scalars['Int'];
+};
+
+
+export type QueryVillageArgs = {
+  villageId: Scalars['Int'];
+};
+
+export type QueuedBuilding = {
+  readonly level: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
+  readonly queueId: Scalars['String'];
+  readonly queueIndex: Scalars['Int'];
+  readonly cost: Cost;
+  readonly fieldId: Scalars['Int'];
+};
+
+export type QueuedBuildingRange = {
+  readonly id: Scalars['String'];
+  readonly buildings: ReadonlyArray<QueuedBuilding>;
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+  readonly fieldId: Scalars['Int'];
+  readonly cost: Cost;
+};
+
+export type ResourceClaimLogEntryContent = {
+  readonly reason: ClaimHeroResourcesReason;
+  readonly resources: Resources;
 };
 
 export type ResourceFields = {
@@ -380,19 +628,13 @@ export type ResourceFields = {
   readonly crop: ReadonlyArray<BuildingSpot>;
 };
 
-export type BuildingSpots = {
-  readonly infrastructure: ReadonlyArray<BuildingSpot>;
-  readonly resources: ResourceFields;
-};
-
-export type AvailableNewBuildingsInput = {
-  readonly fieldId: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type AvailableNewBuilding = {
-  readonly type: Scalars['Int'];
-  readonly name: Scalars['String'];
+export type Resources = {
+  readonly wood: Scalars['Int'];
+  readonly clay: Scalars['Int'];
+  readonly iron: Scalars['Int'];
+  readonly crop: Scalars['Int'];
+  readonly freeCrop: Scalars['Int'];
+  readonly total: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -442,91 +684,6 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['Int'];
 };
 
-export type BuildingInProgress = {
-  readonly level: Scalars['Int'];
-  readonly finishedAt: Timestamp;
-  readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly fieldId: Scalars['Int'];
-};
-
-export enum BotState {
-  None = 'None',
-  Pending = 'Pending',
-  Running = 'Running',
-  Stopping = 'Stopping',
-  Paused = 'Paused'
-}
-
-export type CreateUserAccountInput = {
-  readonly username: Scalars['String'];
-  readonly password: Scalars['String'];
-  readonly server: Scalars['String'];
-};
-
-export type UpdateUserAccountInput = {
-  readonly id: Scalars['String'];
-  readonly username: Scalars['String'];
-  readonly password: Scalars['String'];
-  readonly server: Scalars['String'];
-};
-
-export enum HeroState {
-  Unknown = 'Unknown',
-  InVillage = 'InVillage',
-  Dead = 'Dead',
-  Reviving = 'Reviving',
-  OnAdventure = 'OnAdventure'
-}
-
-export type HeroInformation = {
-  readonly health: Scalars['Int'];
-  readonly state: HeroState;
-  readonly village: Maybe<Village>;
-};
-
-export enum TextLogEntryType {
-  Info = 'Info',
-  Error = 'Error'
-}
-
-export type TextLogEntryContent = {
-  readonly message: Scalars['String'];
-  readonly messageType: TextLogEntryType;
-};
-
-export type AutoBuildLogEntryContent = {
-  readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly level: Scalars['Int'];
-  readonly fieldId: Scalars['Int'];
-};
-
-export type AutoUnitsLogEntryContent = {
-  readonly amount: Scalars['Int'];
-  readonly index: Scalars['Int'];
-  readonly tribe: Scalars['Int'];
-  readonly unitName: Scalars['String'];
-};
-
-export enum ClaimHeroResourcesReason {
-  AutoBuild = 'AutoBuild'
-}
-
-export type ResourceClaimLogEntryContent = {
-  readonly reason: ClaimHeroResourcesReason;
-  readonly resources: Resources;
-};
-
-export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
-
-export type LogEntry = {
-  readonly id: Scalars['String'];
-  readonly timestamp: Timestamp;
-  readonly village: Maybe<Village>;
-  readonly content: LogEntryContent;
-};
-
 export enum TaskType {
   AutoAdventure = 'AutoAdventure',
   AutoBuild = 'AutoBuild',
@@ -535,110 +692,26 @@ export enum TaskType {
   AutoMentor = 'AutoMentor'
 }
 
+export type TextLogEntryContent = {
+  readonly message: Scalars['String'];
+  readonly messageType: TextLogEntryType;
+};
+
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
+
 export type Timestamp = {
   readonly totalSeconds: Scalars['Int'];
-};
-
-export type Resources = {
-  readonly wood: Scalars['Int'];
-  readonly clay: Scalars['Int'];
-  readonly iron: Scalars['Int'];
-  readonly crop: Scalars['Int'];
-  readonly freeCrop: Scalars['Int'];
-  readonly total: Scalars['Int'];
-};
-
-export type Cost = {
-  readonly resources: Resources;
-  readonly buildTime: Duration;
-};
-
-export type Coords = {
-  readonly x: Scalars['Int'];
-  readonly y: Scalars['Int'];
-};
-
-export type Duration = {
-  readonly days: Scalars['Int'];
-  readonly hours: Scalars['Int'];
-  readonly minutes: Scalars['Int'];
-  readonly seconds: Scalars['Int'];
-};
-
-export type CoolDown = {
-  readonly min: Duration;
-  readonly max: Duration;
-};
-
-export type CoolDownInput = {
-  readonly min: DurationInput;
-  readonly max: DurationInput;
-};
-
-export type DurationInput = {
-  readonly days: Scalars['Int'];
-  readonly hours: Scalars['Int'];
-  readonly minutes: Scalars['Int'];
-  readonly seconds: Scalars['Int'];
 };
 
 export type TimestampInput = {
   readonly totalSeconds: Scalars['Int'];
 };
 
-export type QueuedBuilding = {
-  readonly level: Scalars['Int'];
+export type UnitInfo = {
   readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly queueId: Scalars['String'];
-  readonly queueIndex: Scalars['Int'];
-  readonly cost: Cost;
-  readonly fieldId: Scalars['Int'];
-};
-
-export type QueuedBuildingRange = {
-  readonly id: Scalars['String'];
-  readonly buildings: ReadonlyArray<QueuedBuilding>;
-  readonly type: Scalars['Int'];
-  readonly name: Scalars['String'];
-  readonly fieldId: Scalars['Int'];
-  readonly cost: Cost;
-};
-
-export type BuildingQueue = {
-  readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
-  readonly totalCost: Cost;
-};
-
-export type ClearQueueInput = {
-  readonly villageId: Scalars['Int'];
-};
-
-export type EnqueueBuildingInput = {
-  readonly fieldId: Scalars['Int'];
-  readonly type: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-  readonly targetLevel: Maybe<Scalars['Int']>;
-};
-
-export type DequeueBuildingInput = {
-  readonly queueId: Scalars['String'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type DequeueBuildingAtFieldInput = {
-  readonly deleteAll: Scalars['Boolean'];
-  readonly fieldId: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type AccountSettings = {
-  readonly allowTasks: Scalars['Boolean'];
-  readonly tasksCoolDown: CoolDown;
-  readonly autoStart: Scalars['Boolean'];
-  readonly autoBuild: Scalars['Boolean'];
-  readonly autoUnits: Scalars['Boolean'];
-  readonly autoParty: Scalars['Boolean'];
 };
 
 export type UpdateAccountSettingsInput = {
@@ -648,24 +721,6 @@ export type UpdateAccountSettingsInput = {
   readonly autoUnits: Scalars['Boolean'];
   readonly autoStart: Scalars['Boolean'];
   readonly autoParty: Scalars['Boolean'];
-};
-
-export enum AdventureCriteria {
-  Closest = 'Closest',
-  Furthest = 'Furthest',
-  Random = 'Random',
-  FirstToExpire = 'FirstToExpire'
-}
-
-export type AutoAdventureSettings = {
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly adventureCriteria: AdventureCriteria;
-  readonly preferHard: Scalars['Boolean'];
-  readonly normalMinHealth: Scalars['Int'];
-  readonly hardMinHealth: Scalars['Int'];
-  readonly maxTravelTime: Duration;
-  readonly preferredVillageId: Maybe<Scalars['Int']>;
 };
 
 export type UpdateAutoAdventureSettingsInput = {
@@ -679,37 +734,6 @@ export type UpdateAutoAdventureSettingsInput = {
   readonly preferredVillageId: Maybe<Scalars['Int']>;
 };
 
-export type AutoStorageOptionSettings = {
-  readonly allow: Scalars['Boolean'];
-  readonly overflowLevel: Scalars['Int'];
-};
-
-export type UpdateAutoStorageOptionSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly overflowLevel: Scalars['Int'];
-};
-
-export type AutoStorageSettings = {
-  readonly allowFreeSpots: Scalars['Boolean'];
-  readonly granary: AutoStorageOptionSettings;
-  readonly warehouse: AutoStorageOptionSettings;
-};
-
-export type UpdateAutoStorageSettingsInput = {
-  readonly allowFreeSpots: Scalars['Boolean'];
-  readonly granary: UpdateAutoStorageOptionSettingsInput;
-  readonly warehouse: UpdateAutoStorageOptionSettingsInput;
-};
-
-export type AutoBuildSettings = {
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly autoCropFields: Scalars['Boolean'];
-  readonly minCrop: Scalars['Int'];
-  readonly useHeroResources: Scalars['Boolean'];
-  readonly autoStorage: AutoStorageSettings;
-};
-
 export type UpdateAutoBuildSettingsInput = {
   readonly allow: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
@@ -719,22 +743,9 @@ export type UpdateAutoBuildSettingsInput = {
   readonly autoStorage: UpdateAutoStorageSettingsInput;
 };
 
-export type AutoMentorSettings = {
-  readonly acceptTaskRewards: Scalars['Boolean'];
-  readonly acceptDailyRewards: Scalars['Boolean'];
-};
-
 export type UpdateAutoMentorSettingsInput = {
   readonly acceptTaskRewards: Scalars['Boolean'];
   readonly acceptDailyRewards: Scalars['Boolean'];
-};
-
-export type AutoPartySettings = {
-  readonly coolDown: CoolDown;
-  readonly allowSmall: Scalars['Boolean'];
-  readonly allowLarge: Scalars['Boolean'];
-  readonly minCulturePointsSmall: Scalars['Int'];
-  readonly minCulturePointsLarge: Scalars['Int'];
 };
 
 export type UpdateAutoPartySettingsInput = {
@@ -745,11 +756,26 @@ export type UpdateAutoPartySettingsInput = {
   readonly minCulturePointsLarge: Scalars['Int'];
 };
 
-export type AutoUnitsUnitSettings = {
-  readonly index: Scalars['Int'];
-  readonly autoBuild: Scalars['Boolean'];
-  readonly trainForever: Scalars['Boolean'];
-  readonly targetAmount: Scalars['Int'];
+export type UpdateAutoStorageOptionSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly overflowLevel: Scalars['Int'];
+};
+
+export type UpdateAutoStorageSettingsInput = {
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly granary: UpdateAutoStorageOptionSettingsInput;
+  readonly warehouse: UpdateAutoStorageOptionSettingsInput;
+};
+
+export type UpdateAutoUnitsBuildingSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: DurationInput;
+};
+
+export type UpdateAutoUnitsSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly minCrop: Scalars['Int'];
 };
 
 export type UpdateAutoUnitsUnitSettingsInput = {
@@ -759,66 +785,28 @@ export type UpdateAutoUnitsUnitSettingsInput = {
   readonly targetAmount: Scalars['Int'];
 };
 
-export type AutoUnitsBuildingSettings = {
-  readonly allow: Scalars['Boolean'];
-  readonly maxBuildTime: Duration;
-  readonly units: ReadonlyArray<AutoUnitsUnitSettings>;
-};
-
-export type UpdateAutoUnitsBuildingSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly maxBuildTime: DurationInput;
-};
-
-export type AutoUnitsSettings = {
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly minCrop: Scalars['Int'];
-  readonly barracks: AutoUnitsBuildingSettings;
-  readonly stable: AutoUnitsBuildingSettings;
-  readonly workshop: AutoUnitsBuildingSettings;
-  readonly residence: AutoUnitsBuildingSettings;
-};
-
-export type UpdateAutoUnitsSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDownInput;
-  readonly minCrop: Scalars['Int'];
-};
-
-export type GeneralSettings = {
-  readonly dataPath: Scalars['String'];
-  readonly chromePath: Scalars['String'];
-  readonly headlessChrome: Scalars['Boolean'];
-};
-
 export type UpdateGeneralSettingsInput = {
   readonly dataPath: Scalars['String'];
   readonly chromePath: Scalars['String'];
   readonly headlessChrome: Scalars['Boolean'];
 };
 
-export type GeneralVillageSettings = {
-  readonly allowTasks: Scalars['Boolean'];
-};
-
 export type UpdateGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars['Boolean'];
 };
 
-export type UnitInfo = {
-  readonly name: Scalars['String'];
+export type UpdateUserAccountInput = {
+  readonly id: Scalars['String'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
-export type VillageCapacity = {
-  readonly granary: Scalars['Int'];
-  readonly warehouse: Scalars['Int'];
-};
-
-export type VillageResources = {
-  readonly amount: Resources;
-  readonly capacity: VillageCapacity;
-  readonly production: Resources;
+export type UserAccount = {
+  readonly id: Scalars['String'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
 export type Village = {
@@ -829,10 +817,21 @@ export type Village = {
   readonly isCapital: Scalars['Boolean'];
 };
 
+export type VillageCapacity = {
+  readonly granary: Scalars['Int'];
+  readonly warehouse: Scalars['Int'];
+};
+
 export type VillageCrannyCapacity = {
   readonly actual: Scalars['Int'];
   readonly ongoing: Scalars['Int'];
   readonly total: Scalars['Int'];
+};
+
+export type VillageResources = {
+  readonly amount: Resources;
+  readonly capacity: VillageCapacity;
+  readonly production: Resources;
 };
 
 export type UserAccountFragment = Pick<UserAccount, 'id' | 'username' | 'password' | 'server'>;

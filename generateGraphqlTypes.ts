@@ -115,7 +115,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
     noGraphQLTag: true,
   };
 
-  const outputs: Types.FileOutput[] = await generate({
+  await generate({
     documents,
     schema: [schema, localSchema],
     generates: {
@@ -127,35 +127,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
         ],
       },
     },
-  });
-
-  let output = outputs[0].content;
-
-  //  TODO: delete duplicate fragments workaround
-  //  https://github.com/dotansimha/graphql-code-generator/issues/4143
-  const fragments: string[] = [];
-
-  output = output
-    .split(/\r?\n/)
-    .reduce((reducedOutput, line) => {
-      const match = /(export type .*?Fragment = .*?;)/.exec(line);
-
-      if (!match) {
-        return `${reducedOutput}\n${line}`;
-      }
-
-      const fragment = match[1];
-
-      if (fragments.includes(fragment)) {
-        return reducedOutput;
-      }
-
-      fragments.push(fragment);
-
-      return `${reducedOutput}\n${line}`;
-    }, '');
-
-  fs.writeFileSync(hooksPath, output);
+  }, true);
 };
 
 const generateGraphqlFragmentTypes = async (): Promise<void> => {

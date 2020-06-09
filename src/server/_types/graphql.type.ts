@@ -17,139 +17,278 @@ export type Scalars = {
   Float: number;
 };
 
-export type UserAccount = {
-  readonly __typename?: 'UserAccount';
-  readonly id: Scalars['String'];
+export type AccountSettings = {
+  readonly __typename?: 'AccountSettings';
+  readonly allowTasks: Scalars['Boolean'];
+  readonly tasksCoolDown: CoolDown;
+  readonly autoStart: Scalars['Boolean'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly autoUnits: Scalars['Boolean'];
+  readonly autoParty: Scalars['Boolean'];
+};
+
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random',
+  FirstToExpire = 'FirstToExpire'
+}
+
+export type AutoAdventureSettings = {
+  readonly __typename?: 'AutoAdventureSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly adventureCriteria: AdventureCriteria;
+  readonly preferHard: Scalars['Boolean'];
+  readonly normalMinHealth: Scalars['Int'];
+  readonly hardMinHealth: Scalars['Int'];
+  readonly maxTravelTime: Duration;
+  readonly preferredVillageId: Maybe<Scalars['Int']>;
+};
+
+export type AutoBuildLogEntryContent = {
+  readonly __typename?: 'AutoBuildLogEntryContent';
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly level: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
+};
+
+export type AutoBuildSettings = {
+  readonly __typename?: 'AutoBuildSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly autoCropFields: Scalars['Boolean'];
+  readonly minCrop: Scalars['Int'];
+  readonly useHeroResources: Scalars['Boolean'];
+  readonly autoStorage: AutoStorageSettings;
+};
+
+export type AutoMentorSettings = {
+  readonly __typename?: 'AutoMentorSettings';
+  readonly acceptTaskRewards: Scalars['Boolean'];
+  readonly acceptDailyRewards: Scalars['Boolean'];
+};
+
+export type AutoPartySettings = {
+  readonly __typename?: 'AutoPartySettings';
+  readonly coolDown: CoolDown;
+  readonly allowSmall: Scalars['Boolean'];
+  readonly allowLarge: Scalars['Boolean'];
+  readonly minCulturePointsSmall: Scalars['Int'];
+  readonly minCulturePointsLarge: Scalars['Int'];
+};
+
+export type AutoStorageOptionSettings = {
+  readonly __typename?: 'AutoStorageOptionSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly overflowLevel: Scalars['Int'];
+};
+
+export type AutoStorageSettings = {
+  readonly __typename?: 'AutoStorageSettings';
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly granary: AutoStorageOptionSettings;
+  readonly warehouse: AutoStorageOptionSettings;
+};
+
+export type AutoUnitsBuildingSettings = {
+  readonly __typename?: 'AutoUnitsBuildingSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: Duration;
+  readonly units: ReadonlyArray<AutoUnitsUnitSettings>;
+};
+
+export type AutoUnitsLogEntryContent = {
+  readonly __typename?: 'AutoUnitsLogEntryContent';
+  readonly amount: Scalars['Int'];
+  readonly index: Scalars['Int'];
+  readonly tribe: Scalars['Int'];
+  readonly unitName: Scalars['String'];
+};
+
+export type AutoUnitsSettings = {
+  readonly __typename?: 'AutoUnitsSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDown;
+  readonly minCrop: Scalars['Int'];
+  readonly barracks: AutoUnitsBuildingSettings;
+  readonly stable: AutoUnitsBuildingSettings;
+  readonly workshop: AutoUnitsBuildingSettings;
+  readonly residence: AutoUnitsBuildingSettings;
+};
+
+export type AutoUnitsUnitSettings = {
+  readonly __typename?: 'AutoUnitsUnitSettings';
+  readonly index: Scalars['Int'];
+  readonly autoBuild: Scalars['Boolean'];
+  readonly trainForever: Scalars['Boolean'];
+  readonly targetAmount: Scalars['Int'];
+};
+
+export type AvailableNewBuilding = {
+  readonly __typename?: 'AvailableNewBuilding';
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+};
+
+export type AvailableNewBuildingsInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export enum BotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
+
+export type BuildingInProgress = {
+  readonly __typename?: 'BuildingInProgress';
+  readonly level: Scalars['Int'];
+  readonly finishedAt: Timestamp;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+  readonly fieldId: Scalars['Int'];
+};
+
+export type BuildingQueue = {
+  readonly __typename?: 'BuildingQueue';
+  readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
+  readonly totalCost: Cost;
+};
+
+export type BuildingSpot = {
+  readonly __typename?: 'BuildingSpot';
+  readonly fieldId: Scalars['Int'];
+  readonly level: BuildingSpotLevel;
+  readonly name: Scalars['String'];
+  readonly type: Scalars['Int'];
+};
+
+export type BuildingSpotLevel = {
+  readonly __typename?: 'BuildingSpotLevel';
+  readonly actual: Scalars['Int'];
+  readonly ongoing: Maybe<Scalars['Int']>;
+  readonly queued: Maybe<Scalars['Int']>;
+  readonly max: Scalars['Int'];
+  readonly total: Scalars['Int'];
+};
+
+export type BuildingSpots = {
+  readonly __typename?: 'BuildingSpots';
+  readonly infrastructure: ReadonlyArray<BuildingSpot>;
+  readonly resources: ResourceFields;
+};
+
+export enum ClaimHeroResourcesReason {
+  AutoBuild = 'AutoBuild'
+}
+
+export type ClearQueueInput = {
+  readonly villageId: Scalars['Int'];
+};
+
+export type CoolDown = {
+  readonly __typename?: 'CoolDown';
+  readonly min: Duration;
+  readonly max: Duration;
+};
+
+export type CoolDownInput = {
+  readonly min: DurationInput;
+  readonly max: DurationInput;
+};
+
+export type Coords = {
+  readonly __typename?: 'Coords';
+  readonly x: Scalars['Int'];
+  readonly y: Scalars['Int'];
+};
+
+export type Cost = {
+  readonly __typename?: 'Cost';
+  readonly resources: ResourcesModel;
+  readonly buildTime: Duration;
+};
+
+export type CreateUserAccountInput = {
   readonly username: Scalars['String'];
   readonly password: Scalars['String'];
   readonly server: Scalars['String'];
 };
 
-export type Query = {
-  readonly __typename?: 'Query';
-  readonly account: Maybe<UserAccount>;
-  readonly accountSettings: AccountSettings;
-  readonly accounts: ReadonlyArray<UserAccount>;
-  readonly activeVillageId: Scalars['Int'];
-  readonly autoAdventureSettings: AutoAdventureSettings;
-  readonly autoBuildSettings: AutoBuildSettings;
-  readonly autoMentorSettings: AutoMentorSettings;
-  readonly autoPartySettings: AutoPartySettings;
-  readonly autoUnitsSettings: AutoUnitsSettings;
-  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
-  readonly botState: BotState;
-  readonly buildingQueue: BuildingQueue;
-  readonly buildingSpots: BuildingSpots;
-  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
-  readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
-  readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
-  readonly crannyCapacity: VillageCrannyCapacity;
-  readonly currentAccount: UserAccount;
-  readonly generalSettings: GeneralSettings;
-  readonly generalVillageSettings: GeneralVillageSettings;
-  readonly heroInformation: HeroModel;
-  readonly isBotActive: Scalars['Boolean'];
-  readonly lastSignedAccountId: Maybe<Scalars['String']>;
-  readonly logsEntries: ReadonlyArray<LogEntry>;
-  readonly maxBuildingLevel: Scalars['Int'];
-  readonly nextTaskExecution: Timestamp;
-  readonly nextTasksExecution: Timestamp;
-  readonly nextVillageTaskExecution: Timestamp;
-  readonly unitInfo: UnitInfo;
+export type DequeueBuildingAtFieldInput = {
+  readonly deleteAll: Scalars['Boolean'];
+  readonly fieldId: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type DequeueBuildingInput = {
+  readonly queueId: Scalars['String'];
+  readonly villageId: Scalars['Int'];
+};
+
+export type Duration = {
+  readonly __typename?: 'Duration';
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
+};
+
+export type DurationInput = {
+  readonly days: Scalars['Int'];
+  readonly hours: Scalars['Int'];
+  readonly minutes: Scalars['Int'];
+  readonly seconds: Scalars['Int'];
+};
+
+export type EnqueueBuildingInput = {
+  readonly fieldId: Scalars['Int'];
+  readonly type: Scalars['Int'];
+  readonly villageId: Scalars['Int'];
+  readonly targetLevel: Maybe<Scalars['Int']>;
+};
+
+export type GeneralSettings = {
+  readonly __typename?: 'GeneralSettings';
+  readonly dataPath: Scalars['String'];
+  readonly chromePath: Scalars['String'];
+  readonly headlessChrome: Scalars['Boolean'];
+};
+
+export type GeneralVillageSettings = {
+  readonly __typename?: 'GeneralVillageSettings';
+  readonly allowTasks: Scalars['Boolean'];
+};
+
+export type HeroInformation = {
+  readonly __typename?: 'HeroInformation';
+  readonly health: Scalars['Int'];
+  readonly state: HeroState;
   readonly village: Maybe<Village>;
-  readonly villages: ReadonlyArray<Village>;
 };
 
+export enum HeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
-export type QueryAccountArgs = {
-  accountId: Scalars['String'];
+export type LogEntry = {
+  readonly __typename?: 'LogEntry';
+  readonly id: Scalars['String'];
+  readonly timestamp: Timestamp;
+  readonly village: Maybe<Village>;
+  readonly content: LogEntryContent;
 };
 
-
-export type QueryAutoBuildSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoPartySettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAutoUnitsSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryAvailableNewBuildingsArgs = {
-  input: AvailableNewBuildingsInput;
-};
-
-
-export type QueryBuildingQueueArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryBuildingSpotsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryBuildingsInProgressArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryCanMoveQueuedBuildingToIndexArgs = {
-  villageId: Scalars['Int'];
-  queueId: Scalars['String'];
-  index: Scalars['Int'];
-};
-
-
-export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
-  villageId: Scalars['Int'];
-  topBuildingQueueId: Scalars['String'];
-  bottomBuildingQueueId: Scalars['String'];
-  index: Scalars['Int'];
-};
-
-
-export type QueryCrannyCapacityArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryGeneralVillageSettingsArgs = {
-  villageId: Scalars['Int'];
-};
-
-
-export type QueryMaxBuildingLevelArgs = {
-  buildingType: Scalars['Int'];
-};
-
-
-export type QueryNextTaskExecutionArgs = {
-  task: TaskType;
-};
-
-
-export type QueryNextVillageTaskExecutionArgs = {
-  villageId: Scalars['Int'];
-  task: TaskType;
-};
-
-
-export type QueryUnitInfoArgs = {
-  index: Scalars['Int'];
-};
-
-
-export type QueryVillageArgs = {
-  villageId: Scalars['Int'];
-};
+export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
 export type Mutation = {
   readonly __typename?: 'Mutation';
@@ -366,21 +505,157 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
-export type BuildingSpotLevel = {
-  readonly __typename?: 'BuildingSpotLevel';
-  readonly actual: Scalars['Int'];
-  readonly ongoing: Maybe<Scalars['Int']>;
-  readonly queued: Maybe<Scalars['Int']>;
-  readonly max: Scalars['Int'];
-  readonly total: Scalars['Int'];
+export type Query = {
+  readonly __typename?: 'Query';
+  readonly account: Maybe<UserAccount>;
+  readonly accountSettings: AccountSettings;
+  readonly accounts: ReadonlyArray<UserAccount>;
+  readonly activeVillageId: Scalars['Int'];
+  readonly autoAdventureSettings: AutoAdventureSettings;
+  readonly autoBuildSettings: AutoBuildSettings;
+  readonly autoMentorSettings: AutoMentorSettings;
+  readonly autoPartySettings: AutoPartySettings;
+  readonly autoUnitsSettings: AutoUnitsSettings;
+  readonly availableNewBuildings: ReadonlyArray<AvailableNewBuilding>;
+  readonly botState: BotState;
+  readonly buildingQueue: BuildingQueue;
+  readonly buildingSpots: BuildingSpots;
+  readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
+  readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
+  readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
+  readonly crannyCapacity: VillageCrannyCapacity;
+  readonly currentAccount: UserAccount;
+  readonly generalSettings: GeneralSettings;
+  readonly generalVillageSettings: GeneralVillageSettings;
+  readonly heroInformation: HeroModel;
+  readonly isBotActive: Scalars['Boolean'];
+  readonly lastSignedAccountId: Maybe<Scalars['String']>;
+  readonly logsEntries: ReadonlyArray<LogEntry>;
+  readonly maxBuildingLevel: Scalars['Int'];
+  readonly nextTaskExecution: Timestamp;
+  readonly nextTasksExecution: Timestamp;
+  readonly nextVillageTaskExecution: Timestamp;
+  readonly unitInfo: UnitInfo;
+  readonly village: Maybe<Village>;
+  readonly villages: ReadonlyArray<Village>;
 };
 
-export type BuildingSpot = {
-  readonly __typename?: 'BuildingSpot';
-  readonly fieldId: Scalars['Int'];
-  readonly level: BuildingSpotLevel;
+
+export type QueryAccountArgs = {
+  accountId: Scalars['String'];
+};
+
+
+export type QueryAutoBuildSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoPartySettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAutoUnitsSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryAvailableNewBuildingsArgs = {
+  input: AvailableNewBuildingsInput;
+};
+
+
+export type QueryBuildingQueueArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryBuildingSpotsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryBuildingsInProgressArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryCanMoveQueuedBuildingToIndexArgs = {
+  villageId: Scalars['Int'];
+  queueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
+  villageId: Scalars['Int'];
+  topBuildingQueueId: Scalars['String'];
+  bottomBuildingQueueId: Scalars['String'];
+  index: Scalars['Int'];
+};
+
+
+export type QueryCrannyCapacityArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryGeneralVillageSettingsArgs = {
+  villageId: Scalars['Int'];
+};
+
+
+export type QueryMaxBuildingLevelArgs = {
+  buildingType: Scalars['Int'];
+};
+
+
+export type QueryNextTaskExecutionArgs = {
+  task: TaskType;
+};
+
+
+export type QueryNextVillageTaskExecutionArgs = {
+  villageId: Scalars['Int'];
+  task: TaskType;
+};
+
+
+export type QueryUnitInfoArgs = {
+  index: Scalars['Int'];
+};
+
+
+export type QueryVillageArgs = {
+  villageId: Scalars['Int'];
+};
+
+export type QueuedBuilding = {
+  readonly __typename?: 'QueuedBuilding';
+  readonly level: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly type: Scalars['Int'];
+  readonly queueId: Scalars['String'];
+  readonly queueIndex: Scalars['Int'];
+  readonly cost: Cost;
+  readonly fieldId: Scalars['Int'];
+};
+
+export type QueuedBuildingRange = {
+  readonly __typename?: 'QueuedBuildingRange';
+  readonly id: Scalars['String'];
+  readonly buildings: ReadonlyArray<QueuedBuilding>;
+  readonly type: Scalars['Int'];
+  readonly name: Scalars['String'];
+  readonly fieldId: Scalars['Int'];
+  readonly cost: Cost;
+};
+
+export type ResourceClaimLogEntryContent = {
+  readonly __typename?: 'ResourceClaimLogEntryContent';
+  readonly reason: ClaimHeroResourcesReason;
+  readonly resources: ResourcesModel;
 };
 
 export type ResourceFields = {
@@ -391,21 +666,14 @@ export type ResourceFields = {
   readonly crop: ReadonlyArray<BuildingSpot>;
 };
 
-export type BuildingSpots = {
-  readonly __typename?: 'BuildingSpots';
-  readonly infrastructure: ReadonlyArray<BuildingSpot>;
-  readonly resources: ResourceFields;
-};
-
-export type AvailableNewBuildingsInput = {
-  readonly fieldId: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type AvailableNewBuilding = {
-  readonly __typename?: 'AvailableNewBuilding';
-  readonly type: Scalars['Int'];
-  readonly name: Scalars['String'];
+export type Resources = {
+  readonly __typename?: 'Resources';
+  readonly wood: Scalars['Int'];
+  readonly clay: Scalars['Int'];
+  readonly iron: Scalars['Int'];
+  readonly crop: Scalars['Int'];
+  readonly freeCrop: Scalars['Int'];
+  readonly total: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -456,98 +724,6 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['Int'];
 };
 
-export type BuildingInProgress = {
-  readonly __typename?: 'BuildingInProgress';
-  readonly level: Scalars['Int'];
-  readonly finishedAt: Timestamp;
-  readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly fieldId: Scalars['Int'];
-};
-
-export enum BotState {
-  None = 'None',
-  Pending = 'Pending',
-  Running = 'Running',
-  Stopping = 'Stopping',
-  Paused = 'Paused'
-}
-
-export type CreateUserAccountInput = {
-  readonly username: Scalars['String'];
-  readonly password: Scalars['String'];
-  readonly server: Scalars['String'];
-};
-
-export type UpdateUserAccountInput = {
-  readonly id: Scalars['String'];
-  readonly username: Scalars['String'];
-  readonly password: Scalars['String'];
-  readonly server: Scalars['String'];
-};
-
-export enum HeroState {
-  Unknown = 'Unknown',
-  InVillage = 'InVillage',
-  Dead = 'Dead',
-  Reviving = 'Reviving',
-  OnAdventure = 'OnAdventure'
-}
-
-export type HeroInformation = {
-  readonly __typename?: 'HeroInformation';
-  readonly health: Scalars['Int'];
-  readonly state: HeroState;
-  readonly village: Maybe<Village>;
-};
-
-export enum TextLogEntryType {
-  Info = 'Info',
-  Error = 'Error'
-}
-
-export type TextLogEntryContent = {
-  readonly __typename?: 'TextLogEntryContent';
-  readonly message: Scalars['String'];
-  readonly messageType: TextLogEntryType;
-};
-
-export type AutoBuildLogEntryContent = {
-  readonly __typename?: 'AutoBuildLogEntryContent';
-  readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly level: Scalars['Int'];
-  readonly fieldId: Scalars['Int'];
-};
-
-export type AutoUnitsLogEntryContent = {
-  readonly __typename?: 'AutoUnitsLogEntryContent';
-  readonly amount: Scalars['Int'];
-  readonly index: Scalars['Int'];
-  readonly tribe: Scalars['Int'];
-  readonly unitName: Scalars['String'];
-};
-
-export enum ClaimHeroResourcesReason {
-  AutoBuild = 'AutoBuild'
-}
-
-export type ResourceClaimLogEntryContent = {
-  readonly __typename?: 'ResourceClaimLogEntryContent';
-  readonly reason: ClaimHeroResourcesReason;
-  readonly resources: ResourcesModel;
-};
-
-export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
-
-export type LogEntry = {
-  readonly __typename?: 'LogEntry';
-  readonly id: Scalars['String'];
-  readonly timestamp: Timestamp;
-  readonly village: Maybe<Village>;
-  readonly content: LogEntryContent;
-};
-
 export enum TaskType {
   AutoAdventure = 'AutoAdventure',
   AutoBuild = 'AutoBuild',
@@ -556,120 +732,29 @@ export enum TaskType {
   AutoMentor = 'AutoMentor'
 }
 
+export type TextLogEntryContent = {
+  readonly __typename?: 'TextLogEntryContent';
+  readonly message: Scalars['String'];
+  readonly messageType: TextLogEntryType;
+};
+
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
+
 export type Timestamp = {
   readonly __typename?: 'Timestamp';
   readonly totalSeconds: Scalars['Int'];
-};
-
-export type Resources = {
-  readonly __typename?: 'Resources';
-  readonly wood: Scalars['Int'];
-  readonly clay: Scalars['Int'];
-  readonly iron: Scalars['Int'];
-  readonly crop: Scalars['Int'];
-  readonly freeCrop: Scalars['Int'];
-  readonly total: Scalars['Int'];
-};
-
-export type Cost = {
-  readonly __typename?: 'Cost';
-  readonly resources: ResourcesModel;
-  readonly buildTime: Duration;
-};
-
-export type Coords = {
-  readonly __typename?: 'Coords';
-  readonly x: Scalars['Int'];
-  readonly y: Scalars['Int'];
-};
-
-export type Duration = {
-  readonly __typename?: 'Duration';
-  readonly days: Scalars['Int'];
-  readonly hours: Scalars['Int'];
-  readonly minutes: Scalars['Int'];
-  readonly seconds: Scalars['Int'];
-};
-
-export type CoolDown = {
-  readonly __typename?: 'CoolDown';
-  readonly min: Duration;
-  readonly max: Duration;
-};
-
-export type CoolDownInput = {
-  readonly min: DurationInput;
-  readonly max: DurationInput;
-};
-
-export type DurationInput = {
-  readonly days: Scalars['Int'];
-  readonly hours: Scalars['Int'];
-  readonly minutes: Scalars['Int'];
-  readonly seconds: Scalars['Int'];
 };
 
 export type TimestampInput = {
   readonly totalSeconds: Scalars['Int'];
 };
 
-export type QueuedBuilding = {
-  readonly __typename?: 'QueuedBuilding';
-  readonly level: Scalars['Int'];
+export type UnitInfo = {
+  readonly __typename?: 'UnitInfo';
   readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
-  readonly queueId: Scalars['String'];
-  readonly queueIndex: Scalars['Int'];
-  readonly cost: Cost;
-  readonly fieldId: Scalars['Int'];
-};
-
-export type QueuedBuildingRange = {
-  readonly __typename?: 'QueuedBuildingRange';
-  readonly id: Scalars['String'];
-  readonly buildings: ReadonlyArray<QueuedBuilding>;
-  readonly type: Scalars['Int'];
-  readonly name: Scalars['String'];
-  readonly fieldId: Scalars['Int'];
-  readonly cost: Cost;
-};
-
-export type BuildingQueue = {
-  readonly __typename?: 'BuildingQueue';
-  readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
-  readonly totalCost: Cost;
-};
-
-export type ClearQueueInput = {
-  readonly villageId: Scalars['Int'];
-};
-
-export type EnqueueBuildingInput = {
-  readonly fieldId: Scalars['Int'];
-  readonly type: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-  readonly targetLevel: Maybe<Scalars['Int']>;
-};
-
-export type DequeueBuildingInput = {
-  readonly queueId: Scalars['String'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type DequeueBuildingAtFieldInput = {
-  readonly deleteAll: Scalars['Boolean'];
-  readonly fieldId: Scalars['Int'];
-  readonly villageId: Scalars['Int'];
-};
-
-export type AccountSettings = {
-  readonly __typename?: 'AccountSettings';
-  readonly allowTasks: Scalars['Boolean'];
-  readonly tasksCoolDown: CoolDown;
-  readonly autoStart: Scalars['Boolean'];
-  readonly autoBuild: Scalars['Boolean'];
-  readonly autoUnits: Scalars['Boolean'];
-  readonly autoParty: Scalars['Boolean'];
 };
 
 export type UpdateAccountSettingsInput = {
@@ -679,25 +764,6 @@ export type UpdateAccountSettingsInput = {
   readonly autoUnits: Scalars['Boolean'];
   readonly autoStart: Scalars['Boolean'];
   readonly autoParty: Scalars['Boolean'];
-};
-
-export enum AdventureCriteria {
-  Closest = 'Closest',
-  Furthest = 'Furthest',
-  Random = 'Random',
-  FirstToExpire = 'FirstToExpire'
-}
-
-export type AutoAdventureSettings = {
-  readonly __typename?: 'AutoAdventureSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly adventureCriteria: AdventureCriteria;
-  readonly preferHard: Scalars['Boolean'];
-  readonly normalMinHealth: Scalars['Int'];
-  readonly hardMinHealth: Scalars['Int'];
-  readonly maxTravelTime: Duration;
-  readonly preferredVillageId: Maybe<Scalars['Int']>;
 };
 
 export type UpdateAutoAdventureSettingsInput = {
@@ -711,40 +777,6 @@ export type UpdateAutoAdventureSettingsInput = {
   readonly preferredVillageId: Maybe<Scalars['Int']>;
 };
 
-export type AutoStorageOptionSettings = {
-  readonly __typename?: 'AutoStorageOptionSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly overflowLevel: Scalars['Int'];
-};
-
-export type UpdateAutoStorageOptionSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly overflowLevel: Scalars['Int'];
-};
-
-export type AutoStorageSettings = {
-  readonly __typename?: 'AutoStorageSettings';
-  readonly allowFreeSpots: Scalars['Boolean'];
-  readonly granary: AutoStorageOptionSettings;
-  readonly warehouse: AutoStorageOptionSettings;
-};
-
-export type UpdateAutoStorageSettingsInput = {
-  readonly allowFreeSpots: Scalars['Boolean'];
-  readonly granary: UpdateAutoStorageOptionSettingsInput;
-  readonly warehouse: UpdateAutoStorageOptionSettingsInput;
-};
-
-export type AutoBuildSettings = {
-  readonly __typename?: 'AutoBuildSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly autoCropFields: Scalars['Boolean'];
-  readonly minCrop: Scalars['Int'];
-  readonly useHeroResources: Scalars['Boolean'];
-  readonly autoStorage: AutoStorageSettings;
-};
-
 export type UpdateAutoBuildSettingsInput = {
   readonly allow: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
@@ -754,24 +786,9 @@ export type UpdateAutoBuildSettingsInput = {
   readonly autoStorage: UpdateAutoStorageSettingsInput;
 };
 
-export type AutoMentorSettings = {
-  readonly __typename?: 'AutoMentorSettings';
-  readonly acceptTaskRewards: Scalars['Boolean'];
-  readonly acceptDailyRewards: Scalars['Boolean'];
-};
-
 export type UpdateAutoMentorSettingsInput = {
   readonly acceptTaskRewards: Scalars['Boolean'];
   readonly acceptDailyRewards: Scalars['Boolean'];
-};
-
-export type AutoPartySettings = {
-  readonly __typename?: 'AutoPartySettings';
-  readonly coolDown: CoolDown;
-  readonly allowSmall: Scalars['Boolean'];
-  readonly allowLarge: Scalars['Boolean'];
-  readonly minCulturePointsSmall: Scalars['Int'];
-  readonly minCulturePointsLarge: Scalars['Int'];
 };
 
 export type UpdateAutoPartySettingsInput = {
@@ -782,12 +799,26 @@ export type UpdateAutoPartySettingsInput = {
   readonly minCulturePointsLarge: Scalars['Int'];
 };
 
-export type AutoUnitsUnitSettings = {
-  readonly __typename?: 'AutoUnitsUnitSettings';
-  readonly index: Scalars['Int'];
-  readonly autoBuild: Scalars['Boolean'];
-  readonly trainForever: Scalars['Boolean'];
-  readonly targetAmount: Scalars['Int'];
+export type UpdateAutoStorageOptionSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly overflowLevel: Scalars['Int'];
+};
+
+export type UpdateAutoStorageSettingsInput = {
+  readonly allowFreeSpots: Scalars['Boolean'];
+  readonly granary: UpdateAutoStorageOptionSettingsInput;
+  readonly warehouse: UpdateAutoStorageOptionSettingsInput;
+};
+
+export type UpdateAutoUnitsBuildingSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly maxBuildTime: DurationInput;
+};
+
+export type UpdateAutoUnitsSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly coolDown: CoolDownInput;
+  readonly minCrop: Scalars['Int'];
 };
 
 export type UpdateAutoUnitsUnitSettingsInput = {
@@ -797,73 +828,29 @@ export type UpdateAutoUnitsUnitSettingsInput = {
   readonly targetAmount: Scalars['Int'];
 };
 
-export type AutoUnitsBuildingSettings = {
-  readonly __typename?: 'AutoUnitsBuildingSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly maxBuildTime: Duration;
-  readonly units: ReadonlyArray<AutoUnitsUnitSettings>;
-};
-
-export type UpdateAutoUnitsBuildingSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly maxBuildTime: DurationInput;
-};
-
-export type AutoUnitsSettings = {
-  readonly __typename?: 'AutoUnitsSettings';
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDown;
-  readonly minCrop: Scalars['Int'];
-  readonly barracks: AutoUnitsBuildingSettings;
-  readonly stable: AutoUnitsBuildingSettings;
-  readonly workshop: AutoUnitsBuildingSettings;
-  readonly residence: AutoUnitsBuildingSettings;
-};
-
-export type UpdateAutoUnitsSettingsInput = {
-  readonly allow: Scalars['Boolean'];
-  readonly coolDown: CoolDownInput;
-  readonly minCrop: Scalars['Int'];
-};
-
-export type GeneralSettings = {
-  readonly __typename?: 'GeneralSettings';
-  readonly dataPath: Scalars['String'];
-  readonly chromePath: Scalars['String'];
-  readonly headlessChrome: Scalars['Boolean'];
-};
-
 export type UpdateGeneralSettingsInput = {
   readonly dataPath: Scalars['String'];
   readonly chromePath: Scalars['String'];
   readonly headlessChrome: Scalars['Boolean'];
 };
 
-export type GeneralVillageSettings = {
-  readonly __typename?: 'GeneralVillageSettings';
-  readonly allowTasks: Scalars['Boolean'];
-};
-
 export type UpdateGeneralVillageSettingsInput = {
   readonly allowTasks: Scalars['Boolean'];
 };
 
-export type UnitInfo = {
-  readonly __typename?: 'UnitInfo';
-  readonly name: Scalars['String'];
+export type UpdateUserAccountInput = {
+  readonly id: Scalars['String'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
-export type VillageCapacity = {
-  readonly __typename?: 'VillageCapacity';
-  readonly granary: Scalars['Int'];
-  readonly warehouse: Scalars['Int'];
-};
-
-export type VillageResources = {
-  readonly __typename?: 'VillageResources';
-  readonly amount: ResourcesModel;
-  readonly capacity: VillageCapacity;
-  readonly production: ResourcesModel;
+export type UserAccount = {
+  readonly __typename?: 'UserAccount';
+  readonly id: Scalars['String'];
+  readonly username: Scalars['String'];
+  readonly password: Scalars['String'];
+  readonly server: Scalars['String'];
 };
 
 export type Village = {
@@ -875,11 +862,24 @@ export type Village = {
   readonly isCapital: Scalars['Boolean'];
 };
 
+export type VillageCapacity = {
+  readonly __typename?: 'VillageCapacity';
+  readonly granary: Scalars['Int'];
+  readonly warehouse: Scalars['Int'];
+};
+
 export type VillageCrannyCapacity = {
   readonly __typename?: 'VillageCrannyCapacity';
   readonly actual: Scalars['Int'];
   readonly ongoing: Scalars['Int'];
   readonly total: Scalars['Int'];
+};
+
+export type VillageResources = {
+  readonly __typename?: 'VillageResources';
+  readonly amount: ResourcesModel;
+  readonly capacity: VillageCapacity;
+  readonly production: ResourcesModel;
 };
 
 
@@ -960,200 +960,361 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  String: ResolverTypeWrapper<Scalars['String']>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  UserAccount: ResolverTypeWrapper<UserAccount>;
   Query: ResolverTypeWrapper<{}>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  UserAccount: ResolverTypeWrapper<UserAccount>;
+  AccountSettings: ResolverTypeWrapper<AccountSettings>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CoolDown: ResolverTypeWrapper<CoolDown>;
+  Duration: ResolverTypeWrapper<Duration>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Mutation: ResolverTypeWrapper<{}>;
-  BuildingSpotLevel: ResolverTypeWrapper<BuildingSpotLevel>;
-  BuildingSpot: ResolverTypeWrapper<BuildingSpotModel>;
-  ResourceFields: ResolverTypeWrapper<Omit<ResourceFields, 'wood' | 'clay' | 'iron' | 'crop'> & { wood: ReadonlyArray<ResolversTypes['BuildingSpot']>, clay: ReadonlyArray<ResolversTypes['BuildingSpot']>, iron: ReadonlyArray<ResolversTypes['BuildingSpot']>, crop: ReadonlyArray<ResolversTypes['BuildingSpot']> }>;
-  BuildingSpots: ResolverTypeWrapper<Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversTypes['BuildingSpot']>, resources: ResolversTypes['ResourceFields'] }>;
+  AutoAdventureSettings: ResolverTypeWrapper<AutoAdventureSettings>;
+  AdventureCriteria: AdventureCriteria;
+  AutoBuildSettings: ResolverTypeWrapper<AutoBuildSettings>;
+  AutoStorageSettings: ResolverTypeWrapper<AutoStorageSettings>;
+  AutoStorageOptionSettings: ResolverTypeWrapper<AutoStorageOptionSettings>;
+  AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettings>;
+  AutoPartySettings: ResolverTypeWrapper<AutoPartySettings>;
+  AutoUnitsSettings: ResolverTypeWrapper<AutoUnitsSettings>;
+  AutoUnitsBuildingSettings: ResolverTypeWrapper<AutoUnitsBuildingSettings>;
+  AutoUnitsUnitSettings: ResolverTypeWrapper<AutoUnitsUnitSettings>;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   AvailableNewBuilding: ResolverTypeWrapper<AvailableNewBuilding>;
-  Subscription: ResolverTypeWrapper<{}>;
-  BuildingInProgress: ResolverTypeWrapper<BuildingInProgressModel>;
   BotState: BotState;
-  CreateUserAccountInput: CreateUserAccountInput;
-  UpdateUserAccountInput: UpdateUserAccountInput;
-  HeroState: HeroState;
+  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, totalCost: ResolversTypes['Cost'] }>;
+  QueuedBuildingRange: ResolverTypeWrapper<Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, cost: ResolversTypes['Cost'] }>;
+  QueuedBuilding: ResolverTypeWrapper<Omit<QueuedBuilding, 'cost'> & { cost: ResolversTypes['Cost'] }>;
+  Cost: ResolverTypeWrapper<Omit<Cost, 'resources'> & { resources: ResolversTypes['Resources'] }>;
+  Resources: ResolverTypeWrapper<ResourcesModel>;
+  BuildingSpots: ResolverTypeWrapper<Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversTypes['BuildingSpot']>, resources: ResolversTypes['ResourceFields'] }>;
+  BuildingSpot: ResolverTypeWrapper<BuildingSpotModel>;
+  BuildingSpotLevel: ResolverTypeWrapper<BuildingSpotLevel>;
+  ResourceFields: ResolverTypeWrapper<Omit<ResourceFields, 'wood' | 'clay' | 'iron' | 'crop'> & { wood: ReadonlyArray<ResolversTypes['BuildingSpot']>, clay: ReadonlyArray<ResolversTypes['BuildingSpot']>, iron: ReadonlyArray<ResolversTypes['BuildingSpot']>, crop: ReadonlyArray<ResolversTypes['BuildingSpot']> }>;
+  BuildingInProgress: ResolverTypeWrapper<BuildingInProgressModel>;
+  Timestamp: ResolverTypeWrapper<Timestamp>;
+  VillageCrannyCapacity: ResolverTypeWrapper<VillageCrannyCapacity>;
+  GeneralSettings: ResolverTypeWrapper<GeneralSettings>;
+  GeneralVillageSettings: ResolverTypeWrapper<GeneralVillageSettings>;
   HeroInformation: ResolverTypeWrapper<HeroModel>;
-  TextLogEntryType: TextLogEntryType;
+  HeroState: HeroState;
+  Village: ResolverTypeWrapper<Omit<Village, 'resources'> & { resources: ResolversTypes['VillageResources'] }>;
+  Coords: ResolverTypeWrapper<Coords>;
+  VillageResources: ResolverTypeWrapper<Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversTypes['Resources'], production: ResolversTypes['Resources'] }>;
+  VillageCapacity: ResolverTypeWrapper<VillageCapacity>;
+  LogEntry: ResolverTypeWrapper<LogEntryModel>;
+  LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'] | ResolversTypes['ResourceClaimLogEntryContent'];
   TextLogEntryContent: ResolverTypeWrapper<TextLogEntryContentModel>;
+  TextLogEntryType: TextLogEntryType;
   AutoBuildLogEntryContent: ResolverTypeWrapper<AutoBuildLogEntryContent>;
   AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContent>;
-  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
   ResourceClaimLogEntryContent: ResolverTypeWrapper<Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversTypes['Resources'] }>;
-  LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'] | ResolversTypes['ResourceClaimLogEntryContent'];
-  LogEntry: ResolverTypeWrapper<LogEntryModel>;
+  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
   TaskType: TaskType;
-  Timestamp: ResolverTypeWrapper<Timestamp>;
-  Resources: ResolverTypeWrapper<ResourcesModel>;
-  Cost: ResolverTypeWrapper<Omit<Cost, 'resources'> & { resources: ResolversTypes['Resources'] }>;
-  Coords: ResolverTypeWrapper<Coords>;
-  Duration: ResolverTypeWrapper<Duration>;
-  CoolDown: ResolverTypeWrapper<CoolDown>;
-  CoolDownInput: CoolDownInput;
-  DurationInput: DurationInput;
-  TimestampInput: TimestampInput;
-  QueuedBuilding: ResolverTypeWrapper<Omit<QueuedBuilding, 'cost'> & { cost: ResolversTypes['Cost'] }>;
-  QueuedBuildingRange: ResolverTypeWrapper<Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversTypes['QueuedBuilding']>, cost: ResolversTypes['Cost'] }>;
-  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, totalCost: ResolversTypes['Cost'] }>;
-  ClearQueueInput: ClearQueueInput;
-  EnqueueBuildingInput: EnqueueBuildingInput;
+  UnitInfo: ResolverTypeWrapper<UnitInfo>;
+  Mutation: ResolverTypeWrapper<{}>;
+  CreateUserAccountInput: CreateUserAccountInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
-  AccountSettings: ResolverTypeWrapper<AccountSettings>;
+  EnqueueBuildingInput: EnqueueBuildingInput;
+  DurationInput: DurationInput;
+  UpdateUserAccountInput: UpdateUserAccountInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
-  AdventureCriteria: AdventureCriteria;
-  AutoAdventureSettings: ResolverTypeWrapper<AutoAdventureSettings>;
+  CoolDownInput: CoolDownInput;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
-  AutoStorageOptionSettings: ResolverTypeWrapper<AutoStorageOptionSettings>;
-  UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
-  AutoStorageSettings: ResolverTypeWrapper<AutoStorageSettings>;
-  UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
-  AutoBuildSettings: ResolverTypeWrapper<AutoBuildSettings>;
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
-  AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettings>;
+  UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
+  UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
-  AutoPartySettings: ResolverTypeWrapper<AutoPartySettings>;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
-  AutoUnitsUnitSettings: ResolverTypeWrapper<AutoUnitsUnitSettings>;
-  UpdateAutoUnitsUnitSettingsInput: UpdateAutoUnitsUnitSettingsInput;
-  AutoUnitsBuildingSettings: ResolverTypeWrapper<AutoUnitsBuildingSettings>;
   UpdateAutoUnitsBuildingSettingsInput: UpdateAutoUnitsBuildingSettingsInput;
-  AutoUnitsSettings: ResolverTypeWrapper<AutoUnitsSettings>;
   UpdateAutoUnitsSettingsInput: UpdateAutoUnitsSettingsInput;
-  GeneralSettings: ResolverTypeWrapper<GeneralSettings>;
+  UpdateAutoUnitsUnitSettingsInput: UpdateAutoUnitsUnitSettingsInput;
   UpdateGeneralSettingsInput: UpdateGeneralSettingsInput;
-  GeneralVillageSettings: ResolverTypeWrapper<GeneralVillageSettings>;
   UpdateGeneralVillageSettingsInput: UpdateGeneralVillageSettingsInput;
-  UnitInfo: ResolverTypeWrapper<UnitInfo>;
-  VillageCapacity: ResolverTypeWrapper<VillageCapacity>;
-  VillageResources: ResolverTypeWrapper<Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversTypes['Resources'], production: ResolversTypes['Resources'] }>;
-  Village: ResolverTypeWrapper<Omit<Village, 'resources'> & { resources: ResolversTypes['VillageResources'] }>;
-  VillageCrannyCapacity: ResolverTypeWrapper<VillageCrannyCapacity>;
+  Subscription: ResolverTypeWrapper<{}>;
+  TimestampInput: TimestampInput;
+  ClearQueueInput: ClearQueueInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  String: Scalars['String'];
-  Boolean: Scalars['Boolean'];
-  UserAccount: UserAccount;
   Query: {};
+  String: Scalars['String'];
+  UserAccount: UserAccount;
+  AccountSettings: AccountSettings;
+  Boolean: Scalars['Boolean'];
+  CoolDown: CoolDown;
+  Duration: Duration;
   Int: Scalars['Int'];
-  Mutation: {};
-  BuildingSpotLevel: BuildingSpotLevel;
-  BuildingSpot: BuildingSpotModel;
-  ResourceFields: Omit<ResourceFields, 'wood' | 'clay' | 'iron' | 'crop'> & { wood: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, clay: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, iron: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, crop: ReadonlyArray<ResolversParentTypes['BuildingSpot']> };
-  BuildingSpots: Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, resources: ResolversParentTypes['ResourceFields'] };
+  AutoAdventureSettings: AutoAdventureSettings;
+  AdventureCriteria: AdventureCriteria;
+  AutoBuildSettings: AutoBuildSettings;
+  AutoStorageSettings: AutoStorageSettings;
+  AutoStorageOptionSettings: AutoStorageOptionSettings;
+  AutoMentorSettings: AutoMentorSettings;
+  AutoPartySettings: AutoPartySettings;
+  AutoUnitsSettings: AutoUnitsSettings;
+  AutoUnitsBuildingSettings: AutoUnitsBuildingSettings;
+  AutoUnitsUnitSettings: AutoUnitsUnitSettings;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   AvailableNewBuilding: AvailableNewBuilding;
-  Subscription: {};
-  BuildingInProgress: BuildingInProgressModel;
   BotState: BotState;
-  CreateUserAccountInput: CreateUserAccountInput;
-  UpdateUserAccountInput: UpdateUserAccountInput;
-  HeroState: HeroState;
+  BuildingQueue: Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversParentTypes['QueuedBuildingRange']>, totalCost: ResolversParentTypes['Cost'] };
+  QueuedBuildingRange: Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, cost: ResolversParentTypes['Cost'] };
+  QueuedBuilding: Omit<QueuedBuilding, 'cost'> & { cost: ResolversParentTypes['Cost'] };
+  Cost: Omit<Cost, 'resources'> & { resources: ResolversParentTypes['Resources'] };
+  Resources: ResourcesModel;
+  BuildingSpots: Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, resources: ResolversParentTypes['ResourceFields'] };
+  BuildingSpot: BuildingSpotModel;
+  BuildingSpotLevel: BuildingSpotLevel;
+  ResourceFields: Omit<ResourceFields, 'wood' | 'clay' | 'iron' | 'crop'> & { wood: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, clay: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, iron: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, crop: ReadonlyArray<ResolversParentTypes['BuildingSpot']> };
+  BuildingInProgress: BuildingInProgressModel;
+  Timestamp: Timestamp;
+  VillageCrannyCapacity: VillageCrannyCapacity;
+  GeneralSettings: GeneralSettings;
+  GeneralVillageSettings: GeneralVillageSettings;
   HeroInformation: HeroModel;
-  TextLogEntryType: TextLogEntryType;
+  HeroState: HeroState;
+  Village: Omit<Village, 'resources'> & { resources: ResolversParentTypes['VillageResources'] };
+  Coords: Coords;
+  VillageResources: Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversParentTypes['Resources'], production: ResolversParentTypes['Resources'] };
+  VillageCapacity: VillageCapacity;
+  LogEntry: LogEntryModel;
+  LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'] | ResolversParentTypes['ResourceClaimLogEntryContent'];
   TextLogEntryContent: TextLogEntryContentModel;
+  TextLogEntryType: TextLogEntryType;
   AutoBuildLogEntryContent: AutoBuildLogEntryContent;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContent;
-  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
   ResourceClaimLogEntryContent: Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversParentTypes['Resources'] };
-  LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'] | ResolversParentTypes['ResourceClaimLogEntryContent'];
-  LogEntry: LogEntryModel;
+  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
   TaskType: TaskType;
-  Timestamp: Timestamp;
-  Resources: ResourcesModel;
-  Cost: Omit<Cost, 'resources'> & { resources: ResolversParentTypes['Resources'] };
-  Coords: Coords;
-  Duration: Duration;
-  CoolDown: CoolDown;
-  CoolDownInput: CoolDownInput;
-  DurationInput: DurationInput;
-  TimestampInput: TimestampInput;
-  QueuedBuilding: Omit<QueuedBuilding, 'cost'> & { cost: ResolversParentTypes['Cost'] };
-  QueuedBuildingRange: Omit<QueuedBuildingRange, 'buildings' | 'cost'> & { buildings: ReadonlyArray<ResolversParentTypes['QueuedBuilding']>, cost: ResolversParentTypes['Cost'] };
-  BuildingQueue: Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversParentTypes['QueuedBuildingRange']>, totalCost: ResolversParentTypes['Cost'] };
-  ClearQueueInput: ClearQueueInput;
-  EnqueueBuildingInput: EnqueueBuildingInput;
+  UnitInfo: UnitInfo;
+  Mutation: {};
+  CreateUserAccountInput: CreateUserAccountInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
-  AccountSettings: AccountSettings;
+  EnqueueBuildingInput: EnqueueBuildingInput;
+  DurationInput: DurationInput;
+  UpdateUserAccountInput: UpdateUserAccountInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
-  AdventureCriteria: AdventureCriteria;
-  AutoAdventureSettings: AutoAdventureSettings;
+  CoolDownInput: CoolDownInput;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
-  AutoStorageOptionSettings: AutoStorageOptionSettings;
-  UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
-  AutoStorageSettings: AutoStorageSettings;
-  UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
-  AutoBuildSettings: AutoBuildSettings;
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
-  AutoMentorSettings: AutoMentorSettings;
+  UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
+  UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
-  AutoPartySettings: AutoPartySettings;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
-  AutoUnitsUnitSettings: AutoUnitsUnitSettings;
-  UpdateAutoUnitsUnitSettingsInput: UpdateAutoUnitsUnitSettingsInput;
-  AutoUnitsBuildingSettings: AutoUnitsBuildingSettings;
   UpdateAutoUnitsBuildingSettingsInput: UpdateAutoUnitsBuildingSettingsInput;
-  AutoUnitsSettings: AutoUnitsSettings;
   UpdateAutoUnitsSettingsInput: UpdateAutoUnitsSettingsInput;
-  GeneralSettings: GeneralSettings;
+  UpdateAutoUnitsUnitSettingsInput: UpdateAutoUnitsUnitSettingsInput;
   UpdateGeneralSettingsInput: UpdateGeneralSettingsInput;
-  GeneralVillageSettings: GeneralVillageSettings;
   UpdateGeneralVillageSettingsInput: UpdateGeneralVillageSettingsInput;
-  UnitInfo: UnitInfo;
-  VillageCapacity: VillageCapacity;
-  VillageResources: Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversParentTypes['Resources'], production: ResolversParentTypes['Resources'] };
-  Village: Omit<Village, 'resources'> & { resources: ResolversParentTypes['VillageResources'] };
-  VillageCrannyCapacity: VillageCrannyCapacity;
+  Subscription: {};
+  TimestampInput: TimestampInput;
+  ClearQueueInput: ClearQueueInput;
 };
 
-export type UserAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccount'] = ResolversParentTypes['UserAccount']> = {
-  id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  username: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  server: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type AccountSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountSettings'] = ResolversParentTypes['AccountSettings']> = {
+  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  tasksCoolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  autoStart: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoParty: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  account: Resolver<Maybe<ResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
-  accountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
-  accounts: Resolver<ReadonlyArray<ResolversTypes['UserAccount']>, ParentType, ContextType>;
-  activeVillageId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  autoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
-  autoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<QueryAutoBuildSettingsArgs, 'villageId'>>;
-  autoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;
-  autoPartySettings: Resolver<ResolversTypes['AutoPartySettings'], ParentType, ContextType, RequireFields<QueryAutoPartySettingsArgs, 'villageId'>>;
-  autoUnitsSettings: Resolver<ResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<QueryAutoUnitsSettingsArgs, 'villageId'>>;
-  availableNewBuildings: Resolver<ReadonlyArray<ResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<QueryAvailableNewBuildingsArgs, 'input'>>;
-  botState: Resolver<ResolversTypes['BotState'], ParentType, ContextType>;
-  buildingQueue: Resolver<ResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<QueryBuildingQueueArgs, 'villageId'>>;
-  buildingSpots: Resolver<ResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<QueryBuildingSpotsArgs, 'villageId'>>;
-  buildingsInProgress: Resolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<QueryBuildingsInProgressArgs, 'villageId'>>;
-  canMoveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
-  canMoveQueuedBuildingsBlockToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
-  crannyCapacity: Resolver<ResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<QueryCrannyCapacityArgs, 'villageId'>>;
-  currentAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType>;
-  generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
-  generalVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<QueryGeneralVillageSettingsArgs, 'villageId'>>;
-  heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
-  isBotActive: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  lastSignedAccountId: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  logsEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
-  maxBuildingLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryMaxBuildingLevelArgs, 'buildingType'>>;
-  nextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextTaskExecutionArgs, 'task'>>;
-  nextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
-  nextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
-  unitInfo: Resolver<ResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<QueryUnitInfoArgs, 'index'>>;
-  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType, RequireFields<QueryVillageArgs, 'villageId'>>;
-  villages: Resolver<ReadonlyArray<ResolversTypes['Village']>, ParentType, ContextType>;
+export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoAdventureSettings'] = ResolversParentTypes['AutoAdventureSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  adventureCriteria: Resolver<ResolversTypes['AdventureCriteria'], ParentType, ContextType>;
+  preferHard: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  normalMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  hardMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maxTravelTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  preferredVillageId: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildSettings'] = ResolversParentTypes['AutoBuildSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  autoCropFields: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  autoStorage: Resolver<ResolversTypes['AutoStorageSettings'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
+  acceptTaskRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  acceptDailyRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoPartySettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoPartySettings'] = ResolversParentTypes['AutoPartySettings']> = {
+  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  allowSmall: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  allowLarge: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  minCulturePointsSmall: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  minCulturePointsLarge: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoStorageOptionSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageOptionSettings'] = ResolversParentTypes['AutoStorageOptionSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  overflowLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoStorageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageSettings'] = ResolversParentTypes['AutoStorageSettings']> = {
+  allowFreeSpots: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  granary: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
+  warehouse: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsBuildingSettings'] = ResolversParentTypes['AutoUnitsBuildingSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  maxBuildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  units: Resolver<ReadonlyArray<ResolversTypes['AutoUnitsUnitSettings']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
+  amount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  unitName: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsSettings'] = ResolversParentTypes['AutoUnitsSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  barracks: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
+  stable: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
+  workshop: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
+  residence: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AutoUnitsUnitSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsUnitSettings'] = ResolversParentTypes['AutoUnitsUnitSettings']> = {
+  index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  trainForever: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  targetAmount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type AvailableNewBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['AvailableNewBuilding'] = ResolversParentTypes['AvailableNewBuilding']> = {
+  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingInProgressResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingInProgress'] = ResolversParentTypes['BuildingInProgress']> = {
+  level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  finishedAt: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
+  buildingRanges: Resolver<ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, ParentType, ContextType>;
+  totalCost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingSpotResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpot'] = ResolversParentTypes['BuildingSpot']> = {
+  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  level: Resolver<ResolversTypes['BuildingSpotLevel'], ParentType, ContextType>;
+  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingSpotLevelResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpotLevel'] = ResolversParentTypes['BuildingSpotLevel']> = {
+  actual: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  ongoing: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  queued: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  max: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type BuildingSpotsResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpots'] = ResolversParentTypes['BuildingSpots']> = {
+  infrastructure: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
+  resources: Resolver<ResolversTypes['ResourceFields'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type CoolDownResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoolDown'] = ResolversParentTypes['CoolDown']> = {
+  min: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  max: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type CoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coords'] = ResolversParentTypes['Coords']> = {
+  x: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  y: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type CostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cost'] = ResolversParentTypes['Cost']> = {
+  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+  buildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type DurationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Duration'] = ResolversParentTypes['Duration']> = {
+  days: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  hours: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  minutes: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  seconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
+  dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  headlessChrome: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type GeneralVillageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralVillageSettings'] = ResolversParentTypes['GeneralVillageSettings']> = {
+  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type HeroInformationResolvers<ContextType = any, ParentType extends ResolversParentTypes['HeroInformation'] = ResolversParentTypes['HeroInformation']> = {
+  health: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state: Resolver<ResolversTypes['HeroState'], ParentType, ContextType>;
+  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type LogEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntry'] = ResolversParentTypes['LogEntry']> = {
+  id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
+  content: Resolver<ResolversTypes['LogEntryContent'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type LogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntryContent'] = ResolversParentTypes['LogEntryContent']> = {
+  __resolveType: TypeResolveFn<'TextLogEntryContent' | 'AutoBuildLogEntryContent' | 'AutoUnitsLogEntryContent' | 'ResourceClaimLogEntryContent', ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -1198,154 +1359,38 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateGeneralVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralVillageSettingsArgs, 'villageId' | 'settings'>>;
 };
 
-export type BuildingSpotLevelResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpotLevel'] = ResolversParentTypes['BuildingSpotLevel']> = {
-  actual: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  ongoing: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  queued: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  max: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type BuildingSpotResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpot'] = ResolversParentTypes['BuildingSpot']> = {
-  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  level: Resolver<ResolversTypes['BuildingSpotLevel'], ParentType, ContextType>;
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type ResourceFieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceFields'] = ResolversParentTypes['ResourceFields']> = {
-  wood: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  clay: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  iron: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  crop: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type BuildingSpotsResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpots'] = ResolversParentTypes['BuildingSpots']> = {
-  infrastructure: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
-  resources: Resolver<ResolversTypes['ResourceFields'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AvailableNewBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['AvailableNewBuilding'] = ResolversParentTypes['AvailableNewBuilding']> = {
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  activeVillageIdChanged: SubscriptionResolver<ResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>;
-  actualBuildingLevelsUpdate: SubscriptionResolver<ResolversTypes['Boolean'], "actualBuildingLevelsUpdate", ParentType, ContextType, RequireFields<SubscriptionActualBuildingLevelsUpdateArgs, 'villageId'>>;
-  botActivityChanged: SubscriptionResolver<ResolversTypes['Boolean'], "botActivityChanged", ParentType, ContextType>;
-  buildingsInProgressUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, "buildingsInProgressUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingsInProgressUpdatedArgs, 'villageId'>>;
-  heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
-  nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
-  nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;
-  nextVillageTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextVillageTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextVillageTaskExecutionChangedArgs, 'villageId' | 'task'>>;
-  onBotRunningChanged: SubscriptionResolver<ResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>;
-  onLogEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "onLogEntryAdded", ParentType, ContextType>;
-  onQueueUpdated: SubscriptionResolver<ResolversTypes['BuildingQueue'], "onQueueUpdated", ParentType, ContextType, RequireFields<SubscriptionOnQueueUpdatedArgs, 'villageId'>>;
-  villageUpdated: SubscriptionResolver<ResolversTypes['Village'], "villageUpdated", ParentType, ContextType, RequireFields<SubscriptionVillageUpdatedArgs, 'villageId'>>;
-  villagesUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['Village']>, "villagesUpdated", ParentType, ContextType>;
-};
-
-export type BuildingInProgressResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingInProgress'] = ResolversParentTypes['BuildingInProgress']> = {
-  level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  finishedAt: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type HeroInformationResolvers<ContextType = any, ParentType extends ResolversParentTypes['HeroInformation'] = ResolversParentTypes['HeroInformation']> = {
-  health: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  state: Resolver<ResolversTypes['HeroState'], ParentType, ContextType>;
-  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
-  message: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  messageType: Resolver<ResolversTypes['TextLogEntryType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
-  name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
-  amount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  unitName: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type ResourceClaimLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceClaimLogEntryContent'] = ResolversParentTypes['ResourceClaimLogEntryContent']> = {
-  reason: Resolver<ResolversTypes['ClaimHeroResourcesReason'], ParentType, ContextType>;
-  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type LogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntryContent'] = ResolversParentTypes['LogEntryContent']> = {
-  __resolveType: TypeResolveFn<'TextLogEntryContent' | 'AutoBuildLogEntryContent' | 'AutoUnitsLogEntryContent' | 'ResourceClaimLogEntryContent', ParentType, ContextType>;
-};
-
-export type LogEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntry'] = ResolversParentTypes['LogEntry']> = {
-  id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
-  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
-  content: Resolver<ResolversTypes['LogEntryContent'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type TimestampResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timestamp'] = ResolversParentTypes['Timestamp']> = {
-  totalSeconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type ResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Resources'] = ResolversParentTypes['Resources']> = {
-  wood: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  clay: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  iron: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  crop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  freeCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type CostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cost'] = ResolversParentTypes['Cost']> = {
-  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
-  buildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type CoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coords'] = ResolversParentTypes['Coords']> = {
-  x: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  y: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type DurationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Duration'] = ResolversParentTypes['Duration']> = {
-  days: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  hours: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minutes: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  seconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type CoolDownResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoolDown'] = ResolversParentTypes['CoolDown']> = {
-  min: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  max: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  account: Resolver<Maybe<ResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'accountId'>>;
+  accountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
+  accounts: Resolver<ReadonlyArray<ResolversTypes['UserAccount']>, ParentType, ContextType>;
+  activeVillageId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  autoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
+  autoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<QueryAutoBuildSettingsArgs, 'villageId'>>;
+  autoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;
+  autoPartySettings: Resolver<ResolversTypes['AutoPartySettings'], ParentType, ContextType, RequireFields<QueryAutoPartySettingsArgs, 'villageId'>>;
+  autoUnitsSettings: Resolver<ResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<QueryAutoUnitsSettingsArgs, 'villageId'>>;
+  availableNewBuildings: Resolver<ReadonlyArray<ResolversTypes['AvailableNewBuilding']>, ParentType, ContextType, RequireFields<QueryAvailableNewBuildingsArgs, 'input'>>;
+  botState: Resolver<ResolversTypes['BotState'], ParentType, ContextType>;
+  buildingQueue: Resolver<ResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<QueryBuildingQueueArgs, 'villageId'>>;
+  buildingSpots: Resolver<ResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<QueryBuildingSpotsArgs, 'villageId'>>;
+  buildingsInProgress: Resolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<QueryBuildingsInProgressArgs, 'villageId'>>;
+  canMoveQueuedBuildingToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
+  canMoveQueuedBuildingsBlockToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
+  crannyCapacity: Resolver<ResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<QueryCrannyCapacityArgs, 'villageId'>>;
+  currentAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType>;
+  generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
+  generalVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<QueryGeneralVillageSettingsArgs, 'villageId'>>;
+  heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
+  isBotActive: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lastSignedAccountId: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  logsEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
+  maxBuildingLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryMaxBuildingLevelArgs, 'buildingType'>>;
+  nextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextTaskExecutionArgs, 'task'>>;
+  nextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  nextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
+  unitInfo: Resolver<ResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<QueryUnitInfoArgs, 'index'>>;
+  village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType, RequireFields<QueryVillageArgs, 'villageId'>>;
+  villages: Resolver<ReadonlyArray<ResolversTypes['Village']>, ParentType, ContextType>;
 };
 
 export type QueuedBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuilding'] = ResolversParentTypes['QueuedBuilding']> = {
@@ -1369,107 +1414,54 @@ export type QueuedBuildingRangeResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
-  buildingRanges: Resolver<ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, ParentType, ContextType>;
-  totalCost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+export type ResourceClaimLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceClaimLogEntryContent'] = ResolversParentTypes['ResourceClaimLogEntryContent']> = {
+  reason: Resolver<ResolversTypes['ClaimHeroResourcesReason'], ParentType, ContextType>;
+  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type AccountSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountSettings'] = ResolversParentTypes['AccountSettings']> = {
-  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  tasksCoolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  autoStart: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoUnits: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoParty: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+export type ResourceFieldsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResourceFields'] = ResolversParentTypes['ResourceFields']> = {
+  wood: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
+  clay: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
+  iron: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
+  crop: Resolver<ReadonlyArray<ResolversTypes['BuildingSpot']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoAdventureSettings'] = ResolversParentTypes['AutoAdventureSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  adventureCriteria: Resolver<ResolversTypes['AdventureCriteria'], ParentType, ContextType>;
-  preferHard: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  normalMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  hardMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  maxTravelTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  preferredVillageId: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+export type ResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Resources'] = ResolversParentTypes['Resources']> = {
+  wood: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  clay: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  iron: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  crop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  freeCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type AutoStorageOptionSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageOptionSettings'] = ResolversParentTypes['AutoStorageOptionSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  overflowLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  activeVillageIdChanged: SubscriptionResolver<ResolversTypes['Int'], "activeVillageIdChanged", ParentType, ContextType>;
+  actualBuildingLevelsUpdate: SubscriptionResolver<ResolversTypes['Boolean'], "actualBuildingLevelsUpdate", ParentType, ContextType, RequireFields<SubscriptionActualBuildingLevelsUpdateArgs, 'villageId'>>;
+  botActivityChanged: SubscriptionResolver<ResolversTypes['Boolean'], "botActivityChanged", ParentType, ContextType>;
+  buildingsInProgressUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, "buildingsInProgressUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingsInProgressUpdatedArgs, 'villageId'>>;
+  heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
+  nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
+  nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;
+  nextVillageTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextVillageTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextVillageTaskExecutionChangedArgs, 'villageId' | 'task'>>;
+  onBotRunningChanged: SubscriptionResolver<ResolversTypes['Boolean'], "onBotRunningChanged", ParentType, ContextType>;
+  onLogEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "onLogEntryAdded", ParentType, ContextType>;
+  onQueueUpdated: SubscriptionResolver<ResolversTypes['BuildingQueue'], "onQueueUpdated", ParentType, ContextType, RequireFields<SubscriptionOnQueueUpdatedArgs, 'villageId'>>;
+  villageUpdated: SubscriptionResolver<ResolversTypes['Village'], "villageUpdated", ParentType, ContextType, RequireFields<SubscriptionVillageUpdatedArgs, 'villageId'>>;
+  villagesUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['Village']>, "villagesUpdated", ParentType, ContextType>;
+};
+
+export type TextLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['TextLogEntryContent'] = ResolversParentTypes['TextLogEntryContent']> = {
+  message: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  messageType: Resolver<ResolversTypes['TextLogEntryType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type AutoStorageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoStorageSettings'] = ResolversParentTypes['AutoStorageSettings']> = {
-  allowFreeSpots: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  granary: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
-  warehouse: Resolver<ResolversTypes['AutoStorageOptionSettings'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildSettings'] = ResolversParentTypes['AutoBuildSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  autoCropFields: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  autoStorage: Resolver<ResolversTypes['AutoStorageSettings'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
-  acceptTaskRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  acceptDailyRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoPartySettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoPartySettings'] = ResolversParentTypes['AutoPartySettings']> = {
-  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  allowSmall: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  allowLarge: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  minCulturePointsSmall: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minCulturePointsLarge: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsUnitSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsUnitSettings'] = ResolversParentTypes['AutoUnitsUnitSettings']> = {
-  index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  autoBuild: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  trainForever: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  targetAmount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsBuildingSettings'] = ResolversParentTypes['AutoUnitsBuildingSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  maxBuildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  units: Resolver<ReadonlyArray<ResolversTypes['AutoUnitsUnitSettings']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsSettings'] = ResolversParentTypes['AutoUnitsSettings']> = {
-  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
-  minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  barracks: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
-  stable: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
-  workshop: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
-  residence: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
-  dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  headlessChrome: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type GeneralVillageSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralVillageSettings'] = ResolversParentTypes['GeneralVillageSettings']> = {
-  allowTasks: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+export type TimestampResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timestamp'] = ResolversParentTypes['Timestamp']> = {
+  totalSeconds: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1478,16 +1470,11 @@ export type UnitInfoResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type VillageCapacityResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageCapacity'] = ResolversParentTypes['VillageCapacity']> = {
-  granary: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  warehouse: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type VillageResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageResources'] = ResolversParentTypes['VillageResources']> = {
-  amount: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
-  capacity: Resolver<ResolversTypes['VillageCapacity'], ParentType, ContextType>;
-  production: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+export type UserAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccount'] = ResolversParentTypes['UserAccount']> = {
+  id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  server: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1500,6 +1487,12 @@ export type VillageResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type VillageCapacityResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageCapacity'] = ResolversParentTypes['VillageCapacity']> = {
+  granary: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  warehouse: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type VillageCrannyCapacityResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageCrannyCapacity'] = ResolversParentTypes['VillageCrannyCapacity']> = {
   actual: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   ongoing: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1507,50 +1500,57 @@ export type VillageCrannyCapacityResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type VillageResourcesResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageResources'] = ResolversParentTypes['VillageResources']> = {
+  amount: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+  capacity: Resolver<ResolversTypes['VillageCapacity'], ParentType, ContextType>;
+  production: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type Resolvers<ContextType = any> = {
-  UserAccount: UserAccountResolvers<ContextType>;
-  Query: QueryResolvers<ContextType>;
-  Mutation: MutationResolvers<ContextType>;
-  BuildingSpotLevel: BuildingSpotLevelResolvers<ContextType>;
-  BuildingSpot: BuildingSpotResolvers<ContextType>;
-  ResourceFields: ResourceFieldsResolvers<ContextType>;
-  BuildingSpots: BuildingSpotsResolvers<ContextType>;
-  AvailableNewBuilding: AvailableNewBuildingResolvers<ContextType>;
-  Subscription: SubscriptionResolvers<ContextType>;
-  BuildingInProgress: BuildingInProgressResolvers<ContextType>;
-  HeroInformation: HeroInformationResolvers<ContextType>;
-  TextLogEntryContent: TextLogEntryContentResolvers<ContextType>;
-  AutoBuildLogEntryContent: AutoBuildLogEntryContentResolvers<ContextType>;
-  AutoUnitsLogEntryContent: AutoUnitsLogEntryContentResolvers<ContextType>;
-  ResourceClaimLogEntryContent: ResourceClaimLogEntryContentResolvers<ContextType>;
-  LogEntryContent: LogEntryContentResolvers;
-  LogEntry: LogEntryResolvers<ContextType>;
-  Timestamp: TimestampResolvers<ContextType>;
-  Resources: ResourcesResolvers<ContextType>;
-  Cost: CostResolvers<ContextType>;
-  Coords: CoordsResolvers<ContextType>;
-  Duration: DurationResolvers<ContextType>;
-  CoolDown: CoolDownResolvers<ContextType>;
-  QueuedBuilding: QueuedBuildingResolvers<ContextType>;
-  QueuedBuildingRange: QueuedBuildingRangeResolvers<ContextType>;
-  BuildingQueue: BuildingQueueResolvers<ContextType>;
   AccountSettings: AccountSettingsResolvers<ContextType>;
   AutoAdventureSettings: AutoAdventureSettingsResolvers<ContextType>;
-  AutoStorageOptionSettings: AutoStorageOptionSettingsResolvers<ContextType>;
-  AutoStorageSettings: AutoStorageSettingsResolvers<ContextType>;
+  AutoBuildLogEntryContent: AutoBuildLogEntryContentResolvers<ContextType>;
   AutoBuildSettings: AutoBuildSettingsResolvers<ContextType>;
   AutoMentorSettings: AutoMentorSettingsResolvers<ContextType>;
   AutoPartySettings: AutoPartySettingsResolvers<ContextType>;
-  AutoUnitsUnitSettings: AutoUnitsUnitSettingsResolvers<ContextType>;
+  AutoStorageOptionSettings: AutoStorageOptionSettingsResolvers<ContextType>;
+  AutoStorageSettings: AutoStorageSettingsResolvers<ContextType>;
   AutoUnitsBuildingSettings: AutoUnitsBuildingSettingsResolvers<ContextType>;
+  AutoUnitsLogEntryContent: AutoUnitsLogEntryContentResolvers<ContextType>;
   AutoUnitsSettings: AutoUnitsSettingsResolvers<ContextType>;
+  AutoUnitsUnitSettings: AutoUnitsUnitSettingsResolvers<ContextType>;
+  AvailableNewBuilding: AvailableNewBuildingResolvers<ContextType>;
+  BuildingInProgress: BuildingInProgressResolvers<ContextType>;
+  BuildingQueue: BuildingQueueResolvers<ContextType>;
+  BuildingSpot: BuildingSpotResolvers<ContextType>;
+  BuildingSpotLevel: BuildingSpotLevelResolvers<ContextType>;
+  BuildingSpots: BuildingSpotsResolvers<ContextType>;
+  CoolDown: CoolDownResolvers<ContextType>;
+  Coords: CoordsResolvers<ContextType>;
+  Cost: CostResolvers<ContextType>;
+  Duration: DurationResolvers<ContextType>;
   GeneralSettings: GeneralSettingsResolvers<ContextType>;
   GeneralVillageSettings: GeneralVillageSettingsResolvers<ContextType>;
+  HeroInformation: HeroInformationResolvers<ContextType>;
+  LogEntry: LogEntryResolvers<ContextType>;
+  LogEntryContent: LogEntryContentResolvers;
+  Mutation: MutationResolvers<ContextType>;
+  Query: QueryResolvers<ContextType>;
+  QueuedBuilding: QueuedBuildingResolvers<ContextType>;
+  QueuedBuildingRange: QueuedBuildingRangeResolvers<ContextType>;
+  ResourceClaimLogEntryContent: ResourceClaimLogEntryContentResolvers<ContextType>;
+  ResourceFields: ResourceFieldsResolvers<ContextType>;
+  Resources: ResourcesResolvers<ContextType>;
+  Subscription: SubscriptionResolvers<ContextType>;
+  TextLogEntryContent: TextLogEntryContentResolvers<ContextType>;
+  Timestamp: TimestampResolvers<ContextType>;
   UnitInfo: UnitInfoResolvers<ContextType>;
-  VillageCapacity: VillageCapacityResolvers<ContextType>;
-  VillageResources: VillageResourcesResolvers<ContextType>;
+  UserAccount: UserAccountResolvers<ContextType>;
   Village: VillageResolvers<ContextType>;
+  VillageCapacity: VillageCapacityResolvers<ContextType>;
   VillageCrannyCapacity: VillageCrannyCapacityResolvers<ContextType>;
+  VillageResources: VillageResourcesResolvers<ContextType>;
 };
 
 
