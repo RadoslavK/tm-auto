@@ -39,29 +39,29 @@ const useBuildingSpots = () => {
 
   const [buildingSpots, setBuildingSpots] = useState<GetBuildingSpotsQuery['buildingSpots']>();
 
-  const queryResult = useGetBuildingSpotsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading, refetch } = useGetBuildingSpotsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setBuildingSpots(queryResult.data.buildingSpots);
+    if (!queryLoading && queryData) {
+      setBuildingSpots(queryData.buildingSpots);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
   useActualBuildingLevelsUpdateSubscription({
     onSubscriptionData: () => {
-      queryResult.refetch();
+      refetch();
     },
     variables: { villageId },
   });
   useBuildingsInProgressUpdatedSubscription({
     onSubscriptionData: () => {
-      queryResult.refetch();
+      refetch();
     },
     variables: { villageId },
   });
   useOnQueueUpdatedSubscription({
     onSubscriptionData: () => {
-      queryResult.refetch();
+      refetch();
     },
     variables: { villageId },
   });

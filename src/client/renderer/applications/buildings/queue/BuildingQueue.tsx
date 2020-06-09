@@ -38,13 +38,13 @@ const useBuildingQueue = () => {
 
   const [buildingQueue, setBuildingQueue] = useState<GetQueuedBuildingsQuery['buildingQueue']>();
 
-  const queryResult = useGetQueuedBuildingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetQueuedBuildingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setBuildingQueue(queryResult.data.buildingQueue);
+    if (!queryLoading && queryData) {
+      setBuildingQueue(queryData.buildingQueue);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
   useOnQueueUpdatedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

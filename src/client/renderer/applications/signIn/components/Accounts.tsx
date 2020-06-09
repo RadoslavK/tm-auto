@@ -67,21 +67,19 @@ type Props = {
 };
 
 export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selectedId }) => {
-  const accountsQueryResult = useGetAccountsQuery();
-
-  const accounts = accountsQueryResult?.data?.accounts;
+  const { data: queryData, loading: queryLoading } = useGetAccountsQuery();
 
   useEffect(() => {
-    if (!selectedId && !accountsQueryResult.loading && accounts && accounts.length) {
-      onAccountChanged(accounts[0].id);
-    } else if (selectedId && accounts && !accounts.some(account => account.id === selectedId)) {
+    if (!selectedId && !queryLoading && queryData && queryData.accounts.length) {
+      onAccountChanged(queryData.accounts[0].id);
+    } else if (selectedId && queryData && !queryData.accounts.some(account => account.id === selectedId)) {
       onAccountChanged('');
     }
-  }, [accountsQueryResult, accounts, onAccountChanged, selectedId]);
+  }, [queryData, queryLoading, onAccountChanged, selectedId]);
 
   const classes = useStyles();
 
-  if (!accounts) {
+  if (!queryData) {
     return null;
   }
 
@@ -104,7 +102,7 @@ export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selected
         onChange={onOptionChanged}
         value={selectedId}
       >
-        {accounts.map((account) => (
+        {queryData.accounts.map((account) => (
           <option
             key={account.id}
             value={account.id}

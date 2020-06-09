@@ -20,13 +20,13 @@ const useBuildingsInProgress = () => {
 
   const [buildingsInProgress, setBuildingsInProgress] = useState<GetBuildingsInProgressQuery['buildingsInProgress']>();
 
-  const queryResult = useGetBuildingsInProgressQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetBuildingsInProgressQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setBuildingsInProgress(queryResult.data.buildingsInProgress);
+    if (!queryLoading && queryData) {
+      setBuildingsInProgress(queryData.buildingsInProgress);
     }
-  }, [queryResult]);
+  }, [queryLoading, queryData]);
 
   useBuildingsInProgressUpdatedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

@@ -103,19 +103,19 @@ const FormDialog: React.FC<FormDialogProps> = ({
 }) => {
   const classes = useStyles();
 
-  const accountQueryResult = useGetAccountQuery({ variables: { accountId: selectedAccountId } });
+  const { data: queryData, loading: queryLoading } = useGetAccountQuery({ variables: { accountId: selectedAccountId } });
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [server, setServer] = useState('');
 
   useEffect(() => {
-    if (!accountQueryResult.loading && accountQueryResult.data && accountQueryResult.data.account && type === DialogType.Update) {
-      setUsername(accountQueryResult.data.account.username);
-      setPassword(accountQueryResult.data.account.password);
-      setServer(accountQueryResult.data.account.server);
+    if (!queryLoading && queryData && queryData.account && type === DialogType.Update) {
+      setUsername(queryData.account.username);
+      setPassword(queryData.account.password);
+      setServer(queryData.account.server);
     }
-  }, [accountQueryResult, type]);
+  }, [queryLoading, queryData, type]);
 
   const newAccount: CreateUserAccountInput = {
     password,

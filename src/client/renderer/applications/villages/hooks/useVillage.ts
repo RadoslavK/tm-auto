@@ -13,13 +13,13 @@ import {
 export const useVillage = (villageId: number) => {
   const [village, setVillage] = useState<GetVillageQuery['village']>();
 
-  const queryResult = useGetVillageQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading } = useGetVillageQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setVillage(queryResult.data.village);
+    if (!queryLoading && queryData) {
+      setVillage(queryData.village);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
   useVillageUpdatedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

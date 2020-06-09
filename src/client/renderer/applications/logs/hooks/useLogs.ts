@@ -12,17 +12,13 @@ import {
 export const useLogs = () => {
   const [entries, setEntries] = useState<LogEntryFragment[]>([]);
 
-  const queryResult = useGetLogsQuery();
+  const { data: queryData, loading: queryLoading } = useGetLogsQuery();
 
   useEffect(() => {
-    const { data, loading } = queryResult;
-
-    if (loading || !data) {
-      return;
+    if (!queryLoading && queryData) {
+      setEntries([...queryData.logsEntries]);
     }
-
-    setEntries([...data.logsEntries]);
-  }, [queryResult]);
+  }, [queryLoading, queryData]);
 
   useOnLogEntryAddedSubscription({
     onSubscriptionData: ({ subscriptionData }) => {

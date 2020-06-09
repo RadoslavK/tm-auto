@@ -12,13 +12,13 @@ import {
 export const useVillages = () => {
   const [villages, setVillages] = useState<GetVillagesQuery['villages']>();
 
-  const queryResult = useGetVillagesQuery();
+  const { data: queryData, loading: queryLoading } = useGetVillagesQuery();
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setVillages(queryResult.data.villages);
+    if (!queryLoading && queryData) {
+      setVillages(queryData.villages);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
   useVillagesUpdatedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {

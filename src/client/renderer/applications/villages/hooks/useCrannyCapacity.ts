@@ -17,16 +17,16 @@ export const useCrannyCapacity = () => {
 
   const [capacity, setCapacity] = useState<CrannyCapacityQuery['crannyCapacity']>();
 
-  const queryResult = useCrannyCapacityQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading, refetch } = useCrannyCapacityQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setCapacity(queryResult.data.crannyCapacity);
+    if (!queryLoading && queryData) {
+      setCapacity(queryData.crannyCapacity);
     }
-  }, [queryResult]);
+  }, [queryLoading, queryData]);
 
   const onSubscriptionData = () => {
-    queryResult.refetch();
+    refetch();
   };
 
   useActualBuildingLevelsUpdateSubscription({

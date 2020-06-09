@@ -11,13 +11,13 @@ import {
 export const useActiveVillageId = (): number | undefined => {
   const [activeVillageId, setActiveVillageId] = useState<number>();
 
-  const queryResult = useActiveVillageIdQuery();
+  const { data: queryData, loading: queryLoading } = useActiveVillageIdQuery();
 
   useEffect(() => {
-    if (!queryResult.loading && queryResult.data) {
-      setActiveVillageId(queryResult.data.activeVillageId);
+    if (!queryLoading && queryData) {
+      setActiveVillageId(queryData.activeVillageId);
     }
-  }, [queryResult]);
+  }, [queryData, queryLoading]);
 
   useActiveVillageIdChangedSubscription({
     onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
