@@ -75,7 +75,7 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
   try {
     const page = await getPage();
 
-    const continueButton = await page.$(`[href="${TravianPath.ResourceFieldsOverview}?ok"]`);
+    const continueButton = await page.$(`[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`);
 
     if (continueButton) {
       getAccountContext().logsService.logText('Found a dialog about server progress, continuing...');
@@ -84,9 +84,9 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
         continueButton.click(),
       ]);
-    }
 
-    return { allowContinue: true };
+      return { allowContinue: true };
+    }
   } catch (tryContinueError) {
     console.error(tryContinueError.stack);
     getAccountContext().logsService.logError('Tried to continue the server progress dialog but failed with message...');
