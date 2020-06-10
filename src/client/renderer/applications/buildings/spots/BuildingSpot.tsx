@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/graphqlHooks';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
+import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
 import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
@@ -64,16 +65,27 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     fieldId: building.fieldId,
   });
 
+  const buildingInfo = useBuildingInfo(building.type);
+
+  if (!buildingInfo) {
+    return null;
+  }
+
+  const {
+    maxLevel,
+    name,
+  } = buildingInfo;
+
   const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
     if (building.type > 0) {
-      if (building.level.total === building.level.max) {
+      if (building.level.total === maxLevel) {
         return;
       }
 
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else if (event.shiftKey) {
-        await enqueue(building.level.max);
+        await enqueue(maxLevel);
       } else {
         await enqueue();
       }
@@ -100,13 +112,16 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     <>
       <div
         className={clsx(className, classes.root)}
-        title={building.name}
+        title={name}
       >
         {building.type > 0 && (
-          <BuildingLevelBox level={building.level} />
+          <BuildingLevelBox
+            level={building.level}
+            maxLevel={maxLevel}
+          />
         )}
         <div className={classes.queueButtons}>
-          {(building.type === 0 || building.level.total < building.level.max) && (
+          {(building.type === 0 || building.level.total < maxLevel) && (
             <button
               onClick={onEnqueue}
               type="button"
@@ -145,7 +160,7 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
         <MultiEnqueueDialog
           buildingType={building.type}
           fieldId={building.fieldId}
-          maxLevel={building.level.max}
+          maxLevel={maxLevel}
           onSelect={onSelect}
           totalLevel={building.level.total}
         />

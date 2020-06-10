@@ -6,10 +6,11 @@ import React, {
 } from 'react';
 
 import {
-  GetQueuedBuildingsQuery,
+  OnQueueUpdatedDocument,
+  OnQueueUpdatedSubscription,
+  OnQueueUpdatedSubscriptionVariables,
   useClearQueueMutation,
   useGetQueuedBuildingsQuery,
-  useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { QueuedBuilding } from './building/QueuedBuilding';
@@ -36,26 +37,19 @@ const useStyles = makeStyles({
 const useBuildingQueue = () => {
   const { villageId } = useVillageContext();
 
-  const [buildingQueue, setBuildingQueue] = useState<GetQueuedBuildingsQuery['buildingQueue']>();
-
-  const { data: queryData, loading: queryLoading } = useGetQueuedBuildingsQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetQueuedBuildingsQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setBuildingQueue(queryData.buildingQueue);
-    }
-  }, [queryData, queryLoading]);
+    subscribeToMore<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>({
+      document: OnQueueUpdatedDocument,
+      variables: { villageId },
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ buildingQueue: data.queueUpdated }),
+    });
+  }, [subscribeToMore, villageId]);
 
-  useOnQueueUpdatedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        setBuildingQueue(data.onQueueUpdated);
-      }
-    },
-    variables: { villageId },
-  });
-
-  return buildingQueue;
+  return queryLoading || !queryData
+    ? null
+    : queryData.buildingQueue;
 };
 
 export const BuildingQueue: React.FC<Props> = ({ className }) => {

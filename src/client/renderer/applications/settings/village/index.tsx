@@ -76,10 +76,6 @@ export const VillageSettings: React.FC<Props> = (props) => {
 
   const villages = useVillages();
 
-  if (!villages) {
-    return null;
-  }
-
   const renderSettings = (): JSX.Element => {
     switch (selectedTab) {
       case VillageSettingsTabType.General: return <GeneralVillageSettings />;
@@ -96,7 +92,7 @@ export const VillageSettings: React.FC<Props> = (props) => {
       <div>
         <select
           onChange={e => {
-            const id = +e.currentTarget.value;
+            const id = e.currentTarget.value;
             setSelectedVillageId(id);
           }}
           value={selectedVillageId}

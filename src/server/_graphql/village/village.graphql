@@ -10,7 +10,7 @@ type VillageResources {
 }
 
 type Village {
-    id: Int!
+    id: ID!
     coords: Coords!
     name: String!
     resources: VillageResources!
@@ -24,18 +24,18 @@ type VillageCrannyCapacity {
 }
 
 extend type Query {
-    activeVillageId: Int!
-    village(villageId: Int!): Village
+    activeVillageId: ID!
+    village(villageId: ID!): Village
     villages: [Village!]!
-    crannyCapacity(villageId: Int!): VillageCrannyCapacity!
+    crannyCapacity(villageId: ID!): VillageCrannyCapacity!
 }
 
 extend type Mutation {
-    refreshVillage(villageId: Int!): Boolean!
+    refreshVillage(villageId: ID!): Boolean
 }
 
 extend type Subscription {
-    villageUpdated(villageId: Int!): Village!
+    villageUpdated(villageId: ID!): Village!
     villagesUpdated: [Village!]!
-    activeVillageIdChanged: Int!
+    activeVillageIdChanged: ID!
 }

@@ -7,7 +7,7 @@ const getDefaultExecutionTime = (): Date => new Date(1970, 1, 1);
 export class NextExecutionService {
   private nextTaskExecutionTimes: Map<TaskType, Date> = new Map();
 
-  private nextVillageTaskExecutionTimes: Map<number, Map<TaskType, Date>> = new Map();
+  private nextVillageTaskExecutionTimes: Map<string, Map<TaskType, Date>> = new Map();
 
   private nextTasksExecution: Date | undefined;
 
@@ -27,7 +27,7 @@ export class NextExecutionService {
     return date;
   };
 
-  public resetNextVillageTaskExecution = (villageId: number, task: TaskType): Date => {
+  public resetNextVillageTaskExecution = (villageId: string, task: TaskType): Date => {
     const date = new Date();
 
     this.setForVillage(villageId, task, date);
@@ -60,7 +60,7 @@ export class NextExecutionService {
     return nextExecution;
   };
 
-  public getForVillage = (villageId: number, task: TaskType): Date => {
+  public getForVillage = (villageId: string, task: TaskType): Date => {
     const villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
 
     if (!villageTimes) {
@@ -71,7 +71,7 @@ export class NextExecutionService {
      || getDefaultExecutionTime();
   };
 
-  public setForVillage = (villageId: number, task: TaskType, nextExecution: Date): Date => {
+  public setForVillage = (villageId: string, task: TaskType, nextExecution: Date): Date => {
     let villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
 
     if (!villageTimes) {

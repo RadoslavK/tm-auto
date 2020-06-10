@@ -1,36 +1,23 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect } from 'react';
 
 import {
-  LogEntryFragment,
-  useGetLogsQuery,
-  useOnLogEntryAddedSubscription,
+  OnLogEntryAddedDocument,
+  OnLogEntryAddedSubscription,
+  OnLogEntryAddedSubscriptionVariables,
+  useGetLogEntriesQuery,
 } from '../../../_graphql/graphqlHooks';
 
 export const useLogs = () => {
-  const [entries, setEntries] = useState<LogEntryFragment[]>([]);
-
-  const { data: queryData, loading: queryLoading } = useGetLogsQuery();
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetLogEntriesQuery();
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setEntries([...queryData.logsEntries]);
-    }
-  }, [queryLoading, queryData]);
+    subscribeToMore<OnLogEntryAddedSubscription, OnLogEntryAddedSubscriptionVariables>({
+      document: OnLogEntryAddedDocument,
+      updateQuery: ({ logEntries }, { subscriptionData: { data } }) => ({ logEntries: [data.logEntryAdded].concat(logEntries) }),
+    });
+  }, [subscribeToMore]);
 
-  useOnLogEntryAddedSubscription({
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (subscriptionData.loading || !subscriptionData.data) {
-        return;
-      }
-
-      const entry = subscriptionData.data.onLogEntryAdded;
-
-      setEntries(prevEntries => [entry, ...prevEntries]);
-    },
-  });
-
-  return entries;
+  return queryLoading || !queryData
+    ? []
+    : queryData.logEntries;
 };

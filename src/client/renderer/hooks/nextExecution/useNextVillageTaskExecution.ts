@@ -1,59 +1,76 @@
+import { ApolloCache } from '@apollo/client';
 import {
+  useCallback,
   useEffect,
-  useState,
 } from 'react';
 
 import {
+  DurationInput,
+  NextVillageTaskExecutionDocument,
+  NextVillageTaskExecutionQuery,
+  NextVillageTaskExecutionQueryVariables,
+  OnNextVillageTaskExecutionChangedDocument,
+  OnNextVillageTaskExecutionChangedSubscription,
+  OnNextVillageTaskExecutionChangedSubscriptionVariables,
   TaskType,
-  Timestamp,
-  useNextVillageTaskExecutionChangedSubscription,
   useNextVillageTaskExecutionQuery,
   useResetNextVillageTaskExecutionMutation,
   useSetNextVillageTaskExecutionMutation,
 } from '../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
-export const useNextVillageTaskExecution = (villageId: number, task: TaskType) => {
-  const [nextExecutionIn, setNextExecutionIn] = useState(0);
+export const useNextVillageTaskExecution = (villageId: string, task: TaskType) => {
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
 
-  const updateNextExecution = (timestamp: Timestamp): void => {
-    const difference = getSecondsUntilTimestamp(timestamp);
+  useEffect(() => {
+    subscribeToMore<OnNextVillageTaskExecutionChangedSubscription, OnNextVillageTaskExecutionChangedSubscriptionVariables>({
+      document: OnNextVillageTaskExecutionChangedDocument,
+      variables: { villageId, task },
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ nextVillageTaskExecution: data.nextVillageTaskExecutionChanged }),
+    });
+  }, [subscribeToMore, task, villageId]);
 
-    setNextExecutionIn(difference);
+  const updateCache = (cache: ApolloCache<unknown>, nextVillageTaskExecution: NextVillageTaskExecutionQuery['nextVillageTaskExecution']) => {
+    updateQueryCache<NextVillageTaskExecutionQuery, NextVillageTaskExecutionQueryVariables>({
+      cache,
+      query: NextVillageTaskExecutionDocument,
+      data: { nextVillageTaskExecution },
+      variables: { task, villageId },
+    });
   };
 
-  const { data: queryData, loading: queryLoading } = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
-
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      updateNextExecution(queryData.nextVillageTaskExecution);
-    }
-  }, [queryData, queryLoading]);
-
-  const [setNextVillageTaskExecution, { data: updateData, loading: updateLoading }] = useSetNextVillageTaskExecutionMutation();
-
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      updateNextExecution(updateData.setNextVillageTaskExecution);
-    }
-  }, [updateData, updateLoading]);
-
-  const [resetNextVillageTaskExecution, { data: resetData, loading: resetLoading }] = useResetNextVillageTaskExecutionMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      updateNextExecution(resetData.resetNextVillageTaskExecution);
-    }
-  }, [resetData, resetLoading]);
-
-  useNextVillageTaskExecutionChangedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        updateNextExecution(data.nextVillageTaskExecutionChanged);
+  const [setMutation] = useSetNextVillageTaskExecutionMutation({
+    update: (cache, { data: setData }) => {
+      if (!setData) {
+        return;
       }
+
+      updateCache(cache, setData.setNextVillageTaskExecution);
     },
-    variables: { task, villageId },
   });
+
+  const [resetMutation] = useResetNextVillageTaskExecutionMutation({
+    update: (cache, { data: resetData }) => {
+      if (!resetData) {
+        return;
+      }
+
+      updateCache(cache, resetData.resetNextVillageTaskExecution);
+    },
+  });
+
+  const setNextVillageTaskExecution = useCallback((delay: DurationInput) => {
+    setMutation({ variables: { delay, task, villageId } });
+  }, [setMutation, task, villageId]);
+
+  const resetNextVillageTaskExecution = useCallback(() => {
+    resetMutation({ variables: { task, villageId } });
+  }, [resetMutation, task, villageId]);
+
+  const nextExecutionIn = queryLoading || !queryData
+    ? 0
+    : getSecondsUntilTimestamp(queryData.nextVillageTaskExecution);
 
   return {
     nextExecutionIn,

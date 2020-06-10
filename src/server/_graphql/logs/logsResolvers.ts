@@ -32,11 +32,11 @@ export default <Resolvers>{
   },
 
   Query: {
-    logsEntries: () => getAccountContext().logsService.logEntries(),
+    logEntries: () => getAccountContext().logsService.logEntries(),
   },
 
   Subscription: {
-    onLogEntryAdded: subscribeToEvent(BotEvent.LogEntryAdded, {
+    logEntryAdded: subscribeToEvent(BotEvent.LogEntryAdded, {
       resolve: payload => payload.logEntry,
     }),
   },

@@ -44,7 +44,7 @@ const navigation: readonly NavigationItem[] = [
 ];
 
 type Props = {
-  readonly villageId: number;
+  readonly villageId: string;
 };
 
 export const Village: React.FC<Props> = ({ villageId }) => {
@@ -65,7 +65,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   };
 
   useEffect(() => {
-    if (village === null) {
+    if (village === undefined) {
       history.push('/villages');
     }
   }, [village, history]);

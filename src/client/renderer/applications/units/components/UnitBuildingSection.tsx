@@ -9,11 +9,15 @@ import React, {
 import {
   AutoUnitsBuildingSettings,
   Duration as DurationModel,
+  GetAutoUnitsSettingsDocument,
+  GetAutoUnitsSettingsQuery,
+  GetAutoUnitsSettingsQueryVariables,
   UpdateAutoUnitsBuildingSettingsInput,
   useUpdateAutoUnitsBuildingSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 import { UnitSettings } from './UnitSettings';
@@ -89,6 +93,18 @@ export const UnitBuildingSection: React.FC<Props> = ({
           buildingType,
           villageId,
           settings: state,
+        },
+        update: (cache, { data }) => {
+          if (!data) {
+            return;
+          }
+
+          updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+            cache,
+            query: GetAutoUnitsSettingsDocument,
+            data: { autoUnitsSettings: data.updateAutoUnitsBuildingSettings },
+            variables: { villageId },
+          });
         },
       });
     }

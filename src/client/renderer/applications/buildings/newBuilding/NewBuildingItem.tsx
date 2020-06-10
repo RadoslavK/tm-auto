@@ -2,16 +2,15 @@ import { Dialog } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useState } from 'react';
 
-import { useGetMaxBuildingLevelQuery } from '../../../_graphql/graphqlHooks';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
+import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
 import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
 
 type Props = {
   readonly className?: string;
   readonly fieldId: number;
-  readonly name: string;
   readonly onSelect: () => void;
   readonly type: BuildingType
 };
@@ -34,7 +33,6 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
   const {
     className,
     fieldId,
-    name,
     onSelect,
     type,
   } = props;
@@ -44,13 +42,16 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
 
   const enqueue = useEnqueueBuildingMutation({ buildingType: type, fieldId });
 
-  const maxLevelResult = useGetMaxBuildingLevelQuery({ variables: { buildingType: type } });
+  const buildingInfo = useBuildingInfo(type);
 
-  if (maxLevelResult.loading || !maxLevelResult.data) {
+  if (!buildingInfo) {
     return null;
   }
 
-  const maxLevel = maxLevelResult.data.maxBuildingLevel;
+  const {
+    maxLevel,
+    name,
+  } = buildingInfo;
 
   const onClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>): Promise<void> => {
     if (event.ctrlKey) {

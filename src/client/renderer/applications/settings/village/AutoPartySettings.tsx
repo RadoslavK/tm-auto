@@ -6,48 +6,59 @@ import React, {
 } from 'react';
 
 import {
-  AutoPartySettings as AutoPartySettingsModel,
   CoolDown as CoolDownModel,
+  GetAutoPartySettingsDocument,
+  GetAutoPartySettingsQuery,
+  GetAutoPartySettingsQueryVariables,
   UpdateAutoPartySettingsInput,
   useGetAutoPartySettingsQuery,
   useResetAutoPartySettingsMutation,
   useUpdateAutoPartySettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const useAutoPartySettings = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<AutoPartySettingsModel>();
-
   const { data: queryData, loading: queryLoading } = useGetAutoPartySettingsQuery({ variables: { villageId } });
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.autoPartySettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAutoPartySettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoPartySettingsMutation();
+      updateQueryCache<GetAutoPartySettingsQuery, GetAutoPartySettingsQueryVariables>({
+        cache,
+        query: GetAutoPartySettingsDocument,
+        data: { autoPartySettings: data.updateAutoPartySettings },
+        variables: { villageId },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAutoPartySettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAutoPartySettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoPartySettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAutoPartySettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAutoPartySettingsQuery, GetAutoPartySettingsQueryVariables>({
+        cache,
+        query: GetAutoPartySettingsDocument,
+        data: { autoPartySettings: data.resetAutoPartySettings },
+        variables: { villageId },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.autoPartySettings,
     updateSettings,
     resetSettings,
   };

@@ -5,22 +5,15 @@ import { AutoUnitsLogEntryContent } from './content/autoUnits';
 import { ResourceClaimLogEntryContent } from './content/resourceClaim';
 import { TextLogEntryContent } from './content/text';
 
+// TODO are those classes needed?
 export type LogEntryContent =
   TextLogEntryContent
   | AutoBuildLogEntryContent
   | AutoUnitsLogEntryContent
   | ResourceClaimLogEntryContent;
 
-export class LogEntry {
-  public readonly content: LogEntryContent = new TextLogEntryContent();
-
-  public readonly id: string = '';
-
-  public readonly timestamp: Timestamp = new Timestamp();
-
-  public readonly village: Village | null = null;
-
-  constructor(params: LogEntry) {
-    Object.assign(this, params);
-  }
-}
+export type LogEntry = {
+  readonly content: LogEntryContent;
+  readonly timestamp: Timestamp;
+  readonly village: Village | null;
+};

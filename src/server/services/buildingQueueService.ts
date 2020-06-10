@@ -11,7 +11,7 @@ import { buildingInfoService } from './info/buildingInfoService';
 
 export type EnqueuedBuilding = {
   readonly fieldId: number;
-  readonly targetLevel: number | null;
+  readonly targetLevel?: number;
   readonly type: BuildingType;
 };
 
@@ -49,7 +49,7 @@ export class BuildingQueueService {
 
   private readonly _canMoveBlockToIndexFlags: Map<string, Map<number, boolean>> = new Map<string, Map<number, boolean>>();
 
-  constructor(villageId: number) {
+  constructor(villageId: string) {
     const { id: accountId } = accountService.getCurrentAccount();
     this._village = getAccountContext().villageService.village(villageId);
     this._filePath = dataPathService.villagePath(accountId, villageId).queue;

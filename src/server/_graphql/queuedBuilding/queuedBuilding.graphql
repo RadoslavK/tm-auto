@@ -1,10 +1,8 @@
 type QueuedBuilding {
     level: Int!
-    name: String!
     type: Int!
-    queueId: String!
+    queueId: ID!
     queueIndex: Int!
-    cost: Cost!
     fieldId: Int!
 }
 
@@ -12,7 +10,6 @@ type QueuedBuildingRange {
     id: String!
     buildings: [QueuedBuilding!]!
     type: Int!
-    name: String!
     fieldId: Int!
     cost: Cost!
 }
@@ -23,44 +20,44 @@ type BuildingQueue {
 }
 
 extend type Query {
-    buildingQueue(villageId: Int!): BuildingQueue!
-    canMoveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
-    canMoveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
+    buildingQueue(villageId: ID!): BuildingQueue!
+    canMoveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean!
+    canMoveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean!
 }
 
 input ClearQueueInput {
-    villageId: Int!
+    villageId: ID!
 }
 
 input EnqueueBuildingInput {
     fieldId: Int!
     type: Int!
-    villageId: Int!
+    villageId: ID!
     targetLevel: Int
 }
 
 
 input DequeueBuildingInput {
-    queueId: String!
-    villageId: Int!
+    queueId: ID!
+    villageId: ID!
 }
 
 input DequeueBuildingAtFieldInput {
     deleteAll: Boolean!
     fieldId: Int!
-    villageId: Int!
+    villageId: ID!
 }
 
 extend type Mutation {
-    clearQueue(villageId: Int!): Boolean!
-    dequeueBuilding(input: DequeueBuildingInput!): Boolean!
-    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
-    enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
-    moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
-    moveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
-    moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: String!): Boolean!
+    clearQueue(villageId: ID!): Boolean
+    dequeueBuilding(input: DequeueBuildingInput!): Boolean
+    dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean
+    enqueueBuilding(input: EnqueueBuildingInput!): Boolean
+    moveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean
+    moveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean
+    moveQueuedBuildingAsHighAsPossible(villageId: ID!, queueId: ID!): Boolean
 }
 
 type Subscription {
-    onQueueUpdated(villageId: Int!): BuildingQueue!
+    queueUpdated(villageId: ID!): BuildingQueue!
 }

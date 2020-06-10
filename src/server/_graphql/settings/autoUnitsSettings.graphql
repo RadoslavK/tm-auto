@@ -42,12 +42,12 @@ input UpdateAutoUnitsSettingsInput {
 }
 
 extend type Query {
-    autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+    autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }
 
 extend type Mutation {
-    updateAutoUnitsSettings(villageId: Int!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
-    updateAutoUnitsBuildingSettings(villageId: Int!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsBuildingSettings!
-    updateAutoUnitsUnitSettings(villageId: Int!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsUnitSettings!
-    resetAutoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+    updateAutoUnitsSettings(villageId: ID!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
+    updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
+    updateAutoUnitsUnitSettings(villageId: ID!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsSettings!
+    resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }

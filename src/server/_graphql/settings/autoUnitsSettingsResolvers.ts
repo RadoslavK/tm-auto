@@ -3,7 +3,7 @@ import { mergeDefaults } from '../../../_shared/merge';
 import { getAccountContext } from '../../accountContext';
 import { unitInfoService } from '../../services/info/unitInfoService';
 
-const getService = (villageId: number) => getAccountContext().settingsService.village(villageId).autoUnits;
+const getService = (villageId: string) => getAccountContext().settingsService.village(villageId).autoUnits;
 
 export default <Resolvers> {
   Query: {
@@ -21,7 +21,7 @@ export default <Resolvers> {
       mergeDefaults(buildingSettings, args.settings);
       service.update(settings);
 
-      return buildingSettings;
+      return settings;
     },
 
     updateAutoUnitsUnitSettings: (_, args) => {
@@ -34,7 +34,7 @@ export default <Resolvers> {
       mergeDefaults(unitSettings, args.settings);
       service.update(settings);
 
-      return unitSettings;
+      return settings;
     },
 
     resetAutoUnitsSettings: (_, args) => getService(args.villageId).reset(),

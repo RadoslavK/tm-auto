@@ -42,25 +42,21 @@ const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, nu
     const firstBuilding = range[0];
     const lastBuilding = range[range.length - 1];
 
-    const { costs, name } = buildingInfoService.getBuildingInfo(firstBuilding.type);
+    const { costs } = buildingInfoService.getBuildingInfo(firstBuilding.type);
 
     const rangeResult = range.reduce((reducedResult, building): { readonly cost: CostModel; readonly buildings: QueuedBuilding[] } => {
+      const clientBuildingModel: QueuedBuilding = {
+        ...building,
+        queueIndex: building.index,
+      };
+
       const cost = costs[building.level];
       const mbLevel = mbLevels[building.queueId];
       const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
-
       const actualCost = new CostModel({
         resources: cost.resources,
         buildTime: actualBuildTime,
       });
-
-      const clientBuildingModel: QueuedBuilding = {
-        ...building,
-        queueIndex: building.index,
-        cost: actualCost,
-        name,
-      };
-
       reducedResult.buildings.push(clientBuildingModel);
       reducedResult.cost = reducedResult.cost.add(actualCost);
 
@@ -70,7 +66,6 @@ const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, nu
     const clientRange: QueuedBuildingRange = {
       id: `${firstBuilding.fieldId}_${lastBuilding.level}`,
       type: firstBuilding.type,
-      name,
       cost: rangeResult.cost,
       fieldId: firstBuilding.fieldId,
       buildings: rangeResult.buildings,
@@ -83,7 +78,7 @@ const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, nu
   }, { totalCost: new CostModel(), buildingRanges: [] } as { readonly buildingRanges: QueuedBuildingRange[]; totalCost: CostModel });
 };
 
-const getBuildingQueue = (villageId: number) => {
+const getBuildingQueue = (villageId: string) => {
   const village = getAccountContext().villageService.village(villageId);
   const { queue } = village.buildings;
   const queueService = getAccountContext().buildingQueueService.for(villageId);
@@ -115,8 +110,6 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.clearQueue();
-
-      return true;
     },
 
     dequeueBuilding: (_, args) => {
@@ -127,8 +120,6 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.dequeueBuilding(queueId, true);
-
-      return true;
     },
 
     dequeueBuildingAtField: (_, args) => {
@@ -139,8 +130,6 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.dequeueBuildingAtField(input);
-
-      return true;
     },
 
     enqueueBuilding: async (_, args) => {
@@ -151,20 +140,16 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.enqueueBuilding(enqueuedBuilding);
-
-      return true;
     },
 
     moveQueuedBuildingAsHighAsPossible: (_, args) => {
       const queueManager = getAccountContext().buildingQueueService.for(args.villageId);
       queueManager.moveAsHighAsPossible(args.queueId);
-      return true;
     },
 
     moveQueuedBuildingToIndex: (_, { index, queueId, villageId }) => {
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveBuildingToIndex(queueId, index);
-      return true;
     },
 
     moveQueuedBuildingsBlockToIndex: (_, args) => {
@@ -177,12 +162,11 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveQueuedBuildingsBlockToIndex(topBuildingQueueId, bottomBuildingQueueId, index);
-      return true;
     },
   },
 
   Subscription: {
-    onQueueUpdated: subscribeToEvent(BotEvent.QueuedUpdated, {
+    queueUpdated: subscribeToEvent(BotEvent.QueuedUpdated, {
       filter: (payload, variables) => payload.villageId === variables.villageId,
       resolve: p => getBuildingQueue(p.villageId),
     }),

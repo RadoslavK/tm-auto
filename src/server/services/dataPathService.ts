@@ -45,7 +45,7 @@ export class DataPathService {
     };
   };
 
-  public villagePath = (accountId: string, villageId: number): VillagePath => {
+  public villagePath = (accountId: string, villageId: string): VillagePath => {
     const lPath = this.baseVillagePath(accountId, villageId);
 
     return {
@@ -83,8 +83,8 @@ export class DataPathService {
     };
   };
 
-  public baseVillagePath = (accountId: string, villageId: number): string =>
-    path.join(this.baseAccountPath(accountId), 'villages', villageId.toString());
+  public baseVillagePath = (accountId: string, villageId: string): string =>
+    path.join(this.baseAccountPath(accountId), 'villages', villageId);
 
   public baseAccountPath = (id: string): string =>
     path.join(this.basePath(), 'accounts', id);

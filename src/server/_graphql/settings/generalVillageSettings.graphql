@@ -7,10 +7,10 @@ input UpdateGeneralVillageSettingsInput {
 }
 
 extend type Query {
-    generalVillageSettings(villageId: Int!): GeneralVillageSettings!
+    generalVillageSettings(villageId: ID!): GeneralVillageSettings!
 }
 
 extend type Mutation {
-    updateGeneralVillageSettings(villageId: Int!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
-    resetGeneralVillageSettings(villageId: Int!): GeneralVillageSettings!
+    updateGeneralVillageSettings(villageId: ID!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
+    resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
 }

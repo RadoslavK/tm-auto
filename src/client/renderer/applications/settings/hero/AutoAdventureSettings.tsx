@@ -7,9 +7,11 @@ import React, {
 
 import {
   AdventureCriteria,
-  AutoAdventureSettings as AutoAdventureSettingsModel,
   CoolDown as CoolDownModel,
   Duration as DurationModel,
+  GetAutoAdventureSettingsDocument,
+  GetAutoAdventureSettingsQuery,
+  GetAutoAdventureSettingsQueryVariables,
   TaskType,
   UpdateAutoAdventureSettingsInput,
   useGetAutoAdventureSettingsQuery,
@@ -20,6 +22,7 @@ import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
 import { getAllEnumValues } from '../../../../../_shared/enumUtils';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useVillages } from '../../../hooks/villages/useVillages';
 
 const getCriteriaString = (criteria: AdventureCriteria): string => {
@@ -42,34 +45,40 @@ const getCriteriaString = (criteria: AdventureCriteria): string => {
 };
 
 const useAutoAdventureSettings = () => {
-  const [settings, setSettings] = useState<AutoAdventureSettingsModel>();
-
   const { data: queryData, loading: queryLoading } = useGetAutoAdventureSettingsQuery();
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.autoAdventureSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAutoAdventureSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoAdventureSettingsMutation();
+      updateQueryCache<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>({
+        cache,
+        query: GetAutoAdventureSettingsDocument,
+        data: { autoAdventureSettings: data.updateAutoAdventureSettings },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAutoAdventureSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAutoAdventureSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoAdventureSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAutoAdventureSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>({
+        cache,
+        query: GetAutoAdventureSettingsDocument,
+        data: { autoAdventureSettings: data.resetAutoAdventureSettings },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.autoAdventureSettings,
     updateSettings,
     resetSettings,
   };
@@ -113,7 +122,7 @@ export const AutoAdventureSettings: React.FC = () => {
     setHasChanges(true);
   }, []);
 
-  if (!villages || !state) {
+  if (!state) {
     return null;
   }
 

@@ -19,7 +19,8 @@ const fragmentsPath = './src/client/renderer/_graphql/fragmentTypes.json';
 const schemaPath = './src/server/_graphql/schema.graphql';
 
 const commonConfig = {
-  maybeValue: 'T | null',
+  maybeValue: 'T | undefined',
+  preResolveTypes: true,
 };
 
 const generateSchemaFile = async (): Promise<void> => {
@@ -47,7 +48,6 @@ const generateResolverTypes = async (): Promise<void> => {
       BuildingInProgress: '../_models/buildings/inProgress/buildingInProgress#BuildingInProgress',
       BuildingSpot: '../_models/buildings/spots/buildingSpot#BuildingSpot',
       HeroInformation: '../_models/hero/hero#Hero',
-      LogEntry: '../_models/logs/logEntry#LogEntry',
       Resources: '../_models/misc/resources#Resources',
       TextLogEntryContent: '../_models/logs/content/text#TextLogEntryContent',
     },
@@ -125,6 +125,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
           { 'typescript-operations': config },
           { 'typescript-react-apollo': config },
         ],
+        config: commonConfig,
       },
     },
   }, true);

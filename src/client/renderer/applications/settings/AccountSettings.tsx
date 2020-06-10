@@ -6,44 +6,53 @@ import React, {
 } from 'react';
 
 import {
-  AccountSettings as AccountSettingsModel,
   CoolDown as CoolDownModel,
+  GetAccountSettingsDocument,
+  GetAccountSettingsQuery,
+  GetAccountSettingsQueryVariables,
   UpdateAccountSettingsInput,
   useGetAccountSettingsQuery,
   useResetAccountSettingsMutation,
   useUpdateAccountSettingsMutation,
 } from '../../_graphql/graphqlHooks';
 import { CoolDown } from '../../_shared/components/controls/CoolDown';
+import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useAccountSettings = () => {
-  const [settings, setSettings] = useState<AccountSettingsModel>();
-
   const { data: queryData, loading: queryLoading } = useGetAccountSettingsQuery();
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.accountSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAccountSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAccountSettingsMutation();
+      updateQueryCache<GetAccountSettingsQuery, GetAccountSettingsQueryVariables>({
+        query: GetAccountSettingsDocument,
+        cache,
+        data: { accountSettings: data.updateAccountSettings },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAccountSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAccountSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAccountSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAccountSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAccountSettingsQuery, GetAccountSettingsQueryVariables>({
+        query: GetAccountSettingsDocument,
+        cache,
+        data: { accountSettings: data.resetAccountSettings },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.accountSettings,
     updateSettings,
     resetSettings,
   };

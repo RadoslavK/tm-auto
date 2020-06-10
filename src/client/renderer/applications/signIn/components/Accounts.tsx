@@ -63,7 +63,7 @@ const BootstrapInput = withStyles(theme => ({
 type Props = {
   readonly disabled?: boolean;
   readonly onAccountChanged: (id: string) => void;
-  readonly selectedId: string | undefined;
+  readonly selectedId: string | null | undefined;
 };
 
 export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selectedId }) => {
@@ -100,7 +100,7 @@ export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selected
       <NativeSelect
         input={<BootstrapInput />}
         onChange={onOptionChanged}
-        value={selectedId}
+        value={selectedId || ''}
       >
         {queryData.accounts.map((account) => (
           <option

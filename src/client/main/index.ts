@@ -3,12 +3,12 @@ import {
   fork,
   ForkOptions,
 } from 'child_process';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   app,
   BrowserWindow,
   ipcMain,
   session,
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } from 'electron';
 import fs from 'fs';
 import path from 'path';

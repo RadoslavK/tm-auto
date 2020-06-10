@@ -1,7 +1,6 @@
 #import "./misc.graphql"
 
 fragment LogEntry on LogEntry {
-    id
     timestamp {
         ...Timestamp
     }
@@ -38,14 +37,14 @@ fragment LogEntry on LogEntry {
     }
 }
 
-query GetLogs {
-    logsEntries {
+query GetLogEntries {
+    logEntries {
         ...LogEntry
     }
 }
 
 subscription OnLogEntryAdded {
-    onLogEntryAdded {
+    logEntryAdded {
         ...LogEntry
     }
 }

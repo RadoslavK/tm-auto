@@ -6,47 +6,59 @@ import React, {
 } from 'react';
 
 import {
-  AutoUnitsSettings as AutoUnitsSettingsModel,
   CoolDown as CoolDownModel,
+  GetAutoUnitsSettingsDocument,
+  GetAutoUnitsSettingsQuery,
+  GetAutoUnitsSettingsQueryVariables,
   UpdateAutoUnitsSettingsInput,
   useGetAutoUnitsSettingsQuery,
   useResetAutoUnitsSettingsMutation,
   useUpdateAutoUnitsSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const useAutoUnitsSettings = () => {
+export const useAutoUnitsSettings = () => {
   const { villageId } = useVillageSettingsContext();
-  const [settings, setSettings] = useState<AutoUnitsSettingsModel>();
 
   const { data: queryData, loading: queryLoading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.autoUnitsSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAutoUnitsSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoUnitsSettingsMutation();
+      updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+        query: GetAutoUnitsSettingsDocument,
+        cache,
+        data: { autoUnitsSettings: data.updateAutoUnitsSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAutoUnitsSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAutoUnitsSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoUnitsSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAutoUnitsSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+        query: GetAutoUnitsSettingsDocument,
+        cache,
+        data: { autoUnitsSettings: data.resetAutoUnitsSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.autoUnitsSettings,
     updateSettings,
     resetSettings,
   };

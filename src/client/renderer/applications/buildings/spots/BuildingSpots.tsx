@@ -1,15 +1,11 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React from 'react';
 
 import {
   BuildingSpot as BuildingSpotModel,
-  GetBuildingSpotsQuery,
-  useActualBuildingLevelsUpdateSubscription,
-  useBuildingsInProgressUpdatedSubscription,
   useGetBuildingSpotsQuery,
+  useOnActualBuildingLevelsUpdatedSubscription,
+  useOnBuildingsInProgressUpdatedSubscription,
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
@@ -37,23 +33,15 @@ const mapBuilding = (building: BuildingSpotModel, index: number): JSX.Element =>
 const useBuildingSpots = () => {
   const { villageId } = useVillageContext();
 
-  const [buildingSpots, setBuildingSpots] = useState<GetBuildingSpotsQuery['buildingSpots']>();
-
   const { data: queryData, loading: queryLoading, refetch } = useGetBuildingSpotsQuery({ variables: { villageId } });
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setBuildingSpots(queryData.buildingSpots);
-    }
-  }, [queryData, queryLoading]);
-
-  useActualBuildingLevelsUpdateSubscription({
+  useOnActualBuildingLevelsUpdatedSubscription({
     onSubscriptionData: () => {
       refetch();
     },
     variables: { villageId },
   });
-  useBuildingsInProgressUpdatedSubscription({
+  useOnBuildingsInProgressUpdatedSubscription({
     onSubscriptionData: () => {
       refetch();
     },
@@ -66,7 +54,9 @@ const useBuildingSpots = () => {
     variables: { villageId },
   });
 
-  return buildingSpots;
+  return queryLoading || !queryData
+    ? null
+    : queryData.buildingSpots;
 };
 
 export const BuildingSpots: React.FC<Props> = (props) => {

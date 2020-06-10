@@ -1,32 +1,23 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect } from 'react';
 
 import {
-  GetVillagesQuery,
+  OnVillagesUpdatedDocument,
+  OnVillagesUpdatedSubscription,
+  OnVillagesUpdatedSubscriptionVariables,
   useGetVillagesQuery,
-  useVillagesUpdatedSubscription,
 } from '../../_graphql/graphqlHooks';
 
 export const useVillages = () => {
-  const [villages, setVillages] = useState<GetVillagesQuery['villages']>();
-
-  const { data: queryData, loading: queryLoading } = useGetVillagesQuery();
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetVillagesQuery();
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setVillages(queryData.villages);
-    }
-  }, [queryData, queryLoading]);
+    subscribeToMore<OnVillagesUpdatedSubscription, OnVillagesUpdatedSubscriptionVariables>({
+      document: OnVillagesUpdatedDocument,
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ villages: data.villagesUpdated }),
+    });
+  }, [subscribeToMore]);
 
-  useVillagesUpdatedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        setVillages(data.villagesUpdated);
-      }
-    },
-  });
-
-  return villages;
+  return queryLoading || !queryData
+    ? []
+    : queryData.villages;
 };

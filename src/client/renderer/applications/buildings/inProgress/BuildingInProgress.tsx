@@ -5,6 +5,7 @@ import {
   BuildingInProgress as BuildingInProgressModel,
   Timestamp,
 } from '../../../_graphql/graphqlHooks';
+import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';
@@ -53,21 +54,19 @@ export const BuildingInProgress: React.FC<Props> = (props) => {
 
   const classes = useStyles(props);
   const timer = useCountDown(getInitialTimer(building.finishedAt));
-
   const time = formatTimeFromSeconds(timer);
+  const buildingInfo = useBuildingInfo(building.type);
 
   return (
     <div className={classes.root}>
       <div className={classes.imageWithFieldId}>
         <div className={classes.image} />
         <div>
-          [
-          {building.fieldId}
-          ]
+          [{building.fieldId}]
         </div>
       </div>
       <div className={classes.info}>
-        <div>{building.name}</div>
+        <div>{buildingInfo?.name}</div>
         <div>
           Level
           {building.level}

@@ -8,9 +8,9 @@ export const Logs: React.FC = () => {
 
   return (
     <div>
-      {logEntries.map((logEntry) => (
+      {logEntries.map((logEntry, index) => (
         <LogEntry
-          key={logEntry.id}
+          key={index}
           logEntry={logEntry}
         />
       ))}

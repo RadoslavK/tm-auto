@@ -7,9 +7,13 @@ import React, {
 
 import {
   AutoUnitsUnitSettings,
+  GetAutoUnitsSettingsDocument,
+  GetAutoUnitsSettingsQuery,
+  GetAutoUnitsSettingsQueryVariables,
   useGetUnitInfoQuery,
   useUpdateAutoUnitsUnitSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useVillageContext } from '../../villages/context/villageContext';
 
@@ -60,7 +64,10 @@ export const UnitSettings: React.FC<Props> = (props) => {
 
   const { villageId } = useVillageContext();
 
-  const { data, loading } = useGetUnitInfoQuery({ variables: { index: settings.index } });
+  const { data, loading } = useGetUnitInfoQuery({
+    variables: { index: settings.index },
+    fetchPolicy: 'cache-first',
+  });
 
   const [state, setState] = useState(settings);
   const [hasChanges, setHasChanges] = useState(false);
@@ -86,6 +93,18 @@ export const UnitSettings: React.FC<Props> = (props) => {
         variables: {
           villageId,
           settings: state,
+        },
+        update: (cache, { data: updateData }) => {
+          if (!updateData) {
+            return;
+          }
+
+          updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+            cache,
+            query: GetAutoUnitsSettingsDocument,
+            data: { autoUnitsSettings: updateData.updateAutoUnitsUnitSettings },
+            variables: { villageId },
+          });
         },
       });
     }

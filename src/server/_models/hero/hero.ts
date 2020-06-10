@@ -10,7 +10,7 @@ export class Hero {
 
   public state: HeroState = HeroState.Unknown;
 
-  public villageId: number | null = null;
+  public villageId: string | null = null;
 
   public resources: Resources = new Resources();
 

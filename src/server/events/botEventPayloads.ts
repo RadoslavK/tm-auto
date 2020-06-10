@@ -1,5 +1,6 @@
 import { LogEntry } from '../_models/logs/logEntry';
 import { Village } from '../_models/village/village';
+import { BotState } from '../../_shared/types/botState';
 import { TaskType } from '../../_shared/types/taskType';
 import { BotEvent } from './botEvent';
 
@@ -8,16 +9,20 @@ export type BotEventPayloads = {
     readonly isActive: boolean;
   }
 
+  [BotEvent.BotRunningChanged]: {
+    readonly state: BotState;
+  }
+
   [BotEvent.ActualBuildingLevelsUpdated]: {
-    readonly villageId: number;
+    readonly villageId: string;
   },
 
   [BotEvent.QueuedUpdated]: {
-    readonly villageId: number
+    readonly villageId: string
   },
 
   [BotEvent.BuildingsInProgressUpdated]: {
-    readonly villageId: number;
+    readonly villageId: string;
   }
 
   [BotEvent.LogEntryAdded]: {
@@ -25,7 +30,7 @@ export type BotEventPayloads = {
   },
 
   [BotEvent.ActiveVillageIdChanged]: {
-    readonly villageId: number;
+    readonly villageId: string;
   }
 
   [BotEvent.NextTasksExecutionChanged]: {
@@ -40,7 +45,7 @@ export type BotEventPayloads = {
   [BotEvent.NextVillageTaskExecutionChanged]: {
     readonly nextExecution: Date;
     readonly task: TaskType;
-    readonly villageId: number;
+    readonly villageId: string;
   },
 
   [BotEvent.VillageUpdated]: {

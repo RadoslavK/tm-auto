@@ -21,6 +21,20 @@ class AccountsData {
   }
 }
 
+const getBaseServerUrl = (server: string, safe = false): string => {
+  const correctedServerMatch = /(.*travian\.[^/]*)/.exec(server);
+
+  if (!correctedServerMatch) {
+    if (safe) {
+      throw new Error(`Invalid server url: ${server}`);
+    } else {
+      return server;
+    }
+  }
+
+  return correctedServerMatch[1];
+};
+
 class AccountService {
   private accountsData: AccountsData | null = null;
 
@@ -48,37 +62,27 @@ class AccountService {
     return this.accountsData.accounts;
   };
 
-  public createAccount = async (account: Omit<UserAccount, 'id'>): Promise<UserAccount> => {
+  public createAccount = (account: Omit<UserAccount, 'id'>): UserAccount => {
     const id = generateId();
-
-    const correctedServerMatch = /(.*travian\.[^/]*)/.exec(account.server);
-
-    if (!correctedServerMatch) {
-      throw new Error(`Invalid server url: ${account.server}`);
-    }
 
     const newAccount: UserAccount = {
       ...account,
       id,
-      server: correctedServerMatch[1],
+      server: getBaseServerUrl(account.server),
     };
 
     this.getAccountsData().accounts.push(newAccount);
-    await this.saveAccounts();
+    this.saveAccounts();
 
     return newAccount;
   };
 
-  public accountExists = (account: Omit<UserAccount, 'id'> & { readonly id?: string }): boolean => {
-    if ('id' in account) {
-      const accountId = account.id;
-      return this.getAccounts().some(acc => acc.id !== accountId && acc.server === account.server && acc.username === account.username);
-    }
+  public isAccountTaken = (account: Omit<UserAccount, 'id'>): boolean =>
+    this.getAccounts().some(acc =>
+      acc.server === getBaseServerUrl(account.server, false)
+      && acc.username === account.username);
 
-    return this.getAccounts().some(acc => acc.server === account.server && acc.username === account.username);
-  };
-
-  public deleteAccount = async (id: string): Promise<void> => {
+  public deleteAccount = (id: string): UserAccount => {
     const accountIndex = this.getAccountsData().accounts.findIndex(acc => acc.id === id);
 
     if (accountIndex === -1) {
@@ -86,7 +90,7 @@ class AccountService {
     }
 
     const accountPath = dataPathService.baseAccountPath(id);
-    await fileService.delete(accountPath);
+    fileService.delete(accountPath);
 
     const accountsData = this.getAccountsData();
 
@@ -94,15 +98,29 @@ class AccountService {
       accountsData.lastSignedAccountId = null;
     }
 
-    accountsData.accounts.splice(accountIndex, 1);
+    const removedAccount = accountsData.accounts.splice(accountIndex, 1);
+
     this.saveAccounts();
+
+    return removedAccount[0];
   };
 
-  public updateAccount = async (account: UserAccount): Promise<void> => {
+  public updateAccount = (account: UserAccount): UserAccount => {
     const accountsData = this.getAccountsData();
     const accountIndex = accountsData.accounts.findIndex(acc => acc.id === account.id);
-    accountsData.accounts[accountIndex] = account;
-    return this.saveAccounts();
+
+    if (accountIndex === -1) {
+      throw new Error(`Account with id: ${account.id} does not exist`);
+    }
+
+    accountsData.accounts[accountIndex] = {
+      ...account,
+      server: getBaseServerUrl(account.server),
+    };
+
+    this.saveAccounts();
+
+    return account;
   };
 
   public getAccount = (accountId: string): UserAccount | null => {
@@ -121,7 +139,7 @@ class AccountService {
     return account;
   };
 
-  public lastSignedAccountId = (): string | null => this.getAccountsData().lastSignedAccountId;
+  public lastSignedAccountId = () => this.getAccountsData().lastSignedAccountId;
 
   private getAccountsData = (): AccountsData => {
     if (!this.accountsData) {

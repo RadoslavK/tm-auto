@@ -44,22 +44,17 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
       const link = ApolloLink.from([errorLink, ipcLink]);
 
       const client = new ApolloClient({
-        cache: new InMemoryCache({ possibleTypes }),
-        connectToDevTools: true,
         defaultOptions: {
-          mutate: {
-            errorPolicy: 'none',
-            fetchPolicy: 'no-cache',
-          },
-          query: {
-            errorPolicy: 'none',
-            fetchPolicy: 'no-cache',
-          },
           watchQuery: {
-            errorPolicy: 'none',
-            fetchPolicy: 'no-cache',
+            fetchPolicy: 'cache-and-network',
           },
         },
+        cache: new InMemoryCache({
+          possibleTypes,
+          typePolicies: {
+            QueuedBuildingRange: { keyFields: false },
+          },
+        }),
         link,
       });
 

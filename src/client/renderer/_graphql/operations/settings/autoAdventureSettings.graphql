@@ -1,0 +1,34 @@
+#import "./misc.graphql"
+
+fragment AutoAdventureSettings on AutoAdventureSettings {
+    allow
+    coolDown {
+        ...CoolDown
+    }
+    adventureCriteria
+    hardMinHealth
+    normalMinHealth
+    maxTravelTime {
+        ...Duration
+    }
+    preferHard
+    preferredVillageId
+}
+
+query GetAutoAdventureSettings {
+    autoAdventureSettings {
+        ...AutoAdventureSettings
+    }
+}
+
+mutation UpdateAutoAdventureSettings($settings: UpdateAutoAdventureSettingsInput!) {
+    updateAutoAdventureSettings(settings: $settings) {
+        ...AutoAdventureSettings
+    }
+}
+
+mutation ResetAutoAdventureSettings {
+    resetAutoAdventureSettings {
+        ...AutoAdventureSettings
+    }
+}

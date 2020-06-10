@@ -14,7 +14,7 @@ mutation StopBot {
     stopBot
 }
 
-mutation SignIn($accountId: String!) {
+mutation SignIn($accountId: ID!) {
     signIn(accountId: $accountId)
 }
 
@@ -23,7 +23,7 @@ mutation SignOut {
 }
 
 subscription OnBotRunningChanged {
-    onBotRunningChanged
+    botStateChanged
 }
 
 subscription OnBotActivityChanged {

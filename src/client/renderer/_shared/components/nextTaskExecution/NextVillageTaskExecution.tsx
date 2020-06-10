@@ -30,12 +30,8 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
   const closeForm = () => setIsFormShown(false);
 
   const onSubmit = (delay: Duration): void => {
-    setNextVillageTaskExecution({ variables: { delay, task, villageId } });
+    setNextVillageTaskExecution(delay);
     closeForm();
-  };
-
-  const onReset = (): void => {
-    resetNextVillageTaskExecution({ variables: { task, villageId } });
   };
 
   return (
@@ -47,7 +43,7 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
         <button onClick={showForm}>
           Change
         </button>
-        <button onClick={onReset}>
+        <button onClick={resetNextVillageTaskExecution}>
           Reset
         </button>
       </div>

@@ -8,46 +8,58 @@ import React, {
 import {
   AutoBuildSettings as AutoBuildSettingsModel,
   CoolDown as CoolDownModel,
+  GetAutoBuildSettingsDocument,
+  GetAutoBuildSettingsQuery,
+  GetAutoBuildSettingsQueryVariables,
   UpdateAutoBuildSettingsInput,
   useGetAutoBuildSettingsQuery,
   useResetAutoBuildSettingsMutation,
   useUpdateAutoBuildSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const useAutoBuildSettings = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<AutoBuildSettingsModel>();
-
   const { data: queryData, loading: queryLoading } = useGetAutoBuildSettingsQuery({ variables: { villageId } });
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.autoBuildSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAutoBuildSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoBuildSettingsMutation();
+      updateQueryCache<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>({
+        cache,
+        query: GetAutoBuildSettingsDocument,
+        data: { autoBuildSettings: data.updateAutoBuildSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAutoBuildSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAutoBuildSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoBuildSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAutoBuildSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>({
+        cache,
+        query: GetAutoBuildSettingsDocument,
+        data: { autoBuildSettings: data.resetAutoBuildSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.autoBuildSettings,
     updateSettings,
     resetSettings,
   };

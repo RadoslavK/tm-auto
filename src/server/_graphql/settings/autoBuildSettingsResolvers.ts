@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
 
-const getService = (villageId: number) => getAccountContext().settingsService.village(villageId).autoBuild;
+const getService = (villageId: string) => getAccountContext().settingsService.village(villageId).autoBuild;
 
 export default <Resolvers> {
   Query: {

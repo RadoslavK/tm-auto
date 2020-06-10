@@ -29,12 +29,8 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   const closeForm = () => setIsFormShown(false);
 
   const submitForm = (delay: Duration): void => {
-    setNextTaskExecution({ variables: { delay, task } });
+    setNextTaskExecution(delay);
     closeForm();
-  };
-
-  const resetTimer = (): void => {
-    resetNextTaskExecution({ variables: { task } });
   };
 
   return (
@@ -46,7 +42,7 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
         <button onClick={showForm}>
           Change
         </button>
-        <button onClick={resetTimer}>
+        <button onClick={resetNextTaskExecution}>
           Reset
         </button>
       </div>

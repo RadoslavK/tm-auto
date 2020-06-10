@@ -27,15 +27,15 @@ export const getWithMaximumSafe = <T>(values: readonly T[], getMaximum: (value: 
 export const getMaximumSafe = (values: readonly number[]): number =>
   getWithMaximumSafe(values, value => value);
 
-export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) => number): T | null => {
+export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) => number): T | undefined => {
   if (!values.length) {
-    return null;
+    return;
   }
 
   return getWithMaximumInternal(values, getMaximum);
 };
 
-export const getMaximum = (values: readonly number[]): number | null =>
+export const getMaximum = (values: readonly number[]): number | undefined =>
   getWithMaximum(values, value => value);
 
 const getWithMinimumInternal = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {

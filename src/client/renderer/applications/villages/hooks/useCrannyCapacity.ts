@@ -1,13 +1,7 @@
 import {
-  useEffect,
-  useState,
-} from 'react';
-
-import {
-  CrannyCapacityQuery,
-  useActualBuildingLevelsUpdateSubscription,
-  useBuildingsInProgressUpdatedSubscription,
-  useCrannyCapacityQuery,
+  useGetCrannyCapacityQuery,
+  useOnActualBuildingLevelsUpdatedSubscription,
+  useOnBuildingsInProgressUpdatedSubscription,
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../context/villageContext';
@@ -15,26 +9,18 @@ import { useVillageContext } from '../context/villageContext';
 export const useCrannyCapacity = () => {
   const { villageId } = useVillageContext();
 
-  const [capacity, setCapacity] = useState<CrannyCapacityQuery['crannyCapacity']>();
-
-  const { data: queryData, loading: queryLoading, refetch } = useCrannyCapacityQuery({ variables: { villageId } });
-
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setCapacity(queryData.crannyCapacity);
-    }
-  }, [queryLoading, queryData]);
+  const { data: queryData, loading: queryLoading, refetch } = useGetCrannyCapacityQuery({ variables: { villageId } });
 
   const onSubscriptionData = () => {
     refetch();
   };
 
-  useActualBuildingLevelsUpdateSubscription({
+  useOnActualBuildingLevelsUpdatedSubscription({
     onSubscriptionData,
     variables: { villageId },
   });
 
-  useBuildingsInProgressUpdatedSubscription({
+  useOnBuildingsInProgressUpdatedSubscription({
     onSubscriptionData,
     variables: { villageId },
   });
@@ -44,5 +30,7 @@ export const useCrannyCapacity = () => {
     variables: { villageId },
   });
 
-  return capacity;
+  return queryLoading || !queryData
+    ? null
+    : queryData.crannyCapacity;
 };

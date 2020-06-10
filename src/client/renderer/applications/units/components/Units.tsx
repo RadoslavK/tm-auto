@@ -1,13 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import {
-  TaskType,
-  useGetAutoUnitsSettingsQuery,
-} from '../../../_graphql/graphqlHooks';
+import { TaskType } from '../../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useAutoUnitsSettings } from '../../settings/village/AutoUnitsSettings';
 import { UnitBuildingSection } from './UnitBuildingSection';
 
 const useStyles = makeStyles({
@@ -22,14 +19,12 @@ const useStyles = makeStyles({
 
 export const Units: React.FC = () => {
   const classes = useStyles();
-  const { villageId } = useVillageContext();
-  const { data, loading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
-  if (loading || !data) {
+  const { settings } = useAutoUnitsSettings();
+
+  if (!settings) {
     return null;
   }
-
-  const settings = data.autoUnitsSettings;
 
   return (
     <div>

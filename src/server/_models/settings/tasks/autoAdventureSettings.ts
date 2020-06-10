@@ -22,7 +22,7 @@ export class AutoAdventureSettings {
 
   public readonly preferHard: boolean = false;
 
-  public readonly preferredVillageId: number | null = null;
+  public readonly preferredVillageId: string | null = null;
 
   constructor(params: PartialFields<AutoAdventureSettings> = {}) {
     mergeDefaults(this, params);

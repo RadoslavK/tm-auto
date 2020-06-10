@@ -13,7 +13,7 @@ import { buildingInfoService } from './info/buildingInfoService';
 export class AvailableBuildingTypesService {
   private readonly _village: Village;
 
-  constructor(villageId: number) {
+  constructor(villageId: string) {
     this._village = getAccountContext().villageService.village(villageId);
   }
 

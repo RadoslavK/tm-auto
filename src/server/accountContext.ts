@@ -8,7 +8,7 @@ import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService';
 
 export class AccountContext {
-  private _buildingQueueServices: Map<number, BuildingQueueService> = new Map<number, BuildingQueueService>();
+  private _buildingQueueServices: Map<string, BuildingQueueService> = new Map<string, BuildingQueueService>();
 
   public villageService: VillageService;
 
@@ -17,7 +17,7 @@ export class AccountContext {
   public logsService: LogsService = new LogsService();
 
   public buildingQueueService = {
-    for: (villageId: number): BuildingQueueService => {
+    for: (villageId: string): BuildingQueueService => {
       let service = this._buildingQueueServices.get(villageId);
 
       if (!service) {
@@ -43,24 +43,24 @@ export class AccountContext {
   }
 }
 
-let _accountContext: AccountContext | null = null;
+let accountContextField: AccountContext | null = null;
 
 export const getAccountContext = (): AccountContext => {
-  if (!_accountContext) {
+  if (!accountContextField) {
     throw new Error('Account context has not been initialized');
   }
 
-  return _accountContext;
+  return accountContextField;
 };
 
 export const setAccountContext = (accountId: string) => {
-  if (_accountContext) {
+  if (accountContextField) {
     throw new Error('Didnt you want to reset account countext first?');
   }
 
-  _accountContext = new AccountContext(accountId);
+  accountContextField = new AccountContext(accountId);
 };
 
 export const resetAccountContext = () => {
-  _accountContext = null;
+  accountContextField = null;
 };

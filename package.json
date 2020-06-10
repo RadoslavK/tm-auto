@@ -20,7 +20,7 @@
     "build-renderer": "set NODE_ENV=production&& webpack --config webpack.renderer.config.js",
     "build": "yarn build-main&& yarn build-renderer&& yarn build-server",
     "release": "electron-builder --dir",
-    "start-m": "set NODE_ENV=development&& webpack --config webpack.server.config.js&& webpack --config webpack.main.config.js && electron . --remote-debugging-port=9222 --inspect",
+    "start-m": "set NODE_ENV=development&& webpack --config webpack.server.config.js&& webpack --config webpack.main.config.js && electron .webpack/main --remote-debugging-port=9222 --inspect",
     "start-r": "set NODE_ENV=development&& node hot-reload.server.js",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -41,8 +41,11 @@
     ],
     "nodeVersion": "current"
   },
+  "resolutions": {
+    "@apollo/link-error/@apollo/client": "3.0.0-rc.4"
+  },
   "dependencies": {
-    "@apollo/client": "^3.0.0-rc.2",
+    "@apollo/client": "^3.0.0-rc.4",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@material-ui/core": "^4.10.1",
     "@material-ui/icons": "^4.9.1",

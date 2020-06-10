@@ -1,0 +1,22 @@
+fragment AutoMentorSettings on AutoMentorSettings {
+    acceptDailyRewards
+    acceptTaskRewards
+}
+
+query GetAutoMentorSettings {
+    autoMentorSettings {
+        ...AutoMentorSettings
+    }
+}
+
+mutation UpdateAutoMentorSettings($settings: UpdateAutoMentorSettingsInput!) {
+    updateAutoMentorSettings(settings: $settings) {
+        ...AutoMentorSettings
+    }
+}
+
+mutation ResetAutoMentorSettings {
+    resetAutoMentorSettings {
+        ...AutoMentorSettings
+    }
+}

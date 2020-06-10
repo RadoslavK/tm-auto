@@ -1,20 +1,24 @@
+import { useEffect } from 'react';
 
 import {
-  BotState,
+  OnBotRunningChangedDocument,
+  OnBotRunningChangedSubscription,
+  OnBotRunningChangedSubscriptionVariables,
   useGetBotStateQuery,
-  useOnBotRunningChangedSubscription,
 } from '../_graphql/graphqlHooks';
+import { BotState } from '../../../_shared/types/botState';
 
 export const useBotState = (): BotState | null => {
-  const { data, loading, refetch } = useGetBotStateQuery();
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetBotStateQuery();
 
-  useOnBotRunningChangedSubscription({
-    onSubscriptionData: () => {
-      refetch();
-    },
-  });
+  useEffect(() => {
+    subscribeToMore<OnBotRunningChangedSubscription, OnBotRunningChangedSubscriptionVariables>({
+      document: OnBotRunningChangedDocument,
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ botState: data.botStateChanged }),
+    });
+  }, [subscribeToMore]);
 
-  return loading || !data
+  return queryLoading || !queryData
     ? null
-    : data.botState;
+    : queryData.botState;
 };

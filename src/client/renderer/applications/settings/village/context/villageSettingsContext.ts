@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 
 type Context = {
-  readonly villageId: number;
+  readonly villageId: string;
 };
 
-export const VillageSettingsContext = React.createContext<Context>({ villageId: 0 });
+export const VillageSettingsContext = React.createContext<Context>({ villageId: '' });
 
 export const useVillageSettingsContext = () => useContext<Context>(VillageSettingsContext);

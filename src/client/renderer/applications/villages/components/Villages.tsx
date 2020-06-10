@@ -33,7 +33,7 @@ export const Villages: React.FC = () => {
   const villages = useVillages();
   const activeVillageId = useActiveVillageId();
 
-  if (!villages || activeVillageId === undefined) {
+  if (activeVillageId === null) {
     return null;
   }
 
@@ -43,7 +43,7 @@ export const Villages: React.FC = () => {
         <Route
           path={`${match.path}/:selectedVillageId`}
           render={(props: RouteComponentProps<{ readonly selectedVillageId: string; }>) => {
-            const selectedVillageId = +props.match.params.selectedVillageId;
+            const { selectedVillageId } = props.match.params;
 
             return (
               <>
@@ -63,7 +63,7 @@ export const Villages: React.FC = () => {
       <Switch>
         <Route
           path={`${match.path}/:id`}
-          render={(props: RouteComponentProps<VillageRouteParams>) => <Village villageId={+props.match.params.id} />}
+          render={(props: RouteComponentProps<VillageRouteParams>) => <Village villageId={props.match.params.id} />}
         />
         {villages.length > 0 && (
           <Redirect to={`${match.url}/${villages[0].id}`} />

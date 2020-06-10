@@ -33,7 +33,7 @@ type UnitAmount = {
 
 type TroopDetail = {
   readonly movementType: MovementType;
-  readonly originVillageId: number;
+  readonly originVillageId: string;
   readonly unitAmounts: readonly UnitAmount[];
 };
 

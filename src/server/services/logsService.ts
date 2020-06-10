@@ -9,7 +9,6 @@ import {
 } from '../_models/logs/logEntry';
 import { Resources } from '../_models/misc/resources';
 import { Timestamp } from '../_models/misc/timestamp';
-import { generateId } from '../../_shared/generateId';
 import { ClaimHeroResourcesReason } from '../../_shared/types/claimHeroResourcesReason';
 import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
 import { getAccountContext } from '../accountContext';
@@ -86,16 +85,14 @@ export class LogsService {
   };
 
   private log = (content: LogEntryContent, fromVillage = false): void => {
-    const id = generateId();
     const timestamp = new Timestamp({ totalSeconds: Math.round(Date.now() / 1000) });
     const village = fromVillage ? getAccountContext().villageService.currentVillage() : null;
 
-    this.addEntry(new LogEntry({
+    this.addEntry({
       content,
-      id,
       timestamp,
       village,
-    }));
+    });
   };
 
   private addEntry = (logEntry: LogEntry): void => {

@@ -2,14 +2,12 @@ import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
-import { buildingInfoService } from '../../services/info/buildingInfoService';
 
 export default <Resolvers> {
   BuildingInProgress: {
     finishedAt: b => ({
       totalSeconds: Math.floor(b.finishedAt.valueOf() / 1000),
     }),
-    name: b => buildingInfoService.getBuildingInfo(b.type).name,
   },
 
   Query: {

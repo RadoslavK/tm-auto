@@ -1,4 +1,4 @@
-import { AvailableNewBuilding } from '../../_types/graphql.type';
+import { BuildingSpotLevel } from '../../_types/graphql.type';
 import { Resolvers } from '../../_types/resolvers.type';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { getAccountContext } from '../../accountContext';
@@ -7,7 +7,7 @@ import { subscribeToEvent } from '../../pubSub';
 import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 
-const getBuildingSpots = (villageId: number) => {
+const getBuildingSpots = (villageId: string) => {
   const normalizedSpots = getAccountContext().villageService.village(villageId).buildings.spots.buildings();
 
   return {
@@ -23,37 +23,39 @@ const getBuildingSpots = (villageId: number) => {
 
 export default <Resolvers> {
   BuildingSpot: {
-    level: spot => ({
+    level: (spot): BuildingSpotLevel => ({
       ...spot.level,
       total: spot.level.getTotal(),
-      max: buildingInfoService.getBuildingInfo(spot.type).maxLevel,
     }),
-    name: spot => buildingInfoService.getBuildingInfo(spot.type).name,
   },
 
   Query: {
-    availableNewBuildings: (_, args) => {
+    availableNewBuildingsTypes: (_, args) => {
       const {
         fieldId,
         villageId,
       } = args.input;
 
       const manager = new AvailableBuildingTypesService(villageId);
-      return manager.availableBuildingTypes(fieldId).map((type): AvailableNewBuilding => ({
-        name: buildingInfoService.getBuildingInfo(type).name,
-        type,
-      }));
+      return manager.availableBuildingTypes(fieldId);
     },
 
     buildingSpots: (_, args) => getBuildingSpots(args.villageId),
 
-    maxBuildingLevel: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType).maxLevel,
+    buildingInfo: (_, args) => {
+      const info = buildingInfoService.getBuildingInfo(args.buildingType);
+
+      return {
+        ...info,
+        costs: Object.values(info.costs),
+      };
+    },
   },
 
   Subscription: {
-    actualBuildingLevelsUpdate: subscribeToEvent(BotEvent.ActualBuildingLevelsUpdated, {
+    actualBuildingLevelsUpdated: subscribeToEvent(BotEvent.ActualBuildingLevelsUpdated, {
       filter: (payload, variables) => payload.villageId === variables.villageId,
-      resolve: () => true,
+      resolve: () => {},
     }),
   },
 };

@@ -17,8 +17,8 @@ query GetCurrentAccount {
     }
 }
 
-query GetAccount($accountId: String!) {
-    account(accountId: $accountId) {
+query GetAccount($id: ID!) {
+    account(id: $id) {
         ...UserAccount
     }
 }
@@ -27,14 +27,24 @@ query GetLastSignedAccountId {
     lastSignedAccountId
 }
 
-mutation CreateAccount($account: CreateUserAccountInput!) {
-    createAccount(account: $account)
+query IsAccountTaken($account: AccountInput!) {
+    isAccountTaken(account: $account)
 }
 
-mutation UpdateAccount($account: UpdateUserAccountInput!) {
-    updateAccount(account: $account)
+mutation CreateAccount($account: AccountInput!) {
+    createAccount(account: $account) {
+        ...UserAccount
+    }
 }
 
-mutation DeleteAccount($accountId: String!) {
-    deleteAccount(accountId: $accountId)
+mutation UpdateAccount($id: ID!, $account: AccountInput!) {
+    updateAccount(id: $id, account: $account) {
+        ...UserAccount
+    }
+}
+
+mutation DeleteAccount($id: ID!) {
+    deleteAccount(id: $id) {
+        ...UserAccount
+    }
 }

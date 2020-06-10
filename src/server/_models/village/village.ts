@@ -16,7 +16,7 @@ export class Village {
 
   public readonly coords: Coords = new Coords();
 
-  public readonly id: number = 0;
+  public readonly id: string = '';
 
   public isCapital: boolean = false;
 

@@ -71,10 +71,7 @@ NOVE NE TAK DOLEZITE
 ## Bugs
 
 * [?] Bot said is building lvl7 but started building lvl6 for example and removed rest of the queue for the same fieldId.
-* If the settings in opened modal are editing and settings in the background are related to them, they are not updated. I think its only reset option.
-    * Because they are not subscribed to changes
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
-* When just started app and created account -> it is not preselected. Tested with already existing accounts that were loaded.
 * Reload window breaks the IPC + GraphQL functionality
 * GraphQL plugin does not ignore the generated schema, then there is invalid highlighting and code navigation
 

@@ -43,11 +43,7 @@ export default <Resolvers>{
   },
 
   Mutation: {
-    refreshVillage: (_, args) => {
-      controllerService.requestVillageRefresh(args.villageId);
-
-      return true;
-    },
+    refreshVillage: (_, args) => controllerService.requestVillageRefresh(args.villageId),
   },
 
   Subscription: {

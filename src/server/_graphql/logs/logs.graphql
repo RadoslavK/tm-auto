@@ -38,16 +38,15 @@ union LogEntryContent =
     | ResourceClaimLogEntryContent
 
 type LogEntry {
-    id: String!
     timestamp: Timestamp!
     village: Village
     content: LogEntryContent!
 }
 
 extend type Query {
-    logsEntries: [LogEntry!]!
+    logEntries: [LogEntry!]!
 }
 
 extend type Subscription  {
-    onLogEntryAdded: LogEntry!
+    logEntryAdded: LogEntry!
 }

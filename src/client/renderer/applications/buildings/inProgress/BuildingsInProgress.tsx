@@ -1,11 +1,9 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect } from 'react';
 
 import {
-  GetBuildingsInProgressQuery,
-  useBuildingsInProgressUpdatedSubscription,
+  OnBuildingsInProgressUpdatedDocument,
+  OnBuildingsInProgressUpdatedSubscription,
+  OnBuildingsInProgressUpdatedSubscriptionVariables,
   useGetBuildingsInProgressQuery,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
@@ -18,34 +16,23 @@ type Props = {
 const useBuildingsInProgress = () => {
   const { villageId } = useVillageContext();
 
-  const [buildingsInProgress, setBuildingsInProgress] = useState<GetBuildingsInProgressQuery['buildingsInProgress']>();
-
-  const { data: queryData, loading: queryLoading } = useGetBuildingsInProgressQuery({ variables: { villageId } });
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetBuildingsInProgressQuery({ variables: { villageId } });
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setBuildingsInProgress(queryData.buildingsInProgress);
-    }
-  }, [queryLoading, queryData]);
+    subscribeToMore<OnBuildingsInProgressUpdatedSubscription, OnBuildingsInProgressUpdatedSubscriptionVariables>({
+      document: OnBuildingsInProgressUpdatedDocument,
+      variables: { villageId },
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ buildingsInProgress: data.buildingsInProgressUpdated }),
+    });
+  }, [subscribeToMore, villageId]);
 
-  useBuildingsInProgressUpdatedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (data && !loading) {
-        setBuildingsInProgress(data.buildingsInProgressUpdated);
-      }
-    },
-    variables: { villageId },
-  });
-
-  return buildingsInProgress;
+  return queryLoading || !queryData
+    ? []
+    : queryData.buildingsInProgress;
 };
 
 export const BuildingsInProgress: React.FC<Props> = ({ className }) => {
   const buildingsInProgress = useBuildingsInProgress();
-
-  if (!buildingsInProgress) {
-    return null;
-  }
 
   return (
     <div className={className}>

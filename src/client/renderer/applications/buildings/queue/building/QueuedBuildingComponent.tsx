@@ -2,6 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
 import { QueuedBuilding as QueuedBuildingModel } from '../../../../_graphql/graphqlHooks';
+import { useBuildingInfo } from '../../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { Cost } from '../Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
@@ -53,6 +54,12 @@ export const QueuedBuildingComponent: React.FC<Props> = ({ building, isHighlight
     buildingType: building.type,
   });
 
+  const buildingInfo = useBuildingInfo(building.type);
+
+  if (!buildingInfo) {
+    return null;
+  }
+
   return (
     <div className={classes.root}>
       {!isHighlight && (
@@ -70,13 +77,13 @@ export const QueuedBuildingComponent: React.FC<Props> = ({ building, isHighlight
       </div>
       <div className={classes.info}>
         <div>
-          {building.name}
+          {buildingInfo.name}
           {' '}
           Level
           {' '}
           {building.level}
         </div>
-        <Cost cost={building.cost} />
+        <Cost cost={buildingInfo.costs[building.level]} />
       </div>
     </div>
   );

@@ -1,0 +1,21 @@
+fragment GeneralVillageSettings on GeneralVillageSettings {
+    allowTasks
+}
+
+query GetGeneralVillageSettings($villageId: ID!) {
+    generalVillageSettings(villageId: $villageId) {
+        ...GeneralVillageSettings
+    }
+}
+
+mutation UpdateGeneralVillageSettings($villageId: ID!, $settings: UpdateGeneralVillageSettingsInput!) {
+    updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
+        ...GeneralVillageSettings
+    }
+}
+
+mutation ResetGeneralVillageSettings($villageId: ID!) {
+    resetGeneralVillageSettings(villageId: $villageId) {
+        ...GeneralVillageSettings
+    }
+}

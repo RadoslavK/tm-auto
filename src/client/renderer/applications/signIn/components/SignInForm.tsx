@@ -14,31 +14,30 @@ import { green } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
 import React, {
-  useCallback,
   useEffect,
   useState,
 } from 'react';
 
 import {
+  AccountInput,
   BotState,
-  CreateUserAccountInput,
   GetAccountsDocument,
   GetAccountsQuery,
-  UpdateUserAccountInput,
+  GetAccountsQueryVariables,
   useCreateAccountMutation,
   useDeleteAccountMutation,
-  useGetAccountQuery,
   useGetLastSignedAccountIdQuery,
   useSignInMutation,
   useUpdateAccountMutation,
 } from '../../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useBotState } from '../../../hooks/useBotState';
 import { Accounts } from './Accounts';
+import { SignInFormDialog } from './SignInFormDialog';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -79,243 +78,125 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type AccountType = GetAccountsQuery['accounts'][0];
-
-enum DialogType {
+export enum SignInFormDialogType {
   Create = 'create',
-  Delete = 'delete',
   None = 'none',
-  Update = 'update'
+  Update = 'update',
+  Delete = 'delete',
 }
 
-type FormDialogProps = {
-  readonly onCreate: (newAccountId: string | null) => void;
-  readonly onUpdate: (success: boolean) => void;
-  readonly selectedAccountId: string;
-  readonly type: DialogType;
-};
-
-const FormDialog: React.FC<FormDialogProps> = ({
-  onCreate,
-  onUpdate,
-  selectedAccountId,
-  type,
-}) => {
-  const classes = useStyles();
-
-  const { data: queryData, loading: queryLoading } = useGetAccountQuery({ variables: { accountId: selectedAccountId } });
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [server, setServer] = useState('');
-
-  useEffect(() => {
-    if (!queryLoading && queryData && queryData.account && type === DialogType.Update) {
-      setUsername(queryData.account.username);
-      setPassword(queryData.account.password);
-      setServer(queryData.account.server);
-    }
-  }, [queryLoading, queryData, type]);
-
-  const newAccount: CreateUserAccountInput = {
-    password,
-    server,
-    username,
-  };
-
-  const updatedAccount: UpdateUserAccountInput = {
-    ...newAccount,
-    id: selectedAccountId,
-  };
-
-  const [createAccount, { data: createAccData, loading: createAccLoading }] = useCreateAccountMutation({
-    variables: { account: newAccount },
-    refetchQueries: [{ query: GetAccountsDocument }],
-  });
-  const [updateAccount, { data: updateAccData, loading: updateAccLoading }] = useUpdateAccountMutation({
-    variables: { account: updatedAccount },
-    refetchQueries: [{ query: GetAccountsDocument }],
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (!createAccLoading && createAccData) {
-      const newAccountId = createAccData.createAccount;
-
-      setIsSubmitting(false);
-      onCreate(newAccountId || null);
-    }
-  }, [createAccData, createAccLoading, onCreate]);
-
-  useEffect(() => {
-    if (!updateAccLoading && updateAccData) {
-      setIsSubmitting(false);
-      onUpdate(updateAccData.updateAccount);
-    }
-  }, [updateAccData, updateAccLoading, onUpdate]);
-
-  const submitAccount = async (): Promise<void> => {
-    if (type === DialogType.Update) {
-      setIsSubmitting(true);
-
-      await updateAccount();
-    } else {
-      setIsSubmitting(true);
-
-      await createAccount();
-    }
-  };
-
-  return (
-    <Container
-      component="main"
-      maxWidth="xs"
-    >
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography
-          component="h1"
-          variant="h5"
-        >
-          {type === DialogType.Update ? 'Update' : 'Create new'}
-        </Typography>
-        <div className={classes.form}>
-          <TextField
-            autoComplete="username"
-            autoFocus
-            fullWidth
-            id="username"
-            label="Username"
-            margin="normal"
-            name="username"
-            onChange={e => setUsername(e.target.value)}
-            required
-            value={username}
-            variant="outlined"
-          />
-          <TextField
-            autoComplete="current-password"
-            fullWidth
-            id="password"
-            label="Password"
-            margin="normal"
-            name="password"
-            onChange={e => setPassword(e.target.value)}
-            required
-            type="password"
-            value={password}
-            variant="outlined"
-          />
-          <TextField
-            autoComplete="server"
-            autoFocus
-            fullWidth
-            id="server"
-            label="Server"
-            margin="normal"
-            name="server"
-            onChange={e => setServer(e.target.value)}
-            required
-            value={server}
-            variant="outlined"
-          />
-          <Button
-            className={classes.submit}
-            color="primary"
-            disabled={isSubmitting || !server || !username || !password}
-            fullWidth
-            onClick={() => submitAccount()}
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </div>
-      </div>
-    </Container>
-  );
-};
-
-const SignInFormContainer: React.FC = () => {
+const useLastSignedInAccountId = () => {
   const { data, loading } = useGetLastSignedAccountIdQuery();
 
-  if (loading || !data) {
-    return null;
-  }
-
-  return <SignInForm lastSignedInAccountId={data.lastSignedAccountId} />;
+  return loading || !data
+    ? null
+    : data.lastSignedAccountId;
 };
 
-export { SignInFormContainer as SignInForm };
-
-type Props = {
-  readonly lastSignedInAccountId: string | null;
-};
-
-const SignInForm: React.FC<Props> = (props) => {
-  const {
-    lastSignedInAccountId,
-  } = props;
+export const SignInForm: React.FC = () => {
+  const lastSignedInAccountId = useLastSignedInAccountId();
 
   const classes = useStyles();
 
-  const [selectedAccountId, setSelectedAccountId] = useState<AccountType['id']>(lastSignedInAccountId || '');
-  const [showSubmitMessage, setShowSubmitMessage] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
-  const [hasSubmitError, setHasSubmitError] = useState(false);
+  const [selectedAccountId, setSelectedAccountId] = useState<string | undefined | null>(lastSignedInAccountId);
+  const [submitMessage, setSubmitMessage] = useState<string>();
   const [isSigningIn, setIsSigningIn] = useState(false);
+
+  useEffect(() => {
+    document.title = 'TM Auto';
+  }, []);
+
+  useEffect(() => {
+    setSelectedAccountId(lastSignedInAccountId);
+  }, [lastSignedInAccountId]);
 
   const botState = useBotState();
 
-  const [dialogType, setDialogType] = useState(DialogType.None);
+  const [dialogType, setDialogType] = useState(SignInFormDialogType.None);
 
-  const [executeSignIn] = useSignInMutation({ variables: { accountId: selectedAccountId } });
-  const [deleteAccount, { data: deleteAccData, loading: deleteAccLoading }] = useDeleteAccountMutation({
-    variables: { accountId: selectedAccountId },
-    refetchQueries: [{ query: GetAccountsDocument }],
+  const [createAccount] = useCreateAccountMutation({
+    onCompleted: (data) => {
+      setSelectedAccountId(data.createAccount.id);
+      setDialogType(SignInFormDialogType.None);
+      setSubmitMessage('Account created');
+    },
   });
 
-  const signIn = (): void => {
-    setIsSigningIn(false);
-    executeSignIn();
-  };
-
-  useEffect(() => {
-    if (!deleteAccLoading && deleteAccData) {
-      setDialogType(DialogType.None);
-      setSubmitMessage('Account deleted');
-      setShowSubmitMessage(true);
-    }
-  }, [deleteAccData, deleteAccLoading]);
-
-  const onUpdate = (success: boolean): void => {
-    if (!success) {
-      setHasSubmitError(true);
-    } else {
+  const [updateAccount] = useUpdateAccountMutation({
+    onCompleted: () => {
+      setDialogType(SignInFormDialogType.None);
       setSubmitMessage('Account updated');
-    }
+    },
+  });
 
-    setDialogType(DialogType.None);
-    setShowSubmitMessage(true);
-  };
-
-  const onCreate = useCallback((newAccountId: string | null): void => {
-    if (!newAccountId) {
-      setHasSubmitError(true);
-    } else {
-      setSelectedAccountId(newAccountId);
-      setSubmitMessage('Account created');
-    }
-
-    setDialogType(DialogType.None);
-    setShowSubmitMessage(true);
-  }, []);
+  const [executeSignIn] = useSignInMutation();
+  const [deleteAccount] = useDeleteAccountMutation({
+    onCompleted: () => {
+      setDialogType(SignInFormDialogType.None);
+      setSubmitMessage('Account deleted');
+    },
+  });
 
   if (!botState) {
     return null;
   }
 
   const disabled = botState === BotState.Pending || isSigningIn;
+
+  const onSignIn = (): void => {
+    if (!selectedAccountId) {
+      return;
+    }
+
+    setIsSigningIn(false);
+    executeSignIn({ variables: { accountId: selectedAccountId } });
+  };
+
+  const onSubmitForm = (account: AccountInput): void => {
+    if (dialogType === SignInFormDialogType.Update) {
+      if (selectedAccountId) {
+        updateAccount({ variables: { id: selectedAccountId, account } });
+      }
+    } else {
+      createAccount({
+        variables: { account },
+        update: (cache, { data }) => {
+          if (!data) {
+            return;
+          }
+
+          updateQueryCache<GetAccountsQuery, GetAccountsQueryVariables>({
+            cache,
+            query: GetAccountsDocument,
+            mergeWithOriginal: ({ accounts }) => ({ accounts: [...accounts, data.createAccount] }),
+          });
+        },
+      });
+    }
+  };
+
+  const onDelete = () => {
+    if (!selectedAccountId) {
+      return;
+    }
+
+    deleteAccount({
+      variables: { id: selectedAccountId },
+      update: (cache, { data }) => {
+        if (!data) {
+          return;
+        }
+
+        updateQueryCache<GetAccountsQuery, GetAccountsQueryVariables>({
+          cache,
+          query: GetAccountsDocument,
+          mergeWithOriginal: ({ accounts }) => ({ accounts: accounts.filter(acc => acc.id !== data.deleteAccount.id) }),
+        });
+
+        cache.evict({ id: cache.identify(data.deleteAccount) });
+      },
+    });
+  };
 
   return (
     <>
@@ -342,7 +223,7 @@ const SignInForm: React.FC<Props> = (props) => {
               color="primary"
               disabled={disabled || !selectedAccountId}
               fullWidth
-              onClick={signIn}
+              onClick={onSignIn}
               variant="contained"
             >
               Sign In
@@ -352,7 +233,7 @@ const SignInForm: React.FC<Props> = (props) => {
               color="secondary"
               disabled={disabled}
               fullWidth
-              onClick={() => setDialogType(DialogType.Create)}
+              onClick={() => setDialogType(SignInFormDialogType.Create)}
               variant="contained"
             >
               Create account
@@ -362,7 +243,7 @@ const SignInForm: React.FC<Props> = (props) => {
               color="secondary"
               disabled={disabled || !selectedAccountId}
               fullWidth
-              onClick={() => setDialogType(DialogType.Update)}
+              onClick={() => setDialogType(SignInFormDialogType.Update)}
               variant="outlined"
             >
               Update account
@@ -372,7 +253,7 @@ const SignInForm: React.FC<Props> = (props) => {
               color="secondary"
               disabled={disabled || !selectedAccountId}
               fullWidth
-              onClick={() => setDialogType(DialogType.Delete)}
+              onClick={() => setDialogType(SignInFormDialogType.Delete)}
               variant="outlined"
             >
               Delete account
@@ -384,10 +265,9 @@ const SignInForm: React.FC<Props> = (props) => {
               }}
               autoHideDuration={3000}
               onClose={() => {
-                setShowSubmitMessage(false);
-                setHasSubmitError(false);
+                setSubmitMessage('');
               }}
-              open={showSubmitMessage}
+              open={!!submitMessage}
             >
               <SnackbarContent
                 action={[
@@ -395,8 +275,7 @@ const SignInForm: React.FC<Props> = (props) => {
                     key="close"
                     color="inherit"
                     onClick={() => {
-                      setShowSubmitMessage(false);
-                      setHasSubmitError(false);
+                      setSubmitMessage('');
                     }}
                   >
                     <CloseIcon className={classes.icon} />
@@ -406,8 +285,7 @@ const SignInForm: React.FC<Props> = (props) => {
                 message={(
                   <span className={classes.message}>
                     <Icon className={clsx(classes.icon, classes.iconVariant)} />
-                    {hasSubmitError && <span>Account already exists</span>}
-                    {!hasSubmitError && <span>{submitMessage}</span>}
+                    <span>{submitMessage}</span>
                   </span>
                 )}
               />
@@ -416,19 +294,18 @@ const SignInForm: React.FC<Props> = (props) => {
         </div>
       </Container>
       <Dialog
-        onClose={() => setDialogType(DialogType.None)}
-        open={dialogType === DialogType.Create || dialogType === DialogType.Update}
+        onClose={() => setDialogType(SignInFormDialogType.None)}
+        open={dialogType === SignInFormDialogType.Create || dialogType === SignInFormDialogType.Update}
       >
-        <FormDialog
-          onCreate={onCreate}
-          onUpdate={onUpdate}
+        <SignInFormDialog
+          onSubmit={onSubmitForm}
           selectedAccountId={selectedAccountId}
           type={dialogType}
         />
       </Dialog>
       <Dialog
-        onClose={() => setDialogType(DialogType.None)}
-        open={dialogType === DialogType.Delete}
+        onClose={() => setDialogType(SignInFormDialogType.None)}
+        open={dialogType === SignInFormDialogType.Delete}
       >
         <DialogTitle>
           Delete account
@@ -440,13 +317,13 @@ const SignInForm: React.FC<Props> = (props) => {
           <Button
             autoFocus
             color="default"
-            onClick={() => setDialogType(DialogType.None)}
+            onClick={() => setDialogType(SignInFormDialogType.None)}
           >
             Cancel
           </Button>
           <Button
             color="primary"
-            onClick={() => deleteAccount()}
+            onClick={onDelete}
           >
             Submit
           </Button>

@@ -6,7 +6,7 @@ query NextTaskExecution($task: TaskType!) {
     }
 }
 
-query NextVillageTaskExecution($villageId: Int!, $task: TaskType!) {
+query NextVillageTaskExecution($villageId: ID!, $task: TaskType!) {
     nextVillageTaskExecution(villageId: $villageId, task: $task) {
         ...Timestamp
     }
@@ -30,7 +30,7 @@ mutation SetNextTasksExecution($delay: DurationInput!) {
     }
 }
 
-mutation SetNextVillageTaskExecution($villageId: Int!, $task: TaskType!, $delay: DurationInput!) {
+mutation SetNextVillageTaskExecution($villageId: ID!, $task: TaskType!, $delay: DurationInput!) {
     setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
         ...Timestamp
     }
@@ -48,25 +48,25 @@ mutation ResetNextTasksExecution {
     }
 }
 
-mutation ResetNextVillageTaskExecution($villageId: Int!, $task: TaskType!) {
+mutation ResetNextVillageTaskExecution($villageId: ID!, $task: TaskType!) {
     resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
         ...Timestamp
     }
 }
 
-subscription NextTasksExecutionChanged {
+subscription OnNextTasksExecutionChanged {
     nextTasksExecutionChanged {
         ...Timestamp
     }
 }
 
-subscription NextTaskExecutionChanged($task: TaskType!) {
+subscription OnNextTaskExecutionChanged($task: TaskType!) {
     nextTaskExecutionChanged(task: $task) {
         ...Timestamp
     }
 }
 
-subscription NextVillageTaskExecutionChanged($villageId: Int!, $task: TaskType!) {
+subscription OnNextVillageTaskExecutionChanged($villageId: ID!, $task: TaskType!) {
     nextVillageTaskExecutionChanged(villageId: $villageId, task: $task) {
         ...Timestamp
     }

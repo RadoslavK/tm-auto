@@ -15,7 +15,7 @@ export class SettingsService {
 
   public autoMentor: InternalSettingsService<AutoMentorSettings>;
 
-  private villages: Map<number, ComplexSettingsServiceType<VillageSettings>>;
+  private villages: Map<string, ComplexSettingsServiceType<VillageSettings>>;
 
   constructor(private accountId: string) {
     const accountSettingsPath = dataPathService.accountPath(accountId).settings;
@@ -27,7 +27,7 @@ export class SettingsService {
     this.autoMentor = new InternalSettingsService(accountSettingsPath.autoMentor, AutoMentorSettings);
   }
 
-  public village = (villageId: number): VillageSettingsService => {
+  public village = (villageId: string): VillageSettingsService => {
     let settings = this.villages.get(villageId);
 
     if (settings) {

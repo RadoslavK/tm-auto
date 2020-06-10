@@ -14,7 +14,7 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
       throw new Error('Failed to parse village id');
     }
 
-    const id = +idMatch[1];
+    const id = idMatch[1];
 
     const name = await villageNode.$eval('[class=name]', x => (x as HTMLElement).innerText);
 

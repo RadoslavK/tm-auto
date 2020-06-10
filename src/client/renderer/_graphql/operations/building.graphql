@@ -4,11 +4,9 @@ fragment BuildingSpot on BuildingSpot {
         actual
         ongoing
         queued
-        max
         total
     }
     type
-    name
 }
 
 fragment BuildingSpots on BuildingSpots {
@@ -31,23 +29,26 @@ fragment BuildingSpots on BuildingSpots {
     }
 }
 
-query GetBuildingSpots($villageId: Int!) {
+query GetBuildingSpots($villageId: ID!) {
     buildingSpots(villageId: $villageId) {
         ...BuildingSpots
     }
 }
 
-query GetAvailableNewBuildings($input: AvailableNewBuildingsInput!) {
-    availableNewBuildings(input: $input) {
+query GetAvailableNewBuildingTypes($input: AvailableNewBuildingsInput!) {
+    availableNewBuildingsTypes(input: $input)
+}
+
+query GetBuildingInfo($buildingType: Int!) {
+    buildingInfo(buildingType: $buildingType) {
+        costs {
+            ...Cost
+        }
+        maxLevel
         name
-        type
     }
 }
 
-query GetMaxBuildingLevel($buildingType: Int!) {
-    maxBuildingLevel(buildingType: $buildingType)
-}
-
-subscription ActualBuildingLevelsUpdate($villageId: Int!) {
-    actualBuildingLevelsUpdate(villageId: $villageId)
+subscription OnActualBuildingLevelsUpdated($villageId: ID!) {
+    actualBuildingLevelsUpdated(villageId: $villageId)
 }

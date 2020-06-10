@@ -2,6 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
 import { QueuedBuildingRange } from '../../../../_graphql/graphqlHooks';
+import { useBuildingInfo } from '../../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { Cost } from '../Cost';
 import { QueuedBuildingRangeActions } from './QueuedBuildingRangeActions';
@@ -48,6 +49,8 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
     buildingType: buildingRange.type,
   });
 
+  const buildingInfo = useBuildingInfo(buildingRange.type);
+
   return (
     <div className={classes.root}>
       {!isHighlight && (
@@ -64,7 +67,7 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
       </div>
       <div className={classes.info}>
         <div>
-          {buildingRange.name}
+          {buildingInfo?.name}
           {' '}
           Levels
           {' '}

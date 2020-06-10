@@ -21,7 +21,7 @@ export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
     variables: {
       input: {
         fieldId: optionParams.fieldId,
-        targetLevel: optionParams.targetLevel || null,
+        targetLevel: optionParams.targetLevel || undefined,
         type: optionParams.buildingType,
         villageId,
       },

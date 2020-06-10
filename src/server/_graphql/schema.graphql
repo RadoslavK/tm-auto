@@ -1,3 +1,9 @@
+input AccountInput {
+  username: String!
+  password: String!
+  server: String!
+}
+
 type AccountSettings {
   allowTasks: Boolean!
   tasksCoolDown: CoolDown!
@@ -22,7 +28,7 @@ type AutoAdventureSettings {
   normalMinHealth: Int!
   hardMinHealth: Int!
   maxTravelTime: Duration!
-  preferredVillageId: Int
+  preferredVillageId: ID
 }
 
 type AutoBuildLogEntryContent {
@@ -95,14 +101,9 @@ type AutoUnitsUnitSettings {
   targetAmount: Int!
 }
 
-type AvailableNewBuilding {
-  type: Int!
-  name: String!
-}
-
 input AvailableNewBuildingsInput {
   fieldId: Int!
-  villageId: Int!
+  villageId: ID!
 }
 
 enum BotState {
@@ -113,10 +114,15 @@ enum BotState {
   Paused
 }
 
+type BuildingInfo {
+  costs: [Cost!]!
+  maxLevel: Int!
+  name: String!
+}
+
 type BuildingInProgress {
   level: Int!
   finishedAt: Timestamp!
-  name: String!
   type: Int!
   fieldId: Int!
 }
@@ -129,7 +135,6 @@ type BuildingQueue {
 type BuildingSpot {
   fieldId: Int!
   level: BuildingSpotLevel!
-  name: String!
   type: Int!
 }
 
@@ -137,7 +142,6 @@ type BuildingSpotLevel {
   actual: Int!
   ongoing: Int
   queued: Int
-  max: Int!
   total: Int!
 }
 
@@ -151,7 +155,7 @@ enum ClaimHeroResourcesReason {
 }
 
 input ClearQueueInput {
-  villageId: Int!
+  villageId: ID!
 }
 
 type CoolDown {
@@ -174,21 +178,15 @@ type Cost {
   buildTime: Duration!
 }
 
-input CreateUserAccountInput {
-  username: String!
-  password: String!
-  server: String!
-}
-
 input DequeueBuildingAtFieldInput {
   deleteAll: Boolean!
   fieldId: Int!
-  villageId: Int!
+  villageId: ID!
 }
 
 input DequeueBuildingInput {
-  queueId: String!
-  villageId: Int!
+  queueId: ID!
+  villageId: ID!
 }
 
 type Duration {
@@ -208,7 +206,7 @@ input DurationInput {
 input EnqueueBuildingInput {
   fieldId: Int!
   type: Int!
-  villageId: Int!
+  villageId: ID!
   targetLevel: Int
 }
 
@@ -237,7 +235,6 @@ enum HeroState {
 }
 
 type LogEntry {
-  id: String!
   timestamp: Timestamp!
   village: Village
   content: LogEntryContent!
@@ -246,88 +243,87 @@ type LogEntry {
 union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent
 
 type Mutation {
-  createAccount(account: CreateUserAccountInput!): String
-  updateAccount(account: UpdateUserAccountInput!): Boolean!
-  deleteAccount(accountId: String!): Boolean!
-  signIn(accountId: String!): Boolean
+  createAccount(account: AccountInput!): UserAccount!
+  updateAccount(id: ID!, account: AccountInput!): UserAccount!
+  deleteAccount(id: ID!): UserAccount!
+  signIn(accountId: ID!): Boolean
   signOut: Boolean
-  startBot: Boolean!
-  stopBot: Boolean!
+  startBot: Boolean
+  stopBot: Boolean
   setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
   setNextTasksExecution(delay: DurationInput!): Timestamp!
-  setNextVillageTaskExecution(villageId: Int!, task: TaskType!, delay: DurationInput!): Timestamp!
+  setNextVillageTaskExecution(villageId: ID!, task: TaskType!, delay: DurationInput!): Timestamp!
   resetNextTaskExecution(task: TaskType!): Timestamp!
   resetNextTasksExecution: Timestamp!
-  resetNextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
-  clearQueue(villageId: Int!): Boolean!
-  dequeueBuilding(input: DequeueBuildingInput!): Boolean!
-  dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean!
-  enqueueBuilding(input: EnqueueBuildingInput!): Boolean!
-  moveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
-  moveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
-  moveQueuedBuildingAsHighAsPossible(villageId: Int!, queueId: String!): Boolean!
+  resetNextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
+  clearQueue(villageId: ID!): Boolean
+  dequeueBuilding(input: DequeueBuildingInput!): Boolean
+  dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean
+  enqueueBuilding(input: EnqueueBuildingInput!): Boolean
+  moveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean
+  moveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean
+  moveQueuedBuildingAsHighAsPossible(villageId: ID!, queueId: ID!): Boolean
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
   updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
   resetAutoAdventureSettings: AutoAdventureSettings!
-  updateAutoBuildSettings(villageId: Int!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
-  resetAutoBuildSettings(villageId: Int!): AutoBuildSettings!
+  updateAutoBuildSettings(villageId: ID!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
+  resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
   updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
   resetAutoMentorSettings: AutoMentorSettings!
-  updateAutoPartySettings(villageId: Int!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
-  resetAutoPartySettings(villageId: Int!): AutoPartySettings!
-  updateAutoUnitsSettings(villageId: Int!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
-  updateAutoUnitsBuildingSettings(villageId: Int!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsBuildingSettings!
-  updateAutoUnitsUnitSettings(villageId: Int!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsUnitSettings!
-  resetAutoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+  updateAutoPartySettings(villageId: ID!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
+  resetAutoPartySettings(villageId: ID!): AutoPartySettings!
+  updateAutoUnitsSettings(villageId: ID!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
+  updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
+  updateAutoUnitsUnitSettings(villageId: ID!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsSettings!
+  resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
   resetGeneralSettings: GeneralSettings!
-  updateGeneralVillageSettings(villageId: Int!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
-  resetGeneralVillageSettings(villageId: Int!): GeneralVillageSettings!
-  refreshVillage(villageId: Int!): Boolean!
+  updateGeneralVillageSettings(villageId: ID!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
+  resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
+  refreshVillage(villageId: ID!): Boolean
 }
 
 type Query {
+  account(id: ID!): UserAccount!
   accounts: [UserAccount!]!
-  account(accountId: String!): UserAccount
   currentAccount: UserAccount!
+  isAccountTaken(account: AccountInput!): Boolean!
   lastSignedAccountId: String
-  availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
-  buildingSpots(villageId: Int!): BuildingSpots!
-  maxBuildingLevel(buildingType: Int!): Int!
-  buildingsInProgress(villageId: Int!): [BuildingInProgress!]!
+  availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
+  buildingInfo(buildingType: Int!): BuildingInfo!
+  buildingSpots(villageId: ID!): BuildingSpots!
+  buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   isBotActive: Boolean!
   botState: BotState!
   heroInformation: HeroInformation!
-  logsEntries: [LogEntry!]!
+  logEntries: [LogEntry!]!
   nextTasksExecution: Timestamp!
   nextTaskExecution(task: TaskType!): Timestamp!
-  nextVillageTaskExecution(villageId: Int!, task: TaskType!): Timestamp!
-  buildingQueue(villageId: Int!): BuildingQueue!
-  canMoveQueuedBuildingToIndex(villageId: Int!, queueId: String!, index: Int!): Boolean!
-  canMoveQueuedBuildingsBlockToIndex(villageId: Int!, topBuildingQueueId: String!, bottomBuildingQueueId: String!, index: Int!): Boolean!
+  nextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
+  buildingQueue(villageId: ID!): BuildingQueue!
+  canMoveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean!
+  canMoveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean!
   accountSettings: AccountSettings!
   autoAdventureSettings: AutoAdventureSettings!
-  autoBuildSettings(villageId: Int!): AutoBuildSettings!
+  autoBuildSettings(villageId: ID!): AutoBuildSettings!
   autoMentorSettings: AutoMentorSettings!
-  autoPartySettings(villageId: Int!): AutoPartySettings!
-  autoUnitsSettings(villageId: Int!): AutoUnitsSettings!
+  autoPartySettings(villageId: ID!): AutoPartySettings!
+  autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   generalSettings: GeneralSettings!
-  generalVillageSettings(villageId: Int!): GeneralVillageSettings!
+  generalVillageSettings(villageId: ID!): GeneralVillageSettings!
   unitInfo(index: Int!): UnitInfo!
-  activeVillageId: Int!
-  village(villageId: Int!): Village
+  activeVillageId: ID!
+  village(villageId: ID!): Village
   villages: [Village!]!
-  crannyCapacity(villageId: Int!): VillageCrannyCapacity!
+  crannyCapacity(villageId: ID!): VillageCrannyCapacity!
 }
 
 type QueuedBuilding {
   level: Int!
-  name: String!
   type: Int!
-  queueId: String!
+  queueId: ID!
   queueIndex: Int!
-  cost: Cost!
   fieldId: Int!
 }
 
@@ -335,7 +331,6 @@ type QueuedBuildingRange {
   id: String!
   buildings: [QueuedBuilding!]!
   type: Int!
-  name: String!
   fieldId: Int!
   cost: Cost!
 }
@@ -362,19 +357,19 @@ type Resources {
 }
 
 type Subscription {
-  actualBuildingLevelsUpdate(villageId: Int!): Boolean!
-  buildingsInProgressUpdated(villageId: Int!): [BuildingInProgress!]!
+  actualBuildingLevelsUpdated(villageId: ID!): Boolean
+  buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
   botActivityChanged: Boolean!
-  onBotRunningChanged: Boolean!
+  botStateChanged: BotState!
   heroInformationUpdated: HeroInformation!
-  onLogEntryAdded: LogEntry!
+  logEntryAdded: LogEntry!
   nextTasksExecutionChanged: Timestamp!
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
-  nextVillageTaskExecutionChanged(villageId: Int!, task: TaskType!): Timestamp!
-  onQueueUpdated(villageId: Int!): BuildingQueue!
-  villageUpdated(villageId: Int!): Village!
+  nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
+  queueUpdated(villageId: ID!): BuildingQueue!
+  villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!
-  activeVillageIdChanged: Int!
+  activeVillageIdChanged: ID!
 }
 
 enum TaskType {
@@ -424,7 +419,7 @@ input UpdateAutoAdventureSettingsInput {
   normalMinHealth: Int!
   hardMinHealth: Int!
   maxTravelTime: DurationInput!
-  preferredVillageId: Int
+  preferredVillageId: ID
 }
 
 input UpdateAutoBuildSettingsInput {
@@ -488,22 +483,15 @@ input UpdateGeneralVillageSettingsInput {
   allowTasks: Boolean!
 }
 
-input UpdateUserAccountInput {
-  id: String!
-  username: String!
-  password: String!
-  server: String!
-}
-
 type UserAccount {
-  id: String!
+  id: ID!
   username: String!
   password: String!
   server: String!
 }
 
 type Village {
-  id: Int!
+  id: ID!
   coords: Coords!
   name: String!
   resources: VillageResources!

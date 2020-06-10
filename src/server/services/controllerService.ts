@@ -27,10 +27,7 @@ import { updateResources } from '../controller/actions/village/updateResources';
 import { TaskManager } from '../controller/taskManager';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
-import {
-  publishEvent,
-  publishPayloadEvent,
-} from '../pubSub';
+import { publishPayloadEvent } from '../pubSub';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
 import { getGeneralSettingsService } from './settings/general';
@@ -129,7 +126,7 @@ class ControllerService {
 
   private _isActive: boolean = false;
 
-  private _refreshRequests: Set<number> = new Set<number>();
+  private _refreshRequests: Set<string> = new Set<string>();
 
   private botState: BotState = BotState.None;
 
@@ -140,7 +137,7 @@ class ControllerService {
   private setState = async (state: BotState): Promise<void> => {
     this.botState = state;
 
-    await publishEvent(BotEvent.BotRunningChanged);
+    await publishPayloadEvent(BotEvent.BotRunningChanged, { state });
   };
 
   private setActivity = async (activity: boolean): Promise<void> => {
@@ -277,7 +274,7 @@ class ControllerService {
     this.setState(BotState.Paused);
   };
 
-  public requestVillageRefresh = (villageId: number) => {
+  public requestVillageRefresh = (villageId: string) => {
     this._refreshRequests.add(villageId);
   };
 }

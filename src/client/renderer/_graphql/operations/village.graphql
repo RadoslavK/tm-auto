@@ -6,7 +6,7 @@ fragment VillageCrannyCapacity on VillageCrannyCapacity {
     total
 }
 
-query GetVillage($villageId: Int!) {
+query GetVillage($villageId: ID!) {
     village(villageId: $villageId) {
         coords {
             ...Coords
@@ -39,21 +39,21 @@ query GetVillages {
     }
 }
 
-query ActiveVillageId {
+query GetActiveVillageId {
     activeVillageId
 }
 
-query CrannyCapacity($villageId: Int!) {
+query GetCrannyCapacity($villageId: ID!) {
     crannyCapacity(villageId: $villageId) {
         ...VillageCrannyCapacity
     }
 }
 
-mutation RefreshVillage($villageId: Int!) {
+mutation RefreshVillage($villageId: ID!) {
     refreshVillage(villageId: $villageId)
 }
 
-subscription VillageUpdated($villageId: Int!) {
+subscription OnVillageUpdated($villageId: ID!) {
     villageUpdated(villageId: $villageId) {
         coords {
             ...Coords
@@ -75,7 +75,7 @@ subscription VillageUpdated($villageId: Int!) {
     }
 }
 
-subscription VillagesUpdated {
+subscription OnVillagesUpdated {
     villagesUpdated {
         id
         name
@@ -86,6 +86,6 @@ subscription VillagesUpdated {
     }
 }
 
-subscription ActiveVillageIdChanged {
+subscription OnActiveVillageIdChanged {
     activeVillageIdChanged
 }

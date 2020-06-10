@@ -17,10 +17,10 @@ input UpdateAutoPartySettingsInput {
 }
 
 extend type Query {
-    autoPartySettings(villageId: Int!): AutoPartySettings!
+    autoPartySettings(villageId: ID!): AutoPartySettings!
 }
 
 extend type Mutation {
-    updateAutoPartySettings(villageId: Int!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
-    resetAutoPartySettings(villageId: Int!): AutoPartySettings!
+    updateAutoPartySettings(villageId: ID!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
+    resetAutoPartySettings(villageId: ID!): AutoPartySettings!
 }

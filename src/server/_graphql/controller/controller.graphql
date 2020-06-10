@@ -6,32 +6,19 @@ enum BotState {
     Paused
 }
 
-input CreateUserAccountInput {
-    username: String!
-    password: String!
-    server: String!
-}
-
-input UpdateUserAccountInput {
-    id: String!
-    username: String!
-    password: String!
-    server: String!
-}
-
-type Mutation {
-    signIn(accountId: String!): Boolean
-    signOut: Boolean
-    startBot: Boolean!
-    stopBot: Boolean!
-}
-
 type Query {
     isBotActive: Boolean!
     botState: BotState!
 }
 
+type Mutation {
+    signIn(accountId: ID!): Boolean
+    signOut: Boolean
+    startBot: Boolean
+    stopBot: Boolean
+}
+
 extend type Subscription {
     botActivityChanged: Boolean!
-    onBotRunningChanged: Boolean!
+    botStateChanged: BotState!
 }

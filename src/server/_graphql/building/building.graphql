@@ -1,15 +1,19 @@
+type BuildingInfo {
+    costs: [Cost!]!
+    maxLevel: Int!
+    name: String!
+}
+
 type BuildingSpotLevel {
     actual: Int!
     ongoing: Int
     queued: Int
-    max: Int!
     total: Int!
 }
 
 type BuildingSpot {
     fieldId: Int!
     level: BuildingSpotLevel!
-    name: String!
     type: Int!
 }
 
@@ -27,20 +31,15 @@ type BuildingSpots {
 
 input AvailableNewBuildingsInput {
     fieldId: Int!
-    villageId: Int!
-}
-
-type AvailableNewBuilding {
-    type: Int!
-    name: String!
+    villageId: ID!
 }
 
 extend type Query {
-    availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
-    buildingSpots(villageId: Int!): BuildingSpots!
-    maxBuildingLevel(buildingType: Int!): Int!
+    availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
+    buildingInfo(buildingType: Int!): BuildingInfo!
+    buildingSpots(villageId: ID!): BuildingSpots!
 }
 
 extend type Subscription {
-    actualBuildingLevelsUpdate(villageId: Int!): Boolean!
+    actualBuildingLevelsUpdated(villageId: ID!): Boolean
 }

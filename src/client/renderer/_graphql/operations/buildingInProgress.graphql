@@ -5,18 +5,17 @@ fragment BuildingInProgress on BuildingInProgress {
     finishedAt {
         ...Timestamp
     }
-    name
     type
     fieldId
 }
 
-query GetBuildingsInProgress($villageId: Int!) {
+query GetBuildingsInProgress($villageId: ID!) {
     buildingsInProgress(villageId: $villageId) {
         ...BuildingInProgress
     }
 }
 
-subscription BuildingsInProgressUpdated($villageId: Int!) {
+subscription OnBuildingsInProgressUpdated($villageId: ID!) {
     buildingsInProgressUpdated(villageId: $villageId) {
         ...BuildingInProgress
     }

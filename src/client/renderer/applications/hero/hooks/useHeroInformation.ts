@@ -1,36 +1,23 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect } from 'react';
 
 import {
-  HeroInformationFragment,
+  OnHeroInformationUpdatedDocument,
+  OnHeroInformationUpdatedSubscription,
+  OnHeroInformationUpdatedSubscriptionVariables,
   useGetHeroInformationQuery,
-  useOnHeroInformationUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
 
 export const useHeroInformation = () => {
-  const [heroInformation, setHeroInformation] = useState<HeroInformationFragment>();
-
-  const { data, loading } = useGetHeroInformationQuery();
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetHeroInformationQuery();
 
   useEffect(() => {
-    if (loading || !data) {
-      return;
-    }
+    subscribeToMore<OnHeroInformationUpdatedSubscription, OnHeroInformationUpdatedSubscriptionVariables>({
+      document: OnHeroInformationUpdatedDocument,
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ heroInformation: data.heroInformationUpdated }),
+    });
+  }, [subscribeToMore]);
 
-    setHeroInformation(data.heroInformation);
-  }, [data, loading]);
-
-  useOnHeroInformationUpdatedSubscription({
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (subscriptionData.loading || !subscriptionData.data) {
-        return;
-      }
-
-      setHeroInformation(subscriptionData.data.heroInformationUpdated);
-    },
-  });
-
-  return heroInformation;
+  return queryLoading || !queryData
+    ? null
+    : queryData.heroInformation;
 };

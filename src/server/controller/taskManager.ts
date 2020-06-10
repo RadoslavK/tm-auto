@@ -28,7 +28,7 @@ import { AutoUnitsTask } from './tasks/village/autoUnitsTask';
 export class TaskManager {
   private readonly _generalTasks: readonly IBotTaskEngine[];
 
-  private readonly _villageTasks: Record<number, VillageBotTasksEngine>;
+  private readonly _villageTasks: Record<string, VillageBotTasksEngine>;
 
   private readonly _finalTasks: readonly IBotTaskEngine[];
 

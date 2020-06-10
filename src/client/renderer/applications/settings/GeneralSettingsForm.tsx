@@ -5,42 +5,51 @@ import React, {
 } from 'react';
 
 import {
+  GetGeneralSettingsDocument,
   GetGeneralSettingsQuery,
+  GetGeneralSettingsQueryVariables,
   UpdateGeneralSettingsInput,
   useGetGeneralSettingsQuery,
   useResetGeneralSettingsMutation,
   useUpdateGeneralSettingsMutation,
 } from '../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useGeneralSettings = () => {
-  const [settings, setSettings] = useState<GetGeneralSettingsQuery['generalSettings']>();
-
   const { data: queryData, loading: queryLoading } = useGetGeneralSettingsQuery();
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.generalSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateGeneralSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateGeneralSettingsMutation();
+      updateQueryCache<GetGeneralSettingsQuery, GetGeneralSettingsQueryVariables>({
+        cache,
+        query: GetGeneralSettingsDocument,
+        data: { generalSettings: data.updateGeneralSettings },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateGeneralSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetGeneralSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetGeneralSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetGeneralSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetGeneralSettingsQuery, GetGeneralSettingsQueryVariables>({
+        cache,
+        query: GetGeneralSettingsDocument,
+        data: { generalSettings: data.resetGeneralSettings },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.generalSettings,
     updateSettings,
     resetSettings,
   };

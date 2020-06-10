@@ -7,13 +7,13 @@ import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
 export class VillageService {
-  private _currentVillageId: number = 0;
+  private _currentVillageId: string = '';
 
-  get currentVillageId(): number {
+  get currentVillageId(): string {
     return this._currentVillageId;
   }
 
-  set currentVillageId(villageId: number) {
+  set currentVillageId(villageId: string) {
     this._currentVillageId = villageId;
     publishPayloadEvent(BotEvent.ActiveVillageIdChanged, { villageId });
   }
@@ -22,7 +22,7 @@ export class VillageService {
 
   public allVillages = (): readonly Village[] => this._villages;
 
-  public village = (villageId: number): Village => {
+  public village = (villageId: string): Village => {
     const vill = this._villages.find(v => v.id === villageId);
 
     if (!vill) {

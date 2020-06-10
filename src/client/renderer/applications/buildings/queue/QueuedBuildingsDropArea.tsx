@@ -107,7 +107,9 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   const dropPosition = isBuildingOver && movedBuilding && getDropPosition(movedBuilding.building.queueIndex)
     || isRangeOver && movedRange && getDropPosition(movedRange.range.buildings[0].queueIndex);
 
-  const [fetchMoveBuildingFlag, { data: buildingQueryData, loading: buildingQueryLoading }] = useCanMoveQueuedBuildingToIndexLazyQuery();
+  const [fetchMoveBuildingFlag, { data: buildingQueryData, loading: buildingQueryLoading }] = useCanMoveQueuedBuildingToIndexLazyQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   useEffect(() => {
     if (movedBuilding && isBuildingOver) {
@@ -117,7 +119,9 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     }
   }, [movedBuilding, fetchMoveBuildingFlag, villageId, queueIndexTop, isBuildingOver]);
 
-  const [fetchMoveRangeFlag, { data: rangeQueryData, loading: rangeQueryLoading }] = useCanMoveQueuedBuildingsBlockToIndexLazyQuery();
+  const [fetchMoveRangeFlag, { data: rangeQueryData, loading: rangeQueryLoading }] = useCanMoveQueuedBuildingsBlockToIndexLazyQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   useEffect(() => {
     if (movedRange && isRangeOver) {

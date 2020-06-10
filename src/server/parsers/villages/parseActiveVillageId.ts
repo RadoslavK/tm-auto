@@ -1,6 +1,6 @@
 import { getPage } from '../../browser/getPage';
 
-export const parseActiveVillageId = async (): Promise<number> => {
+export const parseActiveVillageId = async (): Promise<string> => {
   const page = await getPage();
   const className = await page.$eval('#sidebarBoxVillagelist [href*=newdid][class=active]', x => x.getAttribute('href'));
 
@@ -14,5 +14,5 @@ export const parseActiveVillageId = async (): Promise<number> => {
     throw new Error('Failed to parse active village id');
   }
 
-  return +match[1];
+  return match[1];
 };

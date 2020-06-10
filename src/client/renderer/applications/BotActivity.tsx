@@ -1,34 +1,24 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect } from 'react';
 
 import {
+  OnBotActivityChangedDocument,
+  OnBotActivityChangedSubscription,
+  OnBotActivityChangedSubscriptionVariables,
   useIsBotActiveQuery,
-  useOnBotActivityChangedSubscription,
 } from '../_graphql/graphqlHooks';
 
 const useBotActivity = () => {
-  const [isActive, setIsActive] = useState(false);
-
-  const { data: queryData, loading: queryLoading } = useIsBotActiveQuery();
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useIsBotActiveQuery();
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setIsActive(queryData.isBotActive);
-    }
-  }, [queryData, queryLoading]);
+    subscribeToMore<OnBotActivityChangedSubscription, OnBotActivityChangedSubscriptionVariables>({
+      document: OnBotActivityChangedDocument,
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ isBotActive: data.botActivityChanged }),
+    });
+  }, [subscribeToMore]);
 
-  useOnBotActivityChangedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        setIsActive(data.botActivityChanged);
-      }
-    },
-  });
-
-  return isActive;
+  return !queryLoading && !!queryData?.isBotActive;
 };
 
 type StylesProps = {

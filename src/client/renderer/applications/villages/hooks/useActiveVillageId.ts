@@ -1,31 +1,23 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect } from 'react';
 
 import {
-  useActiveVillageIdChangedSubscription,
-  useActiveVillageIdQuery,
+  OnActiveVillageIdChangedDocument,
+  OnActiveVillageIdChangedSubscription,
+  OnActiveVillageIdChangedSubscriptionVariables,
+  useGetActiveVillageIdQuery,
 } from '../../../_graphql/graphqlHooks';
 
-export const useActiveVillageId = (): number | undefined => {
-  const [activeVillageId, setActiveVillageId] = useState<number>();
-
-  const { data: queryData, loading: queryLoading } = useActiveVillageIdQuery();
+export const useActiveVillageId = () => {
+  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetActiveVillageIdQuery();
 
   useEffect(() => {
-    if (!queryLoading && queryData) {
-      setActiveVillageId(queryData.activeVillageId);
-    }
-  }, [queryData, queryLoading]);
+    subscribeToMore<OnActiveVillageIdChangedSubscription, OnActiveVillageIdChangedSubscriptionVariables>({
+      document: OnActiveVillageIdChangedDocument,
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({ activeVillageId: data.activeVillageIdChanged }),
+    });
+  }, [subscribeToMore]);
 
-  useActiveVillageIdChangedSubscription({
-    onSubscriptionData: ({ subscriptionData: { data, loading } }) => {
-      if (!loading && data) {
-        setActiveVillageId(data.activeVillageIdChanged);
-      }
-    },
-  });
-
-  return activeVillageId;
+  return queryLoading || !queryData
+    ? null
+    : queryData.activeVillageId;
 };

@@ -5,42 +5,51 @@ import React, {
 } from 'react';
 
 import {
+  GetAutoMentorSettingsDocument,
   GetAutoMentorSettingsQuery,
+  GetAutoMentorSettingsQueryVariables,
   UpdateAutoMentorSettingsInput,
   useGetAutoMentorSettingsQuery,
   useResetAutoMentorSettingsMutation,
   useUpdateAutoMentorSettingsMutation,
 } from '../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useAutoMentorSettings = () => {
-  const [settings, setSettings] = useState<GetAutoMentorSettingsQuery['autoMentorSettings']>();
-
   const { data: queryData, loading: queryLoading } = useGetAutoMentorSettingsQuery();
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.autoMentorSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateAutoMentorSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateAutoMentorSettingsMutation();
+      updateQueryCache<GetAutoMentorSettingsQuery, GetAutoMentorSettingsQueryVariables>({
+        cache,
+        query: GetAutoMentorSettingsDocument,
+        data: { autoMentorSettings: data.updateAutoMentorSettings },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateAutoMentorSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetAutoMentorSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetAutoMentorSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetAutoMentorSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetAutoMentorSettingsQuery, GetAutoMentorSettingsQueryVariables>({
+        cache,
+        query: GetAutoMentorSettingsDocument,
+        data: { autoMentorSettings: data.resetAutoMentorSettings },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.autoMentorSettings,
     updateSettings,
     resetSettings,
   };

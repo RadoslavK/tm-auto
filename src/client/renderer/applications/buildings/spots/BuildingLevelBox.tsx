@@ -6,6 +6,7 @@ import { BuildingSpotLevel } from '../../../_graphql/graphqlHooks';
 type Props = {
   readonly className?: string;
   readonly level: BuildingSpotLevel;
+  readonly maxLevel: number;
 };
 
 enum BuildingState {
@@ -40,11 +41,12 @@ const useStyles = makeStyles<unknown, StyleProps>({
 const getLevelState = (props: Props): BuildingState => {
   const {
     level,
+    maxLevel,
   } = props;
 
-  const isCompleted = level.actual === level.max;
-  const isMaxed = level.total === level.max;
-  const isOngoingMaxed = level.ongoing === level.max;
+  const isCompleted = level.actual === maxLevel;
+  const isMaxed = level.total === maxLevel;
+  const isOngoingMaxed = level.ongoing === maxLevel;
 
   if (isCompleted) {
     return BuildingState.Completed;

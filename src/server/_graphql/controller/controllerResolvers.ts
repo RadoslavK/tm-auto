@@ -10,33 +10,18 @@ export default <Resolvers>{
   },
 
   Mutation: {
-    signIn: (_, args) => {
-      controllerService.signIn(args.accountId);
-      return true;
-    },
-
-    signOut: () => {
-      controllerService.signOut();
-      return true;
-    },
-
-    startBot: () => {
-      controllerService.start();
-      return true;
-    },
-
-    stopBot: () => {
-      controllerService.stop();
-      return true;
-    },
+    signIn: (_, args) => controllerService.signIn(args.accountId),
+    signOut: () => controllerService.signOut(),
+    startBot: () => controllerService.start(),
+    stopBot: () => controllerService.stop(),
   },
 
   Subscription: {
     botActivityChanged: subscribeToEvent(BotEvent.BotActivityChanged, {
       resolve: p => p.isActive,
     }),
-    onBotRunningChanged: subscribeToEvent(BotEvent.BotRunningChanged, {
-      resolve: () => true,
+    botStateChanged: subscribeToEvent(BotEvent.BotRunningChanged, {
+      resolve: p => p.state,
     }),
   },
 };

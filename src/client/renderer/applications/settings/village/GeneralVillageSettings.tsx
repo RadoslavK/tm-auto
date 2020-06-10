@@ -5,45 +5,56 @@ import React, {
 } from 'react';
 
 import {
-  GeneralVillageSettings as GeneralVillageSettingsModel,
+  GetGeneralVillageSettingsDocument,
+  GetGeneralVillageSettingsQuery,
+  GetGeneralVillageSettingsQueryVariables,
   UpdateGeneralVillageSettingsInput,
   useGetGeneralVillageSettingsQuery,
   useResetGeneralVillageSettingsMutation,
   useUpdateGeneralVillageSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
 const useGeneralVillageSettings = () => {
   const { villageId } = useVillageSettingsContext();
 
-  const [settings, setSettings] = useState<GeneralVillageSettingsModel>();
-
   const { data: queryData, loading: queryLoading } = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
 
-  useEffect(() => {
-    if (!queryLoading && queryData) {
-      setSettings(queryData.generalVillageSettings);
-    }
-  }, [queryData, queryLoading]);
+  const [updateSettings] = useUpdateGeneralVillageSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [updateSettings, { data: updateData, loading: updateLoading }] = useUpdateGeneralVillageSettingsMutation();
+      updateQueryCache<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>({
+        query: GetGeneralVillageSettingsDocument,
+        cache,
+        data: { generalVillageSettings: data.updateGeneralVillageSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
-  useEffect(() => {
-    if (!updateLoading && updateData) {
-      setSettings(updateData.updateGeneralVillageSettings);
-    }
-  }, [updateData, updateLoading]);
+  const [resetSettings] = useResetGeneralVillageSettingsMutation({
+    update: (cache, { data }) => {
+      if (!data) {
+        return;
+      }
 
-  const [resetSettings, { data: resetData, loading: resetLoading }] = useResetGeneralVillageSettingsMutation();
-
-  useEffect(() => {
-    if (!resetLoading && resetData) {
-      setSettings(resetData.resetGeneralVillageSettings);
-    }
-  }, [resetData, resetLoading]);
+      updateQueryCache<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>({
+        query: GetGeneralVillageSettingsDocument,
+        cache,
+        data: { generalVillageSettings: data.resetGeneralVillageSettings },
+        variables: { villageId },
+      });
+    },
+  });
 
   return {
-    settings,
+    settings: queryLoading || !queryData
+      ? null
+      : queryData.generalVillageSettings,
     updateSettings,
     resetSettings,
   };

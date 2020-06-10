@@ -41,10 +41,10 @@ input UpdateAutoBuildSettingsInput {
 }
 
 extend type Query {
-    autoBuildSettings(villageId: Int!): AutoBuildSettings!
+    autoBuildSettings(villageId: ID!): AutoBuildSettings!
 }
 
 extend type Mutation {
-    updateAutoBuildSettings(villageId: Int!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
-    resetAutoBuildSettings(villageId: Int!): AutoBuildSettings!
+    updateAutoBuildSettings(villageId: ID!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
+    resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
 }

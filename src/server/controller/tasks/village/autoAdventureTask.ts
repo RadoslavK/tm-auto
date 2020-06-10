@@ -6,7 +6,6 @@ import { BuildingType } from '../../../../_shared/types/buildingType';
 import { TaskType } from '../../../../_shared/types/taskType';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
-import { gameInfoService } from '../../../services/info/gameInfoService';
 import {
   getWithMaximumSafe,
   getWithMinimumSafe,
@@ -45,9 +44,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
     }
 
     const page = await getPage();
-    const adventuresButton = gameInfoService.hasNewUI
-      ? await page.$('.adventure.green')
-      : await page.$('[class*="adventureWhite"]');
+    const adventuresButton = await page.$('.adventure.green');
 
     if (!adventuresButton) {
       return;
