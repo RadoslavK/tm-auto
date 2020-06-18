@@ -22,6 +22,7 @@ input UpdateAutoStorageSettingsInput {
 
 type AutoBuildSettings {
     allow: Boolean!
+    allowDualQueue: Boolean!
     coolDown: CoolDown!
     autoCropFields: Boolean!
     minCrop: Int!
@@ -32,6 +33,7 @@ type AutoBuildSettings {
 
 input UpdateAutoBuildSettingsInput {
     allow: Boolean!
+    allowDualQueue: Boolean!
     coolDown: CoolDownInput!
     autoCropFields: Boolean!
     minCrop: Int!

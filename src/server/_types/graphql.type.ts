@@ -62,6 +62,7 @@ export type AutoBuildLogEntryContent = {
 export type AutoBuildSettings = {
   readonly __typename?: 'AutoBuildSettings';
   readonly allow: Scalars['Boolean'];
+  readonly allowDualQueue: Scalars['Boolean'];
   readonly coolDown: CoolDown;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
@@ -248,6 +249,11 @@ export type EnqueueBuildingInput = {
   readonly type: Scalars['Int'];
   readonly villageId: Scalars['ID'];
   readonly targetLevel: Maybe<Scalars['Int']>;
+};
+
+export type GameInfo = {
+  readonly __typename?: 'GameInfo';
+  readonly tribe: Scalars['Int'];
 };
 
 export type GeneralSettings = {
@@ -523,6 +529,7 @@ export type Query = {
   readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
   readonly crannyCapacity: VillageCrannyCapacity;
   readonly currentAccount: UserAccount;
+  readonly gameInfo: GameInfo;
   readonly generalSettings: GeneralSettings;
   readonly generalVillageSettings: GeneralVillageSettings;
   readonly heroInformation: HeroModel;
@@ -779,6 +786,7 @@ export type UpdateAutoAdventureSettingsInput = {
 
 export type UpdateAutoBuildSettingsInput = {
   readonly allow: Scalars['Boolean'];
+  readonly allowDualQueue: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
@@ -987,6 +995,7 @@ export type ResolversTypes = {
   BuildingInProgress: ResolverTypeWrapper<BuildingInProgressModel>;
   Timestamp: ResolverTypeWrapper<Timestamp>;
   VillageCrannyCapacity: ResolverTypeWrapper<VillageCrannyCapacity>;
+  GameInfo: ResolverTypeWrapper<GameInfo>;
   GeneralSettings: ResolverTypeWrapper<GeneralSettings>;
   GeneralVillageSettings: ResolverTypeWrapper<GeneralVillageSettings>;
   HeroInformation: ResolverTypeWrapper<HeroModel>;
@@ -1065,6 +1074,7 @@ export type ResolversParentTypes = {
   BuildingInProgress: BuildingInProgressModel;
   Timestamp: Timestamp;
   VillageCrannyCapacity: VillageCrannyCapacity;
+  GameInfo: GameInfo;
   GeneralSettings: GeneralSettings;
   GeneralVillageSettings: GeneralVillageSettings;
   HeroInformation: HeroModel;
@@ -1139,6 +1149,7 @@ export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType exte
 
 export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildSettings'] = ResolversParentTypes['AutoBuildSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  allowDualQueue: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
   autoCropFields: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1277,6 +1288,11 @@ export type DurationResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type GameInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameInfo'] = ResolversParentTypes['GameInfo']> = {
+  tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
   dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1369,6 +1385,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   canMoveQueuedBuildingsBlockToIndex: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryCanMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
   crannyCapacity: Resolver<ResolversTypes['VillageCrannyCapacity'], ParentType, ContextType, RequireFields<QueryCrannyCapacityArgs, 'villageId'>>;
   currentAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType>;
+  gameInfo: Resolver<ResolversTypes['GameInfo'], ParentType, ContextType>;
   generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
   generalVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<QueryGeneralVillageSettingsArgs, 'villageId'>>;
   heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
@@ -1518,6 +1535,7 @@ export type Resolvers<ContextType = any> = {
   Coords: CoordsResolvers<ContextType>;
   Cost: CostResolvers<ContextType>;
   Duration: DurationResolvers<ContextType>;
+  GameInfo: GameInfoResolvers<ContextType>;
   GeneralSettings: GeneralSettingsResolvers<ContextType>;
   GeneralVillageSettings: GeneralVillageSettingsResolvers<ContextType>;
   HeroInformation: HeroInformationResolvers<ContextType>;

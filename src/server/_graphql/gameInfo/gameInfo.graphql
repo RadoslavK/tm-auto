@@ -1,0 +1,7 @@
+type GameInfo {
+    tribe: Int!
+}
+
+extend type Query {
+    gameInfo: GameInfo!
+}

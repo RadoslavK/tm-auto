@@ -17,7 +17,9 @@ import {
   useUpdateAutoBuildSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
+import { Tribe } from '../../../../../_shared/types/tribe';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
+import { useGameInfo } from '../../../hooks/useGameInfp';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import { useVillageSettingsContext } from './context/villageSettingsContext';
 
@@ -158,9 +160,13 @@ export const AutoBuildSettings: React.FC = () => {
     setHasChanges(true);
   }, []);
 
+  const gameInfo = useGameInfo();
+
   if (!state) {
     return null;
   }
+
+  const isRoman = gameInfo?.tribe === Tribe.Romans;
 
   const onReset = () => {
     resetSettings({ variables: { villageId } });
@@ -183,6 +189,7 @@ export const AutoBuildSettings: React.FC = () => {
     allow,
     allowAutoGranary,
     allowAutoWarehouse,
+    allowDualQueue,
     allowFreeSpots,
     autoCropFields,
     autoGranaryOverflowLevel,
@@ -232,6 +239,19 @@ export const AutoBuildSettings: React.FC = () => {
           type="checkbox"
         />
       </div>
+
+      {isRoman && (
+        <div>
+          <label htmlFor="allowDualQueue">Allow dual queue</label>
+          <input
+            checked={allowDualQueue}
+            id="allowDualQueue"
+            name="allowDualQueue"
+            onChange={onChange}
+            type="checkbox"
+          />
+        </div>
+      )}
 
       <div>
         <label>Cooldown</label>

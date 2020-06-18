@@ -6,6 +6,7 @@ import accountResolvers from './account/accountResolvers';
 import buildingResolvers from './building/buildingResolvers';
 import buildingInProgressResolvers from './buildingInProgress/buildingInProgressResolvers';
 import controllerResolvers from './controller/controllerResolvers';
+import gameInfoResolvers from './gameInfo/gameInfoResolvers';
 import heroResolvers from './hero/heroResolvers';
 import logsResolvers from './logs/logsResolvers';
 import miscResolvers from './misc/miscResolvers';
@@ -27,6 +28,7 @@ export const loadResolvers = (): Resolvers => mergeResolvers([
   buildingResolvers,
   buildingInProgressResolvers,
   controllerResolvers,
+  gameInfoResolvers,
   heroResolvers,
   logsResolvers,
   miscResolvers,

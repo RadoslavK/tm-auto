@@ -53,7 +53,12 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
     const { queue } = this._village.buildings;
 
-    const { buildingsToBuild } = await checkAutoStorage(this._village, this.settings().autoStorage);
+    const {
+      allowDualQueue,
+      autoStorage,
+    } = this.settings();
+
+    const { buildingsToBuild } = await checkAutoStorage(this._village, autoStorage);
 
     for (const autoStorageBuilding of buildingsToBuild) {
       await this.startBuildingIfQueueIsFree(autoStorageBuilding, !!autoStorageBuilding.queueId);
@@ -66,7 +71,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     const isRoman = getAccountContext().gameInfo.tribe === Tribe.Romans;
 
     let finishedAt: Date | undefined;
-    if (isRoman) {
+    if (isRoman && allowDualQueue) {
       await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
       await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Infrastructure);
 

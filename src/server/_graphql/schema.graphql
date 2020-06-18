@@ -40,6 +40,7 @@ type AutoBuildLogEntryContent {
 
 type AutoBuildSettings {
   allow: Boolean!
+  allowDualQueue: Boolean!
   coolDown: CoolDown!
   autoCropFields: Boolean!
   minCrop: Int!
@@ -210,6 +211,10 @@ input EnqueueBuildingInput {
   targetLevel: Int
 }
 
+type GameInfo {
+  tribe: Int!
+}
+
 type GeneralSettings {
   dataPath: String!
   chromePath: String!
@@ -296,6 +301,7 @@ type Query {
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   isBotActive: Boolean!
   botState: BotState!
+  gameInfo: GameInfo!
   heroInformation: HeroInformation!
   logEntries: [LogEntry!]!
   nextTasksExecution: Timestamp!
@@ -424,6 +430,7 @@ input UpdateAutoAdventureSettingsInput {
 
 input UpdateAutoBuildSettingsInput {
   allow: Boolean!
+  allowDualQueue: Boolean!
   coolDown: CoolDownInput!
   autoCropFields: Boolean!
   minCrop: Int!

@@ -7,6 +7,8 @@ import { AutoStorageSettings } from './autoStorageSettings';
 export class AutoBuildSettings {
   readonly allow: boolean = true;
 
+  readonly allowDualQueue: boolean = true;
+
   readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 7 }),
     min: new Duration({ minutes: 4 }),
