@@ -64,7 +64,9 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const setAllCollapsed = useCallback(() => {
     if (buildingQueue?.buildingRanges) {
       setCollapsedRanges(buildingQueue.buildingRanges.reduce(
-        (all, r) => [...all, r.id],
+        (all, r) => r.buildings.length > 1
+          ? [...all, r.id]
+          : all,
         [] as string[],
       ));
     }
