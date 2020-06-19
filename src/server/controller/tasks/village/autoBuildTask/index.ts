@@ -117,8 +117,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
   private startBuildingIfQueueIsFree = async (queuedBuilding: QueuedBuilding, isQueued = true): Promise<void> => {
     const settings = this.settings();
-    const cost = buildingInfoService.getBuildingInfo(queuedBuilding.type).costs[queuedBuilding.level];
-    const requiredResources = cost.resources.add(new Resources({ crop: settings.minCrop }));
+    const { cost } = buildingInfoService.getBuildingLevelInfo(queuedBuilding.type, queuedBuilding.level);
+    const requiredResources = cost.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
     const warehouseCapacity = this._village.resources.capacity.warehouse;
@@ -147,7 +147,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       }
 
       await this.startBuilding(queuedBuilding, isQueued);
-    } else if (currentResources.freeCrop < cost.resources.freeCrop && settings.autoCropFields) {
+    } else if (currentResources.freeCrop < cost.freeCrop && settings.autoCropFields) {
       // need cropland
       const croplandIsCurrentlyBeingBuilt = this._buildings.ongoing.buildings().some(b => b.type === BuildingType.Crop);
 
@@ -183,7 +183,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       this._addedCroplandInQueue = true;
 
       // dost surovin a zaroven prazdna res queue
-      const cropLandResourceCost = buildingInfoService.getBuildingInfo(BuildingType.Crop).costs[newCropLandLevel].resources;
+      const cropLandResourceCost = buildingInfoService.getBuildingLevelInfo(BuildingType.Crop, newCropLandLevel).cost;
 
       if (this._village.resources.amount.areLowerThan(cropLandResourceCost)
         || !this._village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)) {

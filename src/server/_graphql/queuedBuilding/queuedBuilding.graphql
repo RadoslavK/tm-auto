@@ -1,4 +1,5 @@
 type QueuedBuilding {
+    buildingTime: Duration!
     level: Int!
     type: Int!
     queueId: ID!
@@ -11,12 +12,14 @@ type QueuedBuildingRange {
     buildings: [QueuedBuilding!]!
     type: Int!
     fieldId: Int!
-    cost: Cost!
+    buildingTime: Duration!
+    cost: Resources!
 }
 
 type BuildingQueue {
     buildingRanges: [QueuedBuildingRange!]!
-    totalCost: Cost!
+    totalBuildingTime: Duration!
+    totalCost: Resources!
 }
 
 extend type Query {

@@ -19,11 +19,6 @@ type Resources {
     total: Int!
 }
 
-type Cost {
-    resources: Resources!
-    buildTime: Duration!
-}
-
 type Coords {
     x: Int!
     y: Int!

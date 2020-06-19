@@ -11,15 +11,6 @@ fragment Resources on Resources {
     total
 }
 
-fragment Cost on Cost {
-    resources {
-        ...Resources
-    }
-    buildTime {
-        ...Duration
-    }
-}
-
 fragment Coords on Coords {
     x
     y

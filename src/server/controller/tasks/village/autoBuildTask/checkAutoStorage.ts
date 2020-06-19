@@ -28,7 +28,7 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     const resourceField = village.buildings.queue.peek(BuildingSpotType.Fields);
 
     if (resourceField) {
-      const resourcesNeeded = buildingInfoService.getBuildingInfo(resourceField.type).costs[resourceField.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(resourceField.type, resourceField.level).cost;
 
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
@@ -37,7 +37,7 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     const infrastructureField = village.buildings.queue.peek(BuildingSpotType.Infrastructure);
 
     if (infrastructureField) {
-      const resourcesNeeded = buildingInfoService.getBuildingInfo(infrastructureField.type).costs[infrastructureField.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(infrastructureField.type, infrastructureField.level).cost;
 
       nextTaskHighestWarehouseCost = Math.max(nextTaskHighestWarehouseCost, resourcesNeeded.getRequiredWarehouseSize());
       nextTaskHighestGranaryCost = Math.max(nextTaskHighestGranaryCost, resourcesNeeded.crop);
@@ -46,7 +46,7 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     const building = village.buildings.queue.peek(BuildingSpotType.Any);
 
     if (building) {
-      const resourcesNeeded = buildingInfoService.getBuildingInfo(building.type).costs[building.level].resources;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(building.type, building.level).cost;
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
     }

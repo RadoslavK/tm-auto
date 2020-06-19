@@ -4,6 +4,7 @@
     "webpack.*.js",
     "hot-reload.server.js",
     "babel.config.js",
-    "generateGraphqlTypes.ts"
+    "generateGraphqlTypes.ts",
+    "scrape_info/scrapeBuildingInfo.ts"
   ]
 }

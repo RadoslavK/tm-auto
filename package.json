@@ -11,6 +11,7 @@
   },
   "scripts": {
     "generate-types": "ts-node --compiler-options={\\\"module\\\":\\\"CommonJS\\\"} generateGraphqlTypes",
+    "scrape-building-info": "ts-node --compiler-options={\\\"module\\\":\\\"CommonJS\\\"} scrape_info/scrapeBuildingInfo.ts",
     "lint": "eslint --cache \"src/**/*\"",
     "lint-errors": "yarn lint --quiet",
     "lint-fix-errors": "yarn lint-errors --fix",

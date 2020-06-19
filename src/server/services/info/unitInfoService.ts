@@ -1,11 +1,13 @@
-import { Cost } from '../../_models/misc/cost';
+import { Duration } from '../../_models/duration';
+import { Resources } from '../../_models/misc/resources';
 import { BuildingType } from '../../../_shared/types/buildingType';
 import { Tribe } from '../../../_shared/types/tribe';
 import unitInfos from '../../../../resources/unit-infos.json';
 
 type UnitInfo = {
   readonly buildingType: BuildingType;
-  readonly cost: Cost;
+  readonly buildingTime: Duration;
+  readonly cost: Resources;
   readonly index: number;
   readonly name: string;
   readonly tribe: Tribe;
@@ -36,7 +38,8 @@ class UnitInfoService {
           //  internally there are not classes so we need to create them
           const correctValue: UnitInfo = {
             ...value,
-            cost: new Cost(value.cost),
+            buildingTime: new Duration(value.buildingTime),
+            cost: new Resources(value.cost),
           };
 
           infosMap.set(+key, correctValue);

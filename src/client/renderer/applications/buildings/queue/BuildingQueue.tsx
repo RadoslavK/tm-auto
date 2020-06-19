@@ -102,7 +102,10 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
       >
         Collapse all
       </button>
-      <Cost cost={buildingQueue.totalCost} />
+      <Cost
+        buildTime={buildingQueue.totalBuildingTime}
+        resources={buildingQueue.totalCost}
+      />
       <div className={classes.buildings}>
         {buildingQueue.buildingRanges.map((range) => {
           const topBuilding = range.buildings[0];

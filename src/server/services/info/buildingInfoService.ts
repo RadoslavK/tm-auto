@@ -1,16 +1,26 @@
 import { BuildingCategory } from '../../_enums/buildingCategory';
 import { BuildingConditions } from '../../_models/buildings/buildingConditions';
-import { Cost } from '../../_models/misc/cost';
-import { mapRecord } from '../../../_shared/objectUtils';
+import { Duration } from '../../_models/duration';
+import { Resources } from '../../_models/misc/resources';
 import { BuildingType } from '../../../_shared/types/buildingType';
-import { Fields } from '../../../_shared/types/fields.type';
 import buildingInfos from '../../../../resources/building-infos.json';
 
-type BuildingInfo = {
+export type BuildingLevelInfo = {
+  readonly buildingTime: Duration;
+  readonly cost: Resources;
+  readonly culturePoints: number;
+};
+
+const emptyLevelInfo: BuildingLevelInfo = {
+  buildingTime: new Duration(),
+  cost: new Resources(),
+  culturePoints: 0,
+};
+
+export type BuildingInfo = {
   readonly category: BuildingCategory;
   readonly conditions: BuildingConditions;
-  readonly costs: Record<string, Cost>;
-  readonly culturePoints: Record<string, number>;
+  readonly levelInfos: Map<number, BuildingLevelInfo>;
   readonly maxLevel: number;
   readonly name: string;
   readonly type: number;
@@ -29,23 +39,47 @@ class BuildingInfoService {
     return info;
   };
 
+  public getBuildingLevelInfo = (type: BuildingType, level: number): BuildingLevelInfo => {
+    if (level === 0) {
+      return emptyLevelInfo;
+    }
+
+    const info = this.getBuildingInfo(type);
+
+    const forLevel = info.levelInfos.get(level);
+
+    if (!forLevel) {
+      throw new Error(`Building ${BuildingType[type]} does not have level ${level}`);
+    }
+
+    return forLevel;
+  };
+
   private infos = (): Map<BuildingType, BuildingInfo> => {
     if (!this.buildingInfos) {
       const infosMap = new Map();
 
       Object
         .entries(buildingInfos)
-        .forEach(([key, value]) => {
-          const bInfo: BuildingInfo = value as any;
+        .forEach(([type, info]) => {
+          const levelInfos = Object
+            .entries(info.levelInfos)
+            .reduce((reduced, [level, levelInfo]) => {
+              reduced.set(+level, {
+                buildingTime: new Duration(levelInfo.buildingTime),
+                cost: new Resources(levelInfo.cost),
+                culturePoints: levelInfo.culturePoints,
+              });
 
-          const costs = mapRecord(bInfo.costs as Record<string, Fields<Cost>>, c => new Cost(c));
+              return reduced;
+            }, new Map<number, BuildingLevelInfo>());
 
           const buildingInfo: BuildingInfo = {
-            ...bInfo,
-            costs,
-          };
+            ...info,
+            levelInfos,
+          } as any;
 
-          infosMap.set(+key, buildingInfo);
+          infosMap.set(+type, buildingInfo);
         });
 
       this.buildingInfos = infosMap;

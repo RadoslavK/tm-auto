@@ -2,14 +2,18 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import clsx from 'clsx';
 import React from 'react';
 
-import { Cost as CostModel } from '../../../_graphql/graphqlHooks';
+import {
+  Duration,
+  Resources,
+} from '../../../_graphql/graphqlHooks';
 import { formatTimeFromDuration } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
 
 type Props = {
   readonly className?: string;
-  readonly cost: CostModel;
+  readonly buildTime: Duration;
+  readonly resources: Resources;
 };
 
 const useStyles = makeStyles({
@@ -56,11 +60,9 @@ const useStyles = makeStyles({
 
 export const Cost: React.FC<Props> = (props) => {
   const {
+    buildTime,
     className,
-    cost: {
-      buildTime,
-      resources,
-    },
+    resources,
   } = props;
 
   const classes = useStyles({});

@@ -116,7 +116,6 @@ enum BotState {
 }
 
 type BuildingInfo {
-  costs: [Cost!]!
   maxLevel: Int!
   name: String!
 }
@@ -128,9 +127,14 @@ type BuildingInProgress {
   fieldId: Int!
 }
 
+type BuildingLevelInfo {
+  cost: Resources!
+}
+
 type BuildingQueue {
   buildingRanges: [QueuedBuildingRange!]!
-  totalCost: Cost!
+  totalBuildingTime: Duration!
+  totalCost: Resources!
 }
 
 type BuildingSpot {
@@ -172,11 +176,6 @@ input CoolDownInput {
 type Coords {
   x: Int!
   y: Int!
-}
-
-type Cost {
-  resources: Resources!
-  buildTime: Duration!
 }
 
 input DequeueBuildingAtFieldInput {
@@ -297,6 +296,7 @@ type Query {
   lastSignedAccountId: String
   availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
   buildingInfo(buildingType: Int!): BuildingInfo!
+  buildingLevelInfo(buildingType: Int!, level: Int!): BuildingLevelInfo!
   buildingSpots(villageId: ID!): BuildingSpots!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   isBotActive: Boolean!
@@ -326,6 +326,7 @@ type Query {
 }
 
 type QueuedBuilding {
+  buildingTime: Duration!
   level: Int!
   type: Int!
   queueId: ID!
@@ -338,7 +339,8 @@ type QueuedBuildingRange {
   buildings: [QueuedBuilding!]!
   type: Int!
   fieldId: Int!
-  cost: Cost!
+  buildingTime: Duration!
+  cost: Resources!
 }
 
 type ResourceClaimLogEntryContent {

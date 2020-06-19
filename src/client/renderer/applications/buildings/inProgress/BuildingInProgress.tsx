@@ -5,7 +5,7 @@ import {
   BuildingInProgress as BuildingInProgressModel,
   Timestamp,
 } from '../../../_graphql/graphqlHooks';
-import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
+import { useBuildingInfo } from '../../../hooks/buildings/useBuildingInfo';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';

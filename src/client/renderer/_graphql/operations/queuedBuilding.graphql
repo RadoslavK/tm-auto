@@ -1,6 +1,9 @@
 #import "./misc.graphql"
 
 fragment QueuedBuilding on QueuedBuilding {
+    buildingTime {
+        ...Duration
+    }
     fieldId
     level
     queueId
@@ -12,8 +15,11 @@ fragment QueuedBuildingRange on QueuedBuildingRange {
     buildings {
         ...QueuedBuilding
     }
+    buildingTime {
+        ...Duration
+    }
     cost {
-        ...Cost
+        ...Resources
     }
     fieldId
     id
@@ -24,8 +30,11 @@ fragment BuildingQueue on BuildingQueue {
     buildingRanges {
         ...QueuedBuildingRange
     }
+    totalBuildingTime {
+        ...Duration
+    }
     totalCost {
-        ...Cost
+        ...Resources
     }
 }
 

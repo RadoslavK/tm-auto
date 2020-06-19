@@ -2,7 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
 import { QueuedBuildingRange } from '../../../../_graphql/graphqlHooks';
-import { useBuildingInfo } from '../../../../hooks/useBuildingInfo';
+import { useBuildingInfo } from '../../../../hooks/buildings/useBuildingInfo';
 import { imageLinks } from '../../../../utils/imageLinks';
 import { Cost } from '../Cost';
 import { QueuedBuildingRangeActions } from './QueuedBuildingRangeActions';
@@ -73,7 +73,10 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
           {' '}
           {buildingRange.buildings[0].level}-{buildingRange.buildings[buildingRange.buildings.length - 1].level}
         </div>
-        <Cost cost={buildingRange.cost} />
+        <Cost
+          buildTime={buildingRange.buildingTime}
+          resources={buildingRange.cost}
+        />
       </div>
     </div>
   );

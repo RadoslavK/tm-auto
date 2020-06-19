@@ -5,9 +5,9 @@ import React, { useState } from 'react';
 
 import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/graphqlHooks';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { useBuildingInfo } from '../../../hooks/buildings/useBuildingInfo';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
-import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';

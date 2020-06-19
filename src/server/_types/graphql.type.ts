@@ -147,7 +147,6 @@ export enum BotState {
 
 export type BuildingInfo = {
   readonly __typename?: 'BuildingInfo';
-  readonly costs: ReadonlyArray<Cost>;
   readonly maxLevel: Scalars['Int'];
   readonly name: Scalars['String'];
 };
@@ -160,10 +159,16 @@ export type BuildingInProgress = {
   readonly fieldId: Scalars['Int'];
 };
 
+export type BuildingLevelInfo = {
+  readonly __typename?: 'BuildingLevelInfo';
+  readonly cost: ResourcesModel;
+};
+
 export type BuildingQueue = {
   readonly __typename?: 'BuildingQueue';
   readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
-  readonly totalCost: Cost;
+  readonly totalBuildingTime: Duration;
+  readonly totalCost: ResourcesModel;
 };
 
 export type BuildingSpot = {
@@ -210,12 +215,6 @@ export type Coords = {
   readonly __typename?: 'Coords';
   readonly x: Scalars['Int'];
   readonly y: Scalars['Int'];
-};
-
-export type Cost = {
-  readonly __typename?: 'Cost';
-  readonly resources: ResourcesModel;
-  readonly buildTime: Duration;
 };
 
 export type DequeueBuildingAtFieldInput = {
@@ -522,6 +521,7 @@ export type Query = {
   readonly availableNewBuildingsTypes: ReadonlyArray<Scalars['Int']>;
   readonly botState: BotState;
   readonly buildingInfo: BuildingInfo;
+  readonly buildingLevelInfo: BuildingLevelInfo;
   readonly buildingQueue: BuildingQueue;
   readonly buildingSpots: BuildingSpots;
   readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
@@ -573,6 +573,12 @@ export type QueryAvailableNewBuildingsTypesArgs = {
 
 export type QueryBuildingInfoArgs = {
   buildingType: Scalars['Int'];
+};
+
+
+export type QueryBuildingLevelInfoArgs = {
+  buildingType: Scalars['Int'];
+  level: Scalars['Int'];
 };
 
 
@@ -643,6 +649,7 @@ export type QueryVillageArgs = {
 
 export type QueuedBuilding = {
   readonly __typename?: 'QueuedBuilding';
+  readonly buildingTime: Duration;
   readonly level: Scalars['Int'];
   readonly type: Scalars['Int'];
   readonly queueId: Scalars['ID'];
@@ -656,7 +663,8 @@ export type QueuedBuildingRange = {
   readonly buildings: ReadonlyArray<QueuedBuilding>;
   readonly type: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
-  readonly cost: Cost;
+  readonly buildingTime: Duration;
+  readonly cost: ResourcesModel;
 };
 
 export type ResourceClaimLogEntryContent = {
@@ -982,11 +990,11 @@ export type ResolversTypes = {
   AutoUnitsUnitSettings: ResolverTypeWrapper<AutoUnitsUnitSettings>;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   BotState: BotState;
-  BuildingInfo: ResolverTypeWrapper<Omit<BuildingInfo, 'costs'> & { costs: ReadonlyArray<ResolversTypes['Cost']> }>;
-  Cost: ResolverTypeWrapper<Omit<Cost, 'resources'> & { resources: ResolversTypes['Resources'] }>;
+  BuildingInfo: ResolverTypeWrapper<BuildingInfo>;
+  BuildingLevelInfo: ResolverTypeWrapper<Omit<BuildingLevelInfo, 'cost'> & { cost: ResolversTypes['Resources'] }>;
   Resources: ResolverTypeWrapper<ResourcesModel>;
-  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, totalCost: ResolversTypes['Cost'] }>;
-  QueuedBuildingRange: ResolverTypeWrapper<Omit<QueuedBuildingRange, 'cost'> & { cost: ResolversTypes['Cost'] }>;
+  BuildingQueue: ResolverTypeWrapper<Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, totalCost: ResolversTypes['Resources'] }>;
+  QueuedBuildingRange: ResolverTypeWrapper<Omit<QueuedBuildingRange, 'cost'> & { cost: ResolversTypes['Resources'] }>;
   QueuedBuilding: ResolverTypeWrapper<QueuedBuilding>;
   BuildingSpots: ResolverTypeWrapper<Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversTypes['BuildingSpot']>, resources: ResolversTypes['ResourceFields'] }>;
   BuildingSpot: ResolverTypeWrapper<BuildingSpotModel>;
@@ -1061,11 +1069,11 @@ export type ResolversParentTypes = {
   AutoUnitsUnitSettings: AutoUnitsUnitSettings;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
   BotState: BotState;
-  BuildingInfo: Omit<BuildingInfo, 'costs'> & { costs: ReadonlyArray<ResolversParentTypes['Cost']> };
-  Cost: Omit<Cost, 'resources'> & { resources: ResolversParentTypes['Resources'] };
+  BuildingInfo: BuildingInfo;
+  BuildingLevelInfo: Omit<BuildingLevelInfo, 'cost'> & { cost: ResolversParentTypes['Resources'] };
   Resources: ResourcesModel;
-  BuildingQueue: Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversParentTypes['QueuedBuildingRange']>, totalCost: ResolversParentTypes['Cost'] };
-  QueuedBuildingRange: Omit<QueuedBuildingRange, 'cost'> & { cost: ResolversParentTypes['Cost'] };
+  BuildingQueue: Omit<BuildingQueue, 'buildingRanges' | 'totalCost'> & { buildingRanges: ReadonlyArray<ResolversParentTypes['QueuedBuildingRange']>, totalCost: ResolversParentTypes['Resources'] };
+  QueuedBuildingRange: Omit<QueuedBuildingRange, 'cost'> & { cost: ResolversParentTypes['Resources'] };
   QueuedBuilding: QueuedBuilding;
   BuildingSpots: Omit<BuildingSpots, 'infrastructure' | 'resources'> & { infrastructure: ReadonlyArray<ResolversParentTypes['BuildingSpot']>, resources: ResolversParentTypes['ResourceFields'] };
   BuildingSpot: BuildingSpotModel;
@@ -1221,7 +1229,6 @@ export type AutoUnitsUnitSettingsResolvers<ContextType = any, ParentType extends
 };
 
 export type BuildingInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingInfo'] = ResolversParentTypes['BuildingInfo']> = {
-  costs: Resolver<ReadonlyArray<ResolversTypes['Cost']>, ParentType, ContextType>;
   maxLevel: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -1235,9 +1242,15 @@ export type BuildingInProgressResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type BuildingLevelInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingLevelInfo'] = ResolversParentTypes['BuildingLevelInfo']> = {
+  cost: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
   buildingRanges: Resolver<ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, ParentType, ContextType>;
-  totalCost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+  totalBuildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  totalCost: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1271,12 +1284,6 @@ export type CoolDownResolvers<ContextType = any, ParentType extends ResolversPar
 export type CoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coords'] = ResolversParentTypes['Coords']> = {
   x: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   y: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type CostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cost'] = ResolversParentTypes['Cost']> = {
-  resources: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
-  buildTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1378,6 +1385,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   availableNewBuildingsTypes: Resolver<ReadonlyArray<ResolversTypes['Int']>, ParentType, ContextType, RequireFields<QueryAvailableNewBuildingsTypesArgs, 'input'>>;
   botState: Resolver<ResolversTypes['BotState'], ParentType, ContextType>;
   buildingInfo: Resolver<ResolversTypes['BuildingInfo'], ParentType, ContextType, RequireFields<QueryBuildingInfoArgs, 'buildingType'>>;
+  buildingLevelInfo: Resolver<ResolversTypes['BuildingLevelInfo'], ParentType, ContextType, RequireFields<QueryBuildingLevelInfoArgs, 'buildingType' | 'level'>>;
   buildingQueue: Resolver<ResolversTypes['BuildingQueue'], ParentType, ContextType, RequireFields<QueryBuildingQueueArgs, 'villageId'>>;
   buildingSpots: Resolver<ResolversTypes['BuildingSpots'], ParentType, ContextType, RequireFields<QueryBuildingSpotsArgs, 'villageId'>>;
   buildingsInProgress: Resolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, ParentType, ContextType, RequireFields<QueryBuildingsInProgressArgs, 'villageId'>>;
@@ -1402,6 +1410,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type QueuedBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuilding'] = ResolversParentTypes['QueuedBuilding']> = {
+  buildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   queueId: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -1415,7 +1424,8 @@ export type QueuedBuildingRangeResolvers<ContextType = any, ParentType extends R
   buildings: Resolver<ReadonlyArray<ResolversTypes['QueuedBuilding']>, ParentType, ContextType>;
   type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  cost: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+  buildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  cost: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1527,13 +1537,13 @@ export type Resolvers<ContextType = any> = {
   AutoUnitsUnitSettings: AutoUnitsUnitSettingsResolvers<ContextType>;
   BuildingInfo: BuildingInfoResolvers<ContextType>;
   BuildingInProgress: BuildingInProgressResolvers<ContextType>;
+  BuildingLevelInfo: BuildingLevelInfoResolvers<ContextType>;
   BuildingQueue: BuildingQueueResolvers<ContextType>;
   BuildingSpot: BuildingSpotResolvers<ContextType>;
   BuildingSpotLevel: BuildingSpotLevelResolvers<ContextType>;
   BuildingSpots: BuildingSpotsResolvers<ContextType>;
   CoolDown: CoolDownResolvers<ContextType>;
   Coords: CoordsResolvers<ContextType>;
-  Cost: CostResolvers<ContextType>;
   Duration: DurationResolvers<ContextType>;
   GameInfo: GameInfoResolvers<ContextType>;
   GeneralSettings: GeneralSettingsResolvers<ContextType>;

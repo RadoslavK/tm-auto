@@ -103,9 +103,9 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     possibleUnitsToBuild.forEach(unitToBuild => {
       const uIndex = unitToBuild.index;
       const {
-        buildTime: originalBuildTime,
-        resources: cost,
-      } = unitInfoService.getUnitInfo(uIndex).cost;
+        buildingTime: originalBuildTime,
+        cost,
+      } = unitInfoService.getUnitInfo(uIndex);
 
       // max by res
       let maxPossibleAmountToBuild = Math.min(

@@ -42,14 +42,9 @@ export default <Resolvers> {
 
     buildingSpots: (_, args) => getBuildingSpots(args.villageId),
 
-    buildingInfo: (_, args) => {
-      const info = buildingInfoService.getBuildingInfo(args.buildingType);
+    buildingInfo: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType),
 
-      return {
-        ...info,
-        costs: Object.values(info.costs),
-      };
-    },
+    buildingLevelInfo: (_, { buildingType, level }) => buildingInfoService.getBuildingLevelInfo(buildingType, level),
   },
 
   Subscription: {

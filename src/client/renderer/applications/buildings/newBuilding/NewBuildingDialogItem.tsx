@@ -3,8 +3,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useState } from 'react';
 
 import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { useBuildingInfo } from '../../../hooks/buildings/useBuildingInfo';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
-import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
 

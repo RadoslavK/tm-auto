@@ -1,6 +1,7 @@
 import { BuildingQueue as BuildingQueueModel } from '../../_models/buildings/queue/buildingQueue';
 import { QueuedBuilding as QueuedBuildingModel } from '../../_models/buildings/queue/queuedBuilding';
-import { Cost as CostModel } from '../../_models/misc/cost';
+import { Duration } from '../../_models/duration';
+import { Resources } from '../../_models/misc/resources';
 import {
   BuildingQueue,
   QueuedBuilding,
@@ -38,44 +39,47 @@ const mapBuildingQueue = (queue: BuildingQueueModel, mbLevels: Record<string, nu
 
   const { speed } = getAccountContext().gameInfo;
 
-  return ranges.reduce((reducedQueue, range): { readonly buildingRanges: QueuedBuildingRange[]; totalCost: CostModel } => {
+  return ranges.reduce((reducedQueue, range): { readonly buildingRanges: QueuedBuildingRange[]; totalCost: Resources; totalBuildingTime: Duration } => {
     const firstBuilding = range[0];
     const lastBuilding = range[range.length - 1];
 
-    const { costs } = buildingInfoService.getBuildingInfo(firstBuilding.type);
+    const rangeResult = range.reduce((reducedResult, building): { readonly cost: Resources; readonly buildingTime: Duration; readonly buildings: QueuedBuilding[] } => {
+      const mbLevel = mbLevels[building.queueId];
+      const {
+        buildingTime,
+        cost,
+      } = buildingInfoService.getBuildingLevelInfo(building.type, building.level);
 
-    const rangeResult = range.reduce((reducedResult, building): { readonly cost: CostModel; readonly buildings: QueuedBuilding[] } => {
+      const actualBuildTime = getActualBuildingBuildTime(buildingTime, speed, mbLevel, building.type);
+
       const clientBuildingModel: QueuedBuilding = {
         ...building,
+        buildingTime: actualBuildTime,
         queueIndex: building.index,
       };
 
-      const cost = costs[building.level];
-      const mbLevel = mbLevels[building.queueId];
-      const actualBuildTime = getActualBuildingBuildTime(cost.buildTime, speed, mbLevel, building.type);
-      const actualCost = new CostModel({
-        resources: cost.resources,
-        buildTime: actualBuildTime,
-      });
+      reducedResult.buildingTime = reducedResult.buildingTime.add(actualBuildTime);
       reducedResult.buildings.push(clientBuildingModel);
-      reducedResult.cost = reducedResult.cost.add(actualCost);
+      reducedResult.cost = reducedResult.cost.add(cost);
 
       return reducedResult;
-    }, { buildings: [], cost: new CostModel() } as { cost: CostModel; readonly buildings: QueuedBuilding[] });
+    }, { buildings: [], buildingTime: new Duration(), cost: new Resources() } as { cost: Resources; buildingTime: Duration; readonly buildings: QueuedBuilding[] });
 
     const clientRange: QueuedBuildingRange = {
       id: `${firstBuilding.fieldId}_${lastBuilding.level}`,
       type: firstBuilding.type,
       cost: rangeResult.cost,
       fieldId: firstBuilding.fieldId,
+      buildingTime: rangeResult.buildingTime,
       buildings: rangeResult.buildings,
     };
 
     return {
       buildingRanges: reducedQueue.buildingRanges.concat(clientRange),
       totalCost: reducedQueue.totalCost.add(rangeResult.cost),
+      totalBuildingTime: reducedQueue.totalBuildingTime.add(rangeResult.buildingTime),
     };
-  }, { totalCost: new CostModel(), buildingRanges: [] } as { readonly buildingRanges: QueuedBuildingRange[]; totalCost: CostModel });
+  }, { totalCost: new Resources(), totalBuildingTime: new Duration(), buildingRanges: [] } as { readonly buildingRanges: QueuedBuildingRange[]; totalCost: Resources; totalBuildingTime: Duration });
 };
 
 const getBuildingQueue = (villageId: string) => {

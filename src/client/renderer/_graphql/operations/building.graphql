@@ -41,11 +41,16 @@ query GetAvailableNewBuildingTypes($input: AvailableNewBuildingsInput!) {
 
 query GetBuildingInfo($buildingType: Int!) {
     buildingInfo(buildingType: $buildingType) {
-        costs {
-            ...Cost
-        }
         maxLevel
         name
+    }
+}
+
+query GetBuildingLevelInfo($buildingType: Int!, $level: Int!) {
+    buildingLevelInfo(buildingType: $buildingType, level: $level) {
+        cost {
+            ...Resources
+        }
     }
 }
 

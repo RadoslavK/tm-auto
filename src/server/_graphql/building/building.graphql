@@ -1,7 +1,10 @@
 type BuildingInfo {
-    costs: [Cost!]!
     maxLevel: Int!
     name: String!
+}
+
+type BuildingLevelInfo {
+    cost: Resources!
 }
 
 type BuildingSpotLevel {
@@ -37,6 +40,7 @@ input AvailableNewBuildingsInput {
 extend type Query {
     availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
     buildingInfo(buildingType: Int!): BuildingInfo!
+    buildingLevelInfo(buildingType: Int!, level: Int!): BuildingLevelInfo!
     buildingSpots(villageId: ID!): BuildingSpots!
 }
 
