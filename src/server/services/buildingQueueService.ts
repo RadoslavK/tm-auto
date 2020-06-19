@@ -194,7 +194,6 @@ export class BuildingQueueService {
   };
 
   public moveBlockAsHighAsPossible = (topBuildingQueueId: string, bottomBuildingQueueId: string): void => {
-    // TODO
     if (topBuildingQueueId || bottomBuildingQueueId) {
       throw new Error('Not implemented yet');
     } else {

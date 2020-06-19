@@ -53,10 +53,10 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
 
   return (
     <div className={classes.root}>
-      {!isHighlight && (
+      {!isHighlight && onExpand && (
         <QueuedBuildingRangeActions
           className={classes.actions}
-          onExpand={onExpand ? () => onExpand(buildingRange.id) : undefined}
+          onExpand={() => onExpand(buildingRange.id)}
           range={buildingRange}
         />
       )}

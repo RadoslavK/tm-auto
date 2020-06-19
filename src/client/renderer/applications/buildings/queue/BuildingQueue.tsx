@@ -2,14 +2,15 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, {
   useCallback,
   useEffect,
-  useState,
 } from 'react';
 
+import { updateCollapsedBuildingQueueRangeIds } from '../../../_graphql/cache/cache';
 import {
   OnQueueUpdatedDocument,
   OnQueueUpdatedSubscription,
   OnQueueUpdatedSubscriptionVariables,
   useClearQueueMutation,
+  useGetCollapsedBuildingQueueRangesQuery,
   useGetQueuedBuildingsQuery,
 } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
@@ -54,34 +55,37 @@ const useBuildingQueue = () => {
 
 export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const classes = useStyles();
-  // TODO store in graphql cache/local state
-  const [collapsedRanges, setCollapsedRanges] = useState<readonly string[]>([]);
 
   const { villageId } = useVillageContext();
   const buildingQueue = useBuildingQueue();
   const [clearQueue] = useClearQueueMutation({ variables: { villageId } });
+  const collapsedRangeIds = useGetCollapsedBuildingQueueRangesQuery({
+    variables: {
+      villageId,
+    },
+  }).data?.collapsedBuildingQueueRanges || [];
 
   const setAllCollapsed = useCallback(() => {
     if (buildingQueue?.buildingRanges) {
-      setCollapsedRanges(buildingQueue.buildingRanges.reduce(
+      updateCollapsedBuildingQueueRangeIds(villageId, buildingQueue.buildingRanges.reduce(
         (all, r) => r.buildings.length > 1
           ? [...all, r.id]
           : all,
         [] as string[],
       ));
     }
-  }, [buildingQueue?.buildingRanges]);
+  }, [buildingQueue?.buildingRanges, villageId]);
 
   if (!buildingQueue) {
     return null;
   }
 
   const onRangeCollapse = (rangeId: string) => {
-    setCollapsedRanges(prevRanges => prevRanges.concat([rangeId]));
+    updateCollapsedBuildingQueueRangeIds(villageId, collapsedRangeIds.concat([rangeId]));
   };
 
   const onRangeExpand = (rangeId: string) => {
-    setCollapsedRanges(prevRanges => prevRanges.filter(id => id !== rangeId));
+    updateCollapsedBuildingQueueRangeIds(villageId, collapsedRangeIds.filter(id => id !== rangeId));
   };
 
   const onClear = async (): Promise<void> => {
@@ -111,7 +115,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
           const topBuilding = range.buildings[0];
           const botBuilding = range.buildings[range.buildings.length - 1];
           const canBeCollapsed = topBuilding !== botBuilding;
-          const isCollapsed = collapsedRanges.includes(range.id);
+          const isCollapsed = collapsedRangeIds.includes(range.id);
 
           if (isCollapsed) {
             return (

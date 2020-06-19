@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 type Props = {
   readonly className?: string;
-  readonly onExpand?: () => void;
+  readonly onExpand: () => void;
   readonly range: QueuedBuildingRange;
 };
 
@@ -72,12 +72,10 @@ export const QueuedBuildingRangeActions: React.FC<Props> = ({ className, onExpan
         className={clsx(classes.image, classes.delete)}
         onClick={onDequeue}
       />
-      {onExpand && (
-        <button
-          className={clsx(classes.image, classes.expand)}
-          onClick={onExpand}
-        />
-      )}
+      <button
+        className={clsx(classes.image, classes.expand)}
+        onClick={onExpand}
+      />
     </div>
   );
 };

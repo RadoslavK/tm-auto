@@ -2,7 +2,6 @@ import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
-  InMemoryCache,
 } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,7 +10,7 @@ import React, {
   useState,
 } from 'react';
 
-import { possibleTypes } from '../_graphql/fragmentTypes.json';
+import { graphQLCache } from '../_graphql/cache/cache';
 import { createIpcLink } from '../_graphql/utils/createIpcLink';
 import { IpcClient } from '../_ipc/ipcUtils';
 import { createErrorLink } from '../../../_shared/graphql/createErrorLink';
@@ -49,12 +48,7 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
             fetchPolicy: 'cache-and-network',
           },
         },
-        cache: new InMemoryCache({
-          possibleTypes,
-          typePolicies: {
-            QueuedBuildingRange: { keyFields: false },
-          },
-        }),
+        cache: graphQLCache,
         link,
       });
 

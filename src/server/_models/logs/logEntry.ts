@@ -5,7 +5,6 @@ import { AutoUnitsLogEntryContent } from './content/autoUnits';
 import { ResourceClaimLogEntryContent } from './content/resourceClaim';
 import { TextLogEntryContent } from './content/text';
 
-// TODO are those classes needed?
 export type LogEntryContent =
   TextLogEntryContent
   | AutoBuildLogEntryContent

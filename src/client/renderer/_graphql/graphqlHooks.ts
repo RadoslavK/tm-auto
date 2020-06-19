@@ -509,6 +509,7 @@ export type Query = {
   readonly buildingsInProgress: ReadonlyArray<BuildingInProgress>;
   readonly canMoveQueuedBuildingToIndex: Scalars['Boolean'];
   readonly canMoveQueuedBuildingsBlockToIndex: Scalars['Boolean'];
+  readonly collapsedBuildingQueueRanges: ReadonlyArray<Scalars['String']>;
   readonly crannyCapacity: VillageCrannyCapacity;
   readonly currentAccount: UserAccount;
   readonly gameInfo: GameInfo;
@@ -591,6 +592,11 @@ export type QueryCanMoveQueuedBuildingsBlockToIndexArgs = {
   topBuildingQueueId: Scalars['ID'];
   bottomBuildingQueueId: Scalars['ID'];
   index: Scalars['Int'];
+};
+
+
+export type QueryCollapsedBuildingQueueRangesArgs = {
+  villageId: Scalars['ID'];
 };
 
 
@@ -858,6 +864,13 @@ export type VillageResources = {
   readonly capacity: VillageCapacity;
   readonly production: Resources;
 };
+
+export type GetCollapsedBuildingQueueRangesQueryVariables = {
+  villageId: Scalars['ID'];
+};
+
+
+export type GetCollapsedBuildingQueueRangesQuery = { readonly collapsedBuildingQueueRanges: ReadonlyArray<string> };
 
 export type UserAccountFragment = { readonly id: string, readonly username: string, readonly password: string, readonly server: string };
 
@@ -1529,6 +1542,33 @@ export const AutoUnitsSettingsFragmentDoc: DocumentNode = {"kind":"Document","de
 export const GeneralSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GeneralSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GeneralSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chromePath"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"dataPath"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"headlessChrome"},"arguments":[],"directives":[]}]}}]};
 export const GeneralVillageSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GeneralVillageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GeneralVillageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allowTasks"},"arguments":[],"directives":[]}]}}]};
 export const VillageCrannyCapacityFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VillageCrannyCapacity"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VillageCrannyCapacity"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"actual"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"ongoing"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}}]};
+export const GetCollapsedBuildingQueueRangesDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCollapsedBuildingQueueRanges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collapsedBuildingQueueRanges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"client"},"arguments":[]}]}]}}]};
+
+/**
+ * __useGetCollapsedBuildingQueueRangesQuery__
+ *
+ * To run a query within a React component, call `useGetCollapsedBuildingQueueRangesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCollapsedBuildingQueueRangesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCollapsedBuildingQueueRangesQuery({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *   },
+ * });
+ */
+export function useGetCollapsedBuildingQueueRangesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>(GetCollapsedBuildingQueueRangesDocument, baseOptions);
+      }
+export function useGetCollapsedBuildingQueueRangesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>(GetCollapsedBuildingQueueRangesDocument, baseOptions);
+        }
+export type GetCollapsedBuildingQueueRangesQueryHookResult = ReturnType<typeof useGetCollapsedBuildingQueueRangesQuery>;
+export type GetCollapsedBuildingQueueRangesLazyQueryHookResult = ReturnType<typeof useGetCollapsedBuildingQueueRangesLazyQuery>;
+export type GetCollapsedBuildingQueueRangesQueryResult = ApolloReactCommon.QueryResult<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>;
 export const GetAccountsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accounts"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserAccount"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserAccount"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserAccount"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"username"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"password"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"server"},"arguments":[],"directives":[]}]}}]};
 
 /**

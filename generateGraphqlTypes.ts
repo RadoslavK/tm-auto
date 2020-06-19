@@ -9,7 +9,8 @@ import { loadSchema } from '@graphql-tools/load';
 import fs from 'fs';
 import { printSchema } from 'graphql';
 
-const localSchema = './src/client/renderer/_graphql/**/localSchema/**/*.graphql';
+const localSchema = './src/client/renderer/_graphql/local/schema/**/*.graphql';
+const localDocuments = './src/client/renderer/_graphql/local/operations/**/*.graphql';
 const schema = './src/server/_graphql/**/!(schema).graphql';
 const documents = './src/client/renderer/_graphql/**/operations/**/*.graphql';
 
@@ -116,7 +117,7 @@ const generateOperationTypesAndHooks = async (): Promise<void> => {
   };
 
   await generate({
-    documents,
+    documents: [documents, localDocuments],
     schema: [schema, localSchema],
     generates: {
       [hooksPath]: {
