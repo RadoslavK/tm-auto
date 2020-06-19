@@ -265,9 +265,11 @@ export type Mutation = {
   readonly deleteAccount: UserAccount;
   readonly dequeueBuilding: Maybe<Scalars['Boolean']>;
   readonly dequeueBuildingAtField: Maybe<Scalars['Boolean']>;
+  readonly dequeueBuildingsBlock: Maybe<Scalars['Boolean']>;
   readonly enqueueBuilding: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingToIndex: Maybe<Scalars['Boolean']>;
+  readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockToIndex: Maybe<Scalars['Boolean']>;
   readonly refreshVillage: Maybe<Scalars['Boolean']>;
   readonly resetAccountSettings: AccountSettings;
@@ -327,6 +329,13 @@ export type MutationDequeueBuildingAtFieldArgs = {
 };
 
 
+export type MutationDequeueBuildingsBlockArgs = {
+  villageId: Scalars['ID'];
+  topBuildingQueueId: Scalars['ID'];
+  bottomBuildingQueueId: Scalars['ID'];
+};
+
+
 export type MutationEnqueueBuildingArgs = {
   input: EnqueueBuildingInput;
 };
@@ -342,6 +351,13 @@ export type MutationMoveQueuedBuildingToIndexArgs = {
   villageId: Scalars['ID'];
   queueId: Scalars['ID'];
   index: Scalars['Int'];
+};
+
+
+export type MutationMoveQueuedBuildingsBlockAsHighAsPossibleArgs = {
+  villageId: Scalars['ID'];
+  topBuildingQueueId: Scalars['ID'];
+  bottomBuildingQueueId: Scalars['ID'];
 };
 
 
@@ -1205,6 +1221,24 @@ export type MoveQueuedBuildingsBlockToIndexMutationVariables = {
 
 
 export type MoveQueuedBuildingsBlockToIndexMutation = { readonly moveQueuedBuildingsBlockToIndex: Maybe<boolean> };
+
+export type DequeueBuildingsBlockMutationVariables = {
+  villageId: Scalars['ID'];
+  topBuildingQueueId: Scalars['ID'];
+  bottomBuildingQueueId: Scalars['ID'];
+};
+
+
+export type DequeueBuildingsBlockMutation = { readonly dequeueBuildingsBlock: Maybe<boolean> };
+
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables = {
+  villageId: Scalars['ID'];
+  topBuildingQueueId: Scalars['ID'];
+  bottomBuildingQueueId: Scalars['ID'];
+};
+
+
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutation = { readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<boolean> };
 
 export type OnQueueUpdatedSubscriptionVariables = {
   villageId: Scalars['ID'];
@@ -2790,6 +2824,62 @@ export function useMoveQueuedBuildingsBlockToIndexMutation(baseOptions?: ApolloR
 export type MoveQueuedBuildingsBlockToIndexMutationHookResult = ReturnType<typeof useMoveQueuedBuildingsBlockToIndexMutation>;
 export type MoveQueuedBuildingsBlockToIndexMutationResult = ApolloReactCommon.MutationResult<MoveQueuedBuildingsBlockToIndexMutation>;
 export type MoveQueuedBuildingsBlockToIndexMutationOptions = ApolloReactCommon.BaseMutationOptions<MoveQueuedBuildingsBlockToIndexMutation, MoveQueuedBuildingsBlockToIndexMutationVariables>;
+export const DequeueBuildingsBlockDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DequeueBuildingsBlock"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"topBuildingQueueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bottomBuildingQueueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dequeueBuildingsBlock"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"topBuildingQueueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"topBuildingQueueId"}}},{"kind":"Argument","name":{"kind":"Name","value":"bottomBuildingQueueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bottomBuildingQueueId"}}}],"directives":[]}]}}]};
+export type DequeueBuildingsBlockMutationFn = ApolloReactCommon.MutationFunction<DequeueBuildingsBlockMutation, DequeueBuildingsBlockMutationVariables>;
+
+/**
+ * __useDequeueBuildingsBlockMutation__
+ *
+ * To run a mutation, you first call `useDequeueBuildingsBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDequeueBuildingsBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [dequeueBuildingsBlockMutation, { data, loading, error }] = useDequeueBuildingsBlockMutation({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *      topBuildingQueueId: // value for 'topBuildingQueueId'
+ *      bottomBuildingQueueId: // value for 'bottomBuildingQueueId'
+ *   },
+ * });
+ */
+export function useDequeueBuildingsBlockMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DequeueBuildingsBlockMutation, DequeueBuildingsBlockMutationVariables>) {
+        return ApolloReactHooks.useMutation<DequeueBuildingsBlockMutation, DequeueBuildingsBlockMutationVariables>(DequeueBuildingsBlockDocument, baseOptions);
+      }
+export type DequeueBuildingsBlockMutationHookResult = ReturnType<typeof useDequeueBuildingsBlockMutation>;
+export type DequeueBuildingsBlockMutationResult = ApolloReactCommon.MutationResult<DequeueBuildingsBlockMutation>;
+export type DequeueBuildingsBlockMutationOptions = ApolloReactCommon.BaseMutationOptions<DequeueBuildingsBlockMutation, DequeueBuildingsBlockMutationVariables>;
+export const MoveQueuedBuildingsBlockAsHighAsPossibleDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveQueuedBuildingsBlockAsHighAsPossible"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"topBuildingQueueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bottomBuildingQueueId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveQueuedBuildingsBlockAsHighAsPossible"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"topBuildingQueueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"topBuildingQueueId"}}},{"kind":"Argument","name":{"kind":"Name","value":"bottomBuildingQueueId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bottomBuildingQueueId"}}}],"directives":[]}]}}]};
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationFn = ApolloReactCommon.MutationFunction<MoveQueuedBuildingsBlockAsHighAsPossibleMutation, MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables>;
+
+/**
+ * __useMoveQueuedBuildingsBlockAsHighAsPossibleMutation__
+ *
+ * To run a mutation, you first call `useMoveQueuedBuildingsBlockAsHighAsPossibleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveQueuedBuildingsBlockAsHighAsPossibleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveQueuedBuildingsBlockAsHighAsPossibleMutation, { data, loading, error }] = useMoveQueuedBuildingsBlockAsHighAsPossibleMutation({
+ *   variables: {
+ *      villageId: // value for 'villageId'
+ *      topBuildingQueueId: // value for 'topBuildingQueueId'
+ *      bottomBuildingQueueId: // value for 'bottomBuildingQueueId'
+ *   },
+ * });
+ */
+export function useMoveQueuedBuildingsBlockAsHighAsPossibleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MoveQueuedBuildingsBlockAsHighAsPossibleMutation, MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables>) {
+        return ApolloReactHooks.useMutation<MoveQueuedBuildingsBlockAsHighAsPossibleMutation, MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables>(MoveQueuedBuildingsBlockAsHighAsPossibleDocument, baseOptions);
+      }
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationHookResult = ReturnType<typeof useMoveQueuedBuildingsBlockAsHighAsPossibleMutation>;
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationResult = ApolloReactCommon.MutationResult<MoveQueuedBuildingsBlockAsHighAsPossibleMutation>;
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationOptions = ApolloReactCommon.BaseMutationOptions<MoveQueuedBuildingsBlockAsHighAsPossibleMutation, MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables>;
 export const OnQueueUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnQueueUpdated"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"queueUpdated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BuildingQueue"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuilding"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuilding"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueIndex"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuildingRange"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuildingRange"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuilding"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingQueue"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingQueue"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingRanges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuildingRange"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalBuildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}}]};
 
 /**

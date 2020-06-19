@@ -262,11 +262,13 @@ type Mutation {
   resetNextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
   clearQueue(villageId: ID!): Boolean
   dequeueBuilding(input: DequeueBuildingInput!): Boolean
+  dequeueBuildingsBlock(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!): Boolean
   dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean
   enqueueBuilding(input: EnqueueBuildingInput!): Boolean
   moveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean
   moveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean
   moveQueuedBuildingAsHighAsPossible(villageId: ID!, queueId: ID!): Boolean
+  moveQueuedBuildingsBlockAsHighAsPossible(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!): Boolean
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
   updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!

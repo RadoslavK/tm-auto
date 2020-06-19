@@ -34,10 +34,6 @@ class Offsets {
   public increaseFor = (fieldId: number): void => {
     this._offsets.set(fieldId, this.getFor(fieldId) + 1);
   };
-
-  public decreaseFor = (fieldId: number): void => {
-    this._offsets.set(fieldId, Math.max(this.getFor(fieldId) - 1, 0));
-  };
 }
 
 export class BuildingQueueService {
@@ -134,6 +130,17 @@ export class BuildingQueueService {
     }
   };
 
+  public dequeueBuildingsBlock = (topBuildingQueueId: string, bottomBuildingQueueId: string): void => {
+    const topIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === topBuildingQueueId);
+    const botIndex = this._village.buildings.queue.buildings().findIndex(b => b.queueId === bottomBuildingQueueId);
+
+    const idsToRemove = this._village.buildings.queue.buildings()
+      .slice(topIndex, botIndex + 1)
+      .map(b => b.queueId);
+
+    this.removeAndCorrectQueue(idsToRemove);
+  };
+
   public dequeueBuildingAtField = ({ fieldId, targetLevel }: DequeueAtFieldInput): void => {
     if (targetLevel) {
       const buildings = this._village.buildings.queue.getAllAtField(fieldId, b => b.level > targetLevel);
@@ -184,6 +191,15 @@ export class BuildingQueueService {
     this._village.buildings.queue.moveTo(queueIndex, newIndex);
 
     this.onUpdate();
+  };
+
+  public moveBlockAsHighAsPossible = (topBuildingQueueId: string, bottomBuildingQueueId: string): void => {
+    // TODO
+    if (topBuildingQueueId || bottomBuildingQueueId) {
+      throw new Error('Not implemented yet');
+    } else {
+      throw new Error('Not implemented yet');
+    }
   };
 
   private updateCanMoveToIndexFlags = (queueId: string, newIndex: number, flag: boolean): void => {
@@ -364,16 +380,6 @@ export class BuildingQueueService {
     if (!this.canMoveBuildingsBlockToIndex(topBuildingQueueId, bottomBuildingQueueId, newIndex)) {
       return;
     }
-
-    // TODO delete if below one works
-    // const buildingsToMoveCount = bottomBuildingCurrentIndex - topBuildingCurrentIndex + 1;
-    // const isMovingUp = newIndex < topBuildingCurrentIndex;
-    //
-    // for (let i = 0; i < buildingsToMoveCount; i++) {
-    //   const newIndexForTheBuilding = isMovingUp ? newIndex + i : newIndex - 1;
-    //   const movedIndex = isMovingUp ? topBuildingCurrentIndex + i : topBuildingCurrentIndex;
-    //   this._village.buildings.queue.moveTo(movedIndex, newIndexForTheBuilding);
-    // }
 
     const buildingsToMoveCount = bottomBuildingCurrentIndex - topBuildingCurrentIndex + 1;
     this._village.buildings.queue.moveBlockTo(topBuildingCurrentIndex, buildingsToMoveCount, newIndex);

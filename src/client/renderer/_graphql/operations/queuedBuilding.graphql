@@ -80,6 +80,14 @@ mutation MoveQueuedBuildingsBlockToIndex($villageId: ID!, $topBuildingQueueId: I
     moveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
 }
 
+mutation DequeueBuildingsBlock($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!) {
+    dequeueBuildingsBlock(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId)
+}
+
+mutation MoveQueuedBuildingsBlockAsHighAsPossible($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!) {
+    moveQueuedBuildingsBlockAsHighAsPossible(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId)
+}
+
 subscription OnQueueUpdated($villageId: ID!) {
     queueUpdated(villageId: $villageId) {
         ...BuildingQueue

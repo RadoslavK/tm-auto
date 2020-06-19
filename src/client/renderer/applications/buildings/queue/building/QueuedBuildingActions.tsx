@@ -23,14 +23,14 @@ const useStyles = makeStyles({
   delete: {
     backgroundImage: `url("${imageLinks.actions.delete}")`,
   },
+  moveToTop: {
+    backgroundImage: `url("${imageLinks.actions.queue.moveToTop}")`,
+  },
   image: {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: '2em',
     width: '2em',
-  },
-  moveToTop: {
-    backgroundImage: `url("${imageLinks.actions.queue.moveToTop}")`,
   },
   root: {
     display: 'flex',

@@ -126,6 +126,17 @@ export default <Resolvers> {
       queueManager.dequeueBuilding(queueId, true);
     },
 
+    dequeueBuildingsBlock: (_, args) => {
+      const {
+        bottomBuildingQueueId,
+        topBuildingQueueId,
+        villageId,
+      } = args;
+
+      const queueManager = getAccountContext().buildingQueueService.for(villageId);
+      queueManager.dequeueBuildingsBlock(topBuildingQueueId, bottomBuildingQueueId);
+    },
+
     dequeueBuildingAtField: (_, args) => {
       const {
         villageId,
@@ -166,6 +177,11 @@ export default <Resolvers> {
 
       const queueManager = getAccountContext().buildingQueueService.for(villageId);
       queueManager.moveQueuedBuildingsBlockToIndex(topBuildingQueueId, bottomBuildingQueueId, index);
+    },
+
+    moveQueuedBuildingsBlockAsHighAsPossible: (_, args) => {
+      const queueManager = getAccountContext().buildingQueueService.for(args.villageId);
+      queueManager.moveBlockAsHighAsPossible(args.topBuildingQueueId, args.bottomBuildingQueueId);
     },
   },
 

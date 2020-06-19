@@ -57,6 +57,7 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
         <QueuedBuildingRangeActions
           className={classes.actions}
           onExpand={onExpand ? () => onExpand(buildingRange.id) : undefined}
+          range={buildingRange}
         />
       )}
       <div className={classes.imageWithFieldId}>
