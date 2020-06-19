@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useGetAvailableNewBuildingTypesQuery } from '../../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../villages/context/villageContext';
-import { NewBuildingItem } from './NewBuildingItem';
+import { NewBuildingDialogItem } from './NewBuildingDialogItem';
 
 const useStyles = makeStyles({
   building: {
@@ -46,7 +46,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: 
       className={classes.root}
     >
       {availableNewBuildingsTypes.map((buildingType) => (
-        <NewBuildingItem
+        <NewBuildingDialogItem
           key={buildingType}
           className={classes.building}
           fieldId={fieldId}

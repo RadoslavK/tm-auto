@@ -6,18 +6,15 @@ import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
-import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
+import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
 
-type Props = {
-  readonly className?: string;
-  readonly fieldId: number;
-  readonly onSelect: () => void;
-  readonly type: BuildingType
+type StylesProps = {
+  readonly buildingType: BuildingType;
 };
 
-const useStyles = makeStyles<unknown, Props>({
+const useStyles = makeStyles<unknown, StylesProps>({
   image: props => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.type)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: 96,
@@ -29,20 +26,25 @@ const useStyles = makeStyles<unknown, Props>({
   },
 });
 
-export const NewBuildingItem: React.FC<Props> = (props) => {
-  const {
-    className,
-    fieldId,
-    onSelect,
-    type,
-  } = props;
+type Props = {
+  readonly className?: string;
+  readonly fieldId: number;
+  readonly onSelect: (targetLevel?: number) => void;
+  readonly type: BuildingType
+};
 
+export const NewBuildingDialogItem: React.FC<Props> = ({ className, fieldId, onSelect, type }) => {
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
-  const classes = useStyles(props);
-
-  const enqueue = useEnqueueBuildingMutation({ buildingType: type, fieldId });
+  const classes = useStyles({
+    buildingType: type,
+  });
 
   const buildingInfo = useBuildingInfo(type);
+
+  const enqueue = useEnqueueBuildingMutation({
+    buildingType: type,
+    fieldId,
+  });
 
   if (!buildingInfo) {
     return null;
@@ -56,12 +58,9 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
   const onClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>): Promise<void> => {
     if (event.ctrlKey) {
       setShowMultiEnqueue(true);
-    } else if (event.shiftKey) {
-      onSelect();
-      await enqueue(maxLevel);
     } else {
+      enqueue(event.shiftKey ? maxLevel : undefined);
       onSelect();
-      await enqueue();
     }
   };
 
@@ -78,15 +77,14 @@ export const NewBuildingItem: React.FC<Props> = (props) => {
         onClose={() => setShowMultiEnqueue(false)}
         open={showMultiEnqueue}
       >
-        <MultiEnqueueDialog
-          buildingType={type}
-          fieldId={fieldId}
+        <MultiLevelDialog
           maxLevel={maxLevel}
-          onSelect={() => {
+          minLevel={1}
+          onSelect={(targetLevel: number) => {
             setShowMultiEnqueue(false);
+            enqueue(targetLevel);
             onSelect();
           }}
-          totalLevel={0}
         />
       </Dialog>
     </>

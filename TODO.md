@@ -93,7 +93,6 @@ NOVE NE TAK DOLEZITE
 * Use new icons for resources, buildings, nations... Maybe have 2 versions for buildings
 * Use some big toggle instead of Checkboxes for allow
 * Show the Multi-level enqueue dialog close to the cursor/clicked building - React-Tether?
-* shift rclick -> dequeue all, shift lclick select level to keep
 
 ## Code Quality
 

@@ -180,7 +180,7 @@ type Cost {
 }
 
 input DequeueBuildingAtFieldInput {
-  deleteAll: Boolean!
+  targetLevel: Int
   fieldId: Int!
   villageId: ID!
 }

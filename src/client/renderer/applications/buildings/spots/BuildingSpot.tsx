@@ -9,14 +9,15 @@ import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useD
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
 import { imageLinks } from '../../../utils/imageLinks';
-import { MultiEnqueueDialog } from '../multiEnqueue/MultiEnqueueDialog';
+import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
 import { BuildingLevelBox } from './BuildingLevelBox';
 
 enum DialogType {
-  MultiEnqueue = 'MultiEnqueue',
-  NewBuilding = 'NewBuilding',
-  None = 'None'
+  None,
+  MultiDequeue,
+  MultiEnqueue,
+  NewBuilding,
 }
 
 type Props = {
@@ -51,18 +52,14 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
 
   const classes = useStyles(props);
   const [dialog, setDialog] = useState(DialogType.None);
+
+  const closeDialog = () => setDialog(DialogType.None);
+
   const enqueue = useEnqueueBuildingMutation({
     buildingType: building.type,
     fieldId: building.fieldId,
   });
-  const [dequeue] = useDequeueBuildingAtFieldMutation({
-    deleteAll: false,
-    fieldId: building.fieldId,
-  });
-  const [dequeueAll] = useDequeueBuildingAtFieldMutation({
-    deleteAll: true,
-    fieldId: building.fieldId,
-  });
+  const dequeueAtField = useDequeueBuildingAtFieldMutation();
 
   const buildingInfo = useBuildingInfo(building.type);
 
@@ -81,16 +78,10 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     }
 
     if (building.type > 0) {
-      if (building.level.total === maxLevel) {
-        return;
-      }
-
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
-      } else if (event.shiftKey) {
-        enqueue(maxLevel);
       } else {
-        enqueue();
+        enqueue(event.shiftKey ? maxLevel : undefined);
       }
     } else {
       setDialog(DialogType.NewBuilding);
@@ -103,14 +94,27 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     }
 
     if (event.ctrlKey) {
-      dequeueAll();
+      setDialog(DialogType.MultiDequeue);
     } else {
-      dequeue();
+      dequeueAtField({
+        targetLevel: event.shiftKey ? building.level.ongoing || building.level.actual : undefined,
+        fieldId: building.fieldId,
+      });
     }
   };
 
-  const onSelect = (): void => {
-    setDialog(DialogType.None);
+  const onMultiLevelEnqueue = (targetLevel: number): void => {
+    enqueue(targetLevel);
+    closeDialog();
+  };
+
+  const onMultiLevelDequeue = (targetLevel: number): void => {
+    dequeueAtField({
+      targetLevel,
+      fieldId: building.fieldId,
+    });
+
+    closeDialog();
   };
 
   return (
@@ -132,25 +136,35 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
         </div>
       </div>
       <Dialog
-        onClose={onSelect}
+        onClose={closeDialog}
         open={dialog === DialogType.NewBuilding}
       >
         <NewBuildingDialog
           fieldId={building.fieldId}
-          onSelect={onSelect}
+          onSelect={closeDialog}
         />
       </Dialog>
       <Dialog
-        onClose={onSelect}
+        onClose={closeDialog}
         open={dialog === DialogType.MultiEnqueue}
       >
-        <MultiEnqueueDialog
-          buildingType={building.type}
-          fieldId={building.fieldId}
+        <MultiLevelDialog
           maxLevel={maxLevel}
-          onSelect={onSelect}
-          totalLevel={building.level.total}
+          minLevel={building.level.total + 1}
+          onSelect={onMultiLevelEnqueue}
         />
+      </Dialog>
+      <Dialog
+        onClose={closeDialog}
+        open={dialog === DialogType.MultiDequeue}
+      >
+        {building.level.queued && (
+          <MultiLevelDialog
+            maxLevel={building.level.queued - 1}
+            minLevel={building.level.ongoing || building.level.actual}
+            onSelect={onMultiLevelDequeue}
+          />
+        )}
       </Dialog>
     </>
   );

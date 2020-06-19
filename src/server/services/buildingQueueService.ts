@@ -16,7 +16,7 @@ export type EnqueuedBuilding = {
 };
 
 export type DequeueAtFieldInput = {
-  readonly deleteAll: boolean;
+  readonly targetLevel?: number;
   readonly fieldId: number;
 };
 
@@ -134,14 +134,9 @@ export class BuildingQueueService {
     }
   };
 
-  public dequeueBuildingAtField = (input: DequeueAtFieldInput): void => {
-    const {
-      deleteAll,
-      fieldId,
-    } = input;
-
-    if (deleteAll) {
-      const buildings = this._village.buildings.queue.getAllAtField(fieldId);
+  public dequeueBuildingAtField = ({ fieldId, targetLevel }: DequeueAtFieldInput): void => {
+    if (targetLevel) {
+      const buildings = this._village.buildings.queue.getAllAtField(fieldId, b => b.level > targetLevel);
       this.removeAndCorrectQueue(buildings.map(b => b.queueId));
     } else {
       const building = this._village.buildings.queue.getLastAtField(fieldId);

@@ -19,8 +19,8 @@ export class BuildingQueue {
     ? this._buildings[0]
     : this._buildings.find(x => getBuildingSpotType(x.type) === type);
 
-  public getAllAtField = (fieldId: number): readonly QueuedBuilding[] =>
-    this.buildings().filter(b => b.fieldId === fieldId);
+  public getAllAtField = (fieldId: number, predicate: (building: QueuedBuilding) => boolean): readonly QueuedBuilding[] =>
+    this.buildings().filter(b => b.fieldId === fieldId && predicate(b));
 
   public getLastAtField = (fieldId: number): QueuedBuilding | undefined =>
     this._buildings.slice().reverse().find(b => b.fieldId === fieldId);

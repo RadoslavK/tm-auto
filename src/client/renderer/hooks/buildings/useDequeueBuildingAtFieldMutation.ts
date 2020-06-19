@@ -1,29 +1,25 @@
-import { MutationTuple } from '@apollo/client';
-
-import {
-  DequeueBuildingAtFieldMutation,
-  DequeueBuildingAtFieldMutationVariables,
-  useDequeueBuildingAtFieldMutation as _useDequeueBuildingAtFieldMutation,
-} from '../../_graphql/graphqlHooks';
+import { useDequeueBuildingAtFieldMutation as _useDequeueBuildingAtFieldMutation } from '../../_graphql/graphqlHooks';
 import { useVillageContext } from '../../applications/villages/context/villageContext';
 
 type Params = {
-  readonly deleteAll: boolean;
+  readonly targetLevel?: number;
   readonly fieldId: number;
 };
 
-type ReturnType = MutationTuple<DequeueBuildingAtFieldMutation, DequeueBuildingAtFieldMutationVariables>;
-
-export const useDequeueBuildingAtFieldMutation = ({ deleteAll, fieldId }: Params): ReturnType => {
+export const useDequeueBuildingAtFieldMutation = () => {
   const { villageId } = useVillageContext();
 
-  return _useDequeueBuildingAtFieldMutation({
-    variables: {
-      input: {
-        deleteAll,
-        fieldId,
-        villageId,
+  const [dequeue] = _useDequeueBuildingAtFieldMutation();
+
+  return ({ fieldId, targetLevel }: Params) => {
+    dequeue({
+      variables: {
+        input: {
+          targetLevel,
+          fieldId,
+          villageId,
+        },
       },
-    },
-  });
+    });
+  };
 };

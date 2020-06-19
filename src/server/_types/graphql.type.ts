@@ -219,7 +219,7 @@ export type Cost = {
 };
 
 export type DequeueBuildingAtFieldInput = {
-  readonly deleteAll: Scalars['Boolean'];
+  readonly targetLevel: Maybe<Scalars['Int']>;
   readonly fieldId: Scalars['Int'];
   readonly villageId: Scalars['ID'];
 };
