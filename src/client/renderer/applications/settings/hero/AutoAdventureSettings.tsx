@@ -25,25 +25,6 @@ import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useVillages } from '../../../hooks/villages/useVillages';
 
-const getCriteriaString = (criteria: AdventureCriteria): string => {
-  switch (criteria) {
-    case AdventureCriteria.FirstToExpire:
-      return 'First to expire';
-
-    case AdventureCriteria.Random:
-      return 'Random';
-
-    case AdventureCriteria.Closest:
-      return 'Closest';
-
-    case AdventureCriteria.Furthest:
-      return 'Furthest';
-
-    default:
-      throw new Error(`Unknown adventure criteria: ${criteria}`);
-  }
-};
-
 const useAutoAdventureSettings = () => {
   const { data: queryData, loading: queryLoading } = useGetAutoAdventureSettingsQuery();
 
@@ -284,7 +265,7 @@ export const AutoAdventureSettings: React.FC = () => {
                 type="radio"
                 value={option}
               />
-              <label htmlFor={option}>{getCriteriaString(option)}</label>
+              <label htmlFor={option}>{option}</label>
             </React.Fragment>
           ))}
         </div>

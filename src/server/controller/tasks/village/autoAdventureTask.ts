@@ -119,10 +119,6 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
         break;
       }
 
-      case AdventureCriteria.FirstToExpire:
-        selectedLinkElementId = suitableAdventures[0].linkElementId;
-        break;
-
       case AdventureCriteria.Closest:
       default: {
         const adventure = getWithMinimumSafe(suitableAdventures, x => x.duration.getTotalSeconds());

@@ -17,7 +17,6 @@ enum AdventureCriteria {
   Closest
   Furthest
   Random
-  FirstToExpire
 }
 
 type AutoAdventureSettings {

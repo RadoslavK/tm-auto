@@ -35,8 +35,7 @@ export type AccountSettings = {
 export enum AdventureCriteria {
   Closest = 'Closest',
   Furthest = 'Furthest',
-  Random = 'Random',
-  FirstToExpire = 'FirstToExpire'
+  Random = 'Random'
 }
 
 export type AutoAdventureSettings = {

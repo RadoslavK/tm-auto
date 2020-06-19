@@ -138,7 +138,3 @@ NOVE NE TAK DOLEZITE
 
 * https://travibot.com/en/travian-bot-5-1-0-0/
 * Travian Codex
-
-## Outdated
-
-* Remove adventure expiration stuff (settings, parsing)
