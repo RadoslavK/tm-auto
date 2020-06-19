@@ -1,3 +1,11 @@
+import { AdventureCriteria } from '../../_shared/types/adventureCriteria';
+import { BotState } from '../../_shared/types/botState';
+import { BuildingType } from '../../_shared/types/buildingType';
+import { ClaimHeroResourcesReason } from '../../_shared/types/claimHeroResourcesReason';
+import { HeroState } from '../../_shared/types/heroState';
+import { TaskType } from '../../_shared/types/taskType';
+import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
+import { Tribe } from '../../_shared/types/tribe';
 import { GraphQLResolveInfo } from 'graphql';
 import { BuildingInProgress as BuildingInProgressModel } from '../_models/buildings/inProgress/buildingInProgress';
 import { BuildingSpot as BuildingSpotModel } from '../_models/buildings/spots/buildingSpot';
@@ -32,11 +40,7 @@ export type AccountSettings = {
   readonly autoParty: Scalars['Boolean'];
 };
 
-export enum AdventureCriteria {
-  Closest = 'Closest',
-  Furthest = 'Furthest',
-  Random = 'Random'
-}
+export { AdventureCriteria };
 
 export type AutoAdventureSettings = {
   readonly __typename?: 'AutoAdventureSettings';
@@ -53,7 +57,7 @@ export type AutoAdventureSettings = {
 export type AutoBuildLogEntryContent = {
   readonly __typename?: 'AutoBuildLogEntryContent';
   readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly level: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
 };
@@ -108,7 +112,7 @@ export type AutoUnitsLogEntryContent = {
   readonly __typename?: 'AutoUnitsLogEntryContent';
   readonly amount: Scalars['Int'];
   readonly index: Scalars['Int'];
-  readonly tribe: Scalars['Int'];
+  readonly tribe: Tribe;
   readonly unitName: Scalars['String'];
 };
 
@@ -136,13 +140,7 @@ export type AvailableNewBuildingsInput = {
   readonly villageId: Scalars['ID'];
 };
 
-export enum BotState {
-  None = 'None',
-  Pending = 'Pending',
-  Running = 'Running',
-  Stopping = 'Stopping',
-  Paused = 'Paused'
-}
+export { BotState };
 
 export type BuildingInfo = {
   readonly __typename?: 'BuildingInfo';
@@ -154,7 +152,7 @@ export type BuildingInProgress = {
   readonly __typename?: 'BuildingInProgress';
   readonly level: Scalars['Int'];
   readonly finishedAt: Timestamp;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly fieldId: Scalars['Int'];
 };
 
@@ -174,7 +172,7 @@ export type BuildingSpot = {
   readonly __typename?: 'BuildingSpot';
   readonly fieldId: Scalars['Int'];
   readonly level: BuildingSpotLevel;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
 };
 
 export type BuildingSpotLevel = {
@@ -191,9 +189,9 @@ export type BuildingSpots = {
   readonly resources: ResourceFields;
 };
 
-export enum ClaimHeroResourcesReason {
-  AutoBuild = 'AutoBuild'
-}
+export { BuildingType };
+
+export { ClaimHeroResourcesReason };
 
 export type ClearQueueInput = {
   readonly villageId: Scalars['ID'];
@@ -244,14 +242,14 @@ export type DurationInput = {
 
 export type EnqueueBuildingInput = {
   readonly fieldId: Scalars['Int'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly villageId: Scalars['ID'];
   readonly targetLevel: Maybe<Scalars['Int']>;
 };
 
 export type GameInfo = {
   readonly __typename?: 'GameInfo';
-  readonly tribe: Scalars['Int'];
+  readonly tribe: Tribe;
 };
 
 export type GeneralSettings = {
@@ -273,13 +271,7 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export enum HeroState {
-  Unknown = 'Unknown',
-  InVillage = 'InVillage',
-  Dead = 'Dead',
-  Reviving = 'Reviving',
-  OnAdventure = 'OnAdventure'
-}
+export { HeroState };
 
 export type LogEntry = {
   readonly __typename?: 'LogEntry';
@@ -533,7 +525,7 @@ export type Query = {
   readonly autoMentorSettings: AutoMentorSettings;
   readonly autoPartySettings: AutoPartySettings;
   readonly autoUnitsSettings: AutoUnitsSettings;
-  readonly availableNewBuildingsTypes: ReadonlyArray<Scalars['Int']>;
+  readonly availableNewBuildingsTypes: ReadonlyArray<BuildingType>;
   readonly botState: BotState;
   readonly buildingInfo: BuildingInfo;
   readonly buildingLevelInfo: BuildingLevelInfo;
@@ -587,12 +579,12 @@ export type QueryAvailableNewBuildingsTypesArgs = {
 
 
 export type QueryBuildingInfoArgs = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
 };
 
 
 export type QueryBuildingLevelInfoArgs = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   level: Scalars['Int'];
 };
 
@@ -666,7 +658,7 @@ export type QueuedBuilding = {
   readonly __typename?: 'QueuedBuilding';
   readonly buildingTime: Duration;
   readonly level: Scalars['Int'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly queueId: Scalars['ID'];
   readonly queueIndex: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
@@ -676,7 +668,7 @@ export type QueuedBuildingRange = {
   readonly __typename?: 'QueuedBuildingRange';
   readonly id: Scalars['String'];
   readonly buildings: ReadonlyArray<QueuedBuilding>;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly fieldId: Scalars['Int'];
   readonly buildingTime: Duration;
   readonly cost: ResourcesModel;
@@ -754,13 +746,7 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['ID'];
 };
 
-export enum TaskType {
-  AutoAdventure = 'AutoAdventure',
-  AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits',
-  AutoParty = 'AutoParty',
-  AutoMentor = 'AutoMentor'
-}
+export { TaskType };
 
 export type TextLogEntryContent = {
   readonly __typename?: 'TextLogEntryContent';
@@ -768,10 +754,7 @@ export type TextLogEntryContent = {
   readonly messageType: TextLogEntryType;
 };
 
-export enum TextLogEntryType {
-  Info = 'Info',
-  Error = 'Error'
-}
+export { TextLogEntryType };
 
 export type Timestamp = {
   readonly __typename?: 'Timestamp';
@@ -781,6 +764,8 @@ export type Timestamp = {
 export type TimestampInput = {
   readonly totalSeconds: Scalars['Int'];
 };
+
+export { Tribe };
 
 export type UnitInfo = {
   readonly __typename?: 'UnitInfo';
@@ -1004,6 +989,7 @@ export type ResolversTypes = {
   AutoUnitsBuildingSettings: ResolverTypeWrapper<AutoUnitsBuildingSettings>;
   AutoUnitsUnitSettings: ResolverTypeWrapper<AutoUnitsUnitSettings>;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
+  BuildingType: BuildingType;
   BotState: BotState;
   BuildingInfo: ResolverTypeWrapper<BuildingInfo>;
   BuildingLevelInfo: ResolverTypeWrapper<Omit<BuildingLevelInfo, 'cost'> & { cost: ResolversTypes['Resources'] }>;
@@ -1019,6 +1005,7 @@ export type ResolversTypes = {
   Timestamp: ResolverTypeWrapper<Timestamp>;
   VillageCrannyCapacity: ResolverTypeWrapper<VillageCrannyCapacity>;
   GameInfo: ResolverTypeWrapper<GameInfo>;
+  Tribe: Tribe;
   GeneralSettings: ResolverTypeWrapper<GeneralSettings>;
   GeneralVillageSettings: ResolverTypeWrapper<GeneralVillageSettings>;
   HeroInformation: ResolverTypeWrapper<HeroModel>;
@@ -1083,6 +1070,7 @@ export type ResolversParentTypes = {
   AutoUnitsBuildingSettings: AutoUnitsBuildingSettings;
   AutoUnitsUnitSettings: AutoUnitsUnitSettings;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
+  BuildingType: BuildingType;
   BotState: BotState;
   BuildingInfo: BuildingInfo;
   BuildingLevelInfo: Omit<BuildingLevelInfo, 'cost'> & { cost: ResolversParentTypes['Resources'] };
@@ -1098,6 +1086,7 @@ export type ResolversParentTypes = {
   Timestamp: Timestamp;
   VillageCrannyCapacity: VillageCrannyCapacity;
   GameInfo: GameInfo;
+  Tribe: Tribe;
   GeneralSettings: GeneralSettings;
   GeneralVillageSettings: GeneralVillageSettings;
   HeroInformation: HeroModel;
@@ -1164,7 +1153,7 @@ export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends
 
 export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildLogEntryContent'] = ResolversParentTypes['AutoBuildLogEntryContent']> = {
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['BuildingType'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -1219,7 +1208,7 @@ export type AutoUnitsBuildingSettingsResolvers<ContextType = any, ParentType ext
 export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsLogEntryContent'] = ResolversParentTypes['AutoUnitsLogEntryContent']> = {
   amount: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   index: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tribe: Resolver<ResolversTypes['Tribe'], ParentType, ContextType>;
   unitName: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -1252,7 +1241,7 @@ export type BuildingInfoResolvers<ContextType = any, ParentType extends Resolver
 export type BuildingInProgressResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingInProgress'] = ResolversParentTypes['BuildingInProgress']> = {
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   finishedAt: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['BuildingType'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -1272,7 +1261,7 @@ export type BuildingQueueResolvers<ContextType = any, ParentType extends Resolve
 export type BuildingSpotResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingSpot'] = ResolversParentTypes['BuildingSpot']> = {
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['BuildingSpotLevel'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['BuildingType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1311,7 +1300,7 @@ export type DurationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type GameInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameInfo'] = ResolversParentTypes['GameInfo']> = {
-  tribe: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tribe: Resolver<ResolversTypes['Tribe'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1399,7 +1388,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   autoMentorSettings: Resolver<ResolversTypes['AutoMentorSettings'], ParentType, ContextType>;
   autoPartySettings: Resolver<ResolversTypes['AutoPartySettings'], ParentType, ContextType, RequireFields<QueryAutoPartySettingsArgs, 'villageId'>>;
   autoUnitsSettings: Resolver<ResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<QueryAutoUnitsSettingsArgs, 'villageId'>>;
-  availableNewBuildingsTypes: Resolver<ReadonlyArray<ResolversTypes['Int']>, ParentType, ContextType, RequireFields<QueryAvailableNewBuildingsTypesArgs, 'input'>>;
+  availableNewBuildingsTypes: Resolver<ReadonlyArray<ResolversTypes['BuildingType']>, ParentType, ContextType, RequireFields<QueryAvailableNewBuildingsTypesArgs, 'input'>>;
   botState: Resolver<ResolversTypes['BotState'], ParentType, ContextType>;
   buildingInfo: Resolver<ResolversTypes['BuildingInfo'], ParentType, ContextType, RequireFields<QueryBuildingInfoArgs, 'buildingType'>>;
   buildingLevelInfo: Resolver<ResolversTypes['BuildingLevelInfo'], ParentType, ContextType, RequireFields<QueryBuildingLevelInfoArgs, 'buildingType' | 'level'>>;
@@ -1429,7 +1418,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type QueuedBuildingResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuilding'] = ResolversParentTypes['QueuedBuilding']> = {
   buildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   level: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['BuildingType'], ParentType, ContextType>;
   queueId: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   queueIndex: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1439,7 +1428,7 @@ export type QueuedBuildingResolvers<ContextType = any, ParentType extends Resolv
 export type QueuedBuildingRangeResolvers<ContextType = any, ParentType extends ResolversParentTypes['QueuedBuildingRange'] = ResolversParentTypes['QueuedBuildingRange']> = {
   id: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   buildings: Resolver<ReadonlyArray<ResolversTypes['QueuedBuilding']>, ParentType, ContextType>;
-  type: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['BuildingType'], ParentType, ContextType>;
   fieldId: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   buildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   cost: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;

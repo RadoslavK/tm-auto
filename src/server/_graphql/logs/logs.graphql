@@ -10,7 +10,7 @@ type TextLogEntryContent {
 
 type AutoBuildLogEntryContent {
     name: String!
-    type: Int!
+    type: BuildingType!
     level: Int!
     fieldId: Int!
 }
@@ -18,7 +18,7 @@ type AutoBuildLogEntryContent {
 type AutoUnitsLogEntryContent {
     amount: Int!
     index: Int!
-    tribe: Int!
+    tribe: Tribe!
     unitName: String!
 }
 

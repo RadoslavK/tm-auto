@@ -1,3 +1,53 @@
+enum BuildingType {
+    None
+    Wood
+    Clay
+    Iron
+    Crop
+    Sawmill
+    Brickyard
+    IronFoundry
+    GrainMill
+    Bakery
+    Warehouse
+    Granary
+    Blacksmith
+    Smithy
+    TournamentSquare
+    MainBuilding
+    RallyPoint
+    Marketplace
+    Embassy
+    Barracks
+    Stable
+    Workshop
+    Academy
+    Cranny
+    TownHall
+    Residence
+    Palace
+    Treasury
+    TradeOffice
+    GreatBarracks
+    GreatStable
+    CityWall
+    EarthWall
+    Palisade
+    StonemasonsLodge
+    Brewery
+    Trapper
+    HerosMansion
+    GreatWarehouse
+    GreatGranary
+    WonderOfTheWorld
+    HorseDrinkingTrough
+    StoneWall
+    MakeshiftWall
+    CommandCenter
+    Waterworks
+}
+
+
 type BuildingInfo {
     maxLevel: Int!
     name: String!
@@ -17,7 +67,7 @@ type BuildingSpotLevel {
 type BuildingSpot {
     fieldId: Int!
     level: BuildingSpotLevel!
-    type: Int!
+    type: BuildingType!
 }
 
 type ResourceFields {
@@ -38,9 +88,9 @@ input AvailableNewBuildingsInput {
 }
 
 extend type Query {
-    availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
-    buildingInfo(buildingType: Int!): BuildingInfo!
-    buildingLevelInfo(buildingType: Int!, level: Int!): BuildingLevelInfo!
+    availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [BuildingType!]!
+    buildingInfo(buildingType: BuildingType!): BuildingInfo!
+    buildingLevelInfo(buildingType: BuildingType!, level: Int!): BuildingLevelInfo!
     buildingSpots(villageId: ID!): BuildingSpots!
 }
 

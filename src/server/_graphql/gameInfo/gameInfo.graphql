@@ -1,5 +1,5 @@
 type GameInfo {
-    tribe: Int!
+    tribe: Tribe!
 }
 
 extend type Query {

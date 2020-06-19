@@ -32,7 +32,7 @@ type AutoAdventureSettings {
 
 type AutoBuildLogEntryContent {
   name: String!
-  type: Int!
+  type: BuildingType!
   level: Int!
   fieldId: Int!
 }
@@ -80,7 +80,7 @@ type AutoUnitsBuildingSettings {
 type AutoUnitsLogEntryContent {
   amount: Int!
   index: Int!
-  tribe: Int!
+  tribe: Tribe!
   unitName: String!
 }
 
@@ -122,7 +122,7 @@ type BuildingInfo {
 type BuildingInProgress {
   level: Int!
   finishedAt: Timestamp!
-  type: Int!
+  type: BuildingType!
   fieldId: Int!
 }
 
@@ -139,7 +139,7 @@ type BuildingQueue {
 type BuildingSpot {
   fieldId: Int!
   level: BuildingSpotLevel!
-  type: Int!
+  type: BuildingType!
 }
 
 type BuildingSpotLevel {
@@ -152,6 +152,55 @@ type BuildingSpotLevel {
 type BuildingSpots {
   infrastructure: [BuildingSpot!]!
   resources: ResourceFields!
+}
+
+enum BuildingType {
+  None
+  Wood
+  Clay
+  Iron
+  Crop
+  Sawmill
+  Brickyard
+  IronFoundry
+  GrainMill
+  Bakery
+  Warehouse
+  Granary
+  Blacksmith
+  Smithy
+  TournamentSquare
+  MainBuilding
+  RallyPoint
+  Marketplace
+  Embassy
+  Barracks
+  Stable
+  Workshop
+  Academy
+  Cranny
+  TownHall
+  Residence
+  Palace
+  Treasury
+  TradeOffice
+  GreatBarracks
+  GreatStable
+  CityWall
+  EarthWall
+  Palisade
+  StonemasonsLodge
+  Brewery
+  Trapper
+  HerosMansion
+  GreatWarehouse
+  GreatGranary
+  WonderOfTheWorld
+  HorseDrinkingTrough
+  StoneWall
+  MakeshiftWall
+  CommandCenter
+  Waterworks
 }
 
 enum ClaimHeroResourcesReason {
@@ -204,13 +253,13 @@ input DurationInput {
 
 input EnqueueBuildingInput {
   fieldId: Int!
-  type: Int!
+  type: BuildingType!
   villageId: ID!
   targetLevel: Int
 }
 
 type GameInfo {
-  tribe: Int!
+  tribe: Tribe!
 }
 
 type GeneralSettings {
@@ -295,9 +344,9 @@ type Query {
   currentAccount: UserAccount!
   isAccountTaken(account: AccountInput!): Boolean!
   lastSignedAccountId: String
-  availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
-  buildingInfo(buildingType: Int!): BuildingInfo!
-  buildingLevelInfo(buildingType: Int!, level: Int!): BuildingLevelInfo!
+  availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [BuildingType!]!
+  buildingInfo(buildingType: BuildingType!): BuildingInfo!
+  buildingLevelInfo(buildingType: BuildingType!, level: Int!): BuildingLevelInfo!
   buildingSpots(villageId: ID!): BuildingSpots!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   isBotActive: Boolean!
@@ -329,7 +378,7 @@ type Query {
 type QueuedBuilding {
   buildingTime: Duration!
   level: Int!
-  type: Int!
+  type: BuildingType!
   queueId: ID!
   queueIndex: Int!
   fieldId: Int!
@@ -338,7 +387,7 @@ type QueuedBuilding {
 type QueuedBuildingRange {
   id: String!
   buildings: [QueuedBuilding!]!
-  type: Int!
+  type: BuildingType!
   fieldId: Int!
   buildingTime: Duration!
   cost: Resources!
@@ -405,6 +454,16 @@ type Timestamp {
 
 input TimestampInput {
   totalSeconds: Int!
+}
+
+enum Tribe {
+  Romans
+  Teutons
+  Gauls
+  Nature
+  Natars
+  Egyptians
+  Huns
 }
 
 type UnitInfo {

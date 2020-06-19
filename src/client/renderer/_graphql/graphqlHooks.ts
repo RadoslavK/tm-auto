@@ -1,3 +1,11 @@
+import { AdventureCriteria } from '../../../_shared/types/adventureCriteria';
+import { BotState } from '../../../_shared/types/botState';
+import { BuildingType } from '../../../_shared/types/buildingType';
+import { ClaimHeroResourcesReason } from '../../../_shared/types/claimHeroResourcesReason';
+import { HeroState } from '../../../_shared/types/heroState';
+import { TaskType } from '../../../_shared/types/taskType';
+import { TextLogEntryType } from '../../../_shared/types/textLogEntryType';
+import { Tribe } from '../../../_shared/types/tribe';
 import { DocumentNode } from 'graphql';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
@@ -26,11 +34,7 @@ export type AccountSettings = {
   readonly autoParty: Scalars['Boolean'];
 };
 
-export enum AdventureCriteria {
-  Closest = 'Closest',
-  Furthest = 'Furthest',
-  Random = 'Random'
-}
+export { AdventureCriteria };
 
 export type AutoAdventureSettings = {
   readonly allow: Scalars['Boolean'];
@@ -45,7 +49,7 @@ export type AutoAdventureSettings = {
 
 export type AutoBuildLogEntryContent = {
   readonly name: Scalars['String'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly level: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
 };
@@ -93,7 +97,7 @@ export type AutoUnitsBuildingSettings = {
 export type AutoUnitsLogEntryContent = {
   readonly amount: Scalars['Int'];
   readonly index: Scalars['Int'];
-  readonly tribe: Scalars['Int'];
+  readonly tribe: Tribe;
   readonly unitName: Scalars['String'];
 };
 
@@ -119,13 +123,7 @@ export type AvailableNewBuildingsInput = {
   readonly villageId: Scalars['ID'];
 };
 
-export enum BotState {
-  None = 'None',
-  Pending = 'Pending',
-  Running = 'Running',
-  Stopping = 'Stopping',
-  Paused = 'Paused'
-}
+export { BotState };
 
 export type BuildingInfo = {
   readonly maxLevel: Scalars['Int'];
@@ -135,7 +133,7 @@ export type BuildingInfo = {
 export type BuildingInProgress = {
   readonly level: Scalars['Int'];
   readonly finishedAt: Timestamp;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly fieldId: Scalars['Int'];
 };
 
@@ -152,7 +150,7 @@ export type BuildingQueue = {
 export type BuildingSpot = {
   readonly fieldId: Scalars['Int'];
   readonly level: BuildingSpotLevel;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
 };
 
 export type BuildingSpotLevel = {
@@ -167,9 +165,9 @@ export type BuildingSpots = {
   readonly resources: ResourceFields;
 };
 
-export enum ClaimHeroResourcesReason {
-  AutoBuild = 'AutoBuild'
-}
+export { BuildingType };
+
+export { ClaimHeroResourcesReason };
 
 export type ClearQueueInput = {
   readonly villageId: Scalars['ID'];
@@ -217,13 +215,13 @@ export type DurationInput = {
 
 export type EnqueueBuildingInput = {
   readonly fieldId: Scalars['Int'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly villageId: Scalars['ID'];
   readonly targetLevel: Maybe<Scalars['Int']>;
 };
 
 export type GameInfo = {
-  readonly tribe: Scalars['Int'];
+  readonly tribe: Tribe;
 };
 
 export type GeneralSettings = {
@@ -242,13 +240,7 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export enum HeroState {
-  Unknown = 'Unknown',
-  InVillage = 'InVillage',
-  Dead = 'Dead',
-  Reviving = 'Reviving',
-  OnAdventure = 'OnAdventure'
-}
+export { HeroState };
 
 export type LogEntry = {
   readonly timestamp: Timestamp;
@@ -499,7 +491,7 @@ export type Query = {
   readonly autoMentorSettings: AutoMentorSettings;
   readonly autoPartySettings: AutoPartySettings;
   readonly autoUnitsSettings: AutoUnitsSettings;
-  readonly availableNewBuildingsTypes: ReadonlyArray<Scalars['Int']>;
+  readonly availableNewBuildingsTypes: ReadonlyArray<BuildingType>;
   readonly botState: BotState;
   readonly buildingInfo: BuildingInfo;
   readonly buildingLevelInfo: BuildingLevelInfo;
@@ -555,12 +547,12 @@ export type QueryAvailableNewBuildingsTypesArgs = {
 
 
 export type QueryBuildingInfoArgs = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
 };
 
 
 export type QueryBuildingLevelInfoArgs = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   level: Scalars['Int'];
 };
 
@@ -638,7 +630,7 @@ export type QueryVillageArgs = {
 export type QueuedBuilding = {
   readonly buildingTime: Duration;
   readonly level: Scalars['Int'];
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly queueId: Scalars['ID'];
   readonly queueIndex: Scalars['Int'];
   readonly fieldId: Scalars['Int'];
@@ -647,7 +639,7 @@ export type QueuedBuilding = {
 export type QueuedBuildingRange = {
   readonly id: Scalars['String'];
   readonly buildings: ReadonlyArray<QueuedBuilding>;
-  readonly type: Scalars['Int'];
+  readonly type: BuildingType;
   readonly fieldId: Scalars['Int'];
   readonly buildingTime: Duration;
   readonly cost: Resources;
@@ -721,23 +713,14 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['ID'];
 };
 
-export enum TaskType {
-  AutoAdventure = 'AutoAdventure',
-  AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits',
-  AutoParty = 'AutoParty',
-  AutoMentor = 'AutoMentor'
-}
+export { TaskType };
 
 export type TextLogEntryContent = {
   readonly message: Scalars['String'];
   readonly messageType: TextLogEntryType;
 };
 
-export enum TextLogEntryType {
-  Info = 'Info',
-  Error = 'Error'
-}
+export { TextLogEntryType };
 
 export type Timestamp = {
   readonly totalSeconds: Scalars['Int'];
@@ -746,6 +729,8 @@ export type Timestamp = {
 export type TimestampInput = {
   readonly totalSeconds: Scalars['Int'];
 };
+
+export { Tribe };
 
 export type UnitInfo = {
   readonly name: Scalars['String'];
@@ -930,7 +915,7 @@ export type DeleteAccountMutationVariables = {
 
 export type DeleteAccountMutation = { readonly deleteAccount: UserAccountFragment };
 
-export type BuildingSpotFragment = { readonly fieldId: number, readonly type: number, readonly level: { readonly actual: number, readonly ongoing: Maybe<number>, readonly queued: Maybe<number>, readonly total: number } };
+export type BuildingSpotFragment = { readonly fieldId: number, readonly type: BuildingType, readonly level: { readonly actual: number, readonly ongoing: Maybe<number>, readonly queued: Maybe<number>, readonly total: number } };
 
 export type BuildingSpotsFragment = { readonly infrastructure: ReadonlyArray<BuildingSpotFragment>, readonly resources: { readonly wood: ReadonlyArray<BuildingSpotFragment>, readonly clay: ReadonlyArray<BuildingSpotFragment>, readonly iron: ReadonlyArray<BuildingSpotFragment>, readonly crop: ReadonlyArray<BuildingSpotFragment> } };
 
@@ -946,17 +931,17 @@ export type GetAvailableNewBuildingTypesQueryVariables = {
 };
 
 
-export type GetAvailableNewBuildingTypesQuery = { readonly availableNewBuildingsTypes: ReadonlyArray<number> };
+export type GetAvailableNewBuildingTypesQuery = { readonly availableNewBuildingsTypes: ReadonlyArray<BuildingType> };
 
 export type GetBuildingInfoQueryVariables = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
 };
 
 
 export type GetBuildingInfoQuery = { readonly buildingInfo: { readonly maxLevel: number, readonly name: string } };
 
 export type GetBuildingLevelInfoQueryVariables = {
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   level: Scalars['Int'];
 };
 
@@ -970,7 +955,7 @@ export type OnActualBuildingLevelsUpdatedSubscriptionVariables = {
 
 export type OnActualBuildingLevelsUpdatedSubscription = { readonly actualBuildingLevelsUpdated: Maybe<boolean> };
 
-export type BuildingInProgressFragment = { readonly level: number, readonly type: number, readonly fieldId: number, readonly finishedAt: TimestampFragment };
+export type BuildingInProgressFragment = { readonly level: number, readonly type: BuildingType, readonly fieldId: number, readonly finishedAt: TimestampFragment };
 
 export type GetBuildingsInProgressQueryVariables = {
   villageId: Scalars['ID'];
@@ -1031,7 +1016,7 @@ export type OnBotActivityChangedSubscription = { readonly botActivityChanged: bo
 export type GetGameInfoQueryVariables = {};
 
 
-export type GetGameInfoQuery = { readonly gameInfo: { readonly tribe: number } };
+export type GetGameInfoQuery = { readonly gameInfo: { readonly tribe: Tribe } };
 
 export type HeroInformationFragment = { readonly health: number, readonly state: HeroState, readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment }> };
 
@@ -1045,7 +1030,7 @@ export type OnHeroInformationUpdatedSubscriptionVariables = {};
 
 export type OnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: HeroInformationFragment };
 
-export type LogEntryFragment = { readonly timestamp: TimestampFragment, readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment }>, readonly content: { readonly message: string, readonly messageType: TextLogEntryType } | { readonly fieldId: number, readonly level: number, readonly name: string, readonly type: number } | { readonly amount: number, readonly index: number, readonly tribe: number, readonly unitName: string } | { readonly reason: ClaimHeroResourcesReason, readonly resources: ResourcesFragment } };
+export type LogEntryFragment = { readonly timestamp: TimestampFragment, readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment }>, readonly content: { readonly message: string, readonly messageType: TextLogEntryType } | { readonly fieldId: number, readonly level: number, readonly name: string, readonly type: BuildingType } | { readonly amount: number, readonly index: number, readonly tribe: Tribe, readonly unitName: string } | { readonly reason: ClaimHeroResourcesReason, readonly resources: ResourcesFragment } };
 
 export type GetLogEntriesQueryVariables = {};
 
@@ -1153,9 +1138,9 @@ export type OnNextVillageTaskExecutionChangedSubscriptionVariables = {
 
 export type OnNextVillageTaskExecutionChangedSubscription = { readonly nextVillageTaskExecutionChanged: TimestampFragment };
 
-export type QueuedBuildingFragment = { readonly fieldId: number, readonly level: number, readonly queueId: string, readonly queueIndex: number, readonly type: number, readonly buildingTime: DurationFragment };
+export type QueuedBuildingFragment = { readonly fieldId: number, readonly level: number, readonly queueId: string, readonly queueIndex: number, readonly type: BuildingType, readonly buildingTime: DurationFragment };
 
-export type QueuedBuildingRangeFragment = { readonly fieldId: number, readonly id: string, readonly type: number, readonly buildings: ReadonlyArray<QueuedBuildingFragment>, readonly buildingTime: DurationFragment, readonly cost: ResourcesFragment };
+export type QueuedBuildingRangeFragment = { readonly fieldId: number, readonly id: string, readonly type: BuildingType, readonly buildings: ReadonlyArray<QueuedBuildingFragment>, readonly buildingTime: DurationFragment, readonly cost: ResourcesFragment };
 
 export type BuildingQueueFragment = { readonly buildingRanges: ReadonlyArray<QueuedBuildingRangeFragment>, readonly totalBuildingTime: DurationFragment, readonly totalCost: ResourcesFragment };
 
@@ -1865,7 +1850,7 @@ export function useGetAvailableNewBuildingTypesLazyQuery(baseOptions?: ApolloRea
 export type GetAvailableNewBuildingTypesQueryHookResult = ReturnType<typeof useGetAvailableNewBuildingTypesQuery>;
 export type GetAvailableNewBuildingTypesLazyQueryHookResult = ReturnType<typeof useGetAvailableNewBuildingTypesLazyQuery>;
 export type GetAvailableNewBuildingTypesQueryResult = ApolloReactCommon.QueryResult<GetAvailableNewBuildingTypesQuery, GetAvailableNewBuildingTypesQueryVariables>;
-export const GetBuildingInfoDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuildingInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maxLevel"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}}]}}]};
+export const GetBuildingInfoDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuildingInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingType"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maxLevel"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}}]}}]};
 
 /**
  * __useGetBuildingInfoQuery__
@@ -1892,7 +1877,7 @@ export function useGetBuildingInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQ
 export type GetBuildingInfoQueryHookResult = ReturnType<typeof useGetBuildingInfoQuery>;
 export type GetBuildingInfoLazyQueryHookResult = ReturnType<typeof useGetBuildingInfoLazyQuery>;
 export type GetBuildingInfoQueryResult = ApolloReactCommon.QueryResult<GetBuildingInfoQuery, GetBuildingInfoQueryVariables>;
-export const GetBuildingLevelInfoDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuildingLevelInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"level"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingLevelInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"level"},"value":{"kind":"Variable","name":{"kind":"Name","value":"level"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}}]};
+export const GetBuildingLevelInfoDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBuildingLevelInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingType"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"level"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingLevelInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"level"},"value":{"kind":"Variable","name":{"kind":"Name","value":"level"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}}]};
 
 /**
  * __useGetBuildingLevelInfoQuery__

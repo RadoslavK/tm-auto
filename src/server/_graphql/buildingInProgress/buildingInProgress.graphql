@@ -1,7 +1,7 @@
 type BuildingInProgress {
     level: Int!
     finishedAt: Timestamp!
-    type: Int!
+    type: BuildingType!
     fieldId: Int!
 }
 

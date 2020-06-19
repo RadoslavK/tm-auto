@@ -16,6 +16,9 @@ const resources = {
   wood: `${baseUrl}/resources/wood.png`,
 };
 
+const isEnumKey = (buildingType: BuildingType | keyof BuildingType): buildingType is BuildingType =>
+  typeof buildingType === 'string';
+
 export const imageLinks = {
   actions: {
     collapse: `${baseUrl}/collapse.png`,
@@ -31,12 +34,15 @@ export const imageLinks = {
     resources,
   },
 
-  getBuilding: (buildingType: BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
+  getBuilding: (buildingType: BuildingType | keyof BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
+    // these enums are string enums for GraphQL
+    const numberValue = isEnumKey(buildingType) ? BuildingType[buildingType] : buildingType;
+
     if (size === BuildingImageSize.Normal) {
-      return `${baseUrl}/buildings/${buildingType}.png`;
+      return `${baseUrl}/buildings/${numberValue}.png`;
     }
 
-    return `${baseUrl}/buildings/small/${buildingType}.png`;
+    return `${baseUrl}/buildings/small/${numberValue}.png`;
   },
 
   getUnit: (unitIndex: number): string => `${baseUrl}/units/u${unitIndex}.gif`,

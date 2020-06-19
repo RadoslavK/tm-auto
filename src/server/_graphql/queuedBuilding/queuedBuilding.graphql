@@ -1,7 +1,7 @@
 type QueuedBuilding {
     buildingTime: Duration!
     level: Int!
-    type: Int!
+    type: BuildingType!
     queueId: ID!
     queueIndex: Int!
     fieldId: Int!
@@ -10,7 +10,7 @@ type QueuedBuilding {
 type QueuedBuildingRange {
     id: String!
     buildings: [QueuedBuilding!]!
-    type: Int!
+    type: BuildingType!
     fieldId: Int!
     buildingTime: Duration!
     cost: Resources!
@@ -34,7 +34,7 @@ input ClearQueueInput {
 
 input EnqueueBuildingInput {
     fieldId: Int!
-    type: Int!
+    type: BuildingType!
     villageId: ID!
     targetLevel: Int
 }

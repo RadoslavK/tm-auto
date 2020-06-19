@@ -5,5 +5,5 @@ export enum Tribe {
   Nature = 4,
   Natars = 5,
   Egyptians = 6,
-  Huns = 7
+  Huns = 7,
 }

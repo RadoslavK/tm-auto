@@ -8,6 +8,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { loadSchema } from '@graphql-tools/load';
 import fs from 'fs';
 import { printSchema } from 'graphql';
+import * as path from 'path';
 
 const localSchema = './src/client/renderer/_graphql/local/schema/**/*.graphql';
 const localDocuments = './src/client/renderer/_graphql/local/operations/**/*.graphql';
@@ -19,10 +20,30 @@ const serverTypesPath = './src/server/_types/graphql.type.ts';
 const fragmentsPath = './src/client/renderer/_graphql/fragmentTypes.json';
 const schemaPath = './src/server/_graphql/schema.graphql';
 
+const enumsPath = './src/_shared/types';
+
 const commonConfig = {
   maybeValue: 'T | undefined',
   preResolveTypes: true,
 };
+
+const enumPaths = {
+  AdventureCriteria: 'adventureCriteria#AdventureCriteria',
+  BotState: 'botState#BotState',
+  BuildingType: 'buildingType#BuildingType',
+  ClaimHeroResourcesReason: 'claimHeroResourcesReason#ClaimHeroResourcesReason',
+  HeroState: 'heroState#HeroState',
+  TaskType: 'taskType#TaskType',
+  TextLogEntryType: 'textLogEntryType#TextLogEntryType',
+  Tribe: 'tribe#Tribe',
+};
+
+const getEnumValuesConfig = (basePath: string) => Object
+  .entries(enumPaths)
+  .reduce((reduced, [key, value]) => ({
+    ...reduced,
+    [key]: path.join(basePath, value).replace(/\\/g, '/'),
+  }), {});
 
 const generateSchemaFile = async (): Promise<void> => {
   const mergedSchema = await loadSchema(schema, {
@@ -40,6 +61,7 @@ const generateResolverTypes = async (): Promise<void> => {
   const baseConfig = {
     avoidOptionals: true,
     immutableTypes: true,
+    enumValues: getEnumValuesConfig(path.relative(path.dirname(serverTypesPath), enumsPath)),
   };
 
   const resolversConfig = {
@@ -102,6 +124,7 @@ const generateResolverTypes = async (): Promise<void> => {
 
 const generateOperationTypesAndHooks = async (): Promise<void> => {
   const baseConfig = {
+    enumValues: getEnumValuesConfig(path.relative(path.dirname(hooksPath), enumsPath)),
     avoidOptionals: true,
     immutableTypes: true,
     skipTypename: true,

@@ -1,3 +1,13 @@
+enum Tribe {
+    Romans
+    Teutons
+    Gauls
+    Nature
+    Natars
+    Egyptians
+    Huns
+}
+
 enum TaskType {
     AutoAdventure
     AutoBuild
