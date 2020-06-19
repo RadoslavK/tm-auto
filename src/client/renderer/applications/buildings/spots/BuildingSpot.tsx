@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/graphqlHooks';
+import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { useBuildingInfo } from '../../../hooks/useBuildingInfo';
@@ -29,11 +30,9 @@ const useStyles = makeStyles<unknown, Props>({
     background: '#b1b5b9',
     fontWeight: 'bold',
   },
-  queueButtons: {
-    flex: 1,
-  },
   root: props => ({
     alignItems: 'flex-start',
+    justifyContent: props.building.type === BuildingType.None ? 'flex-end' : 'space-between',
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundSize: 'contain',
     border: '1px solid black',
@@ -76,7 +75,11 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     name,
   } = buildingInfo;
 
-  const onEnqueue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
+  const onEnqueue = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    if (building.type > 0 && building.level.total >= maxLevel) {
+      return;
+    }
+
     if (building.type > 0) {
       if (building.level.total === maxLevel) {
         return;
@@ -85,22 +88,24 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else if (event.shiftKey) {
-        await enqueue(maxLevel);
+        enqueue(maxLevel);
       } else {
-        await enqueue();
+        enqueue();
       }
     } else {
       setDialog(DialogType.NewBuilding);
     }
   };
 
-  const onDequeue = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
-    event.stopPropagation();
+  const onDequeue = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    if (!building.level.queued) {
+      return;
+    }
 
     if (event.ctrlKey) {
-      await dequeueAll();
+      dequeueAll();
     } else {
-      await dequeue();
+      dequeue();
     }
   };
 
@@ -112,6 +117,8 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     <>
       <div
         className={clsx(className, classes.root)}
+        onClick={onEnqueue}
+        onContextMenu={onDequeue}
         title={name}
       >
         {building.type > 0 && (
@@ -120,28 +127,8 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
             maxLevel={maxLevel}
           />
         )}
-        <div className={classes.queueButtons}>
-          {(building.type === 0 || building.level.total < maxLevel) && (
-            <button
-              onClick={onEnqueue}
-              type="button"
-            >
-              +
-            </button>
-          )}
-          {building.level.queued && (
-            <button
-              onClick={onDequeue}
-              type="button"
-            >
-              -
-            </button>
-          )}
-        </div>
         <div className={classes.fieldId}>
-          [
-          {building.fieldId}
-          ]
+          [{building.fieldId}]
         </div>
       </div>
       <Dialog
