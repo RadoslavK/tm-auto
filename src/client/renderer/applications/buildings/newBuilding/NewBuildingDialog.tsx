@@ -2,7 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
 import { useGetAvailableNewBuildingTypesQuery } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { NewBuildingDialogItem } from './NewBuildingDialogItem';
 
 const useStyles = makeStyles({
@@ -28,7 +28,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: 
   } = props;
 
   const classes = useStyles({});
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data, loading } = useGetAvailableNewBuildingTypesQuery({ variables: { input: { fieldId, villageId } } });
 

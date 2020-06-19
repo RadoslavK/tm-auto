@@ -13,7 +13,7 @@ import {
   useGetCollapsedBuildingQueueRangesQuery,
   useGetQueuedBuildingsQuery,
 } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { QueuedBuilding } from './building/QueuedBuilding';
 import { Cost } from './Cost';
 import { QueuedBuildingRange } from './range/QueuedBuildingRange';
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 });
 
 const useBuildingQueue = () => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data: queryData, loading: queryLoading, subscribeToMore } = useGetQueuedBuildingsQuery({ variables: { villageId } });
 
@@ -56,7 +56,7 @@ const useBuildingQueue = () => {
 export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const classes = useStyles();
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
   const buildingQueue = useBuildingQueue();
   const [clearQueue] = useClearQueueMutation({ variables: { villageId } });
   const collapsedRangeIds = useGetCollapsedBuildingQueueRangesQuery({

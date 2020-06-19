@@ -7,8 +7,8 @@ import {
   useDequeueBuildingMutation,
   useMoveQueuedBuildingAsHighAsPossibleMutation,
 } from '../../../../_graphql/graphqlHooks';
+import { useSelectedVillageId } from '../../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../../utils/imageLinks';
-import { useVillageContext } from '../../../villages/context/villageContext';
 
 type Props = {
   readonly building: QueuedBuilding;
@@ -48,7 +48,7 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
     onCollapse,
   } = props;
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const [moveToTop] = useMoveQueuedBuildingAsHighAsPossibleMutation({ variables: { queueId, villageId } });
   const [dequeue] = useDequeueBuildingMutation({ variables: { input: { queueId, villageId } } });

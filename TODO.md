@@ -96,29 +96,23 @@ NOVE NE TAK DOLEZITE
 
 ## Code Quality
 
-* Use local state of GraphQL
 * subscribeToEvent typings.
     * Similar to which module.
     * Make it have possible versions of configs and results rather than having one with complex types.
 * refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
-* Get rid of refetch queries and refetch
 * Use CONSTANTS_NAMING for enum values. At least on graphql
 * Use mapper for union log entry in schema
 * Enum mapping to graphql
-* Refactor code around moving building blocks - canMove method and queued building/range move drop/drag components
 
 ## Performance
 
-* GraphQL Cache
-    * Cache-first - problem with showing updates
-* Optimistic Cache Re-Write on Update
-* Enqueuing buildings have poor performance from UI
-* Store rendered content when switching app tabs
+* Enqueuing buildings take longer to update UI
+* remove loading state for queries where possible. We can reuse old queue values so its faster renderer? so just check data presence
 
 ## Error Handling / Fault Tolerance
 
 * Bot Task CoolDown is set only when task is successful.
-    * Improve retry policy, errror handling and cooldown manipulation
+    * Improve retry policy, error handling and cooldown manipulation
 * Check if login succeeded
 * Check that server is running against required node version
 * Detect server is down and notify client, or automatic restart
@@ -137,4 +131,4 @@ NOVE NE TAK DOLEZITE
 ## Inspiration / Future
 
 * https://travibot.com/en/travian-bot-5-1-0-0/
-* Travian Codex
+    * feature, UI, usability

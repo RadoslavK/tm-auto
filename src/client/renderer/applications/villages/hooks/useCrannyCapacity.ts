@@ -4,10 +4,10 @@ import {
   useOnBuildingsInProgressUpdatedSubscription,
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 
 export const useCrannyCapacity = () => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data: queryData, loading: queryLoading, refetch } = useGetCrannyCapacityQuery({ variables: { villageId } });
 

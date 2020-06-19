@@ -6,7 +6,7 @@ import {
   OnBuildingsInProgressUpdatedSubscriptionVariables,
   useGetBuildingsInProgressQuery,
 } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { BuildingInProgress } from './BuildingInProgress';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 };
 
 const useBuildingsInProgress = () => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data: queryData, loading: queryLoading, subscribeToMore } = useGetBuildingsInProgressQuery({ variables: { villageId } });
 

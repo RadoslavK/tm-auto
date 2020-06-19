@@ -15,6 +15,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import { updateSelectedVillageId } from '../../../_graphql/cache/cache';
 import { useRefreshVillageMutation } from '../../../_graphql/graphqlHooks';
 import { Buildings } from '../../buildings/Buildings';
 import { Parties } from '../../party/Parties';
@@ -23,7 +24,6 @@ import {
   VillageSettingsTabType,
 } from '../../settings/village';
 import { Units } from '../../units/components/Units';
-import { VillageContext } from '../context/villageContext';
 import { useVillage } from '../hooks/useVillage';
 import { CrannyCapacity } from './CrannyCapacity';
 import { Resources } from './Resources';
@@ -48,6 +48,12 @@ type Props = {
 };
 
 export const Village: React.FC<Props> = ({ villageId }) => {
+  useEffect(() => {
+    updateSelectedVillageId(villageId);
+
+    return () => updateSelectedVillageId('');
+  }, [villageId]);
+
   const match = useRouteMatch();
 
   const [showSettings, setShowSettings] = useState(false);
@@ -98,52 +104,50 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   return (
     <div>
-      <VillageContext.Provider value={{ villageId }}>
-        <Resources resources={resources} />
-        <CrannyCapacity />
-        {showSettingsButton && (
-          <button onClick={openSettings}>
-            Settings
-          </button>
-        )}
-        <button onClick={onRefreshVillage}>
-          Refresh
+      <Resources resources={resources} />
+      <CrannyCapacity />
+      {showSettingsButton && (
+        <button onClick={openSettings}>
+          Settings
         </button>
-        <div>
-          {navigation.map((n) => (
-            <Link
-              key={n.path}
-              to={`${match.url}/${n.path}`}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </div>
-        <Switch>
-          {navigation.map((n) => (
-            <Route
-              key={n.path}
-              component={n.component}
-              path={`${match.path}/${n.path}`}
-            />
-          ))}
-          <Redirect to={`${match.path}/${navigation[0].path}`} />
-        </Switch>
-        <Dialog
-          onClose={closeSettings}
-          open={showSettings}
-        >
+      )}
+      <button onClick={onRefreshVillage}>
+        Refresh
+      </button>
+      <div>
+        {navigation.map((n) => (
+          <Link
+            key={n.path}
+            to={`${match.url}/${n.path}`}
+          >
+            {n.label}
+          </Link>
+        ))}
+      </div>
+      <Switch>
+        {navigation.map((n) => (
           <Route
-            path={`${match.path}/:tab`}
-            render={(routeProps: RouteComponentProps<{ readonly tab: string; }>) => (
-              <VillageSettings
-                getTabType={getTabType}
-                tab={routeProps.match.params.tab}
-              />
-            )}
+            key={n.path}
+            component={n.component}
+            path={`${match.path}/${n.path}`}
           />
-        </Dialog>
-      </VillageContext.Provider>
+        ))}
+        <Redirect to={`${match.path}/${navigation[0].path}`} />
+      </Switch>
+      <Dialog
+        onClose={closeSettings}
+        open={showSettings}
+      >
+        <Route
+          path={`${match.path}/:tab`}
+          render={(routeProps: RouteComponentProps<{ readonly tab: string; }>) => (
+            <VillageSettings
+              getTabType={getTabType}
+              tab={routeProps.match.params.tab}
+            />
+          )}
+        />
+      </Dialog>
     </div>
   );
 };

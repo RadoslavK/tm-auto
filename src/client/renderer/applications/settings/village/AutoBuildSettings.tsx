@@ -21,11 +21,8 @@ import { Tribe } from '../../../../../_shared/types/tribe';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useGameInfo } from '../../../hooks/useGameInfp';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const useAutoBuildSettings = () => {
-  const { villageId } = useVillageSettingsContext();
-
+const useAutoBuildSettings = (villageId: string) => {
   const { data: queryData, loading: queryLoading } = useGetAutoBuildSettingsQuery({ variables: { villageId } });
 
   const [updateSettings] = useUpdateAutoBuildSettingsMutation({
@@ -127,9 +124,11 @@ const getSettingsFromState = (state: Settings): UpdateAutoBuildSettingsInput => 
   };
 };
 
-export const AutoBuildSettings: React.FC = () => {
-  const { villageId } = useVillageSettingsContext();
+type Props = {
+  readonly villageId: string;
+};
 
+export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const [state, setState] = useState<Settings>();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -137,7 +136,7 @@ export const AutoBuildSettings: React.FC = () => {
     resetSettings,
     settings,
     updateSettings,
-  } = useAutoBuildSettings();
+  } = useAutoBuildSettings(villageId);
 
   useEffect(() => {
     if (settings) {

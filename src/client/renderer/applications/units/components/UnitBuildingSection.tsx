@@ -18,8 +18,8 @@ import {
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../utils/imageLinks';
-import { useVillageContext } from '../../villages/context/villageContext';
 import { UnitSettings } from './UnitSettings';
 
 type StylesProps = {
@@ -82,7 +82,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
     isAllowed: state.allow,
   });
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const [updateSettings] = useUpdateAutoUnitsBuildingSettingsMutation();
 

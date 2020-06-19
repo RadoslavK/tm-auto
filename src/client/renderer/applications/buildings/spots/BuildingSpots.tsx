@@ -8,7 +8,7 @@ import {
   useOnBuildingsInProgressUpdatedSubscription,
   useOnQueueUpdatedSubscription,
 } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { BuildingSpot } from './BuildingSpot';
 
 const useStyles = makeStyles({
@@ -31,7 +31,7 @@ const mapBuilding = (building: BuildingSpotModel, index: number): JSX.Element =>
 );
 
 const useBuildingSpots = () => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data: queryData, loading: queryLoading, refetch } = useGetBuildingSpotsQuery({ variables: { villageId } });
 

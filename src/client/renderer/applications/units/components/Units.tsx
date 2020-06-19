@@ -4,6 +4,7 @@ import React from 'react';
 import { TaskType } from '../../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
 import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { useAutoUnitsSettings } from '../../settings/village/AutoUnitsSettings';
 import { UnitBuildingSection } from './UnitBuildingSection';
 
@@ -19,8 +20,9 @@ const useStyles = makeStyles({
 
 export const Units: React.FC = () => {
   const classes = useStyles();
+  const villageId = useSelectedVillageId();
 
-  const { settings } = useAutoUnitsSettings();
+  const { settings } = useAutoUnitsSettings(villageId);
 
   if (!settings) {
     return null;

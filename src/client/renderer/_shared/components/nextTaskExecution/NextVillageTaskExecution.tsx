@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 
 import { Duration } from '../../../_graphql/graphqlHooks';
 import { TaskType } from '../../../../../_shared/types/taskType';
-import { useVillageContext } from '../../../applications/villages/context/villageContext';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
 import { NextExecutionForm } from './NextExecutionForm';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const {
     nextExecutionIn,

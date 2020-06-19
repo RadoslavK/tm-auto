@@ -18,11 +18,8 @@ import {
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-export const useAutoUnitsSettings = () => {
-  const { villageId } = useVillageSettingsContext();
-
+export const useAutoUnitsSettings = (villageId: string) => {
   const { data: queryData, loading: queryLoading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
 
   const [updateSettings] = useUpdateAutoUnitsSettingsMutation({
@@ -64,9 +61,11 @@ export const useAutoUnitsSettings = () => {
   };
 };
 
-export const AutoUnitsSettings: React.FC = () => {
-  const { villageId } = useVillageSettingsContext();
+type Props = {
+  readonly villageId: string;
+};
 
+export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   const [state, setState] = useState<UpdateAutoUnitsSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -74,7 +73,7 @@ export const AutoUnitsSettings: React.FC = () => {
     resetSettings,
     settings,
     updateSettings,
-  } = useAutoUnitsSettings();
+  } = useAutoUnitsSettings(villageId);
 
   useEffect(() => {
     if (settings) {

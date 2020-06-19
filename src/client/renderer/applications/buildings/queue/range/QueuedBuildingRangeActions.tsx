@@ -7,8 +7,8 @@ import {
   useDequeueBuildingsBlockMutation,
   useMoveQueuedBuildingsBlockAsHighAsPossibleMutation,
 } from '../../../../_graphql/graphqlHooks';
+import { useSelectedVillageId } from '../../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../../utils/imageLinks';
-import { useVillageContext } from '../../../villages/context/villageContext';
 
 const useStyles = makeStyles({
   expand: {
@@ -42,7 +42,7 @@ type Props = {
 export const QueuedBuildingRangeActions: React.FC<Props> = ({ className, onExpand, range }) => {
   const classes = useStyles();
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const [moveToTop] = useMoveQueuedBuildingsBlockAsHighAsPossibleMutation({
     variables: {

@@ -11,7 +11,7 @@ import {
   useMoveQueuedBuildingsBlockToIndexMutation,
   useMoveQueuedBuildingToIndexMutation,
 } from '../../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../villages/context/villageContext';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { QueuedBuildingComponent } from './building/QueuedBuildingComponent';
 import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent';
 
@@ -50,7 +50,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   queueIndexBot,
   queueIndexTop,
 }) => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
   const [moveQueuedBuildingToIndex] = useMoveQueuedBuildingToIndexMutation();
 
   const onDropBuilding = (item: MovedQueuedBuilding) => {

@@ -1,5 +1,5 @@
 import { useDequeueBuildingAtFieldMutation as _useDequeueBuildingAtFieldMutation } from '../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../applications/villages/context/villageContext';
+import { useSelectedVillageId } from '../villages/useSelectedVillageId';
 
 type Params = {
   readonly targetLevel?: number;
@@ -7,7 +7,7 @@ type Params = {
 };
 
 export const useDequeueBuildingAtFieldMutation = () => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const [dequeue] = _useDequeueBuildingAtFieldMutation();
 

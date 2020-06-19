@@ -522,6 +522,7 @@ export type Query = {
   readonly nextTaskExecution: Timestamp;
   readonly nextTasksExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
+  readonly selectedVillageId: Scalars['String'];
   readonly unitInfo: UnitInfo;
   readonly village: Maybe<Village>;
   readonly villages: ReadonlyArray<Village>;
@@ -870,6 +871,11 @@ export type GetCollapsedBuildingQueueRangesQueryVariables = {
 
 
 export type GetCollapsedBuildingQueueRangesQuery = { readonly collapsedBuildingQueueRanges: ReadonlyArray<string> };
+
+export type GetSelectedVillageIdQueryVariables = {};
+
+
+export type GetSelectedVillageIdQuery = { readonly selectedVillageId: string };
 
 export type UserAccountFragment = { readonly id: string, readonly username: string, readonly password: string, readonly server: string };
 
@@ -1568,6 +1574,32 @@ export function useGetCollapsedBuildingQueueRangesLazyQuery(baseOptions?: Apollo
 export type GetCollapsedBuildingQueueRangesQueryHookResult = ReturnType<typeof useGetCollapsedBuildingQueueRangesQuery>;
 export type GetCollapsedBuildingQueueRangesLazyQueryHookResult = ReturnType<typeof useGetCollapsedBuildingQueueRangesLazyQuery>;
 export type GetCollapsedBuildingQueueRangesQueryResult = ApolloReactCommon.QueryResult<GetCollapsedBuildingQueueRangesQuery, GetCollapsedBuildingQueueRangesQueryVariables>;
+export const GetSelectedVillageIdDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSelectedVillageId"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"selectedVillageId"},"arguments":[],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"client"},"arguments":[]}]}]}}]};
+
+/**
+ * __useGetSelectedVillageIdQuery__
+ *
+ * To run a query within a React component, call `useGetSelectedVillageIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSelectedVillageIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSelectedVillageIdQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSelectedVillageIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetSelectedVillageIdQuery, GetSelectedVillageIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetSelectedVillageIdQuery, GetSelectedVillageIdQueryVariables>(GetSelectedVillageIdDocument, baseOptions);
+      }
+export function useGetSelectedVillageIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSelectedVillageIdQuery, GetSelectedVillageIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetSelectedVillageIdQuery, GetSelectedVillageIdQueryVariables>(GetSelectedVillageIdDocument, baseOptions);
+        }
+export type GetSelectedVillageIdQueryHookResult = ReturnType<typeof useGetSelectedVillageIdQuery>;
+export type GetSelectedVillageIdLazyQueryHookResult = ReturnType<typeof useGetSelectedVillageIdLazyQuery>;
+export type GetSelectedVillageIdQueryResult = ApolloReactCommon.QueryResult<GetSelectedVillageIdQuery, GetSelectedVillageIdQueryVariables>;
 export const GetAccountsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAccounts"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accounts"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserAccount"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserAccount"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserAccount"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"username"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"password"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"server"},"arguments":[],"directives":[]}]}}]};
 
 /**

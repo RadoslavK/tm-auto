@@ -14,8 +14,8 @@ import {
   useUpdateAutoUnitsUnitSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../utils/imageLinks';
-import { useVillageContext } from '../../villages/context/villageContext';
 
 type Props = {
   readonly className?: string;
@@ -62,7 +62,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
     settings,
   } = props;
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const { data, loading } = useGetUnitInfoQuery({
     variables: { index: settings.index },

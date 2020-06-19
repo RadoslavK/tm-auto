@@ -5,6 +5,7 @@ import { possibleTypes } from '../fragmentTypes.json';
 import { GetCollapsedBuildingQueueRangesQueryVariables } from '../graphqlHooks';
 
 let collapsedBuildingQueueRangeIds: ReactiveVar<Record<string, readonly string[]>>;
+let selectedVillageId: ReactiveVar<string>;
 
 export const graphQLCache = new InMemoryCache({
   possibleTypes,
@@ -22,6 +23,7 @@ export const graphQLCache = new InMemoryCache({
           const ids = collapsedBuildingQueueRangeIds();
           return ids[villageId] || [];
         },
+        selectedVillageId: () => selectedVillageId(),
       },
     },
   },
@@ -36,4 +38,10 @@ export const updateCollapsedBuildingQueueRangeIds = (villageId: string, newIds: 
     ...ids,
     [villageId]: newIds,
   });
+};
+
+selectedVillageId = graphQLCache.makeVar<string>('');
+
+export const updateSelectedVillageId = (id: string) => {
+  selectedVillageId(id);
 };

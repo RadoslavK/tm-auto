@@ -4,13 +4,12 @@ import React, {
   useState,
 } from 'react';
 
+import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { useVillages } from '../../../hooks/villages/useVillages';
 import { formatVillageName } from '../../../utils/formatVillageName';
-import { useVillageContext } from '../../villages/context/villageContext';
 import { AutoBuildSettings } from './AutoBuildSettings';
 import { AutoPartySettings } from './AutoPartySettings';
 import { AutoUnitsSettings } from './AutoUnitsSettings';
-import { VillageSettingsContext } from './context/villageSettingsContext';
 import { GeneralVillageSettings } from './GeneralVillageSettings';
 
 type LinkProps = {
@@ -61,7 +60,7 @@ export const VillageSettings: React.FC<Props> = (props) => {
     tab,
   } = props;
 
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
   const [selectedVillageId, setSelectedVillageId] = useState(villageId);
 
   useEffect(() => {
@@ -78,10 +77,10 @@ export const VillageSettings: React.FC<Props> = (props) => {
 
   const renderSettings = (): JSX.Element => {
     switch (selectedTab) {
-      case VillageSettingsTabType.General: return <GeneralVillageSettings />;
-      case VillageSettingsTabType.AutoBuild: return <AutoBuildSettings />;
-      case VillageSettingsTabType.AutoUnits: return <AutoUnitsSettings />;
-      case VillageSettingsTabType.AutoParty: return <AutoPartySettings />;
+      case VillageSettingsTabType.General: return <GeneralVillageSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoBuild: return <AutoBuildSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoUnits: return <AutoUnitsSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoParty: return <AutoPartySettings villageId={selectedVillageId} />;
       default: throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
   };
@@ -129,9 +128,7 @@ export const VillageSettings: React.FC<Props> = (props) => {
           onSelect={() => setSelectedTab(VillageSettingsTabType.AutoParty)}
         />
       </div>
-      <VillageSettingsContext.Provider value={{ villageId: selectedVillageId }}>
-        {renderSettings()}
-      </VillageSettingsContext.Provider>
+      {renderSettings()}
     </div>
   );
 };

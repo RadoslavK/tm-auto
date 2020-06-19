@@ -14,11 +14,8 @@ import {
   useUpdateGeneralVillageSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
-import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const useGeneralVillageSettings = () => {
-  const { villageId } = useVillageSettingsContext();
-
+const useGeneralVillageSettings = (villageId: string) => {
   const { data: queryData, loading: queryLoading } = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
 
   const [updateSettings] = useUpdateGeneralVillageSettingsMutation({
@@ -60,14 +57,16 @@ const useGeneralVillageSettings = () => {
   };
 };
 
-export const GeneralVillageSettings: React.FC = () => {
+type Props = {
+  readonly villageId: string;
+};
+
+export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
   const {
     resetSettings,
     settings,
     updateSettings,
-  } = useGeneralVillageSettings();
-
-  const { villageId } = useVillageSettingsContext();
+  } = useGeneralVillageSettings(villageId);
 
   const [state, setState] = useState<UpdateGeneralVillageSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);

@@ -18,11 +18,8 @@ import {
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
-import { useVillageSettingsContext } from './context/villageSettingsContext';
 
-const useAutoPartySettings = () => {
-  const { villageId } = useVillageSettingsContext();
-
+const useAutoPartySettings = (villageId: string) => {
   const { data: queryData, loading: queryLoading } = useGetAutoPartySettingsQuery({ variables: { villageId } });
 
   const [updateSettings] = useUpdateAutoPartySettingsMutation({
@@ -64,9 +61,11 @@ const useAutoPartySettings = () => {
   };
 };
 
-export const AutoPartySettings: React.FC = () => {
-  const { villageId } = useVillageSettingsContext();
+type Props = {
+  readonly villageId: string;
+};
 
+export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
   const [state, setState] = useState<UpdateAutoPartySettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -74,7 +73,7 @@ export const AutoPartySettings: React.FC = () => {
     resetSettings,
     settings,
     updateSettings,
-  } = useAutoPartySettings();
+  } = useAutoPartySettings(villageId);
 
   useEffect(() => {
     if (settings) {

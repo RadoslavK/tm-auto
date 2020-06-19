@@ -4,7 +4,7 @@ import {
   EnqueueBuildingMutation,
   useEnqueueBuildingMutation as _useEnqueueBuildingMutation,
 } from '../../_graphql/graphqlHooks';
-import { useVillageContext } from '../../applications/villages/context/villageContext';
+import { useSelectedVillageId } from '../villages/useSelectedVillageId';
 
 type Params = {
   readonly buildingType: number
@@ -15,7 +15,7 @@ type Params = {
 type ReturnType = (targetLevel?: number) => Promise<FetchResult<EnqueueBuildingMutation>>;
 
 export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
-  const { villageId } = useVillageContext();
+  const villageId = useSelectedVillageId();
 
   const createOptions = (optionParams: Params) => ({
     variables: {
