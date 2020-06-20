@@ -1,12 +1,21 @@
-NOVE NE TAK DOLEZITE
--podmienena stavba ->specifikovat co najprv pred tym ake budovy na aky level alebo rozdelit build queue na bloky a dalsi sa nezacne robit pokial ten prvy nieje splneny
--moznost autobuild res field. bot sa sam rozhodne kere res field sa v tem momente da stavat ale nebude to davat do queue
-
-
 ## New features
 
+* Building pre-conditions
+    * For building/block
+    * Useful for Roman/free order so the bot would skip certain buildings until the right time
+* Free building order for a block of buildings or everything.
+    * So the bot does not need to follow the queue.
+        * Settings like prefer cheapest buildings or balance resources.
+    * Needs to check requirements if its not first in the row.
+* Milder events/UI updates
+    * Resources, even after each claimed
+    * Building spots etc
+* AutoUnits
+    * min troop count to build at the same time. E.g. build at least 5 units or none.
+* Second village ref builder
 * Use gold for some tasks. settlers or residence when chasing 2nd village
-* automated mentor tasks. scheduling task??? -> settle village etc
+* automated mentor tasks.
+* scheduling task??? -> settle village etc
 * Autoreset tasks when changing its settings? like enqueue etc
 * If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
 * reload settings button from that folder.. copy service settings etc and refresh all structures on UI - refetch queries or subscriptions?
@@ -104,11 +113,15 @@ NOVE NE TAK DOLEZITE
 
 ## Performance
 
+* First load takes a long time as it needs to scan all villages
 * Enqueuing buildings take longer to update UI
 * remove loading state for queries where possible. We can reuse old queue values so its faster renderer? so just check data presence
 
 ## Error Handling / Fault Tolerance
 
+* Add exponential timeout for maintenance handling, starting with lower timeouts.
+* Occasionally some "Unknown Error" happens. Detect and wait similarly to maintenance.
+* React error boundary for client errors -> refresh button?
 * Bot Task CoolDown is set only when task is successful.
     * Improve retry policy, error handling and cooldown manipulation
 * Check if login succeeded

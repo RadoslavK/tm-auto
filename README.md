@@ -1,33 +1,12 @@
-data processed during bot running are stored in .data folder
+After changing the GraphQL schema, types and merged schema needs to be regenerated via
+`generate-types` command.
 
-.data
-	accounts.json - all accounts
-	browser_data - puppeteer browser data, cookies etc
-	accounts
-		accountID
-			villages
-				villageId
-					settings
-						...tasks
-					buildingQueue
-			settings...
-				general
-				hero
-			
-ked sa zmeni graphql schema treba vygenerovat typy: generate-types command
-tento generator generuje fragment types json potrebny pre klienta
--yarn run generate-types
-			
-debugging - yarn run debug
--vo WS nastavit attach to remote process
----renderer port: 9222
----main port: 9229
----server port: 9220
+Debugging (Attach to remote process in WS):
+    * Renderer port: 9222
+    * Main port: 9229
+    * Server port: 9229
 
-node 13.7 +
+Node v13.7+
 
-ked sa kopiruju lokalne moduly tak najprv treba zmazat z nich node_modules lebo sa to vsetko prekopiruje
-a az potom dat yarn add lokalny modul
-viz _eslint
-
-linter has lower typescript support. like 3.7.5
+When copying local modules like _eslint, its required to delete their `node_modules` otherwise
+it would also be copied...
