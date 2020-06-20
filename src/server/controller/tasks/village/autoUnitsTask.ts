@@ -1,8 +1,10 @@
 import { CoolDown } from '../../../_models/coolDown';
+import { Resources } from '../../../_models/misc/resources';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
 import { BuildingType } from '../../../../_shared/types/buildingType';
+import { ClaimHeroResourcesReason } from '../../../../_shared/types/claimHeroResourcesReason';
 import { TaskType } from '../../../../_shared/types/taskType';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
@@ -10,10 +12,12 @@ import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
 import { unitInfoService } from '../../../services/info/unitInfoService';
 import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
+import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources';
 import {
   ensureBuildingSpotPage,
   TabInformation,
 } from '../../actions/ensurePage';
+import { claimHeroResources } from '../../actions/hero/claimHeroResources';
 import { updateUnitsInformation } from '../../actions/updateUnitsInformation';
 import { updateActualResources } from '../../actions/village/updateResources';
 import {
@@ -95,7 +99,11 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     this._units.setQueue(type, unitQueue);
 
     const suitableToBuild: Record<number, number> = {};
-    let startingVillageRes = this._village.resources.amount;
+    const { hero } = getAccountContext();
+    const totalVillageResources = settings.useHeroResources && hero.villageId === this._village.id
+      ? mergeVillageAndHeroResources(this._village.id)
+      : this._village.resources.amount;
+    let availableResources = new Resources(totalVillageResources);
 
     const maxAllowedBuildingTime = buildingSettings.maxBuildTime;
     let ongoingBuildingTime = unitQueue.duration;
@@ -109,10 +117,10 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
       // max by res
       let maxPossibleAmountToBuild = Math.min(
-        startingVillageRes.wood / cost.wood,
-        startingVillageRes.clay / cost.clay,
-        startingVillageRes.iron / cost.iron,
-        startingVillageRes.crop / cost.crop,
+        availableResources.wood / cost.wood,
+        availableResources.clay / cost.clay,
+        availableResources.iron / cost.iron,
+        availableResources.crop / cost.crop,
       );
 
       if (maxPossibleAmountToBuild < 1) {
@@ -159,13 +167,22 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
       maxPossibleAmountToBuild = Math.floor(maxPossibleAmountToBuild);
       suitableToBuild[uIndex] = maxPossibleAmountToBuild;
-      startingVillageRes = startingVillageRes.subtract(cost.multiply(maxPossibleAmountToBuild));
+      availableResources = availableResources.subtract(cost.multiply(maxPossibleAmountToBuild));
       ongoingBuildingTime = ongoingBuildingTime.add(buildTime.multiply(maxPossibleAmountToBuild));
     });
 
     // can build at least 1 with res and fit in queue
     if (!Object.keys(suitableToBuild).length) {
       return;
+    }
+
+    if (settings.useHeroResources) {
+      const requiredResources = totalVillageResources.subtract(availableResources);
+      const resourcesNeeded = requiredResources.subtract(this._village.resources.amount);
+
+      if (resourcesNeeded.getTotal() > 0) {
+        await claimHeroResources(resourcesNeeded, ClaimHeroResourcesReason.AutoUnits);
+      }
     }
 
     const page = await getPage();

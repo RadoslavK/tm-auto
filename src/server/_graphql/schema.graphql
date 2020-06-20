@@ -87,6 +87,7 @@ type AutoUnitsLogEntryContent {
 type AutoUnitsSettings {
   allow: Boolean!
   coolDown: CoolDown!
+  useHeroResources: Boolean!
   minCrop: Int!
   barracks: AutoUnitsBuildingSettings!
   stable: AutoUnitsBuildingSettings!
@@ -205,6 +206,7 @@ enum BuildingType {
 
 enum ClaimHeroResourcesReason {
   AutoBuild
+  AutoUnits
 }
 
 input ClearQueueInput {
@@ -532,6 +534,7 @@ input UpdateAutoUnitsBuildingSettingsInput {
 input UpdateAutoUnitsSettingsInput {
   allow: Boolean!
   coolDown: CoolDownInput!
+  useHeroResources: Boolean!
   minCrop: Int!
 }
 

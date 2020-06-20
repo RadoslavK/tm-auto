@@ -6,6 +6,7 @@ import { getPage } from '../../../browser/getPage';
 import { heroItemIds } from '../../../constants/heroItemIds';
 import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { ensurePage } from '../ensurePage';
+import { updateHeroResources } from './updateHeroResources';
 
 export const claimHeroResources = async (resources: Resources, reason: ClaimHeroResourcesReason): Promise<void> => {
   getAccountContext().logsService.logResourceClaim(resources, reason);
@@ -59,4 +60,5 @@ export const claimHeroResources = async (resources: Resources, reason: ClaimHero
   await claimResource('clay');
   await claimResource('iron');
   await claimResource('crop');
+  await updateHeroResources();
 };

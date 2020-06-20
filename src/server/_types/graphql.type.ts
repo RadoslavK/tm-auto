@@ -120,6 +120,7 @@ export type AutoUnitsSettings = {
   readonly __typename?: 'AutoUnitsSettings';
   readonly allow: Scalars['Boolean'];
   readonly coolDown: CoolDown;
+  readonly useHeroResources: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
   readonly barracks: AutoUnitsBuildingSettings;
   readonly stable: AutoUnitsBuildingSettings;
@@ -834,6 +835,7 @@ export type UpdateAutoUnitsBuildingSettingsInput = {
 export type UpdateAutoUnitsSettingsInput = {
   readonly allow: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
+  readonly useHeroResources: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
 };
 
@@ -1216,6 +1218,7 @@ export type AutoUnitsLogEntryContentResolvers<ContextType = any, ParentType exte
 export type AutoUnitsSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoUnitsSettings'] = ResolversParentTypes['AutoUnitsSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
+  useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   barracks: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;
   stable: Resolver<ResolversTypes['AutoUnitsBuildingSettings'], ParentType, ContextType>;

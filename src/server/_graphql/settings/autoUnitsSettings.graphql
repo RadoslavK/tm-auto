@@ -26,6 +26,7 @@ input UpdateAutoUnitsBuildingSettingsInput {
 type AutoUnitsSettings {
     allow: Boolean!
     coolDown: CoolDown!
+    useHeroResources: Boolean!
 
     minCrop: Int!
     barracks: AutoUnitsBuildingSettings!
@@ -37,6 +38,7 @@ type AutoUnitsSettings {
 input UpdateAutoUnitsSettingsInput {
     allow: Boolean!
     coolDown: CoolDownInput!
+    useHeroResources: Boolean!
 
     minCrop: Int!
 }

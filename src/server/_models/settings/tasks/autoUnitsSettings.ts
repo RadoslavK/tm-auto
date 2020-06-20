@@ -56,6 +56,8 @@ const getUnitsOfType = (buildingType: BuildingType): AutoUnitsUnitSettings[] => 
 export class AutoUnitsSettings {
   public readonly allow: boolean = false;
 
+  public readonly useHeroResources: boolean = false;
+
   public readonly barracks: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
     units: getUnitsOfType(BuildingType.Barracks),
   });

@@ -17,6 +17,7 @@ import { fieldIds } from '../../../../constants/fieldIds';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import { isInfrastructure } from '../../../../utils/buildingUtils';
+import { mergeVillageAndHeroResources } from '../../../../utils/mergeVillageAndHeroResources';
 import {
   ensureBuildingSpotPage,
   ensurePage,
@@ -121,20 +122,11 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     const requiredResources = cost.add(new Resources({ crop: settings.minCrop }));
 
     await updateActualResources();
-    const warehouseCapacity = this._village.resources.capacity.warehouse;
-    const granaryCapacity = this._village.resources.capacity.granary;
+
     const currentResources = this._village.resources.amount;
     const { hero } = getAccountContext();
     const totalResources = settings.useHeroResources && hero.villageId === this._village.id
-      ? currentResources
-        .add(hero.resources)
-        .mergeMin(new Resources({
-          wood: warehouseCapacity,
-          clay: warehouseCapacity,
-          iron: warehouseCapacity,
-          crop: granaryCapacity,
-          freeCrop: currentResources.freeCrop,
-        }))
+      ? mergeVillageAndHeroResources(this._village.id)
       : currentResources;
 
     if (totalResources.areGreaterOrEqualThan(requiredResources)) {

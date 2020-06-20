@@ -55,7 +55,6 @@ NOVE NE TAK DOLEZITE
     * Create a template similar to SecondVillageBot to build buildings based on a state
     * User will be able to create the template in the UI
 * Use hero resources for other tasks
-    * AutoUnits
     * [?] AutoParties
 * Extend unit info with capacity, defense, move speed...
 * Watch auction for items, prices.. maybe buy or sell too. And show pop up if something relevant appeared.

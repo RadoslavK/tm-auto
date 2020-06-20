@@ -19,6 +19,7 @@ fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
 
 fragment AutoUnitsSettings on AutoUnitsSettings {
     allow
+    useHeroResources
     coolDown {
         ...CoolDown
     }

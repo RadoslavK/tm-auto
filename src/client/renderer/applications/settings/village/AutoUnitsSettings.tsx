@@ -81,6 +81,7 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
         allow: settings.allow,
         coolDown: settings.coolDown,
         minCrop: settings.minCrop,
+        useHeroResources: settings.useHeroResources,
       });
       setHasChanges(false);
     }
@@ -112,6 +113,7 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
     allow,
     coolDown,
     minCrop,
+    useHeroResources,
   } = state;
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -155,6 +157,17 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
           checked={allow}
           id="allow"
           name="allow"
+          onChange={onChange}
+          type="checkbox"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="useHeroResources">Use hero resources</label>
+        <input
+          checked={useHeroResources}
+          id="useHeroResources"
+          name="useHeroResources"
           onChange={onChange}
           type="checkbox"
         />
