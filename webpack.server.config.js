@@ -3,7 +3,10 @@ const path = require('path');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
-const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'server');
+const directory = path.join(
+  isDevelopment ? '.webpack' : path.join('app', 'dist'),
+  'server',
+);
 
 // Some packages can not be bundled and need to be provided separately in app/packages.json
 // https://github.com/berstend/puppeteer-extra/issues/93
@@ -61,17 +64,19 @@ module.exports = {
     //  to hide away folder information :D
     devtoolModuleFilenameTemplate: isDevelopment
       ? '../../[resource-path]'
-      : info => info.resourcePath.slice(1),
+      : (info) => info.resourcePath.slice(1),
   },
   plugins: [
     new RemovePlugin({
       before: {
         root: directory,
-        test: [{
-          folder: '.',
-          method: () => true,
-        }],
-        ...isDevelopment ? { exclude: ['.data'] } : undefined,
+        test: [
+          {
+            folder: '.',
+            method: () => true,
+          },
+        ],
+        ...(isDevelopment ? { exclude: ['.data'] } : undefined),
       },
     }),
   ],

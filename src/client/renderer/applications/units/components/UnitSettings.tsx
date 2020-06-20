@@ -1,10 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AutoUnitsUnitSettings,
   GetAutoUnitsSettingsDocument,
@@ -13,7 +11,6 @@ import {
   useGetUnitInfoQuery,
   useUpdateAutoUnitsUnitSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../utils/imageLinks';
 
@@ -32,14 +29,14 @@ const useStyles = makeStyles<unknown, StyleProps>({
   root: {
     display: 'flex',
   },
-  targetAmount: props => ({
+  targetAmount: (props) => ({
     display: 'flex',
     visibility: props.trainForever ? 'hidden' : undefined,
   }),
   targetAmountInput: {
     maxWidth: 70,
   },
-  unitImage: props => ({
+  unitImage: (props) => ({
     backgroundImage: `url("${imageLinks.getUnit(props.unitIndex)}")`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -57,10 +54,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
 });
 
 export const UnitSettings: React.FC<Props> = (props) => {
-  const {
-    className,
-    settings,
-  } = props;
+  const { className, settings } = props;
 
   const villageId = useSelectedVillageId();
 
@@ -77,15 +71,15 @@ export const UnitSettings: React.FC<Props> = (props) => {
     setHasChanges(false);
   }, [settings]);
 
-  const {
-    autoBuild,
-    targetAmount,
-    trainForever,
-  } = state;
+  const { autoBuild, targetAmount, trainForever } = state;
 
   const [updateSettings] = useUpdateAutoUnitsUnitSettingsMutation();
 
-  const classes = useStyles({ autoBuild, trainForever, unitIndex: settings.index });
+  const classes = useStyles({
+    autoBuild,
+    trainForever,
+    unitIndex: settings.index,
+  });
 
   useEffect(() => {
     if (hasChanges) {
@@ -99,7 +93,10 @@ export const UnitSettings: React.FC<Props> = (props) => {
             return;
           }
 
-          updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+          updateQueryCache<
+            GetAutoUnitsSettingsQuery,
+            GetAutoUnitsSettingsQueryVariables
+          >({
             cache,
             query: GetAutoUnitsSettingsDocument,
             data: { autoUnitsSettings: updateData.updateAutoUnitsUnitSettings },
@@ -115,12 +112,9 @@ export const UnitSettings: React.FC<Props> = (props) => {
   }
 
   const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       [name]: checked,
     }));
@@ -128,16 +122,13 @@ export const UnitSettings: React.FC<Props> = (props) => {
   };
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
+    const { name, value } = e.currentTarget;
 
     if (+value < 0) {
       return;
     }
 
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       [name]: +value,
     }));
@@ -145,7 +136,7 @@ export const UnitSettings: React.FC<Props> = (props) => {
   };
 
   const toggleAutoBuild = (): void => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
       autoBuild: !prevState.autoBuild,
     }));

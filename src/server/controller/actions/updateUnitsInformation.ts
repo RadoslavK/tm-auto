@@ -1,4 +1,4 @@
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle } from 'puppeteer-core';
 
 import { Coords } from '../../_models/coords';
 import { BuildingType } from '../../_models/enums/buildingType';
@@ -12,7 +12,7 @@ enum MovementType {
   InVillage = 'InVillage',
   Raid = 'Raid',
   Return = 'Return',
-  Unknown = 'Unknown'
+  Unknown = 'Unknown',
 }
 
 const mapMovementType = (movementClass: string | undefined): MovementType => {
@@ -37,39 +37,58 @@ type TroopDetail = {
   readonly unitAmounts: readonly UnitAmount[];
 };
 
-const parseCoordinate = async (elementHandle: ElementHandle, className: string): Promise<number | null> => {
+const parseCoordinate = async (
+  elementHandle: ElementHandle,
+  className: string,
+): Promise<number | null> => {
   const coordElement = await elementHandle.$(className);
 
   if (!coordElement) {
     return null;
   }
 
-  const coordText = await coordElement.evaluate(x => (x as HTMLElement).innerText);
+  const coordText = await coordElement.evaluate(
+    (x) => (x as HTMLElement).innerText,
+  );
   return parseNumber(coordText);
 };
 
-const parseUnitAmounts = async (detailsHandle: ElementHandle): Promise<UnitAmount[]> => {
-  const amounts = await detailsHandle.$$eval('tbody[class="units last"] tr td', countColumns => countColumns.map(column => +(column as HTMLElement).innerText));
+const parseUnitAmounts = async (
+  detailsHandle: ElementHandle,
+): Promise<UnitAmount[]> => {
+  const amounts = await detailsHandle.$$eval(
+    'tbody[class="units last"] tr td',
+    (countColumns) =>
+      countColumns.map((column) => +(column as HTMLElement).innerText),
+  );
 
-  const indexes = await detailsHandle.$$eval('tbody[class="units"] tr td.uniticon img', icons => icons.map(icon => {
-    const heroIndexMatch = /unit uhero/.exec(icon.className);
+  const indexes = await detailsHandle.$$eval(
+    'tbody[class="units"] tr td.uniticon img',
+    (icons) =>
+      icons.map((icon) => {
+        const heroIndexMatch = /unit uhero/.exec(icon.className);
 
-    if (heroIndexMatch) {
-      return null;
-    }
+        if (heroIndexMatch) {
+          return null;
+        }
 
-    const unitIndexMatch = /unit u(\d+)/.exec(icon.className);
+        const unitIndexMatch = /unit u(\d+)/.exec(icon.className);
 
-    if (!unitIndexMatch) {
-      throw new Error('Could not parse unit index');
-    }
+        if (!unitIndexMatch) {
+          throw new Error('Could not parse unit index');
+        }
 
-    return +unitIndexMatch[1];
-  }));
+        return +unitIndexMatch[1];
+      }),
+  );
 
-  return indexes.reduce((reduced, unitIndex, index) => unitIndex
-    ? [...reduced, { amount: amounts[index] || 0, unitIndex }]
-    : reduced, [] as UnitAmount[]);
+  return indexes.reduce(
+    (reduced, unitIndex, index) =>
+      unitIndex
+        ? [...reduced, { amount: amounts[index] || 0, unitIndex }]
+        : reduced,
+    [] as UnitAmount[],
+  );
 };
 
 export const updateUnitsInformation = async (): Promise<void> => {
@@ -102,14 +121,16 @@ export const updateUnitsInformation = async (): Promise<void> => {
       continue;
     }
 
-    const originVillage = getAccountContext().villageService.villageByCoords(new Coords({ x: originX, y: originY }));
+    const originVillage = getAccountContext().villageService.villageByCoords(
+      new Coords({ x: originX, y: originY }),
+    );
 
     if (!originVillage) {
       //  not from this account's village
       continue;
     }
 
-    const detailClass = await detailNode.evaluate(x => x.className);
+    const detailClass = await detailNode.evaluate((x) => x.className);
     const match = /troop_details$|troop_details ([^ ]+)/.exec(detailClass);
 
     if (!match) {
@@ -132,9 +153,9 @@ export const updateUnitsInformation = async (): Promise<void> => {
   village.units.resetCounts();
 
   details
-    .filter(d => d.originVillageId === village.id)
-    .forEach(detail => {
-      detail.unitAmounts.forEach(unitAmount => {
+    .filter((d) => d.originVillageId === village.id)
+    .forEach((detail) => {
+      detail.unitAmounts.forEach((unitAmount) => {
         village.units.addCount(unitAmount.unitIndex, unitAmount.amount);
       });
     });

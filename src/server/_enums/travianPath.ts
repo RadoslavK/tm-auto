@@ -10,10 +10,13 @@ export enum TravianPath {
   Reports = 'berichte.php',
   ResourceFieldsOverview = 'dorf1.php',
   Settings = 'options.php',
-  Statistics = 'statistiken.php'
+  Statistics = 'statistiken.php',
 }
 
-export const getBuildingSpotPath = (fieldId: number, tab?: TabInformation): string =>
+export const getBuildingSpotPath = (
+  fieldId: number,
+  tab?: TabInformation,
+): string =>
   tab === undefined
     ? `build.php?id=${fieldId}`
     : `build.php?${tab.name}=${tab.index}&id=${fieldId}`;

@@ -42,12 +42,14 @@ export const Villages: React.FC = () => {
       <div className={classes.sideMenu}>
         <Route
           path={`${match.path}/:selectedVillageId`}
-          render={(props: RouteComponentProps<{ readonly selectedVillageId: string; }>) => {
+          render={(
+            props: RouteComponentProps<{ readonly selectedVillageId: string }>,
+          ) => {
             const { selectedVillageId } = props.match.params;
 
             return (
               <>
-                {villages.map(village => (
+                {villages.map((village) => (
                   <VillageSideItem
                     key={village.id}
                     isVillageActive={village.id === activeVillageId}
@@ -63,7 +65,9 @@ export const Villages: React.FC = () => {
       <Switch>
         <Route
           path={`${match.path}/:id`}
-          render={(props: RouteComponentProps<VillageRouteParams>) => <Village villageId={props.match.params.id} />}
+          render={(props: RouteComponentProps<VillageRouteParams>) => (
+            <Village villageId={props.match.params.id} />
+          )}
         />
         {villages.length > 0 && (
           <Redirect to={`${match.url}/${villages[0].id}`} />

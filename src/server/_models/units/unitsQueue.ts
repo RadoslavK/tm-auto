@@ -15,5 +15,6 @@ export class UnitsQueue {
     }
   };
 
-  public getQueuedCount = (unitIndex: number): number => this._amountsByIndex[unitIndex] || 0;
+  public getQueuedCount = (unitIndex: number): number =>
+    this._amountsByIndex[unitIndex] || 0;
 }

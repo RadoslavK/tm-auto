@@ -1,16 +1,19 @@
 type GeneralVillageSettings {
-    allowTasks: Boolean!
+  allowTasks: Boolean!
 }
 
 input UpdateGeneralVillageSettingsInput {
-    allowTasks: Boolean!
+  allowTasks: Boolean!
 }
 
 extend type Query {
-    generalVillageSettings(villageId: ID!): GeneralVillageSettings!
+  generalVillageSettings(villageId: ID!): GeneralVillageSettings!
 }
 
 extend type Mutation {
-    updateGeneralVillageSettings(villageId: ID!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
-    resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
+  updateGeneralVillageSettings(
+    villageId: ID!
+    settings: UpdateGeneralVillageSettingsInput!
+  ): GeneralVillageSettings!
+  resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
 }

@@ -21,39 +21,35 @@ type Props = {
   readonly onSelect: () => void;
 };
 
-export const NewBuildingDialog: React.FC<Props> = React.forwardRef((props, ref: any) => {
-  const {
-    fieldId,
-    onSelect,
-  } = props;
+export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
+  (props, ref: any) => {
+    const { fieldId, onSelect } = props;
 
-  const classes = useStyles({});
-  const villageId = useSelectedVillageId();
+    const classes = useStyles({});
+    const villageId = useSelectedVillageId();
 
-  const { data, loading } = useGetAvailableNewBuildingTypesQuery({ variables: { input: { fieldId, villageId } } });
+    const { data, loading } = useGetAvailableNewBuildingTypesQuery({
+      variables: { input: { fieldId, villageId } },
+    });
 
-  if (loading || !data) {
-    return null;
-  }
+    if (loading || !data) {
+      return null;
+    }
 
-  const {
-    availableNewBuildingsTypes,
-  } = data;
+    const { availableNewBuildingsTypes } = data;
 
-  return (
-    <div
-      ref={ref}
-      className={classes.root}
-    >
-      {availableNewBuildingsTypes.map((buildingType) => (
-        <NewBuildingDialogItem
-          key={buildingType}
-          className={classes.building}
-          fieldId={fieldId}
-          onSelect={onSelect}
-          type={buildingType}
-        />
-      ))}
-    </div>
-  );
-});
+    return (
+      <div ref={ref} className={classes.root}>
+        {availableNewBuildingsTypes.map((buildingType) => (
+          <NewBuildingDialogItem
+            key={buildingType}
+            className={classes.building}
+            fieldId={fieldId}
+            onSelect={onSelect}
+            type={buildingType}
+          />
+        ))}
+      </div>
+    );
+  },
+);

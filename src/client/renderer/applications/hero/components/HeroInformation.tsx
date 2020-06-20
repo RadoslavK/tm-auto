@@ -14,42 +14,26 @@ export const HeroInformation: React.FC = () => {
 
   return (
     <div>
-      <h2>
-        Stats
-      </h2>
+      <h2>Stats</h2>
       <div>
-        <label htmlFor="health">
-          Health:
-        </label>
-        <span id="heath">
-          {information.health}
-        </span>
+        <label htmlFor="health">Health:</label>
+        <span id="heath">{information.health}</span>
       </div>
 
       <div>
-        <label htmlFor="state">
-          State:
-        </label>
-        <span id="state">
-          {HeroState[information.state]}
-        </span>
+        <label htmlFor="state">State:</label>
+        <span id="state">{HeroState[information.state]}</span>
       </div>
 
       <div>
-        <label htmlFor="village">
-          Village:
-        </label>
-        {information.village
-          ? (
-            <Link to={`/villages/${information.village.id}`}>
-              {formatVillageName(information.village)}
-            </Link>
-          )
-          : (
-            <span>
-              Unknown
-            </span>
-          )}
+        <label htmlFor="village">Village:</label>
+        {information.village ? (
+          <Link to={`/villages/${information.village.id}`}>
+            {formatVillageName(information.village)}
+          </Link>
+        ) : (
+          <span>Unknown</span>
+        )}
       </div>
     </div>
   );

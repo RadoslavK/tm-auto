@@ -1,9 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { GetVillagesQuery } from '../../../_graphql/graphqlHooks';
 import { formatVillageName } from '../../../utils/formatVillageName';
@@ -24,7 +21,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
   root: {
     display: 'flex',
   },
-  villageName: props => ({
+  villageName: (props) => ({
     color: props.isVillageSelected ? '#438655' : undefined,
     fontWeight: 'bold',
   }),
@@ -43,17 +40,15 @@ export const VillageSideItem: React.FC<Props> = ({
 }) => {
   const classes = useStyles({ isVillageSelected });
   const location = useLocation();
-  const path = location.pathname.replace(/villages\/(\d+)/, `villages/${village.id}`);
+  const path = location.pathname.replace(
+    /villages\/(\d+)/,
+    `villages/${village.id}`,
+  );
 
   return (
     <div className={classes.root}>
-      {isVillageActive && (
-        <div className={classes.activeDot} />
-      )}
-      <Link
-        className={classes.villageName}
-        to={path}
-      >
+      {isVillageActive && <div className={classes.activeDot} />}
+      <Link className={classes.villageName} to={path}>
         {formatVillageName(village)}
       </Link>
     </div>

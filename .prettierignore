@@ -1,9 +1,10 @@
 .webpack
+travian images
 app
 pack
 resources
 node_modules
-*.graphql
+schema.graphql
 graphql.type.ts
 graphqlHooks.ts
 *.json

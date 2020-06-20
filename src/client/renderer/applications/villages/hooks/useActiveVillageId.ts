@@ -8,16 +8,23 @@ import {
 } from '../../../_graphql/graphqlHooks';
 
 export const useActiveVillageId = () => {
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetActiveVillageIdQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useGetActiveVillageIdQuery();
 
   useEffect(() => {
-    subscribeToMore<OnActiveVillageIdChangedSubscription, OnActiveVillageIdChangedSubscriptionVariables>({
+    subscribeToMore<
+      OnActiveVillageIdChangedSubscription,
+      OnActiveVillageIdChangedSubscriptionVariables
+    >({
       document: OnActiveVillageIdChangedDocument,
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ activeVillageId: data.activeVillageIdChanged }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        activeVillageId: data.activeVillageIdChanged,
+      }),
     });
   }, [subscribeToMore]);
 
-  return queryLoading || !queryData
-    ? null
-    : queryData.activeVillageId;
+  return queryLoading || !queryData ? null : queryData.activeVillageId;
 };

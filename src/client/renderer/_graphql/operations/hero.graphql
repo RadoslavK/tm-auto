@@ -1,25 +1,25 @@
 #import "./misc.graphql"
 
 fragment HeroInformation on HeroInformation {
-    health
-    state
-    village {
-        id
-        coords {
-            ...Coords
-        }
-        name
+  health
+  state
+  village {
+    id
+    coords {
+      ...Coords
     }
+    name
+  }
 }
 
 query GetHeroInformation {
-    heroInformation {
-        ...HeroInformation
-    }
+  heroInformation {
+    ...HeroInformation
+  }
 }
 
 subscription OnHeroInformationUpdated {
-    heroInformationUpdated {
-        ...HeroInformation
-    }
+  heroInformationUpdated {
+    ...HeroInformation
+  }
 }

@@ -9,7 +9,13 @@ import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillage
 export const useCrannyCapacity = () => {
   const villageId = useSelectedVillageId();
 
-  const { data: queryData, loading: queryLoading, refetch } = useGetCrannyCapacityQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+    refetch,
+  } = useGetCrannyCapacityQuery({
+    variables: { villageId },
+  });
 
   const onSubscriptionData = () => {
     refetch();
@@ -30,7 +36,5 @@ export const useCrannyCapacity = () => {
     variables: { villageId },
   });
 
-  return queryLoading || !queryData
-    ? null
-    : queryData.crannyCapacity;
+  return queryLoading || !queryData ? null : queryData.crannyCapacity;
 };

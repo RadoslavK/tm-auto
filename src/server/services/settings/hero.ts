@@ -4,12 +4,17 @@ import { dataPathService } from '../dataPathService';
 import { ComplexSettingsServiceType } from './_types';
 import { InternalSettingsService } from './internalSettingsService';
 
-export class HeroSettingsService implements ComplexSettingsServiceType<HeroSettings> {
+export class HeroSettingsService
+  implements ComplexSettingsServiceType<HeroSettings> {
   public autoAdventure: InternalSettingsService<AutoAdventureSettings>;
 
   constructor(accountId: string) {
-    const heroSettingsPath = dataPathService.accountPath(accountId).settings.hero;
+    const heroSettingsPath = dataPathService.accountPath(accountId).settings
+      .hero;
 
-    this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(heroSettingsPath.autoAdventure, AutoAdventureSettings);
+    this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(
+      heroSettingsPath.autoAdventure,
+      AutoAdventureSettings,
+    );
   }
 }

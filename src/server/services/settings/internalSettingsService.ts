@@ -7,11 +7,19 @@ import { fileService } from '../fileService';
 export class InternalSettingsService<TSettings> {
   private settings: TSettings | null = null;
 
-  constructor(private path: string, private SettingsConstructor: { new(params?: PartialFields<TSettings>): TSettings }) {}
+  constructor(
+    private path: string,
+    private SettingsConstructor: {
+      new (params?: PartialFields<TSettings>): TSettings;
+    },
+  ) {}
 
   public get = (): TSettings => {
     if (!this.settings) {
-      this.settings = fileService.loadInstance<TSettings>(this.path, this.SettingsConstructor);
+      this.settings = fileService.loadInstance<TSettings>(
+        this.path,
+        this.SettingsConstructor,
+      );
     }
 
     return this.settings;

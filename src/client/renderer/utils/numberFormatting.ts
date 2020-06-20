@@ -1,16 +1,18 @@
-const addCommas = (number: string): string => number.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+const addCommas = (number: string): string =>
+  number.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
-const formatNumber = (num: number, maxDigits?: number): string => maxDigits
-  ? addCommas(num.toFixed(maxDigits))
-  : addCommas(num.toString());
+const formatNumber = (num: number, maxDigits?: number): string =>
+  maxDigits ? addCommas(num.toFixed(maxDigits)) : addCommas(num.toString());
 
 enum ValueUnit {
   Million = 'm',
   None = '',
-  Thousand = 'k'
+  Thousand = 'k',
 }
 
-export const createFormatter = (formatAgainst?: number) => (amount: number): string => {
+export const createFormatter = (formatAgainst?: number) => (
+  amount: number,
+): string => {
   let amountLeft = amount;
   let lFormatAgainst = formatAgainst || amountLeft;
   let valueUnit: ValueUnit = ValueUnit.None;

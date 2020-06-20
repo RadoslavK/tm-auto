@@ -1,20 +1,17 @@
-import {
-  ApolloLink,
-  execute as executeLink,
-} from '@apollo/client';
+import { ApolloLink, execute as executeLink } from '@apollo/client';
 import { parse as parseQuery } from 'graphql';
 
 import { GraphqlHandlerPayload } from '../_shared/graphql/models';
 import {
+  GraphqlHandlerMessage,
+  IpcHandler,
   createGraphqlHandlerCompleteMessage,
   createGraphqlHandlerDataMessage,
   createGraphqlHandlerErrorMessage,
-  GraphqlHandlerMessage,
-  IpcHandler,
 } from '../_shared/ipc/graphqlHandlerMessages';
 import {
-  broadcastMessage,
   IpcMessageHandler,
+  broadcastMessage,
   startIpcServer,
 } from './ipcUtils';
 
@@ -24,10 +21,7 @@ type Params = {
 };
 
 export const createIpcExecutor = async (parms: Params): Promise<void> => {
-  const {
-    link,
-    socketName,
-  } = parms;
+  const { link, socketName } = parms;
 
   const handlers = new Map<string, IpcMessageHandler<GraphqlHandlerPayload>>();
 
@@ -39,14 +33,23 @@ export const createIpcExecutor = async (parms: Params): Promise<void> => {
     });
 
     result.subscribe(
-      data => {
-        broadcastMessage<GraphqlHandlerMessage>(subscriptionId, createGraphqlHandlerDataMessage(data));
+      (data) => {
+        broadcastMessage<GraphqlHandlerMessage>(
+          subscriptionId,
+          createGraphqlHandlerDataMessage(data),
+        );
       },
-      error => {
-        broadcastMessage<GraphqlHandlerMessage>(subscriptionId, createGraphqlHandlerErrorMessage(error));
+      (error) => {
+        broadcastMessage<GraphqlHandlerMessage>(
+          subscriptionId,
+          createGraphqlHandlerErrorMessage(error),
+        );
       },
       () => {
-        broadcastMessage<GraphqlHandlerMessage>(subscriptionId, createGraphqlHandlerCompleteMessage());
+        broadcastMessage<GraphqlHandlerMessage>(
+          subscriptionId,
+          createGraphqlHandlerCompleteMessage(),
+        );
       },
     );
   };

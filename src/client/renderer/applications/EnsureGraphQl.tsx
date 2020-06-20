@@ -1,19 +1,12 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  ApolloProvider,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, ApolloProvider } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { createErrorLink } from '../../../_shared/graphql/createErrorLink';
 import { graphQLCache } from '../_graphql/cache/cache';
 import { createIpcLink } from '../_graphql/utils/createIpcLink';
 import { IpcClient } from '../_ipc/ipcUtils';
-import { createErrorLink } from '../../../_shared/graphql/createErrorLink';
 
 const useStyles = makeStyles({
   loaderContainer: {
@@ -60,15 +53,11 @@ export const EnsureGraphQl: React.FC<Props> = ({ children, socketName }) => {
     return () => ipcClient.closeConnection();
   }, [socketName]);
 
-  return apolloClient
-    ? (
-      <ApolloProvider client={apolloClient}>
-        {children}
-      </ApolloProvider>
-    )
-    : (
-      <div className={classes.loaderContainer}>
-        <CircularProgress size={444} />
-      </div>
-    );
+  return apolloClient ? (
+    <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+  ) : (
+    <div className={classes.loaderContainer}>
+      <CircularProgress size={444} />
+    </div>
+  );
 };

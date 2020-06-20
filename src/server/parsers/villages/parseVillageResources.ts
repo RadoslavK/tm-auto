@@ -5,8 +5,12 @@ export const parseVillageResources = async (): Promise<Resources> => {
   const page = await getPage();
   const content = await page.content();
 
-  const match = / storage: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?)}/.exec(content);
-  const freeCropMatch = /production: {"l1": .*?,"l2": .*?,"l3": .*?,"l4": .*?,"l5": (.*?)}/.exec(content);
+  const match = / storage: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?)}/.exec(
+    content,
+  );
+  const freeCropMatch = /production: {"l1": .*?,"l2": .*?,"l3": .*?,"l4": .*?,"l5": (.*?)}/.exec(
+    content,
+  );
 
   if (!match || !freeCropMatch) {
     throw new Error('Failed to parse village resources');

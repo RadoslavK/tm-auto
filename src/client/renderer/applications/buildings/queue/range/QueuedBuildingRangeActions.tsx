@@ -39,7 +39,11 @@ type Props = {
   readonly range: QueuedBuildingRange;
 };
 
-export const QueuedBuildingRangeActions: React.FC<Props> = ({ className, onExpand, range }) => {
+export const QueuedBuildingRangeActions: React.FC<Props> = ({
+  className,
+  onExpand,
+  range,
+}) => {
   const classes = useStyles();
 
   const villageId = useSelectedVillageId();
@@ -48,14 +52,16 @@ export const QueuedBuildingRangeActions: React.FC<Props> = ({ className, onExpan
     variables: {
       villageId,
       topBuildingQueueId: range.buildings[0].queueId,
-      bottomBuildingQueueId: range.buildings[range.buildings.length - 1].queueId,
+      bottomBuildingQueueId:
+        range.buildings[range.buildings.length - 1].queueId,
     },
   });
   const [dequeue] = useDequeueBuildingsBlockMutation({
     variables: {
       villageId,
       topBuildingQueueId: range.buildings[0].queueId,
-      bottomBuildingQueueId: range.buildings[range.buildings.length - 1].queueId,
+      bottomBuildingQueueId:
+        range.buildings[range.buildings.length - 1].queueId,
     },
   });
 

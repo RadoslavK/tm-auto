@@ -1,18 +1,22 @@
 import fs from 'fs';
-import { launch } from 'puppeteer';
+
+import { launch } from 'puppeteer-core';
 
 import { Duration } from '../src/server/_models/duration';
 import { Resources } from '../src/server/_models/misc/resources';
 
 const scrape = async () => {
   const browser = await launch({
-    executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    executablePath:
+      'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
   });
 
   if (1 || 2) return;
 
-  const infos = JSON.parse(fs.readFileSync('./resources/building-infos-new.json').toString());
+  const infos = JSON.parse(
+    fs.readFileSync('./resources/building-infos-new.json').toString(),
+  );
   const newInfos = { 0: infos[0] } as Record<string, any>;
 
   for (let i = 1; i <= 45; i++) {
@@ -38,13 +42,16 @@ const scrape = async () => {
     };
 
     for (const row of rows) {
-      const level = await row.$eval('td:nth-child(1)', x => +x.textContent!);
+      const level = await row.$eval('td:nth-child(1)', (x) => +x.textContent!);
 
-      const wood = await row.$eval('td:nth-child(2)', x => +x.textContent!);
-      const clay = await row.$eval('td:nth-child(3)', x => +x.textContent!);
-      const iron = await row.$eval('td:nth-child(4)', x => +x.textContent!);
-      const crop = await row.$eval('td:nth-child(5)', x => +x.textContent!);
-      const freeCrop = await row.$eval('td:nth-child(7)', x => +x.textContent!);
+      const wood = await row.$eval('td:nth-child(2)', (x) => +x.textContent!);
+      const clay = await row.$eval('td:nth-child(3)', (x) => +x.textContent!);
+      const iron = await row.$eval('td:nth-child(4)', (x) => +x.textContent!);
+      const crop = await row.$eval('td:nth-child(5)', (x) => +x.textContent!);
+      const freeCrop = await row.$eval(
+        'td:nth-child(7)',
+        (x) => +x.textContent!,
+      );
       const cost = new Resources({
         wood,
         clay,
@@ -53,8 +60,14 @@ const scrape = async () => {
         freeCrop,
       });
 
-      const culturePoints = await row.$eval('td:nth-child(10)', x => +x.textContent!);
-      const duration = await row.$eval('td:nth-child(11)', x => x.textContent);
+      const culturePoints = await row.$eval(
+        'td:nth-child(10)',
+        (x) => +x.textContent!,
+      );
+      const duration = await row.$eval(
+        'td:nth-child(11)',
+        (x) => x.textContent,
+      );
       const buildingTime = Duration.fromText(duration!);
 
       const levelInfo = {

@@ -3,7 +3,7 @@ import { getAccountContext } from '../../accountContext';
 
 const getService = () => getAccountContext().settingsService.hero.autoAdventure;
 
-export default <Resolvers> {
+export default <Resolvers>{
   Query: {
     autoAdventureSettings: () => getService().get(),
   },

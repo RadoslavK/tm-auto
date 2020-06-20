@@ -3,9 +3,7 @@ import { Resources } from '../../_models/misc/resources';
 import { getPage } from '../../browser/getPage';
 import { validateUrl } from '../../utils/validateUrl';
 
-const acceptedUrls: readonly string[] = [
-  TravianPath.ResourceFieldsOverview,
-];
+const acceptedUrls: readonly string[] = [TravianPath.ResourceFieldsOverview];
 
 export const parseVillageProduction = async (): Promise<Resources> => {
   await validateUrl(acceptedUrls);
@@ -13,7 +11,9 @@ export const parseVillageProduction = async (): Promise<Resources> => {
   const page = await getPage();
   const content = await page.content();
 
-  const match = /production: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?),/.exec(content);
+  const match = /production: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?),/.exec(
+    content,
+  );
 
   if (!match) {
     throw new Error('Failed to parse village production');

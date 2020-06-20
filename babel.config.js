@@ -3,7 +3,7 @@ module.exports = (api) => {
 
   const isDevelopment = !api.env('production');
 
-  return ({
+  return {
     plugins: [
       '@babel/proposal-class-properties',
       '@babel/proposal-object-rest-spread',
@@ -11,12 +11,8 @@ module.exports = (api) => {
       '@babel/plugin-transform-runtime',
       isDevelopment && 'react-refresh/babel',
     ].filter(Boolean),
-    presets: [
-      '@babel/env',
-      '@babel/react',
-      '@babel/typescript',
-    ],
+    presets: ['@babel/env', '@babel/react', '@babel/typescript'],
     retainLines: isDevelopment,
     sourceMaps: isDevelopment,
-  });
+  };
 };

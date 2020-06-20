@@ -15,16 +15,27 @@ const isTaskWithCooldown = (task: BotTaskBase): task is BotTaskWithCoolDown =>
 export class VillageBotTasksEngine {
   private readonly _tasks: readonly IBotTaskEngine[];
 
-  constructor(village: Village, tasks: { new(village: Village): BotTask | BotTaskWithCoolDown }[]) {
-    this._tasks = tasks.map(Task => {
+  constructor(
+    village: Village,
+    tasks: { new (village: Village): BotTask | BotTaskWithCoolDown }[],
+  ) {
+    this._tasks = tasks.map((Task) => {
       const task = new Task(village);
 
       if (isTaskWithCooldown(task)) {
         return new BotTaskEngineWithCoolDown(
           task,
-          () => getAccountContext().nextExecutionService.getForVillage(village.id, task.type),
-          nextExecution => {
-            getAccountContext().nextExecutionService.setForVillage(village.id, task.type, nextExecution);
+          () =>
+            getAccountContext().nextExecutionService.getForVillage(
+              village.id,
+              task.type,
+            ),
+          (nextExecution) => {
+            getAccountContext().nextExecutionService.setForVillage(
+              village.id,
+              task.type,
+              nextExecution,
+            );
           },
         );
       }
@@ -33,7 +44,8 @@ export class VillageBotTasksEngine {
     });
   }
 
-  public isExecutionReady = (): boolean => this._tasks.some(t => t.isExecutionReady());
+  public isExecutionReady = (): boolean =>
+    this._tasks.some((t) => t.isExecutionReady());
 
   public execute = async (): Promise<void> => {
     for (const task of this._tasks) {

@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   GetGeneralVillageSettingsDocument,
   GetGeneralVillageSettingsQuery,
@@ -13,10 +11,14 @@ import {
   useResetGeneralVillageSettingsMutation,
   useUpdateGeneralVillageSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 
 const useGeneralVillageSettings = (villageId: string) => {
-  const { data: queryData, loading: queryLoading } = useGetGeneralVillageSettingsQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetGeneralVillageSettingsQuery({
+    variables: { villageId },
+  });
 
   const [updateSettings] = useUpdateGeneralVillageSettingsMutation({
     update: (cache, { data }) => {
@@ -24,7 +26,10 @@ const useGeneralVillageSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>({
+      updateQueryCache<
+        GetGeneralVillageSettingsQuery,
+        GetGeneralVillageSettingsQueryVariables
+      >({
         query: GetGeneralVillageSettingsDocument,
         cache,
         data: { generalVillageSettings: data.updateGeneralVillageSettings },
@@ -39,7 +44,10 @@ const useGeneralVillageSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetGeneralVillageSettingsQuery, GetGeneralVillageSettingsQueryVariables>({
+      updateQueryCache<
+        GetGeneralVillageSettingsQuery,
+        GetGeneralVillageSettingsQueryVariables
+      >({
         query: GetGeneralVillageSettingsDocument,
         cache,
         data: { generalVillageSettings: data.resetGeneralVillageSettings },
@@ -49,9 +57,8 @@ const useGeneralVillageSettings = (villageId: string) => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.generalVillageSettings,
+    settings:
+      queryLoading || !queryData ? null : queryData.generalVillageSettings,
     updateSettings,
     resetSettings,
   };
@@ -62,11 +69,9 @@ type Props = {
 };
 
 export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useGeneralVillageSettings(villageId);
+  const { resetSettings, settings, updateSettings } = useGeneralVillageSettings(
+    villageId,
+  );
 
   const [state, setState] = useState<UpdateGeneralVillageSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
@@ -87,15 +92,15 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
   }, [hasChanges, state, updateSettings, villageId]);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -107,9 +112,7 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
     resetSettings({ variables: { villageId } });
   };
 
-  const {
-    allowTasks,
-  } = state;
+  const { allowTasks } = state;
 
   return (
     <div>
@@ -117,8 +120,7 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
         color="primary"
         onClick={onReset}
         type="button"
-        variant="contained"
-      >
+        variant="contained">
         Reset to default
       </Button>
 

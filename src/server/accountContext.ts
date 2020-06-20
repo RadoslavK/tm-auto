@@ -8,7 +8,10 @@ import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService';
 
 export class AccountContext {
-  private _buildingQueueServices: Map<string, BuildingQueueService> = new Map<string, BuildingQueueService>();
+  private _buildingQueueServices: Map<string, BuildingQueueService> = new Map<
+    string,
+    BuildingQueueService
+  >();
 
   public villageService: VillageService;
 

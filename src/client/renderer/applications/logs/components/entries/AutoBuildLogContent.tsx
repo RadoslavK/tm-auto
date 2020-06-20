@@ -13,7 +13,7 @@ type StylesProps = {
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
-  image: props => ({
+  image: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -31,24 +31,21 @@ type Props = {
   readonly content: AutoBuildLogEntryContent;
 };
 
-export const AutoBuildLogContent: React.FC<Props> = ({ className, content }) => {
+export const AutoBuildLogContent: React.FC<Props> = ({
+  className,
+  content,
+}) => {
   const classes = useStyles({
     buildingType: content.type,
   });
 
   return (
     <div className={clsx(className, classes.root)}>
-      <span>
-        Building
-      </span>
+      <span>Building</span>
       <div className={classes.image} />
       <span>
-        {content.name}
-        {' '}
-        to level
-        {content.level}
-        {' '}
-        at field
+        {content.name} to level
+        {content.level} at field
         {content.fieldId}
       </span>
     </div>

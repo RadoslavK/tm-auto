@@ -5,10 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   AccountInput,
@@ -17,7 +14,7 @@ import {
 } from '../../../_graphql/graphqlHooks';
 import { SignInFormDialogType } from './SignInForm';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   form: {
     // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -82,16 +79,10 @@ export const SignInFormDialog: React.FC<Props> = ({
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-    >
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Typography
-          component="h1"
-          variant="h5"
-        >
+        <Typography component="h1" variant="h5">
           {type === SignInFormDialogType.Update ? 'Update' : 'Create new'}
         </Typography>
         <div className={classes.form}>
@@ -104,7 +95,7 @@ export const SignInFormDialog: React.FC<Props> = ({
             label="Username"
             margin="normal"
             name="username"
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             required
             value={username}
             variant="outlined"
@@ -116,7 +107,7 @@ export const SignInFormDialog: React.FC<Props> = ({
             label="Password"
             margin="normal"
             name="password"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
             type="password"
             value={password}
@@ -131,21 +122,28 @@ export const SignInFormDialog: React.FC<Props> = ({
             label="Server"
             margin="normal"
             name="server"
-            onChange={e => setServer(e.target.value)}
+            onChange={(e) => setServer(e.target.value)}
             required
             value={server}
             variant="outlined"
           />
-          <Tooltip title={accountExistData?.isAccountTaken ? 'Account already exists' : ''}>
+          <Tooltip
+            title={
+              accountExistData?.isAccountTaken ? 'Account already exists' : ''
+            }>
             <span>
               <Button
                 className={classes.submit}
                 color="primary"
-                disabled={accountExistData?.isAccountTaken || !server || !username || !password}
+                disabled={
+                  accountExistData?.isAccountTaken ||
+                  !server ||
+                  !username ||
+                  !password
+                }
                 fullWidth
                 onClick={submitAccount}
-                variant="contained"
-              >
+                variant="contained">
                 Submit
               </Button>
             </span>

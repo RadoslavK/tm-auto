@@ -9,7 +9,5 @@ export const useBuildingInfo = (buildingType: BuildingType) => {
     variables: { buildingType },
   });
 
-  return loading || !data
-    ? null
-    : data.buildingInfo;
+  return loading || !data ? null : data.buildingInfo;
 };

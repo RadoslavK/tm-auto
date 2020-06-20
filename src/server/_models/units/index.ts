@@ -32,7 +32,9 @@ export class Units {
         break;
 
       default:
-        throw new Error(`Invalid building for queue, type: ${BuildingType[type]}`);
+        throw new Error(
+          `Invalid building for queue, type: ${BuildingType[type]}`,
+        );
     }
   };
 
@@ -45,5 +47,6 @@ export class Units {
     this._counts.set(unitIndex, count ? count + amount : amount);
   };
 
-  public getCount = (unitIndex: number): number => this._counts.get(unitIndex) || 0;
+  public getCount = (unitIndex: number): number =>
+    this._counts.get(unitIndex) || 0;
 }

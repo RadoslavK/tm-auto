@@ -23,17 +23,21 @@ type Props = {
   readonly className: string;
 };
 
-const mapBuilding = (building: BuildingSpotModel, index: number): JSX.Element => (
-  <BuildingSpot
-    key={index}
-    building={building}
-  />
-);
+const mapBuilding = (
+  building: BuildingSpotModel,
+  index: number,
+): JSX.Element => <BuildingSpot key={index} building={building} />;
 
 const useBuildingSpots = () => {
   const villageId = useSelectedVillageId();
 
-  const { data: queryData, loading: queryLoading, refetch } = useGetBuildingSpotsQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+    refetch,
+  } = useGetBuildingSpotsQuery({
+    variables: { villageId },
+  });
 
   useOnActualBuildingLevelsUpdatedSubscription({
     onSubscriptionData: () => {
@@ -54,15 +58,11 @@ const useBuildingSpots = () => {
     variables: { villageId },
   });
 
-  return queryLoading || !queryData
-    ? null
-    : queryData.buildingSpots;
+  return queryLoading || !queryData ? null : queryData.buildingSpots;
 };
 
 export const BuildingSpots: React.FC<Props> = (props) => {
-  const {
-    className,
-  } = props;
+  const { className } = props;
 
   const classes = useStyles({});
 

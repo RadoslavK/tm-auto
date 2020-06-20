@@ -1,5 +1,5 @@
-import { TravianPath } from '../_enums/travianPath';
 import { getAllEnumValues } from '../../_shared/enumUtils';
+import { TravianPath } from '../_enums/travianPath';
 import { getAccountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
@@ -36,9 +36,7 @@ export class TaskManager {
   private readonly _autoAdventureTask: BotTaskEngineWithCoolDown;
 
   constructor() {
-    this._generalTasks = [
-      new BotTaskEngine(new AutoMentorTask()),
-    ];
+    this._generalTasks = [new BotTaskEngine(new AutoMentorTask())];
     this._finalTasks = [];
     this._villageTasks = {};
 
@@ -46,9 +44,13 @@ export class TaskManager {
 
     this._autoAdventureTask = new BotTaskEngineWithCoolDown(
       autoAdventureTask,
-      () => getAccountContext().nextExecutionService.get(autoAdventureTask.type),
-      nextExecution => {
-        getAccountContext().nextExecutionService.set(autoAdventureTask.type, nextExecution);
+      () =>
+        getAccountContext().nextExecutionService.get(autoAdventureTask.type),
+      (nextExecution) => {
+        getAccountContext().nextExecutionService.set(
+          autoAdventureTask.type,
+          nextExecution,
+        );
       },
     );
   }
@@ -79,7 +81,10 @@ export class TaskManager {
     const villages = getAccountContext().villageService.allVillages();
 
     for (const village of shuffle(villages)) {
-      if (!getAccountContext().settingsService.village(village.id).general.get().allowTasks) {
+      if (
+        !getAccountContext().settingsService.village(village.id).general.get()
+          .allowTasks
+      ) {
         continue;
       }
 
@@ -95,7 +100,10 @@ export class TaskManager {
         this._villageTasks[village.id] = taskEngine;
       }
 
-      if (!this._autoAdventureTask.isExecutionReady() && !taskEngine.isExecutionReady()) {
+      if (
+        !this._autoAdventureTask.isExecutionReady() &&
+        !taskEngine.isExecutionReady()
+      ) {
         continue;
       }
 

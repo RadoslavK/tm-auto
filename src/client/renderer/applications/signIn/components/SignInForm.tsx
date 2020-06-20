@@ -17,11 +17,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AccountInput,
   BotState,
@@ -34,46 +32,45 @@ import {
   useSignInMutation,
   useUpdateAccountMutation,
 } from '../../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useBotState } from '../../../hooks/useBotState';
 import { Accounts } from './Accounts';
 import { SignInFormDialog } from './SignInFormDialog';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   '@global': {
     body: {
       backgroundColor: theme.palette.common.white,
     },
   },
-  form: {
+  'form': {
     // Fix IE 11 issue.
     marginTop: theme.spacing(1),
     width: '100%',
   },
-  icon: {
+  'icon': {
     fontSize: 20,
   },
-  iconVariant: {
+  'iconVariant': {
     marginRight: theme.spacing(1),
     opacity: 0.9,
   },
-  margin: {
+  'margin': {
     margin: theme.spacing(1),
   },
-  message: {
+  'message': {
     alignItems: 'center',
     display: 'flex',
   },
-  paper: {
+  'paper': {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
     marginTop: theme.spacing(8),
   },
-  snackbarContent: {
+  'snackbarContent': {
     backgroundColor: green[600],
   },
-  submit: {
+  'submit': {
     margin: theme.spacing(3, 0, 2),
   },
 }));
@@ -88,9 +85,7 @@ export enum SignInFormDialogType {
 const useLastSignedInAccountId = () => {
   const { data, loading } = useGetLastSignedAccountIdQuery();
 
-  return loading || !data
-    ? null
-    : data.lastSignedAccountId;
+  return loading || !data ? null : data.lastSignedAccountId;
 };
 
 export const SignInForm: React.FC = () => {
@@ -98,7 +93,9 @@ export const SignInForm: React.FC = () => {
 
   const classes = useStyles();
 
-  const [selectedAccountId, setSelectedAccountId] = useState<string | undefined | null>(lastSignedInAccountId);
+  const [selectedAccountId, setSelectedAccountId] = useState<
+    string | undefined | null
+  >(lastSignedInAccountId);
   const [submitMessage, setSubmitMessage] = useState<string>();
   const [isSigningIn, setIsSigningIn] = useState(false);
 
@@ -168,7 +165,9 @@ export const SignInForm: React.FC = () => {
           updateQueryCache<GetAccountsQuery, GetAccountsQueryVariables>({
             cache,
             query: GetAccountsDocument,
-            mergeWithOriginal: ({ accounts }) => ({ accounts: [...accounts, data.createAccount] }),
+            mergeWithOriginal: ({ accounts }) => ({
+              accounts: [...accounts, data.createAccount],
+            }),
           });
         },
       });
@@ -190,7 +189,11 @@ export const SignInForm: React.FC = () => {
         updateQueryCache<GetAccountsQuery, GetAccountsQueryVariables>({
           cache,
           query: GetAccountsDocument,
-          mergeWithOriginal: ({ accounts }) => ({ accounts: accounts.filter(acc => acc.id !== data.deleteAccount.id) }),
+          mergeWithOriginal: ({ accounts }) => ({
+            accounts: accounts.filter(
+              (acc) => acc.id !== data.deleteAccount.id,
+            ),
+          }),
         });
 
         cache.evict({ id: cache.identify(data.deleteAccount) });
@@ -200,16 +203,10 @@ export const SignInForm: React.FC = () => {
 
   return (
     <>
-      <Container
-        component="main"
-        maxWidth="xs"
-      >
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Typography
-            component="h1"
-            variant="h5"
-          >
+          <Typography component="h1" variant="h5">
             TM Auto
           </Typography>
           <div className={classes.form}>
@@ -224,8 +221,7 @@ export const SignInForm: React.FC = () => {
               disabled={disabled || !selectedAccountId}
               fullWidth
               onClick={onSignIn}
-              variant="contained"
-            >
+              variant="contained">
               Sign In
             </Button>
             <Button
@@ -234,8 +230,7 @@ export const SignInForm: React.FC = () => {
               disabled={disabled}
               fullWidth
               onClick={() => setDialogType(SignInFormDialogType.Create)}
-              variant="contained"
-            >
+              variant="contained">
               Create account
             </Button>
             <Button
@@ -244,8 +239,7 @@ export const SignInForm: React.FC = () => {
               disabled={disabled || !selectedAccountId}
               fullWidth
               onClick={() => setDialogType(SignInFormDialogType.Update)}
-              variant="outlined"
-            >
+              variant="outlined">
               Update account
             </Button>
             <Button
@@ -254,8 +248,7 @@ export const SignInForm: React.FC = () => {
               disabled={disabled || !selectedAccountId}
               fullWidth
               onClick={() => setDialogType(SignInFormDialogType.Delete)}
-              variant="outlined"
-            >
+              variant="outlined">
               Delete account
             </Button>
             <Snackbar
@@ -267,8 +260,7 @@ export const SignInForm: React.FC = () => {
               onClose={() => {
                 setSubmitMessage('');
               }}
-              open={!!submitMessage}
-            >
+              open={!!submitMessage}>
               <SnackbarContent
                 action={[
                   <IconButton
@@ -276,18 +268,17 @@ export const SignInForm: React.FC = () => {
                     color="inherit"
                     onClick={() => {
                       setSubmitMessage('');
-                    }}
-                  >
+                    }}>
                     <CloseIcon className={classes.icon} />
                   </IconButton>,
                 ]}
                 className={clsx(classes.snackbarContent, classes.margin)}
-                message={(
+                message={
                   <span className={classes.message}>
                     <Icon className={clsx(classes.icon, classes.iconVariant)} />
                     <span>{submitMessage}</span>
                   </span>
-                )}
+                }
               />
             </Snackbar>
           </div>
@@ -295,8 +286,10 @@ export const SignInForm: React.FC = () => {
       </Container>
       <Dialog
         onClose={() => setDialogType(SignInFormDialogType.None)}
-        open={dialogType === SignInFormDialogType.Create || dialogType === SignInFormDialogType.Update}
-      >
+        open={
+          dialogType === SignInFormDialogType.Create ||
+          dialogType === SignInFormDialogType.Update
+        }>
         <SignInFormDialog
           onSubmit={onSubmitForm}
           selectedAccountId={selectedAccountId}
@@ -305,26 +298,21 @@ export const SignInForm: React.FC = () => {
       </Dialog>
       <Dialog
         onClose={() => setDialogType(SignInFormDialogType.None)}
-        open={dialogType === SignInFormDialogType.Delete}
-      >
-        <DialogTitle>
-          Delete account
-        </DialogTitle>
+        open={dialogType === SignInFormDialogType.Delete}>
+        <DialogTitle>Delete account</DialogTitle>
         <DialogContent>
-          <DialogContentText>Do you really want to delete the account?</DialogContentText>
+          <DialogContentText>
+            Do you really want to delete the account?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             autoFocus
             color="default"
-            onClick={() => setDialogType(SignInFormDialogType.None)}
-          >
+            onClick={() => setDialogType(SignInFormDialogType.None)}>
             Cancel
           </Button>
-          <Button
-            color="primary"
-            onClick={onDelete}
-          >
+          <Button color="primary" onClick={onDelete}>
             Submit
           </Button>
         </DialogActions>

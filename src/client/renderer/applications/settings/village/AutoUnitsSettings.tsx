@@ -1,10 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   CoolDown as CoolDownModel,
   GetAutoUnitsSettingsDocument,
@@ -16,11 +13,15 @@ import {
   useUpdateAutoUnitsSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 
 export const useAutoUnitsSettings = (villageId: string) => {
-  const { data: queryData, loading: queryLoading } = useGetAutoUnitsSettingsQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetAutoUnitsSettingsQuery({
+    variables: { villageId },
+  });
 
   const [updateSettings] = useUpdateAutoUnitsSettingsMutation({
     update: (cache, { data }) => {
@@ -28,7 +29,10 @@ export const useAutoUnitsSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoUnitsSettingsQuery,
+        GetAutoUnitsSettingsQueryVariables
+      >({
         query: GetAutoUnitsSettingsDocument,
         cache,
         data: { autoUnitsSettings: data.updateAutoUnitsSettings },
@@ -43,7 +47,10 @@ export const useAutoUnitsSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoUnitsSettingsQuery,
+        GetAutoUnitsSettingsQueryVariables
+      >({
         query: GetAutoUnitsSettingsDocument,
         cache,
         data: { autoUnitsSettings: data.resetAutoUnitsSettings },
@@ -53,9 +60,7 @@ export const useAutoUnitsSettings = (villageId: string) => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.autoUnitsSettings,
+    settings: queryLoading || !queryData ? null : queryData.autoUnitsSettings,
     updateSettings,
     resetSettings,
   };
@@ -69,11 +74,9 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   const [state, setState] = useState<UpdateAutoUnitsSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
 
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useAutoUnitsSettings(villageId);
+  const { resetSettings, settings, updateSettings } = useAutoUnitsSettings(
+    villageId,
+  );
 
   useEffect(() => {
     if (settings) {
@@ -94,10 +97,13 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   }, [state, hasChanges, updateSettings, villageId]);
 
   const onCoolDownChange = useCallback((coolDown: CoolDownModel): void => {
-    setState(prevState => prevState && ({
-      ...prevState,
-      coolDown,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          coolDown,
+        },
+    );
     setHasChanges(true);
   }, []);
 
@@ -109,32 +115,30 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
     resetSettings({ variables: { villageId } });
   };
 
-  const {
-    allow,
-    coolDown,
-    minCrop,
-    useHeroResources,
-  } = state;
+  const { allow, coolDown, minCrop, useHeroResources } = state;
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
   const onNumberChange = createOnNumberChanged({
     callback: (name, value) => {
-      setState(prevState => prevState && ({
-        ...prevState,
-        [name]: +value,
-      }));
+      setState(
+        (prevState) =>
+          prevState && {
+            ...prevState,
+            [name]: +value,
+          },
+      );
       setHasChanges(true);
     },
     minValue: 0,
@@ -146,8 +150,7 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
         color="primary"
         onClick={onReset}
         type="button"
-        variant="contained"
-      >
+        variant="contained">
         Reset to default
       </Button>
 
@@ -175,10 +178,7 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
 
       <div>
         <label>Cooldown</label>
-        <CoolDown
-          onChange={onCoolDownChange}
-          value={coolDown}
-        />
+        <CoolDown onChange={onCoolDownChange} value={coolDown} />
       </div>
 
       <div>

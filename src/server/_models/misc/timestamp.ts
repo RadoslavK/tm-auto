@@ -8,6 +8,7 @@ export class Timestamp {
     mergeDefaults(this, params);
   }
 
-  static fromDate = (date: Date): Timestamp =>
-    ({ totalSeconds: Math.floor(date.getTime() / 1000) });
+  static fromDate = (date: Date): Timestamp => ({
+    totalSeconds: Math.floor(date.getTime() / 1000),
+  });
 }

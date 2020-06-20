@@ -1,50 +1,50 @@
 fragment UserAccount on UserAccount {
-    id
-    username
-    password
-    server
+  id
+  username
+  password
+  server
 }
 
 query GetAccounts {
-    accounts {
-        ...UserAccount
-    }
+  accounts {
+    ...UserAccount
+  }
 }
 
 query GetCurrentAccount {
-    currentAccount {
-        ...UserAccount
-    }
+  currentAccount {
+    ...UserAccount
+  }
 }
 
 query GetAccount($id: ID!) {
-    account(id: $id) {
-        ...UserAccount
-    }
+  account(id: $id) {
+    ...UserAccount
+  }
 }
 
 query GetLastSignedAccountId {
-    lastSignedAccountId
+  lastSignedAccountId
 }
 
 query IsAccountTaken($account: AccountInput!) {
-    isAccountTaken(account: $account)
+  isAccountTaken(account: $account)
 }
 
 mutation CreateAccount($account: AccountInput!) {
-    createAccount(account: $account) {
-        ...UserAccount
-    }
+  createAccount(account: $account) {
+    ...UserAccount
+  }
 }
 
 mutation UpdateAccount($id: ID!, $account: AccountInput!) {
-    updateAccount(id: $id, account: $account) {
-        ...UserAccount
-    }
+  updateAccount(id: $id, account: $account) {
+    ...UserAccount
+  }
 }
 
 mutation DeleteAccount($id: ID!) {
-    deleteAccount(id: $id) {
-        ...UserAccount
-    }
+  deleteAccount(id: $id) {
+    ...UserAccount
+  }
 }

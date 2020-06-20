@@ -1,10 +1,7 @@
 import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import {
-  Duration,
-  TaskType,
-} from '../../../_graphql/graphqlHooks';
+import { Duration, TaskType } from '../../../_graphql/graphqlHooks';
 import { useNextTaskExecution } from '../../../hooks/nextExecution/useNextTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { formatTimeFromSeconds } from '../../../utils/formatTime';
@@ -36,20 +33,11 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   return (
     <div>
       <div>
-        Next execution in:
-        {' '}
-        {formatTimeFromSeconds(nextExecutionTimer)}
-        <button onClick={showForm}>
-          Change
-        </button>
-        <button onClick={resetNextTaskExecution}>
-          Reset
-        </button>
+        Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
+        <button onClick={showForm}>Change</button>
+        <button onClick={resetNextTaskExecution}>Reset</button>
       </div>
-      <Dialog
-        onClose={closeForm}
-        open={isFormShown}
-      >
+      <Dialog onClose={closeForm} open={isFormShown}>
         <NextExecutionForm onSubmit={submitForm} />
       </Dialog>
     </div>

@@ -13,7 +13,7 @@ type StylesProps = {
 
 const useStyles = makeStyles<unknown, StylesProps>({
   root: {
-    color: props => props.isError ? 'red' : undefined,
+    color: (props) => (props.isError ? 'red' : undefined),
   },
 });
 
@@ -28,8 +28,6 @@ export const TextLogContent: React.FC<Props> = ({ className, content }) => {
   });
 
   return (
-    <span className={clsx(className, classes.root)}>
-      {content.message}
-    </span>
+    <span className={clsx(className, classes.root)}>{content.message}</span>
   );
 };

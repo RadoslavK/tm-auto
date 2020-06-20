@@ -6,7 +6,9 @@ export enum BuildingSpotType {
   Infrastructure = 'Infrastructure',
 }
 
-export const getBuildingSpotType = (buildingType: BuildingType): BuildingSpotType =>
+export const getBuildingSpotType = (
+  buildingType: BuildingType,
+): BuildingSpotType =>
   buildingType >= BuildingType.Wood && buildingType <= BuildingType.Crop
     ? BuildingSpotType.Fields
     : BuildingSpotType.Infrastructure;

@@ -21,7 +21,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
       display: 'block',
     },
   },
-  buildingImage: props => ({
+  buildingImage: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -43,17 +43,21 @@ const useStyles = makeStyles<unknown, StyleProps>({
     '&>*': {
       marginLeft: '10px',
     },
-    display: 'flex',
+    'display': 'flex',
   },
 });
 
 type Props = {
   readonly building: QueuedBuildingModel;
   readonly isHighlight?: boolean;
-  readonly onCollapse? : () => void;
+  readonly onCollapse?: () => void;
 };
 
-export const QueuedBuildingComponent: React.FC<Props> = ({ building, isHighlight, onCollapse }) => {
+export const QueuedBuildingComponent: React.FC<Props> = ({
+  building,
+  isHighlight,
+  onCollapse,
+}) => {
   const classes = useStyles({
     buildingType: building.type,
   });
@@ -76,17 +80,11 @@ export const QueuedBuildingComponent: React.FC<Props> = ({ building, isHighlight
       )}
       <div className={classes.imageWithFieldId}>
         <div className={classes.buildingImage} />
-        <div>
-          [{building.fieldId}]
-        </div>
+        <div>[{building.fieldId}]</div>
       </div>
       <div className={classes.info}>
         <div>
-          {buildingInfo?.name}
-          {' '}
-          Level
-          {' '}
-          {building.level}
+          {buildingInfo?.name} Level {building.level}
         </div>
         <Cost
           buildTime={building.buildingTime}

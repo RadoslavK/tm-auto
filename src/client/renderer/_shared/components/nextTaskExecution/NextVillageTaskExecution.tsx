@@ -1,10 +1,7 @@
 import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import {
-  Duration,
-  TaskType,
-} from '../../../_graphql/graphqlHooks';
+import { Duration, TaskType } from '../../../_graphql/graphqlHooks';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
@@ -39,20 +36,11 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
   return (
     <div>
       <div>
-        Next execution in:
-        {' '}
-        {formatTimeFromSeconds(nextExecutionTimer)}
-        <button onClick={showForm}>
-          Change
-        </button>
-        <button onClick={resetNextVillageTaskExecution}>
-          Reset
-        </button>
+        Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
+        <button onClick={showForm}>Change</button>
+        <button onClick={resetNextVillageTaskExecution}>Reset</button>
       </div>
-      <Dialog
-        onClose={closeForm}
-        open={isFormShown}
-      >
+      <Dialog onClose={closeForm} open={isFormShown}>
         <NextExecutionForm onSubmit={onSubmit} />
       </Dialog>
     </div>

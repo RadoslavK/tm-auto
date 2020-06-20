@@ -41,17 +41,19 @@ const useStyles = makeStyles({
 
 export const QueuedBuildingActions: React.FC<Props> = (props) => {
   const {
-    building: {
-      queueId,
-    },
+    building: { queueId },
     className,
     onCollapse,
   } = props;
 
   const villageId = useSelectedVillageId();
 
-  const [moveToTop] = useMoveQueuedBuildingAsHighAsPossibleMutation({ variables: { queueId, villageId } });
-  const [dequeue] = useDequeueBuildingMutation({ variables: { input: { queueId, villageId } } });
+  const [moveToTop] = useMoveQueuedBuildingAsHighAsPossibleMutation({
+    variables: { queueId, villageId },
+  });
+  const [dequeue] = useDequeueBuildingMutation({
+    variables: { input: { queueId, villageId } },
+  });
 
   const classes = useStyles({});
 

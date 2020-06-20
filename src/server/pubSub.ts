@@ -8,19 +8,34 @@ import { BotEventPayloads } from './events/botEventPayloads';
 
 type Extends<T, X> = T extends X ? true : false;
 
-type EventWithoutPayload<TEvent extends BotEvent> = Extends<TEvent, keyof BotEventPayloads> extends true ? never : TEvent;
+type EventWithoutPayload<TEvent extends BotEvent> = Extends<
+  TEvent,
+  keyof BotEventPayloads
+> extends true
+  ? never
+  : TEvent;
 
-export const publishPayloadEvent = async <TEvent extends keyof BotEventPayloads>(event: TEvent, payload: BotEventPayloads[TEvent]): Promise<void> => {
+export const publishPayloadEvent = async <
+  TEvent extends keyof BotEventPayloads
+>(
+  event: TEvent,
+  payload: BotEventPayloads[TEvent],
+): Promise<void> => {
   pubSub.publish(event, payload);
 };
 
-export const publishEvent = async <TEvent extends BotEvent>(event: EventWithoutPayload<TEvent>): Promise<void> => {
+export const publishEvent = async <TEvent extends BotEvent>(
+  event: EventWithoutPayload<TEvent>,
+): Promise<void> => {
   pubSub.publish(event, null);
 };
 
-type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads ? BotEventPayloads[TEvent] : undefined;
+type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads
+  ? BotEventPayloads[TEvent]
+  : undefined;
 
-class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<EventPayload<TEvent>> {
+class PubSubAsyncIterator<TEvent extends BotEvent>
+  implements AsyncIterator<EventPayload<TEvent>> {
   private pullQueue: ((value: IteratorResult<EventPayload<TEvent>>) => void)[];
 
   private pushQueue: EventPayload<TEvent>[];
@@ -67,9 +82,11 @@ class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<Even
     const resolve = this.pullQueue.shift();
 
     if (resolve) {
-      resolve(this.running
-        ? { done: false, value: data }
-        : { done: true, value: undefined });
+      resolve(
+        this.running
+          ? { done: false, value: data }
+          : { done: true, value: undefined },
+      );
     } else {
       this.pushQueue.push(data);
     }
@@ -80,9 +97,11 @@ class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<Even
       const value = this.pushQueue.shift();
 
       if (value) {
-        resolve(this.running
-          ? { done: false, value }
-          : { done: true, value: undefined });
+        resolve(
+          this.running
+            ? { done: false, value }
+            : { done: true, value: undefined },
+        );
       } else {
         this.pullQueue.push(resolve);
       }
@@ -94,7 +113,9 @@ class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<Even
     }
 
     this.running = false;
-    this.pullQueue.forEach(resolve => resolve({ done: true, value: undefined }));
+    this.pullQueue.forEach((resolve) =>
+      resolve({ done: true, value: undefined }),
+    );
     this.pullQueue.length = 0;
     this.pushQueue.length = 0;
 
@@ -114,24 +135,33 @@ class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<Even
 }
 
 type Options<TEvent, TArgs, TResult> = {
-  readonly filter?: (payload: EventPayload<TEvent>, subscriptionVariables: TArgs) => boolean;
+  readonly filter?: (
+    payload: EventPayload<TEvent>,
+    subscriptionVariables: TArgs,
+  ) => boolean;
   readonly resolve: (payload: EventPayload<TEvent>) => TResult;
 };
 
-export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TResult, TParent, TContext>(
+export const subscribeToEvent = <
+  TEvent extends BotEvent,
+  TArgs,
+  TResult,
+  TParent,
+  TContext
+>(
   event: TEvent,
   options: Options<TEvent, TArgs, TResult>,
 ) => {
-  const {
-    filter,
-    resolve,
-  } = options;
+  const { filter, resolve } = options;
 
   const sub = () => new PubSubAsyncIterator(event);
 
-  const subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs> = filter
-    ? withFilter(sub, filter)
-    : sub;
+  const subscribe: SubscriptionSubscribeFn<
+    unknown,
+    TParent,
+    TContext,
+    TArgs
+  > = filter ? withFilter(sub, filter) : sub;
 
   return { resolve, subscribe };
 };

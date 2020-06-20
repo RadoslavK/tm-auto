@@ -13,7 +13,7 @@ enum BuildingState {
   Completed = 'Completed',
   None = 'None',
   OngoingMaxed = 'OngoingMaxed',
-  QueueMaxed = 'QueueMaxed'
+  QueueMaxed = 'QueueMaxed',
 }
 
 type StyleProps = {
@@ -21,28 +21,28 @@ type StyleProps = {
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({
-  actualLevel: props => ({
-    background: props.levelState === BuildingState.Completed ? '#B8860B' : '#FFFFFF',
+  actualLevel: (props) => ({
+    background:
+      props.levelState === BuildingState.Completed ? '#B8860B' : '#FFFFFF',
     border: '1px solid black',
     color: props.levelState === BuildingState.Completed ? '#FFFFFF' : '#000000',
   }),
-  ongoingLevel: props => ({
+  ongoingLevel: (props) => ({
     background: '#7FFFD4',
     border: '1px solid black',
-    color: props.levelState === BuildingState.OngoingMaxed ? '#B8860B' : '#000000',
+    color:
+      props.levelState === BuildingState.OngoingMaxed ? '#B8860B' : '#000000',
   }),
-  totalLevel: props => ({
+  totalLevel: (props) => ({
     background: '#0000FF',
     border: '1px solid black',
-    color: props.levelState === BuildingState.QueueMaxed ? '#B8860B' : '#FFFFFF',
+    color:
+      props.levelState === BuildingState.QueueMaxed ? '#B8860B' : '#FFFFFF',
   }),
 });
 
 const getLevelState = (props: Props): BuildingState => {
-  const {
-    level,
-    maxLevel,
-  } = props;
+  const { level, maxLevel } = props;
 
   const isCompleted = level.actual === maxLevel;
   const isMaxed = level.total === maxLevel;
@@ -64,30 +64,21 @@ const getLevelState = (props: Props): BuildingState => {
 };
 
 export const BuildingLevelBox: React.FC<Props> = (props) => {
-  const {
-    className,
-    level,
-  } = props;
+  const { className, level } = props;
 
   const levelState = getLevelState(props);
   const classes = useStyles({ levelState });
 
   return (
     <div className={className}>
-      <span className={classes.actualLevel}>
-        {level.actual}
-      </span>
+      <span className={classes.actualLevel}>{level.actual}</span>
 
       {level.ongoing && (
-        <span className={classes.ongoingLevel}>
-          {level.ongoing}
-        </span>
+        <span className={classes.ongoingLevel}>{level.ongoing}</span>
       )}
 
       {level.queued && (
-        <span className={classes.totalLevel}>
-          {level.queued}
-        </span>
+        <span className={classes.totalLevel}>{level.queued}</span>
       )}
     </div>
   );

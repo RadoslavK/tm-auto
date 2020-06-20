@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import {
   GetGeneralSettingsDocument,
   GetGeneralSettingsQuery,
@@ -13,10 +11,12 @@ import {
   useResetGeneralSettingsMutation,
   useUpdateGeneralSettingsMutation,
 } from '../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useGeneralSettings = () => {
-  const { data: queryData, loading: queryLoading } = useGetGeneralSettingsQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetGeneralSettingsQuery();
 
   const [updateSettings] = useUpdateGeneralSettingsMutation({
     update: (cache, { data }) => {
@@ -24,7 +24,10 @@ const useGeneralSettings = () => {
         return;
       }
 
-      updateQueryCache<GetGeneralSettingsQuery, GetGeneralSettingsQueryVariables>({
+      updateQueryCache<
+        GetGeneralSettingsQuery,
+        GetGeneralSettingsQueryVariables
+      >({
         cache,
         query: GetGeneralSettingsDocument,
         data: { generalSettings: data.updateGeneralSettings },
@@ -38,7 +41,10 @@ const useGeneralSettings = () => {
         return;
       }
 
-      updateQueryCache<GetGeneralSettingsQuery, GetGeneralSettingsQueryVariables>({
+      updateQueryCache<
+        GetGeneralSettingsQuery,
+        GetGeneralSettingsQueryVariables
+      >({
         cache,
         query: GetGeneralSettingsDocument,
         data: { generalSettings: data.resetGeneralSettings },
@@ -47,20 +53,14 @@ const useGeneralSettings = () => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.generalSettings,
+    settings: queryLoading || !queryData ? null : queryData.generalSettings,
     updateSettings,
     resetSettings,
   };
 };
 
 export const GeneralSettingsForm: React.FunctionComponent = () => {
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useGeneralSettings();
+  const { resetSettings, settings, updateSettings } = useGeneralSettings();
 
   const [state, setState] = useState<UpdateGeneralSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
@@ -85,14 +85,14 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
   const onTextChanges = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
 
-    setState(prevState => prevState && ({ ...prevState, [name]: value }));
+    setState((prevState) => prevState && { ...prevState, [name]: value });
     setHasChanges(true);
   };
 
   const onBoolChanges = (e: React.FormEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({ ...prevState, [name]: checked }));
+    setState((prevState) => prevState && { ...prevState, [name]: checked });
     setHasChanges(true);
   };
 
@@ -108,8 +108,7 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
           color="primary"
           onClick={onReset}
           type="button"
-          variant="contained"
-        >
+          variant="contained">
           Reset to default
         </Button>
       </div>

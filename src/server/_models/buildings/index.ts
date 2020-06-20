@@ -21,7 +21,7 @@ export class Buildings {
   ) {}
 
   public updateActual = (buildings: readonly ActualBuilding[]): void => {
-    buildings.forEach(b => {
+    buildings.forEach((b) => {
       const spot = this.spots.at(b.fieldId);
       spot.level.actual = b.level;
 
@@ -33,19 +33,21 @@ export class Buildings {
     this.onActualUpdated();
   };
 
-  public updateOngoing = (buildingsInProgress: readonly BuildingInProgress[]): void => {
-    this.spots
-      .buildings()
-      .forEach(spot => {
-        const ongoingForSpot = buildingsInProgress.filter(bip => bip.fieldId === spot.fieldId);
-        const ongoingLevel = getMaximum(ongoingForSpot.map(bip => bip.level));
+  public updateOngoing = (
+    buildingsInProgress: readonly BuildingInProgress[],
+  ): void => {
+    this.spots.buildings().forEach((spot) => {
+      const ongoingForSpot = buildingsInProgress.filter(
+        (bip) => bip.fieldId === spot.fieldId,
+      );
+      const ongoingLevel = getMaximum(ongoingForSpot.map((bip) => bip.level));
 
-        spot.level.ongoing = ongoingLevel;
+      spot.level.ongoing = ongoingLevel;
 
-        if (spot.type === BuildingType.None && ongoingLevel) {
-          spot.type = ongoingForSpot[0].type;
-        }
-      });
+      if (spot.type === BuildingType.None && ongoingLevel) {
+        spot.type = ongoingForSpot[0].type;
+      }
+    });
 
     this.ongoing.set(buildingsInProgress);
     this.onOngoingUpdated();
@@ -54,31 +56,30 @@ export class Buildings {
   public updateSpotsQueuedState = (): void => {
     const queuedBuildings = this.queue.buildings();
 
-    this
-      .spots
-      .buildings()
-      .forEach(spot => {
-        const queuedForSpot = queuedBuildings.filter(b => b.fieldId === spot.fieldId);
-        spot.level.queued = getMaximum(queuedForSpot.map(b => b.level));
+    this.spots.buildings().forEach((spot) => {
+      const queuedForSpot = queuedBuildings.filter(
+        (b) => b.fieldId === spot.fieldId,
+      );
+      spot.level.queued = getMaximum(queuedForSpot.map((b) => b.level));
 
-        if (spot.type === BuildingType.None && spot.level.queued) {
-          spot.type = queuedForSpot[0].type;
-        } else if (
-          spot.type > BuildingType.Crop
-          && spot.fieldId !== fieldIds.RallyPoint
-          && spot.fieldId !== fieldIds.Wall
-          && spot.level.getTotal() === 0
-        ) {
-          spot.type = BuildingType.None;
-        }
-      });
+      if (spot.type === BuildingType.None && spot.level.queued) {
+        spot.type = queuedForSpot[0].type;
+      } else if (
+        spot.type > BuildingType.Crop &&
+        spot.fieldId !== fieldIds.RallyPoint &&
+        spot.fieldId !== fieldIds.Wall &&
+        spot.level.getTotal() === 0
+      ) {
+        spot.type = BuildingType.None;
+      }
+    });
 
     this.onQueuedUpdated();
   };
 
-  public freeFieldIds = (): readonly number[] => this
-    .spots
-    .buildings()
-    .filter(b => b.level.getTotal() === 0)
-    .map(b => b.fieldId);
+  public freeFieldIds = (): readonly number[] =>
+    this.spots
+      .buildings()
+      .filter((b) => b.level.getTotal() === 0)
+      .map((b) => b.fieldId);
 }

@@ -12,19 +12,15 @@ type Props = {
 };
 
 export const CoolDown: React.FC<Props> = ({ onChange, value }) => {
-  const updateMin = (newMin: DurationModel) => onChange({ ...value, min: newMin });
-  const updateMax = (newMax: DurationModel) => onChange({ ...value, max: newMax });
+  const updateMin = (newMin: DurationModel) =>
+    onChange({ ...value, min: newMin });
+  const updateMax = (newMax: DurationModel) =>
+    onChange({ ...value, max: newMax });
 
   return (
     <div>
-      <Duration
-        onChange={updateMin}
-        value={value.min}
-      />
-      <Duration
-        onChange={updateMax}
-        value={value.max}
-      />
+      <Duration onChange={updateMin} value={value.min} />
+      <Duration onChange={updateMax} value={value.max} />
     </div>
   );
 };

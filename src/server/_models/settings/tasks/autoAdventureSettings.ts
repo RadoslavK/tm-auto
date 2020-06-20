@@ -1,11 +1,12 @@
-import { AdventureCriteria } from '../../../_types/graphql.type';
 import { mergeDefaults } from '../../../../_shared/merge';
 import { PartialFields } from '../../../../_shared/types/fields.type';
+import { AdventureCriteria } from '../../../_types/graphql.type';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
 export class AutoAdventureSettings {
-  public readonly adventureCriteria: AdventureCriteria = AdventureCriteria.Closest;
+  public readonly adventureCriteria: AdventureCriteria =
+    AdventureCriteria.Closest;
 
   public readonly allow: boolean = true;
 

@@ -21,62 +21,55 @@ type Props = {
   readonly logEntry: LogEntryFragment;
 };
 
-const isTextEntry = (content: Content): content is TextLogEntryContent => (content as TextLogEntryContent).message !== undefined;
-const isAutoBuildEntry = (content: Content): content is AutoBuildLogEntryContent => (content as AutoBuildLogEntryContent).fieldId !== undefined;
-const isAutoUnitsEntry = (content: Content): content is AutoUnitsLogEntryContent => (content as AutoUnitsLogEntryContent).unitName !== undefined;
-const isResourceClaimEntry = (content: Content): content is ResourceClaimLogEntryContent => (content as ResourceClaimLogEntryContent).resources !== undefined;
+const isTextEntry = (content: Content): content is TextLogEntryContent =>
+  (content as TextLogEntryContent).message !== undefined;
+const isAutoBuildEntry = (
+  content: Content,
+): content is AutoBuildLogEntryContent =>
+  (content as AutoBuildLogEntryContent).fieldId !== undefined;
+const isAutoUnitsEntry = (
+  content: Content,
+): content is AutoUnitsLogEntryContent =>
+  (content as AutoUnitsLogEntryContent).unitName !== undefined;
+const isResourceClaimEntry = (
+  content: Content,
+): content is ResourceClaimLogEntryContent =>
+  (content as ResourceClaimLogEntryContent).resources !== undefined;
 
 // TODO: refactor this
-const getContentNode = ({ content }: LogEntryFragment, className: string): JSX.Element => {
+const getContentNode = (
+  { content }: LogEntryFragment,
+  className: string,
+): JSX.Element => {
   if (isTextEntry(content)) {
-    return (
-      <TextLogContent
-        className={className}
-        content={content}
-      />
-    );
+    return <TextLogContent className={className} content={content} />;
   }
 
   if (isAutoBuildEntry(content)) {
-    return (
-      <AutoBuildLogContent
-        className={className}
-        content={content}
-      />
-    );
+    return <AutoBuildLogContent className={className} content={content} />;
   }
 
   if (isAutoUnitsEntry(content)) {
-    return (
-      <AutoUnitsLogContent
-        className={className}
-        content={content}
-      />
-    );
+    return <AutoUnitsLogContent className={className} content={content} />;
   }
 
   if (isResourceClaimEntry(content)) {
-    return (
-      <ResourceClaimLogContent
-        className={className}
-        content={content}
-      />
-    );
+    return <ResourceClaimLogContent className={className} content={content} />;
   }
 
   throw new Error(`Unknown content: ${JSON.stringify(content)}`);
 };
 
-const getVillageNode = ({ village }: LogEntryFragment, className: string): JSX.Element | null => {
+const getVillageNode = (
+  { village }: LogEntryFragment,
+  className: string,
+): JSX.Element | null => {
   if (!village) {
     return null;
   }
 
   return (
-    <Link
-      className={className}
-      to={`/villages/${village.id}`}
-    >
+    <Link className={className} to={`/villages/${village.id}`}>
       {formatVillageName(village)}
     </Link>
   );
@@ -110,9 +103,7 @@ export const LogEntry: React.FC<Props> = ({ logEntry }) => {
         {new Date(logEntry.timestamp.totalSeconds * 1000).toLocaleString()}
       </span>
       {villageNode}
-      <span className={classes.content}>
-        {contentNode}
-      </span>
+      <span className={classes.content}>{contentNode}</span>
     </div>
   );
 };

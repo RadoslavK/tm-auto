@@ -14,6 +14,5 @@ export class BuildingSpot {
     mergeDefaults(this, params);
   }
 
-  public isBuilt = (): boolean =>
-    this.level.actual > 0;
+  public isBuilt = (): boolean => this.level.actual > 0;
 }

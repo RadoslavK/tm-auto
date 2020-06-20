@@ -22,9 +22,7 @@ class CrannyInfoService {
 
     const { tribe } = getAccountContext().gameInfo;
 
-    const multiplier = tribe === Tribe.Gauls
-      ? 1.5
-      : 1;
+    const multiplier = tribe === Tribe.Gauls ? 1.5 : 1;
 
     return capacities[level] * multiplier;
   };

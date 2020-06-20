@@ -1,18 +1,9 @@
-import {
-  ChildProcess,
-  fork,
-  ForkOptions,
-} from 'child_process';
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  session,
-  // eslint-disable-next-line import/no-extraneous-dependencies
-} from 'electron';
+import { ChildProcess, ForkOptions, fork } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
+
+import { BrowserWindow, app, ipcMain, session } from 'electron';
 import which from 'which';
 
 import { findOpenSocket } from './ipc/findOpenSocket';
@@ -22,7 +13,6 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 let serverProcess: ChildProcess | null = null;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-// eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
@@ -59,11 +49,13 @@ const createClientWindow = async (socketName: string): Promise<void> => {
       }
     } while (!loaded);
   } else {
-    await clientWin.loadURL(url.format({
-      pathname: path.join(__dirname, '..', 'renderer', 'index.html'),
-      protocol: 'file:',
-      slashes: true,
-    }));
+    await clientWin.loadURL(
+      url.format({
+        pathname: path.join(__dirname, '..', 'renderer', 'index.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
   }
 
   clientWin.maximize();
@@ -97,8 +89,8 @@ const createBackgroundProcess = (socketName: string): void => {
   //  Electron run renderer in its own version, we want to run the background process with actual system node version
   const nodePaths = which.sync('node', { all: true, nothrow: true });
 
-  const currentNodePath = nodePaths
-    && nodePaths.find(x => x.toLowerCase().endsWith('node.exe'));
+  const currentNodePath =
+    nodePaths && nodePaths.find((x) => x.toLowerCase().endsWith('node.exe'));
 
   if (!currentNodePath) {
     console.error('No current node path found');
@@ -115,20 +107,13 @@ const createBackgroundProcess = (socketName: string): void => {
       socketName,
     },
     execArgv: isDevelopment
-      ? [
-        '--inspect=9220',
-        '--enable-source-maps',
-      ]
+      ? ['--inspect=9220', '--enable-source-maps']
       : undefined,
     execPath: currentNodePath || undefined,
     silent: true,
   };
 
-  serverProcess = fork(
-    filePath,
-    undefined,
-    options,
-  );
+  serverProcess = fork(filePath, undefined, options);
 
   serverProcess.stderr?.pipe(process.stderr);
   serverProcess.stdout?.pipe(process.stdout);
@@ -173,7 +158,10 @@ const installDevTools = async (): Promise<void> => {
   }
 
   for (const extension of extensions) {
-    const extensionFolder = path.join(appDataPath, `/Google/Chrome/User Data/Default/Extensions/${extension.id}`);
+    const extensionFolder = path.join(
+      appDataPath,
+      `/Google/Chrome/User Data/Default/Extensions/${extension.id}`,
+    );
 
     if (!fs.existsSync(extensionFolder)) {
       console.error(`${extension.name} is not installed.`);
@@ -181,10 +169,12 @@ const installDevTools = async (): Promise<void> => {
 
     const versionDirs = fs
       .readdirSync(extensionFolder, { withFileTypes: true })
-      .filter(subDir => subDir.isDirectory());
+      .filter((subDir) => subDir.isDirectory());
 
     try {
-      await session.defaultSession.loadExtension(path.join(extensionFolder, versionDirs[0].name));
+      await session.defaultSession.loadExtension(
+        path.join(extensionFolder, versionDirs[0].name),
+      );
       console.log(`Installed extension: ${extension.name}.`);
     } catch (error) {
       console.error(error);
@@ -219,12 +209,15 @@ app.on('before-quit', () => {
   }
 });
 
-app.on('activate', async (): Promise<void> => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (clientWin === null) {
-    const serverSocket = await findOpenSocket('tm-auto');
+app.on(
+  'activate',
+  async (): Promise<void> => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (clientWin === null) {
+      const serverSocket = await findOpenSocket('tm-auto');
 
-    await createClientWindow(serverSocket);
-  }
-});
+      await createClientWindow(serverSocket);
+    }
+  },
+);

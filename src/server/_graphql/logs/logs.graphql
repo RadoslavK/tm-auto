@@ -1,53 +1,53 @@
 enum TextLogEntryType {
-    Info
-    Error
+  Info
+  Error
 }
 
 type TextLogEntryContent {
-    message: String!
-    messageType: TextLogEntryType!
+  message: String!
+  messageType: TextLogEntryType!
 }
 
 type AutoBuildLogEntryContent {
-    name: String!
-    type: BuildingType!
-    level: Int!
-    fieldId: Int!
+  name: String!
+  type: BuildingType!
+  level: Int!
+  fieldId: Int!
 }
 
 type AutoUnitsLogEntryContent {
-    amount: Int!
-    index: Int!
-    tribe: Tribe!
-    unitName: String!
+  amount: Int!
+  index: Int!
+  tribe: Tribe!
+  unitName: String!
 }
 
 enum ClaimHeroResourcesReason {
-    AutoBuild
-    AutoUnits
+  AutoBuild
+  AutoUnits
 }
 
 type ResourceClaimLogEntryContent {
-    reason: ClaimHeroResourcesReason!
-    resources: Resources!
+  reason: ClaimHeroResourcesReason!
+  resources: Resources!
 }
 
 union LogEntryContent =
     TextLogEntryContent
-    | AutoBuildLogEntryContent
-    | AutoUnitsLogEntryContent
-    | ResourceClaimLogEntryContent
+  | AutoBuildLogEntryContent
+  | AutoUnitsLogEntryContent
+  | ResourceClaimLogEntryContent
 
 type LogEntry {
-    timestamp: Timestamp!
-    village: Village
-    content: LogEntryContent!
+  timestamp: Timestamp!
+  village: Village
+  content: LogEntryContent!
 }
 
 extend type Query {
-    logEntries: [LogEntry!]!
+  logEntries: [LogEntry!]!
 }
 
-extend type Subscription  {
-    logEntryAdded: LogEntry!
+extend type Subscription {
+  logEntryAdded: LogEntry!
 }

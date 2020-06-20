@@ -22,8 +22,7 @@ export const getServerShortcut = (server: string): string => {
     return getOldServerShortcut(server);
   }
 
-  const type = newMatch[1];
-  const country = newMatch[2];
+  const [, type, country] = newMatch;
 
   const typeMatch = /tx(\d+)|ts(\d+)/.exec(type);
 
@@ -31,9 +30,7 @@ export const getServerShortcut = (server: string): string => {
     throw new Error('Failed to parse server type');
   }
 
-  const typeName = typeMatch[1]
-    ? `${typeMatch[1]}x`
-    : typeMatch[2];
+  const typeName = typeMatch[1] ? `${typeMatch[1]}x` : typeMatch[2];
 
   return `${country.toUpperCase()} ${typeName}`;
 };

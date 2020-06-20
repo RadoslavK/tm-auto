@@ -3,10 +3,7 @@ import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits';
 import { ResourceClaimLogEntryContent } from '../_models/logs/content/resourceClaim';
 import { TextLogEntryContent } from '../_models/logs/content/text';
-import {
-  LogEntry,
-  LogEntryContent,
-} from '../_models/logs/logEntry';
+import { LogEntry, LogEntryContent } from '../_models/logs/logEntry';
 import { Resources } from '../_models/misc/resources';
 import { Timestamp } from '../_models/misc/timestamp';
 import {
@@ -59,10 +56,7 @@ export class LogsService {
   };
 
   public logAutoUnits = (params: LogAutoUnitsParams): void => {
-    const {
-      amount,
-      index,
-    } = params;
+    const { amount, index } = params;
 
     const { tribe } = getAccountContext().gameInfo;
     const { name } = unitInfoService.getUnitInfo(index);
@@ -77,7 +71,10 @@ export class LogsService {
     this.log(content, true);
   };
 
-  public logResourceClaim = (resources: Resources, reason: ClaimHeroResourcesReason): void => {
+  public logResourceClaim = (
+    resources: Resources,
+    reason: ClaimHeroResourcesReason,
+  ): void => {
     const content = new ResourceClaimLogEntryContent({
       reason,
       resources,
@@ -87,8 +84,12 @@ export class LogsService {
   };
 
   private log = (content: LogEntryContent, fromVillage = false): void => {
-    const timestamp = new Timestamp({ totalSeconds: Math.round(Date.now() / 1000) });
-    const village = fromVillage ? getAccountContext().villageService.currentVillage() : null;
+    const timestamp = new Timestamp({
+      totalSeconds: Math.round(Date.now() / 1000),
+    });
+    const village = fromVillage
+      ? getAccountContext().villageService.currentVillage()
+      : null;
 
     this.addEntry({
       content,

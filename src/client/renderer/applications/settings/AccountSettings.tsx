@@ -1,10 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import {
   CoolDown as CoolDownModel,
   GetAccountSettingsDocument,
@@ -16,10 +13,12 @@ import {
   useUpdateAccountSettingsMutation,
 } from '../../_graphql/graphqlHooks';
 import { CoolDown } from '../../_shared/components/controls/CoolDown';
-import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useAccountSettings = () => {
-  const { data: queryData, loading: queryLoading } = useGetAccountSettingsQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetAccountSettingsQuery();
 
   const [updateSettings] = useUpdateAccountSettingsMutation({
     update: (cache, { data }) => {
@@ -27,7 +26,10 @@ const useAccountSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAccountSettingsQuery, GetAccountSettingsQueryVariables>({
+      updateQueryCache<
+        GetAccountSettingsQuery,
+        GetAccountSettingsQueryVariables
+      >({
         query: GetAccountSettingsDocument,
         cache,
         data: { accountSettings: data.updateAccountSettings },
@@ -41,7 +43,10 @@ const useAccountSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAccountSettingsQuery, GetAccountSettingsQueryVariables>({
+      updateQueryCache<
+        GetAccountSettingsQuery,
+        GetAccountSettingsQueryVariables
+      >({
         query: GetAccountSettingsDocument,
         cache,
         data: { accountSettings: data.resetAccountSettings },
@@ -50,9 +55,7 @@ const useAccountSettings = () => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.accountSettings,
+    settings: queryLoading || !queryData ? null : queryData.accountSettings,
     updateSettings,
     resetSettings,
   };
@@ -62,11 +65,7 @@ export const AccountSettings: React.FC = () => {
   const [state, setState] = useState<UpdateAccountSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
 
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useAccountSettings();
+  const { resetSettings, settings, updateSettings } = useAccountSettings();
 
   useEffect(() => {
     if (settings) {
@@ -81,13 +80,19 @@ export const AccountSettings: React.FC = () => {
     }
   }, [hasChanges, state, updateSettings]);
 
-  const onCoolDownChange = useCallback((updatedCoolDown: CoolDownModel): void => {
-    setState(prevState => prevState && ({
-      ...prevState,
-      tasksCoolDown: updatedCoolDown,
-    }));
-    setHasChanges(true);
-  }, []);
+  const onCoolDownChange = useCallback(
+    (updatedCoolDown: CoolDownModel): void => {
+      setState(
+        (prevState) =>
+          prevState && {
+            ...prevState,
+            tasksCoolDown: updatedCoolDown,
+          },
+      );
+      setHasChanges(true);
+    },
+    [],
+  );
 
   if (!state) {
     return null;
@@ -98,15 +103,15 @@ export const AccountSettings: React.FC = () => {
   };
 
   const onCheckboxChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -127,8 +132,7 @@ export const AccountSettings: React.FC = () => {
           color="primary"
           onClick={onReset}
           type="button"
-          variant="contained"
-        >
+          variant="contained">
           Reset to default
         </Button>
       </div>
@@ -159,10 +163,7 @@ export const AccountSettings: React.FC = () => {
 
         <div>
           <label>Cooldown</label>
-          <CoolDown
-            onChange={onCoolDownChange}
-            value={tasksCoolDown}
-          />
+          <CoolDown onChange={onCoolDownChange} value={tasksCoolDown} />
         </div>
 
         <div>

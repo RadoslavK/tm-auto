@@ -1,91 +1,91 @@
 #import "./misc.graphql"
 
 fragment VillageCrannyCapacity on VillageCrannyCapacity {
-    actual
-    ongoing
-    total
+  actual
+  ongoing
+  total
 }
 
 query GetVillage($villageId: ID!) {
-    village(villageId: $villageId) {
-        coords {
-            ...Coords
-        }
-        id
-        name
-        resources {
-            amount {
-                ...Resources
-            }
-            capacity {
-                granary
-                warehouse
-            }
-            production {
-                ...Resources
-            }
-        }
+  village(villageId: $villageId) {
+    coords {
+      ...Coords
     }
+    id
+    name
+    resources {
+      amount {
+        ...Resources
+      }
+      capacity {
+        granary
+        warehouse
+      }
+      production {
+        ...Resources
+      }
+    }
+  }
 }
 
 query GetVillages {
-    villages {
-        id
-        name
-        coords {
-            ...Coords
-        }
-        isCapital
+  villages {
+    id
+    name
+    coords {
+      ...Coords
     }
+    isCapital
+  }
 }
 
 query GetActiveVillageId {
-    activeVillageId
+  activeVillageId
 }
 
 query GetCrannyCapacity($villageId: ID!) {
-    crannyCapacity(villageId: $villageId) {
-        ...VillageCrannyCapacity
-    }
+  crannyCapacity(villageId: $villageId) {
+    ...VillageCrannyCapacity
+  }
 }
 
 mutation RefreshVillage($villageId: ID!) {
-    refreshVillage(villageId: $villageId)
+  refreshVillage(villageId: $villageId)
 }
 
 subscription OnVillageUpdated($villageId: ID!) {
-    villageUpdated(villageId: $villageId) {
-        coords {
-            ...Coords
-        }
-        id
-        name
-        resources {
-            amount {
-                ...Resources
-            }
-            capacity {
-                granary
-                warehouse
-            }
-            production {
-                ...Resources
-            }
-        }
+  villageUpdated(villageId: $villageId) {
+    coords {
+      ...Coords
     }
+    id
+    name
+    resources {
+      amount {
+        ...Resources
+      }
+      capacity {
+        granary
+        warehouse
+      }
+      production {
+        ...Resources
+      }
+    }
+  }
 }
 
 subscription OnVillagesUpdated {
-    villagesUpdated {
-        id
-        name
-        coords {
-            ...Coords
-        }
-        isCapital
+  villagesUpdated {
+    id
+    name
+    coords {
+      ...Coords
     }
+    isCapital
+  }
 }
 
 subscription OnActiveVillageIdChanged {
-    activeVillageIdChanged
+  activeVillageIdChanged
 }

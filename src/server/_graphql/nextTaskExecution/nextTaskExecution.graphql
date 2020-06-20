@@ -1,20 +1,24 @@
 extend type Query {
-    nextTasksExecution: Timestamp!
-    nextTaskExecution(task: TaskType!): Timestamp!
-    nextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
+  nextTasksExecution: Timestamp!
+  nextTaskExecution(task: TaskType!): Timestamp!
+  nextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
 }
 
 extend type Mutation {
-    setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
-    setNextTasksExecution(delay: DurationInput!): Timestamp!
-    setNextVillageTaskExecution(villageId: ID!, task: TaskType!, delay: DurationInput!): Timestamp!
-    resetNextTaskExecution(task: TaskType!): Timestamp!
-    resetNextTasksExecution: Timestamp!
-    resetNextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
+  setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
+  setNextTasksExecution(delay: DurationInput!): Timestamp!
+  setNextVillageTaskExecution(
+    villageId: ID!
+    task: TaskType!
+    delay: DurationInput!
+  ): Timestamp!
+  resetNextTaskExecution(task: TaskType!): Timestamp!
+  resetNextTasksExecution: Timestamp!
+  resetNextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
 }
 
 extend type Subscription {
-    nextTasksExecutionChanged: Timestamp!
-    nextTaskExecutionChanged(task: TaskType!): Timestamp!
-    nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
+  nextTasksExecutionChanged: Timestamp!
+  nextTaskExecutionChanged(task: TaskType!): Timestamp!
+  nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
 }

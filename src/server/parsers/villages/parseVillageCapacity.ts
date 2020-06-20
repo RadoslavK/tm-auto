@@ -4,7 +4,9 @@ import { getPage } from '../../browser/getPage';
 export const parseVillageCapacity = async (): Promise<VillageCapacity> => {
   const page = await getPage();
   const content = await page.content();
-  const match = /maxStorage: {"l1": (.*?),"l2": .*?,"l3": .*?,"l4": (.*?)}/.exec(content);
+  const match = /maxStorage: {"l1": (.*?),"l2": .*?,"l3": .*?,"l4": (.*?)}/.exec(
+    content,
+  );
 
   if (!match) {
     throw new Error('Failed to parse village capacity');

@@ -1,9 +1,10 @@
-import {
-  ElementHandle,
-  Page,
-} from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer-core';
 
-export const replaceInputText = async (page: Page, input: ElementHandle, text: string): Promise<void> => {
+export const replaceInputText = async (
+  page: Page,
+  input: ElementHandle,
+  text: string,
+): Promise<void> => {
   await input.focus();
   await page.keyboard.down('Control');
   await page.keyboard.press('A');

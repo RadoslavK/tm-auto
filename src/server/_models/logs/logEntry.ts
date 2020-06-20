@@ -6,7 +6,7 @@ import { ResourceClaimLogEntryContent } from './content/resourceClaim';
 import { TextLogEntryContent } from './content/text';
 
 export type LogEntryContent =
-  TextLogEntryContent
+  | TextLogEntryContent
   | AutoBuildLogEntryContent
   | AutoUnitsLogEntryContent
   | ResourceClaimLogEntryContent;

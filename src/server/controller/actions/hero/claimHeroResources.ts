@@ -8,11 +8,16 @@ import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { ensurePage } from '../ensurePage';
 import { updateHeroResources } from './updateHeroResources';
 
-export const claimHeroResources = async (resources: Resources, reason: ClaimHeroResourcesReason): Promise<void> => {
+export const claimHeroResources = async (
+  resources: Resources,
+  reason: ClaimHeroResourcesReason,
+): Promise<void> => {
   getAccountContext().logsService.logResourceClaim(resources, reason);
   const page = await getPage();
 
-  const claimResource = async (resource: keyof Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop'>): Promise<void> => {
+  const claimResource = async (
+    resource: keyof Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop'>,
+  ): Promise<void> => {
     const amount = resources[resource];
 
     if (amount <= 0) {
@@ -23,7 +28,9 @@ export const claimHeroResources = async (resources: Resources, reason: ClaimHero
       throw new Error('Requested more resources than available!');
     }
 
-    const itemNode = await page.$(`#itemsToSale .item[class*="item_${heroItemIds[resource]}"]`);
+    const itemNode = await page.$(
+      `#itemsToSale .item[class*="item_${heroItemIds[resource]}"]`,
+    );
 
     if (!itemNode) {
       throw new Error(`Did not find hero item resource: ${resource}`);

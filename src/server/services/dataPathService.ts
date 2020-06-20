@@ -30,13 +30,12 @@ type VillagePath = {
 };
 
 export class DataPathService {
-  static generalPath = () => path.join(getServerAppDirectory(), '.data/settings/general.json');
+  static generalPath = () =>
+    path.join(getServerAppDirectory(), '.data/settings/general.json');
 
-  private basePath = () =>
-    getGeneralSettingsService().get().dataPath;
+  private basePath = () => getGeneralSettingsService().get().dataPath;
 
-  public accountsPath = () =>
-    path.join(this.basePath(), 'accounts.json');
+  public accountsPath = () => path.join(this.basePath(), 'accounts.json');
 
   public accountPath = (accountId: string): AccountPath => {
     const lPath = this.baseAccountPath(accountId);
@@ -55,7 +54,9 @@ export class DataPathService {
     };
   };
 
-  private createVillageSettingsPath = (basePath: string): VillageSettingsPath => {
+  private createVillageSettingsPath = (
+    basePath: string,
+  ): VillageSettingsPath => {
     const lPath = path.join(basePath, 'settings');
 
     return {
@@ -66,7 +67,9 @@ export class DataPathService {
     };
   };
 
-  private createAccountSettingsPath = (basePath: string): AccountSettingsPath => {
+  private createAccountSettingsPath = (
+    basePath: string,
+  ): AccountSettingsPath => {
     const lPath = path.join(basePath, 'settings');
 
     return {

@@ -3,11 +3,12 @@ import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';
 
-export default <Resolvers> {
+export default <Resolvers>{
   HeroInformation: {
-    village: hero => hero.villageId
-      ? getAccountContext().villageService.village(hero.villageId)
-      : null,
+    village: (hero) =>
+      hero.villageId
+        ? getAccountContext().villageService.village(hero.villageId)
+        : null,
   },
 
   Query: {

@@ -8,13 +8,13 @@ export const mergeVillageAndHeroResources = (villageId: string): Resources => {
   const granaryCapacity = village.resources.capacity.granary;
   const currentResources = village.resources.amount;
 
-  return currentResources
-    .add(hero.resources)
-    .mergeMin(new Resources({
+  return currentResources.add(hero.resources).mergeMin(
+    new Resources({
       wood: warehouseCapacity,
       clay: warehouseCapacity,
       iron: warehouseCapacity,
       crop: granaryCapacity,
       freeCrop: currentResources.freeCrop,
-    }));
+    }),
+  );
 };

@@ -23,7 +23,7 @@ export class VillageService {
   public allVillages = (): readonly Village[] => this._villages;
 
   public village = (villageId: string): Village => {
-    const vill = this._villages.find(v => v.id === villageId);
+    const vill = this._villages.find((v) => v.id === villageId);
 
     if (!vill) {
       throw new Error(`Village with id ${villageId} does not exist`);
@@ -38,12 +38,15 @@ export class VillageService {
     const oldVillages: Village[] = [];
 
     for (const existingVillage of this._villages) {
-      const updatedVillage = villages.find(v => v.id === existingVillage.id);
+      const updatedVillage = villages.find((v) => v.id === existingVillage.id);
 
       if (!updatedVillage) {
         const accountId = accountService.getCurrentAccount().id;
         // old village to be deleted
-        const villageDataPath = dataPathService.baseVillagePath(accountId, existingVillage.id);
+        const villageDataPath = dataPathService.baseVillagePath(
+          accountId,
+          existingVillage.id,
+        );
         fileService.delete(villageDataPath);
         oldVillages.push(existingVillage);
       } else {
@@ -53,21 +56,30 @@ export class VillageService {
 
     // add new villages
     villages
-      .filter(v => !this._villages.some(existingVillage => existingVillage.id === v.id))
-      .forEach(village => {
+      .filter(
+        (v) =>
+          !this._villages.some(
+            (existingVillage) => existingVillage.id === v.id,
+          ),
+      )
+      .forEach((village) => {
         this._villages.push(village);
       });
 
-    this._villages = this._villages.filter(v => !oldVillages.includes(v));
+    this._villages = this._villages.filter((v) => !oldVillages.includes(v));
   };
 
-  public villageByCoords = (coords: Coords): Village | undefined => this._villages
-    .find(x => x.coords.x === coords.x && x.coords.y === coords.y);
+  public villageByCoords = (coords: Coords): Village | undefined =>
+    this._villages.find(
+      (x) => x.coords.x === coords.x && x.coords.y === coords.y,
+    );
 
-  public capitalVillage = (): Village | undefined => this._villages
-    .find(x => x.isCapital);
+  public capitalVillage = (): Village | undefined =>
+    this._villages.find((x) => x.isCapital);
 
-  public setCapital = (coords: Coords): { readonly capitalChanged: boolean; } => {
+  public setCapital = (
+    coords: Coords,
+  ): { readonly capitalChanged: boolean } => {
     const village = this.villageByCoords(coords);
 
     if (!village) {

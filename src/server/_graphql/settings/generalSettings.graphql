@@ -1,20 +1,20 @@
 type GeneralSettings {
-    dataPath: String!
-    chromePath: String!
-    headlessChrome: Boolean!
+  dataPath: String!
+  chromePath: String!
+  headlessChrome: Boolean!
 }
 
 extend type Query {
-    generalSettings: GeneralSettings!
+  generalSettings: GeneralSettings!
 }
 
 input UpdateGeneralSettingsInput {
-    dataPath: String!
-    chromePath: String!
-    headlessChrome: Boolean!
+  dataPath: String!
+  chromePath: String!
+  headlessChrome: Boolean!
 }
 
 extend type Mutation {
-    updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
-    resetGeneralSettings: GeneralSettings!
+  updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
+  resetGeneralSettings: GeneralSettings!
 }

@@ -7,7 +7,9 @@ export default <Resolvers>{
   },
 
   Mutation: {
-    updateAccountSettings: (_, args) => getAccountContext().settingsService.account.merge(args.settings),
-    resetAccountSettings: () => getAccountContext().settingsService.account.reset(),
+    updateAccountSettings: (_, args) =>
+      getAccountContext().settingsService.account.merge(args.settings),
+    resetAccountSettings: () =>
+      getAccountContext().settingsService.account.reset(),
   },
 };

@@ -13,7 +13,7 @@ type StylesProps = {
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
-  image: props => ({
+  image: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -30,10 +30,15 @@ type Props = {
   readonly className?: string;
   readonly fieldId: number;
   readonly onSelect: (targetLevel?: number) => void;
-  readonly type: BuildingType
+  readonly type: BuildingType;
 };
 
-export const NewBuildingDialogItem: React.FC<Props> = ({ className, fieldId, onSelect, type }) => {
+export const NewBuildingDialogItem: React.FC<Props> = ({
+  className,
+  fieldId,
+  onSelect,
+  type,
+}) => {
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
   const classes = useStyles({
     buildingType: type,
@@ -50,12 +55,11 @@ export const NewBuildingDialogItem: React.FC<Props> = ({ className, fieldId, onS
     return null;
   }
 
-  const {
-    maxLevel,
-    name,
-  } = buildingInfo;
+  const { maxLevel, name } = buildingInfo;
 
-  const onClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>): Promise<void> => {
+  const onClick = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ): Promise<void> => {
     if (event.ctrlKey) {
       setShowMultiEnqueue(true);
     } else {
@@ -66,17 +70,13 @@ export const NewBuildingDialogItem: React.FC<Props> = ({ className, fieldId, onS
 
   return (
     <>
-      <div
-        className={className}
-        onClick={onClick}
-      >
+      <div className={className} onClick={onClick}>
         <div className={classes.image} />
         <div className={classes.name}>{name}</div>
       </div>
       <Dialog
         onClose={() => setShowMultiEnqueue(false)}
-        open={showMultiEnqueue}
-      >
+        open={showMultiEnqueue}>
         <MultiLevelDialog
           maxLevel={maxLevel}
           minLevel={1}

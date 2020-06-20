@@ -1,14 +1,21 @@
+import { Socket } from 'net';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcRenderer } from 'electron';
 import { IPC } from 'node-ipc';
 
-type Writeable<T, TProps extends keyof T = keyof T> = { -readonly [P in TProps]: T[P] };
+type Writeable<T, TProps extends keyof T = keyof T> = {
+  -readonly [P in TProps]: T[P];
+};
 
 declare global {
   interface Window {
     readonly api: {
       readonly getSocketName: () => Promise<string>;
-      readonly ipcConnect: (id: string, callback: (client: any) => void) => void;
+      readonly ipcConnect: (
+        id: string,
+        callback: (client: Socket) => void,
+      ) => void;
       readonly ipcDisconnect: (id: string) => void;
     };
     readonly isDev: boolean;
@@ -17,7 +24,8 @@ declare global {
 
 const ipc = new IPC();
 
-(window as Writeable<Window, 'isDev'>).isDev = process.env.NODE_ENV !== 'production';
+(window as Writeable<Window, 'isDev'>).isDev =
+  process.env.NODE_ENV !== 'production';
 
 (window as Writeable<Window, 'api'>).api = {
   getSocketName: (): Promise<string> =>

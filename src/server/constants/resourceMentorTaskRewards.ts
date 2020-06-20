@@ -1,6 +1,9 @@
 import { Resources } from '../_models/misc/resources';
 
-export const resourceMentorTaskRewards: Map<string, Resources> = new Map<string, Resources>([
+export const resourceMentorTaskRewards: Map<string, Resources> = new Map<
+  string,
+  Resources
+>([
   ['Economy_02', new Resources({ wood: 160, clay: 190, iron: 150, crop: 70 })],
   ['Economy_03', new Resources({ wood: 250, clay: 290, iron: 100, crop: 130 })],
   ['Economy_04', new Resources({ wood: 400, clay: 460, iron: 330, crop: 270 })],
@@ -9,8 +12,14 @@ export const resourceMentorTaskRewards: Map<string, Resources> = new Map<string,
   ['Economy_07', new Resources({ wood: 100, clay: 99, iron: 99, crop: 99 })],
   ['Economy_08', new Resources({ wood: 400, clay: 400, iron: 400, crop: 200 })],
   ['Economy_09', new Resources({ wood: 620, clay: 730, iron: 560, crop: 230 })],
-  ['Economy_10', new Resources({ wood: 880, clay: 1020, iron: 590, crop: 320 })],
-  ['Economy_11', new Resources({ wood: 900, clay: 790, iron: 685, crop: 2230 })],
+  [
+    'Economy_10',
+    new Resources({ wood: 880, clay: 1020, iron: 590, crop: 320 }),
+  ],
+  [
+    'Economy_11',
+    new Resources({ wood: 900, clay: 790, iron: 685, crop: 2230 }),
+  ],
   ['World_01', new Resources({ wood: 90, clay: 120, iron: 60, crop: 30 })],
   ['World_03', new Resources({ wood: 170, clay: 100, iron: 130, crop: 70 })],
   ['World_04', new Resources({ wood: 215, clay: 145, iron: 195, crop: 50 })],
@@ -20,7 +29,10 @@ export const resourceMentorTaskRewards: Map<string, Resources> = new Map<string,
   ['World_09', new Resources({ wood: 570, clay: 470, iron: 560, crop: 265 })],
   ['World_10', new Resources({ wood: 525, clay: 420, iron: 620, crop: 335 })],
   ['World_11', new Resources({ wood: 650, clay: 800, iron: 740, crop: 530 })],
-  ['World_12', new Resources({ wood: 2650, clay: 2150, iron: 1810, crop: 1320 })],
+  [
+    'World_12',
+    new Resources({ wood: 2650, clay: 2150, iron: 1810, crop: 1320 }),
+  ],
   ['World_13', new Resources({ wood: 800, clay: 700, iron: 750, crop: 600 })],
   ['World_15', new Resources({ wood: 1050, clay: 800, iron: 900, crop: 750 })],
   ['Battle_02', new Resources({ wood: 130, clay: 150, iron: 120, crop: 100 })],

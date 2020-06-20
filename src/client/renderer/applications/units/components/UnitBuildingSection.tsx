@@ -1,11 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AutoUnitsBuildingSettings,
   BuildingType,
@@ -17,7 +14,6 @@ import {
   useUpdateAutoUnitsBuildingSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { Duration } from '../../../_shared/components/controls/Duration';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../utils/imageLinks';
 import { UnitSettings } from './UnitSettings';
@@ -55,7 +51,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly buildingType: BuildingType;
   readonly className?: string;
-  readonly settings: AutoUnitsBuildingSettings
+  readonly settings: AutoUnitsBuildingSettings;
 };
 
 export const UnitBuildingSection: React.FC<Props> = ({
@@ -99,7 +95,10 @@ export const UnitBuildingSection: React.FC<Props> = ({
             return;
           }
 
-          updateQueryCache<GetAutoUnitsSettingsQuery, GetAutoUnitsSettingsQueryVariables>({
+          updateQueryCache<
+            GetAutoUnitsSettingsQuery,
+            GetAutoUnitsSettingsQueryVariables
+          >({
             cache,
             query: GetAutoUnitsSettingsDocument,
             data: { autoUnitsSettings: data.updateAutoUnitsBuildingSettings },
@@ -111,30 +110,22 @@ export const UnitBuildingSection: React.FC<Props> = ({
   }, [state, buildingType, villageId, updateSettings, hasChanges]);
 
   const toggleAllow = () => {
-    setState(prevState => ({ ...prevState, allow: !prevState.allow }));
+    setState((prevState) => ({ ...prevState, allow: !prevState.allow }));
     setHasChanges(true);
   };
 
   const updateMaxBuildTime = useCallback((newValue: DurationModel) => {
-    setState(prevState => ({ ...prevState, maxBuildTime: newValue }));
+    setState((prevState) => ({ ...prevState, maxBuildTime: newValue }));
     setHasChanges(true);
   }, []);
 
   return (
     <div className={clsx(className, classes.root)}>
       <div className={classes.building}>
-        <div
-          className={classes.buildingImage}
-          onClick={toggleAllow}
-        />
+        <div className={classes.buildingImage} onClick={toggleAllow} />
         <div className={classes.maxBuildTime}>
-          <label htmlFor="maxBuildTime">
-            Max build time:
-          </label>
-          <Duration
-            onChange={updateMaxBuildTime}
-            value={state.maxBuildTime}
-          />
+          <label htmlFor="maxBuildTime">Max build time:</label>
+          <Duration onChange={updateMaxBuildTime} value={state.maxBuildTime} />
         </div>
       </div>
       {settings.units.map((unitSettings) => (

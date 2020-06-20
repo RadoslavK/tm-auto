@@ -1,46 +1,49 @@
 fragment AutoStorageOptionSettings on AutoStorageOptionSettings {
-    allow
-    overflowLevel
+  allow
+  overflowLevel
 }
 
 fragment AutoStorageSettings on AutoStorageSettings {
-    granary {
-        ...AutoStorageOptionSettings
-    }
-    warehouse {
-        ...AutoStorageOptionSettings
-    }
-    allowFreeSpots
+  granary {
+    ...AutoStorageOptionSettings
+  }
+  warehouse {
+    ...AutoStorageOptionSettings
+  }
+  allowFreeSpots
 }
 
 fragment AutoBuildSettings on AutoBuildSettings {
-    allow
-    allowDualQueue
-    coolDown {
-        ...CoolDown
-    }
-    autoCropFields
-    minCrop
-    autoStorage {
-        ...AutoStorageSettings
-    }
-    useHeroResources
+  allow
+  allowDualQueue
+  coolDown {
+    ...CoolDown
+  }
+  autoCropFields
+  minCrop
+  autoStorage {
+    ...AutoStorageSettings
+  }
+  useHeroResources
 }
 
 query GetAutoBuildSettings($villageId: ID!) {
-    autoBuildSettings(villageId: $villageId) {
-        ...AutoBuildSettings
-    }
+  autoBuildSettings(villageId: $villageId) {
+    ...AutoBuildSettings
+  }
 }
 
-mutation UpdateAutoBuildSettings($villageId: ID!, $settings: UpdateAutoBuildSettingsInput!) {
-    updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
-        ...AutoBuildSettings
-    }
+mutation UpdateAutoBuildSettings(
+  $villageId: ID!
+  $settings: UpdateAutoBuildSettingsInput!
+) {
+  updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
+    ...AutoBuildSettings
+  }
 }
 
 mutation ResetAutoBuildSettings($villageId: ID!) {
-    resetAutoBuildSettings(villageId: $villageId) {
-        ...AutoBuildSettings
-    }
+  resetAutoBuildSettings(villageId: $villageId) {
+    ...AutoBuildSettings
+  }
 }

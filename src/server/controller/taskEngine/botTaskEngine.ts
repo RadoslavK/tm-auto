@@ -50,14 +50,19 @@ export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
 
   private readonly _getNextExecution: () => Date;
 
-  constructor(task: BotTaskWithCoolDown, getNextExecution: () => Date, setNextExecution: (nextExecution: Date) => void) {
+  constructor(
+    task: BotTaskWithCoolDown,
+    getNextExecution: () => Date,
+    setNextExecution: (nextExecution: Date) => void,
+  ) {
     this._task = task;
     this._setNextExecution = setNextExecution;
     this._getNextExecution = getNextExecution;
   }
 
-  public isExecutionReady = (): boolean => this._task.allowExecution()
-    && (!this._getNextExecution || this._getNextExecution() <= new Date());
+  public isExecutionReady = (): boolean =>
+    this._task.allowExecution() &&
+    (!this._getNextExecution || this._getNextExecution() <= new Date());
 
   public execute = async (): Promise<void> => {
     if (!this.isExecutionReady()) {
@@ -67,9 +72,10 @@ export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
     const timeOfStart = new Date();
     const result = await this._task.execute();
 
-    const coolDown = result && result.nextCoolDown
-      ? result.nextCoolDown.mergeMin(this._task.coolDown())
-      : this._task.coolDown();
+    const coolDown =
+      result && result.nextCoolDown
+        ? result.nextCoolDown.mergeMin(this._task.coolDown())
+        : this._task.coolDown();
 
     const delay = coolDown.getRandomDelay();
 

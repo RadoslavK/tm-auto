@@ -15,27 +15,26 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
-const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'renderer');
+const directory = path.join(
+  isDevelopment ? '.webpack' : path.join('app', 'dist'),
+  'renderer',
+);
 
 module.exports = [
   isDevelopment && new webpack.HotModuleReplacementPlugin(),
-  isDevelopment && new ReactRefreshWebpackPlugin({
-    overlay: {
-      sockIntegration: 'whm',
-    },
-  }),
+  isDevelopment &&
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        sockIntegration: 'whm',
+      },
+    }),
   isDevelopment && new webpack.NoEmitOnErrorsPlugin(),
   new ForkTsCheckerWebpackPlugin(),
   new UnusedFilesWebpackPlugin({
     globOptions: {
-      ignore: [
-        '**/*.type.ts',
-        '**/*.d.ts',
-      ],
+      ignore: ['**/*.type.ts', '**/*.d.ts'],
     },
-    patterns: [
-      'src/client/renderer/**/*.ts?(x)',
-    ],
+    patterns: ['src/client/renderer/**/*.ts?(x)'],
   }),
   new CopyWebpackPlugin({
     patterns: [
@@ -54,11 +53,13 @@ module.exports = [
   new RemovePlugin({
     before: {
       root: directory,
-      test: [{
-        folder: '.',
-        method: () => true,
-        recursive: true,
-      }],
+      test: [
+        {
+          folder: '.',
+          method: () => true,
+          recursive: true,
+        },
+      ],
     },
   }),
 ].filter(Boolean);

@@ -1,11 +1,6 @@
-import {
-  ApolloLink,
-  FetchResult,
-  Observable,
-} from '@apollo/client';
+import { ApolloLink, FetchResult, Observable } from '@apollo/client';
 import { print as printQuery } from 'graphql';
 
-import { IpcClient } from '../../_ipc/ipcUtils';
 import { generateId } from '../../../../_shared/generateId';
 import {
   GraphqlHandlerPayload,
@@ -16,12 +11,17 @@ import {
   GraphqlHandlerMessageType,
   IpcHandler,
 } from '../../../../_shared/ipc/graphqlHandlerMessages';
+import { IpcClient } from '../../_ipc/ipcUtils';
 
-export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> => {
+export const createIpcLink = async (
+  ipcClient: IpcClient,
+): Promise<ApolloLink> => {
   await ipcClient.initConnection();
 
   return new ApolloLink((operation): Observable<FetchResult> | null => {
-    const handleRequest = (observer: ZenObservable.SubscriptionObserver<FetchResult>): void => {
+    const handleRequest = (
+      observer: ZenObservable.SubscriptionObserver<FetchResult>,
+    ): void => {
       const request: SerializableGraphQLRequest = {
         operationName: operation.operationName,
         query: printQuery(operation.query),
@@ -47,16 +47,24 @@ export const createIpcLink = async (ipcClient: IpcClient): Promise<ApolloLink> =
           default: {
             ipcClient.unsubscribe(subscriptionId, processMessage);
 
-            throw new Error(`Unknown result type, message: ${JSON.stringify(message)}`);
+            throw new Error(
+              `Unknown result type, message: ${JSON.stringify(message)}`,
+            );
           }
         }
       };
 
-      ipcClient.subscribe<GraphqlHandlerMessage>(subscriptionId, processMessage);
-      ipcClient.sendMessage<GraphqlHandlerPayload>(IpcHandler.GraphQL, { request, subscriptionId });
+      ipcClient.subscribe<GraphqlHandlerMessage>(
+        subscriptionId,
+        processMessage,
+      );
+      ipcClient.sendMessage<GraphqlHandlerPayload>(IpcHandler.GraphQL, {
+        request,
+        subscriptionId,
+      });
     };
 
-    return new Observable(observer => {
+    return new Observable((observer) => {
       handleRequest(observer);
     });
   });

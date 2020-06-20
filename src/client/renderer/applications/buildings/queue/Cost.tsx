@@ -2,10 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import clsx from 'clsx';
 import React from 'react';
 
-import {
-  Duration,
-  Resources,
-} from '../../../_graphql/graphqlHooks';
+import { Duration, Resources } from '../../../_graphql/graphqlHooks';
 import { formatTimeFromDuration } from '../../../utils/formatTime';
 import { imageLinks } from '../../../utils/imageLinks';
 import { createFormatter } from '../../../utils/numberFormatting';
@@ -59,16 +56,17 @@ const useStyles = makeStyles({
 });
 
 export const Cost: React.FC<Props> = (props) => {
-  const {
-    buildTime,
-    className,
-    resources,
-  } = props;
+  const { buildTime, className, resources } = props;
 
   const classes = useStyles({});
   const time = formatTimeFromDuration(buildTime);
 
-  const highestResource = Math.max(resources.wood, resources.clay, resources.iron, resources.crop);
+  const highestResource = Math.max(
+    resources.wood,
+    resources.clay,
+    resources.iron,
+    resources.crop,
+  );
   const formatResources = createFormatter(highestResource);
   const formatTotal = createFormatter();
   const formatFreeCrop = createFormatter();
@@ -92,7 +90,9 @@ export const Cost: React.FC<Props> = (props) => {
       <span className={classes.value}>{formatTotal(totalResources)}</span>
 
       <span className={clsx(classes.image, classes.freeCrop)} />
-      <span className={classes.value}>{formatFreeCrop(resources.freeCrop)}</span>
+      <span className={classes.value}>
+        {formatFreeCrop(resources.freeCrop)}
+      </span>
 
       <span className={clsx(classes.image, classes.buildTime)} />
       <span className={classes.value}>{time}</span>

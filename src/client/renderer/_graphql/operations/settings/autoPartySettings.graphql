@@ -1,29 +1,32 @@
 #import "./misc.graphql"
 
 fragment AutoPartySettings on AutoPartySettings {
-    allowSmall
-    allowLarge
-    coolDown {
-        ...CoolDown
-    }
-    minCulturePointsSmall
-    minCulturePointsLarge
+  allowSmall
+  allowLarge
+  coolDown {
+    ...CoolDown
+  }
+  minCulturePointsSmall
+  minCulturePointsLarge
 }
 
 query GetAutoPartySettings($villageId: ID!) {
-    autoPartySettings(villageId: $villageId) {
-        ...AutoPartySettings
-    }
+  autoPartySettings(villageId: $villageId) {
+    ...AutoPartySettings
+  }
 }
 
-mutation UpdateAutoPartySettings($villageId: ID!, $settings: UpdateAutoPartySettingsInput!) {
-    updateAutoPartySettings(villageId: $villageId, settings: $settings) {
-        ...AutoPartySettings
-    }
+mutation UpdateAutoPartySettings(
+  $villageId: ID!
+  $settings: UpdateAutoPartySettingsInput!
+) {
+  updateAutoPartySettings(villageId: $villageId, settings: $settings) {
+    ...AutoPartySettings
+  }
 }
 
 mutation ResetAutoPartySettings($villageId: ID!) {
-    resetAutoPartySettings(villageId: $villageId) {
-        ...AutoPartySettings
-    }
+  resetAutoPartySettings(villageId: $villageId) {
+    ...AutoPartySettings
+  }
 }

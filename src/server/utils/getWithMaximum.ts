@@ -1,8 +1,11 @@
-const getWithMaximumInternal = <T>(values: readonly T[], getMaximum: (value: T) => number): T => {
-  let foundMaximum: T = values[0];
+const getWithMaximumInternal = <T>(
+  values: readonly T[],
+  getMaximum: (value: T) => number,
+): T => {
+  let [foundMaximum] = values;
   let maximum = getMaximum(foundMaximum);
 
-  values.forEach(value => {
+  values.forEach((value) => {
     const currentMaximum = getMaximum(value);
 
     if (currentMaximum <= maximum) {
@@ -16,7 +19,10 @@ const getWithMaximumInternal = <T>(values: readonly T[], getMaximum: (value: T) 
   return foundMaximum;
 };
 
-export const getWithMaximumSafe = <T>(values: readonly T[], getMaximum: (value: T) => number): T => {
+export const getWithMaximumSafe = <T>(
+  values: readonly T[],
+  getMaximum: (value: T) => number,
+): T => {
   if (!values.length) {
     throw new Error('Empty collection provided');
   }
@@ -25,9 +31,12 @@ export const getWithMaximumSafe = <T>(values: readonly T[], getMaximum: (value: 
 };
 
 export const getMaximumSafe = (values: readonly number[]): number =>
-  getWithMaximumSafe(values, value => value);
+  getWithMaximumSafe(values, (value) => value);
 
-export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) => number): T | undefined => {
+export const getWithMaximum = <T>(
+  values: readonly T[],
+  getMaximum: (value: T) => number,
+): T | undefined => {
   if (!values.length) {
     return;
   }
@@ -36,13 +45,16 @@ export const getWithMaximum = <T>(values: readonly T[], getMaximum: (value: T) =
 };
 
 export const getMaximum = (values: readonly number[]): number | undefined =>
-  getWithMaximum(values, value => value);
+  getWithMaximum(values, (value) => value);
 
-const getWithMinimumInternal = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {
-  let foundMinimum: T = values[0];
+const getWithMinimumInternal = <T>(
+  values: readonly T[],
+  getMinimum: (value: T) => number,
+): T => {
+  let [foundMinimum] = values;
   let minimum = getMinimum(foundMinimum);
 
-  values.forEach(value => {
+  values.forEach((value) => {
     const currentMinimum = getMinimum(value);
 
     if (currentMinimum >= minimum) {
@@ -56,7 +68,10 @@ const getWithMinimumInternal = <T>(values: readonly T[], getMinimum: (value: T) 
   return foundMinimum;
 };
 
-export const getWithMinimum = <T>(values: readonly T[], getMinimum: (value: T) => number): T | null => {
+export const getWithMinimum = <T>(
+  values: readonly T[],
+  getMinimum: (value: T) => number,
+): T | null => {
   if (!values.length) {
     return null;
   }
@@ -64,7 +79,10 @@ export const getWithMinimum = <T>(values: readonly T[], getMinimum: (value: T) =
   return getWithMinimumInternal(values, getMinimum);
 };
 
-export const getWithMinimumSafe = <T>(values: readonly T[], getMinimum: (value: T) => number): T => {
+export const getWithMinimumSafe = <T>(
+  values: readonly T[],
+  getMinimum: (value: T) => number,
+): T => {
   if (!values.length) {
     throw new Error('Empty collection provided');
   }

@@ -1,52 +1,55 @@
 type AutoStorageOptionSettings {
-    allow: Boolean!
-    overflowLevel: Int!
+  allow: Boolean!
+  overflowLevel: Int!
 }
 
 input UpdateAutoStorageOptionSettingsInput {
-    allow: Boolean!
-    overflowLevel: Int!
+  allow: Boolean!
+  overflowLevel: Int!
 }
 
 type AutoStorageSettings {
-    allowFreeSpots: Boolean!
-    granary: AutoStorageOptionSettings!
-    warehouse: AutoStorageOptionSettings!
+  allowFreeSpots: Boolean!
+  granary: AutoStorageOptionSettings!
+  warehouse: AutoStorageOptionSettings!
 }
 
 input UpdateAutoStorageSettingsInput {
-    allowFreeSpots: Boolean!
-    granary: UpdateAutoStorageOptionSettingsInput!
-    warehouse: UpdateAutoStorageOptionSettingsInput!
+  allowFreeSpots: Boolean!
+  granary: UpdateAutoStorageOptionSettingsInput!
+  warehouse: UpdateAutoStorageOptionSettingsInput!
 }
 
 type AutoBuildSettings {
-    allow: Boolean!
-    allowDualQueue: Boolean!
-    coolDown: CoolDown!
-    autoCropFields: Boolean!
-    minCrop: Int!
-    useHeroResources: Boolean!
+  allow: Boolean!
+  allowDualQueue: Boolean!
+  coolDown: CoolDown!
+  autoCropFields: Boolean!
+  minCrop: Int!
+  useHeroResources: Boolean!
 
-    autoStorage: AutoStorageSettings!
+  autoStorage: AutoStorageSettings!
 }
 
 input UpdateAutoBuildSettingsInput {
-    allow: Boolean!
-    allowDualQueue: Boolean!
-    coolDown: CoolDownInput!
-    autoCropFields: Boolean!
-    minCrop: Int!
-    useHeroResources: Boolean!
+  allow: Boolean!
+  allowDualQueue: Boolean!
+  coolDown: CoolDownInput!
+  autoCropFields: Boolean!
+  minCrop: Int!
+  useHeroResources: Boolean!
 
-    autoStorage: UpdateAutoStorageSettingsInput!
+  autoStorage: UpdateAutoStorageSettingsInput!
 }
 
 extend type Query {
-    autoBuildSettings(villageId: ID!): AutoBuildSettings!
+  autoBuildSettings(villageId: ID!): AutoBuildSettings!
 }
 
 extend type Mutation {
-    updateAutoBuildSettings(villageId: ID!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
-    resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
+  updateAutoBuildSettings(
+    villageId: ID!
+    settings: UpdateAutoBuildSettingsInput!
+  ): AutoBuildSettings!
+  resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
 }

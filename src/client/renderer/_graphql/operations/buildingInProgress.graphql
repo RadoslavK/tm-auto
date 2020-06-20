@@ -1,23 +1,22 @@
 #import "./misc.graphql"
 
 fragment BuildingInProgress on BuildingInProgress {
-    level
-    finishedAt {
-        ...Timestamp
-    }
-    type
-    fieldId
+  level
+  finishedAt {
+    ...Timestamp
+  }
+  type
+  fieldId
 }
 
 query GetBuildingsInProgress($villageId: ID!) {
-    buildingsInProgress(villageId: $villageId) {
-        ...BuildingInProgress
-    }
+  buildingsInProgress(villageId: $villageId) {
+    ...BuildingInProgress
+  }
 }
 
 subscription OnBuildingsInProgressUpdated($villageId: ID!) {
-    buildingsInProgressUpdated(villageId: $villageId) {
-        ...BuildingInProgress
-    }
+  buildingsInProgressUpdated(villageId: $villageId) {
+    ...BuildingInProgress
+  }
 }
-

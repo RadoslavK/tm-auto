@@ -15,15 +15,15 @@ type Props = {
 };
 
 const getInitialTimer = (finishedAt: Timestamp): number => {
-  const timer = Math.floor(finishedAt.totalSeconds - new Date().valueOf() / 1000);
+  const timer = Math.floor(
+    finishedAt.totalSeconds - new Date().valueOf() / 1000,
+  );
 
-  return timer > 0
-    ? timer
-    : 0;
+  return timer > 0 ? timer : 0;
 };
 
 const useStyles = makeStyles<unknown, Props>({
-  image: props => ({
+  image: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -48,9 +48,7 @@ const useStyles = makeStyles<unknown, Props>({
 });
 
 export const BuildingInProgress: React.FC<Props> = (props) => {
-  const {
-    building,
-  } = props;
+  const { building } = props;
 
   const classes = useStyles(props);
   const timer = useCountDown(getInitialTimer(building.finishedAt));
@@ -61,9 +59,7 @@ export const BuildingInProgress: React.FC<Props> = (props) => {
     <div className={classes.root}>
       <div className={classes.imageWithFieldId}>
         <div className={classes.image} />
-        <div>
-          [{building.fieldId}]
-        </div>
+        <div>[{building.fieldId}]</div>
       </div>
       <div className={classes.info}>
         <div>{buildingInfo?.name}</div>

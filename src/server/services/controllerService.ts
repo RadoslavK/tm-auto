@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import { TimeoutError } from 'puppeteer-core/lib/Errors';
 
 import { TravianPath } from '../_enums/travianPath';
@@ -11,10 +12,7 @@ import {
   resetAccountContext,
   setAccountContext,
 } from '../accountContext';
-import {
-  getPage,
-  killBrowser,
-} from '../browser/getPage';
+import { getPage, killBrowser } from '../browser/getPage';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings';
 import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
@@ -49,7 +47,9 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     const hasMaintenance = content.toLowerCase().includes('maintenance');
 
     if (hasMaintenance) {
-      getAccountContext().logsService.logText('There is a maintenance on the server, waiting 30-40 minutes...');
+      getAccountContext().logsService.logText(
+        'There is a maintenance on the server, waiting 30-40 minutes...',
+      );
 
       // Reset the page so it can be reloaded again after timeout
       await page.goto('about:blank');
@@ -64,7 +64,9 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     }
   } catch (tryMaintenanceError) {
     console.error(tryMaintenanceError.stack);
-    getAccountContext().logsService.logError('Tried to wait for maintenance but failed with message...');
+    getAccountContext().logsService.logError(
+      'Tried to wait for maintenance but failed with message...',
+    );
     getAccountContext().logsService.logError(tryMaintenanceError.message);
   }
 
@@ -72,10 +74,14 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
   try {
     const page = await getPage();
 
-    const continueButton = await page.$(`[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`);
+    const continueButton = await page.$(
+      `[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`,
+    );
 
     if (continueButton) {
-      getAccountContext().logsService.logText('Found a dialog about server progress, continuing...');
+      getAccountContext().logsService.logText(
+        'Found a dialog about server progress, continuing...',
+      );
 
       await Promise.all([
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
@@ -86,12 +92,16 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
     }
   } catch (tryContinueError) {
     console.error(tryContinueError.stack);
-    getAccountContext().logsService.logError('Tried to continue the server progress dialog but failed with message...');
+    getAccountContext().logsService.logError(
+      'Tried to continue the server progress dialog but failed with message...',
+    );
     getAccountContext().logsService.logError(tryContinueError.message);
   }
 
   const now = new Date();
-  const format = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+  const format = `${now.getDate()}-${
+    now.getMonth() + 1
+  }-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
   const dir = getGeneralSettingsService().get().dataPath;
   const directory = path.join(dir, '.screenshots');
 
@@ -103,15 +113,36 @@ const handleError = async (error: Error): Promise<HandleErrorResult> => {
       fs.mkdirSync(directory);
     }
 
-    await fs.promises.writeFile(path.join(directory, `${format}.txt`), error.stack ?? '', { flag: 'w' });
-    await fs.promises.writeFile(path.join(directory, `${format}.html`), await page.content(), { flag: 'w' });
+    await fs.promises.writeFile(
+      path.join(directory, `${format}.txt`),
+      error.stack ?? '',
+      {
+        flag: 'w',
+      },
+    );
+    await fs.promises.writeFile(
+      path.join(directory, `${format}.html`),
+      await page.content(),
+      {
+        flag: 'w',
+      },
+    );
 
-    await page.screenshot({ fullPage: true, path: path.join(directory, `${format}.png`) });
+    await page.screenshot({
+      fullPage: true,
+      path: path.join(directory, `${format}.png`),
+    });
   } catch (screenshotError) {
     console.error(screenshotError.stack);
     getAccountContext().logsService.logError(screenshotError.message);
 
-    await fs.promises.writeFile(path.join(directory, `${format}-screenshot-error.txt`), screenshotError.stack ?? '', { flag: 'w' });
+    await fs.promises.writeFile(
+      path.join(directory, `${format}-screenshot-error.txt`),
+      screenshotError.stack ?? '',
+      {
+        flag: 'w',
+      },
+    );
   }
 
   await killBrowser();
@@ -143,7 +174,9 @@ class ControllerService {
   private setActivity = async (activity: boolean): Promise<void> => {
     this._isActive = activity;
 
-    await publishPayloadEvent(BotEvent.BotActivityChanged, { isActive: activity });
+    await publishPayloadEvent(BotEvent.BotActivityChanged, {
+      isActive: activity,
+    });
   };
 
   public signIn = async (accountId: string): Promise<void> => {
@@ -168,7 +201,9 @@ class ControllerService {
       const allVillages = getAccountContext().villageService.allVillages();
 
       for (const village of shuffle(allVillages)) {
-        const buildingQueueService = getAccountContext().buildingQueueService.for(village.id);
+        const buildingQueueService = getAccountContext().buildingQueueService.for(
+          village.id,
+        );
         await buildingQueueService.loadQueue();
         await ensureVillageSelected(village.id);
 
@@ -237,8 +272,7 @@ class ControllerService {
       await this._taskManager.execute();
     } catch (error) {
       const result = await handleError(error);
-      allowContinue = result.allowContinue;
-      coolDown = result.coolDown;
+      ({ allowContinue, coolDown } = result);
     }
 
     if (!allowContinue) {
@@ -248,7 +282,9 @@ class ControllerService {
       return;
     }
 
-    const tasksCoolDown = coolDown || getAccountContext().settingsService.account.get().tasksCoolDown;
+    const tasksCoolDown =
+      coolDown ||
+      getAccountContext().settingsService.account.get().tasksCoolDown;
     const nextTimeout = tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();
@@ -279,12 +315,4 @@ class ControllerService {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-class ControllerServiceMock extends ControllerService {
-  public state = (): BotState => BotState.Paused;
-}
-
 export const controllerService = new ControllerService();
-// export const controllerService = new ControllerServiceMock();

@@ -1,18 +1,20 @@
 type AutoMentorSettings {
-    acceptTaskRewards: Boolean!
-    acceptDailyRewards: Boolean!
+  acceptTaskRewards: Boolean!
+  acceptDailyRewards: Boolean!
 }
 
 input UpdateAutoMentorSettingsInput {
-    acceptTaskRewards: Boolean!
-    acceptDailyRewards: Boolean!
+  acceptTaskRewards: Boolean!
+  acceptDailyRewards: Boolean!
 }
 
 extend type Query {
-    autoMentorSettings: AutoMentorSettings!
+  autoMentorSettings: AutoMentorSettings!
 }
 
 extend type Mutation {
-    updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
-    resetAutoMentorSettings: AutoMentorSettings!
+  updateAutoMentorSettings(
+    settings: UpdateAutoMentorSettingsInput!
+  ): AutoMentorSettings!
+  resetAutoMentorSettings: AutoMentorSettings!
 }

@@ -1,31 +1,31 @@
 query GetBotState {
-    botState
+  botState
 }
 
 query IsBotActive {
-    isBotActive
+  isBotActive
 }
 
 mutation StartBot {
-    startBot
+  startBot
 }
 
 mutation StopBot {
-    stopBot
+  stopBot
 }
 
 mutation SignIn($accountId: ID!) {
-    signIn(accountId: $accountId)
+  signIn(accountId: $accountId)
 }
 
 mutation SignOut {
-    signOut
+  signOut
 }
 
 subscription OnBotRunningChanged {
-    botStateChanged
+  botStateChanged
 }
 
 subscription OnBotActivityChanged {
-    botActivityChanged
+  botActivityChanged
 }

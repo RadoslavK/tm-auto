@@ -1,10 +1,8 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { getAllEnumValues } from '../../../../../_shared/enumUtils';
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AdventureCriteria,
   CoolDown as CoolDownModel,
@@ -21,12 +19,13 @@ import {
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
-import { getAllEnumValues } from '../../../../../_shared/enumUtils';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useVillages } from '../../../hooks/villages/useVillages';
 
 const useAutoAdventureSettings = () => {
-  const { data: queryData, loading: queryLoading } = useGetAutoAdventureSettingsQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetAutoAdventureSettingsQuery();
 
   const [updateSettings] = useUpdateAutoAdventureSettingsMutation({
     update: (cache, { data }) => {
@@ -34,7 +33,10 @@ const useAutoAdventureSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoAdventureSettingsQuery,
+        GetAutoAdventureSettingsQueryVariables
+      >({
         cache,
         query: GetAutoAdventureSettingsDocument,
         data: { autoAdventureSettings: data.updateAutoAdventureSettings },
@@ -48,7 +50,10 @@ const useAutoAdventureSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoAdventureSettingsQuery,
+        GetAutoAdventureSettingsQueryVariables
+      >({
         cache,
         query: GetAutoAdventureSettingsDocument,
         data: { autoAdventureSettings: data.resetAutoAdventureSettings },
@@ -57,9 +62,8 @@ const useAutoAdventureSettings = () => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.autoAdventureSettings,
+    settings:
+      queryLoading || !queryData ? null : queryData.autoAdventureSettings,
     updateSettings,
     resetSettings,
   };
@@ -90,80 +94,96 @@ export const AutoAdventureSettings: React.FC = () => {
 
   const villages = useVillages();
 
-  const onMaxTravelTimeChange = useCallback((newMaxTravelTime: DurationModel) => {
-    setState(prevState => prevState && ({ ...prevState, maxTravelTime: newMaxTravelTime }));
-    setHasChanges(true);
-  }, []);
+  const onMaxTravelTimeChange = useCallback(
+    (newMaxTravelTime: DurationModel) => {
+      setState(
+        (prevState) =>
+          prevState && { ...prevState, maxTravelTime: newMaxTravelTime },
+      );
+      setHasChanges(true);
+    },
+    [],
+  );
 
-  const onCooldownChange = useCallback((updatedCooldown: CoolDownModel): void => {
-    setState(prevState => prevState && ({
-      ...prevState,
-      coolDown: updatedCooldown,
-    }));
-    setHasChanges(true);
-  }, []);
+  const onCooldownChange = useCallback(
+    (updatedCooldown: CoolDownModel): void => {
+      setState(
+        (prevState) =>
+          prevState && {
+            ...prevState,
+            coolDown: updatedCooldown,
+          },
+      );
+      setHasChanges(true);
+    },
+    [],
+  );
 
   if (!state) {
     return null;
   }
 
   const onReset = () => {
-    resetSettings({ variables: { } });
+    resetSettings({ variables: {} });
   };
 
   const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
+    const { name, value } = e.currentTarget;
 
     if (+value < 0) {
       return;
     }
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: +value,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: +value,
+        },
+    );
     setHasChanges(true);
   };
 
-  const onAdventureCriteriaChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
+  const onAdventureCriteriaChange = (
+    e: React.FocusEvent<HTMLInputElement>,
+  ): void => {
+    const { name, value } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: value,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: value,
+        },
+    );
     setHasChanges(true);
   };
 
-  const onNumberOptionChange = (e: React.FocusEvent<HTMLSelectElement>): void => {
-    const {
-      name,
-      value,
-    } = e.currentTarget;
+  const onNumberOptionChange = (
+    e: React.FocusEvent<HTMLSelectElement>,
+  ): void => {
+    const { name, value } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: +value,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: +value,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -178,10 +198,14 @@ export const AutoAdventureSettings: React.FC = () => {
     preferredVillageId,
   } = state;
 
-  const preferredVillageExists = villages.some(x => x.id === preferredVillageId);
+  const preferredVillageExists = villages.some(
+    (x) => x.id === preferredVillageId,
+  );
   const options = preferredVillageExists
-    ? villages.map(village => ({ id: village.id, name: village.name }))
-    : [{ id: preferredVillageId || 0, name: 'Select village' }].concat(villages);
+    ? villages.map((village) => ({ id: village.id, name: village.name }))
+    : [{ id: preferredVillageId || 0, name: 'Select village' }].concat(
+        villages,
+      );
 
   const criteriaOptions = getAllEnumValues(AdventureCriteria);
 
@@ -195,8 +219,7 @@ export const AutoAdventureSettings: React.FC = () => {
         color="primary"
         onClick={onReset}
         type="button"
-        variant="contained"
-      >
+        variant="contained">
         Reset to default
       </Button>
 
@@ -224,10 +247,7 @@ export const AutoAdventureSettings: React.FC = () => {
 
       <div>
         <label htmlFor="maxTravelTime">Max travel time</label>
-        <Duration
-          onChange={onMaxTravelTimeChange}
-          value={maxTravelTime}
-        />
+        <Duration onChange={onMaxTravelTimeChange} value={maxTravelTime} />
       </div>
 
       <div>
@@ -255,8 +275,8 @@ export const AutoAdventureSettings: React.FC = () => {
       <div>
         <label htmlFor="adventureCriteria">Adventure criteria</label>
         <div id="adventureCriteria">
-          {criteriaOptions.map((option, index) => (
-            <React.Fragment key={index}>
+          {criteriaOptions.map((option) => (
+            <React.Fragment key={option}>
               <input
                 checked={option === adventureCriteria}
                 id={option}
@@ -274,10 +294,7 @@ export const AutoAdventureSettings: React.FC = () => {
       <div>
         <h3>Cooldown</h3>
         <label htmlFor="maxTravelTime">Cooldown</label>
-        <CoolDown
-          onChange={onCooldownChange}
-          value={coolDown}
-        />
+        <CoolDown onChange={onCooldownChange} value={coolDown} />
       </div>
 
       <div>
@@ -287,16 +304,11 @@ export const AutoAdventureSettings: React.FC = () => {
           name="preferredVillageId"
           onChange={onNumberOptionChange}
           placeholder="Select village"
-          value={preferredVillageId || undefined}
-        >
-          {options.map((option, index) => {
-            const villageExists = villages.some(x => x.id === option.id);
+          value={preferredVillageId || undefined}>
+          {options.map((option) => {
+            const villageExists = villages.some((x) => x.id === option.id);
             return (
-              <option
-                key={index}
-                hidden={!villageExists}
-                value={option.id}
-              >
+              <option key={option.id} hidden={!villageExists} value={option.id}>
                 {option.name}
               </option>
             );

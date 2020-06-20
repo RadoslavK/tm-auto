@@ -15,12 +15,7 @@ export const SignOut: React.FC = React.forwardRef<any, any>((_pros, ref) => {
   };
 
   return (
-    <Button
-      ref={ref}
-      color="secondary"
-      onClick={onSignOut}
-      variant="contained"
-    >
+    <Button ref={ref} color="secondary" onClick={onSignOut} variant="contained">
       Sign out
     </Button>
   );

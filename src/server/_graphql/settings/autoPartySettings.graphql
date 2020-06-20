@@ -1,26 +1,29 @@
 type AutoPartySettings {
-    coolDown: CoolDown!
-    allowSmall: Boolean!
-    allowLarge: Boolean!
+  coolDown: CoolDown!
+  allowSmall: Boolean!
+  allowLarge: Boolean!
 
-    minCulturePointsSmall: Int!
-    minCulturePointsLarge: Int!
+  minCulturePointsSmall: Int!
+  minCulturePointsLarge: Int!
 }
 
 input UpdateAutoPartySettingsInput {
-    allowSmall: Boolean!
-    allowLarge: Boolean!
-    coolDown: CoolDownInput!
+  allowSmall: Boolean!
+  allowLarge: Boolean!
+  coolDown: CoolDownInput!
 
-    minCulturePointsSmall: Int!
-    minCulturePointsLarge: Int!
+  minCulturePointsSmall: Int!
+  minCulturePointsLarge: Int!
 }
 
 extend type Query {
-    autoPartySettings(villageId: ID!): AutoPartySettings!
+  autoPartySettings(villageId: ID!): AutoPartySettings!
 }
 
 extend type Mutation {
-    updateAutoPartySettings(villageId: ID!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
-    resetAutoPartySettings(villageId: ID!): AutoPartySettings!
+  updateAutoPartySettings(
+    villageId: ID!
+    settings: UpdateAutoPartySettingsInput!
+  ): AutoPartySettings!
+  resetAutoPartySettings(villageId: ID!): AutoPartySettings!
 }

@@ -12,9 +12,7 @@ export class BuildingSpotLevel {
     mergeDefaults(this, params);
   }
 
-  public getActualAndOngoing = (): number =>
-    this.ongoing || this.actual;
+  public getActualAndOngoing = (): number => this.ongoing || this.actual;
 
-  public getTotal = (): number =>
-    this.queued || this.ongoing || this.actual;
+  public getTotal = (): number => this.queued || this.ongoing || this.actual;
 }

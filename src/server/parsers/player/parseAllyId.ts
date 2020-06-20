@@ -15,7 +15,9 @@ export const parseAllyId = async (): Promise<number | null> => {
     return null;
   }
 
-  const allyLink = await allyLinkElement.evaluate(x => x.getAttribute('href'));
+  const allyLink = await allyLinkElement.evaluate((x) =>
+    x.getAttribute('href'),
+  );
 
   if (!allyLink) {
     throw new Error('Failed to parse alliance id');

@@ -11,13 +11,8 @@ export const GeneralSettings: React.FunctionComponent = () => {
 
   return (
     <div>
-      <button onClick={showForm}>
-        General settings
-      </button>
-      <Dialog
-        onClose={closeForm}
-        open={isFormShown}
-      >
+      <button onClick={showForm}>General settings</button>
+      <Dialog onClose={closeForm} open={isFormShown}>
         <GeneralSettingsForm />
       </Dialog>
     </div>

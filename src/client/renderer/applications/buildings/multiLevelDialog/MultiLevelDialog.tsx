@@ -8,9 +8,13 @@ type Props = {
   readonly minLevel: number;
 };
 
-export const MultiLevelDialog: React.FC<Props> = ({ maxLevel, minLevel, onSelect }) => (
+export const MultiLevelDialog: React.FC<Props> = ({
+  maxLevel,
+  minLevel,
+  onSelect,
+}) => (
   <div>
-    {[...new Array(maxLevel - minLevel + 1).keys()].map(i => {
+    {[...new Array(maxLevel - minLevel + 1).keys()].map((i) => {
       const level = i + minLevel;
 
       return (

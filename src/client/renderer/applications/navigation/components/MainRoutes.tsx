@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NexTasksExecution';
 import { BotActivity } from '../../BotActivity';
@@ -20,11 +16,7 @@ export const MainRoutes: React.FC = () => (
         render={() => <Redirect to={navigationApps[0].path} />}
       />
       {navigationApps.map((app) => (
-        <Route
-          key={app.path}
-          component={app.component}
-          path={app.path}
-        />
+        <Route key={app.path} component={app.component} path={app.path} />
       ))}
       <Redirect to={navigationApps[0].path} />
     </Switch>

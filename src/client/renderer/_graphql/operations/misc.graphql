@@ -1,53 +1,53 @@
 fragment Timestamp on Timestamp {
-    totalSeconds
+  totalSeconds
 }
 
 fragment Resources on Resources {
-    wood
-    clay
-    iron
-    crop
-    freeCrop
-    total
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 
 fragment Coords on Coords {
-    x
-    y
+  x
+  y
 }
 
 fragment Village on Village {
-    coords {
-        ...Coords
+  coords {
+    ...Coords
+  }
+  id
+  name
+  resources {
+    amount {
+      ...Resources
     }
-    id
-    name
-    resources {
-        amount {
-            ...Resources
-        }
-        production {
-            ...Resources
-        }
-        capacity {
-            granary
-            warehouse
-        }
+    production {
+      ...Resources
     }
+    capacity {
+      granary
+      warehouse
+    }
+  }
 }
 
 fragment Duration on Duration {
-    days
-    hours
-    minutes
-    seconds
+  days
+  hours
+  minutes
+  seconds
 }
 
 fragment CoolDown on CoolDown {
-    min {
-        ...Duration
-    }
-    max {
-        ...Duration
-    }
+  min {
+    ...Duration
+  }
+  max {
+    ...Duration
+  }
 }

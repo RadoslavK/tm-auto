@@ -16,19 +16,28 @@ type Props = {
 const useBuildingsInProgress = () => {
   const villageId = useSelectedVillageId();
 
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetBuildingsInProgressQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useGetBuildingsInProgressQuery({
+    variables: { villageId },
+  });
 
   useEffect(() => {
-    subscribeToMore<OnBuildingsInProgressUpdatedSubscription, OnBuildingsInProgressUpdatedSubscriptionVariables>({
+    subscribeToMore<
+      OnBuildingsInProgressUpdatedSubscription,
+      OnBuildingsInProgressUpdatedSubscriptionVariables
+    >({
       document: OnBuildingsInProgressUpdatedDocument,
       variables: { villageId },
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ buildingsInProgress: data.buildingsInProgressUpdated }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        buildingsInProgress: data.buildingsInProgressUpdated,
+      }),
     });
   }, [subscribeToMore, villageId]);
 
-  return queryLoading || !queryData
-    ? []
-    : queryData.buildingsInProgress;
+  return queryLoading || !queryData ? [] : queryData.buildingsInProgress;
 };
 
 export const BuildingsInProgress: React.FC<Props> = ({ className }) => {

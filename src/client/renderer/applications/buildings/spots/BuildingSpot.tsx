@@ -33,9 +33,10 @@ const useStyles = makeStyles<unknown, Props>({
     background: '#b1b5b9',
     fontWeight: 'bold',
   },
-  root: props => ({
+  root: (props) => ({
     alignItems: 'flex-start',
-    justifyContent: props.building.type === BuildingType.None ? 'flex-end' : 'space-between',
+    justifyContent:
+      props.building.type === BuildingType.None ? 'flex-end' : 'space-between',
     backgroundImage: `url("${imageLinks.getBuilding(props.building.type)}")`,
     backgroundSize: 'contain',
     border: '1px solid black',
@@ -47,10 +48,7 @@ const useStyles = makeStyles<unknown, Props>({
 });
 
 export const BuildingSpot: React.FC<Props> = React.memo((props) => {
-  const {
-    building,
-    className,
-  } = props;
+  const { building, className } = props;
 
   const classes = useStyles(props);
   const [dialog, setDialog] = useState(DialogType.None);
@@ -69,13 +67,15 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     return null;
   }
 
-  const {
-    maxLevel,
-    name,
-  } = buildingInfo;
+  const { maxLevel, name } = buildingInfo;
 
-  const onEnqueue = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    if (building.type !== BuildingType.None && building.level.total >= maxLevel) {
+  const onEnqueue = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ): void => {
+    if (
+      building.type !== BuildingType.None &&
+      building.level.total >= maxLevel
+    ) {
       return;
     }
 
@@ -90,7 +90,9 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
     }
   };
 
-  const onDequeue = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+  const onDequeue = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ): void => {
     if (!building.level.queued) {
       return;
     }
@@ -99,7 +101,9 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
       setDialog(DialogType.MultiDequeue);
     } else {
       dequeueAtField({
-        targetLevel: event.shiftKey ? building.level.ongoing || building.level.actual : undefined,
+        targetLevel: event.shiftKey
+          ? building.level.ongoing || building.level.actual
+          : undefined,
         fieldId: building.fieldId,
       });
     }
@@ -125,41 +129,23 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
         className={clsx(className, classes.root)}
         onClick={onEnqueue}
         onContextMenu={onDequeue}
-        title={name}
-      >
+        title={name}>
         {building.type !== BuildingType.None && (
-          <BuildingLevelBox
-            level={building.level}
-            maxLevel={maxLevel}
-          />
+          <BuildingLevelBox level={building.level} maxLevel={maxLevel} />
         )}
-        <div className={classes.fieldId}>
-          [{building.fieldId}]
-        </div>
+        <div className={classes.fieldId}>[{building.fieldId}]</div>
       </div>
-      <Dialog
-        onClose={closeDialog}
-        open={dialog === DialogType.NewBuilding}
-      >
-        <NewBuildingDialog
-          fieldId={building.fieldId}
-          onSelect={closeDialog}
-        />
+      <Dialog onClose={closeDialog} open={dialog === DialogType.NewBuilding}>
+        <NewBuildingDialog fieldId={building.fieldId} onSelect={closeDialog} />
       </Dialog>
-      <Dialog
-        onClose={closeDialog}
-        open={dialog === DialogType.MultiEnqueue}
-      >
+      <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>
         <MultiLevelDialog
           maxLevel={maxLevel}
           minLevel={building.level.total + 1}
           onSelect={onMultiLevelEnqueue}
         />
       </Dialog>
-      <Dialog
-        onClose={closeDialog}
-        open={dialog === DialogType.MultiDequeue}
-      >
+      <Dialog onClose={closeDialog} open={dialog === DialogType.MultiDequeue}>
         {building.level.queued && (
           <MultiLevelDialog
             maxLevel={building.level.queued - 1}

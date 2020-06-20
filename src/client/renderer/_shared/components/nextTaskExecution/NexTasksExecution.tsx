@@ -29,20 +29,11 @@ export const NextTasksExecution: React.FC = () => {
   return (
     <div>
       <div>
-        Next bot tasks check in:
-        {' '}
-        {formatTimeFromSeconds(timer)}
-        <button onClick={showForm}>
-          Change
-        </button>
-        <button onClick={resetNextTasksExecution}>
-          Reset
-        </button>
+        Next bot tasks check in: {formatTimeFromSeconds(timer)}
+        <button onClick={showForm}>Change</button>
+        <button onClick={resetNextTasksExecution}>Reset</button>
       </div>
-      <Dialog
-        onClose={closeForm}
-        open={isFormShown}
-      >
+      <Dialog onClose={closeForm} open={isFormShown}>
         <NextExecutionForm onSubmit={submitForm} />
       </Dialog>
     </div>

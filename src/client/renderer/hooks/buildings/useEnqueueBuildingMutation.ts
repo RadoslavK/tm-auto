@@ -8,12 +8,14 @@ import {
 import { useSelectedVillageId } from '../villages/useSelectedVillageId';
 
 type Params = {
-  readonly buildingType: BuildingType
+  readonly buildingType: BuildingType;
   readonly fieldId: number;
   readonly targetLevel?: number;
 };
 
-type ReturnType = (targetLevel?: number) => Promise<FetchResult<EnqueueBuildingMutation>>;
+type ReturnType = (
+  targetLevel?: number,
+) => Promise<FetchResult<EnqueueBuildingMutation>>;
 
 export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
   const villageId = useSelectedVillageId();
@@ -31,12 +33,14 @@ export const useEnqueueBuildingMutation = (params: Params): ReturnType => {
 
   const [mutate] = _useEnqueueBuildingMutation(createOptions(params));
 
-  return (targetLevel?: number): Promise<FetchResult<EnqueueBuildingMutation>> => {
+  return (
+    targetLevel?: number,
+  ): Promise<FetchResult<EnqueueBuildingMutation>> => {
     const options = targetLevel
       ? createOptions({
-        ...params,
-        targetLevel,
-      })
+          ...params,
+          targetLevel,
+        })
       : undefined;
 
     return mutate(options);

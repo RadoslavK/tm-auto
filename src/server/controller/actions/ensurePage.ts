@@ -1,17 +1,14 @@
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle } from 'puppeteer-core';
 
-import {
-  getBuildingSpotPath,
-  TravianPath,
-} from '../../_enums/travianPath';
+import { TravianPath, getBuildingSpotPath } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
-import {
-  isInfrastructure,
-  isResourceField,
-} from '../../utils/buildingUtils';
+import { isInfrastructure, isResourceField } from '../../utils/buildingUtils';
 import { validateUrl } from '../../utils/validateUrl';
 
-const navigateByLink = async (path: string, exact: boolean): Promise<boolean> => {
+const navigateByLink = async (
+  path: string,
+  exact: boolean,
+): Promise<boolean> => {
   const page = await getPage();
   const selectors = exact
     ? [`[href="${path}"]`, `[href^="${path}?"]`]
@@ -33,7 +30,7 @@ const navigateByLink = async (path: string, exact: boolean): Promise<boolean> =>
 
   try {
     await Promise.all([
-      page.evaluate(el => el.click(), link),
+      page.evaluate((el) => el.click(), link),
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
   } catch {
@@ -43,7 +40,10 @@ const navigateByLink = async (path: string, exact: boolean): Promise<boolean> =>
   return true;
 };
 
-const navigateByOnClick = async (path: string, exact: boolean): Promise<boolean> => {
+const navigateByOnClick = async (
+  path: string,
+  exact: boolean,
+): Promise<boolean> => {
   const page = await getPage();
   const selector = exact
     ? `[onclick="window.location.href='${path}'"]`
@@ -56,7 +56,7 @@ const navigateByOnClick = async (path: string, exact: boolean): Promise<boolean>
 
   try {
     await Promise.all([
-      link.evaluate(node => node.dispatchEvent(new Event('click'))),
+      link.evaluate((node) => node.dispatchEvent(new Event('click'))),
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
   } catch {
@@ -66,7 +66,10 @@ const navigateByOnClick = async (path: string, exact: boolean): Promise<boolean>
   return true;
 };
 
-const navigateByJQuery = async (path: string, exact: boolean): Promise<boolean> => {
+const navigateByJQuery = async (
+  path: string,
+  exact: boolean,
+): Promise<boolean> => {
   const page = await getPage();
   const pageContent = await page.content();
 
@@ -79,7 +82,7 @@ const navigateByJQuery = async (path: string, exact: boolean): Promise<boolean> 
     return false;
   }
 
-  const redirectElementId = redirectElementIdMatch[1];
+  const [, redirectElementId] = redirectElementIdMatch;
 
   const redirectElement = await page.$(`#${redirectElementId}`);
 
@@ -112,15 +115,19 @@ const navigate = async (path: string, exact: boolean): Promise<void> => {
     return;
   }
 
-  throw new Error(`Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`);
+  throw new Error(
+    `Did not find url link nor onclick redirect nor redirect  element, requested page: ${path}`,
+  );
 };
 
-export const ensurePage = async (path: string, exact = false): Promise<void> => {
+export const ensurePage = async (
+  path: string,
+  exact = false,
+): Promise<void> => {
   const page = await getPage();
   const url = page.url();
 
-  const isAtUrl = (exact && url === path)
-    || (!exact && url.includes(path));
+  const isAtUrl = (exact && url === path) || (!exact && url.includes(path));
 
   if (isAtUrl) {
     return;
@@ -136,7 +143,10 @@ export type TabInformation = {
   readonly name: string;
 };
 
-export const ensureBuildingSpotPage = async (fieldId: number, tab?: TabInformation): Promise<void> => {
+export const ensureBuildingSpotPage = async (
+  fieldId: number,
+  tab?: TabInformation,
+): Promise<void> => {
   const page = await getPage();
   const spotPath = getBuildingSpotPath(fieldId);
 

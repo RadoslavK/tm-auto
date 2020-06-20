@@ -23,10 +23,14 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     this._village = village;
   }
 
-  private settings = (): AutoPartySettings => getAccountContext().settingsService.village(this._village.id).autoParty.get();
+  private settings = (): AutoPartySettings =>
+    getAccountContext()
+      .settingsService.village(this._village.id)
+      .autoParty.get();
 
-  public allowExecution = (): boolean => getAccountContext().settingsService.account.get().autoParty
-    && (this.settings().allowSmall || this.settings().allowLarge);
+  public allowExecution = (): boolean =>
+    getAccountContext().settingsService.account.get().autoParty &&
+    (this.settings().allowSmall || this.settings().allowLarge);
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
@@ -38,7 +42,9 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       minCulturePointsSmall,
     } = this.settings();
 
-    const townHall = this._village.buildings.spots.ofType(BuildingType.TownHall);
+    const townHall = this._village.buildings.spots.ofType(
+      BuildingType.TownHall,
+    );
 
     if (!townHall) {
       return;
@@ -47,12 +53,14 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     const villageRes = this._village.resources.amount;
     const smallPartyInfo = partyInfo.small;
     const largePartyInfo = partyInfo.large;
-    let canDoSmallParty = allowSmall
-      && townHall.level.actual >= smallPartyInfo.townHallLevel
-      && villageRes.areGreaterOrEqualThan(smallPartyInfo.cost);
-    let canDoLargeParty = allowLarge
-      && townHall.level.actual >= largePartyInfo.townHallLevel
-      && villageRes.areGreaterOrEqualThan(largePartyInfo.cost);
+    let canDoSmallParty =
+      allowSmall &&
+      townHall.level.actual >= smallPartyInfo.townHallLevel &&
+      villageRes.areGreaterOrEqualThan(smallPartyInfo.cost);
+    let canDoLargeParty =
+      allowLarge &&
+      townHall.level.actual >= largePartyInfo.townHallLevel &&
+      villageRes.areGreaterOrEqualThan(largePartyInfo.cost);
 
     if (!canDoSmallParty && !canDoLargeParty) {
       return;
@@ -71,15 +79,17 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       };
     }
 
-    const cps = await page.$$eval('.points', xx => xx.map(x => {
-      const cPoints = /(\d+)/.exec((x as HTMLElement).innerText);
+    const cps = await page.$$eval('.points', (xx) =>
+      xx.map((x) => {
+        const cPoints = /(\d+)/.exec((x as HTMLElement).innerText);
 
-      if (!cPoints) {
-        throw new Error('Did not parse culture points');
-      }
+        if (!cPoints) {
+          throw new Error('Did not parse culture points');
+        }
 
-      return +cPoints[1];
-    }));
+        return +cPoints[1];
+      }),
+    );
 
     if (canDoLargeParty && cps.length !== 2) {
       throw new Error('No information about large party culture points');
@@ -95,13 +105,20 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     const partyType = canDoLargeParty ? 'large' : 'small';
     const partyNumber = canDoLargeParty ? 2 : 1;
 
-    const holdPartyNode = await page.$(`.green[onclick*="${getBuildingSpotPath(townHall.fieldId)}&a=${partyNumber}"]`);
+    const holdPartyNode = await page.$(
+      `.green[onclick*="${getBuildingSpotPath(
+        townHall.fieldId,
+      )}&a=${partyNumber}"]`,
+    );
 
     if (!holdPartyNode) {
       throw new Error('Did not find hold party button');
     }
 
-    getAccountContext().logsService.logText(`Throwing ${partyType} parties`, true);
+    getAccountContext().logsService.logText(
+      `Throwing ${partyType} parties`,
+      true,
+    );
 
     await Promise.all([
       holdPartyNode.click(),

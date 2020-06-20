@@ -8,7 +8,10 @@ export const parseTribe = async (): Promise<Tribe> => {
 
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
-  const className = await page.$eval('#resourceFieldContainer', x => x.className);
+  const className = await page.$eval(
+    '#resourceFieldContainer',
+    (x) => x.className,
+  );
 
   const match = /tribe(\d+)/.exec(className);
 

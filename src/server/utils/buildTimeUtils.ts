@@ -1,7 +1,8 @@
 import { Duration } from '../_models/duration';
 import { BuildingType } from '../_models/enums/buildingType';
 
-const roundToNearest10 = (seconds: number): number => 10 * Math.round(seconds / 10);
+const roundToNearest10 = (seconds: number): number =>
+  10 * Math.round(seconds / 10);
 
 const getUnitsModifier = (buildingLevel: number): number => {
   switch (buildingLevel) {
@@ -50,7 +51,12 @@ const getUnitsModifier = (buildingLevel: number): number => {
   }
 };
 
-export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpeed: number, mainBuildingLevel: number, buildingType: BuildingType): Duration => {
+export const getActualBuildingBuildTime = (
+  originalBuildTime: Duration,
+  gameSpeed: number,
+  mainBuildingLevel: number,
+  buildingType: BuildingType,
+): Duration => {
   const isMainBuilding = buildingType === BuildingType.MainBuilding;
   let totalSeconds = originalBuildTime.getTotalSeconds();
 
@@ -66,9 +72,14 @@ export const getActualBuildingBuildTime = (originalBuildTime: Duration, gameSpee
   return Duration.fromSeconds(totalSeconds);
 };
 
-export const getActualUnitBuildTime = (originalBuildTime: Duration, gameSpeed: number, buildingLevel: number): Duration => {
+export const getActualUnitBuildTime = (
+  originalBuildTime: Duration,
+  gameSpeed: number,
+  buildingLevel: number,
+): Duration => {
   const modifier = getUnitsModifier(buildingLevel);
-  const buildTime = originalBuildTime.getTotalSeconds() / gameSpeed * modifier;
+  const buildTime =
+    (originalBuildTime.getTotalSeconds() / gameSpeed) * modifier;
   const actualBuildTimeInSeconds = Math.round(buildTime);
 
   return Duration.fromSeconds(actualBuildTimeInSeconds);

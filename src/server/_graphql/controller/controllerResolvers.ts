@@ -18,10 +18,10 @@ export default <Resolvers>{
 
   Subscription: {
     botActivityChanged: subscribeToEvent(BotEvent.BotActivityChanged, {
-      resolve: p => p.isActive,
+      resolve: (p) => p.isActive,
     }),
     botStateChanged: subscribeToEvent(BotEvent.BotRunningChanged, {
-      resolve: p => p.state,
+      resolve: (p) => p.state,
     }),
   },
 };

@@ -3,7 +3,7 @@ import { getAccountContext } from '../../accountContext';
 
 const getService = () => getAccountContext().settingsService.autoMentor;
 
-export default <Resolvers> {
+export default <Resolvers>{
   Query: {
     autoMentorSettings: () => getService().get(),
   },

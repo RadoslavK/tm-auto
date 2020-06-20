@@ -13,6 +13,7 @@ export default <Resolvers>{
   Mutation: {
     createAccount: (_, args) => accountService.createAccount(args.account),
     deleteAccount: (_, args) => accountService.deleteAccount(args.id),
-    updateAccount: (_, { account, id }) => accountService.updateAccount({ ...account, id }),
+    updateAccount: (_, { account, id }) =>
+      accountService.updateAccount({ ...account, id }),
   },
 };

@@ -1,9 +1,7 @@
 import { ApolloCache } from '@apollo/client';
-import {
-  useCallback,
-  useEffect,
-} from 'react';
+import { useCallback, useEffect } from 'react';
 
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import {
   DurationInput,
   NextVillageTaskExecutionDocument,
@@ -17,22 +15,41 @@ import {
   useResetNextVillageTaskExecutionMutation,
   useSetNextVillageTaskExecutionMutation,
 } from '../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../server/utils/graphql';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
-export const useNextVillageTaskExecution = (villageId: string, task: TaskType) => {
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useNextVillageTaskExecutionQuery({ variables: { task, villageId } });
+export const useNextVillageTaskExecution = (
+  villageId: string,
+  task: TaskType,
+) => {
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useNextVillageTaskExecutionQuery({
+    variables: { task, villageId },
+  });
 
   useEffect(() => {
-    subscribeToMore<OnNextVillageTaskExecutionChangedSubscription, OnNextVillageTaskExecutionChangedSubscriptionVariables>({
+    subscribeToMore<
+      OnNextVillageTaskExecutionChangedSubscription,
+      OnNextVillageTaskExecutionChangedSubscriptionVariables
+    >({
       document: OnNextVillageTaskExecutionChangedDocument,
       variables: { villageId, task },
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ nextVillageTaskExecution: data.nextVillageTaskExecutionChanged }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        nextVillageTaskExecution: data.nextVillageTaskExecutionChanged,
+      }),
     });
   }, [subscribeToMore, task, villageId]);
 
-  const updateCache = (cache: ApolloCache<unknown>, nextVillageTaskExecution: NextVillageTaskExecutionQuery['nextVillageTaskExecution']) => {
-    updateQueryCache<NextVillageTaskExecutionQuery, NextVillageTaskExecutionQueryVariables>({
+  const updateCache = (
+    cache: ApolloCache<unknown>,
+    nextVillageTaskExecution: NextVillageTaskExecutionQuery['nextVillageTaskExecution'],
+  ) => {
+    updateQueryCache<
+      NextVillageTaskExecutionQuery,
+      NextVillageTaskExecutionQueryVariables
+    >({
       cache,
       query: NextVillageTaskExecutionDocument,
       data: { nextVillageTaskExecution },
@@ -60,17 +77,21 @@ export const useNextVillageTaskExecution = (villageId: string, task: TaskType) =
     },
   });
 
-  const setNextVillageTaskExecution = useCallback((delay: DurationInput) => {
-    setMutation({ variables: { delay, task, villageId } });
-  }, [setMutation, task, villageId]);
+  const setNextVillageTaskExecution = useCallback(
+    (delay: DurationInput) => {
+      setMutation({ variables: { delay, task, villageId } });
+    },
+    [setMutation, task, villageId],
+  );
 
   const resetNextVillageTaskExecution = useCallback(() => {
     resetMutation({ variables: { task, villageId } });
   }, [resetMutation, task, villageId]);
 
-  const nextExecutionIn = queryLoading || !queryData
-    ? 0
-    : getSecondsUntilTimestamp(queryData.nextVillageTaskExecution);
+  const nextExecutionIn =
+    queryLoading || !queryData
+      ? 0
+      : getSecondsUntilTimestamp(queryData.nextVillageTaskExecution);
 
   return {
     nextExecutionIn,

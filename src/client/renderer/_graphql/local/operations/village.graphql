@@ -1,3 +1,3 @@
 query GetSelectedVillageId {
-    selectedVillageId @client
+  selectedVillageId @client
 }

@@ -2,10 +2,7 @@ import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
 import { BuildingType } from '../../../_models/enums/buildingType';
 import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
-import {
-  AdventureCriteria,
-  TaskType,
-} from '../../../_types/graphql.type';
+import { AdventureCriteria, TaskType } from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import {
@@ -21,14 +18,19 @@ import {
 export class AutoAdventureTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoAdventure;
 
-  private settings = (): AutoAdventureSettings => getAccountContext().settingsService.hero.autoAdventure.get();
+  private settings = (): AutoAdventureSettings =>
+    getAccountContext().settingsService.hero.autoAdventure.get();
 
   public allowExecution = (): boolean => {
     const settings = this.settings();
     const { hero } = getAccountContext();
 
     const { currentVillageId } = getAccountContext().villageService;
-    return settings.allow && settings.preferredVillageId === currentVillageId && settings.preferredVillageId === hero.villageId;
+    return (
+      settings.allow &&
+      settings.preferredVillageId === currentVillageId &&
+      settings.preferredVillageId === hero.villageId
+    );
   };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -40,8 +42,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
     const { spots } = village.buildings;
     const { hero } = getAccountContext();
 
-    if (!spots.isBuilt(BuildingType.RallyPoint)
-    || !hero.canGoToAdventure()) {
+    if (!spots.isBuilt(BuildingType.RallyPoint) || !hero.canGoToAdventure()) {
       return;
     }
 
@@ -61,43 +62,57 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
     const canDoHard = hero.health >= settings.hardMinHealth;
 
     const adventureNodes = await page.$$('tr[id]');
-    const adventures = (await Promise.all(adventureNodes.map(async (node) => {
-      const duration = await node.$eval('[id*=walktime]', x => (x as HTMLElement).innerHTML.trim());
-      const difficulty = await node.$eval('[class*=adventureDifficulty]', x => {
-        const difficultyClass = /adventureDifficulty(\d+)/.exec(x.className);
+    const adventures = (
+      await Promise.all(
+        adventureNodes.map(async (node) => {
+          const duration = await node.$eval('[id*=walktime]', (x) =>
+            (x as HTMLElement).innerHTML.trim(),
+          );
+          const difficulty = await node.$eval(
+            '[class*=adventureDifficulty]',
+            (x) => {
+              const difficultyClass = /adventureDifficulty(\d+)/.exec(
+                x.className,
+              );
 
-        return difficultyClass
-          ? +difficultyClass[1]
-          : null;
-      });
+              return difficultyClass ? +difficultyClass[1] : null;
+            },
+          );
 
-      const linkElementId = await node.$eval('[id*=goToAdventure]', x => x.getAttribute('id'));
+          const linkElementId = await node.$eval('[id*=goToAdventure]', (x) =>
+            x.getAttribute('id'),
+          );
 
-      if (!linkElementId) {
-        throw new Error('Link for adventure not found');
-      }
+          if (!linkElementId) {
+            throw new Error('Link for adventure not found');
+          }
 
-      return {
-        duration,
-        isHard: difficulty === 0,
-        linkElementId,
-      };
-    })))
-      .map(adventure => ({
-        ...adventure,
-        duration: Duration.fromText(adventure.duration),
-      }));
+          return {
+            duration,
+            isHard: difficulty === 0,
+            linkElementId,
+          };
+        }),
+      )
+    ).map((adventure) => ({
+      ...adventure,
+      duration: Duration.fromText(adventure.duration),
+    }));
 
     let suitableAdventures = adventures
-      .filter(x => x.duration.getTotalSeconds() <= settings.maxTravelTime.getTotalSeconds())
-      .filter(x => (x.isHard && canDoHard) || (!x.isHard && canDoNormal));
+      .filter(
+        (x) =>
+          x.duration.getTotalSeconds() <=
+          settings.maxTravelTime.getTotalSeconds(),
+      )
+      .filter((x) => (x.isHard && canDoHard) || (!x.isHard && canDoNormal));
 
     if (!suitableAdventures.length) {
       return;
     }
 
     if (settings.preferHard && canDoHard) {
-      const hardAdventures = suitableAdventures.filter(x => x.isHard);
+      const hardAdventures = suitableAdventures.filter((x) => x.isHard);
 
       if (hardAdventures.length) {
         suitableAdventures = hardAdventures;
@@ -116,14 +131,18 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
         break;
 
       case AdventureCriteria.Furthest: {
-        const adventure = getWithMaximumSafe(suitableAdventures, x => x.duration.getTotalSeconds());
+        const adventure = getWithMaximumSafe(suitableAdventures, (x) =>
+          x.duration.getTotalSeconds(),
+        );
         selectedLinkElementId = adventure.linkElementId;
         break;
       }
 
       case AdventureCriteria.Closest:
       default: {
-        const adventure = getWithMinimumSafe(suitableAdventures, x => x.duration.getTotalSeconds());
+        const adventure = getWithMinimumSafe(suitableAdventures, (x) =>
+          x.duration.getTotalSeconds(),
+        );
         selectedLinkElementId = adventure.linkElementId;
         break;
       }

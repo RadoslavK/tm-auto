@@ -1,95 +1,147 @@
 #import "./misc.graphql"
 
 fragment QueuedBuilding on QueuedBuilding {
-    buildingTime {
-        ...Duration
-    }
-    fieldId
-    level
-    queueId
-    queueIndex
-    type
+  buildingTime {
+    ...Duration
+  }
+  fieldId
+  level
+  queueId
+  queueIndex
+  type
 }
 
 fragment QueuedBuildingRange on QueuedBuildingRange {
-    buildings {
-        ...QueuedBuilding
-    }
-    buildingTime {
-        ...Duration
-    }
-    cost {
-        ...Resources
-    }
-    fieldId
-    id
-    type
+  buildings {
+    ...QueuedBuilding
+  }
+  buildingTime {
+    ...Duration
+  }
+  cost {
+    ...Resources
+  }
+  fieldId
+  id
+  type
 }
 
 fragment BuildingQueue on BuildingQueue {
-    buildingRanges {
-        ...QueuedBuildingRange
-    }
-    totalBuildingTime {
-        ...Duration
-    }
-    totalCost {
-        ...Resources
-    }
+  buildingRanges {
+    ...QueuedBuildingRange
+  }
+  totalBuildingTime {
+    ...Duration
+  }
+  totalCost {
+    ...Resources
+  }
 }
 
 query GetQueuedBuildings($villageId: ID!) {
-    buildingQueue(villageId: $villageId) {
-        ...BuildingQueue
-    }
+  buildingQueue(villageId: $villageId) {
+    ...BuildingQueue
+  }
 }
 
-query CanMoveQueuedBuildingToIndex($villageId: ID!, $queueId: ID!, $index: Int!) {
-    canMoveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+query CanMoveQueuedBuildingToIndex(
+  $villageId: ID!
+  $queueId: ID!
+  $index: Int!
+) {
+  canMoveQueuedBuildingToIndex(
+    villageId: $villageId
+    queueId: $queueId
+    index: $index
+  )
 }
 
-query CanMoveQueuedBuildingsBlockToIndex ($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!, $index: Int!) {
-    canMoveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
+query CanMoveQueuedBuildingsBlockToIndex(
+  $villageId: ID!
+  $topBuildingQueueId: ID!
+  $bottomBuildingQueueId: ID!
+  $index: Int!
+) {
+  canMoveQueuedBuildingsBlockToIndex(
+    villageId: $villageId
+    topBuildingQueueId: $topBuildingQueueId
+    bottomBuildingQueueId: $bottomBuildingQueueId
+    index: $index
+  )
 }
 
 mutation ClearQueue($villageId: ID!) {
-    clearQueue(villageId: $villageId)
+  clearQueue(villageId: $villageId)
 }
 
 mutation EnqueueBuilding($input: EnqueueBuildingInput!) {
-    enqueueBuilding(input: $input)
+  enqueueBuilding(input: $input)
 }
 
 mutation DequeueBuilding($input: DequeueBuildingInput!) {
-    dequeueBuilding(input: $input)
+  dequeueBuilding(input: $input)
 }
 
 mutation DequeueBuildingAtField($input: DequeueBuildingAtFieldInput!) {
-    dequeueBuildingAtField(input: $input)
+  dequeueBuildingAtField(input: $input)
 }
 
 mutation MoveQueuedBuildingAsHighAsPossible($villageId: ID!, $queueId: ID!) {
-    moveQueuedBuildingAsHighAsPossible(villageId: $villageId, queueId: $queueId)
+  moveQueuedBuildingAsHighAsPossible(villageId: $villageId, queueId: $queueId)
 }
 
-mutation MoveQueuedBuildingToIndex($villageId: ID!, $queueId: ID!, $index: Int!) {
-    moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+mutation MoveQueuedBuildingToIndex(
+  $villageId: ID!
+  $queueId: ID!
+  $index: Int!
+) {
+  moveQueuedBuildingToIndex(
+    villageId: $villageId
+    queueId: $queueId
+    index: $index
+  )
 }
 
-mutation MoveQueuedBuildingsBlockToIndex($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!, $index: Int!) {
-    moveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
+mutation MoveQueuedBuildingsBlockToIndex(
+  $villageId: ID!
+  $topBuildingQueueId: ID!
+  $bottomBuildingQueueId: ID!
+  $index: Int!
+) {
+  moveQueuedBuildingsBlockToIndex(
+    villageId: $villageId
+    topBuildingQueueId: $topBuildingQueueId
+    bottomBuildingQueueId: $bottomBuildingQueueId
+    index: $index
+  )
 }
 
-mutation DequeueBuildingsBlock($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!) {
-    dequeueBuildingsBlock(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId)
+mutation DequeueBuildingsBlock(
+  $villageId: ID!
+  $topBuildingQueueId: ID!
+  $bottomBuildingQueueId: ID!
+) {
+  dequeueBuildingsBlock(
+    villageId: $villageId
+    topBuildingQueueId: $topBuildingQueueId
+    bottomBuildingQueueId: $bottomBuildingQueueId
+  )
 }
 
-mutation MoveQueuedBuildingsBlockAsHighAsPossible($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!) {
-    moveQueuedBuildingsBlockAsHighAsPossible(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId)
+mutation MoveQueuedBuildingsBlockAsHighAsPossible(
+  $villageId: ID!
+  $topBuildingQueueId: ID!
+  $bottomBuildingQueueId: ID!
+) {
+  moveQueuedBuildingsBlockAsHighAsPossible(
+    villageId: $villageId
+    topBuildingQueueId: $topBuildingQueueId
+    bottomBuildingQueueId: $bottomBuildingQueueId
+  )
 }
 
 subscription OnQueueUpdated($villageId: ID!) {
-    queueUpdated(villageId: $villageId) {
-        ...BuildingQueue
-    }
+  queueUpdated(villageId: $villageId) {
+    ...BuildingQueue
+  }
 }

@@ -14,7 +14,9 @@ const getToggleText = (botState: BotState): string => {
       return 'Stop';
 
     default:
-      throw new Error(`Bot shouldnt be in this state (${BotState[botState]}) while navigation is rendered`);
+      throw new Error(
+        `Bot shouldnt be in this state (${BotState[botState]}) while navigation is rendered`,
+      );
   }
 };
 
@@ -22,18 +24,19 @@ type Props = {
   readonly botState: BotState;
 };
 
-export const BotStateToggle: React.FC<Props> = React.forwardRef<any, Props>(({ botState }, ref) => {
-  const toggleBotState = useToggleBotState();
+export const BotStateToggle: React.FC<Props> = React.forwardRef<any, Props>(
+  ({ botState }, ref) => {
+    const toggleBotState = useToggleBotState();
 
-  return (
-    <Button
-      ref={ref}
-      color="primary"
-      disabled={!toggleBotState}
-      onClick={toggleBotState ?? undefined}
-      variant="contained"
-    >
-      {getToggleText(botState)}
-    </Button>
-  );
-});
+    return (
+      <Button
+        ref={ref}
+        color="primary"
+        disabled={!toggleBotState}
+        onClick={toggleBotState ?? undefined}
+        variant="contained">
+        {getToggleText(botState)}
+      </Button>
+    );
+  },
+);

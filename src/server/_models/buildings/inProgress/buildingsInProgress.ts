@@ -17,18 +17,23 @@ export class BuildingsInProgress {
   public isSpotFree = (type: BuildingSpotType): boolean =>
     type === BuildingSpotType.Any
       ? !this._buildings.length
-      : !this._buildings.some(x => getBuildingSpotType(x.type) === type);
+      : !this._buildings.some((x) => getBuildingSpotType(x.type) === type);
 
-  public getTimeOfBuildingCompletion = (type: BuildingSpotType): Date | undefined => {
-    const filteredSequence = type === BuildingSpotType.Any
-      ? this._buildings.slice()
-      : this._buildings.filter(x => getBuildingSpotType(x.type) === type);
+  public getTimeOfBuildingCompletion = (
+    type: BuildingSpotType,
+  ): Date | undefined => {
+    const filteredSequence =
+      type === BuildingSpotType.Any
+        ? this._buildings.slice()
+        : this._buildings.filter((x) => getBuildingSpotType(x.type) === type);
 
     if (!filteredSequence.length) {
       return;
     }
 
-    const building = getWithMinimumSafe(filteredSequence, b => b.finishedAt.valueOf());
+    const building = getWithMinimumSafe(filteredSequence, (b) =>
+      b.finishedAt.valueOf(),
+    );
     return building.finishedAt;
   };
 }

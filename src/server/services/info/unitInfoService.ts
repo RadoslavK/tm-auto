@@ -1,8 +1,8 @@
+import unitInfos from '../../../../resources/unit-infos.json';
 import { Duration } from '../../_models/duration';
 import { BuildingType } from '../../_models/enums/buildingType';
 import { Tribe } from '../../_models/enums/tribe';
 import { Resources } from '../../_models/misc/resources';
-import unitInfos from '../../../../resources/unit-infos.json';
 
 type UnitInfo = {
   readonly buildingType: BuildingType;
@@ -32,18 +32,16 @@ class UnitInfoService {
     if (!this.unitInfos) {
       const infosMap = new Map();
 
-      Object
-        .entries(unitInfos)
-        .forEach(([key, value]) => {
-          //  internally there are not classes so we need to create them
-          const correctValue: UnitInfo = {
-            ...value,
-            buildingTime: new Duration(value.buildingTime),
-            cost: new Resources(value.cost),
-          };
+      Object.entries(unitInfos).forEach(([key, value]) => {
+        //  internally there are not classes so we need to create them
+        const correctValue: UnitInfo = {
+          ...value,
+          buildingTime: new Duration(value.buildingTime),
+          cost: new Resources(value.cost),
+        };
 
-          infosMap.set(+key, correctValue);
-        });
+        infosMap.set(+key, correctValue);
+      });
 
       this.unitInfos = infosMap;
     }

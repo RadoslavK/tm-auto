@@ -1,9 +1,7 @@
 import { ApolloCache } from '@apollo/client';
-import {
-  useCallback,
-  useEffect,
-} from 'react';
+import { useCallback, useEffect } from 'react';
 
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import {
   DurationInput,
   NextTaskExecutionQuery,
@@ -17,25 +15,38 @@ import {
   useResetNextTasksExecutionMutation,
   useSetNextTasksExecutionMutation,
 } from '../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../server/utils/graphql';
 import { getSecondsUntilTimestamp } from '../../utils/getSecondsUntilTimestamp';
 
 export const useNextTasksExecution = () => {
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useNextTasksExecutionQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useNextTasksExecutionQuery();
 
   useEffect(() => {
-    subscribeToMore<OnNextTasksExecutionChangedSubscription, OnNextTasksExecutionChangedSubscriptionVariables>({
+    subscribeToMore<
+      OnNextTasksExecutionChangedSubscription,
+      OnNextTasksExecutionChangedSubscriptionVariables
+    >({
       document: OnNextTasksExecutionChangedDocument,
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ nextTasksExecution: data.nextTasksExecutionChanged }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        nextTasksExecution: data.nextTasksExecutionChanged,
+      }),
     });
   }, [subscribeToMore]);
 
-  const updateCache = (cache: ApolloCache<unknown>, nextTasksExecution: NextTaskExecutionQuery['nextTaskExecution']) => {
-    updateQueryCache<NextTasksExecutionQuery, NextTasksExecutionQueryVariables>({
-      cache,
-      query: NextTasksExecutionDocument,
-      data: { nextTasksExecution },
-    });
+  const updateCache = (
+    cache: ApolloCache<unknown>,
+    nextTasksExecution: NextTaskExecutionQuery['nextTaskExecution'],
+  ) => {
+    updateQueryCache<NextTasksExecutionQuery, NextTasksExecutionQueryVariables>(
+      {
+        cache,
+        query: NextTasksExecutionDocument,
+        data: { nextTasksExecution },
+      },
+    );
   };
 
   const [setMutation] = useSetNextTasksExecutionMutation({
@@ -58,17 +69,21 @@ export const useNextTasksExecution = () => {
     },
   });
 
-  const setNextTasksExecution = useCallback((delay: DurationInput) => {
-    setMutation({ variables: { delay } });
-  }, [setMutation]);
+  const setNextTasksExecution = useCallback(
+    (delay: DurationInput) => {
+      setMutation({ variables: { delay } });
+    },
+    [setMutation],
+  );
 
   const resetNextTasksExecution = useCallback(() => {
     resetMutation();
   }, [resetMutation]);
 
-  const nextExecutionIn = queryLoading || !queryData
-    ? 0
-    : getSecondsUntilTimestamp(queryData.nextTasksExecution);
+  const nextExecutionIn =
+    queryLoading || !queryData
+      ? 0
+      : getSecondsUntilTimestamp(queryData.nextTasksExecution);
 
   return {
     nextExecutionIn,

@@ -16,7 +16,10 @@ type Result = {
   readonly buildingsToBuild: readonly QueuedBuilding[];
 };
 
-export const checkAutoStorage = async (village: Village, settings: AutoStorageSettings): Promise<Result> => {
+export const checkAutoStorage = async (
+  village: Village,
+  settings: AutoStorageSettings,
+): Promise<Result> => {
   const buildingsToBuild: QueuedBuilding[] = [];
 
   let nextTaskHighestWarehouseCost = 0;
@@ -28,53 +31,76 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
     const resourceField = village.buildings.queue.peek(BuildingSpotType.Fields);
 
     if (resourceField) {
-      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(resourceField.type, resourceField.level).cost;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
+        resourceField.type,
+        resourceField.level,
+      ).cost;
 
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
     }
 
-    const infrastructureField = village.buildings.queue.peek(BuildingSpotType.Infrastructure);
+    const infrastructureField = village.buildings.queue.peek(
+      BuildingSpotType.Infrastructure,
+    );
 
     if (infrastructureField) {
-      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(infrastructureField.type, infrastructureField.level).cost;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
+        infrastructureField.type,
+        infrastructureField.level,
+      ).cost;
 
-      nextTaskHighestWarehouseCost = Math.max(nextTaskHighestWarehouseCost, resourcesNeeded.getRequiredWarehouseSize());
-      nextTaskHighestGranaryCost = Math.max(nextTaskHighestGranaryCost, resourcesNeeded.crop);
+      nextTaskHighestWarehouseCost = Math.max(
+        nextTaskHighestWarehouseCost,
+        resourcesNeeded.getRequiredWarehouseSize(),
+      );
+      nextTaskHighestGranaryCost = Math.max(
+        nextTaskHighestGranaryCost,
+        resourcesNeeded.crop,
+      );
     }
   } else {
     const building = village.buildings.queue.peek(BuildingSpotType.Any);
 
     if (building) {
-      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(building.type, building.level).cost;
+      const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
+        building.type,
+        building.level,
+      ).cost;
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
     }
   }
 
-  const nextTaskExceedsWarehouseCapacity = nextTaskHighestWarehouseCost > village.resources.capacity.warehouse;
-  const nextTaskExceedsGranaryCapacity = nextTaskHighestGranaryCost > village.resources.capacity.granary;
+  const nextTaskExceedsWarehouseCapacity =
+    nextTaskHighestWarehouseCost > village.resources.capacity.warehouse;
+  const nextTaskExceedsGranaryCapacity =
+    nextTaskHighestGranaryCost > village.resources.capacity.granary;
 
   // End check
 
   const neededBuildings: BuildingType[] = [];
 
-  if (settings.warehouse.allow
-    && (village.getGranaryFullness() >= settings.warehouse.overflowLevel
-      || nextTaskExceedsWarehouseCapacity)
+  if (
+    settings.warehouse.allow &&
+    (village.getGranaryFullness() >= settings.warehouse.overflowLevel ||
+      nextTaskExceedsWarehouseCapacity)
   ) {
     neededBuildings.push(BuildingType.Warehouse);
   }
 
-  if (settings.granary.allow
-    && (village.getGranaryFullness() >= settings.granary.overflowLevel
-      || nextTaskExceedsGranaryCapacity)
+  if (
+    settings.granary.allow &&
+    (village.getGranaryFullness() >= settings.granary.overflowLevel ||
+      nextTaskExceedsGranaryCapacity)
   ) {
     neededBuildings.push(BuildingType.Granary);
   }
 
   for (const neededBuildingType of neededBuildings) {
-    const isBeingBuilt = village.buildings.ongoing.buildings().some(b => b.type === neededBuildingType);
+    const isBeingBuilt = village.buildings.ongoing
+      .buildings()
+      .some((b) => b.type === neededBuildingType);
 
     if (isBeingBuilt) {
       continue;
@@ -82,24 +108,32 @@ export const checkAutoStorage = async (village: Village, settings: AutoStorageSe
 
     //  get queued building with lowest level
     const qBuilding = getWithMinimumSafe(
-      village.buildings.queue.buildings().filter(b => b.fieldId === neededBuildingType),
-      b => b.level,
+      village.buildings.queue
+        .buildings()
+        .filter((b) => b.fieldId === neededBuildingType),
+      (b) => b.level,
     );
 
     const lowestLevelBuildingInVillage = getWithMinimum(
-      village
-        .buildings
-        .spots
+      village.buildings.spots
         .buildings()
-        .filter(b => b.type === neededBuildingType && b.level.actual !== buildingInfoService.getBuildingInfo(b.type).maxLevel),
-      b => b.level.actual,
+        .filter(
+          (b) =>
+            b.type === neededBuildingType &&
+            b.level.actual !==
+              buildingInfoService.getBuildingInfo(b.type).maxLevel,
+        ),
+      (b) => b.level.actual,
     );
 
     const levelOfLowestLevelBuildingInVillage = lowestLevelBuildingInVillage
       ? lowestLevelBuildingInVillage.level.getActualAndOngoing()
       : 0;
 
-    if (qBuilding && qBuilding.level === levelOfLowestLevelBuildingInVillage + 1) {
+    if (
+      qBuilding &&
+      qBuilding.level === levelOfLowestLevelBuildingInVillage + 1
+    ) {
       // is already in queue and equal to minimum next level, so build that one
       buildingsToBuild.push(qBuilding);
     } else if (lowestLevelBuildingInVillage) {

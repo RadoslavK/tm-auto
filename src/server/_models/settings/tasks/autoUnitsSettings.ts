@@ -34,7 +34,9 @@ export class AutoUnitsBuildingSettings {
 
 const unitsMap: Map<BuildingType, AutoUnitsUnitSettings[]> = new Map();
 
-const getUnitsOfType = (buildingType: BuildingType): AutoUnitsUnitSettings[] => {
+const getUnitsOfType = (
+  buildingType: BuildingType,
+): AutoUnitsUnitSettings[] => {
   let units = unitsMap.get(buildingType);
 
   if (units) {
@@ -45,7 +47,7 @@ const getUnitsOfType = (buildingType: BuildingType): AutoUnitsUnitSettings[] => 
 
   units = unitInfoService
     .getAllInfos()
-    .filter(i => i.tribe === tribe && i.buildingType === buildingType)
+    .filter((i) => i.tribe === tribe && i.buildingType === buildingType)
     .map(({ index }) => new AutoUnitsUnitSettings({ index }));
 
   unitsMap.set(buildingType, units);
@@ -58,9 +60,11 @@ export class AutoUnitsSettings {
 
   public readonly useHeroResources: boolean = false;
 
-  public readonly barracks: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
-    units: getUnitsOfType(BuildingType.Barracks),
-  });
+  public readonly barracks: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
+    {
+      units: getUnitsOfType(BuildingType.Barracks),
+    },
+  );
 
   public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 12 }),
@@ -69,18 +73,24 @@ export class AutoUnitsSettings {
 
   public readonly minCrop: number = 0;
 
-  public readonly residence: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
-    maxBuildTime: new Duration({ hours: 12 }),
-    units: getUnitsOfType(BuildingType.Residence),
-  });
+  public readonly residence: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
+    {
+      maxBuildTime: new Duration({ hours: 12 }),
+      units: getUnitsOfType(BuildingType.Residence),
+    },
+  );
 
-  public readonly stable: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
-    units: getUnitsOfType(BuildingType.Stable),
-  });
+  public readonly stable: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
+    {
+      units: getUnitsOfType(BuildingType.Stable),
+    },
+  );
 
-  public readonly workshop: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings({
-    units: getUnitsOfType(BuildingType.Workshop),
-  });
+  public readonly workshop: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
+    {
+      units: getUnitsOfType(BuildingType.Workshop),
+    },
+  );
 
   constructor(params: PartialFields<AutoUnitsSettings> = {}) {
     mergeDefaults(this, params);
@@ -102,7 +112,9 @@ export class AutoUnitsSettings {
         return this.residence;
 
       default:
-        throw new Error(`Invalid building type requested: ${BuildingType[type]}`);
+        throw new Error(
+          `Invalid building type requested: ${BuildingType[type]}`,
+        );
     }
   };
 }

@@ -9,5 +9,9 @@ export const initPlayerInfo = async (): Promise<void> => {
   gameInfo.speed = await parseServerSpeed();
   gameInfo.tribe = await parseTribe();
 
-  getAccountContext().logsService.logText(`Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${gameInfo.speed}x`);
+  getAccountContext().logsService.logText(
+    `Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${
+      gameInfo.speed
+    }x`,
+  );
 };

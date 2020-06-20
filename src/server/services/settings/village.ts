@@ -7,7 +7,8 @@ import { dataPathService } from '../dataPathService';
 import { ComplexSettingsServiceType } from './_types';
 import { InternalSettingsService } from './internalSettingsService';
 
-export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
+export class VillageSettingsService
+  implements ComplexSettingsServiceType<VillageSettings> {
   public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
 
   public autoParty: InternalSettingsService<VillageSettings['autoParty']>;
@@ -17,11 +18,26 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
   public general: InternalSettingsService<VillageSettings['general']>;
 
   constructor(accountId: string, villageId: string) {
-    const villageSettingsPath = dataPathService.villagePath(accountId, villageId).settings;
+    const villageSettingsPath = dataPathService.villagePath(
+      accountId,
+      villageId,
+    ).settings;
 
-    this.autoBuild = new InternalSettingsService(villageSettingsPath.autoBuild, AutoBuildSettings);
-    this.autoParty = new InternalSettingsService(villageSettingsPath.autoParty, AutoPartySettings);
-    this.autoUnits = new InternalSettingsService(villageSettingsPath.autoUnits, AutoUnitsSettings);
-    this.general = new InternalSettingsService(villageSettingsPath.general, GeneralVillageSettings);
+    this.autoBuild = new InternalSettingsService(
+      villageSettingsPath.autoBuild,
+      AutoBuildSettings,
+    );
+    this.autoParty = new InternalSettingsService(
+      villageSettingsPath.autoParty,
+      AutoPartySettings,
+    );
+    this.autoUnits = new InternalSettingsService(
+      villageSettingsPath.autoUnits,
+      AutoUnitsSettings,
+    );
+    this.general = new InternalSettingsService(
+      villageSettingsPath.general,
+      GeneralVillageSettings,
+    );
   }
 }

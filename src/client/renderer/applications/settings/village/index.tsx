@@ -1,8 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { useVillages } from '../../../hooks/villages/useVillages';
@@ -19,24 +16,18 @@ type LinkProps = {
 };
 
 const useLinkStyles = makeStyles<unknown, LinkProps>({
-  root: props => ({
+  root: (props) => ({
     backgroundColor: props.isSelected ? 'green' : undefined,
   }),
 });
 
 const TabLink: React.FC<LinkProps> = (props) => {
-  const {
-    label,
-    onSelect,
-  } = props;
+  const { label, onSelect } = props;
 
   const classes = useLinkStyles(props);
 
   return (
-    <div
-      className={classes.root}
-      onClick={onSelect}
-    >
+    <div className={classes.root} onClick={onSelect}>
       {label}
     </div>
   );
@@ -55,10 +46,7 @@ type Props = {
 };
 
 export const VillageSettings: React.FC<Props> = (props) => {
-  const {
-    getTabType,
-    tab,
-  } = props;
+  const { getTabType, tab } = props;
 
   const villageId = useSelectedVillageId();
   const [selectedVillageId, setSelectedVillageId] = useState(villageId);
@@ -67,7 +55,9 @@ export const VillageSettings: React.FC<Props> = (props) => {
     setSelectedVillageId(villageId);
   }, [villageId]);
 
-  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(getTabType(tab));
+  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(
+    getTabType(tab),
+  );
 
   useEffect(() => {
     setSelectedTab(getTabType(tab));
@@ -77,11 +67,16 @@ export const VillageSettings: React.FC<Props> = (props) => {
 
   const renderSettings = (): JSX.Element => {
     switch (selectedTab) {
-      case VillageSettingsTabType.General: return <GeneralVillageSettings villageId={selectedVillageId} />;
-      case VillageSettingsTabType.AutoBuild: return <AutoBuildSettings villageId={selectedVillageId} />;
-      case VillageSettingsTabType.AutoUnits: return <AutoUnitsSettings villageId={selectedVillageId} />;
-      case VillageSettingsTabType.AutoParty: return <AutoPartySettings villageId={selectedVillageId} />;
-      default: throw new Error(`Unknown village settings type: ${selectedTab}`);
+      case VillageSettingsTabType.General:
+        return <GeneralVillageSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoBuild:
+        return <AutoBuildSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoUnits:
+        return <AutoUnitsSettings villageId={selectedVillageId} />;
+      case VillageSettingsTabType.AutoParty:
+        return <AutoPartySettings villageId={selectedVillageId} />;
+      default:
+        throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
   };
 
@@ -90,17 +85,13 @@ export const VillageSettings: React.FC<Props> = (props) => {
       <h1>Village settings</h1>
       <div>
         <select
-          onChange={e => {
+          onChange={(e) => {
             const id = e.currentTarget.value;
             setSelectedVillageId(id);
           }}
-          value={selectedVillageId}
-        >
-          {villages.map(village => (
-            <option
-              key={village.id}
-              value={village.id}
-            >
+          value={selectedVillageId}>
+          {villages.map((village) => (
+            <option key={village.id} value={village.id}>
               {formatVillageName(village)}
             </option>
           ))}

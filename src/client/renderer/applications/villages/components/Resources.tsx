@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     '&>*': {
       marginLeft: '3em',
     },
-    marginBottom: '1.5em',
+    'marginBottom': '1.5em',
   },
 });
 
@@ -19,17 +19,17 @@ type Props = {
 };
 
 export const Resources: React.FC<Props> = ({
-  resources: {
-    amount,
-    capacity,
-    production,
-  },
+  resources: { amount, capacity, production },
 }) => {
   const classes = useStyles();
   const totalCapacity = capacity.granary + capacity.warehouse * 3;
 
-  const resourceFormatter = createFormatter(Math.max(amount.wood, amount.clay, amount.iron, amount.crop));
-  const capacityFormatter = createFormatter(Math.max(capacity.granary, capacity.warehouse));
+  const resourceFormatter = createFormatter(
+    Math.max(amount.wood, amount.clay, amount.iron, amount.crop),
+  );
+  const capacityFormatter = createFormatter(
+    Math.max(capacity.granary, capacity.warehouse),
+  );
   const totalAmount = amount.total;
 
   return (
@@ -72,10 +72,7 @@ export const Resources: React.FC<Props> = ({
         capacityFormatter={capacityFormatter}
         resourceName="total"
       />
-      <Resource
-        amount={amount.freeCrop}
-        resourceName="freeCrop"
-      />
+      <Resource amount={amount.freeCrop} resourceName="freeCrop" />
     </div>
   );
 };

@@ -6,10 +6,10 @@ import { DragObjectWithType } from 'react-dnd/lib/interfaces';
 import {
   QueuedBuilding as QueuedBuildingModel,
   QueuedBuildingRange as QueuedBuildingRangeModel,
-  useCanMoveQueuedBuildingsBlockToIndexLazyQuery,
   useCanMoveQueuedBuildingToIndexLazyQuery,
-  useMoveQueuedBuildingsBlockToIndexMutation,
+  useCanMoveQueuedBuildingsBlockToIndexLazyQuery,
   useMoveQueuedBuildingToIndexMutation,
+  useMoveQueuedBuildingsBlockToIndexMutation,
 } from '../../../_graphql/graphqlHooks';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { QueuedBuildingComponent } from './building/QueuedBuildingComponent';
@@ -34,7 +34,7 @@ type StylesProps = {
 
 const useStyles = makeStyles<unknown, StylesProps>({
   buildingPlaceholder: {
-    backgroundColor: props => props.canBeMoved ? 'green' : 'red',
+    backgroundColor: (props) => (props.canBeMoved ? 'green' : 'red'),
   },
 });
 
@@ -54,9 +54,8 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   const [moveQueuedBuildingToIndex] = useMoveQueuedBuildingToIndexMutation();
 
   const onDropBuilding = (item: MovedQueuedBuilding) => {
-    const targetIndex = item.building.queueIndex < queueIndexTop
-      ? queueIndexBot
-      : queueIndexTop;
+    const targetIndex =
+      item.building.queueIndex < queueIndexTop ? queueIndexBot : queueIndexTop;
 
     moveQueuedBuildingToIndex({
       variables: {
@@ -67,9 +66,16 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     });
   };
 
-  const [{ isBuildingOver, movedBuilding }, dropBuildingRef] = useDrop<MovedQueuedBuilding, void, { readonly movedBuilding: MovedQueuedBuilding, readonly isBuildingOver: boolean }>({
+  const [{ isBuildingOver, movedBuilding }, dropBuildingRef] = useDrop<
+    MovedQueuedBuilding,
+    void,
+    {
+      readonly movedBuilding: MovedQueuedBuilding;
+      readonly isBuildingOver: boolean;
+    }
+  >({
     accept: 'QueuedBuilding',
-    canDrop: droppedItem => droppedItem.building.queueIndex !== queueIndexTop,
+    canDrop: (droppedItem) => droppedItem.building.queueIndex !== queueIndexTop,
     collect: (monitor) => ({
       movedBuilding: monitor.getItem(),
       isBuildingOver: monitor.isOver() && monitor.canDrop(),
@@ -77,26 +83,38 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     drop: onDropBuilding,
   });
 
-  const [moveQueuedBuildingsBlockToIndex] = useMoveQueuedBuildingsBlockToIndexMutation();
+  const [
+    moveQueuedBuildingsBlockToIndex,
+  ] = useMoveQueuedBuildingsBlockToIndexMutation();
 
   const onDropRange = (item: MovedQueuedBuildingRange) => {
-    const targetIndex = item.range.buildings[0].queueIndex < queueIndexTop
-      ? queueIndexBot
-      : queueIndexTop;
+    const targetIndex =
+      item.range.buildings[0].queueIndex < queueIndexTop
+        ? queueIndexBot
+        : queueIndexTop;
 
     moveQueuedBuildingsBlockToIndex({
       variables: {
         villageId,
         index: targetIndex,
         topBuildingQueueId: item.range.buildings[0].queueId,
-        bottomBuildingQueueId: item.range.buildings[item.range.buildings.length - 1].queueId,
+        bottomBuildingQueueId:
+          item.range.buildings[item.range.buildings.length - 1].queueId,
       },
     });
   };
 
-  const [{ isRangeOver, movedRange }, dropRangeRef] = useDrop<MovedQueuedBuildingRange, void, { readonly movedRange: MovedQueuedBuildingRange, readonly isRangeOver: boolean }>({
+  const [{ isRangeOver, movedRange }, dropRangeRef] = useDrop<
+    MovedQueuedBuildingRange,
+    void,
+    {
+      readonly movedRange: MovedQueuedBuildingRange;
+      readonly isRangeOver: boolean;
+    }
+  >({
     accept: 'QueuedBuildingRange',
-    canDrop: droppedItem => droppedItem.range.buildings[0].queueIndex !== queueIndexTop,
+    canDrop: (droppedItem) =>
+      droppedItem.range.buildings[0].queueIndex !== queueIndexTop,
     collect: (monitor) => ({
       movedRange: monitor.getItem(),
       isRangeOver: monitor.isOver() && monitor.canDrop(),
@@ -104,53 +122,96 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     drop: onDropRange,
   });
 
-  const dropPosition = isBuildingOver && movedBuilding && getDropPosition(movedBuilding.building.queueIndex)
-    || isRangeOver && movedRange && getDropPosition(movedRange.range.buildings[0].queueIndex);
+  const dropPosition =
+    (isBuildingOver &&
+      movedBuilding &&
+      getDropPosition(movedBuilding.building.queueIndex)) ||
+    (isRangeOver &&
+      movedRange &&
+      getDropPosition(movedRange.range.buildings[0].queueIndex));
 
-  const [fetchMoveBuildingFlag, { data: buildingQueryData, loading: buildingQueryLoading }] = useCanMoveQueuedBuildingToIndexLazyQuery({
+  const [
+    fetchMoveBuildingFlag,
+    { data: buildingQueryData, loading: buildingQueryLoading },
+  ] = useCanMoveQueuedBuildingToIndexLazyQuery({
     fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
     if (movedBuilding && isBuildingOver) {
       fetchMoveBuildingFlag({
-        variables: { villageId, queueId: movedBuilding.building.queueId, index: queueIndexTop },
+        variables: {
+          villageId,
+          queueId: movedBuilding.building.queueId,
+          index: queueIndexTop,
+        },
       });
     }
-  }, [movedBuilding, fetchMoveBuildingFlag, villageId, queueIndexTop, isBuildingOver]);
+  }, [
+    movedBuilding,
+    fetchMoveBuildingFlag,
+    villageId,
+    queueIndexTop,
+    isBuildingOver,
+  ]);
 
-  const [fetchMoveRangeFlag, { data: rangeQueryData, loading: rangeQueryLoading }] = useCanMoveQueuedBuildingsBlockToIndexLazyQuery({
+  const [
+    fetchMoveRangeFlag,
+    { data: rangeQueryData, loading: rangeQueryLoading },
+  ] = useCanMoveQueuedBuildingsBlockToIndexLazyQuery({
     fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
     if (movedRange && isRangeOver) {
-      const targetIndex = movedRange.range.buildings[0].queueIndex < queueIndexTop
-        ? queueIndexBot
-        : queueIndexTop;
+      const targetIndex =
+        movedRange.range.buildings[0].queueIndex < queueIndexTop
+          ? queueIndexBot
+          : queueIndexTop;
 
       fetchMoveRangeFlag({
-        variables: { villageId, topBuildingQueueId: movedRange.range.buildings[0].queueId, bottomBuildingQueueId: movedRange.range.buildings[movedRange.range.buildings.length - 1].queueId, index: targetIndex },
+        variables: {
+          villageId,
+          topBuildingQueueId: movedRange.range.buildings[0].queueId,
+          bottomBuildingQueueId:
+            movedRange.range.buildings[movedRange.range.buildings.length - 1]
+              .queueId,
+          index: targetIndex,
+        },
       });
     }
-  }, [movedRange, fetchMoveRangeFlag, villageId, queueIndexTop, queueIndexBot, isRangeOver]);
+  }, [
+    movedRange,
+    fetchMoveRangeFlag,
+    villageId,
+    queueIndexTop,
+    queueIndexBot,
+    isRangeOver,
+  ]);
 
-  const canDroppedBuildingBeMovedHere = isBuildingOver && !buildingQueryLoading && buildingQueryData?.canMoveQueuedBuildingToIndex
-    || isRangeOver && !rangeQueryLoading && rangeQueryData?.canMoveQueuedBuildingsBlockToIndex;
+  const canDroppedBuildingBeMovedHere =
+    (isBuildingOver &&
+      !buildingQueryLoading &&
+      buildingQueryData?.canMoveQueuedBuildingToIndex) ||
+    (isRangeOver &&
+      !rangeQueryLoading &&
+      rangeQueryData?.canMoveQueuedBuildingsBlockToIndex);
 
   const classes = useStyles({ canBeMoved: !!canDroppedBuildingBeMovedHere });
 
   return (
     <div ref={dropRangeRef}>
       <div ref={dropBuildingRef}>
-        {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingComponent
-              building={movedBuilding.building}
-              isHighlight
-            />
-          </div>
-        )}
+        {isBuildingOver &&
+          dropPosition === DropPosition.Above &&
+          movedBuilding && (
+            <div className={classes.buildingPlaceholder}>
+              <QueuedBuildingComponent
+                building={movedBuilding.building}
+                isHighlight
+              />
+            </div>
+          )}
         {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent
@@ -160,14 +221,16 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
           </div>
         )}
         {children}
-        {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingComponent
-              building={movedBuilding.building}
-              isHighlight
-            />
-          </div>
-        )}
+        {isBuildingOver &&
+          dropPosition === DropPosition.Below &&
+          movedBuilding && (
+            <div className={classes.buildingPlaceholder}>
+              <QueuedBuildingComponent
+                building={movedBuilding.building}
+                isHighlight
+              />
+            </div>
+          )}
         {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent

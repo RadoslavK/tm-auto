@@ -14,7 +14,7 @@ export const updateHeroResources = async (): Promise<void> => {
     const itemNode = await page.$(`#itemsToSale .item[class*="item_${id}"]`);
 
     return itemNode
-      ? itemNode.$eval('.amount', x => +(<HTMLElement>x).innerText)
+      ? itemNode.$eval('.amount', (x) => +(<HTMLElement>x).innerText)
       : 0;
   };
 
@@ -23,5 +23,10 @@ export const updateHeroResources = async (): Promise<void> => {
   const iron = await getResource(heroItemIds.iron);
   const crop = await getResource(heroItemIds.crop);
 
-  getAccountContext().hero.resources = new Resources({ wood, clay, iron, crop });
+  getAccountContext().hero.resources = new Resources({
+    wood,
+    clay,
+    iron,
+    crop,
+  });
 };

@@ -2,11 +2,10 @@ After changing the GraphQL schema, types and merged schema needs to be regenerat
 `generate-types` command.
 
 Debugging (Attach to remote process in WS):
-    * Renderer port: 9222
-    * Main port: 9229
-    * Server port: 9229
+_ Renderer port: 9222
+_ Main port: 9229 \* Server port: 9229
 
 Node v13.7+
 
-When copying local modules like _eslint, its required to delete their `node_modules` otherwise
+When copying local modules like \_eslint, its required to delete their `node_modules` otherwise
 it would also be copied...

@@ -2,10 +2,7 @@ import 'typeface-roboto';
 
 import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
@@ -17,22 +14,22 @@ import { Navigation } from './navigation/components/Navigation';
 import { GeneralSettings } from './settings/GeneralSettings';
 import { EnsureSignedIn } from './signIn/components/EnsureSignedIn';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   '@global': {
     html: {
       marginLeft: 'calc(100vw - 100%)',
       marginRight: 0,
     },
   },
-  content: {
+  'content': {
     backgroundColor: theme.palette.background.default,
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  root: {
+  'root': {
     display: 'flex',
   },
-  toolbar: theme.mixins.toolbar,
+  'toolbar': theme.mixins.toolbar,
 }));
 
 export const App: React.FC = () => {

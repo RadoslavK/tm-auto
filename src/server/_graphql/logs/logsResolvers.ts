@@ -28,7 +28,7 @@ export default <Resolvers>{
   },
 
   TextLogEntryContent: {
-    messageType: c => c.type,
+    messageType: (c) => c.type,
   },
 
   Query: {
@@ -37,7 +37,7 @@ export default <Resolvers>{
 
   Subscription: {
     logEntryAdded: subscribeToEvent(BotEvent.LogEntryAdded, {
-      resolve: payload => payload.logEntry,
+      resolve: (payload) => payload.logEntry,
     }),
   },
 };

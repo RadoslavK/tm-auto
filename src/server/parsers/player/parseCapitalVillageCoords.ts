@@ -1,4 +1,4 @@
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath';
 import { Coords } from '../../_models/coords';
@@ -29,7 +29,10 @@ export const parseCapitalVillageCoords = async (): Promise<Coords> => {
     throw new Error('No capital village was found');
   }
 
-  const capitalVillageMapUrl = await capitalVillageElement.$eval('.coords [href*="x"][href*="y"]', x => x.getAttribute('href'));
+  const capitalVillageMapUrl = await capitalVillageElement.$eval(
+    '.coords [href*="x"][href*="y"]',
+    (x) => x.getAttribute('href'),
+  );
 
   if (!capitalVillageMapUrl) {
     throw new Error('No capital village was found');

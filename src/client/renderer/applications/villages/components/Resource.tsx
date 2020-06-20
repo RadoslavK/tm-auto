@@ -15,7 +15,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
   amount: {
     '&::after': { content: '"/"' },
   },
-  image: props => ({
+  image: (props) => ({
     backgroundImage: `url("${imageLinks.resources[props.resourceName]}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -36,7 +36,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     if (production > 0) {
       return {
         '&::before': { content: '"+"' },
-        color: 'green',
+        'color': 'green',
       };
     }
 
@@ -71,21 +71,12 @@ export const Resource: React.FC<Props> = ({
   return (
     <span className={classes.root}>
       <span className={classes.image} />
-      <span>
-        {formatResources(amount)}
-      </span>
-      {capacity !== undefined && (
-        <span>
-          /
-          {formatCapacity(capacity)}
-        </span>
-      )}
+      <span>{formatResources(amount)}</span>
+      {capacity !== undefined && <span>/{formatCapacity(capacity)}</span>}
       {production !== undefined && (
-        (
-          <span className={classes.production}>
-            {createFormatter()(production)}
-          </span>
-        )
+        <span className={classes.production}>
+          {createFormatter()(production)}
+        </span>
       )}
     </span>
   );

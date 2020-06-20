@@ -1,8 +1,5 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { updateCollapsedBuildingQueueRangeIds } from '../../../_graphql/cache/cache';
 import {
@@ -38,19 +35,28 @@ const useStyles = makeStyles({
 const useBuildingQueue = () => {
   const villageId = useSelectedVillageId();
 
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetQueuedBuildingsQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useGetQueuedBuildingsQuery({
+    variables: { villageId },
+  });
 
   useEffect(() => {
-    subscribeToMore<OnQueueUpdatedSubscription, OnQueueUpdatedSubscriptionVariables>({
+    subscribeToMore<
+      OnQueueUpdatedSubscription,
+      OnQueueUpdatedSubscriptionVariables
+    >({
       document: OnQueueUpdatedDocument,
       variables: { villageId },
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ buildingQueue: data.queueUpdated }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        buildingQueue: data.queueUpdated,
+      }),
     });
   }, [subscribeToMore, villageId]);
 
-  return queryLoading || !queryData
-    ? null
-    : queryData.buildingQueue;
+  return queryLoading || !queryData ? null : queryData.buildingQueue;
 };
 
 export const BuildingQueue: React.FC<Props> = ({ className }) => {
@@ -59,20 +65,22 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const villageId = useSelectedVillageId();
   const buildingQueue = useBuildingQueue();
   const [clearQueue] = useClearQueueMutation({ variables: { villageId } });
-  const collapsedRangeIds = useGetCollapsedBuildingQueueRangesQuery({
-    variables: {
-      villageId,
-    },
-  }).data?.collapsedBuildingQueueRanges || [];
+  const collapsedRangeIds =
+    useGetCollapsedBuildingQueueRangesQuery({
+      variables: {
+        villageId,
+      },
+    }).data?.collapsedBuildingQueueRanges || [];
 
   const setAllCollapsed = useCallback(() => {
     if (buildingQueue?.buildingRanges) {
-      updateCollapsedBuildingQueueRangeIds(villageId, buildingQueue.buildingRanges.reduce(
-        (all, r) => r.buildings.length > 1
-          ? [...all, r.id]
-          : all,
-        [] as string[],
-      ));
+      updateCollapsedBuildingQueueRangeIds(
+        villageId,
+        buildingQueue.buildingRanges.reduce(
+          (all, r) => (r.buildings.length > 1 ? [...all, r.id] : all),
+          [] as string[],
+        ),
+      );
     }
   }, [buildingQueue?.buildingRanges, villageId]);
 
@@ -81,11 +89,17 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   }
 
   const onRangeCollapse = (rangeId: string) => {
-    updateCollapsedBuildingQueueRangeIds(villageId, collapsedRangeIds.concat([rangeId]));
+    updateCollapsedBuildingQueueRangeIds(
+      villageId,
+      collapsedRangeIds.concat([rangeId]),
+    );
   };
 
   const onRangeExpand = (rangeId: string) => {
-    updateCollapsedBuildingQueueRangeIds(villageId, collapsedRangeIds.filter(id => id !== rangeId));
+    updateCollapsedBuildingQueueRangeIds(
+      villageId,
+      collapsedRangeIds.filter((id) => id !== rangeId),
+    );
   };
 
   const onClear = async (): Promise<void> => {
@@ -94,16 +108,10 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
 
   return (
     <div className={className}>
-      <button
-        className={classes.action}
-        onClick={onClear}
-      >
+      <button className={classes.action} onClick={onClear}>
         Clear queue
       </button>
-      <button
-        className={classes.action}
-        onClick={setAllCollapsed}
-      >
+      <button className={classes.action} onClick={setAllCollapsed}>
         Collapse all
       </button>
       <Cost
@@ -112,7 +120,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
       />
       <div className={classes.buildings}>
         {buildingQueue.buildingRanges.map((range) => {
-          const topBuilding = range.buildings[0];
+          const [topBuilding] = range.buildings;
           const botBuilding = range.buildings[range.buildings.length - 1];
           const canBeCollapsed = topBuilding !== botBuilding;
           const isCollapsed = collapsedRangeIds.includes(range.id);
@@ -129,11 +137,13 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
 
           return (
             <React.Fragment key={range.id}>
-              {range.buildings.map(building => (
+              {range.buildings.map((building) => (
                 <QueuedBuilding
                   key={building.queueId}
                   building={building}
-                  onCollapse={canBeCollapsed ? () => onRangeCollapse(range.id) : undefined}
+                  onCollapse={
+                    canBeCollapsed ? () => onRangeCollapse(range.id) : undefined
+                  }
                 />
               ))}
             </React.Fragment>

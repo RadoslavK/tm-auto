@@ -10,7 +10,7 @@ type StylesProps = {
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
-  image: props => ({
+  image: (props) => ({
     backgroundImage: `url("${imageLinks.getUnit(props.unitIndex)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -28,22 +28,19 @@ type Props = {
   readonly content: AutoUnitsLogEntryContent;
 };
 
-export const AutoUnitsLogContent: React.FC<Props> = ({ className, content }) => {
+export const AutoUnitsLogContent: React.FC<Props> = ({
+  className,
+  content,
+}) => {
   const classes = useStyles({
     unitIndex: content.index,
   });
 
   return (
     <div className={clsx(className, classes.root)}>
-      <span>
-        Building
-        {' '}
-        {content.amount}
-      </span>
+      <span>Building {content.amount}</span>
       <div className={classes.image} />
-      <span>
-        {content.unitName}
-      </span>
+      <span>{content.unitName}</span>
     </div>
   );
 };

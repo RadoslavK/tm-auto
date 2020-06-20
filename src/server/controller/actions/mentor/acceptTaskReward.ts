@@ -5,7 +5,9 @@ import { getPage } from '../../../browser/getPage';
 export const acceptTaskReward = async (task: MentorTask): Promise<void> => {
   const page = await getPage();
 
-  const taskNode = await page.$(`#mentorTaskList li.quest[data-questid="${task.id}"]`);
+  const taskNode = await page.$(
+    `#mentorTaskList li.quest[data-questid="${task.id}"]`,
+  );
 
   if (!taskNode) {
     throw new Error(`Did not find mentor task: ${task.id}`);

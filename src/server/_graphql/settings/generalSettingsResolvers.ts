@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
 import { getGeneralSettingsService } from '../../services/settings/general';
 
-export default <Resolvers> {
+export default <Resolvers>{
   Query: {
     generalSettings: () => getGeneralSettingsService().get(),
   },

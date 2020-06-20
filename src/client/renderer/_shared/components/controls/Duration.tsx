@@ -18,10 +18,7 @@ export const Duration: React.FC<Props> = ({ onChange, value }) => {
   const classes = useStyles();
 
   const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const {
-      name,
-      value: eventValue,
-    } = e.currentTarget;
+    const { name, value: eventValue } = e.currentTarget;
 
     const numValue = +eventValue;
 

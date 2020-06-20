@@ -7,7 +7,10 @@ const getDefaultExecutionTime = (): Date => new Date(1970, 1, 1);
 export class NextExecutionService {
   private nextTaskExecutionTimes: Map<TaskType, Date> = new Map();
 
-  private nextVillageTaskExecutionTimes: Map<string, Map<TaskType, Date>> = new Map();
+  private nextVillageTaskExecutionTimes: Map<
+    string,
+    Map<TaskType, Date>
+  > = new Map();
 
   private nextTasksExecution: Date | undefined;
 
@@ -27,7 +30,10 @@ export class NextExecutionService {
     return date;
   };
 
-  public resetNextVillageTaskExecution = (villageId: string, task: TaskType): Date => {
+  public resetNextVillageTaskExecution = (
+    villageId: string,
+    task: TaskType,
+  ): Date => {
     const date = new Date();
 
     this.setForVillage(villageId, task, date);
@@ -35,8 +41,8 @@ export class NextExecutionService {
     return date;
   };
 
-  public tasks = (): Date => this.nextTasksExecution
-    || getDefaultExecutionTime();
+  public tasks = (): Date =>
+    this.nextTasksExecution || getDefaultExecutionTime();
 
   public setTasks = (nextExecution: Date): Date => {
     this.nextTasksExecution = nextExecution;
@@ -46,8 +52,8 @@ export class NextExecutionService {
     return nextExecution;
   };
 
-  public get = (task: TaskType): Date => this.nextTaskExecutionTimes.get(task)
-    || getDefaultExecutionTime();
+  public get = (task: TaskType): Date =>
+    this.nextTaskExecutionTimes.get(task) || getDefaultExecutionTime();
 
   public set = (task: TaskType, nextExecution: Date): Date => {
     this.nextTaskExecutionTimes.set(task, nextExecution);
@@ -67,11 +73,14 @@ export class NextExecutionService {
       return getDefaultExecutionTime();
     }
 
-    return villageTimes.get(task)
-     || getDefaultExecutionTime();
+    return villageTimes.get(task) || getDefaultExecutionTime();
   };
 
-  public setForVillage = (villageId: string, task: TaskType, nextExecution: Date): Date => {
+  public setForVillage = (
+    villageId: string,
+    task: TaskType,
+    nextExecution: Date,
+  ): Date => {
     let villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
 
     if (!villageTimes) {

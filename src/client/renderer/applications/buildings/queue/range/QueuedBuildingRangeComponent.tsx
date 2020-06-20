@@ -15,7 +15,7 @@ type StyleProps = {
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({
-  buildingImage: props => ({
+  buildingImage: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -37,7 +37,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
     '&>*': {
       marginLeft: '10px',
     },
-    display: 'flex',
+    'display': 'flex',
   },
 });
 
@@ -47,7 +47,11 @@ type Props = {
   readonly onExpand?: (id: string) => void;
 };
 
-export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, isHighlight, onExpand }) => {
+export const QueuedBuildingRangeComponent: React.FC<Props> = ({
+  buildingRange,
+  isHighlight,
+  onExpand,
+}) => {
   const classes = useStyles({
     buildingType: buildingRange.type,
   });
@@ -65,17 +69,12 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({ buildingRange, i
       )}
       <div className={classes.imageWithFieldId}>
         <div className={classes.buildingImage} />
-        <div>
-          [{buildingRange.fieldId}]
-        </div>
+        <div>[{buildingRange.fieldId}]</div>
       </div>
       <div className={classes.info}>
         <div>
-          {buildingInfo?.name}
-          {' '}
-          Levels
-          {' '}
-          {buildingRange.buildings[0].level}-{buildingRange.buildings[buildingRange.buildings.length - 1].level}
+          {buildingInfo?.name} Levels {buildingRange.buildings[0].level}-
+          {buildingRange.buildings[buildingRange.buildings.length - 1].level}
         </div>
         <Cost
           buildTime={buildingRange.buildingTime}

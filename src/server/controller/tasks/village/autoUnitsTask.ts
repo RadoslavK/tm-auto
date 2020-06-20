@@ -16,8 +16,8 @@ import { replaceInputText } from '../../../utils/browser/replaceInputText';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources';
 import {
-  ensureBuildingSpotPage,
   TabInformation,
+  ensureBuildingSpotPage,
 } from '../../actions/ensurePage';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources';
 import { updateUnitsInformation } from '../../actions/updateUnitsInformation';
@@ -39,12 +39,20 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     this._units = village.units;
   }
 
-  private settings = (): AutoUnitsSettings => getAccountContext().settingsService.village(this._village.id).autoUnits.get();
+  private settings = (): AutoUnitsSettings =>
+    getAccountContext()
+      .settingsService.village(this._village.id)
+      .autoUnits.get();
 
   public allowExecution = (): boolean =>
-    getAccountContext().settingsService.account.get().autoUnits
-    && this.settings().allow
-    && [BuildingType.Barracks, BuildingType.Stable, BuildingType.Workshop, BuildingType.Residence].some(x => this.allowForBuilding(x));
+    getAccountContext().settingsService.account.get().autoUnits &&
+    this.settings().allow &&
+    [
+      BuildingType.Barracks,
+      BuildingType.Stable,
+      BuildingType.Workshop,
+      BuildingType.Residence,
+    ].some((x) => this.allowForBuilding(x));
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
@@ -60,11 +68,15 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
   private allowForBuilding = (type: BuildingType): boolean => {
     const buildingSettings = this.settings().forBuilding(type);
 
-    return buildingSettings.allow
-      && buildingSettings.units.some(uSettings => uSettings.autoBuild);
+    return (
+      buildingSettings.allow &&
+      buildingSettings.units.some((uSettings) => uSettings.autoBuild)
+    );
   };
 
-  private analyzeQueueAndBuildUnits = async (type: BuildingType): Promise<void> => {
+  private analyzeQueueAndBuildUnits = async (
+    type: BuildingType,
+  ): Promise<void> => {
     const settings = this.settings();
     const buildingSettings = settings.forBuilding(type);
 
@@ -74,12 +86,11 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
     const unitsToBuild = buildingSettings.units;
 
-    const possibleUnitsToBuild = unitsToBuild.filter(unit => unit.autoBuild);
+    const possibleUnitsToBuild = unitsToBuild.filter((unit) => unit.autoBuild);
     const buildingSpots = this._village.buildings.spots;
     const isUnitBuildingBuilt = buildingSpots.isBuilt(type);
 
-    if (!possibleUnitsToBuild.length
-      || !isUnitBuildingBuilt) {
+    if (!possibleUnitsToBuild.length || !isUnitBuildingBuilt) {
       return;
     }
 
@@ -89,9 +100,10 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const tab: TabInformation | undefined = type === BuildingType.Residence || type === BuildingType.Palace
-      ? { index: 1, name: 's' }
-      : undefined;
+    const tab: TabInformation | undefined =
+      type === BuildingType.Residence || type === BuildingType.Palace
+        ? { index: 1, name: 's' }
+        : undefined;
 
     // select appropriate building
     await ensureBuildingSpotPage(unitBuilding.fieldId, tab);
@@ -102,15 +114,16 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
     const suitableToBuild: Record<number, number> = {};
     const { hero } = getAccountContext();
-    const totalVillageResources = settings.useHeroResources && hero.villageId === this._village.id
-      ? mergeVillageAndHeroResources(this._village.id)
-      : this._village.resources.amount;
+    const totalVillageResources =
+      settings.useHeroResources && hero.villageId === this._village.id
+        ? mergeVillageAndHeroResources(this._village.id)
+        : this._village.resources.amount;
     let availableResources = new Resources(totalVillageResources);
 
     const maxAllowedBuildingTime = buildingSettings.maxBuildTime;
     let ongoingBuildingTime = unitQueue.duration;
 
-    possibleUnitsToBuild.forEach(unitToBuild => {
+    possibleUnitsToBuild.forEach((unitToBuild) => {
       const uIndex = unitToBuild.index;
       const {
         buildingTime: originalBuildTime,
@@ -131,7 +144,8 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
       //  max by count
       if (!unitToBuild.trainForever) {
-        const totalAmount = unitQueue.getQueuedCount(uIndex) + this._units.getCount(uIndex);
+        const totalAmount =
+          unitQueue.getQueuedCount(uIndex) + this._units.getCount(uIndex);
 
         maxPossibleAmountToBuild = Math.min(
           maxPossibleAmountToBuild,
@@ -157,11 +171,20 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
       }
 
       const { speed } = getAccountContext().gameInfo;
-      const buildTime = getActualUnitBuildTime(originalBuildTime, speed, unitBuilding.level.actual);
+      const buildTime = getActualUnitBuildTime(
+        originalBuildTime,
+        speed,
+        unitBuilding.level.actual,
+      );
 
       // by queue time
-      const freeBuildingTimeToFill = maxAllowedBuildingTime.getTotalSeconds() - ongoingBuildingTime.getTotalSeconds();
-      maxPossibleAmountToBuild = Math.min(maxPossibleAmountToBuild, freeBuildingTimeToFill / buildTime.getTotalSeconds());
+      const freeBuildingTimeToFill =
+        maxAllowedBuildingTime.getTotalSeconds() -
+        ongoingBuildingTime.getTotalSeconds();
+      maxPossibleAmountToBuild = Math.min(
+        maxPossibleAmountToBuild,
+        freeBuildingTimeToFill / buildTime.getTotalSeconds(),
+      );
 
       if (maxPossibleAmountToBuild < 1) {
         return;
@@ -169,8 +192,12 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
       maxPossibleAmountToBuild = Math.floor(maxPossibleAmountToBuild);
       suitableToBuild[uIndex] = maxPossibleAmountToBuild;
-      availableResources = availableResources.subtract(cost.multiply(maxPossibleAmountToBuild));
-      ongoingBuildingTime = ongoingBuildingTime.add(buildTime.multiply(maxPossibleAmountToBuild));
+      availableResources = availableResources.subtract(
+        cost.multiply(maxPossibleAmountToBuild),
+      );
+      ongoingBuildingTime = ongoingBuildingTime.add(
+        buildTime.multiply(maxPossibleAmountToBuild),
+      );
     });
 
     // can build at least 1 with res and fit in queue
@@ -179,11 +206,18 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     }
 
     if (settings.useHeroResources) {
-      const requiredResources = totalVillageResources.subtract(availableResources);
-      const resourcesNeeded = requiredResources.subtract(this._village.resources.amount);
+      const requiredResources = totalVillageResources.subtract(
+        availableResources,
+      );
+      const resourcesNeeded = requiredResources.subtract(
+        this._village.resources.amount,
+      );
 
       if (resourcesNeeded.getTotal() > 0) {
-        await claimHeroResources(resourcesNeeded, ClaimHeroResourcesReason.AutoUnits);
+        await claimHeroResources(
+          resourcesNeeded,
+          ClaimHeroResourcesReason.AutoUnits,
+        );
       }
     }
 
@@ -196,7 +230,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
       });
 
       const { tribe } = getAccountContext().gameInfo;
-      const inputUnitIndex = +uIndex - (10 * (tribe - 1));
+      const inputUnitIndex = +uIndex - 10 * (tribe - 1);
       const input = await page.$(`[name=t${inputUnitIndex}]`);
 
       if (input) {

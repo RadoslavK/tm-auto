@@ -1,9 +1,5 @@
 import { Dialog } from '@material-ui/core';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Link,
   Redirect,
@@ -37,9 +33,24 @@ type NavigationItem = {
 };
 
 const navigation: readonly NavigationItem[] = [
-  { label: 'Buildings', path: 'buildings', component: Buildings, tabType: VillageSettingsTabType.AutoBuild },
-  { label: 'Units', path: 'units', component: Units, tabType: VillageSettingsTabType.AutoUnits },
-  { label: 'Parties', path: 'parties', component: Parties, tabType: VillageSettingsTabType.AutoParty },
+  {
+    label: 'Buildings',
+    path: 'buildings',
+    component: Buildings,
+    tabType: VillageSettingsTabType.AutoBuild,
+  },
+  {
+    label: 'Units',
+    path: 'units',
+    component: Units,
+    tabType: VillageSettingsTabType.AutoUnits,
+  },
+  {
+    label: 'Parties',
+    path: 'parties',
+    component: Parties,
+    tabType: VillageSettingsTabType.AutoParty,
+  },
   { label: 'Tasks', path: 'tasks-activity', component: VillageTasksActivity },
 ];
 
@@ -64,7 +75,9 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const history = useHistory();
 
-  const [refreshVillage] = useRefreshVillageMutation({ variables: { villageId } });
+  const [refreshVillage] = useRefreshVillageMutation({
+    variables: { villageId },
+  });
 
   const onRefreshVillage = () => {
     refreshVillage();
@@ -77,7 +90,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   }, [village, history]);
 
   const getTabType = useCallback((tab: string): VillageSettingsTabType => {
-    const navPart = navigation.find(n => n.path === tab);
+    const navPart = navigation.find((n) => n.path === tab);
 
     if (!navPart) {
       throw new Error(`Unknown tab type for path: ${tab} request`);
@@ -98,28 +111,22 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const { resources } = village;
 
-  const currentNavMatch = new RegExp(`${match.url}/(.*)/?`).exec(location.pathname);
+  const currentNavMatch = new RegExp(`${match.url}/(.*)/?`).exec(
+    location.pathname,
+  );
   const currentNav = currentNavMatch && currentNavMatch[1];
-  const showSettingsButton = navigation.find(x => x.path === currentNav)?.tabType !== undefined;
+  const showSettingsButton =
+    navigation.find((x) => x.path === currentNav)?.tabType !== undefined;
 
   return (
     <div>
       <Resources resources={resources} />
       <CrannyCapacity />
-      {showSettingsButton && (
-        <button onClick={openSettings}>
-          Settings
-        </button>
-      )}
-      <button onClick={onRefreshVillage}>
-        Refresh
-      </button>
+      {showSettingsButton && <button onClick={openSettings}>Settings</button>}
+      <button onClick={onRefreshVillage}>Refresh</button>
       <div>
         {navigation.map((n) => (
-          <Link
-            key={n.path}
-            to={`${match.url}/${n.path}`}
-          >
+          <Link key={n.path} to={`${match.url}/${n.path}`}>
             {n.label}
           </Link>
         ))}
@@ -134,13 +141,12 @@ export const Village: React.FC<Props> = ({ villageId }) => {
         ))}
         <Redirect to={`${match.path}/${navigation[0].path}`} />
       </Switch>
-      <Dialog
-        onClose={closeSettings}
-        open={showSettings}
-      >
+      <Dialog onClose={closeSettings} open={showSettings}>
         <Route
           path={`${match.path}/:tab`}
-          render={(routeProps: RouteComponentProps<{ readonly tab: string; }>) => (
+          render={(
+            routeProps: RouteComponentProps<{ readonly tab: string }>,
+          ) => (
             <VillageSettings
               getTabType={getTabType}
               tab={routeProps.match.params.tab}

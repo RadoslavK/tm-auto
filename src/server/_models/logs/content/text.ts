@@ -1,6 +1,6 @@
-import { TextLogEntryType } from '../../../_types/graphql.type';
 import { mergeDefaults } from '../../../../_shared/merge';
 import { PartialFields } from '../../../../_shared/types/fields.type';
+import { TextLogEntryType } from '../../../_types/graphql.type';
 
 export class TextLogEntryContent {
   public readonly message: string = '';

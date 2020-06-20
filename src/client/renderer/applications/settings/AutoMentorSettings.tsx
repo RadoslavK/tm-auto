@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../server/utils/graphql';
 import {
   GetAutoMentorSettingsDocument,
   GetAutoMentorSettingsQuery,
@@ -13,10 +11,12 @@ import {
   useResetAutoMentorSettingsMutation,
   useUpdateAutoMentorSettingsMutation,
 } from '../../_graphql/graphqlHooks';
-import { updateQueryCache } from '../../../../server/utils/graphql';
 
 const useAutoMentorSettings = () => {
-  const { data: queryData, loading: queryLoading } = useGetAutoMentorSettingsQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetAutoMentorSettingsQuery();
 
   const [updateSettings] = useUpdateAutoMentorSettingsMutation({
     update: (cache, { data }) => {
@@ -24,7 +24,10 @@ const useAutoMentorSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAutoMentorSettingsQuery, GetAutoMentorSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoMentorSettingsQuery,
+        GetAutoMentorSettingsQueryVariables
+      >({
         cache,
         query: GetAutoMentorSettingsDocument,
         data: { autoMentorSettings: data.updateAutoMentorSettings },
@@ -38,7 +41,10 @@ const useAutoMentorSettings = () => {
         return;
       }
 
-      updateQueryCache<GetAutoMentorSettingsQuery, GetAutoMentorSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoMentorSettingsQuery,
+        GetAutoMentorSettingsQueryVariables
+      >({
         cache,
         query: GetAutoMentorSettingsDocument,
         data: { autoMentorSettings: data.resetAutoMentorSettings },
@@ -47,9 +53,7 @@ const useAutoMentorSettings = () => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.autoMentorSettings,
+    settings: queryLoading || !queryData ? null : queryData.autoMentorSettings,
     updateSettings,
     resetSettings,
   };
@@ -59,11 +63,7 @@ export const AutoMentorSettings: React.FC = () => {
   const [state, setState] = useState<UpdateAutoMentorSettingsInput>();
   const [hasChanges, setHasChanges] = useState(false);
 
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useAutoMentorSettings();
+  const { resetSettings, settings, updateSettings } = useAutoMentorSettings();
 
   useEffect(() => {
     if (settings) {
@@ -81,16 +81,18 @@ export const AutoMentorSettings: React.FC = () => {
     return null;
   }
 
-  const onCheckBoxChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+  const onCheckBoxChange = async (
+    e: React.FormEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -106,8 +108,7 @@ export const AutoMentorSettings: React.FC = () => {
           color="primary"
           onClick={onReset}
           type="button"
-          variant="contained"
-        >
+          variant="contained">
           Reset to default
         </Button>
       </div>

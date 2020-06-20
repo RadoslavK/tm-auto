@@ -1,3 +1,4 @@
+import { getAllEnumValues } from '../../_shared/enumUtils';
 import {
   BuildingConditions,
   CapitalCondition,
@@ -5,7 +6,6 @@ import {
 import { BuildingType } from '../_models/enums/buildingType';
 import { Tribe } from '../_models/enums/tribe';
 import { Village } from '../_models/village/village';
-import { getAllEnumValues } from '../../_shared/enumUtils';
 import { getAccountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
 import { buildingInfoService } from './info/buildingInfoService';
@@ -17,7 +17,9 @@ export class AvailableBuildingTypesService {
     this._village = getAccountContext().villageService.village(villageId);
   }
 
-  public availableBuildingTypes = (fieldId: number): readonly BuildingType[] => {
+  public availableBuildingTypes = (
+    fieldId: number,
+  ): readonly BuildingType[] => {
     const { tribe } = getAccountContext().gameInfo;
 
     const buildingTypes: BuildingType[] = [];
@@ -68,56 +70,72 @@ export class AvailableBuildingTypesService {
       }
 
       default: {
-        getAllEnumValues(BuildingType).filter(type => type !== BuildingType.None).forEach(type => {
-          if (type <= BuildingType.Crop) {
-            return;
-          }
-
-          switch (type) {
-            case BuildingType.Blacksmith:
-            case BuildingType.RallyPoint:
-            case BuildingType.CityWall:
-            case BuildingType.EarthWall:
-            case BuildingType.Palisade:
-            case BuildingType.StoneWall:
-            case BuildingType.MakeshiftWall:
-            case BuildingType.WonderOfTheWorld:
-              return;
-
-            default:
-              break;
-          }
-
-          const buildingConditions = buildingInfoService.getBuildingInfo(type).conditions;
-          const meetVillageConditions = this.newBuildingMeetsConditions(type, buildingConditions);
-
-          if (!meetVillageConditions) {
-            return;
-          }
-
-          const normalizedBuildingSlots = this._village.buildings.spots.buildings();
-          const spotsOfType = normalizedBuildingSlots.filter(b => b.type === type);
-
-          // max count = 1
-          const bAlreadyExists = spotsOfType.length > 0;
-
-          if (bAlreadyExists) {
-            if (type !== BuildingType.Granary
-              && type !== BuildingType.Warehouse
-              && type !== BuildingType.Cranny
-              && type !== BuildingType.Trapper) {
+        getAllEnumValues(BuildingType)
+          .filter((type) => type !== BuildingType.None)
+          .forEach((type) => {
+            if (type <= BuildingType.Crop) {
               return;
             }
 
-            // requirements for more than 1 building of that type
-            if (!spotsOfType.some(b => b.level.getTotal() === buildingInfoService.getBuildingInfo(b.type).maxLevel)) {
+            switch (type) {
+              case BuildingType.Blacksmith:
+              case BuildingType.RallyPoint:
+              case BuildingType.CityWall:
+              case BuildingType.EarthWall:
+              case BuildingType.Palisade:
+              case BuildingType.StoneWall:
+              case BuildingType.MakeshiftWall:
+              case BuildingType.WonderOfTheWorld:
+                return;
+
+              default:
+                break;
+            }
+
+            const buildingConditions = buildingInfoService.getBuildingInfo(type)
+              .conditions;
+            const meetVillageConditions = this.newBuildingMeetsConditions(
+              type,
+              buildingConditions,
+            );
+
+            if (!meetVillageConditions) {
               return;
             }
-          }
 
-          // requirements
-          buildingTypes.push(type);
-        });
+            const normalizedBuildingSlots = this._village.buildings.spots.buildings();
+            const spotsOfType = normalizedBuildingSlots.filter(
+              (b) => b.type === type,
+            );
+
+            // max count = 1
+            const bAlreadyExists = spotsOfType.length > 0;
+
+            if (bAlreadyExists) {
+              if (
+                type !== BuildingType.Granary &&
+                type !== BuildingType.Warehouse &&
+                type !== BuildingType.Cranny &&
+                type !== BuildingType.Trapper
+              ) {
+                return;
+              }
+
+              // requirements for more than 1 building of that type
+              if (
+                !spotsOfType.some(
+                  (b) =>
+                    b.level.getTotal() ===
+                    buildingInfoService.getBuildingInfo(b.type).maxLevel,
+                )
+              ) {
+                return;
+              }
+            }
+
+            // requirements
+            buildingTypes.push(type);
+          });
 
         break;
       }
@@ -126,34 +144,47 @@ export class AvailableBuildingTypesService {
     return buildingTypes;
   };
 
-  private newBuildingMeetsConditions = (type: BuildingType, conditions: BuildingConditions): boolean => {
-    if (type === BuildingType.GreatGranary
-      || type === BuildingType.GreatWarehouse) {
+  private newBuildingMeetsConditions = (
+    type: BuildingType,
+    conditions: BuildingConditions,
+  ): boolean => {
+    if (
+      type === BuildingType.GreatGranary ||
+      type === BuildingType.GreatWarehouse
+    ) {
       return false;
     }
 
-    if (conditions.playerTribe !== null
-      && conditions.playerTribe !== getAccountContext().gameInfo.tribe) {
+    if (
+      conditions.playerTribe !== null &&
+      conditions.playerTribe !== getAccountContext().gameInfo.tribe
+    ) {
       return false;
     }
 
     const { isCapital } = this._village;
-    if ((conditions.capital === CapitalCondition.Prohibited && isCapital)
-      || (conditions.capital === CapitalCondition.Required && !isCapital)) {
+    if (
+      (conditions.capital === CapitalCondition.Prohibited && isCapital) ||
+      (conditions.capital === CapitalCondition.Required && !isCapital)
+    ) {
       return false;
     }
 
     const normalizedBuildingSpots = this._village.buildings.spots.buildings();
 
     // vsetky budovy aj v queue
-    const buildings = normalizedBuildingSpots.filter(b => b.type === type);
+    const buildings = normalizedBuildingSpots.filter((b) => b.type === type);
 
     if (conditions.isUnique) {
       if (buildings.length) {
         return false;
       }
     } else {
-      const completedBuildingExists = buildings.some(b => b.level.getTotal() === buildingInfoService.getBuildingInfo(b.type).maxLevel);
+      const completedBuildingExists = buildings.some(
+        (b) =>
+          b.level.getTotal() ===
+          buildingInfoService.getBuildingInfo(b.type).maxLevel,
+      );
 
       if (buildings.length && !completedBuildingExists) {
         // neni unikatna, uz nejaka existuje ale neni max level
@@ -161,7 +192,9 @@ export class AvailableBuildingTypesService {
       }
     }
 
-    const hasProhibitedBuildings = normalizedBuildingSpots.some(b => conditions.prohibitedBuildingTypes.includes(b.type));
+    const hasProhibitedBuildings = normalizedBuildingSpots.some((b) =>
+      conditions.prohibitedBuildingTypes.includes(b.type),
+    );
 
     if (hasProhibitedBuildings) {
       return false;
@@ -170,8 +203,9 @@ export class AvailableBuildingTypesService {
     for (let i = 0; i < conditions.requiredBuildings.length; i++) {
       const requiredBuilding = conditions.requiredBuildings[i];
       const requiredBuildingExists = normalizedBuildingSpots.some(
-        b => b.level.getTotal() >= requiredBuilding.level
-          && b.type === requiredBuilding.type,
+        (b) =>
+          b.level.getTotal() >= requiredBuilding.level &&
+          b.type === requiredBuilding.type,
       );
 
       if (!requiredBuildingExists) {

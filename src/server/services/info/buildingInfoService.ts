@@ -1,9 +1,9 @@
+import buildingInfos from '../../../../resources/building-infos.json';
 import { BuildingCategory } from '../../_enums/buildingCategory';
 import { BuildingConditions } from '../../_models/buildings/buildingConditions';
 import { Duration } from '../../_models/duration';
 import { BuildingType } from '../../_models/enums/buildingType';
 import { Resources } from '../../_models/misc/resources';
-import buildingInfos from '../../../../resources/building-infos.json';
 
 export type BuildingLevelInfo = {
   readonly buildingTime: Duration;
@@ -33,13 +33,18 @@ class BuildingInfoService {
     const info = this.infos().get(type);
 
     if (!info) {
-      throw new Error(`Building info for type not found: ${BuildingType[type]}`);
+      throw new Error(
+        `Building info for type not found: ${BuildingType[type]}`,
+      );
     }
 
     return info;
   };
 
-  public getBuildingLevelInfo = (type: BuildingType, level: number): BuildingLevelInfo => {
+  public getBuildingLevelInfo = (
+    type: BuildingType,
+    level: number,
+  ): BuildingLevelInfo => {
     if (level === 0) {
       return emptyLevelInfo;
     }
@@ -49,7 +54,9 @@ class BuildingInfoService {
     const forLevel = info.levelInfos.get(level);
 
     if (!forLevel) {
-      throw new Error(`Building ${BuildingType[type]} does not have level ${level}`);
+      throw new Error(
+        `Building ${BuildingType[type]} does not have level ${level}`,
+      );
     }
 
     return forLevel;
@@ -59,28 +66,27 @@ class BuildingInfoService {
     if (!this.buildingInfos) {
       const infosMap = new Map();
 
-      Object
-        .entries(buildingInfos)
-        .forEach(([type, info]) => {
-          const levelInfos = Object
-            .entries(info.levelInfos)
-            .reduce((reduced, [level, levelInfo]) => {
-              reduced.set(+level, {
-                buildingTime: new Duration(levelInfo.buildingTime),
-                cost: new Resources(levelInfo.cost),
-                culturePoints: levelInfo.culturePoints,
-              });
+      Object.entries(buildingInfos).forEach(([type, info]) => {
+        const levelInfos = Object.entries(info.levelInfos).reduce(
+          (reduced, [level, levelInfo]) => {
+            reduced.set(+level, {
+              buildingTime: new Duration(levelInfo.buildingTime),
+              cost: new Resources(levelInfo.cost),
+              culturePoints: levelInfo.culturePoints,
+            });
 
-              return reduced;
-            }, new Map<number, BuildingLevelInfo>());
+            return reduced;
+          },
+          new Map<number, BuildingLevelInfo>(),
+        );
 
-          const buildingInfo: BuildingInfo = {
-            ...info,
-            levelInfos,
-          } as any;
+        const buildingInfo: BuildingInfo = {
+          ...info,
+          levelInfos,
+        };
 
-          infosMap.set(+type, buildingInfo);
-        });
+        infosMap.set(+type, buildingInfo);
+      });
 
       this.buildingInfos = infosMap;
     }

@@ -2,10 +2,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React, { useState } from 'react';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { BotState } from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
@@ -39,7 +36,9 @@ export const Navigation: React.FC = () => {
     return null;
   }
 
-  const currentItemIndex = navigationApps.findIndex(app => pathname.startsWith(app.path));
+  const currentItemIndex = navigationApps.findIndex((app) =>
+    pathname.startsWith(app.path),
+  );
 
   if (currentItemIndex === -1) {
     return null;
@@ -51,33 +50,28 @@ export const Navigation: React.FC = () => {
     }
   };
 
-  const getTabPath = (index: number, path: string): string => currentItemIndex === index ? '#' : path;
+  const getTabPath = (index: number, path: string): string =>
+    currentItemIndex === index ? '#' : path;
 
   return (
     <AppBar position="fixed">
-      <Tabs
-        centered
-        indicatorColor="primary"
-        value={currentItemIndex}
-      >
+      <Tabs centered indicatorColor="primary" value={currentItemIndex}>
         {navigationApps.map((app, index) => (
           <Tab
             key={app.path}
             component={Link}
             label={app.label}
             onClick={index === 0 ? undefined : markLastVillagePath}
-            to={getTabPath(index, index !== 0
-              ? navigationApps[index].path
-              : lastVillagesPath || navigationApps[index].path)}
+            to={getTabPath(
+              index,
+              index !== 0
+                ? navigationApps[index].path
+                : lastVillagesPath || navigationApps[index].path,
+            )}
           />
         ))}
-        <Tab
-          botState={botState}
-          component={BotStateToggle}
-        />
-        {botState === BotState.Paused && (
-          <Tab component={SignOut} />
-        )}
+        <Tab botState={botState} component={BotStateToggle} />
+        {botState === BotState.Paused && <Tab component={SignOut} />}
       </Tabs>
     </AppBar>
   );

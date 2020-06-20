@@ -4,36 +4,33 @@ import {
   InputLabel,
   NativeSelect,
 } from '@material-ui/core';
-import {
-  makeStyles,
-  withStyles,
-} from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 
 import { useGetAccountsQuery } from '../../../_graphql/graphqlHooks';
 import { getServerShortcut } from '../../../utils/getServerShortcut';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
     display: 'flex',
     margin: theme.spacing(1),
   },
 }));
 
-const BootstrapInput = withStyles(theme => ({
+const BootstrapInput = withStyles((theme) => ({
   input: {
     '&:focus': {
       borderColor: '#80bdff',
       borderRadius: 4,
       boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
     },
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
+    'backgroundColor': theme.palette.background.paper,
+    'border': '1px solid #ced4da',
 
-    borderRadius: 4,
+    'borderRadius': 4,
 
     // Use the system font instead of the default Roboto font.
-    fontFamily: [
+    'fontFamily': [
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -46,12 +43,12 @@ const BootstrapInput = withStyles(theme => ({
       '"Segoe UI Symbol"',
     ].join(','),
 
-    fontSize: 16,
+    'fontSize': 16,
 
-    padding: '10px 26px 10px 12px',
+    'padding': '10px 26px 10px 12px',
 
-    position: 'relative',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    'position': 'relative',
+    'transition': theme.transitions.create(['border-color', 'box-shadow']),
   },
   root: {
     'label + &': {
@@ -66,13 +63,26 @@ type Props = {
   readonly selectedId: string | null | undefined;
 };
 
-export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selectedId }) => {
+export const Accounts: React.FC<Props> = ({
+  disabled,
+  onAccountChanged,
+  selectedId,
+}) => {
   const { data: queryData, loading: queryLoading } = useGetAccountsQuery();
 
   useEffect(() => {
-    if (!selectedId && !queryLoading && queryData && queryData.accounts.length) {
+    if (
+      !selectedId &&
+      !queryLoading &&
+      queryData &&
+      queryData.accounts.length
+    ) {
       onAccountChanged(queryData.accounts[0].id);
-    } else if (selectedId && queryData && !queryData.accounts.some(account => account.id === selectedId)) {
+    } else if (
+      selectedId &&
+      queryData &&
+      !queryData.accounts.some((account) => account.id === selectedId)
+    ) {
       onAccountChanged('');
     }
   }, [queryData, queryLoading, onAccountChanged, selectedId]);
@@ -90,27 +100,15 @@ export const Accounts: React.FC<Props> = ({ disabled, onAccountChanged, selected
   };
 
   return (
-    <FormControl
-      className={classes.formControl}
-      disabled={disabled}
-    >
-      <InputLabel>
-        Account
-      </InputLabel>
+    <FormControl className={classes.formControl} disabled={disabled}>
+      <InputLabel>Account</InputLabel>
       <NativeSelect
         input={<BootstrapInput />}
         onChange={onOptionChanged}
-        value={selectedId || ''}
-      >
+        value={selectedId || ''}>
         {queryData.accounts.map((account) => (
-          <option
-            key={account.id}
-            value={account.id}
-          >
-            {account.username}
-            {' '}
-            @
-            {getServerShortcut(account.server)}
+          <option key={account.id} value={account.id}>
+            {account.username} @ {getServerShortcut(account.server)}
           </option>
         ))}
       </NativeSelect>

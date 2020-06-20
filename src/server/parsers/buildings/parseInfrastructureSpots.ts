@@ -8,9 +8,7 @@ import { fieldIds } from '../../constants/fieldIds';
 import { isInfrastructure } from '../../utils/buildingUtils';
 import { validateUrl } from '../../utils/validateUrl';
 
-const acceptedUrls: readonly string[] = [
-  TravianPath.InfrastructureOverview,
-];
+const acceptedUrls: readonly string[] = [TravianPath.InfrastructureOverview];
 
 const getWallType = (): BuildingType => {
   const { tribe } = getAccountContext().gameInfo;
@@ -36,7 +34,9 @@ const getWallType = (): BuildingType => {
   }
 };
 
-export const parseInfrastructureSpots = async (): Promise<readonly ActualBuilding[]> => {
+export const parseInfrastructureSpots = async (): Promise<
+  readonly ActualBuilding[]
+> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
@@ -44,54 +44,63 @@ export const parseInfrastructureSpots = async (): Promise<readonly ActualBuildin
 
   const nodes = await page.$$('#village_map > .buildingSlot');
 
-  const buildings = await Promise.all(nodes.map(async (node): Promise<ActualBuilding | null> => {
-    const className = await node.getProperty('className').then(classNode => classNode.jsonValue());
-    const fieldIdMatch = /a(\d+)/.exec(className as string);
+  const buildings = await Promise.all(
+    nodes.map(
+      async (node): Promise<ActualBuilding | null> => {
+        const className = await node
+          .getProperty('className')
+          .then((classNode) => classNode.jsonValue());
+        const fieldIdMatch = /a(\d+)/.exec(className as string);
 
-    if (!fieldIdMatch) {
-      throw new Error('Failed to parse field id');
-    }
+        if (!fieldIdMatch) {
+          throw new Error('Failed to parse field id');
+        }
 
-    const fieldId = +fieldIdMatch[1];
+        const fieldId = +fieldIdMatch[1];
 
-    if (!isInfrastructure(fieldId)) {
-      return null;
-    }
+        if (!isInfrastructure(fieldId)) {
+          return null;
+        }
 
-    const typeMatch = /g(\d+)/.exec(className as string);
+        const typeMatch = /g(\d+)/.exec(className as string);
 
-    if (!typeMatch) {
-      throw new Error('Failed to parse building type');
-    }
+        if (!typeMatch) {
+          throw new Error('Failed to parse building type');
+        }
 
-    let type: BuildingType = +typeMatch[1];
+        let type: BuildingType = +typeMatch[1];
 
-    const level = type === BuildingType.None
-      ? 0
-      : +await node.$eval('.labelLayer', levelNode => (levelNode as HTMLElement).innerText);
+        const level =
+          type === BuildingType.None
+            ? 0
+            : +(await node.$eval(
+                '.labelLayer',
+                (levelNode) => (levelNode as HTMLElement).innerText,
+              ));
 
-    if (fieldId === fieldIds.RallyPoint) {
-      type = BuildingType.RallyPoint;
-    } else if (fieldId === fieldIds.Wall) {
-      type = getWallType();
-    }
+        if (fieldId === fieldIds.RallyPoint) {
+          type = BuildingType.RallyPoint;
+        } else if (fieldId === fieldIds.Wall) {
+          type = getWallType();
+        }
 
-    return new ActualBuilding({
-      fieldId,
-      level,
-      type,
-    });
-  }));
+        return new ActualBuilding({
+          fieldId,
+          level,
+          type,
+        });
+      },
+    ),
+  );
 
   const uniqueFieldIds: number[] = [];
 
-  return buildings
-    .filter(b => {
-      if (b && !uniqueFieldIds.includes(b.fieldId)) {
-        uniqueFieldIds.push(b.fieldId);
-        return true;
-      }
+  return buildings.filter((b) => {
+    if (b && !uniqueFieldIds.includes(b.fieldId)) {
+      uniqueFieldIds.push(b.fieldId);
+      return true;
+    }
 
-      return false;
-    }) as readonly ActualBuilding[];
+    return false;
+  }) as readonly ActualBuilding[];
 };

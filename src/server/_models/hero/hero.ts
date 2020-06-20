@@ -1,6 +1,6 @@
-import { HeroState } from '../../_types/graphql.type';
 import { mergeDefaults } from '../../../_shared/merge';
 import { PartialFields } from '../../../_shared/types/fields.type';
+import { HeroState } from '../../_types/graphql.type';
 import { Resources } from '../misc/resources';
 
 export class Hero {

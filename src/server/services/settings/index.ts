@@ -22,9 +22,15 @@ export class SettingsService {
 
     this.villages = new Map();
 
-    this.account = new InternalSettingsService(accountSettingsPath.general, AccountSettings);
+    this.account = new InternalSettingsService(
+      accountSettingsPath.general,
+      AccountSettings,
+    );
     this.hero = new HeroSettingsService(accountId);
-    this.autoMentor = new InternalSettingsService(accountSettingsPath.autoMentor, AutoMentorSettings);
+    this.autoMentor = new InternalSettingsService(
+      accountSettingsPath.autoMentor,
+      AutoMentorSettings,
+    );
   }
 
   public village = (villageId: string): VillageSettingsService => {

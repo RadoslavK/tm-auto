@@ -8,22 +8,28 @@ const acceptedUrls: readonly string[] = [
   TravianPath.InfrastructureOverview,
 ];
 
-export const parseBuildingsInProgress = async (): Promise<readonly BuildingInProgress[]> => {
+export const parseBuildingsInProgress = async (): Promise<
+  readonly BuildingInProgress[]
+> => {
   await validateUrl(acceptedUrls);
 
   const page = await getPage();
-  const content = await page.$eval('#content', x => x.innerHTML);
+  const content = await page.$eval('#content', (x) => x.innerHTML);
   const buildings: BuildingInProgress[] = [];
 
-  const timers: number[] = await page.$$eval('.buildingList .buildDuration .timer', e => e.map(timer => {
-    const value = timer.getAttribute('value');
+  const timers: number[] = await page.$$eval(
+    '.buildingList .buildDuration .timer',
+    (e) =>
+      e.map((timer) => {
+        const value = timer.getAttribute('value');
 
-    if (!value) {
-      throw new Error('Failed to parse building progress timer');
-    }
+        if (!value) {
+          throw new Error('Failed to parse building progress timer');
+        }
 
-    return +value;
-  }));
+        return +value;
+      }),
+  );
 
   let match;
   const re = /{"stufe":(.*?),"gid":"(.*?)","aid":"(.*?)"}/g;

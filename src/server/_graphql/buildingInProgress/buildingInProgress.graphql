@@ -1,14 +1,14 @@
 type BuildingInProgress {
-    level: Int!
-    finishedAt: Timestamp!
-    type: BuildingType!
-    fieldId: Int!
+  level: Int!
+  finishedAt: Timestamp!
+  type: BuildingType!
+  fieldId: Int!
 }
 
 extend type Query {
-    buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
+  buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
 }
 
 extend type Subscription {
-    buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
+  buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
 }

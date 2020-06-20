@@ -1,7 +1,7 @@
 type UnitInfo {
-    name: String!
+  name: String!
 }
 
 extend type Query {
-    unitInfo(index: Int!): UnitInfo!
+  unitInfo(index: Int!): UnitInfo!
 }

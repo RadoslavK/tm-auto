@@ -1,22 +1,22 @@
 fragment AutoMentorSettings on AutoMentorSettings {
-    acceptDailyRewards
-    acceptTaskRewards
+  acceptDailyRewards
+  acceptTaskRewards
 }
 
 query GetAutoMentorSettings {
-    autoMentorSettings {
-        ...AutoMentorSettings
-    }
+  autoMentorSettings {
+    ...AutoMentorSettings
+  }
 }
 
 mutation UpdateAutoMentorSettings($settings: UpdateAutoMentorSettingsInput!) {
-    updateAutoMentorSettings(settings: $settings) {
-        ...AutoMentorSettings
-    }
+  updateAutoMentorSettings(settings: $settings) {
+    ...AutoMentorSettings
+  }
 }
 
 mutation ResetAutoMentorSettings {
-    resetAutoMentorSettings {
-        ...AutoMentorSettings
-    }
+  resetAutoMentorSettings {
+    ...AutoMentorSettings
+  }
 }

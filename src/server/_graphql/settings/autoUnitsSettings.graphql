@@ -1,55 +1,65 @@
 type AutoUnitsUnitSettings {
-    index: Int!
-    autoBuild: Boolean!
-    trainForever: Boolean!
-    targetAmount: Int!
+  index: Int!
+  autoBuild: Boolean!
+  trainForever: Boolean!
+  targetAmount: Int!
 }
 
 input UpdateAutoUnitsUnitSettingsInput {
-    index: Int!
-    autoBuild: Boolean!
-    trainForever: Boolean!
-    targetAmount: Int!
+  index: Int!
+  autoBuild: Boolean!
+  trainForever: Boolean!
+  targetAmount: Int!
 }
 
 type AutoUnitsBuildingSettings {
-    allow: Boolean!
-    maxBuildTime: Duration!
-    units: [AutoUnitsUnitSettings!]!
+  allow: Boolean!
+  maxBuildTime: Duration!
+  units: [AutoUnitsUnitSettings!]!
 }
 
 input UpdateAutoUnitsBuildingSettingsInput {
-    allow: Boolean!
-    maxBuildTime: DurationInput!
+  allow: Boolean!
+  maxBuildTime: DurationInput!
 }
 
 type AutoUnitsSettings {
-    allow: Boolean!
-    coolDown: CoolDown!
-    useHeroResources: Boolean!
+  allow: Boolean!
+  coolDown: CoolDown!
+  useHeroResources: Boolean!
 
-    minCrop: Int!
-    barracks: AutoUnitsBuildingSettings!
-    stable: AutoUnitsBuildingSettings!
-    workshop: AutoUnitsBuildingSettings!
-    residence: AutoUnitsBuildingSettings!
+  minCrop: Int!
+  barracks: AutoUnitsBuildingSettings!
+  stable: AutoUnitsBuildingSettings!
+  workshop: AutoUnitsBuildingSettings!
+  residence: AutoUnitsBuildingSettings!
 }
 
 input UpdateAutoUnitsSettingsInput {
-    allow: Boolean!
-    coolDown: CoolDownInput!
-    useHeroResources: Boolean!
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  useHeroResources: Boolean!
 
-    minCrop: Int!
+  minCrop: Int!
 }
 
 extend type Query {
-    autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
+  autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }
 
 extend type Mutation {
-    updateAutoUnitsSettings(villageId: ID!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
-    updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: BuildingType!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
-    updateAutoUnitsUnitSettings(villageId: ID!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsSettings!
-    resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
+  updateAutoUnitsSettings(
+    villageId: ID!
+    settings: UpdateAutoUnitsSettingsInput!
+  ): AutoUnitsSettings!
+  updateAutoUnitsBuildingSettings(
+    villageId: ID!
+    buildingType: BuildingType!
+    settings: UpdateAutoUnitsBuildingSettingsInput!
+  ): AutoUnitsSettings!
+  updateAutoUnitsUnitSettings(
+    villageId: ID!
+    settings: UpdateAutoUnitsUnitSettingsInput!
+  ): AutoUnitsSettings!
+  resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }

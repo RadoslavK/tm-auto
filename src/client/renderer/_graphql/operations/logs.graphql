@@ -1,50 +1,50 @@
 #import "./misc.graphql"
 
 fragment LogEntry on LogEntry {
-    timestamp {
-        ...Timestamp
+  timestamp {
+    ...Timestamp
+  }
+  village {
+    id
+    coords {
+      ...Coords
     }
-    village {
-        id
-        coords {
-            ...Coords
-        }
-        name
+    name
+  }
+  content {
+    ... on TextLogEntryContent {
+      message
+      messageType
     }
-    content {
-        ... on TextLogEntryContent {
-            message
-            messageType
-        }
-        ... on AutoBuildLogEntryContent {
-            fieldId
-            level
-            name
-            type
-        }
-        ... on AutoUnitsLogEntryContent {
-            amount
-            index
-            tribe
-            unitName
-        }
-        ...on ResourceClaimLogEntryContent {
-            reason
-            resources {
-                ...Resources
-            }
-        }
+    ... on AutoBuildLogEntryContent {
+      fieldId
+      level
+      name
+      type
     }
+    ... on AutoUnitsLogEntryContent {
+      amount
+      index
+      tribe
+      unitName
+    }
+    ... on ResourceClaimLogEntryContent {
+      reason
+      resources {
+        ...Resources
+      }
+    }
+  }
 }
 
 query GetLogEntries {
-    logEntries {
-        ...LogEntry
-    }
+  logEntries {
+    ...LogEntry
+  }
 }
 
 subscription OnLogEntryAdded {
-    logEntryAdded {
-        ...LogEntry
-    }
+  logEntryAdded {
+    ...LogEntry
+  }
 }

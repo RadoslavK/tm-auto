@@ -1,12 +1,7 @@
 import { Duration } from '../_graphql/graphqlHooks';
 
 export const formatTimeFromDuration = (duration: Duration): string => {
-  const {
-    days,
-    hours,
-    minutes,
-    seconds,
-  } = duration;
+  const { days, hours, minutes, seconds } = duration;
 
   const correctedHours = hours > 9 ? `${hours}` : `0${hours}`;
   const correctedMinutes = minutes > 9 ? `${minutes}` : `0${minutes}`;

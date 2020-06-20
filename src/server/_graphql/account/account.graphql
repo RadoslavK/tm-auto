@@ -1,26 +1,26 @@
 type UserAccount {
-    id: ID!
-    username: String!
-    password: String!
-    server: String!
+  id: ID!
+  username: String!
+  password: String!
+  server: String!
 }
 
 extend type Query {
-    account(id: ID!): UserAccount!
-    accounts: [UserAccount!]!
-    currentAccount: UserAccount!
-    isAccountTaken(account: AccountInput!): Boolean!
-    lastSignedAccountId: String
+  account(id: ID!): UserAccount!
+  accounts: [UserAccount!]!
+  currentAccount: UserAccount!
+  isAccountTaken(account: AccountInput!): Boolean!
+  lastSignedAccountId: String
 }
 
 input AccountInput {
-    username: String!
-    password: String!
-    server: String!
+  username: String!
+  password: String!
+  server: String!
 }
 
 extend type Mutation {
-    createAccount(account: AccountInput!): UserAccount!
-    updateAccount(id: ID!, account: AccountInput!): UserAccount!
-    deleteAccount(id: ID!): UserAccount!
+  createAccount(account: AccountInput!): UserAccount!
+  updateAccount(id: ID!, account: AccountInput!): UserAccount!
+  deleteAccount(id: ID!): UserAccount!
 }

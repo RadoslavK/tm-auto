@@ -1,5 +1,5 @@
-import { BuildingType } from '../_graphql/graphqlHooks';
 import { BuildingType as ServerBuildingType } from '../../../server/_models/enums/buildingType';
+import { BuildingType } from '../_graphql/graphqlHooks';
 
 export enum BuildingImageSize {
   Small,
@@ -32,7 +32,10 @@ export const imageLinks = {
     resources,
   },
 
-  getBuilding: (buildingType: BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
+  getBuilding: (
+    buildingType: BuildingType,
+    size: BuildingImageSize = BuildingImageSize.Normal,
+  ): string => {
     //  Server enums have string values on the client because of GraphQL
     const buildingIndex = ServerBuildingType[buildingType];
 

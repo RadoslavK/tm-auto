@@ -1,59 +1,59 @@
 fragment BuildingSpot on BuildingSpot {
-    fieldId
-    level {
-        actual
-        ongoing
-        queued
-        total
-    }
-    type
+  fieldId
+  level {
+    actual
+    ongoing
+    queued
+    total
+  }
+  type
 }
 
 fragment BuildingSpots on BuildingSpots {
-    infrastructure {
-        ...BuildingSpot
+  infrastructure {
+    ...BuildingSpot
+  }
+  resources {
+    wood {
+      ...BuildingSpot
     }
-    resources {
-        wood {
-            ...BuildingSpot
-        }
-        clay {
-            ...BuildingSpot
-        }
-        iron {
-            ...BuildingSpot
-        }
-        crop {
-            ...BuildingSpot
-        }
+    clay {
+      ...BuildingSpot
     }
+    iron {
+      ...BuildingSpot
+    }
+    crop {
+      ...BuildingSpot
+    }
+  }
 }
 
 query GetBuildingSpots($villageId: ID!) {
-    buildingSpots(villageId: $villageId) {
-        ...BuildingSpots
-    }
+  buildingSpots(villageId: $villageId) {
+    ...BuildingSpots
+  }
 }
 
 query GetAvailableNewBuildingTypes($input: AvailableNewBuildingsInput!) {
-    availableNewBuildingsTypes(input: $input)
+  availableNewBuildingsTypes(input: $input)
 }
 
 query GetBuildingInfo($buildingType: BuildingType!) {
-    buildingInfo(buildingType: $buildingType) {
-        maxLevel
-        name
-    }
+  buildingInfo(buildingType: $buildingType) {
+    maxLevel
+    name
+  }
 }
 
 query GetBuildingLevelInfo($buildingType: BuildingType!, $level: Int!) {
-    buildingLevelInfo(buildingType: $buildingType, level: $level) {
-        cost {
-            ...Resources
-        }
+  buildingLevelInfo(buildingType: $buildingType, level: $level) {
+    cost {
+      ...Resources
     }
+  }
 }
 
 subscription OnActualBuildingLevelsUpdated($villageId: ID!) {
-    actualBuildingLevelsUpdated(villageId: $villageId)
+  actualBuildingLevelsUpdated(villageId: $villageId)
 }

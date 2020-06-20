@@ -1,3 +1,5 @@
+import { Socket } from 'net';
+
 import { generateId } from '../../../_shared/generateId';
 import { ClientMessage } from '../../../_shared/ipc/clientMessages';
 import {
@@ -17,15 +19,15 @@ export class IpcClient {
 
   private listenersMap = new Map<string, Listener<any>[]>();
 
-  private messageQueue: ClientMessage<any>[] = [];
+  private messageQueue: ClientMessage<unknown>[] = [];
 
-  private socketClient: any | null = null;
+  private socketClient: Socket | null = null;
 
   constructor(public socketName: string) {}
 
   public initConnection = async (): Promise<void> =>
-    new Promise(resolve => {
-      window.api.ipcConnect(this.socketName, client => {
+    new Promise((resolve) => {
+      window.api.ipcConnect(this.socketName, (client) => {
         client.on('message', (message: ServerMessage) => {
           switch (message.type) {
             case ServerMessageType.Error: {
@@ -55,7 +57,7 @@ export class IpcClient {
               const listeners = this.listenersMap.get(message.name);
 
               if (listeners) {
-                listeners.forEach(listener => {
+                listeners.forEach((listener) => {
                   listener(message.payload);
                 });
               }
@@ -64,7 +66,11 @@ export class IpcClient {
             }
 
             default:
-              throw new Error(`Unknown message type, message data: ${JSON.stringify(message)}`);
+              throw new Error(
+                `Unknown message type, message data: ${JSON.stringify(
+                  message,
+                )}`,
+              );
           }
         });
 
@@ -74,7 +80,9 @@ export class IpcClient {
 
           // Send any messages that were queued while closed
           if (this.messageQueue.length > 0) {
-            this.messageQueue.forEach(message => client.emit('message', message));
+            this.messageQueue.forEach((message) =>
+              client.emit('message', message),
+            );
             this.messageQueue = [];
           }
 
@@ -96,7 +104,14 @@ export class IpcClient {
     this.socketClient = null;
   };
 
-  public sendMessage = <TPayload extends unknown = unknown, TResponse extends unknown = unknown>(name: string, payload: TPayload, handleResponse?: ReplyHandler<TResponse>): void => {
+  public sendMessage = <
+    TPayload extends unknown = unknown,
+    TResponse extends unknown = unknown
+  >(
+    name: string,
+    payload: TPayload,
+    handleResponse?: ReplyHandler<TResponse>,
+  ): void => {
     const messageId = generateId();
 
     if (handleResponse) {
@@ -116,7 +131,10 @@ export class IpcClient {
     }
   };
 
-  public subscribe = <TPayload>(name: string, listener: Listener<TPayload>): void => {
+  public subscribe = <TPayload>(
+    name: string,
+    listener: Listener<TPayload>,
+  ): void => {
     let listeners = this.listenersMap.get(name);
 
     if (!listeners) {
@@ -127,13 +145,19 @@ export class IpcClient {
     }
   };
 
-  public unsubscribe = <TPayload>(name: string, listener: Listener<TPayload>): void => {
+  public unsubscribe = <TPayload>(
+    name: string,
+    listener: Listener<TPayload>,
+  ): void => {
     const currentListeners = this.listenersMap.get(name);
 
     if (!currentListeners) {
       return;
     }
 
-    this.listenersMap.set(name, currentListeners.filter(x => x !== listener));
+    this.listenersMap.set(
+      name,
+      currentListeners.filter((x) => x !== listener),
+    );
   };
 }

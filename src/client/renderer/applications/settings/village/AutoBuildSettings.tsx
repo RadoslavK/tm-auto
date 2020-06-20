@@ -1,10 +1,7 @@
 import { Button } from '@material-ui/core';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AutoBuildSettings as AutoBuildSettingsModel,
   CoolDown as CoolDownModel,
@@ -18,12 +15,16 @@ import {
   useUpdateAutoBuildSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useGameInfo } from '../../../hooks/useGameInfp';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 
 const useAutoBuildSettings = (villageId: string) => {
-  const { data: queryData, loading: queryLoading } = useGetAutoBuildSettingsQuery({ variables: { villageId } });
+  const {
+    data: queryData,
+    loading: queryLoading,
+  } = useGetAutoBuildSettingsQuery({
+    variables: { villageId },
+  });
 
   const [updateSettings] = useUpdateAutoBuildSettingsMutation({
     update: (cache, { data }) => {
@@ -31,7 +32,10 @@ const useAutoBuildSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoBuildSettingsQuery,
+        GetAutoBuildSettingsQueryVariables
+      >({
         cache,
         query: GetAutoBuildSettingsDocument,
         data: { autoBuildSettings: data.updateAutoBuildSettings },
@@ -46,7 +50,10 @@ const useAutoBuildSettings = (villageId: string) => {
         return;
       }
 
-      updateQueryCache<GetAutoBuildSettingsQuery, GetAutoBuildSettingsQueryVariables>({
+      updateQueryCache<
+        GetAutoBuildSettingsQuery,
+        GetAutoBuildSettingsQueryVariables
+      >({
         cache,
         query: GetAutoBuildSettingsDocument,
         data: { autoBuildSettings: data.resetAutoBuildSettings },
@@ -56,9 +63,7 @@ const useAutoBuildSettings = (villageId: string) => {
   });
 
   return {
-    settings: queryLoading || !queryData
-      ? null
-      : queryData.autoBuildSettings,
+    settings: queryLoading || !queryData ? null : queryData.autoBuildSettings,
     updateSettings,
     resetSettings,
   };
@@ -98,7 +103,9 @@ const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
   };
 };
 
-const getSettingsFromState = (state: Settings): UpdateAutoBuildSettingsInput => {
+const getSettingsFromState = (
+  state: Settings,
+): UpdateAutoBuildSettingsInput => {
   const {
     allowAutoGranary,
     allowAutoWarehouse,
@@ -132,11 +139,9 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const [state, setState] = useState<Settings>();
   const [hasChanges, setHasChanges] = useState(false);
 
-  const {
-    resetSettings,
-    settings,
-    updateSettings,
-  } = useAutoBuildSettings(villageId);
+  const { resetSettings, settings, updateSettings } = useAutoBuildSettings(
+    villageId,
+  );
 
   useEffect(() => {
     if (settings) {
@@ -147,17 +152,25 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: getSettingsFromState(state) } });
+      updateSettings({
+        variables: { villageId, settings: getSettingsFromState(state) },
+      });
     }
   }, [state, hasChanges, updateSettings, villageId]);
 
-  const onCoolDownChange = useCallback((updatedCoolDown: CoolDownModel): void => {
-    setState(prevState => prevState && ({
-      ...prevState,
-      coolDown: updatedCoolDown,
-    }));
-    setHasChanges(true);
-  }, []);
+  const onCoolDownChange = useCallback(
+    (updatedCoolDown: CoolDownModel): void => {
+      setState(
+        (prevState) =>
+          prevState && {
+            ...prevState,
+            coolDown: updatedCoolDown,
+          },
+      );
+      setHasChanges(true);
+    },
+    [],
+  );
 
   const gameInfo = useGameInfo();
 
@@ -172,15 +185,15 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   };
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const {
-      checked,
-      name,
-    } = e.currentTarget;
+    const { checked, name } = e.currentTarget;
 
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: checked,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: checked,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -199,10 +212,13 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   } = state;
 
   const updateState = <TValue extends unknown>(name: string, value: TValue) => {
-    setState(prevState => prevState && ({
-      ...prevState,
-      [name]: value,
-    }));
+    setState(
+      (prevState) =>
+        prevState && {
+          ...prevState,
+          [name]: value,
+        },
+    );
     setHasChanges(true);
   };
 
@@ -223,8 +239,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
         color="primary"
         onClick={onReset}
         type="button"
-        variant="contained"
-      >
+        variant="contained">
         Reset to default
       </Button>
 
@@ -254,10 +269,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
 
       <div>
         <label>Cooldown</label>
-        <CoolDown
-          onChange={onCoolDownChange}
-          value={coolDown}
-        />
+        <CoolDown onChange={onCoolDownChange} value={coolDown} />
       </div>
 
       <div>
@@ -272,7 +284,9 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
       </div>
 
       <div>
-        <label htmlFor="allowFreeSpots">Allow auto buildings on new spots</label>
+        <label htmlFor="allowFreeSpots">
+          Allow auto buildings on new spots
+        </label>
         <input
           checked={allowFreeSpots}
           id="allowFreeSpots"

@@ -8,16 +8,23 @@ import {
 } from '../../_graphql/graphqlHooks';
 
 export const useVillages = () => {
-  const { data: queryData, loading: queryLoading, subscribeToMore } = useGetVillagesQuery();
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useGetVillagesQuery();
 
   useEffect(() => {
-    subscribeToMore<OnVillagesUpdatedSubscription, OnVillagesUpdatedSubscriptionVariables>({
+    subscribeToMore<
+      OnVillagesUpdatedSubscription,
+      OnVillagesUpdatedSubscriptionVariables
+    >({
       document: OnVillagesUpdatedDocument,
-      updateQuery: (_prev, { subscriptionData: { data } }) => ({ villages: data.villagesUpdated }),
+      updateQuery: (_prev, { subscriptionData: { data } }) => ({
+        villages: data.villagesUpdated,
+      }),
     });
   }, [subscribeToMore]);
 
-  return queryLoading || !queryData
-    ? []
-    : queryData.villages;
+  return queryLoading || !queryData ? [] : queryData.villages;
 };

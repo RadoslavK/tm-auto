@@ -11,20 +11,25 @@ export class CoolDown {
     mergeDefaults(this, params);
   }
 
-  static fromDuration = (duration: Duration): CoolDown => new CoolDown({
-    max: duration,
-    min: duration,
-  });
+  static fromDuration = (duration: Duration): CoolDown =>
+    new CoolDown({
+      max: duration,
+      min: duration,
+    });
 
   public getRandomDelay = (): number => {
     const minTotalSeconds = this.min.getTotalSeconds();
     const maxTotalSeconds = this.max.getTotalSeconds();
 
-    return Math.floor(Math.random() * (maxTotalSeconds - minTotalSeconds + 1)) + minTotalSeconds;
+    return (
+      Math.floor(Math.random() * (maxTotalSeconds - minTotalSeconds + 1)) +
+      minTotalSeconds
+    );
   };
 
-  public mergeMin = (other: CoolDown): CoolDown => new CoolDown({
-    max: this.max.getMin(other.max),
-    min: this.min.getMin(other.min),
-  });
+  public mergeMin = (other: CoolDown): CoolDown =>
+    new CoolDown({
+      max: this.max.getMin(other.max),
+      min: this.min.getMin(other.min),
+    });
 }

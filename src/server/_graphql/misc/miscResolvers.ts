@@ -1,7 +1,7 @@
 import { Resolvers } from '../../_types/resolvers.type';
 
-export default <Resolvers> {
+export default <Resolvers>{
   Resources: {
-    total: res => res.getTotal(),
+    total: (res) => res.getTotal(),
   },
 };

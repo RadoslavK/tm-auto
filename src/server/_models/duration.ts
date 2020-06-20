@@ -42,12 +42,10 @@ export class Duration {
   };
 
   public getTotalSeconds = (): number =>
-    (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
+    ((this.days * 24 + this.hours) * 60 + this.minutes) * 60 + this.seconds;
 
   public getMin = (other: Duration): Duration =>
-    this.getTotalSeconds() <= other.getTotalSeconds()
-      ? this
-      : other;
+    this.getTotalSeconds() <= other.getTotalSeconds() ? this : other;
 
   public multiply = (multiplicator: number): Duration =>
     Duration.fromSeconds(this.getTotalSeconds() * multiplicator);

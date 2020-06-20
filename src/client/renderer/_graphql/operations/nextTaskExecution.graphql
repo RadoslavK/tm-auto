@@ -1,73 +1,84 @@
 #import "./misc.graphql"
 
 query NextTaskExecution($task: TaskType!) {
-    nextTaskExecution(task: $task) {
-        ...Timestamp
-    }
+  nextTaskExecution(task: $task) {
+    ...Timestamp
+  }
 }
 
 query NextVillageTaskExecution($villageId: ID!, $task: TaskType!) {
-    nextVillageTaskExecution(villageId: $villageId, task: $task) {
-        ...Timestamp
-    }
+  nextVillageTaskExecution(villageId: $villageId, task: $task) {
+    ...Timestamp
+  }
 }
 
 query NextTasksExecution {
-    nextTasksExecution {
-        ...Timestamp
-    }
+  nextTasksExecution {
+    ...Timestamp
+  }
 }
 
 mutation SetNextTaskExecution($task: TaskType!, $delay: DurationInput!) {
-    setNextTaskExecution(task: $task, delay: $delay) {
-        ...Timestamp
-    }
+  setNextTaskExecution(task: $task, delay: $delay) {
+    ...Timestamp
+  }
 }
 
 mutation SetNextTasksExecution($delay: DurationInput!) {
-    setNextTasksExecution(delay: $delay) {
-        ...Timestamp
-    }
+  setNextTasksExecution(delay: $delay) {
+    ...Timestamp
+  }
 }
 
-mutation SetNextVillageTaskExecution($villageId: ID!, $task: TaskType!, $delay: DurationInput!) {
-    setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
-        ...Timestamp
-    }
+mutation SetNextVillageTaskExecution(
+  $villageId: ID!
+  $task: TaskType!
+  $delay: DurationInput!
+) {
+  setNextVillageTaskExecution(
+    villageId: $villageId
+    task: $task
+    delay: $delay
+  ) {
+    ...Timestamp
+  }
 }
 
 mutation ResetNextTaskExecution($task: TaskType!) {
-    resetNextTaskExecution(task: $task) {
-        ...Timestamp
-    }
+  resetNextTaskExecution(task: $task) {
+    ...Timestamp
+  }
 }
 
 mutation ResetNextTasksExecution {
-    resetNextTasksExecution {
-        ...Timestamp
-    }
+  resetNextTasksExecution {
+    ...Timestamp
+  }
 }
 
 mutation ResetNextVillageTaskExecution($villageId: ID!, $task: TaskType!) {
-    resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
-        ...Timestamp
-    }
+  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
+    ...Timestamp
+  }
 }
 
 subscription OnNextTasksExecutionChanged {
-    nextTasksExecutionChanged {
-        ...Timestamp
-    }
+  nextTasksExecutionChanged {
+    ...Timestamp
+  }
 }
 
 subscription OnNextTaskExecutionChanged($task: TaskType!) {
-    nextTaskExecutionChanged(task: $task) {
-        ...Timestamp
-    }
+  nextTaskExecutionChanged(task: $task) {
+    ...Timestamp
+  }
 }
 
-subscription OnNextVillageTaskExecutionChanged($villageId: ID!, $task: TaskType!) {
-    nextVillageTaskExecutionChanged(villageId: $villageId, task: $task) {
-        ...Timestamp
-    }
+subscription OnNextVillageTaskExecutionChanged(
+  $villageId: ID!
+  $task: TaskType!
+) {
+  nextVillageTaskExecutionChanged(villageId: $villageId, task: $task) {
+    ...Timestamp
+  }
 }

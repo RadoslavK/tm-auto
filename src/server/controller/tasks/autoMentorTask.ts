@@ -7,7 +7,8 @@ import { updateMentorTasks } from '../actions/mentor/updateMentorTasks';
 import { BotTask } from '../taskEngine/botTaskEngine';
 
 export class AutoMentorTask implements BotTask {
-  private settings = (): AutoMentorSettings => getAccountContext().settingsService.autoMentor.get();
+  private settings = (): AutoMentorSettings =>
+    getAccountContext().settingsService.autoMentor.get();
 
   public allowExecution = (): boolean => {
     const { acceptDailyRewards, acceptTaskRewards } = this.settings();
@@ -49,12 +50,16 @@ export class AutoMentorTask implements BotTask {
     const bubbleElements = await page.$$('.rewardReady');
 
     if (bubbleElements.length > 1) {
-      throw new Error('Encountered 2 or more daily rewards tasks to complete. Implement the action properly');
+      throw new Error(
+        'Encountered 2 or more daily rewards tasks to complete. Implement the action properly',
+      );
     }
 
     await bubbleElements[0].click();
 
-    const claimRewardButton = await page.waitForSelector('[type="submit"].green.questButtonGainReward');
+    const claimRewardButton = await page.waitForSelector(
+      '[type="submit"].green.questButtonGainReward',
+    );
 
     if (!claimRewardButton) {
       throw new Error('Did not find claim reward button');

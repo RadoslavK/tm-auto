@@ -9,8 +9,14 @@ import { VillageResources } from './villageResources';
 
 export class Village {
   public readonly buildings: Buildings = new Buildings(
-    () => publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, { villageId: this.id }),
-    () => publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, { villageId: this.id }),
+    () =>
+      publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, {
+        villageId: this.id,
+      }),
+    () =>
+      publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, {
+        villageId: this.id,
+      }),
     () => publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.id }),
   );
 
@@ -31,7 +37,8 @@ export class Village {
   }
 
   public getWarehouseFullness = (): number =>
-    this.resources.amount.getRequiredWarehouseSize() / this.resources.capacity.warehouse;
+    this.resources.amount.getRequiredWarehouseSize() /
+    this.resources.capacity.warehouse;
 
   public getGranaryFullness = (): number =>
     this.resources.amount.crop / this.resources.capacity.granary;

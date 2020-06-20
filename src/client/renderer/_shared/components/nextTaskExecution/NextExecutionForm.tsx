@@ -21,14 +21,8 @@ export const NextExecutionForm: React.FC<Props> = ({ onSubmit }) => {
 
   return (
     <div>
-      <Duration
-        onChange={setDelay}
-        value={delay}
-      />
-      <button
-        onClick={submit}
-        type="button"
-      >
+      <Duration onChange={setDelay} value={delay} />
+      <button onClick={submit} type="button">
         Submit
       </button>
     </div>

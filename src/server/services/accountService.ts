@@ -40,7 +40,8 @@ class AccountService {
 
   private currentAccountId: string | null = null;
 
-  private saveAccounts = async (): Promise<void> => fileService.save(dataPathService.accountsPath(), this.accountsData);
+  private saveAccounts = async (): Promise<void> =>
+    fileService.save(dataPathService.accountsPath(), this.accountsData);
 
   public setCurrentAccountId = (id: string | null) => {
     this.currentAccountId = id;
@@ -78,12 +79,16 @@ class AccountService {
   };
 
   public isAccountTaken = (account: Omit<UserAccount, 'id'>): boolean =>
-    this.getAccounts().some(acc =>
-      acc.server === getBaseServerUrl(account.server, false)
-      && acc.username === account.username);
+    this.getAccounts().some(
+      (acc) =>
+        acc.server === getBaseServerUrl(account.server, false) &&
+        acc.username === account.username,
+    );
 
   public deleteAccount = (id: string): UserAccount => {
-    const accountIndex = this.getAccountsData().accounts.findIndex(acc => acc.id === id);
+    const accountIndex = this.getAccountsData().accounts.findIndex(
+      (acc) => acc.id === id,
+    );
 
     if (accountIndex === -1) {
       throw new Error(`Account with ${id} was not found`);
@@ -107,7 +112,9 @@ class AccountService {
 
   public updateAccount = (account: UserAccount): UserAccount => {
     const accountsData = this.getAccountsData();
-    const accountIndex = accountsData.accounts.findIndex(acc => acc.id === account.id);
+    const accountIndex = accountsData.accounts.findIndex(
+      (acc) => acc.id === account.id,
+    );
 
     if (accountIndex === -1) {
       throw new Error(`Account with id: ${account.id} does not exist`);
@@ -125,12 +132,12 @@ class AccountService {
 
   public getAccount = (accountId: string): UserAccount | null => {
     const accounts = this.getAccounts();
-    return accounts.find(x => x.id === accountId) || null;
+    return accounts.find((x) => x.id === accountId) || null;
   };
 
   public getCurrentAccount = (): UserAccount => {
     const accounts = this.getAccounts();
-    const account = accounts.find(x => x.id === this.currentAccountId);
+    const account = accounts.find((x) => x.id === this.currentAccountId);
 
     if (!account) {
       throw new Error(`Account with id ${this.currentAccountId} not found`);
@@ -143,7 +150,10 @@ class AccountService {
 
   private getAccountsData = (): AccountsData => {
     if (!this.accountsData) {
-      this.accountsData = fileService.loadInstance<AccountsData>(dataPathService.accountsPath(), AccountsData);
+      this.accountsData = fileService.loadInstance<AccountsData>(
+        dataPathService.accountsPath(),
+        AccountsData,
+      );
     }
 
     return this.accountsData;

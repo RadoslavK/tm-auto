@@ -30,13 +30,7 @@ export const CrannyCapacity: React.FC = () => {
     <div className={classes.root}>
       <div className={classes.image} />
       <div>
-        {capacity.actual}
-        {' '}
-        /
-        {capacity.ongoing}
-        {' '}
-        /
-        {capacity.total}
+        {capacity.actual} /{capacity.ongoing} /{capacity.total}
       </div>
     </div>
   );

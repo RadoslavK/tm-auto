@@ -11,6 +11,8 @@ export const useTitle = (): void => {
       return;
     }
 
-    document.title = `${currentAccount.username} @ ${getServerShortcut(currentAccount.server)}`;
+    document.title = `${currentAccount.username} @ ${getServerShortcut(
+      currentAccount.server,
+    )}`;
   }, [currentAccount]);
 };

@@ -8,20 +8,22 @@ import { AvailableBuildingTypesService } from '../../services/availableBuildingT
 import { buildingInfoService } from '../../services/info/buildingInfoService';
 
 const getBuildingSpots = (villageId: string) => {
-  const normalizedSpots = getAccountContext().villageService.village(villageId).buildings.spots.buildings();
+  const normalizedSpots = getAccountContext()
+    .villageService.village(villageId)
+    .buildings.spots.buildings();
 
   return {
-    infrastructure: normalizedSpots.filter(s => s.fieldId >= 19),
+    infrastructure: normalizedSpots.filter((s) => s.fieldId >= 19),
     resources: {
-      clay: normalizedSpots.filter(s => s.type === BuildingType.Clay),
-      crop: normalizedSpots.filter(s => s.type === BuildingType.Crop),
-      iron: normalizedSpots.filter(s => s.type === BuildingType.Iron),
-      wood: normalizedSpots.filter(s => s.type === BuildingType.Wood),
+      clay: normalizedSpots.filter((s) => s.type === BuildingType.Clay),
+      crop: normalizedSpots.filter((s) => s.type === BuildingType.Crop),
+      iron: normalizedSpots.filter((s) => s.type === BuildingType.Iron),
+      wood: normalizedSpots.filter((s) => s.type === BuildingType.Wood),
     },
   };
 };
 
-export default <Resolvers> {
+export default <Resolvers>{
   BuildingSpot: {
     level: (spot): BuildingSpotLevel => ({
       ...spot.level,
@@ -31,10 +33,7 @@ export default <Resolvers> {
 
   Query: {
     availableNewBuildingsTypes: (_, args) => {
-      const {
-        fieldId,
-        villageId,
-      } = args.input;
+      const { fieldId, villageId } = args.input;
 
       const manager = new AvailableBuildingTypesService(villageId);
       return manager.availableBuildingTypes(fieldId);
@@ -42,15 +41,21 @@ export default <Resolvers> {
 
     buildingSpots: (_, args) => getBuildingSpots(args.villageId),
 
-    buildingInfo: (_, args) => buildingInfoService.getBuildingInfo(args.buildingType),
+    buildingInfo: (_, args) =>
+      buildingInfoService.getBuildingInfo(args.buildingType),
 
-    buildingLevelInfo: (_, { buildingType, level }) => buildingInfoService.getBuildingLevelInfo(buildingType, level),
+    buildingLevelInfo: (_, { buildingType, level }) =>
+      buildingInfoService.getBuildingLevelInfo(buildingType, level),
   },
 
   Subscription: {
-    actualBuildingLevelsUpdated: subscribeToEvent(BotEvent.ActualBuildingLevelsUpdated, {
-      filter: (payload, variables) => payload.villageId === variables.villageId,
-      resolve: () => {},
-    }),
+    actualBuildingLevelsUpdated: subscribeToEvent(
+      BotEvent.ActualBuildingLevelsUpdated,
+      {
+        filter: (payload, variables) =>
+          payload.villageId === variables.villageId,
+        resolve: () => {},
+      },
+    ),
   },
 };

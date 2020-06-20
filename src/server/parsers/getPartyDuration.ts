@@ -10,7 +10,10 @@ export const getPartyDuration = async (): Promise<Duration | null> => {
     return null;
   }
 
-  const duration = await page.evaluate((x: Element) => x.getAttribute('value'), durationNode);
+  const duration = await page.evaluate(
+    (x: Element) => x.getAttribute('value'),
+    durationNode,
+  );
 
   if (!duration) {
     throw new Error('Did not find duration value');
