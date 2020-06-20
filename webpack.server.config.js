@@ -17,7 +17,7 @@ const createExternals = (...externalPackages) =>
   );
 
 module.exports = {
-  devtool: isDevelopment ? 'source-map' : undefined,
+  devtool: 'source-map',
   entry: {
     index: path.join(__dirname, 'src', 'server', 'index.ts'),
   },
@@ -57,6 +57,11 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, directory),
+    //  in development we have output in folder .webpack/server and on production we want only relative resource path
+    //  to hide away folder information :D
+    devtoolModuleFilenameTemplate: isDevelopment
+      ? '../../[resource-path]'
+      : info => info.resourcePath.slice(1),
   },
   plugins: [
     new RemovePlugin({

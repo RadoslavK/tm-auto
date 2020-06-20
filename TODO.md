@@ -69,10 +69,11 @@ NOVE NE TAK DOLEZITE
 
 ## Bugs
 
-* [?] Bot said is building lvl7 but started building lvl6 for example and removed rest of the queue for the same fieldId.
 * [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
+    * Check requirements are met when peeking
 * Reload window breaks the IPC + GraphQL functionality
 * GraphQL plugin does not ignore the generated schema, then there is invalid highlighting and code navigation
+* Packaged app does not work with "asar:true" build
 
 ## Bot Detection
 
@@ -123,6 +124,7 @@ NOVE NE TAK DOLEZITE
     * The it will ignore the link error handler.
     * https://github.com/apollographql/apollo-link/issues/793
 * Validate GraphQL schema and resolvers before run
+    * in development only
 * Recover from failed to navigate pages/clicks. Throw custom error instance.
 
 ## Inspiration / Future

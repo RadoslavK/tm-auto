@@ -1,3 +1,5 @@
+import 'source-map-support/register';
+
 import { ApolloLink } from '@apollo/client';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { makeExecutableSchema } from '@graphql-tools/schema';

@@ -7,7 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'main');
 
 module.exports = {
-  devtool: isDevelopment ? 'source-map' : undefined,
+  devtool: 'source-map',
   entry: {
     index: path.join(__dirname, 'src', 'client', 'main', 'index.ts'),
     preload: path.join(__dirname, 'src', 'client', 'main', 'preload.ts'),

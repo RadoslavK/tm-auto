@@ -7,7 +7,7 @@ const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'
 const entry = path.join(__dirname, 'src', 'client', 'renderer', 'index.tsx');
 
 module.exports = {
-  devtool: isDevelopment ? 'source-map' : undefined,
+  devtool: 'source-map',
   entry: {
     index: isDevelopment
       ? ['webpack-hot-middleware/client', entry]
