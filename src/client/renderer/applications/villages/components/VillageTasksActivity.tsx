@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { TaskType } from '../../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
-import { TaskType } from '../../../../../_shared/types/taskType';
 
 export const VillageTasksActivity: React.FunctionComponent = () => (
   <div>

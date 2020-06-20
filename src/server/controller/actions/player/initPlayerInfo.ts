@@ -1,4 +1,4 @@
-import { Tribe } from '../../../../_shared/types/tribe';
+import { Tribe } from '../../../_models/enums/tribe';
 import { getAccountContext } from '../../../accountContext';
 import { parseServerSpeed } from '../../../parsers/player/parseServerSpeed';
 import { parseTribe } from '../../../parsers/player/parseTribe';

@@ -2,11 +2,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React from 'react';
 
-import { AutoBuildLogEntryContent } from '../../../../_graphql/graphqlHooks';
+import {
+  AutoBuildLogEntryContent,
+  BuildingType,
+} from '../../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../../utils/imageLinks';
 
 type StylesProps = {
-  readonly buildingType: number;
+  readonly buildingType: BuildingType;
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({

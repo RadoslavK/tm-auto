@@ -1,8 +1,10 @@
 import { Dialog } from '@material-ui/core';
 import React, { useState } from 'react';
 
-import { Duration } from '../../../_graphql/graphqlHooks';
-import { TaskType } from '../../../../../_shared/types/taskType';
+import {
+  Duration,
+  TaskType,
+} from '../../../_graphql/graphqlHooks';
 import { useNextVillageTaskExecution } from '../../../hooks/nextExecution/useNextVillageTaskExecution';
 import { useCountDown } from '../../../hooks/useCountDown';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';

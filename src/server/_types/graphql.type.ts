@@ -1,11 +1,5 @@
-import { AdventureCriteria } from '../../_shared/types/adventureCriteria';
-import { BotState } from '../../_shared/types/botState';
-import { BuildingType } from '../../_shared/types/buildingType';
-import { ClaimHeroResourcesReason } from '../../_shared/types/claimHeroResourcesReason';
-import { HeroState } from '../../_shared/types/heroState';
-import { TaskType } from '../../_shared/types/taskType';
-import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
-import { Tribe } from '../../_shared/types/tribe';
+import { BuildingType } from '../_models/enums/buildingType';
+import { Tribe } from '../_models/enums/tribe';
 import { GraphQLResolveInfo } from 'graphql';
 import { BuildingInProgress as BuildingInProgressModel } from '../_models/buildings/inProgress/buildingInProgress';
 import { BuildingSpot as BuildingSpotModel } from '../_models/buildings/spots/buildingSpot';
@@ -40,7 +34,11 @@ export type AccountSettings = {
   readonly autoParty: Scalars['Boolean'];
 };
 
-export { AdventureCriteria };
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random'
+}
 
 export type AutoAdventureSettings = {
   readonly __typename?: 'AutoAdventureSettings';
@@ -141,7 +139,13 @@ export type AvailableNewBuildingsInput = {
   readonly villageId: Scalars['ID'];
 };
 
-export { BotState };
+export enum BotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
 
 export type BuildingInfo = {
   readonly __typename?: 'BuildingInfo';
@@ -192,7 +196,10 @@ export type BuildingSpots = {
 
 export { BuildingType };
 
-export { ClaimHeroResourcesReason };
+export enum ClaimHeroResourcesReason {
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits'
+}
 
 export type ClearQueueInput = {
   readonly villageId: Scalars['ID'];
@@ -272,7 +279,13 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export { HeroState };
+export enum HeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
 export type LogEntry = {
   readonly __typename?: 'LogEntry';
@@ -488,7 +501,7 @@ export type MutationUpdateAutoPartySettingsArgs = {
 
 export type MutationUpdateAutoUnitsBuildingSettingsArgs = {
   villageId: Scalars['ID'];
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   settings: UpdateAutoUnitsBuildingSettingsInput;
 };
 
@@ -747,7 +760,13 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['ID'];
 };
 
-export { TaskType };
+export enum TaskType {
+  AutoAdventure = 'AutoAdventure',
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty',
+  AutoMentor = 'AutoMentor'
+}
 
 export type TextLogEntryContent = {
   readonly __typename?: 'TextLogEntryContent';
@@ -755,7 +774,10 @@ export type TextLogEntryContent = {
   readonly messageType: TextLogEntryType;
 };
 
-export { TextLogEntryType };
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
 
 export type Timestamp = {
   readonly __typename?: 'Timestamp';

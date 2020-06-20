@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { Tribe } from '../../../_shared/types/tribe';
+import { Tribe } from '../../_models/enums/tribe';
 import { getPage } from '../../browser/getPage';
 import { ensurePage } from '../../controller/actions/ensurePage';
 

@@ -1,5 +1,5 @@
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
+import { BuildingType } from '../enums/buildingType';
+import { Tribe } from '../enums/tribe';
 
 export enum CapitalCondition {
   None = 0,

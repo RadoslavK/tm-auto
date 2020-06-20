@@ -1,7 +1,9 @@
 import { LogEntry } from '../_models/logs/logEntry';
 import { Village } from '../_models/village/village';
-import { BotState } from '../../_shared/types/botState';
-import { TaskType } from '../../_shared/types/taskType';
+import {
+  BotState,
+  TaskType,
+} from '../_types/graphql.type';
 import { BotEvent } from './botEvent';
 
 export type BotEventPayloads = {

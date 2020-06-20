@@ -1,11 +1,3 @@
-import { AdventureCriteria } from '../../../_shared/types/adventureCriteria';
-import { BotState } from '../../../_shared/types/botState';
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { ClaimHeroResourcesReason } from '../../../_shared/types/claimHeroResourcesReason';
-import { HeroState } from '../../../_shared/types/heroState';
-import { TaskType } from '../../../_shared/types/taskType';
-import { TextLogEntryType } from '../../../_shared/types/textLogEntryType';
-import { Tribe } from '../../../_shared/types/tribe';
 import { DocumentNode } from 'graphql';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
@@ -34,7 +26,11 @@ export type AccountSettings = {
   readonly autoParty: Scalars['Boolean'];
 };
 
-export { AdventureCriteria };
+export enum AdventureCriteria {
+  Closest = 'Closest',
+  Furthest = 'Furthest',
+  Random = 'Random'
+}
 
 export type AutoAdventureSettings = {
   readonly allow: Scalars['Boolean'];
@@ -124,7 +120,13 @@ export type AvailableNewBuildingsInput = {
   readonly villageId: Scalars['ID'];
 };
 
-export { BotState };
+export enum BotState {
+  None = 'None',
+  Pending = 'Pending',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Paused = 'Paused'
+}
 
 export type BuildingInfo = {
   readonly maxLevel: Scalars['Int'];
@@ -166,9 +168,59 @@ export type BuildingSpots = {
   readonly resources: ResourceFields;
 };
 
-export { BuildingType };
+export enum BuildingType {
+  None = 'None',
+  Wood = 'Wood',
+  Clay = 'Clay',
+  Iron = 'Iron',
+  Crop = 'Crop',
+  Sawmill = 'Sawmill',
+  Brickyard = 'Brickyard',
+  IronFoundry = 'IronFoundry',
+  GrainMill = 'GrainMill',
+  Bakery = 'Bakery',
+  Warehouse = 'Warehouse',
+  Granary = 'Granary',
+  Blacksmith = 'Blacksmith',
+  Smithy = 'Smithy',
+  TournamentSquare = 'TournamentSquare',
+  MainBuilding = 'MainBuilding',
+  RallyPoint = 'RallyPoint',
+  Marketplace = 'Marketplace',
+  Embassy = 'Embassy',
+  Barracks = 'Barracks',
+  Stable = 'Stable',
+  Workshop = 'Workshop',
+  Academy = 'Academy',
+  Cranny = 'Cranny',
+  TownHall = 'TownHall',
+  Residence = 'Residence',
+  Palace = 'Palace',
+  Treasury = 'Treasury',
+  TradeOffice = 'TradeOffice',
+  GreatBarracks = 'GreatBarracks',
+  GreatStable = 'GreatStable',
+  CityWall = 'CityWall',
+  EarthWall = 'EarthWall',
+  Palisade = 'Palisade',
+  StonemasonsLodge = 'StonemasonsLodge',
+  Brewery = 'Brewery',
+  Trapper = 'Trapper',
+  HerosMansion = 'HerosMansion',
+  GreatWarehouse = 'GreatWarehouse',
+  GreatGranary = 'GreatGranary',
+  WonderOfTheWorld = 'WonderOfTheWorld',
+  HorseDrinkingTrough = 'HorseDrinkingTrough',
+  StoneWall = 'StoneWall',
+  MakeshiftWall = 'MakeshiftWall',
+  CommandCenter = 'CommandCenter',
+  Waterworks = 'Waterworks'
+}
 
-export { ClaimHeroResourcesReason };
+export enum ClaimHeroResourcesReason {
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits'
+}
 
 export type ClearQueueInput = {
   readonly villageId: Scalars['ID'];
@@ -241,7 +293,13 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
-export { HeroState };
+export enum HeroState {
+  Unknown = 'Unknown',
+  InVillage = 'InVillage',
+  Dead = 'Dead',
+  Reviving = 'Reviving',
+  OnAdventure = 'OnAdventure'
+}
 
 export type LogEntry = {
   readonly timestamp: Timestamp;
@@ -455,7 +513,7 @@ export type MutationUpdateAutoPartySettingsArgs = {
 
 export type MutationUpdateAutoUnitsBuildingSettingsArgs = {
   villageId: Scalars['ID'];
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   settings: UpdateAutoUnitsBuildingSettingsInput;
 };
 
@@ -714,14 +772,23 @@ export type SubscriptionVillageUpdatedArgs = {
   villageId: Scalars['ID'];
 };
 
-export { TaskType };
+export enum TaskType {
+  AutoAdventure = 'AutoAdventure',
+  AutoBuild = 'AutoBuild',
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty',
+  AutoMentor = 'AutoMentor'
+}
 
 export type TextLogEntryContent = {
   readonly message: Scalars['String'];
   readonly messageType: TextLogEntryType;
 };
 
-export { TextLogEntryType };
+export enum TextLogEntryType {
+  Info = 'Info',
+  Error = 'Error'
+}
 
 export type Timestamp = {
   readonly totalSeconds: Scalars['Int'];
@@ -731,7 +798,15 @@ export type TimestampInput = {
   readonly totalSeconds: Scalars['Int'];
 };
 
-export { Tribe };
+export enum Tribe {
+  Romans = 'Romans',
+  Teutons = 'Teutons',
+  Gauls = 'Gauls',
+  Nature = 'Nature',
+  Natars = 'Natars',
+  Egyptians = 'Egyptians',
+  Huns = 'Huns'
+}
 
 export type UnitInfo = {
   readonly name: Scalars['String'];
@@ -1384,7 +1459,7 @@ export type UpdateAutoUnitsUnitSettingsMutation = { readonly updateAutoUnitsUnit
 
 export type UpdateAutoUnitsBuildingSettingsMutationVariables = {
   villageId: Scalars['ID'];
-  buildingType: Scalars['Int'];
+  buildingType: BuildingType;
   settings: UpdateAutoUnitsBuildingSettingsInput;
 };
 
@@ -3406,7 +3481,7 @@ export function useUpdateAutoUnitsUnitSettingsMutation(baseOptions?: ApolloReact
 export type UpdateAutoUnitsUnitSettingsMutationHookResult = ReturnType<typeof useUpdateAutoUnitsUnitSettingsMutation>;
 export type UpdateAutoUnitsUnitSettingsMutationResult = ApolloReactCommon.MutationResult<UpdateAutoUnitsUnitSettingsMutation>;
 export type UpdateAutoUnitsUnitSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateAutoUnitsUnitSettingsMutation, UpdateAutoUnitsUnitSettingsMutationVariables>;
-export const UpdateAutoUnitsBuildingSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoUnitsBuildingSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoUnitsBuildingSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoUnitsBuildingSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsUnitSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoBuild"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"index"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"targetAmount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"trainForever"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxBuildTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"units"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"barracks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"stable"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"workshop"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"residence"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}}]}}]};
+export const UpdateAutoUnitsBuildingSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoUnitsBuildingSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingType"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoUnitsBuildingSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoUnitsBuildingSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}},{"kind":"Argument","name":{"kind":"Name","value":"buildingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"buildingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsUnitSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoBuild"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"index"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"targetAmount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"trainForever"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxBuildTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"units"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"barracks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"stable"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"workshop"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"residence"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}}]}}]};
 export type UpdateAutoUnitsBuildingSettingsMutationFn = ApolloReactCommon.MutationFunction<UpdateAutoUnitsBuildingSettingsMutation, UpdateAutoUnitsBuildingSettingsMutationVariables>;
 
 /**

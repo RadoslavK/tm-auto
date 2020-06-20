@@ -1,4 +1,4 @@
-import { BuildingType } from '../../../../_shared/types/buildingType';
+import { BuildingType } from '../../enums/buildingType';
 
 export class AutoBuildLogEntryContent {
   public readonly fieldId: number = 0;

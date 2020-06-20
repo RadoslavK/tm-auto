@@ -1,6 +1,6 @@
-import { BuildingType } from '../../../_shared/types/buildingType';
 import { fieldIds } from '../../constants/fieldIds';
 import { getMaximum } from '../../utils/getWithMaximum';
+import { BuildingType } from '../enums/buildingType';
 import { ActualBuilding } from './actual/actualBuilding';
 import { BuildingInProgress } from './inProgress/buildingInProgress';
 import { BuildingsInProgress } from './inProgress/buildingsInProgress';

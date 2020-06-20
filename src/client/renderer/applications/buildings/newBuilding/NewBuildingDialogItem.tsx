@@ -2,7 +2,7 @@ import { Dialog } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React, { useState } from 'react';
 
-import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { BuildingType } from '../../../_graphql/graphqlHooks';
 import { useBuildingInfo } from '../../../hooks/buildings/useBuildingInfo';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
 import { imageLinks } from '../../../utils/imageLinks';

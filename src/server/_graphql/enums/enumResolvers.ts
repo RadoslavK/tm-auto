@@ -1,7 +1,7 @@
+import { BuildingType } from '../../_models/enums/buildingType';
+import { Tribe } from '../../_models/enums/tribe';
 import { Resolvers } from '../../_types/resolvers.type';
 import { getAllEnumValues } from '../../../_shared/enumUtils';
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
 
 type EnumType = {
   [index: string]: string | number,

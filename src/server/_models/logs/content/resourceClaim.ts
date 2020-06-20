@@ -1,4 +1,4 @@
-import { ClaimHeroResourcesReason } from '../../../../_shared/types/claimHeroResourcesReason';
+import { ClaimHeroResourcesReason } from '../../../_types/graphql.type';
 import { Resources } from '../../misc/resources';
 
 export class ResourceClaimLogEntryContent {

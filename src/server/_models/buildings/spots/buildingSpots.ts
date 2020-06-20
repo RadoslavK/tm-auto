@@ -1,4 +1,4 @@
-import { BuildingType } from '../../../../_shared/types/buildingType';
+import { BuildingType } from '../../enums/buildingType';
 import { BuildingSpot } from './buildingSpot';
 
 export class BuildingSpots {

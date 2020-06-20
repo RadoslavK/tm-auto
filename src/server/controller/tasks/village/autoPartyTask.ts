@@ -1,9 +1,9 @@
 import { getBuildingSpotPath } from '../../../_enums/travianPath';
 import { CoolDown } from '../../../_models/coolDown';
+import { BuildingType } from '../../../_models/enums/buildingType';
 import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
 import { Village } from '../../../_models/village/village';
-import { BuildingType } from '../../../../_shared/types/buildingType';
-import { TaskType } from '../../../../_shared/types/taskType';
+import { TaskType } from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { partyInfo } from '../../../constants/partyInfo';

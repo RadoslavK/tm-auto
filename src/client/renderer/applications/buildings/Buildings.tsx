@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
+import { TaskType } from '../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
-import { TaskType } from '../../../../_shared/types/taskType';
 import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
 import { BuildingQueue } from './queue/BuildingQueue';
 import { BuildingSpots } from './spots/BuildingSpots';

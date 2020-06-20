@@ -1,8 +1,8 @@
 import { CapitalCondition } from '../_models/buildings/buildingConditions';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
 import { BuildingSpot } from '../_models/buildings/spots/buildingSpot';
+import { BuildingType } from '../_models/enums/buildingType';
 import { Village } from '../_models/village/village';
-import { BuildingType } from '../../_shared/types/buildingType';
 import { getAccountContext } from '../accountContext';
 import { accountService } from './accountService';
 import { dataPathService } from './dataPathService';

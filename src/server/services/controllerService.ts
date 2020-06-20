@@ -5,7 +5,7 @@ import { TimeoutError } from 'puppeteer/Errors';
 import { TravianPath } from '../_enums/travianPath';
 import { CoolDown } from '../_models/coolDown';
 import { Duration } from '../_models/duration';
-import { BotState } from '../../_shared/types/botState';
+import { BotState } from '../_types/graphql.type';
 import {
   getAccountContext,
   resetAccountContext,

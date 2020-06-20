@@ -1,13 +1,14 @@
 import { FetchResult } from '@apollo/client/link/core/types';
 
 import {
+  BuildingType,
   EnqueueBuildingMutation,
   useEnqueueBuildingMutation as _useEnqueueBuildingMutation,
 } from '../../_graphql/graphqlHooks';
 import { useSelectedVillageId } from '../villages/useSelectedVillageId';
 
 type Params = {
-  readonly buildingType: number
+  readonly buildingType: BuildingType
   readonly fieldId: number;
   readonly targetLevel?: number;
 };

@@ -11,13 +11,13 @@ import {
   GetAutoBuildSettingsDocument,
   GetAutoBuildSettingsQuery,
   GetAutoBuildSettingsQueryVariables,
+  Tribe,
   UpdateAutoBuildSettingsInput,
   useGetAutoBuildSettingsQuery,
   useResetAutoBuildSettingsMutation,
   useUpdateAutoBuildSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { Tribe } from '../../../../../_shared/types/tribe';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useGameInfo } from '../../../hooks/useGameInfp';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';

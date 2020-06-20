@@ -20,7 +20,7 @@ const serverTypesPath = './src/server/_types/graphql.type.ts';
 const fragmentsPath = './src/client/renderer/_graphql/fragmentTypes.json';
 const schemaPath = './src/server/_graphql/schema.graphql';
 
-const enumsPath = './src/_shared/types';
+const enumsPath = './src/server/_models/enums';
 
 const commonConfig = {
   maybeValue: 'T | undefined',
@@ -28,13 +28,7 @@ const commonConfig = {
 };
 
 const enumPaths = {
-  AdventureCriteria: 'adventureCriteria#AdventureCriteria',
-  BotState: 'botState#BotState',
   BuildingType: 'buildingType#BuildingType',
-  ClaimHeroResourcesReason: 'claimHeroResourcesReason#ClaimHeroResourcesReason',
-  HeroState: 'heroState#HeroState',
-  TaskType: 'taskType#TaskType',
-  TextLogEntryType: 'textLogEntryType#TextLogEntryType',
   Tribe: 'tribe#Tribe',
 };
 
@@ -124,7 +118,6 @@ const generateResolverTypes = async (): Promise<void> => {
 
 const generateOperationTypesAndHooks = async (): Promise<void> => {
   const baseConfig = {
-    enumValues: getEnumValuesConfig(path.relative(path.dirname(hooksPath), enumsPath)),
     avoidOptionals: true,
     immutableTypes: true,
     skipTypename: true,

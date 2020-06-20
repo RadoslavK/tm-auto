@@ -1,4 +1,4 @@
-import { TaskType } from '../../_shared/types/taskType';
+import { TaskType } from '../_types/graphql.type';
 import { BotEvent } from '../events/botEvent';
 import { publishPayloadEvent } from '../pubSub';
 

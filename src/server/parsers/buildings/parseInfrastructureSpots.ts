@@ -1,7 +1,7 @@
 import { TravianPath } from '../../_enums/travianPath';
 import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding';
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
+import { BuildingType } from '../../_models/enums/buildingType';
+import { Tribe } from '../../_models/enums/tribe';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { fieldIds } from '../../constants/fieldIds';

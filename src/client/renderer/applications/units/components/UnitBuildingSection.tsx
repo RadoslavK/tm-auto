@@ -8,6 +8,7 @@ import React, {
 
 import {
   AutoUnitsBuildingSettings,
+  BuildingType,
   Duration as DurationModel,
   GetAutoUnitsSettingsDocument,
   GetAutoUnitsSettingsQuery,
@@ -16,7 +17,6 @@ import {
   useUpdateAutoUnitsBuildingSettingsMutation,
 } from '../../../_graphql/graphqlHooks';
 import { Duration } from '../../../_shared/components/controls/Duration';
-import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { imageLinks } from '../../../utils/imageLinks';

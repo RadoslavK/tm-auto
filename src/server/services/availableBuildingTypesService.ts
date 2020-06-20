@@ -2,10 +2,10 @@ import {
   BuildingConditions,
   CapitalCondition,
 } from '../_models/buildings/buildingConditions';
+import { BuildingType } from '../_models/enums/buildingType';
+import { Tribe } from '../_models/enums/tribe';
 import { Village } from '../_models/village/village';
 import { getAllEnumValues } from '../../_shared/enumUtils';
-import { BuildingType } from '../../_shared/types/buildingType';
-import { Tribe } from '../../_shared/types/tribe';
 import { getAccountContext } from '../accountContext';
 import { fieldIds } from '../constants/fieldIds';
 import { buildingInfoService } from './info/buildingInfoService';

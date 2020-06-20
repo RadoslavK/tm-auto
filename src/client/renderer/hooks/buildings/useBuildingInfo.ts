@@ -1,5 +1,7 @@
-import { useGetBuildingInfoQuery } from '../../_graphql/graphqlHooks';
-import { BuildingType } from '../../../../_shared/types/buildingType';
+import {
+  BuildingType,
+  useGetBuildingInfoQuery,
+} from '../../_graphql/graphqlHooks';
 
 export const useBuildingInfo = (buildingType: BuildingType) => {
   const { data, loading } = useGetBuildingInfoQuery({

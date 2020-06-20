@@ -1,4 +1,5 @@
-import { BuildingType } from '../../../_shared/types/buildingType';
+import { BuildingType } from '../_graphql/graphqlHooks';
+import { BuildingType as ServerBuildingType } from '../../../server/_models/enums/buildingType';
 
 export enum BuildingImageSize {
   Small,
@@ -16,9 +17,6 @@ const resources = {
   wood: `${baseUrl}/resources/wood.png`,
 };
 
-const isEnumKey = (buildingType: BuildingType | keyof BuildingType): buildingType is BuildingType =>
-  typeof buildingType === 'string';
-
 export const imageLinks = {
   actions: {
     collapse: `${baseUrl}/collapse.png`,
@@ -34,15 +32,15 @@ export const imageLinks = {
     resources,
   },
 
-  getBuilding: (buildingType: BuildingType | keyof BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
-    // these enums are string enums for GraphQL
-    const numberValue = isEnumKey(buildingType) ? BuildingType[buildingType] : buildingType;
+  getBuilding: (buildingType: BuildingType, size: BuildingImageSize = BuildingImageSize.Normal): string => {
+    //  Server enums have string values on the client because of GraphQL
+    const buildingIndex = ServerBuildingType[buildingType];
 
     if (size === BuildingImageSize.Normal) {
-      return `${baseUrl}/buildings/${numberValue}.png`;
+      return `${baseUrl}/buildings/${buildingIndex}.png`;
     }
 
-    return `${baseUrl}/buildings/small/${numberValue}.png`;
+    return `${baseUrl}/buildings/small/${buildingIndex}.png`;
   },
 
   getUnit: (unitIndex: number): string => `${baseUrl}/units/u${unitIndex}.gif`,

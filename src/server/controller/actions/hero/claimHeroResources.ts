@@ -1,6 +1,6 @@
 import { TravianPath } from '../../../_enums/travianPath';
 import { Resources } from '../../../_models/misc/resources';
-import { ClaimHeroResourcesReason } from '../../../../_shared/types/claimHeroResourcesReason';
+import { ClaimHeroResourcesReason } from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { heroItemIds } from '../../../constants/heroItemIds';

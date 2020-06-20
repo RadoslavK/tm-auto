@@ -1,11 +1,13 @@
 import { CoolDown } from '../../../_models/coolDown';
+import { BuildingType } from '../../../_models/enums/buildingType';
 import { Resources } from '../../../_models/misc/resources';
 import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
 import { Units } from '../../../_models/units';
 import { Village } from '../../../_models/village/village';
-import { BuildingType } from '../../../../_shared/types/buildingType';
-import { ClaimHeroResourcesReason } from '../../../../_shared/types/claimHeroResourcesReason';
-import { TaskType } from '../../../../_shared/types/taskType';
+import {
+  ClaimHeroResourcesReason,
+  TaskType,
+} from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';

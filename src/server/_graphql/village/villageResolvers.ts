@@ -1,6 +1,6 @@
+import { BuildingType } from '../../_models/enums/buildingType';
 import { VillageCrannyCapacity } from '../../_models/village/villageCrannyCapacity';
 import { Resolvers } from '../../_types/resolvers.type';
-import { BuildingType } from '../../../_shared/types/buildingType';
 import { getAccountContext } from '../../accountContext';
 import { BotEvent } from '../../events/botEvent';
 import { subscribeToEvent } from '../../pubSub';

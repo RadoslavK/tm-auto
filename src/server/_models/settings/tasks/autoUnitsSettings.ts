@@ -1,10 +1,10 @@
 import { mergeDefaults } from '../../../../_shared/merge';
-import { BuildingType } from '../../../../_shared/types/buildingType';
 import { PartialFields } from '../../../../_shared/types/fields.type';
 import { getAccountContext } from '../../../accountContext';
 import { unitInfoService } from '../../../services/info/unitInfoService';
 import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
+import { BuildingType } from '../../enums/buildingType';
 
 export class AutoUnitsUnitSettings {
   public readonly autoBuild: boolean = false;

@@ -1,5 +1,5 @@
 import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
-import { TaskType } from '../../../_shared/types/taskType';
+import { TaskType } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward';

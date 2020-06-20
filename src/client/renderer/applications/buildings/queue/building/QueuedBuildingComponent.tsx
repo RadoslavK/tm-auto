@@ -1,7 +1,10 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 
-import { QueuedBuilding as QueuedBuildingModel } from '../../../../_graphql/graphqlHooks';
+import {
+  BuildingType,
+  QueuedBuilding as QueuedBuildingModel,
+} from '../../../../_graphql/graphqlHooks';
 import { useBuildingInfo } from '../../../../hooks/buildings/useBuildingInfo';
 import { useBuildingLevelInfo } from '../../../../hooks/buildings/useBuildingLevelInfo';
 import { imageLinks } from '../../../../utils/imageLinks';
@@ -9,7 +12,7 @@ import { Cost } from '../Cost';
 import { QueuedBuildingActions } from './QueuedBuildingActions';
 
 type StyleProps = {
-  readonly buildingType: number;
+  readonly buildingType: BuildingType;
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({

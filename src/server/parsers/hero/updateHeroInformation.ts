@@ -1,4 +1,4 @@
-import { HeroState } from '../../../_shared/types/heroState';
+import { HeroState } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { BotEvent } from '../../events/botEvent';

@@ -1,7 +1,7 @@
 import { ElementHandle } from 'puppeteer';
 
 import { Coords } from '../../_models/coords';
-import { BuildingType } from '../../../_shared/types/buildingType';
+import { BuildingType } from '../../_models/enums/buildingType';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { parseNumber } from '../../utils/numberUtils';

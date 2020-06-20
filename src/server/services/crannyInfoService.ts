@@ -1,4 +1,4 @@
-import { Tribe } from '../../_shared/types/tribe';
+import { Tribe } from '../_models/enums/tribe';
 import { getAccountContext } from '../accountContext';
 
 const capacities: Record<number, number> = {

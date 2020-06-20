@@ -3,8 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { BuildingSpot as BuildingSpotModel } from '../../../_graphql/graphqlHooks';
-import { BuildingType } from '../../../../../_shared/types/buildingType';
+import {
+  BuildingSpot as BuildingSpotModel,
+  BuildingType,
+} from '../../../_graphql/graphqlHooks';
 import { useBuildingInfo } from '../../../hooks/buildings/useBuildingInfo';
 import { useDequeueBuildingAtFieldMutation } from '../../../hooks/buildings/useDequeueBuildingAtFieldMutation';
 import { useEnqueueBuildingMutation } from '../../../hooks/buildings/useEnqueueBuildingMutation';
@@ -73,11 +75,11 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
   } = buildingInfo;
 
   const onEnqueue = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    if (building.type > 0 && building.level.total >= maxLevel) {
+    if (building.type !== BuildingType.None && building.level.total >= maxLevel) {
       return;
     }
 
-    if (building.type > 0) {
+    if (building.type !== BuildingType.None) {
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else {
@@ -125,7 +127,7 @@ export const BuildingSpot: React.FC<Props> = React.memo((props) => {
         onContextMenu={onDequeue}
         title={name}
       >
-        {building.type > 0 && (
+        {building.type !== BuildingType.None && (
           <BuildingLevelBox
             level={building.level}
             maxLevel={maxLevel}

@@ -1,9 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { TaskType } from '../../../_graphql/graphqlHooks';
+import {
+  BuildingType,
+  TaskType,
+} from '../../../_graphql/graphqlHooks';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
-import { BuildingType } from '../../../../../_shared/types/buildingType';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
 import { useAutoUnitsSettings } from '../../settings/village/AutoUnitsSettings';
 import { UnitBuildingSection } from './UnitBuildingSection';

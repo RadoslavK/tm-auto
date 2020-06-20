@@ -1,9 +1,11 @@
 import { CoolDown } from '../../../_models/coolDown';
 import { Duration } from '../../../_models/duration';
+import { BuildingType } from '../../../_models/enums/buildingType';
 import { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings';
-import { AdventureCriteria } from '../../../../_shared/types/adventureCriteria';
-import { BuildingType } from '../../../../_shared/types/buildingType';
-import { TaskType } from '../../../../_shared/types/taskType';
+import {
+  AdventureCriteria,
+  TaskType,
+} from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import {

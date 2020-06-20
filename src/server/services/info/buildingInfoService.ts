@@ -1,8 +1,8 @@
 import { BuildingCategory } from '../../_enums/buildingCategory';
 import { BuildingConditions } from '../../_models/buildings/buildingConditions';
 import { Duration } from '../../_models/duration';
+import { BuildingType } from '../../_models/enums/buildingType';
 import { Resources } from '../../_models/misc/resources';
-import { BuildingType } from '../../../_shared/types/buildingType';
 import buildingInfos from '../../../../resources/building-infos.json';
 
 export type BuildingLevelInfo = {

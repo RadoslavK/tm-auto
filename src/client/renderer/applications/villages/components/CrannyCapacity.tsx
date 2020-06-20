@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { BuildingType } from '../../../../../_shared/types/buildingType';
+import { BuildingType } from '../../../_graphql/graphqlHooks';
 import { imageLinks } from '../../../utils/imageLinks';
 import { useCrannyCapacity } from '../hooks/useCrannyCapacity';
 

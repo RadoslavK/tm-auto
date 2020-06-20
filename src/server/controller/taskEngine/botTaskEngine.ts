@@ -1,5 +1,5 @@
 import { CoolDown } from '../../_models/coolDown';
-import { TaskType } from '../../../_shared/types/taskType';
+import { TaskType } from '../../_types/graphql.type';
 
 export type BotTaskWithCoolDownResult = {
   readonly nextCoolDown?: CoolDown | null;

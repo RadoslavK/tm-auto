@@ -49,7 +49,7 @@ extend type Query {
 
 extend type Mutation {
     updateAutoUnitsSettings(villageId: ID!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
-    updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
+    updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: BuildingType!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
     updateAutoUnitsUnitSettings(villageId: ID!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsSettings!
     resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }

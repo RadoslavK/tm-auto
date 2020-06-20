@@ -50,7 +50,7 @@ mutation UpdateAutoUnitsUnitSettings($villageId: ID!, $settings: UpdateAutoUnits
     }
 }
 
-mutation UpdateAutoUnitsBuildingSettings($villageId: ID!, $buildingType: Int!, $settings: UpdateAutoUnitsBuildingSettingsInput!) {
+mutation UpdateAutoUnitsBuildingSettings($villageId: ID!, $buildingType: BuildingType!, $settings: UpdateAutoUnitsBuildingSettingsInput!) {
     updateAutoUnitsBuildingSettings(villageId: $villageId, buildingType: $buildingType, settings: $settings) {
         ...AutoUnitsSettings
     }

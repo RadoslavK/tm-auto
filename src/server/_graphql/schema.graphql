@@ -330,7 +330,7 @@ type Mutation {
   updateAutoPartySettings(villageId: ID!, settings: UpdateAutoPartySettingsInput!): AutoPartySettings!
   resetAutoPartySettings(villageId: ID!): AutoPartySettings!
   updateAutoUnitsSettings(villageId: ID!, settings: UpdateAutoUnitsSettingsInput!): AutoUnitsSettings!
-  updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
+  updateAutoUnitsBuildingSettings(villageId: ID!, buildingType: BuildingType!, settings: UpdateAutoUnitsBuildingSettingsInput!): AutoUnitsSettings!
   updateAutoUnitsUnitSettings(villageId: ID!, settings: UpdateAutoUnitsUnitSettingsInput!): AutoUnitsSettings!
   resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!

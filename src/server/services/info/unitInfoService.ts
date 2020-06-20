@@ -1,7 +1,7 @@
 import { Duration } from '../../_models/duration';
+import { BuildingType } from '../../_models/enums/buildingType';
+import { Tribe } from '../../_models/enums/tribe';
 import { Resources } from '../../_models/misc/resources';
-import { BuildingType } from '../../../_shared/types/buildingType';
-import { Tribe } from '../../../_shared/types/tribe';
 import unitInfos from '../../../../resources/unit-infos.json';
 
 type UnitInfo = {

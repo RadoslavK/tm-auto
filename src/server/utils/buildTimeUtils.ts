@@ -1,5 +1,5 @@
 import { Duration } from '../_models/duration';
-import { BuildingType } from '../../_shared/types/buildingType';
+import { BuildingType } from '../_models/enums/buildingType';
 
 const roundToNearest10 = (seconds: number): number => 10 * Math.round(seconds / 10);
 

@@ -9,8 +9,10 @@ import {
 } from '../_models/logs/logEntry';
 import { Resources } from '../_models/misc/resources';
 import { Timestamp } from '../_models/misc/timestamp';
-import { ClaimHeroResourcesReason } from '../../_shared/types/claimHeroResourcesReason';
-import { TextLogEntryType } from '../../_shared/types/textLogEntryType';
+import {
+  ClaimHeroResourcesReason,
+  TextLogEntryType,
+} from '../_types/graphql.type';
 import { getAccountContext } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { publishPayloadEvent } from '../pubSub';

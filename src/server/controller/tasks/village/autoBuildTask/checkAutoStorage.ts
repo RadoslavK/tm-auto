@@ -1,9 +1,9 @@
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
 import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding';
+import { BuildingType } from '../../../../_models/enums/buildingType';
+import { Tribe } from '../../../../_models/enums/tribe';
 import { AutoStorageSettings } from '../../../../_models/settings/tasks/autoBuildSettings/autoStorageSettings';
 import { Village } from '../../../../_models/village/village';
-import { BuildingType } from '../../../../../_shared/types/buildingType';
-import { Tribe } from '../../../../../_shared/types/tribe';
 import { getAccountContext } from '../../../../accountContext';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService';
 import {
