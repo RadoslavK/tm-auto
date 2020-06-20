@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { TimeoutError } from 'puppeteer/Errors';
+import { TimeoutError } from 'puppeteer-core/lib/Errors';
 
 import { TravianPath } from '../_enums/travianPath';
 import { CoolDown } from '../_models/coolDown';
