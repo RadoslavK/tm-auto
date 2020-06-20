@@ -5,7 +5,7 @@ const RemovePlugin = require('remove-files-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const directory = path.join(isDevelopment ? '.webpack' : path.join('app', 'dist'), 'server');
 
-// Some packages can not be bundled and need to be provided separately
+// Some packages can not be bundled and need to be provided separately in app/packages.json
 // https://github.com/berstend/puppeteer-extra/issues/93
 const createExternals = (...externalPackages) =>
   externalPackages.reduce(
@@ -21,7 +21,11 @@ module.exports = {
   entry: {
     index: path.join(__dirname, 'src', 'server', 'index.ts'),
   },
-  externals: createExternals('puppeteer-extra'),
+  externals: createExternals(
+    'puppeteer-core',
+    'puppeteer-extra',
+    'puppeteer-extra-plugin-stealth',
+  ),
   mode: isDevelopment ? 'development' : 'production',
   module: {
     rules: [
@@ -33,11 +37,6 @@ module.exports = {
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto',
-      },
-      {
-        //  Needed to bundle puppeteer-extra-plugin-stealth stuff into server bundle
-        test: /\.js$/,
-        loader: 'unlazy-loader',
       },
       {
         test: /\.ts$/,
@@ -67,7 +66,7 @@ module.exports = {
           folder: '.',
           method: () => true,
         }],
-        exclude: ['.data'],
+        ...isDevelopment ? { exclude: ['.data'] } : undefined,
       },
     }),
   ],

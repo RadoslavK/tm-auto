@@ -10,7 +10,11 @@ import { Resolvers } from './_types/graphql.type';
 import { createIpcExecutor } from './createIpcExecutor';
 import { createSchemaLink } from './createSchemaLink';
 
-const socketName = process.argv[2];
+const { socketName } = process.env;
+
+if (!socketName) {
+  throw new Error('Missing socket name');
+}
 
 process.on('warning', e => console.warn(e.stack));
 

@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { getServerAppDirectory } from '../utils/getServerAppDirectory';
 import { getGeneralSettingsService } from './settings/general';
 
 type HeroSettingsPath = {
@@ -29,7 +30,7 @@ type VillagePath = {
 };
 
 export class DataPathService {
-  static generalPath = () => path.join(__dirname, '.data/settings/general.json');
+  static generalPath = () => path.join(getServerAppDirectory(), '.data/settings/general.json');
 
   private basePath = () =>
     getGeneralSettingsService().get().dataPath;

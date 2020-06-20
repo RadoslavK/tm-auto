@@ -104,31 +104,40 @@ const createBackgroundProcess = (socketName: string): void => {
     console.error('No current node path found');
   }
 
-  if (isDevelopment) {
-    const options: ForkOptions = {
-      execArgv: [
+  const serverDir = path.join(__dirname, '..', 'server');
+  const filePath = path.join(serverDir, 'index.js');
+
+  const options: ForkOptions = {
+    env: {
+      //  Portable app has a __dirname default in Temp directory
+      dirname: process.env.PORTABLE_EXECUTABLE_DIR || serverDir,
+      NODE_ENV: isDevelopment ? 'development' : 'production',
+      socketName,
+    },
+    execArgv: isDevelopment
+      ? [
         '--inspect=9220',
         '--enable-source-maps',
-      ],
-      execPath: currentNodePath || undefined,
-      silent: true,
-    };
+      ]
+      : undefined,
+    execPath: currentNodePath || undefined,
+    silent: true,
+  };
 
-    const filePath = path.join(__dirname, '..', 'server', 'index.js');
+  serverProcess = fork(
+    filePath,
+    undefined,
+    options,
+  );
 
-    serverProcess = fork(
-      filePath,
-      [socketName],
-      options,
-    );
+  serverProcess.stderr?.pipe(process.stderr);
+  serverProcess.stdout?.pipe(process.stdout);
 
+  if (isDevelopment) {
     //  logging
     serverProcess.on('data', (data) => {
       console.log(data);
     });
-
-    serverProcess.stderr?.pipe(process.stderr);
-    serverProcess.stdout?.pipe(process.stdout);
 
     serverProcess.on('exit', (code) => {
       console.log(`server exited with code ${code}`);
@@ -142,25 +151,6 @@ const createBackgroundProcess = (socketName: string): void => {
       console.error('Server crashed with error');
       console.error(error);
     });
-  } else {
-    const options: ForkOptions = {
-      env: {
-        NODE_ENV: 'production',
-      },
-      execPath: currentNodePath || undefined,
-      silent: true,
-    };
-
-    const filePath = path.join(__dirname, '..', 'server', 'index.js');
-
-    serverProcess = fork(
-      filePath,
-      [socketName],
-      options,
-    );
-
-    serverProcess.stderr?.pipe(process.stderr);
-    serverProcess.stdout?.pipe(process.stdout);
   }
 };
 
