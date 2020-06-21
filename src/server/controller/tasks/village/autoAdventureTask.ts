@@ -21,17 +21,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
   private settings = (): AutoAdventureSettings =>
     getAccountContext().settingsService.hero.autoAdventure.get();
 
-  public allowExecution = (): boolean => {
-    const settings = this.settings();
-    const { hero } = getAccountContext();
-
-    const { currentVillageId } = getAccountContext().villageService;
-    return (
-      settings.allow &&
-      settings.preferredVillageId === currentVillageId &&
-      settings.preferredVillageId === hero.villageId
-    );
-  };
+  public allowExecution = (): boolean => this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 

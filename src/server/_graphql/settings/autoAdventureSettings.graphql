@@ -13,7 +13,6 @@ type AutoAdventureSettings {
   normalMinHealth: Int!
   hardMinHealth: Int!
   maxTravelTime: Duration!
-  preferredVillageId: ID
 }
 
 input UpdateAutoAdventureSettingsInput {
@@ -25,7 +24,6 @@ input UpdateAutoAdventureSettingsInput {
   normalMinHealth: Int!
   hardMinHealth: Int!
   maxTravelTime: DurationInput!
-  preferredVillageId: ID
 }
 
 extend type Query {

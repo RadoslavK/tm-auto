@@ -7,7 +7,9 @@ import { Hero as HeroModel } from '../_models/hero/hero';
 import { Resources as ResourcesModel } from '../_models/misc/resources';
 import { TextLogEntryContent as TextLogEntryContentModel } from '../_models/logs/content/text';
 export type Maybe<T> = T | undefined;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -49,7 +51,6 @@ export type AutoAdventureSettings = {
   readonly normalMinHealth: Scalars['Int'];
   readonly hardMinHealth: Scalars['Int'];
   readonly maxTravelTime: Duration;
-  readonly preferredVillageId: Maybe<Scalars['ID']>;
 };
 
 export type AutoBuildLogEntryContent = {
@@ -812,7 +813,6 @@ export type UpdateAutoAdventureSettingsInput = {
   readonly normalMinHealth: Scalars['Int'];
   readonly hardMinHealth: Scalars['Int'];
   readonly maxTravelTime: DurationInput;
-  readonly preferredVillageId: Maybe<Scalars['ID']>;
 };
 
 export type UpdateAutoBuildSettingsInput = {
@@ -1084,7 +1084,6 @@ export type ResolversParentTypes = {
   Duration: Duration;
   Int: Scalars['Int'];
   AutoAdventureSettings: AutoAdventureSettings;
-  AdventureCriteria: AdventureCriteria;
   AutoBuildSettings: AutoBuildSettings;
   AutoStorageSettings: AutoStorageSettings;
   AutoStorageOptionSettings: AutoStorageOptionSettings;
@@ -1094,8 +1093,6 @@ export type ResolversParentTypes = {
   AutoUnitsBuildingSettings: AutoUnitsBuildingSettings;
   AutoUnitsUnitSettings: AutoUnitsUnitSettings;
   AvailableNewBuildingsInput: AvailableNewBuildingsInput;
-  BuildingType: BuildingType;
-  BotState: BotState;
   BuildingInfo: BuildingInfo;
   BuildingLevelInfo: Omit<BuildingLevelInfo, 'cost'> & { cost: ResolversParentTypes['Resources'] };
   Resources: ResourcesModel;
@@ -1110,11 +1107,9 @@ export type ResolversParentTypes = {
   Timestamp: Timestamp;
   VillageCrannyCapacity: VillageCrannyCapacity;
   GameInfo: GameInfo;
-  Tribe: Tribe;
   GeneralSettings: GeneralSettings;
   GeneralVillageSettings: GeneralVillageSettings;
   HeroInformation: HeroModel;
-  HeroState: HeroState;
   Village: Omit<Village, 'resources'> & { resources: ResolversParentTypes['VillageResources'] };
   Coords: Coords;
   VillageResources: Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversParentTypes['Resources'], production: ResolversParentTypes['Resources'] };
@@ -1123,12 +1118,9 @@ export type ResolversParentTypes = {
   LogEntry: Omit<LogEntry, 'village' | 'content'> & { village: Maybe<ResolversParentTypes['Village']>, content: ResolversParentTypes['LogEntryContent'] };
   LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'] | ResolversParentTypes['ResourceClaimLogEntryContent'];
   TextLogEntryContent: TextLogEntryContentModel;
-  TextLogEntryType: TextLogEntryType;
   AutoBuildLogEntryContent: AutoBuildLogEntryContent;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContent;
   ResourceClaimLogEntryContent: Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversParentTypes['Resources'] };
-  ClaimHeroResourcesReason: ClaimHeroResourcesReason;
-  TaskType: TaskType;
   UnitInfo: UnitInfo;
   Mutation: {};
   DequeueBuildingInput: DequeueBuildingInput;
@@ -1171,7 +1163,6 @@ export type AutoAdventureSettingsResolvers<ContextType = any, ParentType extends
   normalMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hardMinHealth: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maxTravelTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
-  preferredVillageId: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1303,6 +1294,8 @@ export type BuildingSpotsResolvers<ContextType = any, ParentType extends Resolve
   resources: Resolver<ResolversTypes['ResourceFields'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
+
+export type BuildingTypeResolvers = EnumResolverSignature<{ None: any, Wood: any, Clay: any, Iron: any, Crop: any, Sawmill: any, Brickyard: any, IronFoundry: any, GrainMill: any, Bakery: any, Warehouse: any, Granary: any, Blacksmith: any, Smithy: any, TournamentSquare: any, MainBuilding: any, RallyPoint: any, Marketplace: any, Embassy: any, Barracks: any, Stable: any, Workshop: any, Academy: any, Cranny: any, TownHall: any, Residence: any, Palace: any, Treasury: any, TradeOffice: any, GreatBarracks: any, GreatStable: any, CityWall: any, EarthWall: any, Palisade: any, StonemasonsLodge: any, Brewery: any, Trapper: any, HerosMansion: any, GreatWarehouse: any, GreatGranary: any, WonderOfTheWorld: any, HorseDrinkingTrough: any, StoneWall: any, MakeshiftWall: any, CommandCenter: any, Waterworks: any }, ResolversTypes['BuildingType']>;
 
 export type CoolDownResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoolDown'] = ResolversParentTypes['CoolDown']> = {
   min: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
@@ -1511,6 +1504,8 @@ export type TimestampResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type TribeResolvers = EnumResolverSignature<{ Romans: any, Teutons: any, Gauls: any, Nature: any, Natars: any, Egyptians: any, Huns: any }, ResolversTypes['Tribe']>;
+
 export type UnitInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnitInfo'] = ResolversParentTypes['UnitInfo']> = {
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -1573,6 +1568,7 @@ export type Resolvers<ContextType = any> = {
   BuildingSpot: BuildingSpotResolvers<ContextType>;
   BuildingSpotLevel: BuildingSpotLevelResolvers<ContextType>;
   BuildingSpots: BuildingSpotsResolvers<ContextType>;
+  BuildingType: BuildingTypeResolvers;
   CoolDown: CoolDownResolvers<ContextType>;
   Coords: CoordsResolvers<ContextType>;
   Duration: DurationResolvers<ContextType>;
@@ -1592,6 +1588,7 @@ export type Resolvers<ContextType = any> = {
   Subscription: SubscriptionResolvers<ContextType>;
   TextLogEntryContent: TextLogEntryContentResolvers<ContextType>;
   Timestamp: TimestampResolvers<ContextType>;
+  Tribe: TribeResolvers;
   UnitInfo: UnitInfoResolvers<ContextType>;
   UserAccount: UserAccountResolvers<ContextType>;
   Village: VillageResolvers<ContextType>;

@@ -19,7 +19,6 @@ import {
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { Duration } from '../../../_shared/components/controls/Duration';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
-import { useVillages } from '../../../hooks/villages/useVillages';
 
 const useAutoAdventureSettings = () => {
   const {
@@ -91,8 +90,6 @@ export const AutoAdventureSettings: React.FC = () => {
       updateSettings({ variables: { settings: state } });
     }
   }, [state, hasChanges, updateSettings]);
-
-  const villages = useVillages();
 
   const onMaxTravelTimeChange = useCallback(
     (newMaxTravelTime: DurationModel) => {
@@ -172,19 +169,6 @@ export const AutoAdventureSettings: React.FC = () => {
     setHasChanges(true);
   };
 
-  const onTextChanged = (e: React.FocusEvent<HTMLSelectElement>): void => {
-    const { name, value } = e.currentTarget;
-
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: value,
-        },
-    );
-    setHasChanges(true);
-  };
-
   const {
     adventureCriteria,
     allow,
@@ -193,17 +177,7 @@ export const AutoAdventureSettings: React.FC = () => {
     maxTravelTime,
     normalMinHealth,
     preferHard,
-    preferredVillageId,
   } = state;
-
-  const preferredVillageExists = villages.some(
-    (x) => x.id === preferredVillageId,
-  );
-  const options = preferredVillageExists
-    ? villages.map((village) => ({ id: village.id, name: village.name }))
-    : [{ id: preferredVillageId || 0, name: 'Select village' }].concat(
-        villages,
-      );
 
   const criteriaOptions = getAllEnumValues(AdventureCriteria);
 
@@ -293,25 +267,6 @@ export const AutoAdventureSettings: React.FC = () => {
         <h3>Cooldown</h3>
         <label htmlFor="maxTravelTime">Cooldown</label>
         <CoolDown onChange={onCooldownChange} value={coolDown} />
-      </div>
-
-      <div>
-        <label htmlFor="preferredVillageId">Preferred village</label>
-        <select
-          id="preferredVillageId"
-          name="preferredVillageId"
-          onChange={onTextChanged}
-          placeholder="Select village"
-          value={preferredVillageId || undefined}>
-          {options.map((option) => {
-            const villageExists = villages.some((x) => x.id === option.id);
-            return (
-              <option key={option.id} hidden={!villageExists} value={option.id}>
-                {option.name}
-              </option>
-            );
-          })}
-        </select>
       </div>
     </div>
   );

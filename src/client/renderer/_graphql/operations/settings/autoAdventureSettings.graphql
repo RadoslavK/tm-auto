@@ -12,7 +12,6 @@ fragment AutoAdventureSettings on AutoAdventureSettings {
     ...Duration
   }
   preferHard
-  preferredVillageId
 }
 
 query GetAutoAdventureSettings {

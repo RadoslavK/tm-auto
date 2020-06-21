@@ -2,6 +2,7 @@ import { DocumentNode } from 'graphql';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | undefined;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -40,7 +41,6 @@ export type AutoAdventureSettings = {
   readonly normalMinHealth: Scalars['Int'];
   readonly hardMinHealth: Scalars['Int'];
   readonly maxTravelTime: Duration;
-  readonly preferredVillageId: Maybe<Scalars['ID']>;
 };
 
 export type AutoBuildLogEntryContent = {
@@ -829,7 +829,6 @@ export type UpdateAutoAdventureSettingsInput = {
   readonly normalMinHealth: Scalars['Int'];
   readonly hardMinHealth: Scalars['Int'];
   readonly maxTravelTime: DurationInput;
-  readonly preferredVillageId: Maybe<Scalars['ID']>;
 };
 
 export type UpdateAutoBuildSettingsInput = {
@@ -927,67 +926,67 @@ export type VillageResources = {
   readonly production: Resources;
 };
 
-export type GetCollapsedBuildingQueueRangesQueryVariables = {
+export type GetCollapsedBuildingQueueRangesQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetCollapsedBuildingQueueRangesQuery = { readonly collapsedBuildingQueueRanges: ReadonlyArray<string> };
 
-export type GetSelectedVillageIdQueryVariables = {};
+export type GetSelectedVillageIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetSelectedVillageIdQuery = { readonly selectedVillageId: string };
 
 export type UserAccountFragment = { readonly id: string, readonly username: string, readonly password: string, readonly server: string };
 
-export type GetAccountsQueryVariables = {};
+export type GetAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAccountsQuery = { readonly accounts: ReadonlyArray<UserAccountFragment> };
 
-export type GetCurrentAccountQueryVariables = {};
+export type GetCurrentAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentAccountQuery = { readonly currentAccount: UserAccountFragment };
 
-export type GetAccountQueryVariables = {
+export type GetAccountQueryVariables = Exact<{
   id: Scalars['ID'];
-};
+}>;
 
 
 export type GetAccountQuery = { readonly account: UserAccountFragment };
 
-export type GetLastSignedAccountIdQueryVariables = {};
+export type GetLastSignedAccountIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetLastSignedAccountIdQuery = { readonly lastSignedAccountId: Maybe<string> };
 
-export type IsAccountTakenQueryVariables = {
+export type IsAccountTakenQueryVariables = Exact<{
   account: AccountInput;
-};
+}>;
 
 
 export type IsAccountTakenQuery = { readonly isAccountTaken: boolean };
 
-export type CreateAccountMutationVariables = {
+export type CreateAccountMutationVariables = Exact<{
   account: AccountInput;
-};
+}>;
 
 
 export type CreateAccountMutation = { readonly createAccount: UserAccountFragment };
 
-export type UpdateAccountMutationVariables = {
+export type UpdateAccountMutationVariables = Exact<{
   id: Scalars['ID'];
   account: AccountInput;
-};
+}>;
 
 
 export type UpdateAccountMutation = { readonly updateAccount: UserAccountFragment };
 
-export type DeleteAccountMutationVariables = {
+export type DeleteAccountMutationVariables = Exact<{
   id: Scalars['ID'];
-};
+}>;
 
 
 export type DeleteAccountMutation = { readonly deleteAccount: UserAccountFragment };
@@ -996,125 +995,125 @@ export type BuildingSpotFragment = { readonly fieldId: number, readonly type: Bu
 
 export type BuildingSpotsFragment = { readonly infrastructure: ReadonlyArray<BuildingSpotFragment>, readonly resources: { readonly wood: ReadonlyArray<BuildingSpotFragment>, readonly clay: ReadonlyArray<BuildingSpotFragment>, readonly iron: ReadonlyArray<BuildingSpotFragment>, readonly crop: ReadonlyArray<BuildingSpotFragment> } };
 
-export type GetBuildingSpotsQueryVariables = {
+export type GetBuildingSpotsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetBuildingSpotsQuery = { readonly buildingSpots: BuildingSpotsFragment };
 
-export type GetAvailableNewBuildingTypesQueryVariables = {
+export type GetAvailableNewBuildingTypesQueryVariables = Exact<{
   input: AvailableNewBuildingsInput;
-};
+}>;
 
 
 export type GetAvailableNewBuildingTypesQuery = { readonly availableNewBuildingsTypes: ReadonlyArray<BuildingType> };
 
-export type GetBuildingInfoQueryVariables = {
+export type GetBuildingInfoQueryVariables = Exact<{
   buildingType: BuildingType;
-};
+}>;
 
 
 export type GetBuildingInfoQuery = { readonly buildingInfo: { readonly maxLevel: number, readonly name: string } };
 
-export type GetBuildingLevelInfoQueryVariables = {
+export type GetBuildingLevelInfoQueryVariables = Exact<{
   buildingType: BuildingType;
   level: Scalars['Int'];
-};
+}>;
 
 
 export type GetBuildingLevelInfoQuery = { readonly buildingLevelInfo: { readonly cost: ResourcesFragment } };
 
-export type OnActualBuildingLevelsUpdatedSubscriptionVariables = {
+export type OnActualBuildingLevelsUpdatedSubscriptionVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type OnActualBuildingLevelsUpdatedSubscription = { readonly actualBuildingLevelsUpdated: Maybe<boolean> };
 
 export type BuildingInProgressFragment = { readonly level: number, readonly type: BuildingType, readonly fieldId: number, readonly finishedAt: TimestampFragment };
 
-export type GetBuildingsInProgressQueryVariables = {
+export type GetBuildingsInProgressQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetBuildingsInProgressQuery = { readonly buildingsInProgress: ReadonlyArray<BuildingInProgressFragment> };
 
-export type OnBuildingsInProgressUpdatedSubscriptionVariables = {
+export type OnBuildingsInProgressUpdatedSubscriptionVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type OnBuildingsInProgressUpdatedSubscription = { readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgressFragment> };
 
-export type GetBotStateQueryVariables = {};
+export type GetBotStateQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetBotStateQuery = { readonly botState: BotState };
 
-export type IsBotActiveQueryVariables = {};
+export type IsBotActiveQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type IsBotActiveQuery = { readonly isBotActive: boolean };
 
-export type StartBotMutationVariables = {};
+export type StartBotMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StartBotMutation = { readonly startBot: Maybe<boolean> };
 
-export type StopBotMutationVariables = {};
+export type StopBotMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StopBotMutation = { readonly stopBot: Maybe<boolean> };
 
-export type SignInMutationVariables = {
+export type SignInMutationVariables = Exact<{
   accountId: Scalars['ID'];
-};
+}>;
 
 
 export type SignInMutation = { readonly signIn: Maybe<boolean> };
 
-export type SignOutMutationVariables = {};
+export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SignOutMutation = { readonly signOut: Maybe<boolean> };
 
-export type OnBotRunningChangedSubscriptionVariables = {};
+export type OnBotRunningChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnBotRunningChangedSubscription = { readonly botStateChanged: BotState };
 
-export type OnBotActivityChangedSubscriptionVariables = {};
+export type OnBotActivityChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnBotActivityChangedSubscription = { readonly botActivityChanged: boolean };
 
-export type GetGameInfoQueryVariables = {};
+export type GetGameInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGameInfoQuery = { readonly gameInfo: { readonly tribe: Tribe } };
 
 export type HeroInformationFragment = { readonly health: number, readonly state: HeroState, readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment }> };
 
-export type GetHeroInformationQueryVariables = {};
+export type GetHeroInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetHeroInformationQuery = { readonly heroInformation: HeroInformationFragment };
 
-export type OnHeroInformationUpdatedSubscriptionVariables = {};
+export type OnHeroInformationUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnHeroInformationUpdatedSubscription = { readonly heroInformationUpdated: HeroInformationFragment };
 
 export type LogEntryFragment = { readonly timestamp: TimestampFragment, readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment }>, readonly content: { readonly message: string, readonly messageType: TextLogEntryType } | { readonly fieldId: number, readonly level: number, readonly name: string, readonly type: BuildingType } | { readonly amount: number, readonly index: number, readonly tribe: Tribe, readonly unitName: string } | { readonly reason: ClaimHeroResourcesReason, readonly resources: ResourcesFragment } };
 
-export type GetLogEntriesQueryVariables = {};
+export type GetLogEntriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetLogEntriesQuery = { readonly logEntries: ReadonlyArray<LogEntryFragment> };
 
-export type OnLogEntryAddedSubscriptionVariables = {};
+export type OnLogEntryAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnLogEntryAddedSubscription = { readonly logEntryAdded: LogEntryFragment };
@@ -1131,86 +1130,86 @@ export type DurationFragment = { readonly days: number, readonly hours: number, 
 
 export type CoolDownFragment = { readonly min: DurationFragment, readonly max: DurationFragment };
 
-export type NextTaskExecutionQueryVariables = {
+export type NextTaskExecutionQueryVariables = Exact<{
   task: TaskType;
-};
+}>;
 
 
 export type NextTaskExecutionQuery = { readonly nextTaskExecution: TimestampFragment };
 
-export type NextVillageTaskExecutionQueryVariables = {
+export type NextVillageTaskExecutionQueryVariables = Exact<{
   villageId: Scalars['ID'];
   task: TaskType;
-};
+}>;
 
 
 export type NextVillageTaskExecutionQuery = { readonly nextVillageTaskExecution: TimestampFragment };
 
-export type NextTasksExecutionQueryVariables = {};
+export type NextTasksExecutionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NextTasksExecutionQuery = { readonly nextTasksExecution: TimestampFragment };
 
-export type SetNextTaskExecutionMutationVariables = {
+export type SetNextTaskExecutionMutationVariables = Exact<{
   task: TaskType;
   delay: DurationInput;
-};
+}>;
 
 
 export type SetNextTaskExecutionMutation = { readonly setNextTaskExecution: TimestampFragment };
 
-export type SetNextTasksExecutionMutationVariables = {
+export type SetNextTasksExecutionMutationVariables = Exact<{
   delay: DurationInput;
-};
+}>;
 
 
 export type SetNextTasksExecutionMutation = { readonly setNextTasksExecution: TimestampFragment };
 
-export type SetNextVillageTaskExecutionMutationVariables = {
+export type SetNextVillageTaskExecutionMutationVariables = Exact<{
   villageId: Scalars['ID'];
   task: TaskType;
   delay: DurationInput;
-};
+}>;
 
 
 export type SetNextVillageTaskExecutionMutation = { readonly setNextVillageTaskExecution: TimestampFragment };
 
-export type ResetNextTaskExecutionMutationVariables = {
+export type ResetNextTaskExecutionMutationVariables = Exact<{
   task: TaskType;
-};
+}>;
 
 
 export type ResetNextTaskExecutionMutation = { readonly resetNextTaskExecution: TimestampFragment };
 
-export type ResetNextTasksExecutionMutationVariables = {};
+export type ResetNextTasksExecutionMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResetNextTasksExecutionMutation = { readonly resetNextTasksExecution: TimestampFragment };
 
-export type ResetNextVillageTaskExecutionMutationVariables = {
+export type ResetNextVillageTaskExecutionMutationVariables = Exact<{
   villageId: Scalars['ID'];
   task: TaskType;
-};
+}>;
 
 
 export type ResetNextVillageTaskExecutionMutation = { readonly resetNextVillageTaskExecution: TimestampFragment };
 
-export type OnNextTasksExecutionChangedSubscriptionVariables = {};
+export type OnNextTasksExecutionChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnNextTasksExecutionChangedSubscription = { readonly nextTasksExecutionChanged: TimestampFragment };
 
-export type OnNextTaskExecutionChangedSubscriptionVariables = {
+export type OnNextTaskExecutionChangedSubscriptionVariables = Exact<{
   task: TaskType;
-};
+}>;
 
 
 export type OnNextTaskExecutionChangedSubscription = { readonly nextTaskExecutionChanged: TimestampFragment };
 
-export type OnNextVillageTaskExecutionChangedSubscriptionVariables = {
+export type OnNextVillageTaskExecutionChangedSubscriptionVariables = Exact<{
   villageId: Scalars['ID'];
   task: TaskType;
-};
+}>;
 
 
 export type OnNextVillageTaskExecutionChangedSubscription = { readonly nextVillageTaskExecutionChanged: TimestampFragment };
@@ -1221,146 +1220,146 @@ export type QueuedBuildingRangeFragment = { readonly fieldId: number, readonly i
 
 export type BuildingQueueFragment = { readonly buildingRanges: ReadonlyArray<QueuedBuildingRangeFragment>, readonly totalBuildingTime: DurationFragment, readonly totalCost: ResourcesFragment };
 
-export type GetQueuedBuildingsQueryVariables = {
+export type GetQueuedBuildingsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetQueuedBuildingsQuery = { readonly buildingQueue: BuildingQueueFragment };
 
-export type CanMoveQueuedBuildingToIndexQueryVariables = {
+export type CanMoveQueuedBuildingToIndexQueryVariables = Exact<{
   villageId: Scalars['ID'];
   queueId: Scalars['ID'];
   index: Scalars['Int'];
-};
+}>;
 
 
 export type CanMoveQueuedBuildingToIndexQuery = { readonly canMoveQueuedBuildingToIndex: boolean };
 
-export type CanMoveQueuedBuildingsBlockToIndexQueryVariables = {
+export type CanMoveQueuedBuildingsBlockToIndexQueryVariables = Exact<{
   villageId: Scalars['ID'];
   topBuildingQueueId: Scalars['ID'];
   bottomBuildingQueueId: Scalars['ID'];
   index: Scalars['Int'];
-};
+}>;
 
 
 export type CanMoveQueuedBuildingsBlockToIndexQuery = { readonly canMoveQueuedBuildingsBlockToIndex: boolean };
 
-export type ClearQueueMutationVariables = {
+export type ClearQueueMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type ClearQueueMutation = { readonly clearQueue: Maybe<boolean> };
 
-export type EnqueueBuildingMutationVariables = {
+export type EnqueueBuildingMutationVariables = Exact<{
   input: EnqueueBuildingInput;
-};
+}>;
 
 
 export type EnqueueBuildingMutation = { readonly enqueueBuilding: Maybe<boolean> };
 
-export type DequeueBuildingMutationVariables = {
+export type DequeueBuildingMutationVariables = Exact<{
   input: DequeueBuildingInput;
-};
+}>;
 
 
 export type DequeueBuildingMutation = { readonly dequeueBuilding: Maybe<boolean> };
 
-export type DequeueBuildingAtFieldMutationVariables = {
+export type DequeueBuildingAtFieldMutationVariables = Exact<{
   input: DequeueBuildingAtFieldInput;
-};
+}>;
 
 
 export type DequeueBuildingAtFieldMutation = { readonly dequeueBuildingAtField: Maybe<boolean> };
 
-export type MoveQueuedBuildingAsHighAsPossibleMutationVariables = {
+export type MoveQueuedBuildingAsHighAsPossibleMutationVariables = Exact<{
   villageId: Scalars['ID'];
   queueId: Scalars['ID'];
-};
+}>;
 
 
 export type MoveQueuedBuildingAsHighAsPossibleMutation = { readonly moveQueuedBuildingAsHighAsPossible: Maybe<boolean> };
 
-export type MoveQueuedBuildingToIndexMutationVariables = {
+export type MoveQueuedBuildingToIndexMutationVariables = Exact<{
   villageId: Scalars['ID'];
   queueId: Scalars['ID'];
   index: Scalars['Int'];
-};
+}>;
 
 
 export type MoveQueuedBuildingToIndexMutation = { readonly moveQueuedBuildingToIndex: Maybe<boolean> };
 
-export type MoveQueuedBuildingsBlockToIndexMutationVariables = {
+export type MoveQueuedBuildingsBlockToIndexMutationVariables = Exact<{
   villageId: Scalars['ID'];
   topBuildingQueueId: Scalars['ID'];
   bottomBuildingQueueId: Scalars['ID'];
   index: Scalars['Int'];
-};
+}>;
 
 
 export type MoveQueuedBuildingsBlockToIndexMutation = { readonly moveQueuedBuildingsBlockToIndex: Maybe<boolean> };
 
-export type DequeueBuildingsBlockMutationVariables = {
+export type DequeueBuildingsBlockMutationVariables = Exact<{
   villageId: Scalars['ID'];
   topBuildingQueueId: Scalars['ID'];
   bottomBuildingQueueId: Scalars['ID'];
-};
+}>;
 
 
 export type DequeueBuildingsBlockMutation = { readonly dequeueBuildingsBlock: Maybe<boolean> };
 
-export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables = {
+export type MoveQueuedBuildingsBlockAsHighAsPossibleMutationVariables = Exact<{
   villageId: Scalars['ID'];
   topBuildingQueueId: Scalars['ID'];
   bottomBuildingQueueId: Scalars['ID'];
-};
+}>;
 
 
 export type MoveQueuedBuildingsBlockAsHighAsPossibleMutation = { readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<boolean> };
 
-export type OnQueueUpdatedSubscriptionVariables = {
+export type OnQueueUpdatedSubscriptionVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type OnQueueUpdatedSubscription = { readonly queueUpdated: BuildingQueueFragment };
 
 export type AccountSettingsFragment = { readonly allowTasks: boolean, readonly autoStart: boolean, readonly autoBuild: boolean, readonly autoUnits: boolean, readonly autoParty: boolean, readonly tasksCoolDown: CoolDownFragment };
 
-export type GetAccountSettingsQueryVariables = {};
+export type GetAccountSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAccountSettingsQuery = { readonly accountSettings: AccountSettingsFragment };
 
-export type UpdateAccountSettingsMutationVariables = {
+export type UpdateAccountSettingsMutationVariables = Exact<{
   settings: UpdateAccountSettingsInput;
-};
+}>;
 
 
 export type UpdateAccountSettingsMutation = { readonly updateAccountSettings: AccountSettingsFragment };
 
-export type ResetAccountSettingsMutationVariables = {};
+export type ResetAccountSettingsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResetAccountSettingsMutation = { readonly resetAccountSettings: AccountSettingsFragment };
 
-export type AutoAdventureSettingsFragment = { readonly allow: boolean, readonly adventureCriteria: AdventureCriteria, readonly hardMinHealth: number, readonly normalMinHealth: number, readonly preferHard: boolean, readonly preferredVillageId: Maybe<string>, readonly coolDown: CoolDownFragment, readonly maxTravelTime: DurationFragment };
+export type AutoAdventureSettingsFragment = { readonly allow: boolean, readonly adventureCriteria: AdventureCriteria, readonly hardMinHealth: number, readonly normalMinHealth: number, readonly preferHard: boolean, readonly coolDown: CoolDownFragment, readonly maxTravelTime: DurationFragment };
 
-export type GetAutoAdventureSettingsQueryVariables = {};
+export type GetAutoAdventureSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAutoAdventureSettingsQuery = { readonly autoAdventureSettings: AutoAdventureSettingsFragment };
 
-export type UpdateAutoAdventureSettingsMutationVariables = {
+export type UpdateAutoAdventureSettingsMutationVariables = Exact<{
   settings: UpdateAutoAdventureSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoAdventureSettingsMutation = { readonly updateAutoAdventureSettings: AutoAdventureSettingsFragment };
 
-export type ResetAutoAdventureSettingsMutationVariables = {};
+export type ResetAutoAdventureSettingsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResetAutoAdventureSettingsMutation = { readonly resetAutoAdventureSettings: AutoAdventureSettingsFragment };
@@ -1371,67 +1370,67 @@ export type AutoStorageSettingsFragment = { readonly allowFreeSpots: boolean, re
 
 export type AutoBuildSettingsFragment = { readonly allow: boolean, readonly allowDualQueue: boolean, readonly autoCropFields: boolean, readonly minCrop: number, readonly useHeroResources: boolean, readonly coolDown: CoolDownFragment, readonly autoStorage: AutoStorageSettingsFragment };
 
-export type GetAutoBuildSettingsQueryVariables = {
+export type GetAutoBuildSettingsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetAutoBuildSettingsQuery = { readonly autoBuildSettings: AutoBuildSettingsFragment };
 
-export type UpdateAutoBuildSettingsMutationVariables = {
+export type UpdateAutoBuildSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   settings: UpdateAutoBuildSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoBuildSettingsMutation = { readonly updateAutoBuildSettings: AutoBuildSettingsFragment };
 
-export type ResetAutoBuildSettingsMutationVariables = {
+export type ResetAutoBuildSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type ResetAutoBuildSettingsMutation = { readonly resetAutoBuildSettings: AutoBuildSettingsFragment };
 
 export type AutoMentorSettingsFragment = { readonly acceptDailyRewards: boolean, readonly acceptTaskRewards: boolean };
 
-export type GetAutoMentorSettingsQueryVariables = {};
+export type GetAutoMentorSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAutoMentorSettingsQuery = { readonly autoMentorSettings: AutoMentorSettingsFragment };
 
-export type UpdateAutoMentorSettingsMutationVariables = {
+export type UpdateAutoMentorSettingsMutationVariables = Exact<{
   settings: UpdateAutoMentorSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoMentorSettingsMutation = { readonly updateAutoMentorSettings: AutoMentorSettingsFragment };
 
-export type ResetAutoMentorSettingsMutationVariables = {};
+export type ResetAutoMentorSettingsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResetAutoMentorSettingsMutation = { readonly resetAutoMentorSettings: AutoMentorSettingsFragment };
 
 export type AutoPartySettingsFragment = { readonly allowSmall: boolean, readonly allowLarge: boolean, readonly minCulturePointsSmall: number, readonly minCulturePointsLarge: number, readonly coolDown: CoolDownFragment };
 
-export type GetAutoPartySettingsQueryVariables = {
+export type GetAutoPartySettingsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetAutoPartySettingsQuery = { readonly autoPartySettings: AutoPartySettingsFragment };
 
-export type UpdateAutoPartySettingsMutationVariables = {
+export type UpdateAutoPartySettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   settings: UpdateAutoPartySettingsInput;
-};
+}>;
 
 
 export type UpdateAutoPartySettingsMutation = { readonly updateAutoPartySettings: AutoPartySettingsFragment };
 
-export type ResetAutoPartySettingsMutationVariables = {
+export type ResetAutoPartySettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type ResetAutoPartySettingsMutation = { readonly resetAutoPartySettings: AutoPartySettingsFragment };
@@ -1442,141 +1441,141 @@ export type AutoUnitsBuildingSettingsFragment = { readonly allow: boolean, reado
 
 export type AutoUnitsSettingsFragment = { readonly allow: boolean, readonly useHeroResources: boolean, readonly minCrop: number, readonly coolDown: CoolDownFragment, readonly barracks: AutoUnitsBuildingSettingsFragment, readonly stable: AutoUnitsBuildingSettingsFragment, readonly workshop: AutoUnitsBuildingSettingsFragment, readonly residence: AutoUnitsBuildingSettingsFragment };
 
-export type GetAutoUnitsSettingsQueryVariables = {
+export type GetAutoUnitsSettingsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetAutoUnitsSettingsQuery = { readonly autoUnitsSettings: AutoUnitsSettingsFragment };
 
-export type UpdateAutoUnitsUnitSettingsMutationVariables = {
+export type UpdateAutoUnitsUnitSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   settings: UpdateAutoUnitsUnitSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoUnitsUnitSettingsMutation = { readonly updateAutoUnitsUnitSettings: AutoUnitsSettingsFragment };
 
-export type UpdateAutoUnitsBuildingSettingsMutationVariables = {
+export type UpdateAutoUnitsBuildingSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   buildingType: BuildingType;
   settings: UpdateAutoUnitsBuildingSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoUnitsBuildingSettingsMutation = { readonly updateAutoUnitsBuildingSettings: AutoUnitsSettingsFragment };
 
-export type UpdateAutoUnitsSettingsMutationVariables = {
+export type UpdateAutoUnitsSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   settings: UpdateAutoUnitsSettingsInput;
-};
+}>;
 
 
 export type UpdateAutoUnitsSettingsMutation = { readonly updateAutoUnitsSettings: AutoUnitsSettingsFragment };
 
-export type ResetAutoUnitsSettingsMutationVariables = {
+export type ResetAutoUnitsSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type ResetAutoUnitsSettingsMutation = { readonly resetAutoUnitsSettings: AutoUnitsSettingsFragment };
 
 export type GeneralSettingsFragment = { readonly chromePath: string, readonly dataPath: string, readonly headlessChrome: boolean };
 
-export type GetGeneralSettingsQueryVariables = {};
+export type GetGeneralSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGeneralSettingsQuery = { readonly generalSettings: GeneralSettingsFragment };
 
-export type UpdateGeneralSettingsMutationVariables = {
+export type UpdateGeneralSettingsMutationVariables = Exact<{
   settings: UpdateGeneralSettingsInput;
-};
+}>;
 
 
 export type UpdateGeneralSettingsMutation = { readonly updateGeneralSettings: GeneralSettingsFragment };
 
-export type ResetGeneralSettingsMutationVariables = {};
+export type ResetGeneralSettingsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResetGeneralSettingsMutation = { readonly resetGeneralSettings: GeneralSettingsFragment };
 
 export type GeneralVillageSettingsFragment = { readonly allowTasks: boolean };
 
-export type GetGeneralVillageSettingsQueryVariables = {
+export type GetGeneralVillageSettingsQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetGeneralVillageSettingsQuery = { readonly generalVillageSettings: GeneralVillageSettingsFragment };
 
-export type UpdateGeneralVillageSettingsMutationVariables = {
+export type UpdateGeneralVillageSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
   settings: UpdateGeneralVillageSettingsInput;
-};
+}>;
 
 
 export type UpdateGeneralVillageSettingsMutation = { readonly updateGeneralVillageSettings: GeneralVillageSettingsFragment };
 
-export type ResetGeneralVillageSettingsMutationVariables = {
+export type ResetGeneralVillageSettingsMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type ResetGeneralVillageSettingsMutation = { readonly resetGeneralVillageSettings: GeneralVillageSettingsFragment };
 
-export type GetUnitInfoQueryVariables = {
+export type GetUnitInfoQueryVariables = Exact<{
   index: Scalars['Int'];
-};
+}>;
 
 
 export type GetUnitInfoQuery = { readonly unitInfo: { readonly name: string } };
 
 export type VillageCrannyCapacityFragment = { readonly actual: number, readonly ongoing: number, readonly total: number };
 
-export type GetVillageQueryVariables = {
+export type GetVillageQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetVillageQuery = { readonly village: Maybe<{ readonly id: string, readonly name: string, readonly coords: CoordsFragment, readonly resources: { readonly amount: ResourcesFragment, readonly capacity: { readonly granary: number, readonly warehouse: number }, readonly production: ResourcesFragment } }> };
 
-export type GetVillagesQueryVariables = {};
+export type GetVillagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetVillagesQuery = { readonly villages: ReadonlyArray<{ readonly id: string, readonly name: string, readonly isCapital: boolean, readonly coords: CoordsFragment }> };
 
-export type GetActiveVillageIdQueryVariables = {};
+export type GetActiveVillageIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetActiveVillageIdQuery = { readonly activeVillageId: string };
 
-export type GetCrannyCapacityQueryVariables = {
+export type GetCrannyCapacityQueryVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type GetCrannyCapacityQuery = { readonly crannyCapacity: VillageCrannyCapacityFragment };
 
-export type RefreshVillageMutationVariables = {
+export type RefreshVillageMutationVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type RefreshVillageMutation = { readonly refreshVillage: Maybe<boolean> };
 
-export type OnVillageUpdatedSubscriptionVariables = {
+export type OnVillageUpdatedSubscriptionVariables = Exact<{
   villageId: Scalars['ID'];
-};
+}>;
 
 
 export type OnVillageUpdatedSubscription = { readonly villageUpdated: { readonly id: string, readonly name: string, readonly coords: CoordsFragment, readonly resources: { readonly amount: ResourcesFragment, readonly capacity: { readonly granary: number, readonly warehouse: number }, readonly production: ResourcesFragment } } };
 
-export type OnVillagesUpdatedSubscriptionVariables = {};
+export type OnVillagesUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnVillagesUpdatedSubscription = { readonly villagesUpdated: ReadonlyArray<{ readonly id: string, readonly name: string, readonly isCapital: boolean, readonly coords: CoordsFragment }> };
 
-export type OnActiveVillageIdChangedSubscriptionVariables = {};
+export type OnActiveVillageIdChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OnActiveVillageIdChangedSubscription = { readonly activeVillageIdChanged: string };
@@ -1597,7 +1596,7 @@ export const QueuedBuildingRangeFragmentDoc: DocumentNode = {"kind":"Document","
 export const BuildingQueueFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingQueue"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingQueue"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingRanges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuildingRange"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalBuildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuilding"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuilding"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueIndex"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuildingRange"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuildingRange"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuilding"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}}]};
 export const CoolDownFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}}]};
 export const AccountSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AccountSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AccountSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allowTasks"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tasksCoolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"autoStart"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoBuild"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoUnits"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoParty"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
-export const AutoAdventureSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preferredVillageId"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
+export const AutoAdventureSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
 export const AutoStorageOptionSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}}]};
 export const AutoStorageSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allowFreeSpots"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}}]};
 export const AutoBuildSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoBuildSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoBuildSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"allowDualQueue"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"autoCropFields"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoStorage"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allowFreeSpots"},"arguments":[],"directives":[]}]}}]};
@@ -3113,7 +3112,7 @@ export function useResetAccountSettingsMutation(baseOptions?: ApolloReactHooks.M
 export type ResetAccountSettingsMutationHookResult = ReturnType<typeof useResetAccountSettingsMutation>;
 export type ResetAccountSettingsMutationResult = ApolloReactCommon.MutationResult<ResetAccountSettingsMutation>;
 export type ResetAccountSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetAccountSettingsMutation, ResetAccountSettingsMutationVariables>;
-export const GetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preferredVillageId"},"arguments":[],"directives":[]}]}}]};
+export const GetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
 
 /**
  * __useGetAutoAdventureSettingsQuery__
@@ -3139,7 +3138,7 @@ export function useGetAutoAdventureSettingsLazyQuery(baseOptions?: ApolloReactHo
 export type GetAutoAdventureSettingsQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsQuery>;
 export type GetAutoAdventureSettingsLazyQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsLazyQuery>;
 export type GetAutoAdventureSettingsQueryResult = ApolloReactCommon.QueryResult<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>;
-export const UpdateAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoAdventureSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoAdventureSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoAdventureSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preferredVillageId"},"arguments":[],"directives":[]}]}}]};
+export const UpdateAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoAdventureSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoAdventureSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoAdventureSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
 export type UpdateAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
 
 /**
@@ -3165,7 +3164,7 @@ export function useUpdateAutoAdventureSettingsMutation(baseOptions?: ApolloReact
 export type UpdateAutoAdventureSettingsMutationHookResult = ReturnType<typeof useUpdateAutoAdventureSettingsMutation>;
 export type UpdateAutoAdventureSettingsMutationResult = ApolloReactCommon.MutationResult<UpdateAutoAdventureSettingsMutation>;
 export type UpdateAutoAdventureSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
-export const ResetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetAutoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preferredVillageId"},"arguments":[],"directives":[]}]}}]};
+export const ResetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetAutoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
 export type ResetAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>;
 
 /**
