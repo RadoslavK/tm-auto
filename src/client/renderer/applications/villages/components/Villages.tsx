@@ -66,7 +66,10 @@ export const Villages: React.FC = () => {
         <Route
           path={`${match.path}/:id`}
           render={(props: RouteComponentProps<VillageRouteParams>) => (
-            <Village villageId={props.match.params.id} />
+            <Village
+              key={props.match.params.id}
+              villageId={props.match.params.id}
+            />
           )}
         />
         {villages.length > 0 && (
