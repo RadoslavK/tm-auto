@@ -172,16 +172,14 @@ export const AutoAdventureSettings: React.FC = () => {
     setHasChanges(true);
   };
 
-  const onNumberOptionChange = (
-    e: React.FocusEvent<HTMLSelectElement>,
-  ): void => {
+  const onTextChanged = (e: React.FocusEvent<HTMLSelectElement>): void => {
     const { name, value } = e.currentTarget;
 
     setState(
       (prevState) =>
         prevState && {
           ...prevState,
-          [name]: +value,
+          [name]: value,
         },
     );
     setHasChanges(true);
@@ -302,7 +300,7 @@ export const AutoAdventureSettings: React.FC = () => {
         <select
           id="preferredVillageId"
           name="preferredVillageId"
-          onChange={onNumberOptionChange}
+          onChange={onTextChanged}
           placeholder="Select village"
           value={preferredVillageId || undefined}>
           {options.map((option) => {
