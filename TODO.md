@@ -119,7 +119,6 @@
 
 ## Error Handling / Fault Tolerance
 
-- Add exponential timeout for maintenance handling, starting with lower timeouts.
 - Occasionally some "Unknown Error" happens. Detect and wait similarly to maintenance.
 - React error boundary for client errors -> refresh button?
 - Bot Task CoolDown is set only when task is successful.

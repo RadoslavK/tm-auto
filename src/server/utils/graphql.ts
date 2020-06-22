@@ -1,6 +1,10 @@
 import { ApolloCache, DocumentNode } from '@apollo/client';
 
-type Base<TQueryVariables> = keyof TQueryVariables extends never
+import { Exact } from '../_types/graphql.type';
+
+type Base<TQueryVariables> = TQueryVariables extends Exact<{
+  [x: string]: never;
+}>
   ? {
       readonly cache: ApolloCache<unknown>;
       readonly query: DocumentNode;

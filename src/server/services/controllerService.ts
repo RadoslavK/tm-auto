@@ -5,7 +5,6 @@ import { TimeoutError } from 'puppeteer-core/lib/Errors';
 
 import { TravianPath } from '../_enums/travianPath';
 import { CoolDown } from '../_models/coolDown';
-import { Duration } from '../_models/duration';
 import { BotState } from '../_types/graphql.type';
 import {
   getAccountContext,
@@ -35,138 +34,19 @@ type HandleErrorResult = {
   readonly coolDown?: CoolDown;
 };
 
-const handleError = async (error: Error): Promise<HandleErrorResult> => {
-  console.error(error.stack);
-  getAccountContext().logsService.logError(error.message);
-
-  // Maybe its maintenance
-  try {
-    const page = await getPage();
-    const content = await page.content();
-
-    const hasMaintenance = content.toLowerCase().includes('maintenance');
-
-    if (hasMaintenance) {
-      getAccountContext().logsService.logText(
-        'There is a maintenance on the server, waiting 30-40 minutes...',
-      );
-
-      // Reset the page so it can be reloaded again after timeout
-      await page.goto('about:blank');
-
-      return {
-        allowContinue: true,
-        coolDown: new CoolDown({
-          min: new Duration({ minutes: 30 }),
-          max: new Duration({ minutes: 40 }),
-        }),
-      };
-    }
-  } catch (tryMaintenanceError) {
-    console.error(tryMaintenanceError.stack);
-    getAccountContext().logsService.logError(
-      'Tried to wait for maintenance but failed with message...',
-    );
-    getAccountContext().logsService.logError(tryMaintenanceError.message);
-  }
-
-  //  Maybe its some forced dialog about server progress
-  try {
-    const page = await getPage();
-
-    const continueButton = await page.$(
-      `[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`,
-    );
-
-    if (continueButton) {
-      getAccountContext().logsService.logText(
-        'Found a dialog about server progress, continuing...',
-      );
-
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-        continueButton.click(),
-      ]);
-
-      return { allowContinue: true };
-    }
-  } catch (tryContinueError) {
-    console.error(tryContinueError.stack);
-    getAccountContext().logsService.logError(
-      'Tried to continue the server progress dialog but failed with message...',
-    );
-    getAccountContext().logsService.logError(tryContinueError.message);
-  }
-
-  const now = new Date();
-  const format = `${now.getDate()}-${
-    now.getMonth() + 1
-  }-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
-  const dir = getGeneralSettingsService().get().dataPath;
-  const directory = path.join(dir, '.screenshots');
-
-  // try to make screenshot
-  try {
-    const page = await getPage();
-
-    if (!fs.existsSync(directory)) {
-      fs.mkdirSync(directory);
-    }
-
-    await fs.promises.writeFile(
-      path.join(directory, `${format}.txt`),
-      error.stack ?? '',
-      {
-        flag: 'w',
-      },
-    );
-    await fs.promises.writeFile(
-      path.join(directory, `${format}.html`),
-      await page.content(),
-      {
-        flag: 'w',
-      },
-    );
-
-    await page.screenshot({
-      fullPage: true,
-      path: path.join(directory, `${format}.png`),
-    });
-  } catch (screenshotError) {
-    console.error(screenshotError.stack);
-    getAccountContext().logsService.logError(screenshotError.message);
-
-    await fs.promises.writeFile(
-      path.join(directory, `${format}-screenshot-error.txt`),
-      screenshotError.stack ?? '',
-      {
-        flag: 'w',
-      },
-    );
-  }
-
-  await killBrowser();
-
-  return { allowContinue: error instanceof TimeoutError };
-};
-
 class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
-
   private _taskManager: TaskManager | null = null;
-
   private _isActive: boolean = false;
-
   private _refreshRequests: Set<string> = new Set<string>();
-
-  private botState: BotState = BotState.None;
+  private _botState: BotState = BotState.None;
 
   public isActive = (): boolean => this._isActive;
 
-  public state = (): BotState => this.botState;
+  public state = (): BotState => this._botState;
 
   private setState = async (state: BotState): Promise<void> => {
-    this.botState = state;
+    this._botState = state;
 
     await publishPayloadEvent(BotEvent.BotRunningChanged, { state });
   };
@@ -179,6 +59,139 @@ class ControllerService {
     });
   };
 
+  private handleError = async (error: Error): Promise<HandleErrorResult> => {
+    console.error(error.stack);
+    getAccountContext().logsService.logError(error.message);
+
+    // Maybe its maintenance
+    try {
+      let hasMaintenance: boolean;
+      let maintenanceCount = 0;
+
+      do {
+        const page = await getPage();
+        const content = await page.content();
+
+        hasMaintenance = content.toLowerCase().includes('maintenance');
+
+        if (!hasMaintenance) {
+          if (maintenanceCount > 0) {
+            return { allowContinue: true };
+          } else {
+            break;
+          }
+        }
+
+        maintenanceCount++;
+
+        getAccountContext().logsService.logText(
+          'There is a maintenance on the server, waiting 30-40 minutes...',
+        );
+
+        // Reset the page so it can be reloaded again after timeout
+        await page.goto('about:blank');
+
+        const nextCoolDownSeconds =
+          maintenanceCount < 7
+            ? Math.pow(2, maintenanceCount) * 30
+            : (Math.random() * (40 - 30) + 30) * 60;
+
+        await page.waitFor(nextCoolDownSeconds * 1000);
+
+        const account = accountService.getCurrentAccount();
+
+        await page.goto(
+          `${account.server}/${TravianPath.ResourceFieldsOverview}`,
+        );
+      } while (true);
+    } catch (tryMaintenanceError) {
+      console.error(tryMaintenanceError.stack);
+      getAccountContext().logsService.logError(
+        'Tried to wait for maintenance but failed with message...',
+      );
+      getAccountContext().logsService.logError(tryMaintenanceError.message);
+    }
+
+    //  Maybe its some forced dialog about server progress
+    try {
+      const page = await getPage();
+
+      const continueButton = await page.$(
+        `[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`,
+      );
+
+      if (continueButton) {
+        getAccountContext().logsService.logText(
+          'Found a dialog about server progress, continuing...',
+        );
+
+        await Promise.all([
+          page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+          continueButton.click(),
+        ]);
+
+        return { allowContinue: true };
+      }
+    } catch (tryContinueError) {
+      console.error(tryContinueError.stack);
+      getAccountContext().logsService.logError(
+        'Tried to continue the server progress dialog but failed with message...',
+      );
+      getAccountContext().logsService.logError(tryContinueError.message);
+    }
+
+    const now = new Date();
+    const format = `${now.getDate()}-${
+      now.getMonth() + 1
+    }-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
+    const dir = getGeneralSettingsService().get().dataPath;
+    const directory = path.join(dir, '.screenshots');
+
+    // try to make screenshot
+    try {
+      const page = await getPage();
+
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+      }
+
+      await fs.promises.writeFile(
+        path.join(directory, `${format}.txt`),
+        error.stack ?? '',
+        {
+          flag: 'w',
+        },
+      );
+      await fs.promises.writeFile(
+        path.join(directory, `${format}.html`),
+        await page.content(),
+        {
+          flag: 'w',
+        },
+      );
+
+      await page.screenshot({
+        fullPage: true,
+        path: path.join(directory, `${format}.png`),
+      });
+    } catch (screenshotError) {
+      console.error(screenshotError.stack);
+      getAccountContext().logsService.logError(screenshotError.message);
+
+      await fs.promises.writeFile(
+        path.join(directory, `${format}-screenshot-error.txt`),
+        screenshotError.stack ?? '',
+        {
+          flag: 'w',
+        },
+      );
+    }
+
+    await killBrowser();
+
+    return { allowContinue: error instanceof TimeoutError };
+  };
+
   public signIn = async (accountId: string): Promise<void> => {
     setAccountContext(accountId);
     accountService.setCurrentAccountId(accountId);
@@ -186,7 +199,7 @@ class ControllerService {
     let allowContinue = true;
 
     try {
-      if (this.botState !== BotState.None) {
+      if (this._botState !== BotState.None) {
         return;
       }
 
@@ -213,7 +226,7 @@ class ControllerService {
 
       await updatePlayerInfo();
     } catch (error) {
-      await handleError(error);
+      await this.handleError(error);
       allowContinue = false;
     }
 
@@ -271,7 +284,7 @@ class ControllerService {
 
       await this._taskManager.execute();
     } catch (error) {
-      const result = await handleError(error);
+      const result = await this.handleError(error);
       ({ allowContinue, coolDown } = result);
     }
 
