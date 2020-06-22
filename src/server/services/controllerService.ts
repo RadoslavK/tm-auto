@@ -323,8 +323,13 @@ class ControllerService {
     this.setState(BotState.Paused);
   };
 
-  public requestVillageRefresh = (villageId: string) => {
-    this._refreshRequests.add(villageId);
+  public requestVillageRefresh = async (villageId: string) => {
+    if (this._botState === BotState.Running) {
+      this._refreshRequests.add(villageId);
+      return;
+    }
+
+    await refreshVillage(villageId);
   };
 }
 
