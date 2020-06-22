@@ -18,7 +18,7 @@ import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { useGameInfo } from '../../../hooks/useGameInfp';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 
-const useAutoBuildSettings = (villageId: string) => {
+export const useAutoBuildSettings = (villageId: string) => {
   const {
     data: queryData,
     loading: queryLoading,

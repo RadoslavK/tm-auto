@@ -20,7 +20,6 @@
 - reload settings button from that folder.. copy service settings etc and refresh all structures on UI - refetch queries or subscriptions?
 - Use video feature to speed up building construction
 - Building Queue
-  - Scrollbar on building queue rather than whole app
   - Block of queued buildings
     - Drag, Move to the top, delete
 - Show what task is the bot actually performing
@@ -29,9 +28,6 @@
 - Have preferences for how to spend resources, how much on units, buildings, what ratios of units, how etc.
   - and how much min resources to leave
   - also something like have at least for the next building queue before building units etc
-- Option to turn off dual queue for Roman
-  - If its on then show possible if res and infrastructure can be built at the same time the whole duration
-    - have a toggle for this
 - Show double queue for Roman
   - Have a toggle for this
   - Double queue: allow only delete because its just a view
@@ -48,7 +44,6 @@
 - Better task CoolDowns to not waste time
 - Hero set next cooldown based on having adventures >= 1 and hero comming back from one
 - Better experience with enqueing buildings.. For example set all res fields of type to lvl1.
-- With plus account allow having 2 buildings in queue at the same time. 3 for romans?
 - Filter villages by name in the UI
 - Have an option to rename village in the UI. Have Village groups
 - Allow options to sort/filter logs

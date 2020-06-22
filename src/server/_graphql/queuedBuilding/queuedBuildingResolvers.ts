@@ -4,6 +4,7 @@ import { Duration } from '../../_models/duration';
 import { Resources } from '../../_models/misc/resources';
 import {
   BuildingQueue,
+  BuildingType,
   QueuedBuilding,
   QueuedBuildingRange,
 } from '../../_types/graphql.type';
@@ -59,6 +60,8 @@ const mapBuildingQueue = (
       range,
     ): {
       readonly buildingRanges: QueuedBuildingRange[];
+      resourcesBuildingTime: Duration;
+      infrastructureBuildingTime: Duration;
       totalCost: Resources;
       totalBuildingTime: Duration;
     } => {
@@ -71,7 +74,8 @@ const mapBuildingQueue = (
           building,
         ): {
           readonly cost: Resources;
-          readonly buildingTime: Duration;
+          readonly resourcesBuildingTime: Duration;
+          readonly infrastructureBuildingTime: Duration;
           readonly buildings: QueuedBuilding[];
         } => {
           const mbLevel = mbLevels[building.queueId];
@@ -96,9 +100,16 @@ const mapBuildingQueue = (
             queueIndex: building.index,
           };
 
-          reducedResult.buildingTime = reducedResult.buildingTime.add(
-            actualBuildTime,
-          );
+          if (building.type > BuildingType.Crop) {
+            reducedResult.infrastructureBuildingTime = reducedResult.infrastructureBuildingTime.add(
+              actualBuildTime,
+            );
+          } else {
+            reducedResult.resourcesBuildingTime = reducedResult.resourcesBuildingTime.add(
+              actualBuildTime,
+            );
+          }
+
           reducedResult.buildings.push(clientBuildingModel);
           reducedResult.cost = reducedResult.cost.add(cost);
 
@@ -106,13 +117,19 @@ const mapBuildingQueue = (
         },
         {
           buildings: [],
-          buildingTime: new Duration(),
+          resourcesBuildingTime: new Duration(),
+          infrastructureBuildingTime: new Duration(),
           cost: new Resources(),
         } as {
           cost: Resources;
-          buildingTime: Duration;
+          infrastructureBuildingTime: Duration;
+          resourcesBuildingTime: Duration;
           readonly buildings: QueuedBuilding[];
         },
+      );
+
+      const totalBuildingTime = rangeResult.resourcesBuildingTime.add(
+        rangeResult.infrastructureBuildingTime,
       );
 
       const clientRange: QueuedBuildingRange = {
@@ -120,7 +137,7 @@ const mapBuildingQueue = (
         type: firstBuilding.type,
         cost: rangeResult.cost,
         fieldId: firstBuilding.fieldId,
-        buildingTime: rangeResult.buildingTime,
+        buildingTime: totalBuildingTime,
         buildings: rangeResult.buildings,
       };
 
@@ -128,17 +145,27 @@ const mapBuildingQueue = (
         buildingRanges: reducedQueue.buildingRanges.concat(clientRange),
         totalCost: reducedQueue.totalCost.add(rangeResult.cost),
         totalBuildingTime: reducedQueue.totalBuildingTime.add(
-          rangeResult.buildingTime,
+          totalBuildingTime,
+        ),
+        resourcesBuildingTime: reducedQueue.resourcesBuildingTime.add(
+          rangeResult.resourcesBuildingTime,
+        ),
+        infrastructureBuildingTime: reducedQueue.infrastructureBuildingTime.add(
+          rangeResult.infrastructureBuildingTime,
         ),
       };
     },
     {
       totalCost: new Resources(),
       totalBuildingTime: new Duration(),
+      infrastructureBuildingTime: new Duration(),
+      resourcesBuildingTime: new Duration(),
       buildingRanges: [],
     } as {
       readonly buildingRanges: QueuedBuildingRange[];
       totalCost: Resources;
+      resourcesBuildingTime: Duration;
+      infrastructureBuildingTime: Duration;
       totalBuildingTime: Duration;
     },
   );

@@ -6,11 +6,14 @@ import {
   OnQueueUpdatedDocument,
   OnQueueUpdatedSubscription,
   OnQueueUpdatedSubscriptionVariables,
+  Tribe,
   useClearQueueMutation,
   useGetCollapsedBuildingQueueRangesQuery,
   useGetQueuedBuildingsQuery,
 } from '../../../_graphql/graphqlHooks';
+import { useGameInfo } from '../../../hooks/useGameInfp';
 import { useSelectedVillageId } from '../../../hooks/villages/useSelectedVillageId';
+import { useAutoBuildSettings } from '../../settings/village/AutoBuildSettings';
 import { QueuedBuilding } from './building/QueuedBuilding';
 import { Cost } from './Cost';
 import { QueuedBuildingRange } from './range/QueuedBuildingRange';
@@ -59,8 +62,19 @@ const useBuildingQueue = () => {
   return queryLoading || !queryData ? null : queryData.buildingQueue;
 };
 
+const useShouldSplitBuildingTimes = (): boolean => {
+  const villageId = useSelectedVillageId();
+
+  const { tribe } = useGameInfo() || {};
+  const { settings } = useAutoBuildSettings(villageId);
+
+  return tribe === Tribe.Romans && !!settings && settings.allowDualQueue;
+};
+
 export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const classes = useStyles();
+
+  const splitBuildingTimes = useShouldSplitBuildingTimes();
 
   const villageId = useSelectedVillageId();
   const buildingQueue = useBuildingQueue();
@@ -116,6 +130,9 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
       </button>
       <Cost
         buildTime={buildingQueue.totalBuildingTime}
+        infrastructureBuildTime={buildingQueue.infrastructureBuildingTime}
+        resourcesBuildTime={buildingQueue.resourcesBuildingTime}
+        split={splitBuildingTimes}
         resources={buildingQueue.totalCost}
       />
       <div className={classes.buildings}>

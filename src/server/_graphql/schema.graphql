@@ -133,6 +133,8 @@ type BuildingLevelInfo {
 type BuildingQueue {
   buildingRanges: [QueuedBuildingRange!]!
   totalBuildingTime: Duration!
+  resourcesBuildingTime: Duration!
+  infrastructureBuildingTime: Duration!
   totalCost: Resources!
 }
 

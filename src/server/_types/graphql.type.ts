@@ -171,6 +171,8 @@ export type BuildingQueue = {
   readonly __typename?: 'BuildingQueue';
   readonly buildingRanges: ReadonlyArray<QueuedBuildingRange>;
   readonly totalBuildingTime: Duration;
+  readonly resourcesBuildingTime: Duration;
+  readonly infrastructureBuildingTime: Duration;
   readonly totalCost: ResourcesModel;
 };
 
@@ -1270,6 +1272,8 @@ export type BuildingLevelInfoResolvers<ContextType = any, ParentType extends Res
 export type BuildingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuildingQueue'] = ResolversParentTypes['BuildingQueue']> = {
   buildingRanges: Resolver<ReadonlyArray<ResolversTypes['QueuedBuildingRange']>, ParentType, ContextType>;
   totalBuildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  resourcesBuildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
+  infrastructureBuildingTime: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
   totalCost: Resolver<ResolversTypes['Resources'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };

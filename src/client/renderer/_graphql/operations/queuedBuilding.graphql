@@ -33,6 +33,12 @@ fragment BuildingQueue on BuildingQueue {
   totalBuildingTime {
     ...Duration
   }
+  resourcesBuildingTime {
+    ...Duration
+  }
+  infrastructureBuildingTime {
+    ...Duration
+  }
   totalCost {
     ...Resources
   }
