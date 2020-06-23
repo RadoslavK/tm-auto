@@ -307,6 +307,8 @@ export type Mutation = {
   readonly dequeueBuildingAtField: Maybe<Scalars['Boolean']>;
   readonly dequeueBuildingsBlock: Maybe<Scalars['Boolean']>;
   readonly enqueueBuilding: Maybe<Scalars['Boolean']>;
+  readonly exportSettings: Maybe<Scalars['Boolean']>;
+  readonly importSettings: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingToIndex: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
@@ -378,6 +380,16 @@ export type MutationDequeueBuildingsBlockArgs = {
 
 export type MutationEnqueueBuildingArgs = {
   input: EnqueueBuildingInput;
+};
+
+
+export type MutationExportSettingsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationImportSettingsArgs = {
+  path: Scalars['String'];
 };
 
 
@@ -1361,6 +1373,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   dequeueBuildingAtField: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDequeueBuildingAtFieldArgs, 'input'>>;
   dequeueBuildingsBlock: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDequeueBuildingsBlockArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId'>>;
   enqueueBuilding: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
+  exportSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationExportSettingsArgs, 'path'>>;
+  importSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationImportSettingsArgs, 'path'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingToIndex: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
   moveQueuedBuildingsBlockAsHighAsPossible: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingsBlockAsHighAsPossibleArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId'>>;

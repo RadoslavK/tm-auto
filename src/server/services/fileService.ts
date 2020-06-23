@@ -1,11 +1,13 @@
 import fs, { MakeDirectoryOptions } from 'fs';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 
 import { PartialFields } from '../../_shared/types/fields.type';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory';
 
 class FileService {
   public save = async (targetPath: string, object: unknown): Promise<void> => {
-    const folder = dirname(targetPath);
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+    const folder = dirname(absolutePath);
     const serializedObject = JSON.stringify(object);
     const options: MakeDirectoryOptions = {
       recursive: true,
@@ -13,7 +15,7 @@ class FileService {
 
     await fs.promises.mkdir(folder, options);
 
-    return fs.promises.writeFile(targetPath, serializedObject, { flag: 'w' });
+    return fs.promises.writeFile(absolutePath, serializedObject, { flag: 'w' });
   };
 
   public loadInstance = <T extends unknown>(
@@ -21,8 +23,10 @@ class FileService {
     constructor: { new (params?: PartialFields<T>): T },
     defaultValue?: T | undefined,
   ): T => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
     try {
-      const file = fs.readFileSync(targetPath);
+      const file = fs.readFileSync(absolutePath);
       const params: T = JSON.parse(file.toString());
       return new constructor(params);
     } catch {
@@ -31,8 +35,10 @@ class FileService {
   };
 
   public load = <T extends unknown>(targetPath: string, defaultValue: T): T => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
     try {
-      const file = fs.readFileSync(targetPath);
+      const file = fs.readFileSync(absolutePath);
       return JSON.parse(file.toString()) as T;
     } catch {
       return defaultValue;
@@ -41,15 +47,17 @@ class FileService {
 
   public delete = async (targetPath: string): Promise<void> =>
     new Promise((resolve) => {
+      const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
       try {
-        if (fs.existsSync(targetPath)) {
-          fs.rmdir(targetPath, { recursive: true }, () => resolve());
+        if (fs.existsSync(absolutePath)) {
+          fs.rmdir(absolutePath, { recursive: true }, () => resolve());
         } else {
           resolve();
         }
       } catch (error) {
         console.error(error);
-        throw new Error(`Failed to delete account at ${targetPath}`);
+        throw new Error(`Failed to delete account at ${absolutePath}`);
       }
     });
 }

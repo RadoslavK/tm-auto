@@ -1,7 +1,7 @@
 import { Socket } from 'net';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { IPC } from 'node-ipc';
 
 type Writeable<T, TProps extends keyof T = keyof T> = {
@@ -11,6 +11,7 @@ type Writeable<T, TProps extends keyof T = keyof T> = {
 declare global {
   interface Window {
     readonly api: {
+      readonly openSaveFileDialog: () => string | undefined;
       readonly getSocketName: () => Promise<string>;
       readonly ipcConnect: (
         id: string,
@@ -28,6 +29,16 @@ const ipc = new IPC();
   process.env.NODE_ENV !== 'production';
 
 (window as Writeable<Window, 'api'>).api = {
+  openSaveFileDialog: (): string | undefined =>
+    remote.dialog.showSaveDialogSync({
+      filters: [
+        {
+          name: 'Zip',
+          extensions: ['zip'],
+        },
+      ],
+    }),
+
   getSocketName: (): Promise<string> =>
     new Promise((resolve) => {
       ipcRenderer.removeAllListeners('set-socket-name');

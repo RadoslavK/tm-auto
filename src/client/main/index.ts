@@ -28,6 +28,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
     webPreferences: {
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
     },
   });
 

@@ -1,18 +1,17 @@
 import path from 'path';
 
-import { getServerAppDirectory } from '../utils/getServerAppDirectory';
-
 type HeroSettingsPath = {
   readonly autoAdventure: string;
 };
 
 type AccountSettingsPath = {
   readonly autoMentor: string;
-  readonly general: string;
+  readonly account: string;
   readonly hero: HeroSettingsPath;
 };
 
 type AccountPath = {
+  readonly root: string;
   readonly settings: AccountSettingsPath;
 };
 
@@ -24,22 +23,21 @@ type VillageSettingsPath = {
 };
 
 type VillagePath = {
+  readonly root: string;
   readonly queue: string;
   readonly settings: VillageSettingsPath;
 };
 
 export class DataPathService {
-  static generalPath = () =>
-    path.join(getServerAppDirectory(), 'settings/general.json');
+  static generalPath = () => 'settings/general.json';
 
-  private basePath = getServerAppDirectory();
-
-  public accountsPath = () => path.join(this.basePath, 'accounts.json');
+  public accountsPath = () => 'accounts.json';
 
   public accountPath = (accountId: string): AccountPath => {
     const lPath = this.baseAccountPath(accountId);
 
     return {
+      root: lPath,
       settings: this.createAccountSettingsPath(lPath),
     };
   };
@@ -48,6 +46,7 @@ export class DataPathService {
     const lPath = this.baseVillagePath(accountId, villageId);
 
     return {
+      root: lPath,
       queue: path.join(lPath, 'queue.json'),
       settings: this.createVillageSettingsPath(lPath),
     };
@@ -73,7 +72,7 @@ export class DataPathService {
 
     return {
       autoMentor: path.join(lPath, 'autoMentor.json'),
-      general: path.join(lPath, 'general.json'),
+      account: path.join(lPath, 'general.json'),
       hero: this.createHeroSettingsPath(lPath),
     };
   };
@@ -86,11 +85,10 @@ export class DataPathService {
     };
   };
 
-  public baseVillagePath = (accountId: string, villageId: string): string =>
+  private baseVillagePath = (accountId: string, villageId: string): string =>
     path.join(this.baseAccountPath(accountId), 'villages', villageId);
 
-  public baseAccountPath = (id: string): string =>
-    path.join(this.basePath, 'accounts', id);
+  private baseAccountPath = (id: string): string => path.join('accounts', id);
 }
 
 export const dataPathService = new DataPathService();

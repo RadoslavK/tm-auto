@@ -94,7 +94,7 @@ class AccountService {
       throw new Error(`Account with ${id} was not found`);
     }
 
-    const accountPath = dataPathService.baseAccountPath(id);
+    const accountPath = dataPathService.accountPath(id).root;
     fileService.delete(accountPath);
 
     const accountsData = this.getAccountsData();
@@ -148,7 +148,7 @@ class AccountService {
 
   public lastSignedAccountId = () => this.getAccountsData().lastSignedAccountId;
 
-  private getAccountsData = (): AccountsData => {
+  public getAccountsData = (): AccountsData => {
     if (!this.accountsData) {
       this.accountsData = fileService.loadInstance<AccountsData>(
         dataPathService.accountsPath(),

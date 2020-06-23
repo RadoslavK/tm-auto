@@ -43,7 +43,7 @@ export class VillageService {
       if (!updatedVillage) {
         const accountId = accountService.getCurrentAccount().id;
         // old village to be deleted
-        const villageDataPath = dataPathService.baseVillagePath(
+        const { root: villageDataPath } = dataPathService.villagePath(
           accountId,
           existingVillage.id,
         );

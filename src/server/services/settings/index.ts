@@ -23,7 +23,7 @@ export class SettingsService {
     this.villages = new Map();
 
     this.account = new InternalSettingsService(
-      accountSettingsPath.general,
+      accountSettingsPath.account,
       AccountSettings,
     );
     this.hero = new HeroSettingsService(accountId);

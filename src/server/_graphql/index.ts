@@ -21,6 +21,7 @@ import autoPartySettingsResolvers from './settings/autoPartySettingsResolvers';
 import autoUnitsSettingsResolvers from './settings/autoUnitsSettingsResolvers';
 import generalSettingsResolvers from './settings/generalSettingsResolvers';
 import generalVillageSettingsResolvers from './settings/generalVillageSettingsResolvers';
+import settingsManagementResolvers from './settings/settingsManagementResolvers';
 import unitResolvers from './unit/unitResolvers';
 import villageResolvers from './village/villageResolvers';
 
@@ -45,6 +46,7 @@ export const loadResolvers = (): Resolvers =>
     accountSettingsResolvers,
     generalSettingsResolvers,
     generalVillageSettingsResolvers,
+    settingsManagementResolvers,
     unitResolvers,
     villageResolvers,
   ] as Resolvers[]);

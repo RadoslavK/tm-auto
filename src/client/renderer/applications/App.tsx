@@ -11,7 +11,7 @@ import { EnsureGraphQl } from './EnsureGraphQl';
 import { EnsureTitle } from './EnsureTitle';
 import { MainRoutes } from './navigation/components/MainRoutes';
 import { Navigation } from './navigation/components/Navigation';
-import { GeneralSettings } from './settings/GeneralSettings';
+import { SettingsManagement } from './settings/SettingsManagement';
 import { EnsureSignedIn } from './signIn/components/EnsureSignedIn';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
                 <Navigation />
                 <main className={classes.content}>
                   <div className={classes.toolbar} />
-                  <GeneralSettings />
+                  <SettingsManagement />
                   <MainRoutes />
                 </main>
               </div>

@@ -1,0 +1,7 @@
+mutation ExportSettings($path: String!) {
+  exportSettings(path: $path)
+}
+
+mutation ImportSettings($path: String!) {
+  importSettings(path: $path)
+}

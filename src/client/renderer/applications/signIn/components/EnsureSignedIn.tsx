@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BotState } from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
-import { GeneralSettings } from '../../settings/GeneralSettings';
+import { SettingsManagement } from '../../settings/SettingsManagement';
 import { SignInForm } from './SignInForm';
 
 export const EnsureSignedIn: React.FC = ({ children }) => {
@@ -15,7 +15,7 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
   if (botState === BotState.None || botState === BotState.Pending) {
     return (
       <div>
-        <GeneralSettings />
+        <SettingsManagement />
         <SignInForm />
       </div>
     );
