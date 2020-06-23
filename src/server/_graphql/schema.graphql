@@ -266,7 +266,6 @@ type GameInfo {
 }
 
 type GeneralSettings {
-  dataPath: String!
   chromePath: String!
   headlessChrome: Boolean!
 }
@@ -546,7 +545,6 @@ input UpdateAutoUnitsUnitSettingsInput {
 }
 
 input UpdateGeneralSettingsInput {
-  dataPath: String!
   chromePath: String!
   headlessChrome: Boolean!
 }

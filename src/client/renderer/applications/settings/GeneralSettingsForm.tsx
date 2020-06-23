@@ -133,16 +133,6 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
           value={state.chromePath}
         />
       </div>
-
-      <div>
-        <label htmlFor="dataPath">Data path</label>
-        <input
-          id="dataPath"
-          name="dataPath"
-          onChange={onTextChanges}
-          value={state.dataPath}
-        />
-      </div>
     </div>
   );
 };

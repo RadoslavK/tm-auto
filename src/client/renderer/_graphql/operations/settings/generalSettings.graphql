@@ -1,6 +1,5 @@
 fragment GeneralSettings on GeneralSettings {
   chromePath
-  dataPath
   headlessChrome
 }
 

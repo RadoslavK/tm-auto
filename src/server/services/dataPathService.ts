@@ -1,7 +1,6 @@
 import path from 'path';
 
 import { getServerAppDirectory } from '../utils/getServerAppDirectory';
-import { getGeneralSettingsService } from './settings/general';
 
 type HeroSettingsPath = {
   readonly autoAdventure: string;
@@ -31,11 +30,11 @@ type VillagePath = {
 
 export class DataPathService {
   static generalPath = () =>
-    path.join(getServerAppDirectory(), '.data/settings/general.json');
+    path.join(getServerAppDirectory(), 'settings/general.json');
 
-  private basePath = () => getGeneralSettingsService().get().dataPath;
+  private basePath = getServerAppDirectory();
 
-  public accountsPath = () => path.join(this.basePath(), 'accounts.json');
+  public accountsPath = () => path.join(this.basePath, 'accounts.json');
 
   public accountPath = (accountId: string): AccountPath => {
     const lPath = this.baseAccountPath(accountId);
@@ -91,7 +90,7 @@ export class DataPathService {
     path.join(this.baseAccountPath(accountId), 'villages', villageId);
 
   public baseAccountPath = (id: string): string =>
-    path.join(this.basePath(), 'accounts', id);
+    path.join(this.basePath, 'accounts', id);
 }
 
 export const dataPathService = new DataPathService();

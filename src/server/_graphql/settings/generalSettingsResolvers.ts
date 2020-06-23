@@ -11,7 +11,6 @@ export default <Resolvers>{
       getGeneralSettingsService().merge({
         ...settings,
         chromePath: settings.chromePath || undefined,
-        dataPath: settings.dataPath || undefined,
       }),
     resetGeneralSettings: () => getGeneralSettingsService().reset(),
   },

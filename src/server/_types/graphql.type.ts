@@ -265,7 +265,6 @@ export type GameInfo = {
 
 export type GeneralSettings = {
   readonly __typename?: 'GeneralSettings';
-  readonly dataPath: Scalars['String'];
   readonly chromePath: Scalars['String'];
   readonly headlessChrome: Scalars['Boolean'];
 };
@@ -871,7 +870,6 @@ export type UpdateAutoUnitsUnitSettingsInput = {
 };
 
 export type UpdateGeneralSettingsInput = {
-  readonly dataPath: Scalars['String'];
   readonly chromePath: Scalars['String'];
   readonly headlessChrome: Scalars['Boolean'];
 };
@@ -1327,7 +1325,6 @@ export type GameInfoResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type GeneralSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneralSettings'] = ResolversParentTypes['GeneralSettings']> = {
-  dataPath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   chromePath: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   headlessChrome: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;

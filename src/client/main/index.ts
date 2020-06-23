@@ -101,8 +101,7 @@ const createBackgroundProcess = (socketName: string): void => {
 
   const options: ForkOptions = {
     env: {
-      //  Portable app has a __dirname default in Temp directory
-      dirname: process.env.PORTABLE_EXECUTABLE_DIR || serverDir,
+      dirname: app.getPath('userData'),
       NODE_ENV: isDevelopment ? 'development' : 'production',
       socketName,
     },

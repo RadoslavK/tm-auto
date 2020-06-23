@@ -76,7 +76,6 @@ module.exports = {
             method: () => true,
           },
         ],
-        ...(isDevelopment ? { exclude: ['.data'] } : undefined),
       },
     }),
   ],

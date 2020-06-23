@@ -5,6 +5,7 @@ import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
 import { getGeneralSettingsService } from '../services/settings/general';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory';
 
 const stealth = pluginStealth();
 // TODO: workaround as typings changed in the original puppeteer or puppeteer extra but on this plugin
@@ -20,10 +21,7 @@ const getChromeOptions = () => ({
   //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
   headless: getGeneralSettingsService().get().headlessChrome,
   slowMo: 25,
-  userDataDir: path.join(
-    getGeneralSettingsService().get().dataPath,
-    'browser_data',
-  ),
+  userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
 });
 
 let browser: Browser | null;

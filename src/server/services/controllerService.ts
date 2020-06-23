@@ -25,9 +25,9 @@ import { TaskManager } from '../controller/taskManager';
 import { BotEvent } from '../events/botEvent';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
 import { publishPayloadEvent } from '../pubSub';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory';
 import { shuffle } from '../utils/shuffle';
 import { accountService } from './accountService';
-import { getGeneralSettingsService } from './settings/general';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
@@ -144,7 +144,7 @@ class ControllerService {
     const format = `${now.getDate()}-${
       now.getMonth() + 1
     }-${now.getFullYear()} ${now.getHours()},${now.getMinutes()},${now.getSeconds()}`;
-    const dir = getGeneralSettingsService().get().dataPath;
+    const dir = getServerAppDirectory();
     const directory = path.join(dir, '.screenshots');
 
     // try to make screenshot

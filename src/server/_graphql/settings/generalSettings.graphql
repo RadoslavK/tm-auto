@@ -1,5 +1,4 @@
 type GeneralSettings {
-  dataPath: String!
   chromePath: String!
   headlessChrome: Boolean!
 }
@@ -9,7 +8,6 @@ extend type Query {
 }
 
 input UpdateGeneralSettingsInput {
-  dataPath: String!
   chromePath: String!
   headlessChrome: Boolean!
 }
