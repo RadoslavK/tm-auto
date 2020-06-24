@@ -83,6 +83,7 @@ export type AutoPartySettings = {
   readonly coolDown: CoolDown;
   readonly allowSmall: Scalars['Boolean'];
   readonly allowLarge: Scalars['Boolean'];
+  readonly useHeroResources: Scalars['Boolean'];
   readonly minCulturePointsSmall: Scalars['Int'];
   readonly minCulturePointsLarge: Scalars['Int'];
 };
@@ -201,7 +202,8 @@ export { BuildingType };
 
 export enum ClaimHeroResourcesReason {
   AutoBuild = 'AutoBuild',
-  AutoUnits = 'AutoUnits'
+  AutoUnits = 'AutoUnits',
+  AutoParty = 'AutoParty'
 }
 
 export type ClearQueueInput = {
@@ -847,6 +849,7 @@ export type UpdateAutoPartySettingsInput = {
   readonly allowSmall: Scalars['Boolean'];
   readonly allowLarge: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
+  readonly useHeroResources: Scalars['Boolean'];
   readonly minCulturePointsSmall: Scalars['Int'];
   readonly minCulturePointsLarge: Scalars['Int'];
 };
@@ -1207,6 +1210,7 @@ export type AutoPartySettingsResolvers<ContextType = any, ParentType extends Res
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
   allowSmall: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   allowLarge: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCulturePointsSmall: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   minCulturePointsLarge: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;

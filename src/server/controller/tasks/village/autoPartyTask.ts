@@ -3,12 +3,17 @@ import { CoolDown } from '../../../_models/coolDown';
 import { BuildingType } from '../../../_models/enums/buildingType';
 import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
 import { Village } from '../../../_models/village/village';
-import { TaskType } from '../../../_types/graphql.type';
+import {
+  ClaimHeroResourcesReason,
+  TaskType,
+} from '../../../_types/graphql.type';
 import { getAccountContext } from '../../../accountContext';
 import { getPage } from '../../../browser/getPage';
 import { partyInfo } from '../../../constants/partyInfo';
 import { getPartyDuration } from '../../../parsers/getPartyDuration';
+import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage';
+import { claimHeroResources } from '../../actions/hero/claimHeroResources';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
@@ -40,6 +45,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       allowSmall,
       minCulturePointsLarge,
       minCulturePointsSmall,
+      useHeroResources,
     } = this.settings();
 
     const townHall = this._village.buildings.spots.ofType(
@@ -50,17 +56,22 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       return;
     }
 
+    const { hero } = getAccountContext();
     const villageRes = this._village.resources.amount;
+    const totalRes =
+      useHeroResources && hero.villageId === this._village.id
+        ? mergeVillageAndHeroResources(this._village.id)
+        : villageRes;
     const smallPartyInfo = partyInfo.small;
     const largePartyInfo = partyInfo.large;
     let canDoSmallParty =
       allowSmall &&
       townHall.level.actual >= smallPartyInfo.townHallLevel &&
-      villageRes.areGreaterOrEqualThan(smallPartyInfo.cost);
+      totalRes.areGreaterOrEqualThan(smallPartyInfo.cost);
     let canDoLargeParty =
       allowLarge &&
       townHall.level.actual >= largePartyInfo.townHallLevel &&
-      villageRes.areGreaterOrEqualThan(largePartyInfo.cost);
+      totalRes.areGreaterOrEqualThan(largePartyInfo.cost);
 
     if (!canDoSmallParty && !canDoLargeParty) {
       return;
@@ -104,6 +115,20 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
 
     const partyType = canDoLargeParty ? 'large' : 'small';
     const partyNumber = canDoLargeParty ? 2 : 1;
+
+    if (useHeroResources) {
+      const requiredRes = canDoLargeParty
+        ? largePartyInfo.cost
+        : smallPartyInfo.cost;
+
+      const neededRes = requiredRes.subtract(villageRes);
+
+      if (neededRes.getTotal() > 0) {
+        await claimHeroResources(neededRes, ClaimHeroResourcesReason.AutoParty);
+
+        await ensureBuildingSpotPage(townHall.fieldId);
+      }
+    }
 
     const holdPartyNode = await page.$(
       `.green[onclick*="${getBuildingSpotPath(

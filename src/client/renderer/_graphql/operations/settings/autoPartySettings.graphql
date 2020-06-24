@@ -6,6 +6,7 @@ fragment AutoPartySettings on AutoPartySettings {
   coolDown {
     ...CoolDown
   }
+  useHeroResources
   minCulturePointsSmall
   minCulturePointsLarge
 }

@@ -17,7 +17,6 @@
 - automated mentor tasks.
 - scheduling task??? -> settle village etc
 - If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
-- reload settings button from that folder.. copy service settings etc and refresh all structures on UI - refetch queries or subscriptions?
 - Use video feature to speed up building construction
 - Building Queue
   - Block of queued buildings
@@ -56,8 +55,6 @@
 - Building mode templates
   - Create a template similar to SecondVillageBot to build buildings based on a state
   - User will be able to create the template in the UI
-- Use hero resources for other tasks
-  - [?] AutoParties
 - Extend unit info with capacity, defense, move speed...
 - Watch auction for items, prices.. maybe buy or sell too. And show pop up if something relevant appeared.
 - Resources balancing between villages / Trade Routes

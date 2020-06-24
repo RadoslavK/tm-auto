@@ -25,6 +25,7 @@ type AutoUnitsLogEntryContent {
 enum ClaimHeroResourcesReason {
   AutoBuild
   AutoUnits
+  AutoParty
 }
 
 type ResourceClaimLogEntryContent {

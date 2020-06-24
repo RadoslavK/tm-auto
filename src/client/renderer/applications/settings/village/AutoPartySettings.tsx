@@ -146,6 +146,7 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
     coolDown,
     minCulturePointsLarge,
     minCulturePointsSmall,
+    useHeroResources,
   } = state;
 
   return (
@@ -157,6 +158,17 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
         variant="contained">
         Reset to default
       </Button>
+
+      <div>
+        <label htmlFor="useHeroResources">Use hero resources</label>
+        <input
+          checked={useHeroResources}
+          id="useHeroResources"
+          name="useHeroResources"
+          onChange={onChange}
+          type="checkbox"
+        />
+      </div>
 
       <div>
         <label htmlFor="allowSmall">Hold small parties</label>

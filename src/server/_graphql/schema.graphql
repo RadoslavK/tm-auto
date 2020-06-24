@@ -55,6 +55,7 @@ type AutoPartySettings {
   coolDown: CoolDown!
   allowSmall: Boolean!
   allowLarge: Boolean!
+  useHeroResources: Boolean!
   minCulturePointsSmall: Int!
   minCulturePointsLarge: Int!
 }
@@ -208,6 +209,7 @@ enum BuildingType {
 enum ClaimHeroResourcesReason {
   AutoBuild
   AutoUnits
+  AutoParty
 }
 
 input ClearQueueInput {
@@ -512,6 +514,7 @@ input UpdateAutoPartySettingsInput {
   allowSmall: Boolean!
   allowLarge: Boolean!
   coolDown: CoolDownInput!
+  useHeroResources: Boolean!
   minCulturePointsSmall: Int!
   minCulturePointsLarge: Int!
 }

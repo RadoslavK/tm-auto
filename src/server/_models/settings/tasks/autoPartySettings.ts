@@ -4,6 +4,8 @@ import { CoolDown } from '../../coolDown';
 import { Duration } from '../../duration';
 
 export class AutoPartySettings {
+  public readonly useHeroResources: boolean = false;
+
   public readonly allowSmall: boolean = false;
 
   public readonly allowLarge: boolean = false;
