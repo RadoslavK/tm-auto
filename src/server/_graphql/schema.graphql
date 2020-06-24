@@ -421,6 +421,8 @@ type Resources {
 }
 
 type Subscription {
+  accountsUpdated: [UserAccount!]!
+  lastSignedAccountIdUpdated: String
   actualBuildingLevelsUpdated(villageId: ID!): Boolean
   buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
   botActivityChanged: Boolean!
@@ -431,6 +433,14 @@ type Subscription {
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
   nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
   queueUpdated(villageId: ID!): BuildingQueue!
+  accountSettingsUpdated: AccountSettings!
+  autoAdventureSettingsUpdated: AutoAdventureSettings!
+  autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
+  autoMentorSettingsUpdated: AutoMentorSettings!
+  autoPartySettingsUpdated(villageId: ID!): AutoPartySettings!
+  autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
+  generalSettingsUpdated: GeneralSettings!
+  generalVillageSettingsUpdated(villageId: ID!): GeneralVillageSettings!
   villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!
   activeVillageIdChanged: ID!

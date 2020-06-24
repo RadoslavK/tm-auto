@@ -10,6 +10,9 @@ import {
   GetAutoAdventureSettingsDocument,
   GetAutoAdventureSettingsQuery,
   GetAutoAdventureSettingsQueryVariables,
+  OnAutoAdventureSettingsUpdatedDocument,
+  OnAutoAdventureSettingsUpdatedSubscription,
+  OnAutoAdventureSettingsUpdatedSubscriptionVariables,
   TaskType,
   UpdateAutoAdventureSettingsInput,
   useGetAutoAdventureSettingsQuery,
@@ -24,7 +27,18 @@ const useAutoAdventureSettings = () => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAutoAdventureSettingsQuery();
+
+  subscribeToMore<
+    OnAutoAdventureSettingsUpdatedSubscription,
+    OnAutoAdventureSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAutoAdventureSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      autoAdventureSettings: data.autoAdventureSettingsUpdated,
+    }),
+  });
 
   const [updateSettings] = useUpdateAutoAdventureSettingsMutation({
     update: (cache, { data }) => {

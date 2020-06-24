@@ -22,3 +22,9 @@ mutation ResetGeneralVillageSettings($villageId: ID!) {
     ...GeneralVillageSettings
   }
 }
+
+subscription OnGeneralVillageSettingsUpdated($villageId: ID!) {
+  generalVillageSettingsUpdated(villageId: $villageId) {
+    ...GeneralVillageSettings
+  }
+}

@@ -1,9 +1,63 @@
 import { LogEntry } from '../_models/logs/logEntry';
+import { AccountSettings } from '../_models/settings/accountSettings';
+import { AutoMentorSettings } from '../_models/settings/autoMentorSettings';
+import { GeneralSettings } from '../_models/settings/generalSettings';
+import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
+import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings';
+import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
+import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings';
+import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings';
 import { Village } from '../_models/village/village';
 import { BotState, TaskType } from '../_types/graphql.type';
+import { UserAccount } from '../services/accountService';
 import { BotEvent } from './botEvent';
 
 export type BotEventPayloads = {
+  [BotEvent.AccountsUpdated]: {
+    readonly accounts: readonly UserAccount[];
+  };
+
+  [BotEvent.LastSignedAccountIdUpdated]: {
+    readonly lastSignedAccountId: string | null;
+  };
+
+  [BotEvent.AccountSettingsUpdated]: {
+    readonly settings: AccountSettings;
+  };
+
+  [BotEvent.AutoAdventureSettingsUpdated]: {
+    readonly settings: AutoAdventureSettings;
+  };
+
+  [BotEvent.AutoBuildSettingsUpdated]: {
+    readonly settings: AutoBuildSettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.AutoMentorSettingsUpdated]: {
+    readonly settings: AutoMentorSettings;
+  };
+
+  [BotEvent.AutoPartySettingsUpdated]: {
+    readonly settings: AutoPartySettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.AutoUnitsSettingsUpdated]: {
+    readonly settings: AutoUnitsSettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.GeneralSettingsUpdated]: {
+    readonly settings: GeneralSettings;
+  };
+
+  [BotEvent.GeneralVillageSettingsUpdated]: {
+    readonly settings: GeneralVillageSettings;
+    readonly villageId: string;
+  };
+
+  // TODO when subscribeToEvent is typed properly we can pass values directly rather than this
   [BotEvent.BotActivityChanged]: {
     readonly isActive: boolean;
   };

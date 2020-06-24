@@ -48,3 +48,13 @@ mutation DeleteAccount($id: ID!) {
     ...UserAccount
   }
 }
+
+subscription OnAccountsUpdated {
+  accountsUpdated {
+    ...UserAccount
+  }
+}
+
+subscription OnLastSignedAccoutnIdUpdated {
+  lastSignedAccountIdUpdated
+}

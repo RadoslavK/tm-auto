@@ -8,6 +8,9 @@ import {
   GetAutoBuildSettingsDocument,
   GetAutoBuildSettingsQuery,
   GetAutoBuildSettingsQueryVariables,
+  OnAutoBuildSettingsUpdatedDocument,
+  OnAutoBuildSettingsUpdatedSubscription,
+  OnAutoBuildSettingsUpdatedSubscriptionVariables,
   Tribe,
   UpdateAutoBuildSettingsInput,
   useGetAutoBuildSettingsQuery,
@@ -22,7 +25,19 @@ export const useAutoBuildSettings = (villageId: string) => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAutoBuildSettingsQuery({
+    variables: { villageId },
+  });
+
+  subscribeToMore<
+    OnAutoBuildSettingsUpdatedSubscription,
+    OnAutoBuildSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAutoBuildSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      autoBuildSettings: data.autoBuildSettingsUpdated,
+    }),
     variables: { villageId },
   });
 

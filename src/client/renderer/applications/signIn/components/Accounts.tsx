@@ -7,8 +7,33 @@ import {
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 
-import { useGetAccountsQuery } from '../../../_graphql/graphqlHooks';
+import {
+  OnAccountsUpdatedDocument,
+  OnAccountsUpdatedSubscription,
+  OnAccountsUpdatedSubscriptionVariables,
+  useGetAccountsQuery,
+} from '../../../_graphql/graphqlHooks';
 import { getServerShortcut } from '../../../utils/getServerShortcut';
+
+const useAccounts = () => {
+  const {
+    data: queryData,
+    loading: queryLoading,
+    subscribeToMore,
+  } = useGetAccountsQuery();
+
+  subscribeToMore<
+    OnAccountsUpdatedSubscription,
+    OnAccountsUpdatedSubscriptionVariables
+  >({
+    document: OnAccountsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      accounts: data.accountsUpdated,
+    }),
+  });
+
+  return queryLoading || !queryData ? [] : queryData.accounts;
+};
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -68,30 +93,20 @@ export const Accounts: React.FC<Props> = ({
   onAccountChanged,
   selectedId,
 }) => {
-  const { data: queryData, loading: queryLoading } = useGetAccountsQuery();
+  const accounts = useAccounts();
 
   useEffect(() => {
-    if (
-      !selectedId &&
-      !queryLoading &&
-      queryData &&
-      queryData.accounts.length
-    ) {
-      onAccountChanged(queryData.accounts[0].id);
+    if (!selectedId && accounts.length) {
+      onAccountChanged(accounts[0].id);
     } else if (
       selectedId &&
-      queryData &&
-      !queryData.accounts.some((account) => account.id === selectedId)
+      !accounts.some((account) => account.id === selectedId)
     ) {
       onAccountChanged('');
     }
-  }, [queryData, queryLoading, onAccountChanged, selectedId]);
+  }, [accounts, onAccountChanged, selectedId]);
 
   const classes = useStyles();
-
-  if (!queryData) {
-    return null;
-  }
 
   const onOptionChanged = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const accountId = e.currentTarget.value;
@@ -106,7 +121,7 @@ export const Accounts: React.FC<Props> = ({
         input={<BootstrapInput />}
         onChange={onOptionChanged}
         value={selectedId || ''}>
-        {queryData.accounts.map((account) => (
+        {accounts.map((account) => (
           <option key={account.id} value={account.id}>
             {account.username} @ {getServerShortcut(account.server)}
           </option>

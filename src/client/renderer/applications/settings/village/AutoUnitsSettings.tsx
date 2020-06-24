@@ -7,6 +7,9 @@ import {
   GetAutoUnitsSettingsDocument,
   GetAutoUnitsSettingsQuery,
   GetAutoUnitsSettingsQueryVariables,
+  OnAutoUnitsSettingsUpdatedDocument,
+  OnAutoUnitsSettingsUpdatedSubscription,
+  OnAutoUnitsSettingsUpdatedSubscriptionVariables,
   UpdateAutoUnitsSettingsInput,
   useGetAutoUnitsSettingsQuery,
   useResetAutoUnitsSettingsMutation,
@@ -19,7 +22,19 @@ export const useAutoUnitsSettings = (villageId: string) => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAutoUnitsSettingsQuery({
+    variables: { villageId },
+  });
+
+  subscribeToMore<
+    OnAutoUnitsSettingsUpdatedSubscription,
+    OnAutoUnitsSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAutoUnitsSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      autoUnitsSettings: data.autoUnitsSettingsUpdated,
+    }),
     variables: { villageId },
   });
 

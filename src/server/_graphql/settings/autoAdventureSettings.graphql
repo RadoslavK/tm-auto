@@ -36,3 +36,7 @@ extend type Mutation {
   ): AutoAdventureSettings!
   resetAutoAdventureSettings: AutoAdventureSettings!
 }
+
+extend type Subscription {
+  autoAdventureSettingsUpdated: AutoAdventureSettings!
+}

@@ -63,3 +63,7 @@ extend type Mutation {
   ): AutoUnitsSettings!
   resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
 }
+
+extend type Subscription {
+  autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
+}

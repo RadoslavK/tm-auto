@@ -81,3 +81,9 @@ mutation ResetAutoUnitsSettings($villageId: ID!) {
     ...AutoUnitsSettings
   }
 }
+
+subscription OnAutoUnitsSettingsUpdated($villageId: ID!) {
+  autoUnitsSettingsUpdated(villageId: $villageId) {
+    ...AutoUnitsSettings
+  }
+}

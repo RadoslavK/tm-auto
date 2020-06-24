@@ -6,6 +6,9 @@ import {
   GetAutoMentorSettingsDocument,
   GetAutoMentorSettingsQuery,
   GetAutoMentorSettingsQueryVariables,
+  OnAutoMentorSettingsUpdatedDocument,
+  OnAutoMentorSettingsUpdatedSubscription,
+  OnAutoMentorSettingsUpdatedSubscriptionVariables,
   UpdateAutoMentorSettingsInput,
   useGetAutoMentorSettingsQuery,
   useResetAutoMentorSettingsMutation,
@@ -16,7 +19,18 @@ const useAutoMentorSettings = () => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAutoMentorSettingsQuery();
+
+  subscribeToMore<
+    OnAutoMentorSettingsUpdatedSubscription,
+    OnAutoMentorSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAutoMentorSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      autoMentorSettings: data.autoMentorSettingsUpdated,
+    }),
+  });
 
   const [updateSettings] = useUpdateAutoMentorSettingsMutation({
     update: (cache, { data }) => {

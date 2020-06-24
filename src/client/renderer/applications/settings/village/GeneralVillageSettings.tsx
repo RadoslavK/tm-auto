@@ -6,6 +6,9 @@ import {
   GetGeneralVillageSettingsDocument,
   GetGeneralVillageSettingsQuery,
   GetGeneralVillageSettingsQueryVariables,
+  OnGeneralVillageSettingsUpdatedDocument,
+  OnGeneralVillageSettingsUpdatedSubscription,
+  OnGeneralVillageSettingsUpdatedSubscriptionVariables,
   UpdateGeneralVillageSettingsInput,
   useGetGeneralVillageSettingsQuery,
   useResetGeneralVillageSettingsMutation,
@@ -16,7 +19,19 @@ const useGeneralVillageSettings = (villageId: string) => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetGeneralVillageSettingsQuery({
+    variables: { villageId },
+  });
+
+  subscribeToMore<
+    OnGeneralVillageSettingsUpdatedSubscription,
+    OnGeneralVillageSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnGeneralVillageSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      generalVillageSettings: data.generalVillageSettingsUpdated,
+    }),
     variables: { villageId },
   });
 

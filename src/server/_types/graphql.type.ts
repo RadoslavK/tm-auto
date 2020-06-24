@@ -730,12 +730,22 @@ export type Resources = {
 
 export type Subscription = {
   readonly __typename?: 'Subscription';
+  readonly accountSettingsUpdated: AccountSettings;
+  readonly accountsUpdated: ReadonlyArray<UserAccount>;
   readonly activeVillageIdChanged: Scalars['ID'];
   readonly actualBuildingLevelsUpdated: Maybe<Scalars['Boolean']>;
+  readonly autoAdventureSettingsUpdated: AutoAdventureSettings;
+  readonly autoBuildSettingsUpdated: AutoBuildSettings;
+  readonly autoMentorSettingsUpdated: AutoMentorSettings;
+  readonly autoPartySettingsUpdated: AutoPartySettings;
+  readonly autoUnitsSettingsUpdated: AutoUnitsSettings;
   readonly botActivityChanged: Scalars['Boolean'];
   readonly botStateChanged: BotState;
   readonly buildingsInProgressUpdated: ReadonlyArray<BuildingInProgress>;
+  readonly generalSettingsUpdated: GeneralSettings;
+  readonly generalVillageSettingsUpdated: GeneralVillageSettings;
   readonly heroInformationUpdated: HeroModel;
+  readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextTasksExecutionChanged: Timestamp;
@@ -751,7 +761,27 @@ export type SubscriptionActualBuildingLevelsUpdatedArgs = {
 };
 
 
+export type SubscriptionAutoBuildSettingsUpdatedArgs = {
+  villageId: Scalars['ID'];
+};
+
+
+export type SubscriptionAutoPartySettingsUpdatedArgs = {
+  villageId: Scalars['ID'];
+};
+
+
+export type SubscriptionAutoUnitsSettingsUpdatedArgs = {
+  villageId: Scalars['ID'];
+};
+
+
 export type SubscriptionBuildingsInProgressUpdatedArgs = {
+  villageId: Scalars['ID'];
+};
+
+
+export type SubscriptionGeneralVillageSettingsUpdatedArgs = {
   villageId: Scalars['ID'];
 };
 
@@ -1497,12 +1527,22 @@ export type ResourcesResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  accountSettingsUpdated: SubscriptionResolver<ResolversTypes['AccountSettings'], "accountSettingsUpdated", ParentType, ContextType>;
+  accountsUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['UserAccount']>, "accountsUpdated", ParentType, ContextType>;
   activeVillageIdChanged: SubscriptionResolver<ResolversTypes['ID'], "activeVillageIdChanged", ParentType, ContextType>;
   actualBuildingLevelsUpdated: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "actualBuildingLevelsUpdated", ParentType, ContextType, RequireFields<SubscriptionActualBuildingLevelsUpdatedArgs, 'villageId'>>;
+  autoAdventureSettingsUpdated: SubscriptionResolver<ResolversTypes['AutoAdventureSettings'], "autoAdventureSettingsUpdated", ParentType, ContextType>;
+  autoBuildSettingsUpdated: SubscriptionResolver<ResolversTypes['AutoBuildSettings'], "autoBuildSettingsUpdated", ParentType, ContextType, RequireFields<SubscriptionAutoBuildSettingsUpdatedArgs, 'villageId'>>;
+  autoMentorSettingsUpdated: SubscriptionResolver<ResolversTypes['AutoMentorSettings'], "autoMentorSettingsUpdated", ParentType, ContextType>;
+  autoPartySettingsUpdated: SubscriptionResolver<ResolversTypes['AutoPartySettings'], "autoPartySettingsUpdated", ParentType, ContextType, RequireFields<SubscriptionAutoPartySettingsUpdatedArgs, 'villageId'>>;
+  autoUnitsSettingsUpdated: SubscriptionResolver<ResolversTypes['AutoUnitsSettings'], "autoUnitsSettingsUpdated", ParentType, ContextType, RequireFields<SubscriptionAutoUnitsSettingsUpdatedArgs, 'villageId'>>;
   botActivityChanged: SubscriptionResolver<ResolversTypes['Boolean'], "botActivityChanged", ParentType, ContextType>;
   botStateChanged: SubscriptionResolver<ResolversTypes['BotState'], "botStateChanged", ParentType, ContextType>;
   buildingsInProgressUpdated: SubscriptionResolver<ReadonlyArray<ResolversTypes['BuildingInProgress']>, "buildingsInProgressUpdated", ParentType, ContextType, RequireFields<SubscriptionBuildingsInProgressUpdatedArgs, 'villageId'>>;
+  generalSettingsUpdated: SubscriptionResolver<ResolversTypes['GeneralSettings'], "generalSettingsUpdated", ParentType, ContextType>;
+  generalVillageSettingsUpdated: SubscriptionResolver<ResolversTypes['GeneralVillageSettings'], "generalVillageSettingsUpdated", ParentType, ContextType, RequireFields<SubscriptionGeneralVillageSettingsUpdatedArgs, 'villageId'>>;
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
+  lastSignedAccountIdUpdated: SubscriptionResolver<Maybe<ResolversTypes['String']>, "lastSignedAccountIdUpdated", ParentType, ContextType>;
   logEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "logEntryAdded", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
   nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;

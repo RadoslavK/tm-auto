@@ -4,14 +4,14 @@ import { PartialFields } from '../../_shared/types/fields.type';
 import { dataPathService } from './dataPathService';
 import { fileService } from './fileService';
 
-type UserAccount = {
+export type UserAccount = {
   readonly id: string;
   readonly username: string;
   readonly password: string;
   readonly server: string;
 };
 
-class AccountsData {
+export class AccountsData {
   public readonly accounts: UserAccount[] = [];
 
   public lastSignedAccountId: string | null = null;
@@ -36,7 +36,7 @@ const getBaseServerUrl = (server: string, safe = false): string => {
 };
 
 class AccountService {
-  private accountsData: AccountsData | null = null;
+  public accountsData: AccountsData | null = null;
 
   private currentAccountId: string | null = null;
 
@@ -150,13 +150,25 @@ class AccountService {
 
   public getAccountsData = (): AccountsData => {
     if (!this.accountsData) {
-      this.accountsData = fileService.loadInstance<AccountsData>(
-        dataPathService.accountsPath(),
-        AccountsData,
-      );
+      this.accountsData = this.loadAccountsData();
     }
 
     return this.accountsData;
+  };
+
+  public loadAccountsData = (): AccountsData => {
+    this.accountsData = fileService.loadInstance<AccountsData>(
+      dataPathService.accountsPath(),
+      AccountsData,
+    );
+
+    return this.accountsData;
+  };
+
+  public updateAccountsData = (accountsData: AccountsData) => {
+    this.accountsData = accountsData;
+
+    this.saveAccounts();
   };
 }
 

@@ -24,3 +24,7 @@ extend type Mutation {
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
 }
+
+extend type Subscription {
+  accountSettingsUpdated: AccountSettings!
+}

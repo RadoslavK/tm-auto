@@ -7,6 +7,9 @@ import {
   GetAutoPartySettingsDocument,
   GetAutoPartySettingsQuery,
   GetAutoPartySettingsQueryVariables,
+  OnAutoPartySettingsUpdatedDocument,
+  OnAutoPartySettingsUpdatedSubscription,
+  OnAutoPartySettingsUpdatedSubscriptionVariables,
   UpdateAutoPartySettingsInput,
   useGetAutoPartySettingsQuery,
   useResetAutoPartySettingsMutation,
@@ -19,7 +22,19 @@ const useAutoPartySettings = (villageId: string) => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAutoPartySettingsQuery({
+    variables: { villageId },
+  });
+
+  subscribeToMore<
+    OnAutoPartySettingsUpdatedSubscription,
+    OnAutoPartySettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAutoPartySettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      autoPartySettings: data.autoPartySettingsUpdated,
+    }),
     variables: { villageId },
   });
 

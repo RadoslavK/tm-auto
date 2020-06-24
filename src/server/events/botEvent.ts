@@ -1,4 +1,16 @@
 export enum BotEvent {
+  // Settings & Accounts
+  AccountsUpdated = 'AccountsUpdated',
+  LastSignedAccountIdUpdated = 'LastSignedAccountIdUpdated',
+  AccountSettingsUpdated = 'AccountSettingsUpdated',
+  AutoAdventureSettingsUpdated = 'AutoAdventureSettingsUpdated',
+  AutoBuildSettingsUpdated = 'AutoBuildSettingsUpdated',
+  AutoMentorSettingsUpdated = 'AutoMentorSettingsUpdated',
+  AutoPartySettingsUpdated = 'AutoPartySettingsUpdated',
+  AutoUnitsSettingsUpdated = 'AutoUnitsSettingsUpdated',
+  GeneralSettingsUpdated = 'GeneralSettingsUpdated',
+  GeneralVillageSettingsUpdated = 'GeneralVillageSettingsUpdated',
+
   BotActivityChanged = 'BotActivityChanged',
   ActiveVillageIdChanged = 'ActiveVillageIdChanged',
   BotRunningChanged = 'BotRunningChanged',
@@ -9,7 +21,7 @@ export enum BotEvent {
   NextTaskExecutionChanged = 'NextTaskExecutionChanged',
   NextTasksExecutionChanged = 'NextTasksExecutionChanged',
   NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
-  QueuedUpdated = 'QueueUpdated',
+  QueuedUpdated = 'QueuedUpdated',
   VillageUpdated = 'VillageUpdated',
   VillagesUpdated = 'VillagesUpdated',
 }

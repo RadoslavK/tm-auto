@@ -1,6 +1,8 @@
 import { mergeDefaults } from '../../../_shared/merge';
 import { Resolvers } from '../../_types/resolvers.type';
 import { getAccountContext } from '../../accountContext';
+import { BotEvent } from '../../events/botEvent';
+import { subscribeToEvent } from '../../pubSub';
 import { unitInfoService } from '../../services/info/unitInfoService';
 
 const getService = (villageId: string) =>
@@ -42,5 +44,15 @@ export default <Resolvers>{
     },
 
     resetAutoUnitsSettings: (_, args) => getService(args.villageId).reset(),
+  },
+
+  Subscription: {
+    autoUnitsSettingsUpdated: subscribeToEvent(
+      BotEvent.AutoUnitsSettingsUpdated,
+      {
+        filter: (p, args) => p.villageId === args.villageId,
+        resolve: (p) => p.settings,
+      },
+    ),
   },
 };

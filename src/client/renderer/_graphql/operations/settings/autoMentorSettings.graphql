@@ -20,3 +20,9 @@ mutation ResetAutoMentorSettings {
     ...AutoMentorSettings
   }
 }
+
+subscription OnAutoMentorSettingsUpdated {
+  autoMentorSettingsUpdated {
+    ...AutoMentorSettings
+  }
+}

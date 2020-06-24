@@ -12,6 +12,7 @@ declare global {
   interface Window {
     readonly api: {
       readonly openSaveFileDialog: () => string | undefined;
+      readonly openLoadfileDialog: () => string | undefined;
       readonly getSocketName: () => Promise<string>;
       readonly ipcConnect: (
         id: string,
@@ -38,6 +39,20 @@ const ipc = new IPC();
         },
       ],
     }),
+
+  openLoadfileDialog: (): string | undefined => {
+    const result = remote.dialog.showOpenDialogSync({
+      filters: [
+        {
+          name: 'Zip',
+          extensions: ['zip'],
+        },
+      ],
+      properties: ['openFile'],
+    });
+
+    return result && result[0];
+  },
 
   getSocketName: (): Promise<string> =>
     new Promise((resolve) => {

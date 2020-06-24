@@ -1,4 +1,6 @@
 import { Resolvers } from '../../_types/resolvers.type';
+import { BotEvent } from '../../events/botEvent';
+import { subscribeToEvent } from '../../pubSub';
 import { accountService } from '../../services/accountService';
 
 export default <Resolvers>{
@@ -15,5 +17,17 @@ export default <Resolvers>{
     deleteAccount: (_, args) => accountService.deleteAccount(args.id),
     updateAccount: (_, { account, id }) =>
       accountService.updateAccount({ ...account, id }),
+  },
+
+  Subscription: {
+    accountsUpdated: subscribeToEvent(BotEvent.AccountsUpdated, {
+      resolve: (p) => p.accounts,
+    }),
+    lastSignedAccountIdUpdated: subscribeToEvent(
+      BotEvent.LastSignedAccountIdUpdated,
+      {
+        resolve: (p) => p.lastSignedAccountId,
+      },
+    ),
   },
 };

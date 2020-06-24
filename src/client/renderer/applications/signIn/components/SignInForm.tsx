@@ -26,6 +26,9 @@ import {
   GetAccountsDocument,
   GetAccountsQuery,
   GetAccountsQueryVariables,
+  OnLastSignedAccoutnIdUpdatedDocument,
+  OnLastSignedAccoutnIdUpdatedSubscription,
+  OnLastSignedAccoutnIdUpdatedSubscriptionVariables,
   useCreateAccountMutation,
   useDeleteAccountMutation,
   useGetLastSignedAccountIdQuery,
@@ -83,7 +86,17 @@ export enum SignInFormDialogType {
 }
 
 const useLastSignedInAccountId = () => {
-  const { data, loading } = useGetLastSignedAccountIdQuery();
+  const { data, loading, subscribeToMore } = useGetLastSignedAccountIdQuery();
+
+  subscribeToMore<
+    OnLastSignedAccoutnIdUpdatedSubscription,
+    OnLastSignedAccoutnIdUpdatedSubscriptionVariables
+  >({
+    document: OnLastSignedAccoutnIdUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      lastSignedAccountId: data.lastSignedAccountIdUpdated,
+    }),
+  });
 
   return loading || !data ? null : data.lastSignedAccountId;
 };

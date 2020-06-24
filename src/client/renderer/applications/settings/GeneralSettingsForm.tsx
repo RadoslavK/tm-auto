@@ -6,6 +6,9 @@ import {
   GetGeneralSettingsDocument,
   GetGeneralSettingsQuery,
   GetGeneralSettingsQueryVariables,
+  OnGeneralSettingsUpdatedDocument,
+  OnGeneralSettingsUpdatedSubscription,
+  OnGeneralSettingsUpdatedSubscriptionVariables,
   UpdateGeneralSettingsInput,
   useGetGeneralSettingsQuery,
   useResetGeneralSettingsMutation,
@@ -16,7 +19,18 @@ const useGeneralSettings = () => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetGeneralSettingsQuery();
+
+  subscribeToMore<
+    OnGeneralSettingsUpdatedSubscription,
+    OnGeneralSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnGeneralSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      generalSettings: data.generalSettingsUpdated,
+    }),
+  });
 
   const [updateSettings] = useUpdateGeneralSettingsMutation({
     update: (cache, { data }) => {

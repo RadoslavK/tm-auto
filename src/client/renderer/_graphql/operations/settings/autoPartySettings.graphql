@@ -31,3 +31,9 @@ mutation ResetAutoPartySettings($villageId: ID!) {
     ...AutoPartySettings
   }
 }
+
+subscription OnAutoPartySettingsUpdated($villageId: ID!) {
+  autoPartySettingsUpdated(villageId: $villageId) {
+    ...AutoPartySettings
+  }
+}

@@ -16,3 +16,7 @@ extend type Mutation {
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
   resetGeneralSettings: GeneralSettings!
 }
+
+extend type Subscription {
+  generalSettingsUpdated: GeneralSettings!
+}

@@ -53,3 +53,7 @@ extend type Mutation {
   ): AutoBuildSettings!
   resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
 }
+
+extend type Subscription {
+  autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
+}

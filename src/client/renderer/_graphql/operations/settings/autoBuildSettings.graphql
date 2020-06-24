@@ -47,3 +47,9 @@ mutation ResetAutoBuildSettings($villageId: ID!) {
     ...AutoBuildSettings
   }
 }
+
+subscription OnAutoBuildSettingsUpdated($villageId: ID!) {
+  autoBuildSettingsUpdated(villageId: $villageId) {
+    ...AutoBuildSettings
+  }
+}

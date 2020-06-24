@@ -65,6 +65,11 @@ export class BuildingQueueService {
     this._village.buildings.updateSpotsQueuedState();
   };
 
+  public setQueue = (buildings: QueuedBuilding[]) => {
+    this._village.buildings.queue.set(buildings);
+    this.onUpdate();
+  };
+
   public enqueueBuilding = (building: EnqueuedBuilding): void => {
     const { fieldId, targetLevel, type } = building;
 

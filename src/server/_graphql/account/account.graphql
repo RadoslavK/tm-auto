@@ -24,3 +24,8 @@ extend type Mutation {
   updateAccount(id: ID!, account: AccountInput!): UserAccount!
   deleteAccount(id: ID!): UserAccount!
 }
+
+extend type Subscription {
+  accountsUpdated: [UserAccount!]!
+  lastSignedAccountIdUpdated: String
+}

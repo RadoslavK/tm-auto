@@ -17,3 +17,7 @@ extend type Mutation {
   ): GeneralVillageSettings!
   resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
 }
+
+extend type Subscription {
+  generalVillageSettingsUpdated(villageId: ID!): GeneralVillageSettings!
+}

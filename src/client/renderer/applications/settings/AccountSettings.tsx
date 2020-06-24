@@ -7,6 +7,9 @@ import {
   GetAccountSettingsDocument,
   GetAccountSettingsQuery,
   GetAccountSettingsQueryVariables,
+  OnAccountSettingsUpdatedDocument,
+  OnAccountSettingsUpdatedSubscription,
+  OnAccountSettingsUpdatedSubscriptionVariables,
   UpdateAccountSettingsInput,
   useGetAccountSettingsQuery,
   useResetAccountSettingsMutation,
@@ -18,7 +21,18 @@ const useAccountSettings = () => {
   const {
     data: queryData,
     loading: queryLoading,
+    subscribeToMore,
   } = useGetAccountSettingsQuery();
+
+  subscribeToMore<
+    OnAccountSettingsUpdatedSubscription,
+    OnAccountSettingsUpdatedSubscriptionVariables
+  >({
+    document: OnAccountSettingsUpdatedDocument,
+    updateQuery: (_prev, { subscriptionData: { data } }) => ({
+      accountSettings: data.accountSettingsUpdated,
+    }),
+  });
 
   const [updateSettings] = useUpdateAccountSettingsMutation({
     update: (cache, { data }) => {

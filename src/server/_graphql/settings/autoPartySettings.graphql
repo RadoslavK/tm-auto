@@ -29,3 +29,7 @@ extend type Mutation {
   ): AutoPartySettings!
   resetAutoPartySettings(villageId: ID!): AutoPartySettings!
 }
+
+extend type Subscription {
+  autoPartySettingsUpdated(villageId: ID!): AutoPartySettings!
+}

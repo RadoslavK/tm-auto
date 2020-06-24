@@ -33,3 +33,9 @@ mutation ResetAutoAdventureSettings {
     ...AutoAdventureSettings
   }
 }
+
+subscription OnAutoAdventureSettingsUpdated {
+  autoAdventureSettingsUpdated {
+    ...AutoAdventureSettings
+  }
+}
