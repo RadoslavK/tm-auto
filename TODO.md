@@ -105,6 +105,7 @@
 
 - First load takes a long time as it needs to scan all villages
 - Enqueuing buildings take longer to update UI
+- Switching to buildings tab takes a long time when queue is long
 - remove loading state for queries where possible. We can reuse old queue values so its faster renderer? so just check data presence
 
 ## Error Handling / Fault Tolerance

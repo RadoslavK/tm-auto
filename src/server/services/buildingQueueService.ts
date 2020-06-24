@@ -165,7 +165,7 @@ export class BuildingQueueService {
     fieldId,
     targetLevel,
   }: DequeueAtFieldInput): void => {
-    if (targetLevel) {
+    if (targetLevel !== undefined) {
       const buildings = this._village.buildings.queue.getAllAtField(
         fieldId,
         (b) => b.level > targetLevel,
