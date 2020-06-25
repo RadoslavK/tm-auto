@@ -11,7 +11,7 @@ import { EnsureGraphQl } from './EnsureGraphQl';
 import { EnsureTitle } from './EnsureTitle';
 import { MainRoutes } from './navigation/components/MainRoutes';
 import { Navigation } from './navigation/components/Navigation';
-import { SettingsManagement } from './settings/SettingsManagement';
+import { SettingsManagement } from './settings/management/SettingsManagement';
 import { EnsureSignedIn } from './signIn/components/EnsureSignedIn';
 
 const useStyles = makeStyles((theme) => ({

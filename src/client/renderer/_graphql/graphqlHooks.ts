@@ -320,8 +320,12 @@ export type Mutation = {
   readonly dequeueBuildingAtField: Maybe<Scalars['Boolean']>;
   readonly dequeueBuildingsBlock: Maybe<Scalars['Boolean']>;
   readonly enqueueBuilding: Maybe<Scalars['Boolean']>;
-  readonly exportSettings: Maybe<Scalars['Boolean']>;
-  readonly importSettings: Maybe<Scalars['Boolean']>;
+  readonly exportAccountSettings: Maybe<Scalars['Boolean']>;
+  readonly exportAccounts: Maybe<Scalars['Boolean']>;
+  readonly exportGeneralSettings: Maybe<Scalars['Boolean']>;
+  readonly importAccountSettings: Maybe<Scalars['Boolean']>;
+  readonly importAccounts: Maybe<Scalars['Boolean']>;
+  readonly importGeneralSettings: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingToIndex: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
@@ -396,12 +400,34 @@ export type MutationEnqueueBuildingArgs = {
 };
 
 
-export type MutationExportSettingsArgs = {
+export type MutationExportAccountSettingsArgs = {
+  accountId: Scalars['ID'];
   path: Scalars['String'];
 };
 
 
-export type MutationImportSettingsArgs = {
+export type MutationExportAccountsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationExportGeneralSettingsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationImportAccountSettingsArgs = {
+  accountId: Scalars['ID'];
+  path: Scalars['String'];
+};
+
+
+export type MutationImportAccountsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationImportGeneralSettingsArgs = {
   path: Scalars['String'];
 };
 
@@ -1626,19 +1652,49 @@ export type OnGeneralVillageSettingsUpdatedSubscriptionVariables = Exact<{
 
 export type OnGeneralVillageSettingsUpdatedSubscription = { readonly generalVillageSettingsUpdated: GeneralVillageSettingsFragment };
 
-export type ExportSettingsMutationVariables = Exact<{
+export type ExportAccountSettingsMutationVariables = Exact<{
+  accountId: Scalars['ID'];
   path: Scalars['String'];
 }>;
 
 
-export type ExportSettingsMutation = { readonly exportSettings: Maybe<boolean> };
+export type ExportAccountSettingsMutation = { readonly exportAccountSettings: Maybe<boolean> };
 
-export type ImportSettingsMutationVariables = Exact<{
+export type ExportGeneralSettingsMutationVariables = Exact<{
   path: Scalars['String'];
 }>;
 
 
-export type ImportSettingsMutation = { readonly importSettings: Maybe<boolean> };
+export type ExportGeneralSettingsMutation = { readonly exportGeneralSettings: Maybe<boolean> };
+
+export type ExportAccountsMutationVariables = Exact<{
+  path: Scalars['String'];
+}>;
+
+
+export type ExportAccountsMutation = { readonly exportAccounts: Maybe<boolean> };
+
+export type ImportAccountSettingsMutationVariables = Exact<{
+  accountId: Scalars['ID'];
+  path: Scalars['String'];
+}>;
+
+
+export type ImportAccountSettingsMutation = { readonly importAccountSettings: Maybe<boolean> };
+
+export type ImportGeneralSettingsMutationVariables = Exact<{
+  path: Scalars['String'];
+}>;
+
+
+export type ImportGeneralSettingsMutation = { readonly importGeneralSettings: Maybe<boolean> };
+
+export type ImportAccountsMutationVariables = Exact<{
+  path: Scalars['String'];
+}>;
+
+
+export type ImportAccountsMutation = { readonly importAccounts: Maybe<boolean> };
 
 export type GetUnitInfoQueryVariables = Exact<{
   index: Scalars['Int'];
@@ -4059,58 +4115,164 @@ export function useOnGeneralVillageSettingsUpdatedSubscription(baseOptions?: Apo
       }
 export type OnGeneralVillageSettingsUpdatedSubscriptionHookResult = ReturnType<typeof useOnGeneralVillageSettingsUpdatedSubscription>;
 export type OnGeneralVillageSettingsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnGeneralVillageSettingsUpdatedSubscription>;
-export const ExportSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExportSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"exportSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
-export type ExportSettingsMutationFn = ApolloReactCommon.MutationFunction<ExportSettingsMutation, ExportSettingsMutationVariables>;
+export const ExportAccountSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExportAccountSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"exportAccountSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}},{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ExportAccountSettingsMutationFn = ApolloReactCommon.MutationFunction<ExportAccountSettingsMutation, ExportAccountSettingsMutationVariables>;
 
 /**
- * __useExportSettingsMutation__
+ * __useExportAccountSettingsMutation__
  *
- * To run a mutation, you first call `useExportSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useExportSettingsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useExportAccountSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExportAccountSettingsMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [exportSettingsMutation, { data, loading, error }] = useExportSettingsMutation({
+ * const [exportAccountSettingsMutation, { data, loading, error }] = useExportAccountSettingsMutation({
  *   variables: {
+ *      accountId: // value for 'accountId'
  *      path: // value for 'path'
  *   },
  * });
  */
-export function useExportSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ExportSettingsMutation, ExportSettingsMutationVariables>) {
-        return ApolloReactHooks.useMutation<ExportSettingsMutation, ExportSettingsMutationVariables>(ExportSettingsDocument, baseOptions);
+export function useExportAccountSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ExportAccountSettingsMutation, ExportAccountSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ExportAccountSettingsMutation, ExportAccountSettingsMutationVariables>(ExportAccountSettingsDocument, baseOptions);
       }
-export type ExportSettingsMutationHookResult = ReturnType<typeof useExportSettingsMutation>;
-export type ExportSettingsMutationResult = ApolloReactCommon.MutationResult<ExportSettingsMutation>;
-export type ExportSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ExportSettingsMutation, ExportSettingsMutationVariables>;
-export const ImportSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ImportSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"importSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
-export type ImportSettingsMutationFn = ApolloReactCommon.MutationFunction<ImportSettingsMutation, ImportSettingsMutationVariables>;
+export type ExportAccountSettingsMutationHookResult = ReturnType<typeof useExportAccountSettingsMutation>;
+export type ExportAccountSettingsMutationResult = ApolloReactCommon.MutationResult<ExportAccountSettingsMutation>;
+export type ExportAccountSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ExportAccountSettingsMutation, ExportAccountSettingsMutationVariables>;
+export const ExportGeneralSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExportGeneralSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"exportGeneralSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ExportGeneralSettingsMutationFn = ApolloReactCommon.MutationFunction<ExportGeneralSettingsMutation, ExportGeneralSettingsMutationVariables>;
 
 /**
- * __useImportSettingsMutation__
+ * __useExportGeneralSettingsMutation__
  *
- * To run a mutation, you first call `useImportSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useImportSettingsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useExportGeneralSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExportGeneralSettingsMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [importSettingsMutation, { data, loading, error }] = useImportSettingsMutation({
+ * const [exportGeneralSettingsMutation, { data, loading, error }] = useExportGeneralSettingsMutation({
  *   variables: {
  *      path: // value for 'path'
  *   },
  * });
  */
-export function useImportSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ImportSettingsMutation, ImportSettingsMutationVariables>) {
-        return ApolloReactHooks.useMutation<ImportSettingsMutation, ImportSettingsMutationVariables>(ImportSettingsDocument, baseOptions);
+export function useExportGeneralSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ExportGeneralSettingsMutation, ExportGeneralSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ExportGeneralSettingsMutation, ExportGeneralSettingsMutationVariables>(ExportGeneralSettingsDocument, baseOptions);
       }
-export type ImportSettingsMutationHookResult = ReturnType<typeof useImportSettingsMutation>;
-export type ImportSettingsMutationResult = ApolloReactCommon.MutationResult<ImportSettingsMutation>;
-export type ImportSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ImportSettingsMutation, ImportSettingsMutationVariables>;
+export type ExportGeneralSettingsMutationHookResult = ReturnType<typeof useExportGeneralSettingsMutation>;
+export type ExportGeneralSettingsMutationResult = ApolloReactCommon.MutationResult<ExportGeneralSettingsMutation>;
+export type ExportGeneralSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ExportGeneralSettingsMutation, ExportGeneralSettingsMutationVariables>;
+export const ExportAccountsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExportAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"exportAccounts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ExportAccountsMutationFn = ApolloReactCommon.MutationFunction<ExportAccountsMutation, ExportAccountsMutationVariables>;
+
+/**
+ * __useExportAccountsMutation__
+ *
+ * To run a mutation, you first call `useExportAccountsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExportAccountsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [exportAccountsMutation, { data, loading, error }] = useExportAccountsMutation({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useExportAccountsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ExportAccountsMutation, ExportAccountsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ExportAccountsMutation, ExportAccountsMutationVariables>(ExportAccountsDocument, baseOptions);
+      }
+export type ExportAccountsMutationHookResult = ReturnType<typeof useExportAccountsMutation>;
+export type ExportAccountsMutationResult = ApolloReactCommon.MutationResult<ExportAccountsMutation>;
+export type ExportAccountsMutationOptions = ApolloReactCommon.BaseMutationOptions<ExportAccountsMutation, ExportAccountsMutationVariables>;
+export const ImportAccountSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ImportAccountSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"importAccountSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}},{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ImportAccountSettingsMutationFn = ApolloReactCommon.MutationFunction<ImportAccountSettingsMutation, ImportAccountSettingsMutationVariables>;
+
+/**
+ * __useImportAccountSettingsMutation__
+ *
+ * To run a mutation, you first call `useImportAccountSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImportAccountSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [importAccountSettingsMutation, { data, loading, error }] = useImportAccountSettingsMutation({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useImportAccountSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ImportAccountSettingsMutation, ImportAccountSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ImportAccountSettingsMutation, ImportAccountSettingsMutationVariables>(ImportAccountSettingsDocument, baseOptions);
+      }
+export type ImportAccountSettingsMutationHookResult = ReturnType<typeof useImportAccountSettingsMutation>;
+export type ImportAccountSettingsMutationResult = ApolloReactCommon.MutationResult<ImportAccountSettingsMutation>;
+export type ImportAccountSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ImportAccountSettingsMutation, ImportAccountSettingsMutationVariables>;
+export const ImportGeneralSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ImportGeneralSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"importGeneralSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ImportGeneralSettingsMutationFn = ApolloReactCommon.MutationFunction<ImportGeneralSettingsMutation, ImportGeneralSettingsMutationVariables>;
+
+/**
+ * __useImportGeneralSettingsMutation__
+ *
+ * To run a mutation, you first call `useImportGeneralSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImportGeneralSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [importGeneralSettingsMutation, { data, loading, error }] = useImportGeneralSettingsMutation({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useImportGeneralSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ImportGeneralSettingsMutation, ImportGeneralSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ImportGeneralSettingsMutation, ImportGeneralSettingsMutationVariables>(ImportGeneralSettingsDocument, baseOptions);
+      }
+export type ImportGeneralSettingsMutationHookResult = ReturnType<typeof useImportGeneralSettingsMutation>;
+export type ImportGeneralSettingsMutationResult = ApolloReactCommon.MutationResult<ImportGeneralSettingsMutation>;
+export type ImportGeneralSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ImportGeneralSettingsMutation, ImportGeneralSettingsMutationVariables>;
+export const ImportAccountsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ImportAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"importAccounts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
+export type ImportAccountsMutationFn = ApolloReactCommon.MutationFunction<ImportAccountsMutation, ImportAccountsMutationVariables>;
+
+/**
+ * __useImportAccountsMutation__
+ *
+ * To run a mutation, you first call `useImportAccountsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImportAccountsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [importAccountsMutation, { data, loading, error }] = useImportAccountsMutation({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useImportAccountsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ImportAccountsMutation, ImportAccountsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ImportAccountsMutation, ImportAccountsMutationVariables>(ImportAccountsDocument, baseOptions);
+      }
+export type ImportAccountsMutationHookResult = ReturnType<typeof useImportAccountsMutation>;
+export type ImportAccountsMutationResult = ApolloReactCommon.MutationResult<ImportAccountsMutation>;
+export type ImportAccountsMutationOptions = ApolloReactCommon.BaseMutationOptions<ImportAccountsMutation, ImportAccountsMutationVariables>;
 export const GetUnitInfoDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnitInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"index"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unitInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"index"},"value":{"kind":"Variable","name":{"kind":"Name","value":"index"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]}]}}]}}]};
 
 /**

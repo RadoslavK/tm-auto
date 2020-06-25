@@ -15,7 +15,7 @@ import {
 } from '../../../_graphql/graphqlHooks';
 import { getServerShortcut } from '../../../utils/getServerShortcut';
 
-const useAccounts = () => {
+export const useAccounts = () => {
   const {
     data: queryData,
     loading: queryLoading,

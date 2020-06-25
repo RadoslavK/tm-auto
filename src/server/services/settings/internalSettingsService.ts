@@ -25,6 +25,13 @@ export class InternalSettingsService<TSettings> {
     return this.settings;
   };
 
+  public getWithoutDefaultValue = (): TSettings | null =>
+    this.settings ||
+    fileService.loadInstanceWithoutDefaultValue<TSettings>(
+      this.path,
+      this.SettingsConstructor,
+    );
+
   public update = (settings: TSettings): void => {
     this.settings = settings;
 

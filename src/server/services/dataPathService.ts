@@ -29,7 +29,7 @@ type VillagePath = {
 };
 
 export class DataPathService {
-  static generalPath = () => 'settings/general.json';
+  static generalPath = () => 'generalSettings.json';
 
   public accountsPath = () => 'accounts.json';
 
@@ -85,10 +85,13 @@ export class DataPathService {
     };
   };
 
-  private baseVillagePath = (accountId: string, villageId: string): string =>
-    path.join(this.baseAccountPath(accountId), 'villages', villageId);
+  public villagesPath = (accountId: string): string =>
+    path.join(this.baseAccountPath(accountId), 'village');
 
-  private baseAccountPath = (id: string): string => path.join('accounts', id);
+  private baseVillagePath = (accountId: string, villageId: string): string =>
+    path.join(this.villagesPath(accountId), villageId);
+
+  private baseAccountPath = (id: string): string => path.join('account', id);
 }
 
 export const dataPathService = new DataPathService();

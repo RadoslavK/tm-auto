@@ -1,4 +1,3 @@
-import { generateId } from '../../_shared/generateId';
 import { mergeDefaults } from '../../_shared/merge';
 import { PartialFields } from '../../_shared/types/fields.type';
 import { dataPathService } from './dataPathService';
@@ -38,7 +37,7 @@ const getBaseServerUrl = (server: string, safe = false): string => {
 class AccountService {
   public accountsData: AccountsData | null = null;
 
-  private currentAccountId: string | null = null;
+  public currentAccountId: string | null = null;
 
   private saveAccounts = async (): Promise<void> =>
     fileService.save(dataPathService.accountsPath(), this.accountsData);
@@ -64,12 +63,13 @@ class AccountService {
   };
 
   public createAccount = (account: Omit<UserAccount, 'id'>): UserAccount => {
-    const id = generateId();
+    const server = getBaseServerUrl(account.server);
+    const id = Buffer.from(`${account.username}@${server}`).toString('base64');
 
     const newAccount: UserAccount = {
       ...account,
       id,
-      server: getBaseServerUrl(account.server),
+      server,
     };
 
     this.getAccountsData().accounts.push(newAccount);

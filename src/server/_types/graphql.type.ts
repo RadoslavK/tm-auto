@@ -309,8 +309,12 @@ export type Mutation = {
   readonly dequeueBuildingAtField: Maybe<Scalars['Boolean']>;
   readonly dequeueBuildingsBlock: Maybe<Scalars['Boolean']>;
   readonly enqueueBuilding: Maybe<Scalars['Boolean']>;
-  readonly exportSettings: Maybe<Scalars['Boolean']>;
-  readonly importSettings: Maybe<Scalars['Boolean']>;
+  readonly exportAccountSettings: Maybe<Scalars['Boolean']>;
+  readonly exportAccounts: Maybe<Scalars['Boolean']>;
+  readonly exportGeneralSettings: Maybe<Scalars['Boolean']>;
+  readonly importAccountSettings: Maybe<Scalars['Boolean']>;
+  readonly importAccounts: Maybe<Scalars['Boolean']>;
+  readonly importGeneralSettings: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingToIndex: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
@@ -385,12 +389,34 @@ export type MutationEnqueueBuildingArgs = {
 };
 
 
-export type MutationExportSettingsArgs = {
+export type MutationExportAccountSettingsArgs = {
+  accountId: Scalars['ID'];
   path: Scalars['String'];
 };
 
 
-export type MutationImportSettingsArgs = {
+export type MutationExportAccountsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationExportGeneralSettingsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationImportAccountSettingsArgs = {
+  accountId: Scalars['ID'];
+  path: Scalars['String'];
+};
+
+
+export type MutationImportAccountsArgs = {
+  path: Scalars['String'];
+};
+
+
+export type MutationImportGeneralSettingsArgs = {
   path: Scalars['String'];
 };
 
@@ -1407,8 +1433,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   dequeueBuildingAtField: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDequeueBuildingAtFieldArgs, 'input'>>;
   dequeueBuildingsBlock: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDequeueBuildingsBlockArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId'>>;
   enqueueBuilding: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEnqueueBuildingArgs, 'input'>>;
-  exportSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationExportSettingsArgs, 'path'>>;
-  importSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationImportSettingsArgs, 'path'>>;
+  exportAccountSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationExportAccountSettingsArgs, 'accountId' | 'path'>>;
+  exportAccounts: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationExportAccountsArgs, 'path'>>;
+  exportGeneralSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationExportGeneralSettingsArgs, 'path'>>;
+  importAccountSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationImportAccountSettingsArgs, 'accountId' | 'path'>>;
+  importAccounts: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationImportAccountsArgs, 'path'>>;
+  importGeneralSettings: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationImportGeneralSettingsArgs, 'path'>>;
   moveQueuedBuildingAsHighAsPossible: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingAsHighAsPossibleArgs, 'villageId' | 'queueId'>>;
   moveQueuedBuildingToIndex: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingToIndexArgs, 'villageId' | 'queueId' | 'index'>>;
   moveQueuedBuildingsBlockAsHighAsPossible: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingsBlockAsHighAsPossibleArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId'>>;

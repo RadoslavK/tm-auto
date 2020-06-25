@@ -11,8 +11,8 @@ type Writeable<T, TProps extends keyof T = keyof T> = {
 declare global {
   interface Window {
     readonly api: {
-      readonly openSaveFileDialog: () => string | undefined;
-      readonly openLoadfileDialog: () => string | undefined;
+      readonly openSaveFileDialog: (defaultName?: string) => string | undefined;
+      readonly openLoadFileDialog: () => string | undefined;
       readonly getSocketName: () => Promise<string>;
       readonly ipcConnect: (
         id: string,
@@ -30,8 +30,9 @@ const ipc = new IPC();
   process.env.NODE_ENV !== 'production';
 
 (window as Writeable<Window, 'api'>).api = {
-  openSaveFileDialog: (): string | undefined =>
+  openSaveFileDialog: (defaultName?: string): string | undefined =>
     remote.dialog.showSaveDialogSync({
+      defaultPath: defaultName,
       filters: [
         {
           name: 'Zip',
@@ -40,7 +41,7 @@ const ipc = new IPC();
       ],
     }),
 
-  openLoadfileDialog: (): string | undefined => {
+  openLoadFileDialog: (): string | undefined => {
     const result = remote.dialog.showOpenDialogSync({
       filters: [
         {

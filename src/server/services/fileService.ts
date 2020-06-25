@@ -34,6 +34,21 @@ class FileService {
     }
   };
 
+  public loadInstanceWithoutDefaultValue = <T extends unknown>(
+    targetPath: string,
+    constructor: { new (params?: PartialFields<T>): T },
+  ): T | null => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
+    try {
+      const file = fs.readFileSync(absolutePath);
+      const params: T = JSON.parse(file.toString());
+      return new constructor(params);
+    } catch {
+      return null;
+    }
+  };
+
   public load = <T extends unknown>(targetPath: string, defaultValue: T): T => {
     const absolutePath = path.join(getServerAppDirectory(), targetPath);
 

@@ -59,7 +59,7 @@ export class BuildingQueueService {
   private serializeQueue = async (): Promise<void> =>
     fileService.save(this._filePath, this._village.buildings.queue.buildings());
 
-  public loadQueue = async (): Promise<void> => {
+  public loadQueueAndUpdate = async (): Promise<void> => {
     const buildings = fileService.load<QueuedBuilding[]>(this._filePath, []);
     this._village.buildings.queue.set(buildings);
     this._village.buildings.updateSpotsQueuedState();

@@ -3,8 +3,10 @@ import path from 'path';
 
 import { TimeoutError } from 'puppeteer-core/lib/Errors';
 
+import { formatTimeFromDuration } from '../../client/renderer/utils/formatTime';
 import { TravianPath } from '../_enums/travianPath';
 import { CoolDown } from '../_models/coolDown';
+import { Duration } from '../_models/duration';
 import { BotState } from '../_types/graphql.type';
 import {
   getAccountContext,
@@ -84,17 +86,19 @@ class ControllerService {
 
         maintenanceCount++;
 
-        getAccountContext().logsService.logText(
-          'There is a maintenance on the server, waiting 30-40 minutes...',
-        );
-
-        // Reset the page so it can be reloaded again after timeout
-        await page.goto('about:blank');
-
         const nextCoolDownSeconds =
           maintenanceCount < 7
             ? Math.pow(2, maintenanceCount) * 30
             : (Math.random() * (40 - 30) + 30) * 60;
+
+        getAccountContext().logsService.logText(
+          `There is a maintenance on the server, waiting ${formatTimeFromDuration(
+            Duration.fromSeconds(nextCoolDownSeconds),
+          )} minutes...`,
+        );
+
+        // Reset the page so it can be reloaded again after timeout
+        await page.goto('about:blank');
 
         await page.waitFor(nextCoolDownSeconds * 1000);
 
@@ -217,7 +221,7 @@ class ControllerService {
         const buildingQueueService = getAccountContext().buildingQueueService.for(
           village.id,
         );
-        await buildingQueueService.loadQueue();
+        await buildingQueueService.loadQueueAndUpdate();
         await ensureVillageSelected(village.id);
 
         await updateResources();

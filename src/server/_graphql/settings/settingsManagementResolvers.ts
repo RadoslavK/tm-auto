@@ -3,7 +3,17 @@ import { settingsManagementService } from '../../services/settingsManagementServ
 
 export default <Resolvers>{
   Mutation: {
-    exportSettings: (_, { path }) => settingsManagementService.export(path),
-    importSettings: (_, { path }) => settingsManagementService.import(path),
+    exportAccountSettings: (_, { accountId, path }) =>
+      settingsManagementService.exportAccountSettings(accountId, path),
+    exportGeneralSettings: (_, { path }) =>
+      settingsManagementService.exportGeneralSettings(path),
+    exportAccounts: (_, { path }) =>
+      settingsManagementService.exportAccounts(path),
+    importAccountSettings: (_, { accountId, path }) =>
+      settingsManagementService.importAccountSettings(accountId, path),
+    importGeneralSettings: (_, { path }) =>
+      settingsManagementService.importGeneralSettings(path),
+    importAccounts: (_, { path }) =>
+      settingsManagementService.importAccounts(path),
   },
 };

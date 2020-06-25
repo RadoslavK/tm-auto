@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 import JSZip from 'jszip';
 
@@ -14,9 +15,12 @@ import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings';
 import { getAccountContextUnsafe } from '../accountContext';
 import { BotEvent } from '../events/botEvent';
 import { publishPayloadEvent } from '../pubSub';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory';
 import { AccountsData, accountService } from './accountService';
 import { BuildingQueueService } from './buildingQueueService';
 import { DataPathService, dataPathService } from './dataPathService';
+import { fileService } from './fileService';
+import { SettingsService } from './settings';
 import { getGeneralSettingsService } from './settings/general';
 
 const updateSettings = async <TData = object>(
@@ -34,118 +38,186 @@ const updateSettings = async <TData = object>(
 };
 
 class SettingsManagementService {
-  public export = (path: string) => {
+  private saveZip = (zipPath: string, populateZip: (zip: JSZip) => void) => {
     const zip = new JSZip();
 
-    zip.file(
-      dataPathService.accountsPath(),
-      JSON.stringify(accountService.getAccountsData()),
-    );
-
-    zip.file(
-      DataPathService.generalPath(),
-      JSON.stringify(getGeneralSettingsService().get()),
-    );
-
-    const accContext = getAccountContextUnsafe();
-
-    if (accContext) {
-      const { settingsService, villageService } = accContext;
-
-      const accId = accountService.getCurrentAccount().id;
-      const accountPath = dataPathService.accountPath(accId);
-
-      zip.file(
-        accountPath.settings.hero.autoAdventure,
-        JSON.stringify(settingsService.hero.autoAdventure.get()),
-      );
-
-      zip.file(
-        accountPath.settings.autoMentor,
-        JSON.stringify(settingsService.autoMentor.get()),
-      );
-
-      zip.file(
-        accountPath.settings.account,
-        JSON.stringify(settingsService.account.get()),
-      );
-
-      villageService.allVillages().forEach((village) => {
-        const {
-          settings: villageSettingsPath,
-          queue: villageQueuePath,
-        } = dataPathService.villagePath(accId, village.id);
-
-        const villageSettingsService = settingsService.village(village.id);
-
-        zip.file(
-          villageQueuePath,
-          JSON.stringify(village.buildings.queue.buildings()),
-        );
-
-        zip.file(
-          villageSettingsPath.autoBuild,
-          JSON.stringify(villageSettingsService.autoBuild.get()),
-        );
-
-        zip.file(
-          villageSettingsPath.autoUnits,
-          JSON.stringify(villageSettingsService.autoUnits.get()),
-        );
-
-        zip.file(
-          villageSettingsPath.autoParty,
-          JSON.stringify(villageSettingsService.autoParty.get()),
-        );
-
-        zip.file(
-          villageSettingsPath.general,
-          JSON.stringify(villageSettingsService.general.get()),
-        );
-      });
-    }
+    populateZip(zip);
 
     zip
       .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-      .pipe(fs.createWriteStream(path));
+      .pipe(fs.createWriteStream(zipPath));
   };
 
-  public import = async (path: string) => {
-    const data = await fs.promises.readFile(path);
+  private readZip = async (
+    zipPath: string,
+    processZip: (zip: JSZip) => Promise<void> | void,
+  ) => {
+    const data = await fs.promises.readFile(zipPath);
     const zip = await JSZip.loadAsync(data);
 
-    await updateSettings(zip, dataPathService.accountsPath(), (accounts) => {
-      const newAccounts = new AccountsData(accounts);
+    await processZip(zip);
+  };
 
-      publishPayloadEvent(BotEvent.AccountsUpdated, {
-        accounts: newAccounts.accounts,
+  public exportAccountSettings = (accountId: string, zipPath: string) =>
+    this.saveZip(zipPath, (zip) => {
+      const accContext =
+        accountService.currentAccountId === accountId
+          ? getAccountContextUnsafe()
+          : null;
+
+      let settingsService: SettingsService;
+      let villageIds: readonly string[];
+
+      if (accContext) {
+        ({ settingsService } = accContext);
+        villageIds = accContext.villageService.allVillages().map((v) => v.id);
+      } else {
+        settingsService = new SettingsService(accountId);
+        const villagesPath = dataPathService.villagesPath(accountId);
+
+        villageIds = fs
+          .readdirSync(path.join(getServerAppDirectory(), villagesPath), {
+            withFileTypes: true,
+          })
+          .filter((dirent) => dirent.isDirectory())
+          .map((dirent) => dirent.name);
+      }
+
+      const accountPath = dataPathService.accountPath(accountId);
+
+      const autoHeroSettings = settingsService.hero.autoAdventure.getWithoutDefaultValue();
+
+      if (autoHeroSettings) {
+        zip.file(
+          accountPath.settings.hero.autoAdventure,
+          JSON.stringify(autoHeroSettings),
+        );
+      }
+
+      const autoMentorSettings = settingsService.autoMentor.getWithoutDefaultValue();
+
+      if (autoMentorSettings) {
+        zip.file(
+          accountPath.settings.autoMentor,
+          JSON.stringify(autoMentorSettings),
+        );
+      }
+
+      const generalAccountSettings = settingsService.account.getWithoutDefaultValue();
+
+      if (generalAccountSettings) {
+        zip.file(
+          accountPath.settings.account,
+          JSON.stringify(generalAccountSettings),
+        );
+      }
+
+      villageIds.forEach((villageId) => {
+        const {
+          settings: villageSettingsPath,
+          queue: villageQueuePath,
+        } = dataPathService.villagePath(accountId, villageId);
+
+        const villageSettingsService = settingsService.village(villageId);
+
+        const buildings = accContext
+          ? accContext.villageService
+              .village(villageId)
+              .buildings.queue.buildings()
+          : fileService.load<QueuedBuilding[]>(
+              dataPathService.villagePath(accountId, villageId).queue,
+              [],
+            );
+
+        zip.file(villageQueuePath, JSON.stringify(buildings));
+
+        const autoBuildSettings = villageSettingsService.autoBuild.getWithoutDefaultValue();
+
+        if (autoBuildSettings) {
+          zip.file(
+            villageSettingsPath.autoBuild,
+            JSON.stringify(autoBuildSettings),
+          );
+        }
+
+        const autoUnitsSettings = villageSettingsService.autoUnits.getWithoutDefaultValue();
+
+        if (autoUnitsSettings) {
+          zip.file(
+            villageSettingsPath.autoUnits,
+            JSON.stringify(autoUnitsSettings),
+          );
+        }
+
+        const autoPartySettings = villageSettingsService.autoParty.getWithoutDefaultValue();
+
+        if (autoPartySettings) {
+          zip.file(
+            villageSettingsPath.autoParty,
+            JSON.stringify(autoPartySettings),
+          );
+        }
+
+        const generalVillageSettings = villageSettingsService.general.getWithoutDefaultValue();
+
+        if (generalVillageSettings) {
+          zip.file(
+            villageSettingsPath.general,
+            JSON.stringify(generalVillageSettings),
+          );
+        }
       });
-      publishPayloadEvent(BotEvent.LastSignedAccountIdUpdated, {
-        lastSignedAccountId: newAccounts.lastSignedAccountId,
-      });
-      accountService.updateAccountsData(newAccounts);
     });
 
-    await updateSettings(
-      zip,
-      DataPathService.generalPath(),
-      (generalSettings) => {
-        const newSettings = new GeneralSettings(generalSettings);
+  public exportGeneralSettings = (zipPath: string) =>
+    this.saveZip(zipPath, (zip) => {
+      zip.file(
+        DataPathService.generalPath(),
+        JSON.stringify(getGeneralSettingsService().get()),
+      );
+    });
 
-        getGeneralSettingsService().update(newSettings);
-        publishPayloadEvent(BotEvent.GeneralSettingsUpdated, {
-          settings: newSettings,
-        });
-      },
-    );
+  public exportAccounts = (zipPath: string) =>
+    this.saveZip(zipPath, (zip) => {
+      zip.file(
+        dataPathService.accountsPath(),
+        JSON.stringify(accountService.getAccountsData()),
+      );
+    });
 
-    const accContext = getAccountContextUnsafe();
+  public importAccountSettings = (accountId: string, zipPath: string) =>
+    this.readZip(zipPath, async (zip) => {
+      const accContext =
+        accountService.currentAccountId === accountId
+          ? getAccountContextUnsafe()
+          : null;
 
-    if (accContext) {
-      const { settingsService, villageService } = accContext;
+      const settingsService = accContext
+        ? accContext.settingsService
+        : new SettingsService(accountId);
 
-      const accId = accountService.getCurrentAccount().id;
-      const accountPath = dataPathService.accountPath(accId);
+      let villageIds: readonly string[];
+
+      if (accContext) {
+        villageIds = accContext.villageService.allVillages().map((v) => v.id);
+      } else {
+        const villagesPath = dataPathService.villagesPath(accountId);
+
+        const villagesFolder = zip.folder(villagesPath);
+
+        villageIds = villagesFolder
+          ? // Cannot read folders from zip so need to extract from absolute path
+            Object.values(villagesFolder.files).reduce((ids, x) => {
+              const suffix = x.name.slice(villagesPath.length);
+              const match = new RegExp(/\\(\d+)/).exec(suffix);
+              const id = match && match[1];
+
+              return id && !ids.includes(id) ? [...ids, id] : ids;
+            }, [] as string[])
+          : [];
+      }
+
+      const accountPath = dataPathService.accountPath(accountId);
 
       await updateSettings(
         zip,
@@ -186,19 +258,26 @@ class SettingsManagementService {
         },
       );
 
-      for (const village of villageService.allVillages()) {
+      for (const villageId of villageIds) {
         const {
           settings: villageSettingsPath,
           queue: villageQueuePath,
-        } = dataPathService.villagePath(accId, village.id);
+        } = dataPathService.villagePath(accountId, villageId);
 
-        const villageSettingsService = settingsService.village(village.id);
+        const villageSettingsService = settingsService.village(villageId);
 
         await updateSettings<QueuedBuilding[]>(
           zip,
           villageQueuePath,
           (buildings) => {
-            new BuildingQueueService(village.id).setQueue(buildings);
+            if (accContext) {
+              new BuildingQueueService(villageId).setQueue(buildings);
+            } else {
+              fileService.save(
+                dataPathService.villagePath(accountId, villageId).queue,
+                buildings,
+              );
+            }
           },
         );
 
@@ -211,7 +290,7 @@ class SettingsManagementService {
             villageSettingsService.autoBuild.update(newSettings);
             publishPayloadEvent(BotEvent.AutoBuildSettingsUpdated, {
               settings: newSettings,
-              villageId: village.id,
+              villageId,
             });
           },
         );
@@ -225,7 +304,7 @@ class SettingsManagementService {
             villageSettingsService.autoUnits.update(newSettings);
             publishPayloadEvent(BotEvent.AutoUnitsSettingsUpdated, {
               settings: newSettings,
-              villageId: village.id,
+              villageId,
             });
           },
         );
@@ -239,7 +318,7 @@ class SettingsManagementService {
             villageSettingsService.autoParty.update(newSettings);
             publishPayloadEvent(BotEvent.AutoPartySettingsUpdated, {
               settings: newSettings,
-              villageId: village.id,
+              villageId,
             });
           },
         );
@@ -250,12 +329,42 @@ class SettingsManagementService {
           villageSettingsService.general.update(newSettings);
           publishPayloadEvent(BotEvent.GeneralVillageSettingsUpdated, {
             settings: newSettings,
-            villageId: village.id,
+            villageId,
           });
         });
       }
-    }
-  };
+    });
+
+  public importGeneralSettings = (zipPath: string) =>
+    this.readZip(zipPath, async (zip) => {
+      await updateSettings(
+        zip,
+        DataPathService.generalPath(),
+        (generalSettings) => {
+          const newSettings = new GeneralSettings(generalSettings);
+
+          getGeneralSettingsService().update(newSettings);
+          publishPayloadEvent(BotEvent.GeneralSettingsUpdated, {
+            settings: newSettings,
+          });
+        },
+      );
+    });
+
+  public importAccounts = (zipPath: string) =>
+    this.readZip(zipPath, async (zip) => {
+      await updateSettings(zip, dataPathService.accountsPath(), (accounts) => {
+        const newAccounts = new AccountsData(accounts);
+
+        publishPayloadEvent(BotEvent.AccountsUpdated, {
+          accounts: newAccounts.accounts,
+        });
+        publishPayloadEvent(BotEvent.LastSignedAccountIdUpdated, {
+          lastSignedAccountId: newAccounts.lastSignedAccountId,
+        });
+        accountService.updateAccountsData(newAccounts);
+      });
+    });
 }
 
 export const settingsManagementService = new SettingsManagementService();
