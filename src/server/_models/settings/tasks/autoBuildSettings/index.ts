@@ -1,13 +1,22 @@
 import { mergeDefaults } from '../../../../../_shared/merge';
 import { PartialFields } from '../../../../../_shared/types/fields.type';
+import { DualQueuePreference } from '../../../../_types/graphql.type';
 import { CoolDown } from '../../../coolDown';
 import { Duration } from '../../../duration';
 import { AutoStorageSettings } from './autoStorageSettings';
 
+type DualQueueSettings = {
+  readonly allow: boolean;
+  readonly preference: DualQueuePreference;
+};
+
 export class AutoBuildSettings {
   readonly allow: boolean = true;
 
-  readonly allowDualQueue: boolean = true;
+  readonly dualQueue: DualQueueSettings = {
+    allow: true,
+    preference: DualQueuePreference.Resources,
+  };
 
   readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 7 }),

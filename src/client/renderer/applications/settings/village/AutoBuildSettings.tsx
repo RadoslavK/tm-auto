@@ -1,10 +1,12 @@
 import { Button } from '@material-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { getAllEnumValues } from '../../../../../_shared/enumUtils';
 import { updateQueryCache } from '../../../../../server/utils/graphql';
 import {
   AutoBuildSettings as AutoBuildSettingsModel,
   CoolDown as CoolDownModel,
+  DualQueuePreference,
   GetAutoBuildSettingsDocument,
   GetAutoBuildSettingsQuery,
   GetAutoBuildSettingsQueryVariables,
@@ -84,12 +86,15 @@ export const useAutoBuildSettings = (villageId: string) => {
   };
 };
 
-type Settings = Omit<AutoBuildSettingsModel, 'autoStorage'> & {
+type Settings = Omit<AutoBuildSettingsModel, 'autoStorage' | 'dualQueue'> & {
   readonly allowAutoGranary: boolean;
   readonly allowAutoWarehouse: boolean;
   readonly allowFreeSpots: boolean;
   readonly autoGranaryOverflowLevel: number;
   readonly autoWarehouseOverflowLevel: number;
+
+  readonly allowDualQueue: boolean;
+  readonly dualQueuePreference: DualQueuePreference;
 };
 
 const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
@@ -105,6 +110,7 @@ const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
         overflowLevel: autoWarehouseOverflowLevel,
       },
     },
+    dualQueue: { allow: allowDualQueue, preference: dualQueuePreference },
     ...otherSettings
   } = settings;
 
@@ -115,6 +121,8 @@ const getStateFromSettings = (settings: AutoBuildSettingsModel): Settings => {
     allowFreeSpots,
     autoGranaryOverflowLevel,
     autoWarehouseOverflowLevel,
+    allowDualQueue,
+    dualQueuePreference,
   };
 };
 
@@ -127,11 +135,17 @@ const getSettingsFromState = (
     allowFreeSpots,
     autoGranaryOverflowLevel,
     autoWarehouseOverflowLevel,
+    allowDualQueue,
+    dualQueuePreference,
     ...otherState
   } = state;
 
   return {
     ...otherState,
+    dualQueue: {
+      allow: allowDualQueue,
+      preference: dualQueuePreference,
+    },
     autoStorage: {
       allowFreeSpots,
       granary: {
@@ -217,6 +231,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     allowAutoGranary,
     allowAutoWarehouse,
     allowDualQueue,
+    dualQueuePreference,
     allowFreeSpots,
     autoCropFields,
     autoGranaryOverflowLevel,
@@ -248,6 +263,13 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     minValue: 0,
   });
 
+  const onPreferenceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
+
+    setState((prevState) => prevState && { ...prevState, [name]: value });
+    setHasChanges(true);
+  };
+
   return (
     <div>
       <Button
@@ -270,16 +292,35 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
       </div>
 
       {isRoman && (
-        <div>
-          <label htmlFor="allowDualQueue">Allow dual queue</label>
-          <input
-            checked={allowDualQueue}
-            id="allowDualQueue"
-            name="allowDualQueue"
-            onChange={onChange}
-            type="checkbox"
-          />
-        </div>
+        <>
+          <div>
+            <label htmlFor="allowDualQueue">Allow dual queue</label>
+            <input
+              checked={allowDualQueue}
+              id="allowDualQueue"
+              name="allowDualQueue"
+              onChange={onChange}
+              type="checkbox"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="dualQueuePreference">Dual queue preference</label>
+            <select
+              id="dualQueuePreference"
+              name="dualQueuePreference"
+              value={dualQueuePreference}
+              onChange={onPreferenceChange}>
+              {getAllEnumValues(DualQueuePreference).map((preference) => (
+                <option
+                  key={preference}
+                  value={preference}
+                  label={preference}
+                />
+              ))}
+            </select>
+          </div>
+        </>
       )}
 
       <div>

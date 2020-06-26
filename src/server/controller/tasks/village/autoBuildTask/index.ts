@@ -11,6 +11,7 @@ import { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildS
 import { Village } from '../../../../_models/village/village';
 import {
   ClaimHeroResourcesReason,
+  DualQueuePreference,
   TaskType,
 } from '../../../../_types/graphql.type';
 import { getAccountContext } from '../../../../accountContext';
@@ -60,7 +61,10 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
     const { queue } = this._village.buildings;
 
-    const { allowDualQueue, autoStorage } = this.settings();
+    const {
+      dualQueue: { allow: allowDualQueue, preference: dualQueuePreference },
+      autoStorage,
+    } = this.settings();
 
     const { buildingsToBuild } = await checkAutoStorage(
       this._village,
@@ -82,10 +86,17 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
     let finishedAt: Date | undefined;
     if (isRoman && allowDualQueue) {
-      await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
-      await this.startBuildingIfQueueIsFreeByType(
-        BuildingSpotType.Infrastructure,
-      );
+      if (dualQueuePreference === DualQueuePreference.Resources) {
+        await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
+        await this.startBuildingIfQueueIsFreeByType(
+          BuildingSpotType.Infrastructure,
+        );
+      } else {
+        await this.startBuildingIfQueueIsFreeByType(
+          BuildingSpotType.Infrastructure,
+        );
+        await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
+      }
 
       const fieldFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(
         BuildingSpotType.Fields,

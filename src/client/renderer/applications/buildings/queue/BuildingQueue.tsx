@@ -68,7 +68,7 @@ const useShouldSplitBuildingTimes = (): boolean => {
   const { tribe } = useGameInfo() || {};
   const { settings } = useAutoBuildSettings(villageId);
 
-  return tribe === Tribe.Romans && !!settings && settings.allowDualQueue;
+  return tribe === Tribe.Romans && !!settings && settings.dualQueue.allow;
 };
 
 export const BuildingQueue: React.FC<Props> = ({ className }) => {

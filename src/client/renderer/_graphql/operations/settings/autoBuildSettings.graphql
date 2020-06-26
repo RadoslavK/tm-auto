@@ -15,7 +15,10 @@ fragment AutoStorageSettings on AutoStorageSettings {
 
 fragment AutoBuildSettings on AutoBuildSettings {
   allow
-  allowDualQueue
+  dualQueue {
+    allow
+    preference
+  }
   coolDown {
     ...CoolDown
   }

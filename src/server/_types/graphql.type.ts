@@ -64,11 +64,11 @@ export type AutoBuildLogEntryContent = {
 export type AutoBuildSettings = {
   readonly __typename?: 'AutoBuildSettings';
   readonly allow: Scalars['Boolean'];
-  readonly allowDualQueue: Scalars['Boolean'];
   readonly coolDown: CoolDown;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
   readonly useHeroResources: Scalars['Boolean'];
+  readonly dualQueue: DualQueueSettings;
   readonly autoStorage: AutoStorageSettings;
 };
 
@@ -236,6 +236,22 @@ export type DequeueBuildingAtFieldInput = {
 export type DequeueBuildingInput = {
   readonly queueId: Scalars['ID'];
   readonly villageId: Scalars['ID'];
+};
+
+export enum DualQueuePreference {
+  Resources = 'Resources',
+  Infrastructure = 'Infrastructure'
+}
+
+export type DualQueueSettings = {
+  readonly __typename?: 'DualQueueSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly preference: DualQueuePreference;
+};
+
+export type DualQueueSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly preference: DualQueuePreference;
 };
 
 export type Duration = {
@@ -888,11 +904,11 @@ export type UpdateAutoAdventureSettingsInput = {
 
 export type UpdateAutoBuildSettingsInput = {
   readonly allow: Scalars['Boolean'];
-  readonly allowDualQueue: Scalars['Boolean'];
   readonly coolDown: CoolDownInput;
   readonly autoCropFields: Scalars['Boolean'];
   readonly minCrop: Scalars['Int'];
   readonly useHeroResources: Scalars['Boolean'];
+  readonly dualQueue: DualQueueSettingsInput;
   readonly autoStorage: UpdateAutoStorageSettingsInput;
 };
 
@@ -1076,6 +1092,8 @@ export type ResolversTypes = {
   AutoAdventureSettings: ResolverTypeWrapper<AutoAdventureSettings>;
   AdventureCriteria: AdventureCriteria;
   AutoBuildSettings: ResolverTypeWrapper<AutoBuildSettings>;
+  DualQueueSettings: ResolverTypeWrapper<DualQueueSettings>;
+  DualQueuePreference: DualQueuePreference;
   AutoStorageSettings: ResolverTypeWrapper<AutoStorageSettings>;
   AutoStorageOptionSettings: ResolverTypeWrapper<AutoStorageOptionSettings>;
   AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettings>;
@@ -1129,6 +1147,7 @@ export type ResolversTypes = {
   CoolDownInput: CoolDownInput;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
+  DualQueueSettingsInput: DualQueueSettingsInput;
   UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
   UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
@@ -1156,6 +1175,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   AutoAdventureSettings: AutoAdventureSettings;
   AutoBuildSettings: AutoBuildSettings;
+  DualQueueSettings: DualQueueSettings;
   AutoStorageSettings: AutoStorageSettings;
   AutoStorageOptionSettings: AutoStorageOptionSettings;
   AutoMentorSettings: AutoMentorSettings;
@@ -1202,6 +1222,7 @@ export type ResolversParentTypes = {
   CoolDownInput: CoolDownInput;
   UpdateAutoAdventureSettingsInput: UpdateAutoAdventureSettingsInput;
   UpdateAutoBuildSettingsInput: UpdateAutoBuildSettingsInput;
+  DualQueueSettingsInput: DualQueueSettingsInput;
   UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
   UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
@@ -1247,11 +1268,11 @@ export type AutoBuildLogEntryContentResolvers<ContextType = any, ParentType exte
 
 export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoBuildSettings'] = ResolversParentTypes['AutoBuildSettings']> = {
   allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  allowDualQueue: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   coolDown: Resolver<ResolversTypes['CoolDown'], ParentType, ContextType>;
   autoCropFields: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   minCrop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   useHeroResources: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  dualQueue: Resolver<ResolversTypes['DualQueueSettings'], ParentType, ContextType>;
   autoStorage: Resolver<ResolversTypes['AutoStorageSettings'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -1380,6 +1401,12 @@ export type CoolDownResolvers<ContextType = any, ParentType extends ResolversPar
 export type CoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Coords'] = ResolversParentTypes['Coords']> = {
   x: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   y: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type DualQueueSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['DualQueueSettings'] = ResolversParentTypes['DualQueueSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  preference: Resolver<ResolversTypes['DualQueuePreference'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1660,6 +1687,7 @@ export type Resolvers<ContextType = any> = {
   BuildingType: BuildingTypeResolvers;
   CoolDown: CoolDownResolvers<ContextType>;
   Coords: CoordsResolvers<ContextType>;
+  DualQueueSettings: DualQueueSettingsResolvers<ContextType>;
   Duration: DurationResolvers<ContextType>;
   GameInfo: GameInfoResolvers<ContextType>;
   GeneralSettings: GeneralSettingsResolvers<ContextType>;

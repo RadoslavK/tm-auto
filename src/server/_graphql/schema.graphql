@@ -38,11 +38,11 @@ type AutoBuildLogEntryContent {
 
 type AutoBuildSettings {
   allow: Boolean!
-  allowDualQueue: Boolean!
   coolDown: CoolDown!
   autoCropFields: Boolean!
   minCrop: Int!
   useHeroResources: Boolean!
+  dualQueue: DualQueueSettings!
   autoStorage: AutoStorageSettings!
 }
 
@@ -240,6 +240,21 @@ input DequeueBuildingAtFieldInput {
 input DequeueBuildingInput {
   queueId: ID!
   villageId: ID!
+}
+
+enum DualQueuePreference {
+  Resources
+  Infrastructure
+}
+
+type DualQueueSettings {
+  allow: Boolean!
+  preference: DualQueuePreference!
+}
+
+input DualQueueSettingsInput {
+  allow: Boolean!
+  preference: DualQueuePreference!
 }
 
 type Duration {
@@ -511,11 +526,11 @@ input UpdateAutoAdventureSettingsInput {
 
 input UpdateAutoBuildSettingsInput {
   allow: Boolean!
-  allowDualQueue: Boolean!
   coolDown: CoolDownInput!
   autoCropFields: Boolean!
   minCrop: Int!
   useHeroResources: Boolean!
+  dualQueue: DualQueueSettingsInput!
   autoStorage: UpdateAutoStorageSettingsInput!
 }
 
