@@ -1,6 +1,7 @@
 import { BuildingType } from '../_models/enums/buildingType';
 import { Tribe } from '../_models/enums/tribe';
 import { GraphQLResolveInfo } from 'graphql';
+import { AutoMentorSettings as AutoMentorSettingsModel } from '../_models/settings/autoMentorSettings';
 import { BuildingInProgress as BuildingInProgressModel } from '../_models/buildings/inProgress/buildingInProgress';
 import { BuildingSpot as BuildingSpotModel } from '../_models/buildings/spots/buildingSpot';
 import { Hero as HeroModel } from '../_models/hero/hero';
@@ -76,6 +77,7 @@ export type AutoMentorSettings = {
   readonly __typename?: 'AutoMentorSettings';
   readonly acceptTaskRewards: Scalars['Boolean'];
   readonly acceptDailyRewards: Scalars['Boolean'];
+  readonly completeTasks: CompleteTasksSettings;
 };
 
 export type AutoPartySettings = {
@@ -210,6 +212,19 @@ export type ClearQueueInput = {
   readonly villageId: Scalars['ID'];
 };
 
+export type CompleteTasksSettings = {
+  readonly __typename?: 'CompleteTasksSettings';
+  readonly allow: Scalars['Boolean'];
+  readonly taskIds: ReadonlyArray<Scalars['String']>;
+  readonly allowedTaskIds: ReadonlyArray<Scalars['String']>;
+};
+
+export type CompleteTasksSettingsInput = {
+  readonly allow: Scalars['Boolean'];
+  readonly taskIds: ReadonlyArray<Scalars['String']>;
+  readonly allowedTaskIds: ReadonlyArray<Scalars['String']>;
+};
+
 export type CoolDown = {
   readonly __typename?: 'CoolDown';
   readonly min: Duration;
@@ -339,7 +354,7 @@ export type Mutation = {
   readonly resetAccountSettings: AccountSettings;
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
-  readonly resetAutoMentorSettings: AutoMentorSettings;
+  readonly resetAutoMentorSettings: AutoMentorSettingsModel;
   readonly resetAutoPartySettings: AutoPartySettings;
   readonly resetAutoUnitsSettings: AutoUnitsSettings;
   readonly resetGeneralSettings: GeneralSettings;
@@ -358,7 +373,7 @@ export type Mutation = {
   readonly updateAccountSettings: AccountSettings;
   readonly updateAutoAdventureSettings: AutoAdventureSettings;
   readonly updateAutoBuildSettings: AutoBuildSettings;
-  readonly updateAutoMentorSettings: AutoMentorSettings;
+  readonly updateAutoMentorSettings: AutoMentorSettingsModel;
   readonly updateAutoPartySettings: AutoPartySettings;
   readonly updateAutoUnitsBuildingSettings: AutoUnitsSettings;
   readonly updateAutoUnitsSettings: AutoUnitsSettings;
@@ -594,7 +609,7 @@ export type Query = {
   readonly activeVillageId: Scalars['ID'];
   readonly autoAdventureSettings: AutoAdventureSettings;
   readonly autoBuildSettings: AutoBuildSettings;
-  readonly autoMentorSettings: AutoMentorSettings;
+  readonly autoMentorSettings: AutoMentorSettingsModel;
   readonly autoPartySettings: AutoPartySettings;
   readonly autoUnitsSettings: AutoUnitsSettings;
   readonly availableNewBuildingsTypes: ReadonlyArray<BuildingType>;
@@ -778,7 +793,7 @@ export type Subscription = {
   readonly actualBuildingLevelsUpdated: Maybe<Scalars['Boolean']>;
   readonly autoAdventureSettingsUpdated: AutoAdventureSettings;
   readonly autoBuildSettingsUpdated: AutoBuildSettings;
-  readonly autoMentorSettingsUpdated: AutoMentorSettings;
+  readonly autoMentorSettingsUpdated: AutoMentorSettingsModel;
   readonly autoPartySettingsUpdated: AutoPartySettings;
   readonly autoUnitsSettingsUpdated: AutoUnitsSettings;
   readonly botActivityChanged: Scalars['Boolean'];
@@ -915,6 +930,7 @@ export type UpdateAutoBuildSettingsInput = {
 export type UpdateAutoMentorSettingsInput = {
   readonly acceptTaskRewards: Scalars['Boolean'];
   readonly acceptDailyRewards: Scalars['Boolean'];
+  readonly completeTasks: CompleteTasksSettingsInput;
 };
 
 export type UpdateAutoPartySettingsInput = {
@@ -1096,7 +1112,8 @@ export type ResolversTypes = {
   DualQueuePreference: DualQueuePreference;
   AutoStorageSettings: ResolverTypeWrapper<AutoStorageSettings>;
   AutoStorageOptionSettings: ResolverTypeWrapper<AutoStorageOptionSettings>;
-  AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettings>;
+  AutoMentorSettings: ResolverTypeWrapper<AutoMentorSettingsModel>;
+  CompleteTasksSettings: ResolverTypeWrapper<CompleteTasksSettings>;
   AutoPartySettings: ResolverTypeWrapper<AutoPartySettings>;
   AutoUnitsSettings: ResolverTypeWrapper<AutoUnitsSettings>;
   AutoUnitsBuildingSettings: ResolverTypeWrapper<AutoUnitsBuildingSettings>;
@@ -1151,6 +1168,7 @@ export type ResolversTypes = {
   UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
   UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
+  CompleteTasksSettingsInput: CompleteTasksSettingsInput;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
   UpdateAutoUnitsBuildingSettingsInput: UpdateAutoUnitsBuildingSettingsInput;
   UpdateAutoUnitsSettingsInput: UpdateAutoUnitsSettingsInput;
@@ -1178,7 +1196,8 @@ export type ResolversParentTypes = {
   DualQueueSettings: DualQueueSettings;
   AutoStorageSettings: AutoStorageSettings;
   AutoStorageOptionSettings: AutoStorageOptionSettings;
-  AutoMentorSettings: AutoMentorSettings;
+  AutoMentorSettings: AutoMentorSettingsModel;
+  CompleteTasksSettings: CompleteTasksSettings;
   AutoPartySettings: AutoPartySettings;
   AutoUnitsSettings: AutoUnitsSettings;
   AutoUnitsBuildingSettings: AutoUnitsBuildingSettings;
@@ -1226,6 +1245,7 @@ export type ResolversParentTypes = {
   UpdateAutoStorageSettingsInput: UpdateAutoStorageSettingsInput;
   UpdateAutoStorageOptionSettingsInput: UpdateAutoStorageOptionSettingsInput;
   UpdateAutoMentorSettingsInput: UpdateAutoMentorSettingsInput;
+  CompleteTasksSettingsInput: CompleteTasksSettingsInput;
   UpdateAutoPartySettingsInput: UpdateAutoPartySettingsInput;
   UpdateAutoUnitsBuildingSettingsInput: UpdateAutoUnitsBuildingSettingsInput;
   UpdateAutoUnitsSettingsInput: UpdateAutoUnitsSettingsInput;
@@ -1280,6 +1300,7 @@ export type AutoBuildSettingsResolvers<ContextType = any, ParentType extends Res
 export type AutoMentorSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoMentorSettings'] = ResolversParentTypes['AutoMentorSettings']> = {
   acceptTaskRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   acceptDailyRewards: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  completeTasks: Resolver<ResolversTypes['CompleteTasksSettings'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1391,6 +1412,13 @@ export type BuildingSpotsResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type BuildingTypeResolvers = EnumResolverSignature<{ None: any, Wood: any, Clay: any, Iron: any, Crop: any, Sawmill: any, Brickyard: any, IronFoundry: any, GrainMill: any, Bakery: any, Warehouse: any, Granary: any, Blacksmith: any, Smithy: any, TournamentSquare: any, MainBuilding: any, RallyPoint: any, Marketplace: any, Embassy: any, Barracks: any, Stable: any, Workshop: any, Academy: any, Cranny: any, TownHall: any, Residence: any, Palace: any, Treasury: any, TradeOffice: any, GreatBarracks: any, GreatStable: any, CityWall: any, EarthWall: any, Palisade: any, StonemasonsLodge: any, Brewery: any, Trapper: any, HerosMansion: any, GreatWarehouse: any, GreatGranary: any, WonderOfTheWorld: any, HorseDrinkingTrough: any, StoneWall: any, MakeshiftWall: any, CommandCenter: any, Waterworks: any }, ResolversTypes['BuildingType']>;
+
+export type CompleteTasksSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['CompleteTasksSettings'] = ResolversParentTypes['CompleteTasksSettings']> = {
+  allow: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  taskIds: Resolver<ReadonlyArray<ResolversTypes['String']>, ParentType, ContextType>;
+  allowedTaskIds: Resolver<ReadonlyArray<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
 
 export type CoolDownResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoolDown'] = ResolversParentTypes['CoolDown']> = {
   min: Resolver<ResolversTypes['Duration'], ParentType, ContextType>;
@@ -1685,6 +1713,7 @@ export type Resolvers<ContextType = any> = {
   BuildingSpotLevel: BuildingSpotLevelResolvers<ContextType>;
   BuildingSpots: BuildingSpotsResolvers<ContextType>;
   BuildingType: BuildingTypeResolvers;
+  CompleteTasksSettings: CompleteTasksSettingsResolvers<ContextType>;
   CoolDown: CoolDownResolvers<ContextType>;
   Coords: CoordsResolvers<ContextType>;
   DualQueueSettings: DualQueueSettingsResolvers<ContextType>;

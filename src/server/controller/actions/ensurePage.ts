@@ -138,6 +138,12 @@ export const ensurePage = async (
   await validateUrl([path], exact);
 };
 
+export const ensurePageTab = async (path: string, tab: TabInformation) => {
+  await ensurePage(path);
+
+  await ensurePage(`${path}?${tab.name}=${tab.index}`);
+};
+
 export type TabInformation = {
   readonly index: number;
   readonly name: string;

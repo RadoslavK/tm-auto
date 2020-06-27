@@ -148,6 +148,58 @@ export const AutoMentorSettings: React.FC = () => {
           />
         </div>
       </div>
+      <div>
+        <label htmlFor="completeTasks.allow">Complete tasks</label>
+        <input
+          checked={state.completeTasks.allow}
+          id="completeTasks.allow"
+          onChange={(e) => {
+            const { checked } = e.target;
+
+            setState(
+              (prevState) =>
+                prevState && {
+                  ...prevState,
+                  completeTasks: {
+                    ...prevState.completeTasks,
+                    allow: checked,
+                  },
+                },
+            );
+            setHasChanges(true);
+          }}
+          type="checkbox"
+        />
+        {state.completeTasks.taskIds.map((taskId) => (
+          <div key={taskId}>
+            <label>{taskId}</label>
+            <input
+              type="checkbox"
+              checked={state.completeTasks.allowedTaskIds.includes(taskId)}
+              onChange={(e) => {
+                const allowed = e.target.checked;
+                setState(
+                  (prevState) =>
+                    prevState && {
+                      ...prevState,
+                      completeTasks: {
+                        ...prevState.completeTasks,
+                        allowedTaskIds: allowed
+                          ? prevState.completeTasks.allowedTaskIds.concat([
+                              taskId,
+                            ])
+                          : prevState.completeTasks.allowedTaskIds.filter(
+                              (x) => x !== taskId,
+                            ),
+                      },
+                    },
+                );
+                setHasChanges(true);
+              }}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

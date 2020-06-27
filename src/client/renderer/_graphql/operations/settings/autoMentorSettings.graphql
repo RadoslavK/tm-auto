@@ -1,6 +1,11 @@
 fragment AutoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
+  completeTasks {
+    allow
+    taskIds
+    allowedTaskIds
+  }
 }
 
 query GetAutoMentorSettings {

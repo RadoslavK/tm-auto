@@ -66,6 +66,8 @@ const generateResolverTypes = async (): Promise<void> => {
     ...baseConfig,
     mapperTypeSuffix: 'Model',
     mappers: {
+      AutoMentorSettings:
+        '../_models/settings/autoMentorSettings#AutoMentorSettings',
       BuildingInProgress:
         '../_models/buildings/inProgress/buildingInProgress#BuildingInProgress',
       BuildingSpot: '../_models/buildings/spots/buildingSpot#BuildingSpot',
@@ -77,8 +79,7 @@ const generateResolverTypes = async (): Promise<void> => {
 
   const typeReplacements = Object.entries(resolversConfig.mappers).reduce(
     (reduced, entry) => {
-      const original = entry[0];
-      const replacementPath = entry[1];
+      const [original, replacementPath] = entry;
 
       const match = /#(.*)/.exec(replacementPath);
 
@@ -86,7 +87,7 @@ const generateResolverTypes = async (): Promise<void> => {
         throw new Error(`Cant find match in the path: ${replacementPath}`);
       }
 
-      const mapperName = match[1];
+      const [, mapperName] = match;
 
       return {
         ...reduced,

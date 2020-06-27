@@ -1,5 +1,8 @@
 ## New features
 
+- Store context like village ids, speed, tribe
+    - so it can be parsed only once
+    - and can remove old villages on login and faster render UI etc
 - Building pre-conditions
   - For building/block
   - Useful for Roman/free order so the bot would skip certain buildings until the right time
@@ -14,7 +17,6 @@
   - min troop count to build at the same time. E.g. build at least 5 units or none.
 - Second village ref builder
 - Use gold for some tasks. settlers or residence when chasing 2nd village
-- automated mentor tasks.
 - scheduling task??? -> settle village etc
 - If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
 - Use video feature to speed up building construction

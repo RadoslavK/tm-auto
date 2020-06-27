@@ -6,4 +6,6 @@ export class GameInfo {
   public speed = 0;
 
   public tribe: Tribe = Tribe.Romans;
+
+  public ajaxToken: string = '';
 }

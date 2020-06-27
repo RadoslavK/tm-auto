@@ -2,32 +2,80 @@ import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
 import { TaskType } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
+import { completeTaskIds } from '../../constants/completeTaskIds';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward';
+import { changeVillageName } from '../actions/mentor/completeTasks/changeVillageName';
+import { createMarketOffer } from '../actions/mentor/completeTasks/createMarketOffer';
+import { openCulturePointsTab } from '../actions/mentor/completeTasks/openCulturePointsTab';
+import { openMap } from '../actions/mentor/completeTasks/openMap';
+import { openStatisticsPage } from '../actions/mentor/completeTasks/openStatisticsPage';
+import { openSurroundingReports } from '../actions/mentor/completeTasks/openSurroundingReports';
+import { raidOasis } from '../actions/mentor/completeTasks/raidOasis';
+import { readGoldAdvantanges } from '../actions/mentor/completeTasks/readGoldAdvantanges';
+import { readMessage } from '../actions/mentor/completeTasks/readMessage';
 import { updateMentorTasks } from '../actions/mentor/updateMentorTasks';
 import { BotTask } from '../taskEngine/botTaskEngine';
+
+type CompleteTask = () => Promise<boolean | void>;
+
+export const getCompleteTask = (
+  taskId: typeof completeTaskIds[number],
+): CompleteTask => {
+  switch (taskId) {
+    case 'World_01':
+      return openStatisticsPage;
+    case 'World_02':
+      return changeVillageName;
+    case 'World_05':
+      return openMap;
+    case 'World_06':
+    case 'World_06a':
+      return readMessage;
+    case 'World_11':
+      return openCulturePointsTab;
+    case 'World_13':
+      return openSurroundingReports;
+    case 'Economy_07':
+      return createMarketOffer;
+    case 'Battle_07':
+      return raidOasis;
+    case 'World_07':
+    case 'World_07a':
+      return readGoldAdvantanges;
+
+    default:
+      throw new Error(`No task action for quest id: ${taskId}`);
+  }
+};
 
 export class AutoMentorTask implements BotTask {
   private settings = (): AutoMentorSettings =>
     getAccountContext().settingsService.autoMentor.get();
 
   public allowExecution = (): boolean => {
-    const { acceptDailyRewards, acceptTaskRewards } = this.settings();
+    const {
+      acceptDailyRewards,
+      acceptTaskRewards,
+      completeTasks,
+    } = this.settings();
 
-    return acceptDailyRewards || acceptTaskRewards;
+    return (
+      acceptDailyRewards ||
+      acceptTaskRewards ||
+      (completeTasks.allow && !!completeTasks.allowedTaskIds.length)
+    );
   };
 
   public execute = async (): Promise<void> => {
-    const { acceptDailyRewards, acceptTaskRewards } = this.settings();
-
-    if (acceptTaskRewards) {
-      await this.acceptTaskRewards();
-    }
-    if (acceptDailyRewards) {
-      await this.acceptDailyRewards();
-    }
+    await this.completeAndAcceptTaskRewards();
+    await this.acceptDailyRewards();
   };
 
-  public acceptDailyRewards = async (): Promise<void> => {
+  private acceptDailyRewards = async (): Promise<void> => {
+    if (!this.settings().acceptDailyRewards) {
+      return;
+    }
+
     const page = await getPage();
 
     const dailyRewards = await page.$('#navigation .dailyQuests');
@@ -73,7 +121,13 @@ export class AutoMentorTask implements BotTask {
     ]);
   };
 
-  public acceptTaskRewards = async (): Promise<void> => {
+  private completeAndAcceptTaskRewards = async (): Promise<void> => {
+    const { completeTasks, acceptTaskRewards } = this.settings();
+
+    if (!completeTasks.allow || !acceptTaskRewards) {
+      return;
+    }
+
     let hadAutomatedTasks: boolean;
 
     do {
@@ -83,11 +137,32 @@ export class AutoMentorTask implements BotTask {
 
       for (const task of getAccountContext().mentorTasks) {
         if (!task.completed) {
+          if (
+            completeTasks.allow &&
+            completeTasks.allowedTaskIds.includes(task.id)
+          ) {
+            const action = getCompleteTask(
+              task.id as typeof completeTaskIds[number],
+            );
+
+            const result = await action();
+
+            if (result !== false) {
+              getAccountContext().logsService.logText(
+                `Completed mentor task: ${task.id}`,
+              );
+
+              hadAutomatedTasks = true;
+            }
+          }
+
           continue;
         }
 
-        await acceptTaskReward(task);
-        hadAutomatedTasks = true;
+        if (acceptTaskRewards) {
+          await acceptTaskReward(task);
+          hadAutomatedTasks = true;
+        }
       }
     } while (hadAutomatedTasks);
   };

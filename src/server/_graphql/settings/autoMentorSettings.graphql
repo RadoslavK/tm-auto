@@ -1,11 +1,25 @@
+type CompleteTasksSettings {
+  allow: Boolean!
+  taskIds: [String!]!
+  allowedTaskIds: [String!]!
+}
+
 type AutoMentorSettings {
   acceptTaskRewards: Boolean!
   acceptDailyRewards: Boolean!
+  completeTasks: CompleteTasksSettings!
+}
+
+input CompleteTasksSettingsInput {
+  allow: Boolean!
+  taskIds: [String!]!
+  allowedTaskIds: [String!]!
 }
 
 input UpdateAutoMentorSettingsInput {
   acceptTaskRewards: Boolean!
   acceptDailyRewards: Boolean!
+  completeTasks: CompleteTasksSettingsInput!
 }
 
 extend type Query {
