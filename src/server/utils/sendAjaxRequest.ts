@@ -2,10 +2,10 @@ import { getAccountContext } from '../accountContext';
 import { getPage } from '../browser/getPage';
 import { accountService } from '../services/accountService';
 
-export const sendAjaxRequest = async (
+export const sendAjaxRequest = async <T = any>(
   command: string,
   params: Record<string, string>,
-): Promise<any> => {
+): Promise<T> => {
   const page = await getPage();
 
   const {
@@ -13,7 +13,7 @@ export const sendAjaxRequest = async (
   } = getAccountContext();
   const account = accountService.getCurrentAccount();
 
-  return await page.evaluate(
+  const result = await page.evaluate(
     ({ account, ajaxToken, command, params }) => {
       const body = new URLSearchParams();
 
@@ -31,4 +31,6 @@ export const sendAjaxRequest = async (
     },
     { account, ajaxToken, command, params },
   );
+
+  return result.response.data;
 };

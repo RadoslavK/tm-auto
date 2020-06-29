@@ -1,0 +1,49 @@
+type OasisBonus {
+  wood: Int!
+  clay: Int!
+  iron: Int!
+  crop: Int!
+}
+
+type VillageTile {
+  coords: Coords!
+  type: String!
+  claimed: Boolean
+  distance: Float!
+  bonus: OasisBonus!
+}
+
+enum MapSearchState {
+  None
+  Scanning
+  Searching
+}
+
+extend type Query {
+  villageTileTypes: [String!]!
+  mapSearchState: MapSearchState!
+  mapScanProgress: Float!
+}
+
+input SearchMapOriginInput {
+  radius: Int!
+  x: Int!
+  y: Int!
+}
+
+input SearchMapInput {
+  types: [String!]!
+  origin: SearchMapOriginInput!
+  cropBonus: Int!
+}
+
+extend type Mutation {
+  searchMap(input: SearchMapInput!): [VillageTile!]!
+  scanWholeMap: Boolean
+  stopMapScan: Boolean
+}
+
+extend type Subscription {
+  mapSearchStateChanged: MapSearchState!
+  mapScanProgressUpdated: Float!
+}

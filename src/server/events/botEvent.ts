@@ -24,4 +24,7 @@ export enum BotEvent {
   QueuedUpdated = 'QueuedUpdated',
   VillageUpdated = 'VillageUpdated',
   VillagesUpdated = 'VillagesUpdated',
+
+  MapScanProgressUpdated = 'MapScanProgressUpdated',
+  MapSearchStateChanged = 'MapSearchStateChanged',
 }

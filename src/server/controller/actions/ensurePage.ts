@@ -1,4 +1,4 @@
-import { ElementHandle } from 'puppeteer-core';
+import { ElementHandle, Page } from 'puppeteer-core';
 
 import { TravianPath, getBuildingSpotPath } from '../../_enums/travianPath';
 import { getPage } from '../../browser/getPage';
@@ -123,8 +123,9 @@ const navigate = async (path: string, exact: boolean): Promise<void> => {
 export const ensurePage = async (
   path: string,
   exact = false,
+  existingPage?: Page,
 ): Promise<void> => {
-  const page = await getPage();
+  const page = existingPage || (await getPage());
   const url = page.url();
 
   const isAtUrl = (exact && url === path) || (!exact && url.includes(path));

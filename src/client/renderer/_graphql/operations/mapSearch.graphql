@@ -1,0 +1,46 @@
+#import ./misc.graphql
+
+query GetMapScanProgress {
+  mapScanProgress
+}
+
+query GetMapSearchState {
+  mapSearchState
+}
+
+query GetVillageTileTypes {
+  villageTileTypes
+}
+
+mutation SearchMap($input: SearchMapInput!) {
+  searchMap(input: $input) {
+    claimed
+    coords {
+      ...Coords
+    }
+    type
+    distance
+    bonus {
+      wood
+      clay
+      iron
+      crop
+    }
+  }
+}
+
+mutation ScanWholeMap {
+  scanWholeMap
+}
+
+mutation StopMapScan {
+  stopMapScan
+}
+
+subscription OnMapScanProgressUpdated {
+  mapScanProgressUpdated
+}
+
+subscription OnMapSearchStateChanged {
+  mapSearchStateChanged
+}

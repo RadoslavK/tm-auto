@@ -7,6 +7,7 @@ import { BuildingSpot as BuildingSpotModel } from '../_models/buildings/spots/bu
 import { Hero as HeroModel } from '../_models/hero/hero';
 import { Resources as ResourcesModel } from '../_models/misc/resources';
 import { TextLogEntryContent as TextLogEntryContentModel } from '../_models/logs/content/text';
+import { MapSearchVillageTile as MapSearchVillageTileModel } from '../_models/map/villageTile';
 export type Maybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -331,6 +332,12 @@ export type LogEntry = {
 
 export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
+export enum MapSearchState {
+  None = 'None',
+  Scanning = 'Scanning',
+  Searching = 'Searching'
+}
+
 export type Mutation = {
   readonly __typename?: 'Mutation';
   readonly clearQueue: Maybe<Scalars['Boolean']>;
@@ -362,6 +369,8 @@ export type Mutation = {
   readonly resetNextTaskExecution: Timestamp;
   readonly resetNextTasksExecution: Timestamp;
   readonly resetNextVillageTaskExecution: Timestamp;
+  readonly scanWholeMap: Maybe<Scalars['Boolean']>;
+  readonly searchMap: ReadonlyArray<VillageTile>;
   readonly setNextTaskExecution: Timestamp;
   readonly setNextTasksExecution: Timestamp;
   readonly setNextVillageTaskExecution: Timestamp;
@@ -369,6 +378,7 @@ export type Mutation = {
   readonly signOut: Maybe<Scalars['Boolean']>;
   readonly startBot: Maybe<Scalars['Boolean']>;
   readonly stopBot: Maybe<Scalars['Boolean']>;
+  readonly stopMapScan: Maybe<Scalars['Boolean']>;
   readonly updateAccount: UserAccount;
   readonly updateAccountSettings: AccountSettings;
   readonly updateAutoAdventureSettings: AutoAdventureSettings;
@@ -516,6 +526,11 @@ export type MutationResetNextVillageTaskExecutionArgs = {
 };
 
 
+export type MutationSearchMapArgs = {
+  input: SearchMapInput;
+};
+
+
 export type MutationSetNextTaskExecutionArgs = {
   task: TaskType;
   delay: DurationInput;
@@ -601,6 +616,14 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
+export type OasisBonus = {
+  readonly __typename?: 'OasisBonus';
+  readonly wood: Scalars['Int'];
+  readonly clay: Scalars['Int'];
+  readonly iron: Scalars['Int'];
+  readonly crop: Scalars['Int'];
+};
+
 export type Query = {
   readonly __typename?: 'Query';
   readonly account: UserAccount;
@@ -631,11 +654,14 @@ export type Query = {
   readonly isBotActive: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logEntries: ReadonlyArray<LogEntry>;
+  readonly mapScanProgress: Scalars['Float'];
+  readonly mapSearchState: MapSearchState;
   readonly nextTaskExecution: Timestamp;
   readonly nextTasksExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
   readonly unitInfo: UnitInfo;
   readonly village: Maybe<Village>;
+  readonly villageTileTypes: ReadonlyArray<Scalars['String']>;
   readonly villages: ReadonlyArray<Village>;
 };
 
@@ -785,6 +811,18 @@ export type Resources = {
   readonly total: Scalars['Int'];
 };
 
+export type SearchMapInput = {
+  readonly types: ReadonlyArray<Scalars['String']>;
+  readonly origin: SearchMapOriginInput;
+  readonly cropBonus: Scalars['Int'];
+};
+
+export type SearchMapOriginInput = {
+  readonly radius: Scalars['Int'];
+  readonly x: Scalars['Int'];
+  readonly y: Scalars['Int'];
+};
+
 export type Subscription = {
   readonly __typename?: 'Subscription';
   readonly accountSettingsUpdated: AccountSettings;
@@ -804,6 +842,8 @@ export type Subscription = {
   readonly heroInformationUpdated: HeroModel;
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
+  readonly mapScanProgressUpdated: Scalars['Float'];
+  readonly mapSearchStateChanged: MapSearchState;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextTasksExecutionChanged: Timestamp;
   readonly nextVillageTaskExecutionChanged: Timestamp;
@@ -1018,6 +1058,15 @@ export type VillageResources = {
   readonly production: ResourcesModel;
 };
 
+export type VillageTile = {
+  readonly __typename?: 'VillageTile';
+  readonly coords: Coords;
+  readonly type: Scalars['String'];
+  readonly claimed: Maybe<Scalars['Boolean']>;
+  readonly distance: Scalars['Float'];
+  readonly bonus: OasisBonus;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1153,12 +1202,18 @@ export type ResolversTypes = {
   AutoUnitsLogEntryContent: ResolverTypeWrapper<AutoUnitsLogEntryContent>;
   ResourceClaimLogEntryContent: ResolverTypeWrapper<Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversTypes['Resources'] }>;
   ClaimHeroResourcesReason: ClaimHeroResourcesReason;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  MapSearchState: MapSearchState;
   TaskType: TaskType;
   UnitInfo: ResolverTypeWrapper<UnitInfo>;
   Mutation: ResolverTypeWrapper<{}>;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
+  SearchMapInput: SearchMapInput;
+  SearchMapOriginInput: SearchMapOriginInput;
+  VillageTile: ResolverTypeWrapper<MapSearchVillageTileModel>;
+  OasisBonus: ResolverTypeWrapper<OasisBonus>;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1231,11 +1286,16 @@ export type ResolversParentTypes = {
   AutoBuildLogEntryContent: AutoBuildLogEntryContent;
   AutoUnitsLogEntryContent: AutoUnitsLogEntryContent;
   ResourceClaimLogEntryContent: Omit<ResourceClaimLogEntryContent, 'resources'> & { resources: ResolversParentTypes['Resources'] };
+  Float: Scalars['Float'];
   UnitInfo: UnitInfo;
   Mutation: {};
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
+  SearchMapInput: SearchMapInput;
+  SearchMapOriginInput: SearchMapOriginInput;
+  VillageTile: MapSearchVillageTileModel;
+  OasisBonus: OasisBonus;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1510,6 +1570,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   resetNextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationResetNextTaskExecutionArgs, 'task'>>;
   resetNextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   resetNextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationResetNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
+  scanWholeMap: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  searchMap: Resolver<ReadonlyArray<ResolversTypes['VillageTile']>, ParentType, ContextType, RequireFields<MutationSearchMapArgs, 'input'>>;
   setNextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextTaskExecutionArgs, 'task' | 'delay'>>;
   setNextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextTasksExecutionArgs, 'delay'>>;
   setNextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextVillageTaskExecutionArgs, 'villageId' | 'task' | 'delay'>>;
@@ -1517,6 +1579,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   signOut: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   startBot: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   stopBot: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  stopMapScan: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   updateAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType, RequireFields<MutationUpdateAccountArgs, 'id' | 'account'>>;
   updateAccountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType, RequireFields<MutationUpdateAccountSettingsArgs, 'settings'>>;
   updateAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoAdventureSettingsArgs, 'settings'>>;
@@ -1528,6 +1591,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateAutoUnitsUnitSettings: Resolver<ResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoUnitsUnitSettingsArgs, 'villageId' | 'settings'>>;
   updateGeneralSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralSettingsArgs, 'settings'>>;
   updateGeneralVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralVillageSettingsArgs, 'villageId' | 'settings'>>;
+};
+
+export type OasisBonusResolvers<ContextType = any, ParentType extends ResolversParentTypes['OasisBonus'] = ResolversParentTypes['OasisBonus']> = {
+  wood: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  clay: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  iron: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  crop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -1559,11 +1630,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   isBotActive: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastSignedAccountId: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
+  mapScanProgress: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  mapSearchState: Resolver<ResolversTypes['MapSearchState'], ParentType, ContextType>;
   nextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextTaskExecutionArgs, 'task'>>;
   nextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   nextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<QueryNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
   unitInfo: Resolver<ResolversTypes['UnitInfo'], ParentType, ContextType, RequireFields<QueryUnitInfoArgs, 'index'>>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType, RequireFields<QueryVillageArgs, 'villageId'>>;
+  villageTileTypes: Resolver<ReadonlyArray<ResolversTypes['String']>, ParentType, ContextType>;
   villages: Resolver<ReadonlyArray<ResolversTypes['Village']>, ParentType, ContextType>;
 };
 
@@ -1629,6 +1703,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
   lastSignedAccountIdUpdated: SubscriptionResolver<Maybe<ResolversTypes['String']>, "lastSignedAccountIdUpdated", ParentType, ContextType>;
   logEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "logEntryAdded", ParentType, ContextType>;
+  mapScanProgressUpdated: SubscriptionResolver<ResolversTypes['Float'], "mapScanProgressUpdated", ParentType, ContextType>;
+  mapSearchStateChanged: SubscriptionResolver<ResolversTypes['MapSearchState'], "mapSearchStateChanged", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
   nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;
   nextVillageTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextVillageTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextVillageTaskExecutionChangedArgs, 'villageId' | 'task'>>;
@@ -1692,6 +1768,15 @@ export type VillageResourcesResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type VillageTileResolvers<ContextType = any, ParentType extends ResolversParentTypes['VillageTile'] = ResolversParentTypes['VillageTile']> = {
+  coords: Resolver<ResolversTypes['Coords'], ParentType, ContextType>;
+  type: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  claimed: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  distance: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  bonus: Resolver<ResolversTypes['OasisBonus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type Resolvers<ContextType = any> = {
   AccountSettings: AccountSettingsResolvers<ContextType>;
   AutoAdventureSettings: AutoAdventureSettingsResolvers<ContextType>;
@@ -1725,6 +1810,7 @@ export type Resolvers<ContextType = any> = {
   LogEntry: LogEntryResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   Mutation: MutationResolvers<ContextType>;
+  OasisBonus: OasisBonusResolvers<ContextType>;
   Query: QueryResolvers<ContextType>;
   QueuedBuilding: QueuedBuildingResolvers<ContextType>;
   QueuedBuildingRange: QueuedBuildingRangeResolvers<ContextType>;
@@ -1741,6 +1827,7 @@ export type Resolvers<ContextType = any> = {
   VillageCapacity: VillageCapacityResolvers<ContextType>;
   VillageCrannyCapacity: VillageCrannyCapacityResolvers<ContextType>;
   VillageResources: VillageResourcesResolvers<ContextType>;
+  VillageTile: VillageTileResolvers<ContextType>;
 };
 
 

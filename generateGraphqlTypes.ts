@@ -74,6 +74,7 @@ const generateResolverTypes = async (): Promise<void> => {
       HeroInformation: '../_models/hero/hero#Hero',
       Resources: '../_models/misc/resources#Resources',
       TextLogEntryContent: '../_models/logs/content/text#TextLogEntryContent',
+      VillageTile: '../_models/map/villageTile#MapSearchVillageTile',
     },
   };
 

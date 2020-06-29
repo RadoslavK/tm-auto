@@ -8,4 +8,6 @@ export class GameInfo {
   public tribe: Tribe = Tribe.Romans;
 
   public ajaxToken: string = '';
+
+  public mapSize: number = 200;
 }

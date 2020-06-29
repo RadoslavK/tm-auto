@@ -1,5 +1,7 @@
 import path from 'path';
 
+import { accountService } from './accountService';
+
 type HeroSettingsPath = {
   readonly autoAdventure: string;
 };
@@ -28,10 +30,30 @@ type VillagePath = {
   readonly settings: VillageSettingsPath;
 };
 
+type ServerPath = {
+  readonly root: string;
+  readonly scannedSectors: string;
+  readonly scannedOasisTiles: string;
+  readonly scannedVillageTiles: string;
+};
+
 export class DataPathService {
   static generalPath = () => 'generalSettings.json';
 
   public accountsPath = () => 'accounts.json';
+
+  public serverPath = (accountId: string): ServerPath => {
+    const { server } = accountService.getAccountOrThrow(accountId);
+    const serverName = Buffer.from(server).toString('base64');
+    const root = path.join('server', serverName);
+
+    return {
+      root,
+      scannedSectors: path.join(root, 'scannedSectors.json'),
+      scannedVillageTiles: path.join(root, 'scannedVillageTiles.json'),
+      scannedOasisTiles: path.join(root, 'scannedOasisTiles.json'),
+    };
+  };
 
   public accountPath = (accountId: string): AccountPath => {
     const lPath = this.baseAccountPath(accountId);

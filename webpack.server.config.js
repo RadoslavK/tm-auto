@@ -28,6 +28,7 @@ module.exports = {
     'puppeteer-core',
     'puppeteer-extra',
     'puppeteer-extra-plugin-stealth',
+    'jsdom',
   ),
   mode: isDevelopment ? 'development' : 'production',
   module: {

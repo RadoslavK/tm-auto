@@ -27,8 +27,12 @@ const getChromeOptions = () => ({
 let browser: Browser | null;
 let page: Page | null;
 
-const initializePage = async (b: Browser): Promise<Page> => {
-  const lPage = await b.newPage();
+export const createPage = async (): Promise<Page> => {
+  if (!browser) {
+    browser = await puppeteer.launch(getChromeOptions());
+  }
+
+  const lPage = await browser.newPage();
 
   lPage.on('console', (consoleMessageObject) => {
     if (consoleMessageObject.type() !== 'warning') {
@@ -56,7 +60,7 @@ export const getPage = async (): Promise<Page> => {
 
   const pages = await browser.pages();
 
-  page = pages.length ? pages[0] : await initializePage(browser);
+  page = pages.length ? pages[0] : await createPage();
 
   return page;
 };

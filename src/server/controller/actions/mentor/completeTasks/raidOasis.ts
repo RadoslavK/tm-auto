@@ -18,6 +18,19 @@ const parseCenterCoords = (pageContent: string) => {
   return { x: match[1], y: match[2] };
 };
 
+const findFreeOasesInArea = async (x: string, y: string) => {
+  const { tiles } = await sendAjaxRequest<{ readonly tiles: any[] }>(
+    'mapPositionData',
+    {
+      'data[x]': x,
+      'data[y]': y,
+      'data[zoomLevel]': '1',
+    },
+  );
+
+  return tiles.filter((t: any) => t.title && t.title.includes('k.fo'));
+};
+
 export const raidOasis = async (): Promise<boolean> => {
   const { villageService } = getAccountContext();
 
@@ -77,17 +90,9 @@ export const raidOasis = async (): Promise<boolean> => {
   const content = await page.content();
   const centerCoords = parseCenterCoords(content);
 
-  const result = await sendAjaxRequest('mapPositionData', {
-    'data[x]': centerCoords.x,
-    'data[y]': centerCoords.y,
-    'data[zoomLevel]': '1',
-  });
+  const freeOases = await findFreeOasesInArea(centerCoords.x, centerCoords.y);
 
-  const freeOases = result.response.data.tiles.filter(
-    (t: { readonly title?: string }) => t.title && t.title.includes('k.fo'),
-  );
-
-  if (!freeOases) {
+  if (!freeOases.length) {
     throw new Error('Didnt find a free oasis');
   }
 

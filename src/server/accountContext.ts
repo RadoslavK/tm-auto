@@ -3,6 +3,8 @@ import { Hero } from './_models/hero/hero';
 import { MentorTask } from './_models/mentor/mentorTask';
 import { BuildingQueueService } from './services/buildingQueueService';
 import { LogsService } from './services/logsService';
+import { MapScanService } from './services/mapScan/mapScanService';
+import { MapSearchService } from './services/mapSearchService/mapSearchService';
 import { NextExecutionService } from './services/nextExecutionService';
 import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService';
@@ -16,6 +18,10 @@ export class AccountContext {
   public villageService: VillageService;
 
   public settingsService: SettingsService;
+
+  public mapScanService: MapScanService;
+
+  public mapSearchService: MapSearchService = new MapSearchService();
 
   public logsService: LogsService = new LogsService();
 
@@ -43,6 +49,7 @@ export class AccountContext {
   constructor(accountId: string) {
     this.villageService = new VillageService();
     this.settingsService = new SettingsService(accountId);
+    this.mapScanService = new MapScanService(accountId);
   }
 }
 

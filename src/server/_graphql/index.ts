@@ -10,6 +10,7 @@ import enumResolvers from './enums/enumResolvers';
 import gameInfoResolvers from './gameInfo/gameInfoResolvers';
 import heroResolvers from './hero/heroResolvers';
 import logsResolvers from './logs/logsResolvers';
+import mapSearchResolvers from './mapSearch/mapSearchResolvers';
 import miscResolvers from './misc/miscResolvers';
 import nextTaskExecutionResolvers from './nextTaskExecution/nextTaskExecutionResolvers';
 import queuedBuildingResolvers from './queuedBuilding/queuedBuildingResolvers';
@@ -35,6 +36,7 @@ export const loadResolvers = (): Resolvers =>
     gameInfoResolvers,
     heroResolvers,
     logsResolvers,
+    mapSearchResolvers,
     miscResolvers,
     nextTaskExecutionResolvers,
     queuedBuildingResolvers,

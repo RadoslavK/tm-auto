@@ -12,6 +12,7 @@
   "dependencies": {
     "puppeteer-core": "^4.0.0",
     "puppeteer-extra": "^3.1.9",
-    "puppeteer-extra-plugin-stealth": "^2.4.9"
+    "puppeteer-extra-plugin-stealth": "^2.4.9",
+    "jsdom": "^16.2.2"
   }
 }

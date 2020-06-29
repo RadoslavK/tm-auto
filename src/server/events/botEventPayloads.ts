@@ -8,7 +8,7 @@ import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings';
 import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings';
 import { Village } from '../_models/village/village';
-import { BotState, TaskType } from '../_types/graphql.type';
+import { BotState, MapSearchState, TaskType } from '../_types/graphql.type';
 import { UserAccount } from '../services/accountService';
 import { BotEvent } from './botEvent';
 
@@ -107,5 +107,13 @@ export type BotEventPayloads = {
 
   [BotEvent.VillagesUpdated]: {
     readonly villages: readonly Village[];
+  };
+
+  [BotEvent.MapScanProgressUpdated]: {
+    readonly scanProgress: number;
+  };
+
+  [BotEvent.MapSearchStateChanged]: {
+    readonly state: MapSearchState;
   };
 };

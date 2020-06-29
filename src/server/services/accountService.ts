@@ -135,6 +135,16 @@ class AccountService {
     return accounts.find((x) => x.id === accountId) || null;
   };
 
+  public getAccountOrThrow = (accountId: string): UserAccount => {
+    const acc = this.getAccount(accountId);
+
+    if (!acc) {
+      throw new Error(`Did not find account with id ${accountId}`);
+    }
+
+    return acc;
+  };
+
   public getCurrentAccount = (): UserAccount => {
     const accounts = this.getAccounts();
     const account = accounts.find((x) => x.id === this.currentAccountId);

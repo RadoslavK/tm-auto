@@ -326,6 +326,12 @@ type LogEntry {
 
 union LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent
 
+enum MapSearchState {
+  None
+  Scanning
+  Searching
+}
+
 type Mutation {
   createAccount(account: AccountInput!): UserAccount!
   updateAccount(id: ID!, account: AccountInput!): UserAccount!
@@ -334,6 +340,9 @@ type Mutation {
   signOut: Boolean
   startBot: Boolean
   stopBot: Boolean
+  searchMap(input: SearchMapInput!): [VillageTile!]!
+  scanWholeMap: Boolean
+  stopMapScan: Boolean
   setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
   setNextTasksExecution(delay: DurationInput!): Timestamp!
   setNextVillageTaskExecution(villageId: ID!, task: TaskType!, delay: DurationInput!): Timestamp!
@@ -376,6 +385,13 @@ type Mutation {
   refreshVillage(villageId: ID!): Boolean
 }
 
+type OasisBonus {
+  wood: Int!
+  clay: Int!
+  iron: Int!
+  crop: Int!
+}
+
 type Query {
   account(id: ID!): UserAccount!
   accounts: [UserAccount!]!
@@ -392,6 +408,9 @@ type Query {
   gameInfo: GameInfo!
   heroInformation: HeroInformation!
   logEntries: [LogEntry!]!
+  villageTileTypes: [String!]!
+  mapSearchState: MapSearchState!
+  mapScanProgress: Float!
   nextTasksExecution: Timestamp!
   nextTaskExecution(task: TaskType!): Timestamp!
   nextVillageTaskExecution(villageId: ID!, task: TaskType!): Timestamp!
@@ -452,6 +471,18 @@ type Resources {
   total: Int!
 }
 
+input SearchMapInput {
+  types: [String!]!
+  origin: SearchMapOriginInput!
+  cropBonus: Int!
+}
+
+input SearchMapOriginInput {
+  radius: Int!
+  x: Int!
+  y: Int!
+}
+
 type Subscription {
   accountsUpdated: [UserAccount!]!
   lastSignedAccountIdUpdated: String
@@ -461,6 +492,8 @@ type Subscription {
   botStateChanged: BotState!
   heroInformationUpdated: HeroInformation!
   logEntryAdded: LogEntry!
+  mapSearchStateChanged: MapSearchState!
+  mapScanProgressUpdated: Float!
   nextTasksExecutionChanged: Timestamp!
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
   nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
@@ -631,4 +664,12 @@ type VillageResources {
   amount: Resources!
   capacity: VillageCapacity!
   production: Resources!
+}
+
+type VillageTile {
+  coords: Coords!
+  type: String!
+  claimed: Boolean
+  distance: Float!
+  bonus: OasisBonus!
 }

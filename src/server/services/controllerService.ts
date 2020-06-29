@@ -18,7 +18,7 @@ import { updateBuildings } from '../controller/actions/buildings/updateBuildings
 import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
-import { initPlayerInfo } from '../controller/actions/player/initPlayerInfo';
+import { initGameInfo } from '../controller/actions/player/initGameInfo';
 import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo';
 import { refreshVillage } from '../controller/actions/village/refreshVillage';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
@@ -212,7 +212,7 @@ class ControllerService {
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();
       await updateNewOldVillages();
-      await initPlayerInfo();
+      await initGameInfo();
       await updateHeroInformation();
 
       const allVillages = getAccountContext().villageService.allVillages();

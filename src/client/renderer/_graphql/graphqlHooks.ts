@@ -340,6 +340,12 @@ export type LogEntry = {
 
 export type LogEntryContent = TextLogEntryContent | AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent;
 
+export enum MapSearchState {
+  None = 'None',
+  Scanning = 'Scanning',
+  Searching = 'Searching'
+}
+
 export type Mutation = {
   readonly clearQueue: Maybe<Scalars['Boolean']>;
   readonly createAccount: UserAccount;
@@ -370,6 +376,8 @@ export type Mutation = {
   readonly resetNextTaskExecution: Timestamp;
   readonly resetNextTasksExecution: Timestamp;
   readonly resetNextVillageTaskExecution: Timestamp;
+  readonly scanWholeMap: Maybe<Scalars['Boolean']>;
+  readonly searchMap: ReadonlyArray<VillageTile>;
   readonly setNextTaskExecution: Timestamp;
   readonly setNextTasksExecution: Timestamp;
   readonly setNextVillageTaskExecution: Timestamp;
@@ -377,6 +385,7 @@ export type Mutation = {
   readonly signOut: Maybe<Scalars['Boolean']>;
   readonly startBot: Maybe<Scalars['Boolean']>;
   readonly stopBot: Maybe<Scalars['Boolean']>;
+  readonly stopMapScan: Maybe<Scalars['Boolean']>;
   readonly updateAccount: UserAccount;
   readonly updateAccountSettings: AccountSettings;
   readonly updateAutoAdventureSettings: AutoAdventureSettings;
@@ -524,6 +533,11 @@ export type MutationResetNextVillageTaskExecutionArgs = {
 };
 
 
+export type MutationSearchMapArgs = {
+  input: SearchMapInput;
+};
+
+
 export type MutationSetNextTaskExecutionArgs = {
   task: TaskType;
   delay: DurationInput;
@@ -609,6 +623,13 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
+export type OasisBonus = {
+  readonly wood: Scalars['Int'];
+  readonly clay: Scalars['Int'];
+  readonly iron: Scalars['Int'];
+  readonly crop: Scalars['Int'];
+};
+
 export type Query = {
   readonly account: UserAccount;
   readonly accountSettings: AccountSettings;
@@ -639,12 +660,15 @@ export type Query = {
   readonly isBotActive: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logEntries: ReadonlyArray<LogEntry>;
+  readonly mapScanProgress: Scalars['Float'];
+  readonly mapSearchState: MapSearchState;
   readonly nextTaskExecution: Timestamp;
   readonly nextTasksExecution: Timestamp;
   readonly nextVillageTaskExecution: Timestamp;
   readonly selectedVillageId: Scalars['String'];
   readonly unitInfo: UnitInfo;
   readonly village: Maybe<Village>;
+  readonly villageTileTypes: ReadonlyArray<Scalars['String']>;
   readonly villages: ReadonlyArray<Village>;
 };
 
@@ -794,6 +818,18 @@ export type Resources = {
   readonly total: Scalars['Int'];
 };
 
+export type SearchMapInput = {
+  readonly types: ReadonlyArray<Scalars['String']>;
+  readonly origin: SearchMapOriginInput;
+  readonly cropBonus: Scalars['Int'];
+};
+
+export type SearchMapOriginInput = {
+  readonly radius: Scalars['Int'];
+  readonly x: Scalars['Int'];
+  readonly y: Scalars['Int'];
+};
+
 export type Subscription = {
   readonly accountSettingsUpdated: AccountSettings;
   readonly accountsUpdated: ReadonlyArray<UserAccount>;
@@ -812,6 +848,8 @@ export type Subscription = {
   readonly heroInformationUpdated: HeroInformation;
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
+  readonly mapScanProgressUpdated: Scalars['Float'];
+  readonly mapSearchStateChanged: MapSearchState;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextTasksExecutionChanged: Timestamp;
   readonly nextVillageTaskExecutionChanged: Timestamp;
@@ -1026,6 +1064,14 @@ export type VillageResources = {
   readonly production: Resources;
 };
 
+export type VillageTile = {
+  readonly coords: Coords;
+  readonly type: Scalars['String'];
+  readonly claimed: Maybe<Scalars['Boolean']>;
+  readonly distance: Scalars['Float'];
+  readonly bonus: OasisBonus;
+};
+
 export type GetCollapsedBuildingQueueRangesQueryVariables = Exact<{
   villageId: Scalars['ID'];
 }>;
@@ -1227,6 +1273,48 @@ export type OnLogEntryAddedSubscriptionVariables = Exact<{ [key: string]: never;
 
 
 export type OnLogEntryAddedSubscription = { readonly logEntryAdded: LogEntryFragment };
+
+export type GetMapScanProgressQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMapScanProgressQuery = { readonly mapScanProgress: number };
+
+export type GetMapSearchStateQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMapSearchStateQuery = { readonly mapSearchState: MapSearchState };
+
+export type GetVillageTileTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetVillageTileTypesQuery = { readonly villageTileTypes: ReadonlyArray<string> };
+
+export type SearchMapMutationVariables = Exact<{
+  input: SearchMapInput;
+}>;
+
+
+export type SearchMapMutation = { readonly searchMap: ReadonlyArray<{ readonly claimed: Maybe<boolean>, readonly type: string, readonly distance: number, readonly coords: CoordsFragment, readonly bonus: { readonly wood: number, readonly clay: number, readonly iron: number, readonly crop: number } }> };
+
+export type ScanWholeMapMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ScanWholeMapMutation = { readonly scanWholeMap: Maybe<boolean> };
+
+export type StopMapScanMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StopMapScanMutation = { readonly stopMapScan: Maybe<boolean> };
+
+export type OnMapScanProgressUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnMapScanProgressUpdatedSubscription = { readonly mapScanProgressUpdated: number };
+
+export type OnMapSearchStateChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnMapSearchStateChangedSubscription = { readonly mapSearchStateChanged: MapSearchState };
 
 export type TimestampFragment = { readonly totalSeconds: number };
 
@@ -2619,6 +2707,204 @@ export function useOnLogEntryAddedSubscription(baseOptions?: ApolloReactHooks.Su
       }
 export type OnLogEntryAddedSubscriptionHookResult = ReturnType<typeof useOnLogEntryAddedSubscription>;
 export type OnLogEntryAddedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnLogEntryAddedSubscription>;
+export const GetMapScanProgressDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMapScanProgress"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mapScanProgress"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useGetMapScanProgressQuery__
+ *
+ * To run a query within a React component, call `useGetMapScanProgressQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMapScanProgressQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMapScanProgressQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMapScanProgressQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMapScanProgressQuery, GetMapScanProgressQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMapScanProgressQuery, GetMapScanProgressQueryVariables>(GetMapScanProgressDocument, baseOptions);
+      }
+export function useGetMapScanProgressLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMapScanProgressQuery, GetMapScanProgressQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMapScanProgressQuery, GetMapScanProgressQueryVariables>(GetMapScanProgressDocument, baseOptions);
+        }
+export type GetMapScanProgressQueryHookResult = ReturnType<typeof useGetMapScanProgressQuery>;
+export type GetMapScanProgressLazyQueryHookResult = ReturnType<typeof useGetMapScanProgressLazyQuery>;
+export type GetMapScanProgressQueryResult = ApolloReactCommon.QueryResult<GetMapScanProgressQuery, GetMapScanProgressQueryVariables>;
+export const GetMapSearchStateDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMapSearchState"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mapSearchState"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useGetMapSearchStateQuery__
+ *
+ * To run a query within a React component, call `useGetMapSearchStateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMapSearchStateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMapSearchStateQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMapSearchStateQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMapSearchStateQuery, GetMapSearchStateQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMapSearchStateQuery, GetMapSearchStateQueryVariables>(GetMapSearchStateDocument, baseOptions);
+      }
+export function useGetMapSearchStateLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMapSearchStateQuery, GetMapSearchStateQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMapSearchStateQuery, GetMapSearchStateQueryVariables>(GetMapSearchStateDocument, baseOptions);
+        }
+export type GetMapSearchStateQueryHookResult = ReturnType<typeof useGetMapSearchStateQuery>;
+export type GetMapSearchStateLazyQueryHookResult = ReturnType<typeof useGetMapSearchStateLazyQuery>;
+export type GetMapSearchStateQueryResult = ApolloReactCommon.QueryResult<GetMapSearchStateQuery, GetMapSearchStateQueryVariables>;
+export const GetVillageTileTypesDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVillageTileTypes"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"villageTileTypes"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useGetVillageTileTypesQuery__
+ *
+ * To run a query within a React component, call `useGetVillageTileTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVillageTileTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVillageTileTypesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetVillageTileTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>(GetVillageTileTypesDocument, baseOptions);
+      }
+export function useGetVillageTileTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>(GetVillageTileTypesDocument, baseOptions);
+        }
+export type GetVillageTileTypesQueryHookResult = ReturnType<typeof useGetVillageTileTypesQuery>;
+export type GetVillageTileTypesLazyQueryHookResult = ReturnType<typeof useGetVillageTileTypesLazyQuery>;
+export type GetVillageTileTypesQueryResult = ApolloReactCommon.QueryResult<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>;
+export const SearchMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SearchMap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchMapInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchMap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimed"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"distance"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
+export type SearchMapMutationFn = ApolloReactCommon.MutationFunction<SearchMapMutation, SearchMapMutationVariables>;
+
+/**
+ * __useSearchMapMutation__
+ *
+ * To run a mutation, you first call `useSearchMapMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSearchMapMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [searchMapMutation, { data, loading, error }] = useSearchMapMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchMapMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SearchMapMutation, SearchMapMutationVariables>) {
+        return ApolloReactHooks.useMutation<SearchMapMutation, SearchMapMutationVariables>(SearchMapDocument, baseOptions);
+      }
+export type SearchMapMutationHookResult = ReturnType<typeof useSearchMapMutation>;
+export type SearchMapMutationResult = ApolloReactCommon.MutationResult<SearchMapMutation>;
+export type SearchMapMutationOptions = ApolloReactCommon.BaseMutationOptions<SearchMapMutation, SearchMapMutationVariables>;
+export const ScanWholeMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ScanWholeMap"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scanWholeMap"},"arguments":[],"directives":[]}]}}]};
+export type ScanWholeMapMutationFn = ApolloReactCommon.MutationFunction<ScanWholeMapMutation, ScanWholeMapMutationVariables>;
+
+/**
+ * __useScanWholeMapMutation__
+ *
+ * To run a mutation, you first call `useScanWholeMapMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useScanWholeMapMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [scanWholeMapMutation, { data, loading, error }] = useScanWholeMapMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useScanWholeMapMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ScanWholeMapMutation, ScanWholeMapMutationVariables>) {
+        return ApolloReactHooks.useMutation<ScanWholeMapMutation, ScanWholeMapMutationVariables>(ScanWholeMapDocument, baseOptions);
+      }
+export type ScanWholeMapMutationHookResult = ReturnType<typeof useScanWholeMapMutation>;
+export type ScanWholeMapMutationResult = ApolloReactCommon.MutationResult<ScanWholeMapMutation>;
+export type ScanWholeMapMutationOptions = ApolloReactCommon.BaseMutationOptions<ScanWholeMapMutation, ScanWholeMapMutationVariables>;
+export const StopMapScanDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"StopMapScan"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stopMapScan"},"arguments":[],"directives":[]}]}}]};
+export type StopMapScanMutationFn = ApolloReactCommon.MutationFunction<StopMapScanMutation, StopMapScanMutationVariables>;
+
+/**
+ * __useStopMapScanMutation__
+ *
+ * To run a mutation, you first call `useStopMapScanMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopMapScanMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [stopMapScanMutation, { data, loading, error }] = useStopMapScanMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStopMapScanMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StopMapScanMutation, StopMapScanMutationVariables>) {
+        return ApolloReactHooks.useMutation<StopMapScanMutation, StopMapScanMutationVariables>(StopMapScanDocument, baseOptions);
+      }
+export type StopMapScanMutationHookResult = ReturnType<typeof useStopMapScanMutation>;
+export type StopMapScanMutationResult = ApolloReactCommon.MutationResult<StopMapScanMutation>;
+export type StopMapScanMutationOptions = ApolloReactCommon.BaseMutationOptions<StopMapScanMutation, StopMapScanMutationVariables>;
+export const OnMapScanProgressUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnMapScanProgressUpdated"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mapScanProgressUpdated"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useOnMapScanProgressUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useOnMapScanProgressUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnMapScanProgressUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnMapScanProgressUpdatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnMapScanProgressUpdatedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnMapScanProgressUpdatedSubscription, OnMapScanProgressUpdatedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnMapScanProgressUpdatedSubscription, OnMapScanProgressUpdatedSubscriptionVariables>(OnMapScanProgressUpdatedDocument, baseOptions);
+      }
+export type OnMapScanProgressUpdatedSubscriptionHookResult = ReturnType<typeof useOnMapScanProgressUpdatedSubscription>;
+export type OnMapScanProgressUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnMapScanProgressUpdatedSubscription>;
+export const OnMapSearchStateChangedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnMapSearchStateChanged"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mapSearchStateChanged"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useOnMapSearchStateChangedSubscription__
+ *
+ * To run a query within a React component, call `useOnMapSearchStateChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnMapSearchStateChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnMapSearchStateChangedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnMapSearchStateChangedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnMapSearchStateChangedSubscription, OnMapSearchStateChangedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnMapSearchStateChangedSubscription, OnMapSearchStateChangedSubscriptionVariables>(OnMapSearchStateChangedDocument, baseOptions);
+      }
+export type OnMapSearchStateChangedSubscriptionHookResult = ReturnType<typeof useOnMapSearchStateChangedSubscription>;
+export type OnMapSearchStateChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnMapSearchStateChangedSubscription>;
 export const NextTaskExecutionDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"NextTaskExecution"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"task"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TaskType"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextTaskExecution"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"task"},"value":{"kind":"Variable","name":{"kind":"Name","value":"task"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Timestamp"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Timestamp"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Timestamp"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalSeconds"},"arguments":[],"directives":[]}]}}]};
 
 /**
