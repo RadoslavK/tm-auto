@@ -9,9 +9,9 @@ export const SignOut: React.FC = React.forwardRef<any, any>((_pros, ref) => {
 
   const history = useHistory();
 
-  const onSignOut = (): void => {
+  const onSignOut = async () => {
+    await signOut();
     history.push('/');
-    signOut();
   };
 
   return (

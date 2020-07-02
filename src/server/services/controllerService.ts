@@ -250,9 +250,9 @@ class ControllerService {
   };
 
   public signOut = async (): Promise<void> => {
+    this.setState(BotState.None);
     resetAccountContext();
     accountService.setCurrentAccountId(null);
-    this.setState(BotState.None);
   };
 
   public start = async (): Promise<void> => {
