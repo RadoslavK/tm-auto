@@ -32,7 +32,7 @@ export const useAccounts = () => {
     }),
   });
 
-  return queryLoading || !queryData ? [] : queryData.accounts;
+  return queryLoading || !queryData ? null : queryData.accounts;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -96,6 +96,10 @@ export const Accounts: React.FC<Props> = ({
   const accounts = useAccounts();
 
   useEffect(() => {
+    if (!accounts) {
+      return;
+    }
+
     if (!selectedId && accounts.length) {
       onAccountChanged(accounts[0].id);
     } else if (
@@ -121,7 +125,7 @@ export const Accounts: React.FC<Props> = ({
         input={<BootstrapInput />}
         onChange={onOptionChanged}
         value={selectedId || ''}>
-        {accounts.map((account) => (
+        {accounts?.map((account) => (
           <option key={account.id} value={account.id}>
             {account.username} @ {getServerShortcut(account.server)}
           </option>

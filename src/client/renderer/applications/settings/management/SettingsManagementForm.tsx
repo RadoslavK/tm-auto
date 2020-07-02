@@ -16,7 +16,7 @@ import { useAccounts } from '../../signIn/components/Accounts';
 
 export const SettingsManagementForm: React.FC = () => {
   const botState = useBotState();
-  const accounts = useAccounts();
+  const accounts = useAccounts() || [];
   const [
     getCurrentAccount,
     { data: accountData, loading: accountLoading },

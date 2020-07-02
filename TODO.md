@@ -110,6 +110,7 @@
 - Switching to buildings tab takes a long time when queue is long
 - remove loading state for queries where possible. We can reuse old queue values so its faster renderer? so just check data presence
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
+- Kill page when afk?
 
 ## Error Handling / Fault Tolerance
 
