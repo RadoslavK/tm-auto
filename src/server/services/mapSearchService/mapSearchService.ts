@@ -72,7 +72,7 @@ export class MapSearchService {
     types: readonly string[],
     origin: Origin,
     cropBonus: number,
-  ): Promise<MapSearchVillageTile[]> => {
+  ) => {
     const { mapScanService } = getAccountContext();
 
     this._state = MapSearchState.Scanning;
@@ -159,10 +159,12 @@ export class MapSearchService {
 
     this._state = MapSearchState.None;
 
+    publishPayloadEvent(BotEvent.MapSearchFinished, {
+      tiles: result,
+    });
+
     publishPayloadEvent(BotEvent.MapSearchStateChanged, {
       state: MapSearchState.None,
     });
-
-    return result;
   };
 }

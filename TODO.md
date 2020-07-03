@@ -90,6 +90,7 @@
 
 ## QoL
 
+- Store map search result and filter in GraphQL local cache.
 - Handle UI updates. Like prevent incorrect interactions. When clicking something and it does not get result from server immediatly.
 - Use new icons for resources, buildings, nations... Maybe have 2 versions for buildings
 - Use some big toggle instead of Checkboxes for allow

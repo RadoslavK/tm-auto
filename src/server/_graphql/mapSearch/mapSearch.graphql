@@ -31,12 +31,13 @@ input SearchMapInput {
 }
 
 extend type Mutation {
-  searchMap(input: SearchMapInput!): [VillageTile!]!
+  searchMap(input: SearchMapInput!): Boolean
   scanWholeMap: Boolean
   stopMapScan: Boolean
 }
 
 extend type Subscription {
   mapSearchStateChanged: MapSearchState!
+  mapSearchFinished: [VillageTile!]!
   mapScanProgressUpdated: Float!
 }

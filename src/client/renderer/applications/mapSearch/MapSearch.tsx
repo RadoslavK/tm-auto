@@ -6,14 +6,15 @@ import {
   OnMapScanProgressUpdatedDocument,
   OnMapScanProgressUpdatedSubscription,
   OnMapScanProgressUpdatedSubscriptionVariables,
+  OnMapSearchFinishedSubscription,
   OnMapSearchStateChangedDocument,
   OnMapSearchStateChangedSubscription,
   OnMapSearchStateChangedSubscriptionVariables,
-  SearchMapMutation,
   VillageTile,
   useGetMapScanProgressQuery,
   useGetMapSearchStateQuery,
   useGetVillageTileTypesQuery,
+  useOnMapSearchFinishedSubscription,
   useScanWholeMapMutation,
   useSearchMapMutation,
   useStopMapScanMutation,
@@ -93,7 +94,7 @@ export const MapSearch: React.FC = () => {
   const [order, setOrder] = useState<SortOrder>(SortOrder.Asc);
   const [cropBonus, setCropBonus] = useState(0);
   const [villageTiles, setVillageTiles] = useState<
-    SearchMapMutation['searchMap']
+    OnMapSearchFinishedSubscription['mapSearchFinished']
   >([]);
   const [villageTypes, setVillageTypes] = useState<readonly string[]>([]);
   const [x, setX] = useState(0);
@@ -103,11 +104,7 @@ export const MapSearch: React.FC = () => {
   const villageTileTypes = useVillageTileTypes();
   const scanProgress = useScanProgress();
   const searchState = useMapSearchState();
-  const [searchMap] = useSearchMapMutation({
-    onCompleted: ({ searchMap }) => {
-      setVillageTiles(searchMap);
-    },
-  });
+  const [searchMap] = useSearchMapMutation();
   const [scanWholeMap] = useScanWholeMapMutation();
   const [stopScan] = useStopMapScanMutation();
 
@@ -115,6 +112,16 @@ export const MapSearch: React.FC = () => {
     () => getSortedTiles(villageTiles, sortBy, order),
     [villageTiles, sortBy, order],
   );
+
+  useOnMapSearchFinishedSubscription({
+    onSubscriptionData: ({ subscriptionData: { data } }) => {
+      if (!data) {
+        return;
+      }
+
+      setVillageTiles(data.mapSearchFinished);
+    },
+  });
 
   const onSearchMap = () =>
     searchMap({

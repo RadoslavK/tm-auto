@@ -370,7 +370,7 @@ export type Mutation = {
   readonly resetNextTasksExecution: Timestamp;
   readonly resetNextVillageTaskExecution: Timestamp;
   readonly scanWholeMap: Maybe<Scalars['Boolean']>;
-  readonly searchMap: ReadonlyArray<VillageTile>;
+  readonly searchMap: Maybe<Scalars['Boolean']>;
   readonly setNextTaskExecution: Timestamp;
   readonly setNextTasksExecution: Timestamp;
   readonly setNextVillageTaskExecution: Timestamp;
@@ -835,6 +835,7 @@ export type Subscription = {
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
   readonly mapScanProgressUpdated: Scalars['Float'];
+  readonly mapSearchFinished: ReadonlyArray<VillageTile>;
   readonly mapSearchStateChanged: MapSearchState;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextTasksExecutionChanged: Timestamp;
@@ -1204,7 +1205,6 @@ export type ResolversTypes = {
   EnqueueBuildingInput: EnqueueBuildingInput;
   SearchMapInput: SearchMapInput;
   SearchMapOriginInput: SearchMapOriginInput;
-  VillageTile: ResolverTypeWrapper<MapSearchVillageTileModel>;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1222,6 +1222,7 @@ export type ResolversTypes = {
   UpdateGeneralSettingsInput: UpdateGeneralSettingsInput;
   UpdateGeneralVillageSettingsInput: UpdateGeneralVillageSettingsInput;
   Subscription: ResolverTypeWrapper<{}>;
+  VillageTile: ResolverTypeWrapper<MapSearchVillageTileModel>;
   TimestampInput: TimestampInput;
   ClearQueueInput: ClearQueueInput;
 };
@@ -1285,7 +1286,6 @@ export type ResolversParentTypes = {
   EnqueueBuildingInput: EnqueueBuildingInput;
   SearchMapInput: SearchMapInput;
   SearchMapOriginInput: SearchMapOriginInput;
-  VillageTile: MapSearchVillageTileModel;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1303,6 +1303,7 @@ export type ResolversParentTypes = {
   UpdateGeneralSettingsInput: UpdateGeneralSettingsInput;
   UpdateGeneralVillageSettingsInput: UpdateGeneralVillageSettingsInput;
   Subscription: {};
+  VillageTile: MapSearchVillageTileModel;
   TimestampInput: TimestampInput;
   ClearQueueInput: ClearQueueInput;
 };
@@ -1561,7 +1562,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   resetNextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   resetNextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationResetNextVillageTaskExecutionArgs, 'villageId' | 'task'>>;
   scanWholeMap: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  searchMap: Resolver<ReadonlyArray<ResolversTypes['VillageTile']>, ParentType, ContextType, RequireFields<MutationSearchMapArgs, 'input'>>;
+  searchMap: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSearchMapArgs, 'input'>>;
   setNextTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextTaskExecutionArgs, 'task' | 'delay'>>;
   setNextTasksExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextTasksExecutionArgs, 'delay'>>;
   setNextVillageTaskExecution: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType, RequireFields<MutationSetNextVillageTaskExecutionArgs, 'villageId' | 'task' | 'delay'>>;
@@ -1686,6 +1687,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   lastSignedAccountIdUpdated: SubscriptionResolver<Maybe<ResolversTypes['String']>, "lastSignedAccountIdUpdated", ParentType, ContextType>;
   logEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "logEntryAdded", ParentType, ContextType>;
   mapScanProgressUpdated: SubscriptionResolver<ResolversTypes['Float'], "mapScanProgressUpdated", ParentType, ContextType>;
+  mapSearchFinished: SubscriptionResolver<ReadonlyArray<ResolversTypes['VillageTile']>, "mapSearchFinished", ParentType, ContextType>;
   mapSearchStateChanged: SubscriptionResolver<ResolversTypes['MapSearchState'], "mapSearchStateChanged", ParentType, ContextType>;
   nextTaskExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTaskExecutionChanged", ParentType, ContextType, RequireFields<SubscriptionNextTaskExecutionChangedArgs, 'task'>>;
   nextTasksExecutionChanged: SubscriptionResolver<ResolversTypes['Timestamp'], "nextTasksExecutionChanged", ParentType, ContextType>;

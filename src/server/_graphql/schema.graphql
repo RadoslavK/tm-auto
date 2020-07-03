@@ -340,7 +340,7 @@ type Mutation {
   signOut: Boolean
   startBot: Boolean
   stopBot: Boolean
-  searchMap(input: SearchMapInput!): [VillageTile!]!
+  searchMap(input: SearchMapInput!): Boolean
   scanWholeMap: Boolean
   stopMapScan: Boolean
   setNextTaskExecution(task: TaskType!, delay: DurationInput!): Timestamp!
@@ -486,6 +486,7 @@ type Subscription {
   heroInformationUpdated: HeroInformation!
   logEntryAdded: LogEntry!
   mapSearchStateChanged: MapSearchState!
+  mapSearchFinished: [VillageTile!]!
   mapScanProgressUpdated: Float!
   nextTasksExecutionChanged: Timestamp!
   nextTaskExecutionChanged(task: TaskType!): Timestamp!

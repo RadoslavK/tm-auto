@@ -27,4 +27,5 @@ export enum BotEvent {
 
   MapScanProgressUpdated = 'MapScanProgressUpdated',
   MapSearchStateChanged = 'MapSearchStateChanged',
+  MapSearchFinished = 'MapSearchFinished',
 }

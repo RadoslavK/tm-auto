@@ -1,4 +1,5 @@
 import { LogEntry } from '../_models/logs/logEntry';
+import { MapSearchVillageTile } from '../_models/map/villageTile';
 import { AccountSettings } from '../_models/settings/accountSettings';
 import { AutoMentorSettings } from '../_models/settings/autoMentorSettings';
 import { GeneralSettings } from '../_models/settings/generalSettings';
@@ -115,5 +116,9 @@ export type BotEventPayloads = {
 
   [BotEvent.MapSearchStateChanged]: {
     readonly state: MapSearchState;
+  };
+
+  [BotEvent.MapSearchFinished]: {
+    readonly tiles: readonly MapSearchVillageTile[];
   };
 };

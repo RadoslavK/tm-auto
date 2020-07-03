@@ -13,15 +13,7 @@ query GetVillageTileTypes {
 }
 
 mutation SearchMap($input: SearchMapInput!) {
-  searchMap(input: $input) {
-    claimed
-    coords {
-      ...Coords
-    }
-    type
-    distance
-    cropBonus
-  }
+  searchMap(input: $input)
 }
 
 mutation ScanWholeMap {
@@ -38,4 +30,16 @@ subscription OnMapScanProgressUpdated {
 
 subscription OnMapSearchStateChanged {
   mapSearchStateChanged
+}
+
+subscription OnMapSearchFinished {
+  mapSearchFinished {
+    claimed
+    coords {
+      ...Coords
+    }
+    cropBonus
+    distance
+    type
+  }
 }

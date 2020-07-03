@@ -377,7 +377,7 @@ export type Mutation = {
   readonly resetNextTasksExecution: Timestamp;
   readonly resetNextVillageTaskExecution: Timestamp;
   readonly scanWholeMap: Maybe<Scalars['Boolean']>;
-  readonly searchMap: ReadonlyArray<VillageTile>;
+  readonly searchMap: Maybe<Scalars['Boolean']>;
   readonly setNextTaskExecution: Timestamp;
   readonly setNextTasksExecution: Timestamp;
   readonly setNextVillageTaskExecution: Timestamp;
@@ -842,6 +842,7 @@ export type Subscription = {
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
   readonly mapScanProgressUpdated: Scalars['Float'];
+  readonly mapSearchFinished: ReadonlyArray<VillageTile>;
   readonly mapSearchStateChanged: MapSearchState;
   readonly nextTaskExecutionChanged: Timestamp;
   readonly nextTasksExecutionChanged: Timestamp;
@@ -1287,7 +1288,7 @@ export type SearchMapMutationVariables = Exact<{
 }>;
 
 
-export type SearchMapMutation = { readonly searchMap: ReadonlyArray<{ readonly claimed: Maybe<boolean>, readonly type: string, readonly distance: number, readonly cropBonus: number, readonly coords: CoordsFragment }> };
+export type SearchMapMutation = { readonly searchMap: Maybe<boolean> };
 
 export type ScanWholeMapMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1308,6 +1309,11 @@ export type OnMapSearchStateChangedSubscriptionVariables = Exact<{ [key: string]
 
 
 export type OnMapSearchStateChangedSubscription = { readonly mapSearchStateChanged: MapSearchState };
+
+export type OnMapSearchFinishedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnMapSearchFinishedSubscription = { readonly mapSearchFinished: ReadonlyArray<{ readonly claimed: Maybe<boolean>, readonly cropBonus: number, readonly distance: number, readonly type: string, readonly coords: CoordsFragment }> };
 
 export type TimestampFragment = { readonly totalSeconds: number };
 
@@ -2778,7 +2784,7 @@ export function useGetVillageTileTypesLazyQuery(baseOptions?: ApolloReactHooks.L
 export type GetVillageTileTypesQueryHookResult = ReturnType<typeof useGetVillageTileTypesQuery>;
 export type GetVillageTileTypesLazyQueryHookResult = ReturnType<typeof useGetVillageTileTypesLazyQuery>;
 export type GetVillageTileTypesQueryResult = ApolloReactCommon.QueryResult<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>;
-export const SearchMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SearchMap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchMapInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchMap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimed"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"distance"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"cropBonus"},"arguments":[],"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
+export const SearchMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SearchMap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchMapInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchMap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[]}]}}]};
 export type SearchMapMutationFn = ApolloReactCommon.MutationFunction<SearchMapMutation, SearchMapMutationVariables>;
 
 /**
@@ -2898,6 +2904,28 @@ export function useOnMapSearchStateChangedSubscription(baseOptions?: ApolloReact
       }
 export type OnMapSearchStateChangedSubscriptionHookResult = ReturnType<typeof useOnMapSearchStateChangedSubscription>;
 export type OnMapSearchStateChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnMapSearchStateChangedSubscription>;
+export const OnMapSearchFinishedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnMapSearchFinished"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mapSearchFinished"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimed"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"cropBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"distance"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useOnMapSearchFinishedSubscription__
+ *
+ * To run a query within a React component, call `useOnMapSearchFinishedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnMapSearchFinishedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnMapSearchFinishedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnMapSearchFinishedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnMapSearchFinishedSubscription, OnMapSearchFinishedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnMapSearchFinishedSubscription, OnMapSearchFinishedSubscriptionVariables>(OnMapSearchFinishedDocument, baseOptions);
+      }
+export type OnMapSearchFinishedSubscriptionHookResult = ReturnType<typeof useOnMapSearchFinishedSubscription>;
+export type OnMapSearchFinishedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnMapSearchFinishedSubscription>;
 export const NextTaskExecutionDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"NextTaskExecution"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"task"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TaskType"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nextTaskExecution"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"task"},"value":{"kind":"Variable","name":{"kind":"Name","value":"task"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Timestamp"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Timestamp"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Timestamp"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalSeconds"},"arguments":[],"directives":[]}]}}]};
 
 /**

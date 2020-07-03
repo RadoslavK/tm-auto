@@ -37,5 +37,8 @@ export default <Resolvers>{
     mapSearchStateChanged: subscribeToEvent(BotEvent.MapSearchStateChanged, {
       resolve: (p) => p.state,
     }),
+    mapSearchFinished: subscribeToEvent(BotEvent.MapSearchFinished, {
+      resolve: (p) => p.tiles,
+    }),
   },
 };
