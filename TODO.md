@@ -102,6 +102,7 @@
   - Make it have possible versions of configs and results rather than having one with complex types.
 - refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
 - Use mapper for union log entry in schema
+- Better support for logic execution on particular pages
 
 ## Performance
 

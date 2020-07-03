@@ -8,8 +8,8 @@ import { validateUrl } from '../../utils/validateUrl';
 const navigateByLink = async (
   path: string,
   exact: boolean,
+  page: Page,
 ): Promise<boolean> => {
-  const page = await getPage();
   const selectors = exact
     ? [`[href="${path}"]`, `[href^="${path}?"]`]
     : [`[href^="${path}"]`];
@@ -43,8 +43,8 @@ const navigateByLink = async (
 const navigateByOnClick = async (
   path: string,
   exact: boolean,
+  page: Page,
 ): Promise<boolean> => {
-  const page = await getPage();
   const selector = exact
     ? `[onclick="window.location.href='${path}'"]`
     : `[onclick^="window.location.href='${path}"]`;
@@ -69,8 +69,8 @@ const navigateByOnClick = async (
 const navigateByJQuery = async (
   path: string,
   exact: boolean,
+  page: Page,
 ): Promise<boolean> => {
-  const page = await getPage();
   const pageContent = await page.content();
 
   const regexpPattern = exact
@@ -102,16 +102,20 @@ const navigateByJQuery = async (
   return true;
 };
 
-const navigate = async (path: string, exact: boolean): Promise<void> => {
-  if (await navigateByLink(path, exact)) {
+const navigate = async (
+  path: string,
+  exact: boolean,
+  page: Page,
+): Promise<void> => {
+  if (await navigateByLink(path, exact, page)) {
     return;
   }
 
-  if (await navigateByOnClick(path, exact)) {
+  if (await navigateByOnClick(path, exact, page)) {
     return;
   }
 
-  if (await navigateByJQuery(path, exact)) {
+  if (await navigateByJQuery(path, exact, page)) {
     return;
   }
 
@@ -134,15 +138,19 @@ export const ensurePage = async (
     return;
   }
 
-  await navigate(path, exact);
+  await navigate(path, exact, page);
 
-  await validateUrl([path], exact);
+  await validateUrl([path], exact, page);
 };
 
-export const ensurePageTab = async (path: string, tab: TabInformation) => {
-  await ensurePage(path);
+export const ensurePageTab = async (
+  path: string,
+  tab: TabInformation,
+  page?: Page,
+) => {
+  await ensurePage(path, false, page);
 
-  await ensurePage(`${path}?${tab.name}=${tab.index}`);
+  await ensurePage(`${path}?${tab.name}=${tab.index}`, false, page);
 };
 
 export type TabInformation = {

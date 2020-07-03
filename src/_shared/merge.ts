@@ -16,7 +16,7 @@ const removeUndefinedFields = <T>(obj: T): Partial<T> =>
     ) as Partial<T>;
 
 // should we merge Maps too?
-const isObject = (obj: unknown): obj is object =>
+export const isObject = (obj: unknown): obj is object =>
   obj &&
   typeof obj === 'object' &&
   Object.prototype.toString.call(obj) === '[object Object]';

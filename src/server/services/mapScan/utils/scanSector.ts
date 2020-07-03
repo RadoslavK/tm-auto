@@ -1,3 +1,5 @@
+import { Page } from 'puppeteer-core';
+
 import { OasisBonuses, OasisTile } from '../../../_models/map/oasisTile';
 import { Point } from '../../../_models/map/point';
 import { VillageTile } from '../../../_models/map/villageTile';
@@ -68,6 +70,7 @@ type Params = {
   readonly sector: Point;
   readonly zoomLevel: number;
   readonly mapSize: number;
+  readonly page: Page;
 };
 
 /*
@@ -77,14 +80,22 @@ export const scanSector = async ({
   sector,
   zoomLevel,
   mapSize,
+  page,
 }: Params): Promise<Result> => {
-  let tiles = (
-    await sendAjaxRequest<Response>('mapPositionData', {
-      'data[x]': sector.x.toString(),
-      'data[y]': sector.y.toString(),
-      'data[zoomLevel]': Math.max(Math.min(zoomLevel, 3), 1).toString(),
-    })
-  ).tiles.map((t) => ({
+  const response = await sendAjaxRequest<Response>(
+    'mapPositionData',
+    {
+      data: {
+        ignorePositions: [],
+        x: sector.x,
+        y: sector.y,
+        zoomLevel: Math.max(Math.min(zoomLevel, 3), 1),
+      },
+    },
+    page,
+  );
+
+  let tiles = response.tiles.map((t) => ({
     ...t,
     position: {
       x: +t.position.x,
@@ -129,7 +140,7 @@ export const scanSector = async ({
           async (claimedTile): Promise<VillageTile> => {
             const { x, y } = claimedTile.position;
 
-            const type = await getClaimedVillageTileType(x, y);
+            const type = await getClaimedVillageTileType(x, y, page);
 
             return { x, y, type, claimed: true };
           },

@@ -1,6 +1,6 @@
 import { Tribe } from '../../../_models/enums/tribe';
 import { getAccountContext } from '../../../accountContext';
-import { parseAjaxToken } from '../../../parsers/gameInfo/parseAjaxToken';
+import { parseGameToken } from '../../../parsers/gameInfo/parseGameToken';
 import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize';
 import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed';
 import { parseTribe } from '../../../parsers/gameInfo/parseTribe';
@@ -10,7 +10,7 @@ export const initGameInfo = async (): Promise<void> => {
 
   gameInfo.speed = await parseServerSpeed();
   gameInfo.tribe = await parseTribe();
-  gameInfo.ajaxToken = await parseAjaxToken();
+  gameInfo.token = await parseGameToken();
   gameInfo.mapSize = await parseMapSize();
 
   getAccountContext().logsService.logText(

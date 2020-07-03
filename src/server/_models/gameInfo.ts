@@ -1,5 +1,15 @@
 import { Tribe } from './enums/tribe';
 
+export enum TokenType {
+  Ajax,
+  Bearer,
+}
+
+export type Token = {
+  readonly type: TokenType;
+  readonly value: string;
+};
+
 export class GameInfo {
   public allyId: number | null = null;
 
@@ -7,7 +17,10 @@ export class GameInfo {
 
   public tribe: Tribe = Tribe.Romans;
 
-  public ajaxToken: string = '';
+  public token: Token = {
+    type: TokenType.Ajax,
+    value: '',
+  };
 
   public mapSize: number = 200;
 }

@@ -15,16 +15,19 @@ const parseCenterCoords = (pageContent: string) => {
     throw new Error('Failed to parse map center coords');
   }
 
-  return { x: match[1], y: match[2] };
+  return { x: +match[1], y: +match[2] };
 };
 
-const findFreeOasesInArea = async (x: string, y: string) => {
+const findFreeOasesInArea = async (x: number, y: number) => {
   const { tiles } = await sendAjaxRequest<{ readonly tiles: any[] }>(
     'mapPositionData',
     {
-      'data[x]': x,
-      'data[y]': y,
-      'data[zoomLevel]': '1',
+      data: {
+        ignorePositions: [],
+        x,
+        y,
+        zoomLevel: 1,
+      },
     },
   );
 

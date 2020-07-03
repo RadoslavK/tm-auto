@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom';
+import { Page } from 'puppeteer-core';
 
 import { sendAjaxRequest } from '../../../utils/sendAjaxRequest';
 
@@ -15,13 +16,11 @@ const parseRes = (document: Document, index: number): string => {
 };
 
 export const getClaimedVillageTileType = async (
-  x: number | string,
-  y: number | string,
+  x: number,
+  y: number,
+  page: Page,
 ): Promise<string> => {
-  const { html } = await sendAjaxRequest('viewTileDetails', {
-    x: x.toString(),
-    y: y.toString(),
-  });
+  const { html } = await sendAjaxRequest('viewTileDetails', { x, y }, page);
 
   const doc = new JSDOM(html).window.document;
 

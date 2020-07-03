@@ -27,7 +27,7 @@ const transformCoordAroundAxis = (coord: number, mapSize: number): number => {
 };
 
 const createGetXCondition = (minIndexX: number, maxIndexX: number) => {
-  if (minIndexX < maxIndexX) {
+  if (minIndexX <= maxIndexX) {
     return (s: Sector): boolean =>
       s.index.x >= minIndexX && s.index.x <= maxIndexX;
   } else {
@@ -39,7 +39,7 @@ const createGetXCondition = (minIndexX: number, maxIndexX: number) => {
 };
 
 const createGetYCondition = (minIndexY: number, maxIndexY: number) => {
-  if (minIndexY < maxIndexY) {
+  if (minIndexY <= maxIndexY) {
     return (s: Sector): boolean =>
       s.index.y >= minIndexY && s.index.y <= maxIndexY;
   } else {

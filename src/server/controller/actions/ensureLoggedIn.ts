@@ -1,13 +1,15 @@
+import { Page } from 'puppeteer-core';
+
 import { TravianPath } from '../../_enums/travianPath';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
 import { accountService } from '../../services/accountService';
 import { ensurePage } from './ensurePage';
 
-export const ensureLoggedIn = async (): Promise<void> => {
+export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   const account = accountService.getCurrentAccount();
 
-  const page = await getPage();
+  const page = existingPage || (await getPage());
 
   if (page.url().includes(account.server)) {
     await ensurePage(TravianPath.ResourceFieldsOverview);

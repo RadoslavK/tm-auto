@@ -1,8 +1,12 @@
+import { TravianPath } from '../../_enums/travianPath';
 import { OasisTile } from '../../_models/map/oasisTile';
 import { Point } from '../../_models/map/point';
 import { VillageTile } from '../../_models/map/villageTile';
 import { MapSearchState } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
+import { createPage } from '../../browser/getPage';
+import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn';
+import { ensurePage } from '../../controller/actions/ensurePage';
 import { BotEvent } from '../../events/botEvent';
 import { publishPayloadEvent } from '../../pubSub';
 import { dataPathService } from '../dataPathService';
@@ -140,8 +144,16 @@ export class MapScanService {
       (s) => !scannedSectorIds.has(getSectorId(s)),
     );
 
+    const page = await createPage();
+
+    if (sectorsToScan.length) {
+      await ensureLoggedIn(page);
+      await ensurePage(TravianPath.CenterMap, false, page);
+    }
+
     for (const sector of sectorsToScan) {
       if (this._stopRequested) {
+        await page.close();
         this.markStopped();
 
         return;
@@ -155,9 +167,11 @@ export class MapScanService {
         attempt++;
 
         if (attempt > 3) {
-          this.stopScan();
+          await page.close();
+          this.markStopped();
+          getAccountContext().logsService.logError('Failed to scan the map!');
 
-          throw new Error('Failed to scan the map!');
+          return;
         }
 
         try {
@@ -165,8 +179,11 @@ export class MapScanService {
             sector,
             zoomLevel,
             mapSize,
+            page,
           }));
-        } catch {}
+        } catch (error) {
+          getAccountContext().logsService.logError(error.message);
+        }
       } while (!oasesTiles || !villageTiles);
 
       this._oases = (await this.getScannedOases()).concat(oasesTiles);
@@ -179,6 +196,7 @@ export class MapScanService {
       await this.saveScannedData();
     }
 
+    await page.close();
     this.markStopped();
   };
 

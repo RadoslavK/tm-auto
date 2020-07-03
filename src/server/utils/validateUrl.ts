@@ -1,11 +1,14 @@
+import { Page } from 'puppeteer-core';
+
 import { getPage } from '../browser/getPage';
 import { accountService } from '../services/accountService';
 
 export const validateUrl = async (
   acceptedUrls: readonly string[],
   exact = false,
+  existingPage?: Page,
 ): Promise<void> => {
-  const page = await getPage();
+  const page = existingPage || (await getPage());
   const regExp = new RegExp(`^${accountService.getCurrentAccount().server}/`);
 
   const pageUrl = page.url().replace(regExp, '');
