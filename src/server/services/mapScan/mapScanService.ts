@@ -1,7 +1,6 @@
 import { TravianPath } from '../../_enums/travianPath';
-import { OasisTile } from '../../_models/map/oasisTile';
-import { Point } from '../../_models/map/point';
 import { VillageTile } from '../../_models/map/villageTile';
+import { WheatOasis } from '../../_models/map/wheatOasis';
 import { MapSearchState } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
 import { createPage } from '../../browser/getPage';
@@ -13,7 +12,7 @@ import { dataPathService } from '../dataPathService';
 import { fileService } from '../fileService';
 import { filterSectorsInRadius } from './utils/filterSectorsInRadius';
 import { getAllSectors } from './utils/getAllSectors';
-import { getSectorId } from './utils/getSectorId';
+import { getPointId } from './utils/getPointId';
 import { getSectorSize } from './utils/getSectorSize';
 import { scanSector } from './utils/scanSector';
 
@@ -28,28 +27,28 @@ type CurrentScan = {
 export class MapScanService {
   private _currentScan: CurrentScan | undefined;
 
-  private _villages: VillageTile[] | undefined;
+  private _villages: Record<string, VillageTile> | undefined;
 
-  private _oases: OasisTile[] | undefined;
+  private _oases: Record<string, WheatOasis> | undefined;
 
-  private _sectors: Point[] | undefined;
+  private _scannedSectorIds: string[] | undefined;
 
   private _stopRequested: boolean = false;
 
   constructor(private accountId: string) {}
 
   private loadScannedData = async () => {
-    this._villages = fileService.load<VillageTile[]>(
+    this._villages = fileService.load<Record<string, VillageTile>>(
       dataPathService.serverPath(this.accountId).scannedVillageTiles,
-      [],
+      {},
     );
 
-    this._oases = fileService.load<OasisTile[]>(
+    this._oases = fileService.load<Record<string, WheatOasis>>(
       dataPathService.serverPath(this.accountId).scannedOasisTiles,
-      [],
+      {},
     );
 
-    this._sectors = fileService.load<Point[]>(
+    this._scannedSectorIds = fileService.load<string[]>(
       dataPathService.serverPath(this.accountId).scannedSectors,
       [],
     );
@@ -57,7 +56,7 @@ export class MapScanService {
     return {
       villages: this._villages,
       oases: this._oases,
-      sectors: this._sectors,
+      sectors: this._scannedSectorIds,
     };
   };
 
@@ -74,7 +73,16 @@ export class MapScanService {
 
     await fileService.save(
       dataPathService.serverPath(this.accountId).scannedSectors,
-      this._sectors,
+      this._scannedSectorIds,
+    );
+  };
+
+  public updateVillageTiles = async (tiles: Record<string, VillageTile>) => {
+    this._villages = tiles;
+
+    await fileService.save(
+      dataPathService.serverPath(this.accountId).scannedVillageTiles,
+      this._villages,
     );
   };
 
@@ -82,15 +90,17 @@ export class MapScanService {
 
   public getScanProgress = (): number => this._currentScan?.progress ?? 100;
 
-  private getScannedSectors = async (): Promise<Point[]> => {
-    if (!this._sectors) {
+  private getScannedSectorIds = async (): Promise<string[]> => {
+    if (!this._scannedSectorIds) {
       return (await this.loadScannedData()).sectors;
     }
 
-    return this._sectors;
+    return this._scannedSectorIds;
   };
 
-  public getScannedVillages = async (): Promise<VillageTile[]> => {
+  public getScannedVillages = async (): Promise<
+    Record<string, VillageTile>
+  > => {
     if (!this._villages) {
       return (await this.loadScannedData()).villages;
     }
@@ -98,7 +108,7 @@ export class MapScanService {
     return this._villages;
   };
 
-  public getScannedOases = async (): Promise<OasisTile[]> => {
+  public getScannedOases = async (): Promise<Record<string, WheatOasis>> => {
     if (!this._oases) {
       return (await this.loadScannedData()).oases;
     }
@@ -121,7 +131,7 @@ export class MapScanService {
       gameInfo: { mapSize },
     } = getAccountContext();
 
-    const loadedSectors = await this.getScannedSectors();
+    const scannedSectorIds = new Set<string>(await this.getScannedSectorIds());
 
     const sectorSize = getSectorSize(zoomLevel);
     const allSectors = getAllSectors({ mapSize, sectorSize });
@@ -136,12 +146,8 @@ export class MapScanService {
         })
       : allSectors;
 
-    const scannedSectorIds = new Set<string>(
-      loadedSectors.map((s) => getSectorId(s)),
-    );
-
     const sectorsToScan = relevantSectorPoints.filter(
-      (s) => !scannedSectorIds.has(getSectorId(s)),
+      (s) => !scannedSectorIds.has(getPointId(s)),
     );
 
     const page = await createPage();
@@ -159,8 +165,8 @@ export class MapScanService {
         return;
       }
 
-      let oasesTiles: readonly OasisTile[] | undefined;
-      let villageTiles: readonly VillageTile[] | undefined;
+      let oasesTiles: Record<string, WheatOasis> | undefined;
+      let villageTiles: Record<string, VillageTile> | undefined;
       let attempt = 0;
 
       do {
@@ -186,11 +192,17 @@ export class MapScanService {
         }
       } while (!oasesTiles || !villageTiles);
 
-      this._oases = (await this.getScannedOases()).concat(oasesTiles);
-      this._villages = (await this.getScannedVillages()).concat(villageTiles);
-      const sectors = await this.getScannedSectors();
+      this._oases = {
+        ...(await this.getScannedOases()),
+        ...oasesTiles,
+      };
+      this._villages = {
+        ...(await this.getScannedVillages()),
+        ...villageTiles,
+      };
+      const sectors = await this.getScannedSectorIds();
 
-      sectors.push(sector);
+      sectors.push(getPointId(sector));
 
       this.markProgress((sectors.length / relevantSectorPoints.length) * 100);
       await this.saveScannedData();

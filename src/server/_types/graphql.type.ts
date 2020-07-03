@@ -616,14 +616,6 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
-export type OasisBonus = {
-  readonly __typename?: 'OasisBonus';
-  readonly wood: Scalars['Int'];
-  readonly clay: Scalars['Int'];
-  readonly iron: Scalars['Int'];
-  readonly crop: Scalars['Int'];
-};
-
 export type Query = {
   readonly __typename?: 'Query';
   readonly account: UserAccount;
@@ -1064,7 +1056,7 @@ export type VillageTile = {
   readonly type: Scalars['String'];
   readonly claimed: Maybe<Scalars['Boolean']>;
   readonly distance: Scalars['Float'];
-  readonly bonus: OasisBonus;
+  readonly cropBonus: Scalars['Int'];
 };
 
 
@@ -1213,7 +1205,6 @@ export type ResolversTypes = {
   SearchMapInput: SearchMapInput;
   SearchMapOriginInput: SearchMapOriginInput;
   VillageTile: ResolverTypeWrapper<MapSearchVillageTileModel>;
-  OasisBonus: ResolverTypeWrapper<OasisBonus>;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1295,7 +1286,6 @@ export type ResolversParentTypes = {
   SearchMapInput: SearchMapInput;
   SearchMapOriginInput: SearchMapOriginInput;
   VillageTile: MapSearchVillageTileModel;
-  OasisBonus: OasisBonus;
   DurationInput: DurationInput;
   UpdateAccountSettingsInput: UpdateAccountSettingsInput;
   CoolDownInput: CoolDownInput;
@@ -1593,14 +1583,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateGeneralVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralVillageSettingsArgs, 'villageId' | 'settings'>>;
 };
 
-export type OasisBonusResolvers<ContextType = any, ParentType extends ResolversParentTypes['OasisBonus'] = ResolversParentTypes['OasisBonus']> = {
-  wood: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  clay: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  iron: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  crop: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   account: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType, RequireFields<QueryAccountArgs, 'id'>>;
   accountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
@@ -1773,7 +1755,7 @@ export type VillageTileResolvers<ContextType = any, ParentType extends Resolvers
   type: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   claimed: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   distance: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  bonus: Resolver<ResolversTypes['OasisBonus'], ParentType, ContextType>;
+  cropBonus: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1810,7 +1792,6 @@ export type Resolvers<ContextType = any> = {
   LogEntry: LogEntryResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   Mutation: MutationResolvers<ContextType>;
-  OasisBonus: OasisBonusResolvers<ContextType>;
   Query: QueryResolvers<ContextType>;
   QueuedBuilding: QueuedBuildingResolvers<ContextType>;
   QueuedBuildingRange: QueuedBuildingRangeResolvers<ContextType>;

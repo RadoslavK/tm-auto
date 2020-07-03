@@ -20,12 +20,7 @@ mutation SearchMap($input: SearchMapInput!) {
     }
     type
     distance
-    bonus {
-      wood
-      clay
-      iron
-      crop
-    }
+    cropBonus
   }
 }
 

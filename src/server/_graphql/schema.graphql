@@ -385,13 +385,6 @@ type Mutation {
   refreshVillage(villageId: ID!): Boolean
 }
 
-type OasisBonus {
-  wood: Int!
-  clay: Int!
-  iron: Int!
-  crop: Int!
-}
-
 type Query {
   account(id: ID!): UserAccount!
   accounts: [UserAccount!]!
@@ -671,5 +664,5 @@ type VillageTile {
   type: String!
   claimed: Boolean
   distance: Float!
-  bonus: OasisBonus!
+  cropBonus: Int!
 }

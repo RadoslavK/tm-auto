@@ -1,16 +1,9 @@
-type OasisBonus {
-  wood: Int!
-  clay: Int!
-  iron: Int!
-  crop: Int!
-}
-
 type VillageTile {
   coords: Coords!
   type: String!
   claimed: Boolean
   distance: Float!
-  bonus: OasisBonus!
+  cropBonus: Int!
 }
 
 enum MapSearchState {

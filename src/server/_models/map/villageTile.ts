@@ -1,17 +1,12 @@
-import { Resources } from '../misc/resources';
 import { Point } from './point';
 
 export type VillageTile = Point & {
   readonly type: string;
   readonly claimed?: boolean;
+  readonly cropBonus?: number;
 };
 
-export type MapSearchVillageTileBonus = Pick<
-  Resources,
-  'wood' | 'clay' | 'iron' | 'crop'
->;
-
-export type MapSearchVillageTile = VillageTile & {
+export type MapSearchVillageTile = Omit<VillageTile, 'cropBonus'> & {
   readonly distance: number;
-  readonly bonus: MapSearchVillageTileBonus;
+  readonly cropBonus: number;
 };

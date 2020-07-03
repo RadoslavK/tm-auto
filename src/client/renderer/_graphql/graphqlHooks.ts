@@ -623,13 +623,6 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
-export type OasisBonus = {
-  readonly wood: Scalars['Int'];
-  readonly clay: Scalars['Int'];
-  readonly iron: Scalars['Int'];
-  readonly crop: Scalars['Int'];
-};
-
 export type Query = {
   readonly account: UserAccount;
   readonly accountSettings: AccountSettings;
@@ -1069,7 +1062,7 @@ export type VillageTile = {
   readonly type: Scalars['String'];
   readonly claimed: Maybe<Scalars['Boolean']>;
   readonly distance: Scalars['Float'];
-  readonly bonus: OasisBonus;
+  readonly cropBonus: Scalars['Int'];
 };
 
 export type GetCollapsedBuildingQueueRangesQueryVariables = Exact<{
@@ -1294,7 +1287,7 @@ export type SearchMapMutationVariables = Exact<{
 }>;
 
 
-export type SearchMapMutation = { readonly searchMap: ReadonlyArray<{ readonly claimed: Maybe<boolean>, readonly type: string, readonly distance: number, readonly coords: CoordsFragment, readonly bonus: { readonly wood: number, readonly clay: number, readonly iron: number, readonly crop: number } }> };
+export type SearchMapMutation = { readonly searchMap: ReadonlyArray<{ readonly claimed: Maybe<boolean>, readonly type: string, readonly distance: number, readonly cropBonus: number, readonly coords: CoordsFragment }> };
 
 export type ScanWholeMapMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2785,7 +2778,7 @@ export function useGetVillageTileTypesLazyQuery(baseOptions?: ApolloReactHooks.L
 export type GetVillageTileTypesQueryHookResult = ReturnType<typeof useGetVillageTileTypesQuery>;
 export type GetVillageTileTypesLazyQueryHookResult = ReturnType<typeof useGetVillageTileTypesLazyQuery>;
 export type GetVillageTileTypesQueryResult = ApolloReactCommon.QueryResult<GetVillageTileTypesQuery, GetVillageTileTypesQueryVariables>;
-export const SearchMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SearchMap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchMapInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchMap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimed"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"distance"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
+export const SearchMapDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SearchMap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchMapInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchMap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimed"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coords"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Coords"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"distance"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"cropBonus"},"arguments":[],"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Coords"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coords"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"y"},"arguments":[],"directives":[]}]}}]};
 export type SearchMapMutationFn = ApolloReactCommon.MutationFunction<SearchMapMutation, SearchMapMutationVariables>;
 
 /**

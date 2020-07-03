@@ -1,10 +1,11 @@
 import { Page } from 'puppeteer-core';
 
-import { OasisBonuses, OasisTile } from '../../../_models/map/oasisTile';
 import { Point } from '../../../_models/map/point';
 import { VillageTile } from '../../../_models/map/villageTile';
+import { WheatOasis } from '../../../_models/map/wheatOasis';
 import { sendAjaxRequest } from '../../../utils/sendAjaxRequest';
 import { getClaimedVillageTileType } from './getClaimedVillageTileType';
+import { getPointId } from './getPointId';
 import { getSectorSize } from './getSectorSize';
 
 type Tile = {
@@ -21,8 +22,8 @@ type Response = {
 };
 
 type Result = {
-  readonly villageTiles: readonly VillageTile[];
-  readonly oasesTiles: readonly OasisTile[];
+  readonly villageTiles: Record<string, VillageTile>;
+  readonly oasesTiles: Record<string, WheatOasis>;
 };
 
 const resourcesMap: Record<string, string> = {
@@ -30,6 +31,13 @@ const resourcesMap: Record<string, string> = {
   2: 'clay',
   3: 'iron',
   4: 'crop',
+};
+
+type OasisBonus = {
+  readonly wood?: number;
+  readonly clay?: number;
+  readonly iron?: number;
+  readonly crop?: number;
 };
 
 export const relevantVillageTileTypes: Record<string, string> = {
@@ -43,7 +51,7 @@ export const relevantVillageTileTypes: Record<string, string> = {
 const parseVillageTileType = (typeCode: string): string | null =>
   relevantVillageTileTypes[typeCode] || null;
 
-const parseOasisBonuses = (text: string): OasisBonuses => {
+const parseOasisBonuses = (text: string): OasisBonus => {
   const bonuses = [];
   const regexp = /{a\.r(\d)}\s(\d+)/g;
   let match;
@@ -63,7 +71,7 @@ const parseOasisBonuses = (text: string): OasisBonuses => {
       ...bonuses,
       [res]: bonus,
     };
-  }, {} as OasisBonuses);
+  }, {} as OasisBonus);
 };
 
 type Params = {
@@ -127,10 +135,10 @@ export const scanSector = async ({
       const { x, y } = t.position;
 
       const tile: VillageTile = { x, y, type };
-      tiles.push(tile);
+      tiles[getPointId(tile)] = tile;
 
       return tiles;
-    }, [] as VillageTile[]);
+    }, {} as Record<string, VillageTile>);
 
   const claimedTiles = (
     await Promise.all(
@@ -146,7 +154,13 @@ export const scanSector = async ({
           },
         ),
     )
-  ).filter((t) => Object.values(relevantVillageTileTypes).includes(t.type));
+  )
+    .filter((t) => Object.values(relevantVillageTileTypes).includes(t.type))
+    .reduce((tiles, tile) => {
+      tiles[getPointId(tile)] = tile;
+
+      return tiles;
+    }, {} as Record<string, VillageTile>);
 
   const oases = tiles
     .filter(
@@ -157,22 +171,27 @@ export const scanSector = async ({
       const { x, y } = t.position;
       const bonuses = parseOasisBonuses(t.text);
 
-      if ((bonuses.crop || 0) <= 0) {
+      if (!bonuses.crop) {
         return tiles;
       }
 
-      const tile: OasisTile = {
+      const tile: WheatOasis = {
         x,
         y,
-        bonuses,
+        bonus: bonuses.crop,
         claimed: t.title!.includes('{k.bt}') ? true : undefined,
       };
 
-      return [...tiles, tile];
-    }, [] as OasisTile[]);
+      tiles[getPointId(tile)] = tile;
+
+      return tiles;
+    }, {} as Record<string, WheatOasis>);
 
   return {
-    villageTiles: unclaimedTiles.concat(claimedTiles),
+    villageTiles: {
+      ...unclaimedTiles,
+      ...claimedTiles,
+    },
     oasesTiles: oases,
   };
 };

@@ -76,8 +76,8 @@ const getSortedTiles = (
   return tiles.slice().sort((t1, t2) => {
     if (sortBy === SearchMapSortBy.CropBonus) {
       return order === SortOrder.Asc
-        ? t1.bonus.crop - t2.bonus.crop
-        : t2.bonus.crop - t1.bonus.crop;
+        ? t1.cropBonus - t2.cropBonus
+        : t2.cropBonus - t1.cropBonus;
     } else {
       return order === SortOrder.Asc
         ? t1.distance - t2.distance
@@ -223,8 +223,6 @@ export const MapSearch: React.FC = () => {
         <VirtualizedTable
           getCellData={(cellData, dataKey: keyof VillageTile) => {
             switch (dataKey) {
-              case 'bonus':
-                return (cellData as VillageTile[typeof dataKey]).crop;
               case 'distance':
                 return (cellData as VillageTile[typeof dataKey]).toFixed(2);
               case 'claimed':
@@ -248,7 +246,7 @@ export const MapSearch: React.FC = () => {
             {
               width: 200,
               label: 'Crop bonus',
-              dataKey: 'bonus',
+              dataKey: 'cropBonus',
               numeric: true,
             },
             {
@@ -260,9 +258,10 @@ export const MapSearch: React.FC = () => {
           ]}
           data={sortedVillageTiles}
           sort={{
-            sortBy: sortBy === SearchMapSortBy.Distance ? 'distance' : 'bonus',
+            sortBy:
+              sortBy === SearchMapSortBy.Distance ? 'distance' : 'cropBonus',
             sortDirection: order === SortOrder.Asc ? 'ASC' : 'DESC',
-            sortStates: ['distance', 'bonus'],
+            sortStates: ['distance', 'cropBonus'],
             onSortByChanged: (newSortBy) => {
               setSortBy(
                 newSortBy === 'distance'
