@@ -10,6 +10,7 @@ import {
   getWithMinimumSafe,
 } from '../../../utils/getWithMaximum';
 import { randomElement } from '../../../utils/randomElement';
+import { equipHeroHorse } from '../../actions/hero/equipHeroHorse';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
@@ -34,6 +35,10 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
 
     if (!spots.isBuilt(BuildingType.RallyPoint) || !hero.canGoToAdventure()) {
       return;
+    }
+
+    if (hero.hasHorseInInventory) {
+      await equipHeroHorse();
     }
 
     const page = await getPage();

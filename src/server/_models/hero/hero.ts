@@ -14,6 +14,8 @@ export class Hero {
 
   public resources: Resources = new Resources();
 
+  public hasHorseInInventory: boolean = false;
+
   constructor(params: PartialFields<Hero> = {}) {
     mergeDefaults(this, params);
   }
