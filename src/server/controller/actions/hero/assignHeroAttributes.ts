@@ -85,7 +85,7 @@ export const assignHeroAttributes = async () => {
 
   const page = await getPage();
 
-  let availablePoints = await page.$eval('#availablePoints', (e) => {
+  const initialAvailablePoints = await page.$eval('#availablePoints', (e) => {
     const match = /(\d+)\//.exec((e as HTMLElement).innerText);
 
     if (!match) {
@@ -94,6 +94,8 @@ export const assignHeroAttributes = async () => {
 
     return +match[1];
   });
+
+  let availablePoints = initialAvailablePoints;
 
   for (const item of levelUpItems) {
     if (!availablePoints) {
@@ -154,10 +156,12 @@ export const assignHeroAttributes = async () => {
       page.waitForSelector('#saveHeroAttributes'),
     ]);
 
-    await Promise.all([
-      page.click('#saveHeroAttributes'),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    ]);
+    if (availablePoints !== initialAvailablePoints) {
+      await Promise.all([
+        page.click('#saveHeroAttributes'),
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      ]);
+    }
 
     const updatedLevelUpItems = settingsService.get().levelUpItems.slice(1);
 

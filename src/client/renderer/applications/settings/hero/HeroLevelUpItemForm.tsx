@@ -40,7 +40,7 @@ export const HeroLevelUpItemForm: React.FC<Props> = ({
 }) => {
   const [name, setName] = useState(item?.name || '');
   const [offensiveStrength, setOffensiveStrength] = useState(
-    item?.offensiveStrength || 0,
+    (item || lastItem)?.offensiveStrength || 0,
   );
   const [offBonus, setOffBonus] = useState((item || lastItem)?.offBonus || 0);
   const [defBonus, setDefBonus] = useState((item || lastItem)?.defBonus || 0);
