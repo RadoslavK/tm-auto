@@ -11,6 +11,7 @@ export enum TravianPath {
   ResourceFieldsOverview = 'dorf1.php',
   Settings = 'options.php',
   Statistics = 'statistiken.php',
+  Logout = 'logout.php',
 }
 
 export const getBuildingSpotPath = (

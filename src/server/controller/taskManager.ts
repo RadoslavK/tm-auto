@@ -66,7 +66,13 @@ export class TaskManager {
   };
 
   private doGeneralTasks = async (): Promise<void> => {
-    await ensurePage(randomElement(getAllEnumValues(TravianPath)));
+    await ensurePage(
+      randomElement(
+        getAllEnumValues(TravianPath).filter(
+          (x) => ![TravianPath.Logout, TravianPath.AccountOverview].includes(x),
+        ),
+      ),
+    );
     await updateNewOldVillages();
     await updateHeroInformation();
     await updateHeroResources();

@@ -13,3 +13,17 @@ export const replaceInputText = async (
   await page.keyboard.down('Backspace');
   await input.type(text);
 };
+
+export const replaceInputTextBySelector = async (
+  page: Page,
+  selector: string,
+  text: string,
+): Promise<void> => {
+  const input = await page.$(selector);
+
+  if (!input) {
+    throw new Error(`Input for selector ${selector} was not found`);
+  }
+
+  await replaceInputText(page, input, text);
+};
