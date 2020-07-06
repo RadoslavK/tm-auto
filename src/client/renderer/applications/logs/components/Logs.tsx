@@ -8,8 +8,8 @@ export const Logs: React.FC = () => {
 
   return (
     <div>
-      {logEntries.map((logEntry) => (
-        <LogEntry key={logEntry.timestamp.totalSeconds} logEntry={logEntry} />
+      {logEntries.map((logEntry, index) => (
+        <LogEntry key={index} logEntry={logEntry} />
       ))}
     </div>
   );

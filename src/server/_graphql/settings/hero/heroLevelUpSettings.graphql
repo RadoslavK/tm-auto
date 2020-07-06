@@ -1,0 +1,37 @@
+type HeroLevelUpItem {
+  name: ID!
+  offensiveStrength: Int!
+  offBonus: Int!
+  defBonus: Int!
+  resources: Int!
+}
+
+input HeroLevelUpItemInput {
+  name: ID!
+  offensiveStrength: Int!
+  offBonus: Int!
+  defBonus: Int!
+  resources: Int!
+}
+
+type HeroLevelUpSettings {
+  levelUpItems: [HeroLevelUpItem!]!
+}
+
+extend type Query {
+  heroLevelUpSettings: HeroLevelUpSettings!
+  isHeroLevelUpItemNameUsed(name: ID!): Boolean!
+}
+
+extend type Mutation {
+  addHeroLevelUpItem(item: HeroLevelUpItemInput!): HeroLevelUpItem!
+  updateHeroLevelUpItem(
+    previousName: ID!
+    item: HeroLevelUpItemInput!
+  ): HeroLevelUpItem!
+  removeHeroLevelUpItem(name: ID!): HeroLevelUpItem!
+}
+
+extend type Subscription {
+  heroLevelUpSettingsChanged: HeroLevelUpSettings!
+}

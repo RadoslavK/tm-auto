@@ -324,6 +324,26 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
+export type HeroLevelUpItem = {
+  readonly name: Scalars['ID'];
+  readonly offensiveStrength: Scalars['Int'];
+  readonly offBonus: Scalars['Int'];
+  readonly defBonus: Scalars['Int'];
+  readonly resources: Scalars['Int'];
+};
+
+export type HeroLevelUpItemInput = {
+  readonly name: Scalars['ID'];
+  readonly offensiveStrength: Scalars['Int'];
+  readonly offBonus: Scalars['Int'];
+  readonly defBonus: Scalars['Int'];
+  readonly resources: Scalars['Int'];
+};
+
+export type HeroLevelUpSettings = {
+  readonly levelUpItems: ReadonlyArray<HeroLevelUpItem>;
+};
+
 export enum HeroState {
   Unknown = 'Unknown',
   InVillage = 'InVillage',
@@ -347,6 +367,7 @@ export enum MapSearchState {
 }
 
 export type Mutation = {
+  readonly addHeroLevelUpItem: HeroLevelUpItem;
   readonly clearQueue: Maybe<Scalars['Boolean']>;
   readonly createAccount: UserAccount;
   readonly deleteAccount: UserAccount;
@@ -365,6 +386,7 @@ export type Mutation = {
   readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockToIndex: Maybe<Scalars['Boolean']>;
   readonly refreshVillage: Maybe<Scalars['Boolean']>;
+  readonly removeHeroLevelUpItem: HeroLevelUpItem;
   readonly resetAccountSettings: AccountSettings;
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
@@ -397,6 +419,12 @@ export type Mutation = {
   readonly updateAutoUnitsUnitSettings: AutoUnitsSettings;
   readonly updateGeneralSettings: GeneralSettings;
   readonly updateGeneralVillageSettings: GeneralVillageSettings;
+  readonly updateHeroLevelUpItem: HeroLevelUpItem;
+};
+
+
+export type MutationAddHeroLevelUpItemArgs = {
+  item: HeroLevelUpItemInput;
 };
 
 
@@ -499,6 +527,11 @@ export type MutationMoveQueuedBuildingsBlockToIndexArgs = {
 
 export type MutationRefreshVillageArgs = {
   villageId: Scalars['ID'];
+};
+
+
+export type MutationRemoveHeroLevelUpItemArgs = {
+  name: Scalars['ID'];
 };
 
 
@@ -623,6 +656,12 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
+
+export type MutationUpdateHeroLevelUpItemArgs = {
+  previousName: Scalars['ID'];
+  item: HeroLevelUpItemInput;
+};
+
 export type Query = {
   readonly account: UserAccount;
   readonly accountSettings: AccountSettings;
@@ -649,8 +688,10 @@ export type Query = {
   readonly generalSettings: GeneralSettings;
   readonly generalVillageSettings: GeneralVillageSettings;
   readonly heroInformation: HeroInformation;
+  readonly heroLevelUpSettings: HeroLevelUpSettings;
   readonly isAccountTaken: Scalars['Boolean'];
   readonly isBotActive: Scalars['Boolean'];
+  readonly isHeroLevelUpItemNameUsed: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logEntries: ReadonlyArray<LogEntry>;
   readonly mapScanProgress: Scalars['Float'];
@@ -752,6 +793,11 @@ export type QueryIsAccountTakenArgs = {
 };
 
 
+export type QueryIsHeroLevelUpItemNameUsedArgs = {
+  name: Scalars['ID'];
+};
+
+
 export type QueryNextTaskExecutionArgs = {
   task: TaskType;
 };
@@ -839,6 +885,7 @@ export type Subscription = {
   readonly generalSettingsUpdated: GeneralSettings;
   readonly generalVillageSettingsUpdated: GeneralVillageSettings;
   readonly heroInformationUpdated: HeroInformation;
+  readonly heroLevelUpSettingsChanged: HeroLevelUpSettings;
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
   readonly mapScanProgressUpdated: Scalars['Float'];
@@ -1547,30 +1594,6 @@ export type OnAccountSettingsUpdatedSubscriptionVariables = Exact<{ [key: string
 
 export type OnAccountSettingsUpdatedSubscription = { readonly accountSettingsUpdated: AccountSettingsFragment };
 
-export type AutoAdventureSettingsFragment = { readonly allow: boolean, readonly adventureCriteria: AdventureCriteria, readonly hardMinHealth: number, readonly normalMinHealth: number, readonly preferHard: boolean, readonly coolDown: CoolDownFragment, readonly maxTravelTime: DurationFragment };
-
-export type GetAutoAdventureSettingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAutoAdventureSettingsQuery = { readonly autoAdventureSettings: AutoAdventureSettingsFragment };
-
-export type UpdateAutoAdventureSettingsMutationVariables = Exact<{
-  settings: UpdateAutoAdventureSettingsInput;
-}>;
-
-
-export type UpdateAutoAdventureSettingsMutation = { readonly updateAutoAdventureSettings: AutoAdventureSettingsFragment };
-
-export type ResetAutoAdventureSettingsMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ResetAutoAdventureSettingsMutation = { readonly resetAutoAdventureSettings: AutoAdventureSettingsFragment };
-
-export type OnAutoAdventureSettingsUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type OnAutoAdventureSettingsUpdatedSubscription = { readonly autoAdventureSettingsUpdated: AutoAdventureSettingsFragment };
-
 export type AutoStorageOptionSettingsFragment = { readonly allow: boolean, readonly overflowLevel: number };
 
 export type AutoStorageSettingsFragment = { readonly allowFreeSpots: boolean, readonly granary: AutoStorageOptionSettingsFragment, readonly warehouse: AutoStorageOptionSettingsFragment };
@@ -1768,6 +1791,73 @@ export type OnGeneralVillageSettingsUpdatedSubscriptionVariables = Exact<{
 
 export type OnGeneralVillageSettingsUpdatedSubscription = { readonly generalVillageSettingsUpdated: GeneralVillageSettingsFragment };
 
+export type AutoAdventureSettingsFragment = { readonly allow: boolean, readonly adventureCriteria: AdventureCriteria, readonly hardMinHealth: number, readonly normalMinHealth: number, readonly preferHard: boolean, readonly coolDown: CoolDownFragment, readonly maxTravelTime: DurationFragment };
+
+export type GetAutoAdventureSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAutoAdventureSettingsQuery = { readonly autoAdventureSettings: AutoAdventureSettingsFragment };
+
+export type UpdateAutoAdventureSettingsMutationVariables = Exact<{
+  settings: UpdateAutoAdventureSettingsInput;
+}>;
+
+
+export type UpdateAutoAdventureSettingsMutation = { readonly updateAutoAdventureSettings: AutoAdventureSettingsFragment };
+
+export type ResetAutoAdventureSettingsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResetAutoAdventureSettingsMutation = { readonly resetAutoAdventureSettings: AutoAdventureSettingsFragment };
+
+export type OnAutoAdventureSettingsUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnAutoAdventureSettingsUpdatedSubscription = { readonly autoAdventureSettingsUpdated: AutoAdventureSettingsFragment };
+
+export type HeroLevelUpItemFragment = { readonly name: string, readonly offensiveStrength: number, readonly offBonus: number, readonly defBonus: number, readonly resources: number };
+
+export type HeroLevelUpSettingsFragment = { readonly levelUpItems: ReadonlyArray<HeroLevelUpItemFragment> };
+
+export type GetHeroLevelUpSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHeroLevelUpSettingsQuery = { readonly heroLevelUpSettings: HeroLevelUpSettingsFragment };
+
+export type IsHeroLevelUpItemNameUsedQueryVariables = Exact<{
+  name: Scalars['ID'];
+}>;
+
+
+export type IsHeroLevelUpItemNameUsedQuery = { readonly isHeroLevelUpItemNameUsed: boolean };
+
+export type AddHeroLevelUpItemMutationVariables = Exact<{
+  item: HeroLevelUpItemInput;
+}>;
+
+
+export type AddHeroLevelUpItemMutation = { readonly addHeroLevelUpItem: HeroLevelUpItemFragment };
+
+export type UpdateHeroLevelUpItemMutationVariables = Exact<{
+  previousName: Scalars['ID'];
+  item: HeroLevelUpItemInput;
+}>;
+
+
+export type UpdateHeroLevelUpItemMutation = { readonly updateHeroLevelUpItem: HeroLevelUpItemFragment };
+
+export type RemoveHeroLevelUpItemMutationVariables = Exact<{
+  name: Scalars['ID'];
+}>;
+
+
+export type RemoveHeroLevelUpItemMutation = { readonly removeHeroLevelUpItem: HeroLevelUpItemFragment };
+
+export type OnHeroLevelUpSettingsChangedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnHeroLevelUpSettingsChangedSubscription = { readonly heroLevelUpSettingsChanged: HeroLevelUpSettingsFragment };
+
 export type ExportAccountSettingsMutationVariables = Exact<{
   accountId: Scalars['ID'];
   path: Scalars['String'];
@@ -1885,7 +1975,6 @@ export const QueuedBuildingRangeFragmentDoc: DocumentNode = {"kind":"Document","
 export const BuildingQueueFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BuildingQueue"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BuildingQueue"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingRanges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuildingRange"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalBuildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"resourcesBuildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"infrastructureBuildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Resources"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Resources"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wood"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"clay"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"iron"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"crop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"freeCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuilding"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuilding"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"level"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"queueIndex"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"QueuedBuildingRange"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"QueuedBuildingRange"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buildings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"QueuedBuilding"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"buildingTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Resources"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"type"},"arguments":[],"directives":[]}]}}]};
 export const CoolDownFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}}]};
 export const AccountSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AccountSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AccountSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allowTasks"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tasksCoolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"autoStart"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoBuild"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoUnits"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoParty"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
-export const AutoAdventureSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
 export const AutoStorageOptionSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}}]};
 export const AutoStorageSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allowFreeSpots"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}}]};
 export const AutoBuildSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoBuildSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoBuildSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"dualQueue"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preference"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"autoCropFields"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoStorage"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allowFreeSpots"},"arguments":[],"directives":[]}]}}]};
@@ -1896,6 +1985,9 @@ export const AutoUnitsBuildingSettingsFragmentDoc: DocumentNode = {"kind":"Docum
 export const AutoUnitsSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"barracks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"stable"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"workshop"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"residence"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsUnitSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoBuild"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"index"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"targetAmount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"trainForever"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoUnitsBuildingSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxBuildTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"units"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoUnitsUnitSettings"},"directives":[]}]}}]}}]};
 export const GeneralSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GeneralSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GeneralSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chromePath"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"headlessChrome"},"arguments":[],"directives":[]}]}}]};
 export const GeneralVillageSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GeneralVillageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GeneralVillageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allowTasks"},"arguments":[],"directives":[]}]}}]};
+export const AutoAdventureSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}}]};
+export const HeroLevelUpItemFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}}]};
+export const HeroLevelUpSettingsFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"levelUpItems"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}}]};
 export const VillageCrannyCapacityFragmentDoc: DocumentNode = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VillageCrannyCapacity"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VillageCrannyCapacity"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"actual"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"ongoing"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"total"},"arguments":[],"directives":[]}]}}]};
 export const GetCollapsedBuildingQueueRangesDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCollapsedBuildingQueueRanges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collapsedBuildingQueueRanges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"client"},"arguments":[]}]}]}}]};
 
@@ -3687,105 +3779,6 @@ export function useOnAccountSettingsUpdatedSubscription(baseOptions?: ApolloReac
       }
 export type OnAccountSettingsUpdatedSubscriptionHookResult = ReturnType<typeof useOnAccountSettingsUpdatedSubscription>;
 export type OnAccountSettingsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnAccountSettingsUpdatedSubscription>;
-export const GetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
-
-/**
- * __useGetAutoAdventureSettingsQuery__
- *
- * To run a query within a React component, call `useGetAutoAdventureSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAutoAdventureSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAutoAdventureSettingsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAutoAdventureSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>(GetAutoAdventureSettingsDocument, baseOptions);
-      }
-export function useGetAutoAdventureSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>(GetAutoAdventureSettingsDocument, baseOptions);
-        }
-export type GetAutoAdventureSettingsQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsQuery>;
-export type GetAutoAdventureSettingsLazyQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsLazyQuery>;
-export type GetAutoAdventureSettingsQueryResult = ApolloReactCommon.QueryResult<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>;
-export const UpdateAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoAdventureSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoAdventureSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoAdventureSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
-export type UpdateAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
-
-/**
- * __useUpdateAutoAdventureSettingsMutation__
- *
- * To run a mutation, you first call `useUpdateAutoAdventureSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAutoAdventureSettingsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAutoAdventureSettingsMutation, { data, loading, error }] = useUpdateAutoAdventureSettingsMutation({
- *   variables: {
- *      settings: // value for 'settings'
- *   },
- * });
- */
-export function useUpdateAutoAdventureSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>) {
-        return ApolloReactHooks.useMutation<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>(UpdateAutoAdventureSettingsDocument, baseOptions);
-      }
-export type UpdateAutoAdventureSettingsMutationHookResult = ReturnType<typeof useUpdateAutoAdventureSettingsMutation>;
-export type UpdateAutoAdventureSettingsMutationResult = ApolloReactCommon.MutationResult<UpdateAutoAdventureSettingsMutation>;
-export type UpdateAutoAdventureSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
-export const ResetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetAutoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
-export type ResetAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>;
-
-/**
- * __useResetAutoAdventureSettingsMutation__
- *
- * To run a mutation, you first call `useResetAutoAdventureSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResetAutoAdventureSettingsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [resetAutoAdventureSettingsMutation, { data, loading, error }] = useResetAutoAdventureSettingsMutation({
- *   variables: {
- *   },
- * });
- */
-export function useResetAutoAdventureSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>) {
-        return ApolloReactHooks.useMutation<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>(ResetAutoAdventureSettingsDocument, baseOptions);
-      }
-export type ResetAutoAdventureSettingsMutationHookResult = ReturnType<typeof useResetAutoAdventureSettingsMutation>;
-export type ResetAutoAdventureSettingsMutationResult = ApolloReactCommon.MutationResult<ResetAutoAdventureSettingsMutation>;
-export type ResetAutoAdventureSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>;
-export const OnAutoAdventureSettingsUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnAutoAdventureSettingsUpdated"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettingsUpdated"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
-
-/**
- * __useOnAutoAdventureSettingsUpdatedSubscription__
- *
- * To run a query within a React component, call `useOnAutoAdventureSettingsUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useOnAutoAdventureSettingsUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOnAutoAdventureSettingsUpdatedSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useOnAutoAdventureSettingsUpdatedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnAutoAdventureSettingsUpdatedSubscription, OnAutoAdventureSettingsUpdatedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<OnAutoAdventureSettingsUpdatedSubscription, OnAutoAdventureSettingsUpdatedSubscriptionVariables>(OnAutoAdventureSettingsUpdatedDocument, baseOptions);
-      }
-export type OnAutoAdventureSettingsUpdatedSubscriptionHookResult = ReturnType<typeof useOnAutoAdventureSettingsUpdatedSubscription>;
-export type OnAutoAdventureSettingsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnAutoAdventureSettingsUpdatedSubscription>;
 export const GetAutoBuildSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoBuildSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoBuildSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"villageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"villageId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoBuildSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageOptionSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"overflowLevel"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoStorageSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoStorageSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"granary"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"warehouse"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageOptionSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allowFreeSpots"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoBuildSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoBuildSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"dualQueue"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"preference"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"autoCropFields"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minCrop"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"autoStorage"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoStorageSettings"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"useHeroResources"},"arguments":[],"directives":[]}]}}]};
 
 /**
@@ -4451,6 +4444,259 @@ export function useOnGeneralVillageSettingsUpdatedSubscription(baseOptions?: Apo
       }
 export type OnGeneralVillageSettingsUpdatedSubscriptionHookResult = ReturnType<typeof useOnGeneralVillageSettingsUpdatedSubscription>;
 export type OnGeneralVillageSettingsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnGeneralVillageSettingsUpdatedSubscription>;
+export const GetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useGetAutoAdventureSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetAutoAdventureSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAutoAdventureSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAutoAdventureSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAutoAdventureSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>(GetAutoAdventureSettingsDocument, baseOptions);
+      }
+export function useGetAutoAdventureSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>(GetAutoAdventureSettingsDocument, baseOptions);
+        }
+export type GetAutoAdventureSettingsQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsQuery>;
+export type GetAutoAdventureSettingsLazyQueryHookResult = ReturnType<typeof useGetAutoAdventureSettingsLazyQuery>;
+export type GetAutoAdventureSettingsQueryResult = ApolloReactCommon.QueryResult<GetAutoAdventureSettingsQuery, GetAutoAdventureSettingsQueryVariables>;
+export const UpdateAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAutoAdventureSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateAutoAdventureSettingsInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAutoAdventureSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
+export type UpdateAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
+
+/**
+ * __useUpdateAutoAdventureSettingsMutation__
+ *
+ * To run a mutation, you first call `useUpdateAutoAdventureSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAutoAdventureSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAutoAdventureSettingsMutation, { data, loading, error }] = useUpdateAutoAdventureSettingsMutation({
+ *   variables: {
+ *      settings: // value for 'settings'
+ *   },
+ * });
+ */
+export function useUpdateAutoAdventureSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>(UpdateAutoAdventureSettingsDocument, baseOptions);
+      }
+export type UpdateAutoAdventureSettingsMutationHookResult = ReturnType<typeof useUpdateAutoAdventureSettingsMutation>;
+export type UpdateAutoAdventureSettingsMutationResult = ApolloReactCommon.MutationResult<UpdateAutoAdventureSettingsMutation>;
+export type UpdateAutoAdventureSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateAutoAdventureSettingsMutation, UpdateAutoAdventureSettingsMutationVariables>;
+export const ResetAutoAdventureSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetAutoAdventureSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetAutoAdventureSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
+export type ResetAutoAdventureSettingsMutationFn = ApolloReactCommon.MutationFunction<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>;
+
+/**
+ * __useResetAutoAdventureSettingsMutation__
+ *
+ * To run a mutation, you first call `useResetAutoAdventureSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetAutoAdventureSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetAutoAdventureSettingsMutation, { data, loading, error }] = useResetAutoAdventureSettingsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useResetAutoAdventureSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>(ResetAutoAdventureSettingsDocument, baseOptions);
+      }
+export type ResetAutoAdventureSettingsMutationHookResult = ReturnType<typeof useResetAutoAdventureSettingsMutation>;
+export type ResetAutoAdventureSettingsMutationResult = ApolloReactCommon.MutationResult<ResetAutoAdventureSettingsMutation>;
+export type ResetAutoAdventureSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetAutoAdventureSettingsMutation, ResetAutoAdventureSettingsMutationVariables>;
+export const OnAutoAdventureSettingsUpdatedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnAutoAdventureSettingsUpdated"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"autoAdventureSettingsUpdated"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AutoAdventureSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Duration"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Duration"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hours"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"minutes"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"seconds"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CoolDown"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CoolDown"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"min"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"max"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AutoAdventureSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AutoAdventureSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allow"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"coolDown"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CoolDown"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"adventureCriteria"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hardMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"normalMinHealth"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"maxTravelTime"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Duration"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"preferHard"},"arguments":[],"directives":[]}]}}]};
+
+/**
+ * __useOnAutoAdventureSettingsUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useOnAutoAdventureSettingsUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnAutoAdventureSettingsUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnAutoAdventureSettingsUpdatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnAutoAdventureSettingsUpdatedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnAutoAdventureSettingsUpdatedSubscription, OnAutoAdventureSettingsUpdatedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnAutoAdventureSettingsUpdatedSubscription, OnAutoAdventureSettingsUpdatedSubscriptionVariables>(OnAutoAdventureSettingsUpdatedDocument, baseOptions);
+      }
+export type OnAutoAdventureSettingsUpdatedSubscriptionHookResult = ReturnType<typeof useOnAutoAdventureSettingsUpdatedSubscription>;
+export type OnAutoAdventureSettingsUpdatedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnAutoAdventureSettingsUpdatedSubscription>;
+export const GetHeroLevelUpSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHeroLevelUpSettings"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroLevelUpSettings"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"levelUpItems"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}}]};
+
+/**
+ * __useGetHeroLevelUpSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetHeroLevelUpSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHeroLevelUpSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHeroLevelUpSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHeroLevelUpSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetHeroLevelUpSettingsQuery, GetHeroLevelUpSettingsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetHeroLevelUpSettingsQuery, GetHeroLevelUpSettingsQueryVariables>(GetHeroLevelUpSettingsDocument, baseOptions);
+      }
+export function useGetHeroLevelUpSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetHeroLevelUpSettingsQuery, GetHeroLevelUpSettingsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetHeroLevelUpSettingsQuery, GetHeroLevelUpSettingsQueryVariables>(GetHeroLevelUpSettingsDocument, baseOptions);
+        }
+export type GetHeroLevelUpSettingsQueryHookResult = ReturnType<typeof useGetHeroLevelUpSettingsQuery>;
+export type GetHeroLevelUpSettingsLazyQueryHookResult = ReturnType<typeof useGetHeroLevelUpSettingsLazyQuery>;
+export type GetHeroLevelUpSettingsQueryResult = ApolloReactCommon.QueryResult<GetHeroLevelUpSettingsQuery, GetHeroLevelUpSettingsQueryVariables>;
+export const IsHeroLevelUpItemNameUsedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"IsHeroLevelUpItemNameUsed"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isHeroLevelUpItemNameUsed"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}],"directives":[]}]}}]};
+
+/**
+ * __useIsHeroLevelUpItemNameUsedQuery__
+ *
+ * To run a query within a React component, call `useIsHeroLevelUpItemNameUsedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsHeroLevelUpItemNameUsedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsHeroLevelUpItemNameUsedQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useIsHeroLevelUpItemNameUsedQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<IsHeroLevelUpItemNameUsedQuery, IsHeroLevelUpItemNameUsedQueryVariables>) {
+        return ApolloReactHooks.useQuery<IsHeroLevelUpItemNameUsedQuery, IsHeroLevelUpItemNameUsedQueryVariables>(IsHeroLevelUpItemNameUsedDocument, baseOptions);
+      }
+export function useIsHeroLevelUpItemNameUsedLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsHeroLevelUpItemNameUsedQuery, IsHeroLevelUpItemNameUsedQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<IsHeroLevelUpItemNameUsedQuery, IsHeroLevelUpItemNameUsedQueryVariables>(IsHeroLevelUpItemNameUsedDocument, baseOptions);
+        }
+export type IsHeroLevelUpItemNameUsedQueryHookResult = ReturnType<typeof useIsHeroLevelUpItemNameUsedQuery>;
+export type IsHeroLevelUpItemNameUsedLazyQueryHookResult = ReturnType<typeof useIsHeroLevelUpItemNameUsedLazyQuery>;
+export type IsHeroLevelUpItemNameUsedQueryResult = ApolloReactCommon.QueryResult<IsHeroLevelUpItemNameUsedQuery, IsHeroLevelUpItemNameUsedQueryVariables>;
+export const AddHeroLevelUpItemDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddHeroLevelUpItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"item"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItemInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHeroLevelUpItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"item"},"value":{"kind":"Variable","name":{"kind":"Name","value":"item"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}}]};
+export type AddHeroLevelUpItemMutationFn = ApolloReactCommon.MutationFunction<AddHeroLevelUpItemMutation, AddHeroLevelUpItemMutationVariables>;
+
+/**
+ * __useAddHeroLevelUpItemMutation__
+ *
+ * To run a mutation, you first call `useAddHeroLevelUpItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddHeroLevelUpItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addHeroLevelUpItemMutation, { data, loading, error }] = useAddHeroLevelUpItemMutation({
+ *   variables: {
+ *      item: // value for 'item'
+ *   },
+ * });
+ */
+export function useAddHeroLevelUpItemMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddHeroLevelUpItemMutation, AddHeroLevelUpItemMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddHeroLevelUpItemMutation, AddHeroLevelUpItemMutationVariables>(AddHeroLevelUpItemDocument, baseOptions);
+      }
+export type AddHeroLevelUpItemMutationHookResult = ReturnType<typeof useAddHeroLevelUpItemMutation>;
+export type AddHeroLevelUpItemMutationResult = ApolloReactCommon.MutationResult<AddHeroLevelUpItemMutation>;
+export type AddHeroLevelUpItemMutationOptions = ApolloReactCommon.BaseMutationOptions<AddHeroLevelUpItemMutation, AddHeroLevelUpItemMutationVariables>;
+export const UpdateHeroLevelUpItemDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateHeroLevelUpItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"previousName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"item"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItemInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateHeroLevelUpItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"previousName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"previousName"}}},{"kind":"Argument","name":{"kind":"Name","value":"item"},"value":{"kind":"Variable","name":{"kind":"Name","value":"item"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}}]};
+export type UpdateHeroLevelUpItemMutationFn = ApolloReactCommon.MutationFunction<UpdateHeroLevelUpItemMutation, UpdateHeroLevelUpItemMutationVariables>;
+
+/**
+ * __useUpdateHeroLevelUpItemMutation__
+ *
+ * To run a mutation, you first call `useUpdateHeroLevelUpItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHeroLevelUpItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHeroLevelUpItemMutation, { data, loading, error }] = useUpdateHeroLevelUpItemMutation({
+ *   variables: {
+ *      previousName: // value for 'previousName'
+ *      item: // value for 'item'
+ *   },
+ * });
+ */
+export function useUpdateHeroLevelUpItemMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateHeroLevelUpItemMutation, UpdateHeroLevelUpItemMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateHeroLevelUpItemMutation, UpdateHeroLevelUpItemMutationVariables>(UpdateHeroLevelUpItemDocument, baseOptions);
+      }
+export type UpdateHeroLevelUpItemMutationHookResult = ReturnType<typeof useUpdateHeroLevelUpItemMutation>;
+export type UpdateHeroLevelUpItemMutationResult = ApolloReactCommon.MutationResult<UpdateHeroLevelUpItemMutation>;
+export type UpdateHeroLevelUpItemMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateHeroLevelUpItemMutation, UpdateHeroLevelUpItemMutationVariables>;
+export const RemoveHeroLevelUpItemDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveHeroLevelUpItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeHeroLevelUpItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}}]};
+export type RemoveHeroLevelUpItemMutationFn = ApolloReactCommon.MutationFunction<RemoveHeroLevelUpItemMutation, RemoveHeroLevelUpItemMutationVariables>;
+
+/**
+ * __useRemoveHeroLevelUpItemMutation__
+ *
+ * To run a mutation, you first call `useRemoveHeroLevelUpItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveHeroLevelUpItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeHeroLevelUpItemMutation, { data, loading, error }] = useRemoveHeroLevelUpItemMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRemoveHeroLevelUpItemMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveHeroLevelUpItemMutation, RemoveHeroLevelUpItemMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveHeroLevelUpItemMutation, RemoveHeroLevelUpItemMutationVariables>(RemoveHeroLevelUpItemDocument, baseOptions);
+      }
+export type RemoveHeroLevelUpItemMutationHookResult = ReturnType<typeof useRemoveHeroLevelUpItemMutation>;
+export type RemoveHeroLevelUpItemMutationResult = ApolloReactCommon.MutationResult<RemoveHeroLevelUpItemMutation>;
+export type RemoveHeroLevelUpItemMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveHeroLevelUpItemMutation, RemoveHeroLevelUpItemMutationVariables>;
+export const OnHeroLevelUpSettingsChangedDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"OnHeroLevelUpSettingsChanged"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heroLevelUpSettingsChanged"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpSettings"},"directives":[]}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offensiveStrength"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"offBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"defBonus"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"resources"},"arguments":[],"directives":[]}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroLevelUpSettings"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroLevelUpSettings"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"levelUpItems"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroLevelUpItem"},"directives":[]}]}}]}}]};
+
+/**
+ * __useOnHeroLevelUpSettingsChangedSubscription__
+ *
+ * To run a query within a React component, call `useOnHeroLevelUpSettingsChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnHeroLevelUpSettingsChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnHeroLevelUpSettingsChangedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnHeroLevelUpSettingsChangedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnHeroLevelUpSettingsChangedSubscription, OnHeroLevelUpSettingsChangedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnHeroLevelUpSettingsChangedSubscription, OnHeroLevelUpSettingsChangedSubscriptionVariables>(OnHeroLevelUpSettingsChangedDocument, baseOptions);
+      }
+export type OnHeroLevelUpSettingsChangedSubscriptionHookResult = ReturnType<typeof useOnHeroLevelUpSettingsChangedSubscription>;
+export type OnHeroLevelUpSettingsChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnHeroLevelUpSettingsChangedSubscription>;
 export const ExportAccountSettingsDocument: DocumentNode = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExportAccountSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"exportAccountSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}},{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[]}]}}]};
 export type ExportAccountSettingsMutationFn = ApolloReactCommon.MutationFunction<ExportAccountSettingsMutation, ExportAccountSettingsMutationVariables>;
 

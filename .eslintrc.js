@@ -110,6 +110,7 @@ module.exports = {
     'unicorn/no-null': 'off',
     'unicorn/no-reduce': 'off',
     'unicorn/prefer-text-content': 'off',
+    'unicorn/no-useless-undefined': 'off',
     // Common abbreviations are known and readable
     'unicorn/prevent-abbreviations': 'off',
     '@typescript-eslint/no-empty-function': 'off',

@@ -315,6 +315,28 @@ export type HeroInformation = {
   readonly village: Maybe<Village>;
 };
 
+export type HeroLevelUpItem = {
+  readonly __typename?: 'HeroLevelUpItem';
+  readonly name: Scalars['ID'];
+  readonly offensiveStrength: Scalars['Int'];
+  readonly offBonus: Scalars['Int'];
+  readonly defBonus: Scalars['Int'];
+  readonly resources: Scalars['Int'];
+};
+
+export type HeroLevelUpItemInput = {
+  readonly name: Scalars['ID'];
+  readonly offensiveStrength: Scalars['Int'];
+  readonly offBonus: Scalars['Int'];
+  readonly defBonus: Scalars['Int'];
+  readonly resources: Scalars['Int'];
+};
+
+export type HeroLevelUpSettings = {
+  readonly __typename?: 'HeroLevelUpSettings';
+  readonly levelUpItems: ReadonlyArray<HeroLevelUpItem>;
+};
+
 export enum HeroState {
   Unknown = 'Unknown',
   InVillage = 'InVillage',
@@ -340,6 +362,7 @@ export enum MapSearchState {
 
 export type Mutation = {
   readonly __typename?: 'Mutation';
+  readonly addHeroLevelUpItem: HeroLevelUpItem;
   readonly clearQueue: Maybe<Scalars['Boolean']>;
   readonly createAccount: UserAccount;
   readonly deleteAccount: UserAccount;
@@ -358,6 +381,7 @@ export type Mutation = {
   readonly moveQueuedBuildingsBlockAsHighAsPossible: Maybe<Scalars['Boolean']>;
   readonly moveQueuedBuildingsBlockToIndex: Maybe<Scalars['Boolean']>;
   readonly refreshVillage: Maybe<Scalars['Boolean']>;
+  readonly removeHeroLevelUpItem: HeroLevelUpItem;
   readonly resetAccountSettings: AccountSettings;
   readonly resetAutoAdventureSettings: AutoAdventureSettings;
   readonly resetAutoBuildSettings: AutoBuildSettings;
@@ -390,6 +414,12 @@ export type Mutation = {
   readonly updateAutoUnitsUnitSettings: AutoUnitsSettings;
   readonly updateGeneralSettings: GeneralSettings;
   readonly updateGeneralVillageSettings: GeneralVillageSettings;
+  readonly updateHeroLevelUpItem: HeroLevelUpItem;
+};
+
+
+export type MutationAddHeroLevelUpItemArgs = {
+  item: HeroLevelUpItemInput;
 };
 
 
@@ -492,6 +522,11 @@ export type MutationMoveQueuedBuildingsBlockToIndexArgs = {
 
 export type MutationRefreshVillageArgs = {
   villageId: Scalars['ID'];
+};
+
+
+export type MutationRemoveHeroLevelUpItemArgs = {
+  name: Scalars['ID'];
 };
 
 
@@ -616,6 +651,12 @@ export type MutationUpdateGeneralVillageSettingsArgs = {
   settings: UpdateGeneralVillageSettingsInput;
 };
 
+
+export type MutationUpdateHeroLevelUpItemArgs = {
+  previousName: Scalars['ID'];
+  item: HeroLevelUpItemInput;
+};
+
 export type Query = {
   readonly __typename?: 'Query';
   readonly account: UserAccount;
@@ -642,8 +683,10 @@ export type Query = {
   readonly generalSettings: GeneralSettings;
   readonly generalVillageSettings: GeneralVillageSettings;
   readonly heroInformation: HeroModel;
+  readonly heroLevelUpSettings: HeroLevelUpSettings;
   readonly isAccountTaken: Scalars['Boolean'];
   readonly isBotActive: Scalars['Boolean'];
+  readonly isHeroLevelUpItemNameUsed: Scalars['Boolean'];
   readonly lastSignedAccountId: Maybe<Scalars['String']>;
   readonly logEntries: ReadonlyArray<LogEntry>;
   readonly mapScanProgress: Scalars['Float'];
@@ -736,6 +779,11 @@ export type QueryGeneralVillageSettingsArgs = {
 
 export type QueryIsAccountTakenArgs = {
   account: AccountInput;
+};
+
+
+export type QueryIsHeroLevelUpItemNameUsedArgs = {
+  name: Scalars['ID'];
 };
 
 
@@ -832,6 +880,7 @@ export type Subscription = {
   readonly generalSettingsUpdated: GeneralSettings;
   readonly generalVillageSettingsUpdated: GeneralVillageSettings;
   readonly heroInformationUpdated: HeroModel;
+  readonly heroLevelUpSettingsChanged: HeroLevelUpSettings;
   readonly lastSignedAccountIdUpdated: Maybe<Scalars['String']>;
   readonly logEntryAdded: LogEntry;
   readonly mapScanProgressUpdated: Scalars['Float'];
@@ -1186,6 +1235,8 @@ export type ResolversTypes = {
   Coords: ResolverTypeWrapper<Coords>;
   VillageResources: ResolverTypeWrapper<Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversTypes['Resources'], production: ResolversTypes['Resources'] }>;
   VillageCapacity: ResolverTypeWrapper<VillageCapacity>;
+  HeroLevelUpSettings: ResolverTypeWrapper<HeroLevelUpSettings>;
+  HeroLevelUpItem: ResolverTypeWrapper<HeroLevelUpItem>;
   AccountInput: AccountInput;
   LogEntry: ResolverTypeWrapper<Omit<LogEntry, 'village' | 'content'> & { village: Maybe<ResolversTypes['Village']>, content: ResolversTypes['LogEntryContent'] }>;
   LogEntryContent: ResolversTypes['TextLogEntryContent'] | ResolversTypes['AutoBuildLogEntryContent'] | ResolversTypes['AutoUnitsLogEntryContent'] | ResolversTypes['ResourceClaimLogEntryContent'];
@@ -1200,6 +1251,7 @@ export type ResolversTypes = {
   TaskType: TaskType;
   UnitInfo: ResolverTypeWrapper<UnitInfo>;
   Mutation: ResolverTypeWrapper<{}>;
+  HeroLevelUpItemInput: HeroLevelUpItemInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
@@ -1271,6 +1323,8 @@ export type ResolversParentTypes = {
   Coords: Coords;
   VillageResources: Omit<VillageResources, 'amount' | 'production'> & { amount: ResolversParentTypes['Resources'], production: ResolversParentTypes['Resources'] };
   VillageCapacity: VillageCapacity;
+  HeroLevelUpSettings: HeroLevelUpSettings;
+  HeroLevelUpItem: HeroLevelUpItem;
   AccountInput: AccountInput;
   LogEntry: Omit<LogEntry, 'village' | 'content'> & { village: Maybe<ResolversParentTypes['Village']>, content: ResolversParentTypes['LogEntryContent'] };
   LogEntryContent: ResolversParentTypes['TextLogEntryContent'] | ResolversParentTypes['AutoBuildLogEntryContent'] | ResolversParentTypes['AutoUnitsLogEntryContent'] | ResolversParentTypes['ResourceClaimLogEntryContent'];
@@ -1281,6 +1335,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   UnitInfo: UnitInfo;
   Mutation: {};
+  HeroLevelUpItemInput: HeroLevelUpItemInput;
   DequeueBuildingInput: DequeueBuildingInput;
   DequeueBuildingAtFieldInput: DequeueBuildingAtFieldInput;
   EnqueueBuildingInput: EnqueueBuildingInput;
@@ -1520,6 +1575,20 @@ export type HeroInformationResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type HeroLevelUpItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['HeroLevelUpItem'] = ResolversParentTypes['HeroLevelUpItem']> = {
+  name: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  offensiveStrength: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  offBonus: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  defBonus: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  resources: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type HeroLevelUpSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['HeroLevelUpSettings'] = ResolversParentTypes['HeroLevelUpSettings']> = {
+  levelUpItems: Resolver<ReadonlyArray<ResolversTypes['HeroLevelUpItem']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type LogEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogEntry'] = ResolversParentTypes['LogEntry']> = {
   timestamp: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   village: Resolver<Maybe<ResolversTypes['Village']>, ParentType, ContextType>;
@@ -1532,6 +1601,7 @@ export type LogEntryContentResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addHeroLevelUpItem: Resolver<ResolversTypes['HeroLevelUpItem'], ParentType, ContextType, RequireFields<MutationAddHeroLevelUpItemArgs, 'item'>>;
   clearQueue: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationClearQueueArgs, 'villageId'>>;
   createAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'account'>>;
   deleteAccount: Resolver<ResolversTypes['UserAccount'], ParentType, ContextType, RequireFields<MutationDeleteAccountArgs, 'id'>>;
@@ -1550,6 +1620,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   moveQueuedBuildingsBlockAsHighAsPossible: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingsBlockAsHighAsPossibleArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId'>>;
   moveQueuedBuildingsBlockToIndex: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMoveQueuedBuildingsBlockToIndexArgs, 'villageId' | 'topBuildingQueueId' | 'bottomBuildingQueueId' | 'index'>>;
   refreshVillage: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRefreshVillageArgs, 'villageId'>>;
+  removeHeroLevelUpItem: Resolver<ResolversTypes['HeroLevelUpItem'], ParentType, ContextType, RequireFields<MutationRemoveHeroLevelUpItemArgs, 'name'>>;
   resetAccountSettings: Resolver<ResolversTypes['AccountSettings'], ParentType, ContextType>;
   resetAutoAdventureSettings: Resolver<ResolversTypes['AutoAdventureSettings'], ParentType, ContextType>;
   resetAutoBuildSettings: Resolver<ResolversTypes['AutoBuildSettings'], ParentType, ContextType, RequireFields<MutationResetAutoBuildSettingsArgs, 'villageId'>>;
@@ -1582,6 +1653,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateAutoUnitsUnitSettings: Resolver<ResolversTypes['AutoUnitsSettings'], ParentType, ContextType, RequireFields<MutationUpdateAutoUnitsUnitSettingsArgs, 'villageId' | 'settings'>>;
   updateGeneralSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralSettingsArgs, 'settings'>>;
   updateGeneralVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<MutationUpdateGeneralVillageSettingsArgs, 'villageId' | 'settings'>>;
+  updateHeroLevelUpItem: Resolver<ResolversTypes['HeroLevelUpItem'], ParentType, ContextType, RequireFields<MutationUpdateHeroLevelUpItemArgs, 'previousName' | 'item'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -1609,8 +1681,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   generalSettings: Resolver<ResolversTypes['GeneralSettings'], ParentType, ContextType>;
   generalVillageSettings: Resolver<ResolversTypes['GeneralVillageSettings'], ParentType, ContextType, RequireFields<QueryGeneralVillageSettingsArgs, 'villageId'>>;
   heroInformation: Resolver<ResolversTypes['HeroInformation'], ParentType, ContextType>;
+  heroLevelUpSettings: Resolver<ResolversTypes['HeroLevelUpSettings'], ParentType, ContextType>;
   isAccountTaken: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsAccountTakenArgs, 'account'>>;
   isBotActive: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isHeroLevelUpItemNameUsed: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsHeroLevelUpItemNameUsedArgs, 'name'>>;
   lastSignedAccountId: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logEntries: Resolver<ReadonlyArray<ResolversTypes['LogEntry']>, ParentType, ContextType>;
   mapScanProgress: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
@@ -1684,6 +1758,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   generalSettingsUpdated: SubscriptionResolver<ResolversTypes['GeneralSettings'], "generalSettingsUpdated", ParentType, ContextType>;
   generalVillageSettingsUpdated: SubscriptionResolver<ResolversTypes['GeneralVillageSettings'], "generalVillageSettingsUpdated", ParentType, ContextType, RequireFields<SubscriptionGeneralVillageSettingsUpdatedArgs, 'villageId'>>;
   heroInformationUpdated: SubscriptionResolver<ResolversTypes['HeroInformation'], "heroInformationUpdated", ParentType, ContextType>;
+  heroLevelUpSettingsChanged: SubscriptionResolver<ResolversTypes['HeroLevelUpSettings'], "heroLevelUpSettingsChanged", ParentType, ContextType>;
   lastSignedAccountIdUpdated: SubscriptionResolver<Maybe<ResolversTypes['String']>, "lastSignedAccountIdUpdated", ParentType, ContextType>;
   logEntryAdded: SubscriptionResolver<ResolversTypes['LogEntry'], "logEntryAdded", ParentType, ContextType>;
   mapScanProgressUpdated: SubscriptionResolver<ResolversTypes['Float'], "mapScanProgressUpdated", ParentType, ContextType>;
@@ -1791,6 +1866,8 @@ export type Resolvers<ContextType = any> = {
   GeneralSettings: GeneralSettingsResolvers<ContextType>;
   GeneralVillageSettings: GeneralVillageSettingsResolvers<ContextType>;
   HeroInformation: HeroInformationResolvers<ContextType>;
+  HeroLevelUpItem: HeroLevelUpItemResolvers<ContextType>;
+  HeroLevelUpSettings: HeroLevelUpSettingsResolvers<ContextType>;
   LogEntry: LogEntryResolvers<ContextType>;
   LogEntryContent: LogEntryContentResolvers;
   Mutation: MutationResolvers<ContextType>;

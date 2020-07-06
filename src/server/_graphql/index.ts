@@ -15,13 +15,14 @@ import miscResolvers from './misc/miscResolvers';
 import nextTaskExecutionResolvers from './nextTaskExecution/nextTaskExecutionResolvers';
 import queuedBuildingResolvers from './queuedBuilding/queuedBuildingResolvers';
 import accountSettingsResolvers from './settings/accountSettingsResolvers';
-import autoAdventureSettingsResolvers from './settings/autoAdventureSettingsResolvers';
 import autoBuildSettingsResolvers from './settings/autoBuildSettingsResolvers';
 import autoMentorSettingsResolvers from './settings/autoMentorSettingsResolvers';
 import autoPartySettingsResolvers from './settings/autoPartySettingsResolvers';
 import autoUnitsSettingsResolvers from './settings/autoUnitsSettingsResolvers';
 import generalSettingsResolvers from './settings/generalSettingsResolvers';
 import generalVillageSettingsResolvers from './settings/generalVillageSettingsResolvers';
+import autoAdventureSettingsResolvers from './settings/hero/autoAdventureSettingsResolvers';
+import heroLevelUpSettingsResolvers from './settings/hero/heroLevelUpSettingsResolvers';
 import settingsManagementResolvers from './settings/settingsManagementResolvers';
 import unitResolvers from './unit/unitResolvers';
 import villageResolvers from './village/villageResolvers';
@@ -34,6 +35,7 @@ export const loadResolvers = (): Resolvers =>
     controllerResolvers,
     enumResolvers,
     gameInfoResolvers,
+    heroLevelUpSettingsResolvers,
     heroResolvers,
     logsResolvers,
     mapSearchResolvers,

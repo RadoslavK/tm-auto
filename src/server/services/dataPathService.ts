@@ -4,6 +4,7 @@ import { accountService } from './accountService';
 
 type HeroSettingsPath = {
   readonly autoAdventure: string;
+  readonly heroLevelUp: string;
 };
 
 type AccountSettingsPath = {
@@ -104,6 +105,7 @@ export class DataPathService {
 
     return {
       autoAdventure: path.join(lPath, 'auto-adventure.json'),
+      heroLevelUp: path.join(lPath, 'hero-level-up.json'),
     };
   };
 

@@ -1,6 +1,7 @@
 import { HeroState } from '../../_types/graphql.type';
 import { getAccountContext } from '../../accountContext';
 import { getPage } from '../../browser/getPage';
+import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes';
 import { BotEvent } from '../../events/botEvent';
 import { publishEvent } from '../../pubSub';
 
@@ -98,4 +99,6 @@ export const updateHeroInformation = async (): Promise<void> => {
   hero.hasAvailableAdventures = adventureCount > 0;
 
   publishEvent(BotEvent.HeroInformationUpdated);
+
+  await assignHeroAttributes();
 };

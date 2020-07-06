@@ -13,6 +13,7 @@ const collapsedBuildingQueueRangeIds = graphQLCache.makeVar<
 const selectedVillageId = graphQLCache.makeVar<string>('');
 
 graphQLCache.policies.addTypePolicies({
+  HeroLevelUpItem: { keyFields: ['name'] },
   QueuedBuildingRange: { keyFields: false },
   Query: {
     fields: {

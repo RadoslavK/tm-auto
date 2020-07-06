@@ -4,6 +4,7 @@ import { AccountSettings } from '../_models/settings/accountSettings';
 import { AutoMentorSettings } from '../_models/settings/autoMentorSettings';
 import { GeneralSettings } from '../_models/settings/generalSettings';
 import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
+import { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings';
 import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings';
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings';
@@ -56,6 +57,10 @@ export type BotEventPayloads = {
   [BotEvent.GeneralVillageSettingsUpdated]: {
     readonly settings: GeneralVillageSettings;
     readonly villageId: string;
+  };
+
+  [BotEvent.HeroLevelUpSettingsChanged]: {
+    readonly settings: HeroLevelUpSettings;
   };
 
   // TODO when subscribeToEvent is typed properly we can pass values directly rather than this

@@ -6,9 +6,9 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { BotState } from '../../../_graphql/graphqlHooks';
 import { useBotState } from '../../../hooks/useBotState';
+import { Hero } from '../../hero/components/Hero';
 import { Logs } from '../../logs/components/Logs';
 import { MapSearch } from '../../mapSearch/MapSearch';
-import { HeroSettings } from '../../settings/hero/HeroSettings';
 import { Settings } from '../../settings/Settings';
 import { Villages } from '../../villages/components/Villages';
 import { BotStateToggle } from './BotStateToggle';
@@ -22,7 +22,7 @@ type NavigationApp = {
 
 export const navigationApps: readonly NavigationApp[] = [
   { component: Villages, label: 'Villages', path: '/villages' },
-  { component: HeroSettings, label: 'Hero', path: '/hero' },
+  { component: Hero, label: 'Hero', path: '/hero' },
   { component: Settings, label: 'Settings', path: '/settings' },
   { component: MapSearch, label: 'Search map', path: '/map-search' },
   { component: Logs, label: 'Logs', path: '/logs' },

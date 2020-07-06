@@ -1,7 +1,7 @@
-import { Resolvers } from '../../_types/resolvers.type';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
+import { Resolvers } from '../../../_types/resolvers.type';
+import { getAccountContext } from '../../../accountContext';
+import { BotEvent } from '../../../events/botEvent';
+import { subscribeToEvent } from '../../../pubSub';
 
 const getService = () => getAccountContext().settingsService.hero.autoAdventure;
 

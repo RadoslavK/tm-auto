@@ -310,6 +310,26 @@ type HeroInformation {
   village: Village
 }
 
+type HeroLevelUpItem {
+  name: ID!
+  offensiveStrength: Int!
+  offBonus: Int!
+  defBonus: Int!
+  resources: Int!
+}
+
+input HeroLevelUpItemInput {
+  name: ID!
+  offensiveStrength: Int!
+  offBonus: Int!
+  defBonus: Int!
+  resources: Int!
+}
+
+type HeroLevelUpSettings {
+  levelUpItems: [HeroLevelUpItem!]!
+}
+
 enum HeroState {
   Unknown
   InVillage
@@ -360,8 +380,6 @@ type Mutation {
   moveQueuedBuildingsBlockAsHighAsPossible(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!): Boolean
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
   resetAccountSettings: AccountSettings!
-  updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
-  resetAutoAdventureSettings: AutoAdventureSettings!
   updateAutoBuildSettings(villageId: ID!, settings: UpdateAutoBuildSettingsInput!): AutoBuildSettings!
   resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
   updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
@@ -376,6 +394,11 @@ type Mutation {
   resetGeneralSettings: GeneralSettings!
   updateGeneralVillageSettings(villageId: ID!, settings: UpdateGeneralVillageSettingsInput!): GeneralVillageSettings!
   resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
+  updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
+  resetAutoAdventureSettings: AutoAdventureSettings!
+  addHeroLevelUpItem(item: HeroLevelUpItemInput!): HeroLevelUpItem!
+  updateHeroLevelUpItem(previousName: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
+  removeHeroLevelUpItem(name: ID!): HeroLevelUpItem!
   exportAccountSettings(accountId: ID!, path: String!): Boolean
   exportGeneralSettings(path: String!): Boolean
   exportAccounts(path: String!): Boolean
@@ -411,13 +434,15 @@ type Query {
   canMoveQueuedBuildingToIndex(villageId: ID!, queueId: ID!, index: Int!): Boolean!
   canMoveQueuedBuildingsBlockToIndex(villageId: ID!, topBuildingQueueId: ID!, bottomBuildingQueueId: ID!, index: Int!): Boolean!
   accountSettings: AccountSettings!
-  autoAdventureSettings: AutoAdventureSettings!
   autoBuildSettings(villageId: ID!): AutoBuildSettings!
   autoMentorSettings: AutoMentorSettings!
   autoPartySettings(villageId: ID!): AutoPartySettings!
   autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   generalSettings: GeneralSettings!
   generalVillageSettings(villageId: ID!): GeneralVillageSettings!
+  autoAdventureSettings: AutoAdventureSettings!
+  heroLevelUpSettings: HeroLevelUpSettings!
+  isHeroLevelUpItemNameUsed(name: ID!): Boolean!
   unitInfo(index: Int!): UnitInfo!
   activeVillageId: ID!
   village(villageId: ID!): Village
@@ -493,13 +518,14 @@ type Subscription {
   nextVillageTaskExecutionChanged(villageId: ID!, task: TaskType!): Timestamp!
   queueUpdated(villageId: ID!): BuildingQueue!
   accountSettingsUpdated: AccountSettings!
-  autoAdventureSettingsUpdated: AutoAdventureSettings!
   autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
   autoPartySettingsUpdated(villageId: ID!): AutoPartySettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   generalSettingsUpdated: GeneralSettings!
   generalVillageSettingsUpdated(villageId: ID!): GeneralVillageSettings!
+  autoAdventureSettingsUpdated: AutoAdventureSettings!
+  heroLevelUpSettingsChanged: HeroLevelUpSettings!
   villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!
   activeVillageIdChanged: ID!

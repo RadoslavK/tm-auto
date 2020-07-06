@@ -10,6 +10,7 @@ export enum BotEvent {
   AutoUnitsSettingsUpdated = 'AutoUnitsSettingsUpdated',
   GeneralSettingsUpdated = 'GeneralSettingsUpdated',
   GeneralVillageSettingsUpdated = 'GeneralVillageSettingsUpdated',
+  HeroLevelUpSettingsChanged = 'HeroLevelUpSettingsChanged',
 
   BotActivityChanged = 'BotActivityChanged',
   ActiveVillageIdChanged = 'ActiveVillageIdChanged',
