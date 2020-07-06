@@ -124,7 +124,7 @@ export class AutoMentorTask implements BotTask {
   private completeAndAcceptTaskRewards = async (): Promise<void> => {
     const { completeTasks, acceptTaskRewards } = this.settings();
 
-    if (!completeTasks.allow || !acceptTaskRewards) {
+    if (!completeTasks.allow && !acceptTaskRewards) {
       return;
     }
 

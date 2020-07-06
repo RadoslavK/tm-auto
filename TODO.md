@@ -95,6 +95,7 @@
 - Use new icons for resources, buildings, nations... Maybe have 2 versions for buildings
 - Use some big toggle instead of Checkboxes for allow
 - Show the Multi-level enqueue dialog close to the cursor/clicked building - React-Tether?
+- Option to clear server data
 
 ## Code Quality
 
@@ -104,6 +105,7 @@
 - refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
 - Use mapper for union log entry in schema
 - Better support for logic execution on particular pages
+- Rethink bot task engines. Maybe they are not needed at all.
 
 ## Performance
 
