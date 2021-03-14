@@ -1,0 +1,77 @@
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { DragPreviewImage, useDrag } from 'react-dnd';
+import { useFragment } from 'react-relay/hooks';
+import { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql';
+
+import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks';
+import {
+  DropPosition,
+  MovedQueuedBuilding,
+  QueuedBuildingsDropArea,
+} from '../QueuedBuildingsDropArea';
+import { QueuedBuildingComponent } from './QueuedBuildingComponent';
+import graphql from 'babel-plugin-relay/macro';
+
+type StylesProps = {
+  readonly isDragging: boolean;
+};
+
+const useStyles = makeStyles<unknown, StylesProps>({
+  root: {
+    opacity: (props) => (props.isDragging ? 0.5 : 1),
+  },
+});
+
+type Props = {
+  readonly building: QueuedBuilding_queuedBuilding$key;
+  readonly onCollapse?: () => void;
+};
+
+const queuedBuildingQueuedBuildingFragment = graphql`
+  fragment QueuedBuilding_queuedBuilding on QueuedBuilding {
+      queueIndex
+      queueId
+      type
+      ...QueuedBuildingComponent_queuedBuilding
+  }
+`;
+
+export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse }) => {
+  const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
+
+  const movedBuilding: MovedQueuedBuilding = {
+    buildingFragmentKey: queuedBuildingFragment,
+    queueId: queuedBuildingFragment.queueId,
+    queueIndex: queuedBuildingFragment.queueIndex,
+  };
+
+  const [{ isDragging }, drag, preview] = useDrag({
+    item: movedBuilding,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    type: 'QueuedBuilding',
+  });
+
+  const classes = useStyles({ isDragging });
+
+  return (
+    <QueuedBuildingsDropArea
+      getDropPosition={(queueIndex) =>
+        queueIndex > queuedBuildingFragment.queueIndex
+          ? DropPosition.Above
+          : DropPosition.Below
+      }
+      queueIndexBot={queuedBuildingFragment.queueIndex}
+      queueIndexTop={queuedBuildingFragment.queueIndex}>
+      <div ref={drag} className={classes.root}>
+        <DragPreviewImage
+          connect={preview}
+          src={imageLinks.getBuilding(queuedBuildingFragment.type, BuildingImageSize.Small)}
+        />
+        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} />
+      </div>
+    </QueuedBuildingsDropArea>
+  );
+};

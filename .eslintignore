@@ -4,8 +4,4 @@ pack
 resources
 node_modules
 *.graphql
-graphql.type.ts
-graphqlHooks.ts
 *.json
-*.yml
-index.html

@@ -1,8 +1,0 @@
-extend type Mutation {
-  exportAccountSettings(accountId: ID!, path: String!): Boolean
-  exportGeneralSettings(path: String!): Boolean
-  exportAccounts(path: String!): Boolean
-  importAccountSettings(accountId: ID!, path: String!): Boolean
-  importGeneralSettings(path: String!): Boolean
-  importAccounts(path: String!): Boolean
-}

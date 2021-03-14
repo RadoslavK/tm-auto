@@ -120,7 +120,7 @@
 
 - Occasionally some "Unknown Error" happens. Detect and wait similarly to maintenance.
 - React error boundary for client errors -> refresh button?
-- Bot Task CoolDown is set only when task is successful.
+- Bot Task CoolDownType is set only when task is successful.
   - Improve retry policy, error handling and cooldown manipulation
 - Check if login succeeded
 - Check that server is running against required node version

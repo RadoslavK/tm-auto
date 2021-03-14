@@ -1,0 +1,191 @@
+import {
+  idArg,
+  mutationField,
+  queryField,
+  subscriptionField,
+} from 'nexus';
+import { Duration } from '../../_models/duration';
+import { TaskType } from '../../_models/misc/taskType';
+import { Timestamp } from '../../_models/misc/timestamp';
+import { getAccountContext } from '../../accountContext';
+import { BotEvent } from '../../events/botEvent';
+import { subscribeToEvent } from '../../pubSub';
+import { convertDelayToDate } from '../../utils/convertDelayToDate';
+
+export const NextTasksExecutionQuery = queryField(t => {
+  t.field('nextTasksExecution', {
+    type: 'Timestamp',
+    resolve: () =>
+      Timestamp.fromDate(getAccountContext().nextExecutionService.tasks()),
+  });
+});
+
+export const NextTaskExecutionQuery = queryField(t => {
+  t.field('nextTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      task: 'TaskType',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.get(TaskType[args.task]),
+      ),
+  });
+});
+
+export const NextVillageTaskExecutionQuery = queryField(t => {
+  t.field('nextVillageTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      villageId: idArg(),
+      task: 'TaskType',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.getForVillage(
+          args.villageId,
+          TaskType[args.task],
+        ),
+      ),
+  });
+});
+
+export const SetNextTaskExecutionMutation = mutationField(t => {
+  t.field('setNextTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      task: 'TaskType',
+      delay: 'DurationInput',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.set(
+          TaskType[args.task],
+          convertDelayToDate(new Duration(args.delay)),
+        ),
+      ),
+  });
+});
+
+export const SetNextTasksExecutionMutation = mutationField(t => {
+  t.field('setNextTasksExecution', {
+    type: 'Timestamp',
+    args: {
+      delay: 'DurationInput',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.setTasks(
+          convertDelayToDate(new Duration(args.delay)),
+        ),
+      ),
+  });
+});
+
+export const SetNextVillageTaskExecutionMutation = mutationField(t => {
+  t.field('setNextVillageTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      villageId: 'ID',
+      task: 'TaskType',
+      delay: 'DurationInput',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.setForVillage(
+          args.villageId,
+          TaskType[args.task],
+          convertDelayToDate(new Duration(args.delay)),
+        ),
+      ),
+  });
+});
+
+export const ResetNextTaskExecutionMutation = mutationField(t => {
+  t.field('resetNextTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      task: 'TaskType',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.resetNextTaskExecution(
+          TaskType[args.task],
+        ),
+      ),
+  });
+});
+
+export const ResetNextTasksExecutionMutation = mutationField(t => {
+  t.field('resetNextTasksExecution', {
+    type: 'Timestamp',
+    resolve: () =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.resetNextTasksExecution(),
+      ),
+  });
+});
+
+export const ResetNextVillageTaskExecutionMutation = mutationField(t => {
+  t.field('resetNextVillageTaskExecution', {
+    type: 'Timestamp',
+    args: {
+      villageId: 'ID',
+      task: 'TaskType',
+    },
+    resolve: (_, args) =>
+      Timestamp.fromDate(
+        getAccountContext().nextExecutionService.resetNextVillageTaskExecution(
+          args.villageId,
+          TaskType[args.task],
+        ),
+      ),
+  });
+});
+
+export const NextTasksExecutionChangedSubscription = subscriptionField(t => {
+  t.field('nextTasksExecutionChanged', {
+    type: 'Timestamp',
+    ...subscribeToEvent(
+      BotEvent.NextTasksExecutionChanged,
+      {
+        resolve: (p) => Timestamp.fromDate(p.nextExecution),
+      },
+    ),
+  });
+});
+
+export const NextTaskExecutionChangedSubscription = subscriptionField(t => {
+  t.field('nextTaskExecutionChanged', {
+    type: 'Timestamp',
+    args: {
+      task: 'TaskType',
+    },
+    ...subscribeToEvent(
+      BotEvent.NextTaskExecutionChanged,
+      {
+        filter: (payload, variables) => payload.task === variables.task,
+        resolve: (p) => Timestamp.fromDate(p.nextExecution),
+      },
+    ),
+  });
+});
+
+export const NextVillageTaskExecutionChangedSubscription = subscriptionField(t => {
+  t.field('nextVillageTaskExecutionChanged', {
+    type: 'Timestamp',
+    args: {
+      villageId: 'ID',
+      task: 'TaskType',
+    },
+    ...subscribeToEvent(
+      BotEvent.NextVillageTaskExecutionChanged,
+      {
+        filter: (payload, variables) =>
+          payload.villageId === variables.villageId &&
+          payload.task === variables.task,
+        resolve: (p) => Timestamp.fromDate(p.nextExecution),
+      },
+    ),
+  });
+});

@@ -1,3 +1,5 @@
+import { ExecutionResult } from 'graphql';
+
 export enum IpcHandler {
   GraphQL = 'graphql',
 }
@@ -8,19 +10,19 @@ export enum GraphqlHandlerMessageType {
   Error = 'error',
 }
 
-export const createGraphqlHandlerDataMessage = (data: any) =>
+export const createGraphqlHandlerDataMessage = (payload: ExecutionResult) =>
   ({
-    data,
     type: GraphqlHandlerMessageType.Data,
+    payload,
   } as const);
 
 export const createGraphqlHandlerErrorMessage = (error: Error) =>
   ({
+    type: GraphqlHandlerMessageType.Error,
     error: {
       message: error.message,
       stack: error.stack,
     },
-    type: GraphqlHandlerMessageType.Error,
   } as const);
 
 export const createGraphqlHandlerCompleteMessage = () =>

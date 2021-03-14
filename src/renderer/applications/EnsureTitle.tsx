@@ -1,0 +1,27 @@
+import graphql from 'babel-plugin-relay/macro';
+import React, { useEffect } from 'react';
+import {
+  useLazyLoadQuery,
+} from 'react-relay/hooks';
+import { EnsureTitleQuery } from '../_graphql/__generated__/EnsureTitleQuery.graphql';
+
+import { getServerShortcut } from '../utils/getServerShortcut';
+
+const ensureTitleQuery = graphql`
+  query EnsureTitleQuery {
+      currentAccount {
+          server
+          username
+      }
+  }
+`;
+
+export const EnsureTitle: React.FC = ({ children }) => {
+  const { currentAccount } = useLazyLoadQuery<EnsureTitleQuery>(ensureTitleQuery, {});
+
+  useEffect(() => {
+    document.title = `${currentAccount.username} @ ${getServerShortcut(currentAccount.server)}`;
+  }, [currentAccount]);
+
+  return <>{children}</>;
+};

@@ -1,41 +1,16 @@
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const UnusedFilesWebpackPlugin = require('unused-files-webpack-plugin').default;
-// eslint-disable-next-line import/no-extraneous-dependencies
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const RemovePlugin = require('remove-files-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const directory = path.join(
-  isDevelopment ? '.webpack' : path.join('app', 'dist'),
+  isDevelopment ? '.webpack' : 'app/dist',
   'renderer',
 );
 
 module.exports = [
-  isDevelopment && new webpack.HotModuleReplacementPlugin(),
-  isDevelopment &&
-    new ReactRefreshWebpackPlugin({
-      overlay: {
-        sockIntegration: 'whm',
-      },
-    }),
   isDevelopment && new webpack.NoEmitOnErrorsPlugin(),
-  new ForkTsCheckerWebpackPlugin(),
-  new UnusedFilesWebpackPlugin({
-    globOptions: {
-      ignore: ['**/*.type.ts', '**/*.d.ts'],
-    },
-    patterns: ['src/client/renderer/**/*.ts?(x)'],
-  }),
   new CopyWebpackPlugin({
     patterns: [
       {
@@ -48,18 +23,18 @@ module.exports = [
     ],
   }),
   new HtmlWebpackPlugin({
-    template: './src/client/static/index.html',
-  }),
-  new RemovePlugin({
-    before: {
-      root: directory,
-      test: [
-        {
-          folder: '.',
-          method: () => true,
-          recursive: true,
-        },
-      ],
-    },
+    title: 'TM Auto',
+    templateContent: `
+      <div id="app"></div>
+      <script>
+        if (!window.api.isDev) {
+            const tag = document.createElement('meta');
+            
+            tag.setAttribute("http-equiv", "Content-Security-Policy");
+            tag.setAttribute("content", "default-src 'self'; style-src 'self' 'unsafe-inline';");
+            document.head.appendChild(tag);
+        }
+      </script>
+    `,
   }),
 ].filter(Boolean);

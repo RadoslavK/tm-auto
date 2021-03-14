@@ -1,9 +1,7 @@
 export type SerializableGraphQLRequest = {
-  readonly context?: Record<string, unknown>;
-  readonly extensions?: Record<string, unknown>;
-  readonly operationName?: string;
+  readonly name: string;
   readonly query: string;
-  readonly variables?: Record<string, unknown>;
+  readonly variables: Record<string, unknown>;
 };
 
 export type GraphqlHandlerPayload = {

@@ -1,46 +1,44 @@
 const path = require('path');
-const rules = require('./webpack.rules');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const mainFolder = path.join(__dirname, 'src/main');
 const directory = path.join(
-  isDevelopment ? '.webpack' : path.join('app', 'dist'),
+  isDevelopment ? '.webpack' : 'app/dist',
   'main',
 );
 
 module.exports = {
   devtool: 'source-map',
   entry: {
-    index: path.join(__dirname, 'src', 'client', 'main', 'index.ts'),
-    preload: path.join(__dirname, 'src', 'client', 'main', 'preload.ts'),
+    index: path.join(mainFolder, 'index.ts'),
+    preload: path.join(mainFolder, 'preload.ts'),
   },
   mode: isDevelopment ? 'development' : 'production',
   module: {
-    rules,
+    rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: 'src/main/tsconfig.json',
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   node: {
     __dirname: false,
   },
-  plugins: [
-    new RemovePlugin({
-      before: {
-        root: directory,
-        test: [
-          {
-            folder: '.',
-            method: () => true,
-            recursive: true,
-          },
-        ],
-      },
-    }),
-  ],
   output: {
     path: path.join(__dirname, directory),
   },
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.ts', '.js'],
   },
   target: 'electron-main',
 };
