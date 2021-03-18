@@ -1,19 +1,19 @@
-import { TravianPath } from '../../_enums/travianPath';
-import { VillageTile } from '../../_models/map/villageTile';
-import { WheatOasis } from '../../_models/map/wheatOasis';
-import { getAccountContext } from '../../accountContext';
-import { createPage } from '../../browser/getPage';
-import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn';
-import { ensurePage } from '../../controller/actions/ensurePage';
-import { BotEvent } from '../../events/botEvent';
-import { publishPayloadEvent } from '../../pubSub';
-import { dataPathService } from '../dataPathService';
-import { fileService } from '../fileService';
-import { filterSectorsInRadius } from './utils/filterSectorsInRadius';
-import { getAllSectors } from './utils/getAllSectors';
-import { getPointId } from './utils/getPointId';
-import { getSectorSize } from './utils/getSectorSize';
-import { scanSector } from './utils/scanSector';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { VillageTile } from '../../_models/map/villageTile.js';
+import { WheatOasis } from '../../_models/map/wheatOasis.js';
+import { getAccountContext } from '../../accountContext.js';
+import { createPage } from '../../browser/getPage.js';
+import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn.js';
+import { ensurePage } from '../../controller/actions/ensurePage.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { publishPayloadEvent } from '../../pubSub.js';
+import { dataPathService } from '../dataPathService.js';
+import { fileService } from '../fileService.js';
+import { filterSectorsInRadius } from './utils/filterSectorsInRadius.js';
+import { getAllSectors } from './utils/getAllSectors.js';
+import { getPointId } from './utils/getPointId.js';
+import { getSectorSize } from './utils/getSectorSize.js';
+import { scanSector } from './utils/scanSector.js';
 
 // 1 - 3
 // zoomLevel - 1 = 11x9, 2 = 21x17, 3 = 31x31

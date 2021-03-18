@@ -1,29 +1,29 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { CoolDown } from '../../../_models/coolDown';
-import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim';
-import { Resources } from '../../../_models/misc/resources';
-import { TaskType } from '../../../_models/misc/taskType';
-import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { CoolDown } from '../../../_models/coolDown.js';
+import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
+import { Resources } from '../../../_models/misc/resources.js';
+import { TaskType } from '../../../_models/misc/taskType.js';
+import { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings.js';
 import { Units } from '../../../_models/units';
-import { Village } from '../../../_models/village/village';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue';
-import { unitInfoService } from '../../../services/info/unitInfoService';
-import { replaceInputText } from '../../../utils/browser/replaceInputText';
-import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils';
-import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources';
+import { Village } from '../../../_models/village/village.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
+import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue.js';
+import { unitInfoService } from '../../../services/info/unitInfoService.js';
+import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
+import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils.js';
+import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import {
   TabInformation,
   ensureBuildingSpotPage,
-} from '../../actions/ensurePage';
-import { claimHeroResources } from '../../actions/hero/claimHeroResources';
-import { updateUnitsInformation } from '../../actions/updateUnitsInformation';
-import { updateActualResources } from '../../actions/village/updateResources';
+} from '../../actions/ensurePage.js';
+import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateUnitsInformation } from '../../actions/updateUnitsInformation.js';
+import { updateActualResources } from '../../actions/village/updateResources.js';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
-} from '../../taskEngine/botTaskEngine';
+} from '../../taskEngine/botTaskEngine.js';
 
 export class AutoUnitsTask implements BotTaskWithCoolDown {
   private readonly _village: Village;

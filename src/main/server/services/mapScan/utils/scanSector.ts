@@ -1,12 +1,12 @@
 import { Page } from 'puppeteer';
 
-import { Point } from '../../../_models/map/point';
-import { VillageTile } from '../../../_models/map/villageTile';
-import { WheatOasis } from '../../../_models/map/wheatOasis';
-import { sendAjaxRequest } from '../../../utils/sendAjaxRequest';
-import { getClaimedVillageTileType } from './getClaimedVillageTileType';
-import { getPointId } from './getPointId';
-import { getSectorSize } from './getSectorSize';
+import { Point } from '../../../_models/map/point.js';
+import { VillageTile } from '../../../_models/map/villageTile.js';
+import { WheatOasis } from '../../../_models/map/wheatOasis.js';
+import { sendAjaxRequest } from '../../../utils/sendAjaxRequest.js';
+import { getClaimedVillageTileType } from './getClaimedVillageTileType.js';
+import { getPointId } from './getPointId.js';
+import { getSectorSize } from './getSectorSize.js';
 
 type Tile = {
   readonly title?: string;

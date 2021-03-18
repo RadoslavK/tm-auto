@@ -1,11 +1,11 @@
-import { Point } from '../../_models/map/point';
-import { MapSearchVillageTile } from '../../_models/map/villageTile';
-import { WheatOasis } from '../../_models/map/wheatOasis';
-import { MapSearchState } from '../mapScan/mapScanService';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { publishPayloadEvent } from '../../pubSub';
-import { getTotalAxisLength } from '../mapScan/utils/getTotalAxisLength';
+import { Point } from '../../_models/map/point.js';
+import { MapSearchVillageTile } from '../../_models/map/villageTile.js';
+import { WheatOasis } from '../../_models/map/wheatOasis.js';
+import { MapSearchState } from '../mapScan/mapScanService.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { publishPayloadEvent } from '../../pubSub.js';
+import { getTotalAxisLength } from '../mapScan/utils/getTotalAxisLength.js';
 
 type Origin = Point & {
   readonly radius: number;

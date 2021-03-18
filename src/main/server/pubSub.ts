@@ -3,8 +3,8 @@ import { withFilter } from 'graphql-subscriptions';
 import { $$asyncIterator } from 'iterall';
 import pubSub from 'pubsub-js';
 
-import { BotEvent } from './events/botEvent';
-import { BotEventPayloads } from './events/botEventPayloads';
+import { BotEvent } from './events/botEvent.js';
+import { BotEventPayloads } from './events/botEventPayloads.js';
 
 type Extends<T, X> = T extends X ? true : false;
 

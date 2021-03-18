@@ -1,10 +1,10 @@
-import { BuildingType } from '../../../../../../_shared/enums/BuildingType';
-import { TravianPath } from '../../../../_enums/travianPath';
-import { getAccountContext } from '../../../../accountContext';
-import { getPage } from '../../../../browser/getPage';
-import { replaceInputText } from '../../../../utils/browser/replaceInputText';
-import { sendAjaxRequest } from '../../../../utils/sendAjaxRequest';
-import { ensureBuildingSpotPage, ensurePage } from '../../ensurePage';
+import { BuildingType } from '../../../../../../_shared/enums/BuildingType.js';
+import { TravianPath } from '../../../../_enums/travianPath.js';
+import { getAccountContext } from '../../../../accountContext.js';
+import { getPage } from '../../../../browser/getPage.js';
+import { replaceInputText } from '../../../../utils/browser/replaceInputText.js';
+import { sendAjaxRequest } from '../../../../utils/sendAjaxRequest.js';
+import { ensureBuildingSpotPage, ensurePage } from '../../ensurePage.js';
 
 const parseCenterCoords = (pageContent: string) => {
   const match = /mapInitialPosition: {\s*?x:\s(-?\d+),\s*y:\s(-?\d+)/s.exec(

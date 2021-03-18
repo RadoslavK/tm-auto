@@ -1,12 +1,12 @@
-import { AccountSettings } from '../../_models/settings/accountSettings';
-import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
-import { HeroSettings } from '../../_models/settings/heroSettings';
-import { VillageSettings } from '../../_models/settings/villageSettings';
-import { dataPathService } from '../dataPathService';
-import { ComplexSettingsServiceType } from './_types';
-import { HeroSettingsService } from './hero';
-import { InternalSettingsService } from './internalSettingsService';
-import { VillageSettingsService } from './village';
+import { AccountSettings } from '../../_models/settings/accountSettings.js';
+import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
+import { HeroSettings } from '../../_models/settings/heroSettings.js';
+import { VillageSettings } from '../../_models/settings/villageSettings.js';
+import { dataPathService } from '../dataPathService.js';
+import { ComplexSettingsServiceType } from './_types.js';
+import { HeroSettingsService } from './hero.js';
+import { InternalSettingsService } from './internalSettingsService.js';
+import { VillageSettingsService } from './village.js';
 
 export class SettingsService {
   public account: InternalSettingsService<AccountSettings>;

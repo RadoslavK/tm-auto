@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom';
 import { Page } from 'puppeteer';
 
-import { sendAjaxRequest } from '../../../utils/sendAjaxRequest';
+import { sendAjaxRequest } from '../../../utils/sendAjaxRequest.js';
 
 const parseRes = (document: Document, index: number): string => {
   const node = document.querySelector(

@@ -1,6 +1,6 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { completeTaskIds } from '../../constants/completeTaskIds';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { completeTaskIds } from '../../constants/completeTaskIds.js';
 
 type CompleteTasksSettings = {
   readonly allow: boolean;

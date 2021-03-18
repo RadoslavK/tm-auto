@@ -6,19 +6,22 @@ import {
   unionType,
 } from 'nexus';
 import { join } from 'path';
-import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild';
-import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits';
+import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild.js';
+import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits.js';
 import {
   ClaimHeroResourcesReason,
   ResourceClaimLogEntryContent,
-} from '../../_models/logs/content/resourceClaim';
+} from '../../_models/logs/content/resourceClaim.js';
 import {
   TextLogEntryContent,
   TextLogEntryType,
-} from '../../_models/logs/content/text';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
+} from '../../_models/logs/content/text.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { getDirname } from '../../utils/getDirname.js';
+
+const __dirname = getDirname(import.meta);
 
 export const TextLogEntryTypeEnum = enumType({
   name: "TextLogEntryType",

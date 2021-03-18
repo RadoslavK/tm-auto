@@ -1,13 +1,13 @@
-import { BuildingType } from '../../../_shared/enums/BuildingType';
-import { CapitalCondition } from '../_models/buildings/buildingConditions';
-import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
-import { BuildingSpot } from '../_models/buildings/spots/buildingSpot';
-import { Village } from '../_models/village/village';
-import { getAccountContext } from '../accountContext';
-import { accountService } from './accountService';
-import { dataPathService } from './dataPathService';
-import { fileService } from './fileService';
-import { buildingInfoService } from './info/buildingInfoService';
+import { BuildingType } from '../../../_shared/enums/BuildingType.js';
+import { CapitalCondition } from '../_models/buildings/buildingConditions.js';
+import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
+import { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
+import { Village } from '../_models/village/village.js';
+import { getAccountContext } from '../accountContext.js';
+import { accountService } from './accountService.js';
+import { dataPathService } from './dataPathService.js';
+import { fileService } from './fileService.js';
+import { buildingInfoService } from './info/buildingInfoService.js';
 
 export type EnqueuedBuilding = {
   readonly fieldId: number;

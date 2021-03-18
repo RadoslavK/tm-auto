@@ -1,9 +1,9 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { getAccountContext } from '../../../accountContext';
-import { parseVillageCapacity } from '../../../parsers/villages/parseVillageCapacity';
-import { parseVillageProduction } from '../../../parsers/villages/parseVillageProduction';
-import { parseVillageResources } from '../../../parsers/villages/parseVillageResources';
-import { ensurePage } from '../ensurePage';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { parseVillageCapacity } from '../../../parsers/villages/parseVillageCapacity.js';
+import { parseVillageProduction } from '../../../parsers/villages/parseVillageProduction.js';
+import { parseVillageResources } from '../../../parsers/villages/parseVillageResources.js';
+import { ensurePage } from '../ensurePage.js';
 
 export const updateResources = async (): Promise<void> => {
   await ensurePage(TravianPath.ResourceFieldsOverview);

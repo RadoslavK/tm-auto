@@ -1,9 +1,9 @@
 import {
   BuildingSpotType,
   getBuildingSpotType,
-} from '../../../_enums/buildingSpotType';
-import { getWithMinimumSafe } from '../../../utils/getWithMaximum';
-import { BuildingInProgress } from './buildingInProgress';
+} from '../../../_enums/buildingSpotType.js';
+import { getWithMinimumSafe } from '../../../utils/getWithMaximum.js';
+import { BuildingInProgress } from './buildingInProgress.js';
 
 export class BuildingsInProgress {
   private _buildings: readonly BuildingInProgress[] = [];

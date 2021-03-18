@@ -1,4 +1,4 @@
-import { ServerMessage } from '../ipc/serverMessages';
+import { ServerMessage } from '../ipc/serverMessages.js';
 
 type ConnectParams = {
   readonly id: string

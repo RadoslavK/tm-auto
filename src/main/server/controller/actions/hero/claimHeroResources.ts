@@ -1,12 +1,12 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim';
-import { Resources } from '../../../_models/misc/resources';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { heroItemIds } from '../../../constants/heroItemIds';
-import { replaceInputText } from '../../../utils/browser/replaceInputText';
-import { ensurePage } from '../ensurePage';
-import { updateHeroResources } from './updateHeroResources';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
+import { Resources } from '../../../_models/misc/resources.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
+import { heroItemIds } from '../../../constants/heroItemIds.js';
+import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
+import { ensurePage } from '../ensurePage.js';
+import { updateHeroResources } from './updateHeroResources.js';
 
 export const claimHeroResources = async (
   resources: Resources,

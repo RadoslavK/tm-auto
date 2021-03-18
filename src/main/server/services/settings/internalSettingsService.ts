@@ -1,8 +1,10 @@
-import { debounce } from 'debounce';
+import debouncePkg from 'debounce';
+//  TODO: debounce is CommonJS
+const { debounce } = debouncePkg;
 
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { fileService } from '../fileService';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { fileService } from '../fileService.js';
 
 export class InternalSettingsService<TSettings> {
   private settings: TSettings | null = null;

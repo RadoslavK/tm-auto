@@ -1,7 +1,7 @@
-import { Point } from '../../../_models/map/point';
-import { Sector } from '../sector';
-import { getSectorIndexFromCoords } from './getSectorIndexFromCoords';
-import { getTotalAxisLength } from './getTotalAxisLength';
+import { Point } from '../../../_models/map/point.js';
+import { Sector } from '../sector.js';
+import { getSectorIndexFromCoords } from './getSectorIndexFromCoords.js';
+import { getTotalAxisLength } from './getTotalAxisLength.js';
 
 type Params = {
   readonly sectors: readonly Sector[];

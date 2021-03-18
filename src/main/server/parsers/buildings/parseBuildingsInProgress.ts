@@ -1,7 +1,7 @@
-import { TravianPath } from '../../_enums/travianPath';
-import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress';
-import { getPage } from '../../browser/getPage';
-import { validateUrl } from '../../utils/validateUrl';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress.js';
+import { getPage } from '../../browser/getPage.js';
+import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls: readonly string[] = [
   TravianPath.ResourceFieldsOverview,

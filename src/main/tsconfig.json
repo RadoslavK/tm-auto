@@ -1,12 +1,18 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "target": "ES2020",
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext"],
+    "outDir": "../../.webpack",
+    "noEmit": false,
   },
+  "files": [
+    "main.js",
+    "mainPreload.js"
+  ],
   "include": [
-    "./**/*",
     "../_shared/types/window.d.ts"
   ]
 }

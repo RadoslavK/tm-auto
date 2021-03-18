@@ -1,5 +1,5 @@
-import { Village } from '../../_models/village/village';
-import { getAccountContext } from '../../accountContext';
+import { Village } from '../../_models/village/village.js';
+import { getAccountContext } from '../../accountContext.js';
 import {
   BotTask,
   BotTaskBase,
@@ -7,7 +7,7 @@ import {
   BotTaskEngineWithCoolDown,
   BotTaskWithCoolDown,
   IBotTaskEngine,
-} from './botTaskEngine';
+} from './botTaskEngine.js';
 
 const isTaskWithCooldown = (task: BotTaskBase): task is BotTaskWithCoolDown =>
   (task as BotTaskWithCoolDown).coolDown !== undefined;

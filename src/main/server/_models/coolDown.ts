@@ -1,6 +1,6 @@
-import { mergeDefaults } from '../../../_shared/merge';
-import { PartialFields } from '../../../_shared/types/fields.type';
-import { Duration } from './duration';
+import { mergeDefaults } from '../../../_shared/merge.js';
+import { PartialFields } from '../../../_shared/types/fields.type.js';
+import { Duration } from './duration.js';
 
 export class CoolDown {
   public readonly max: Duration = new Duration();

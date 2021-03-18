@@ -5,13 +5,13 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
-import { controllerService } from '../../services/controllerService';
-import { crannyInfoService } from '../../services/crannyInfoService';
-import { VillageCrannyCapacity as VillageCrannyCapacityModel } from '../../_models/village/villageCrannyCapacity';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { controllerService } from '../../services/controllerService.js';
+import { crannyInfoService } from '../../services/crannyInfoService.js';
+import { VillageCrannyCapacity as VillageCrannyCapacityModel } from '../../_models/village/villageCrannyCapacity.js';
 
 export const VillageCapacity = objectType({
   name: 'VillageCapacity',

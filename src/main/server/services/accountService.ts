@@ -1,7 +1,7 @@
-import { mergeDefaults } from '../../../_shared/merge';
-import { PartialFields } from '../../../_shared/types/fields.type';
-import { dataPathService } from './dataPathService';
-import { fileService } from './fileService';
+import { mergeDefaults } from '../../../_shared/merge.js';
+import { PartialFields } from '../../../_shared/types/fields.type.js';
+import { dataPathService } from './dataPathService.js';
+import { fileService } from './fileService.js';
 
 export type UserAccount = {
   readonly id: string;

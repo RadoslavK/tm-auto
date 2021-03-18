@@ -1,5 +1,5 @@
-import { getPage } from '../../../../browser/getPage';
-import { replaceInputText } from '../../../../utils/browser/replaceInputText';
+import { getPage } from '../../../../browser/getPage.js';
+import { replaceInputText } from '../../../../utils/browser/replaceInputText.js';
 
 export const changeVillageName = async (): Promise<void> => {
   const page = await getPage();

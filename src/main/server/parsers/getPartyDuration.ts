@@ -1,5 +1,5 @@
-import { Duration } from '../_models/duration';
-import { getPage } from '../browser/getPage';
+import { Duration } from '../_models/duration.js';
+import { getPage } from '../browser/getPage.js';
 
 export const getPartyDuration = async (): Promise<Duration | null> => {
   const page = await getPage();

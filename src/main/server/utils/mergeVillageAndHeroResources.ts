@@ -1,5 +1,5 @@
-import { Resources } from '../_models/misc/resources';
-import { getAccountContext } from '../accountContext';
+import { Resources } from '../_models/misc/resources.js';
+import { getAccountContext } from '../accountContext.js';
 
 export const mergeVillageAndHeroResources = (villageId: string): Resources => {
   const { hero, villageService } = getAccountContext();

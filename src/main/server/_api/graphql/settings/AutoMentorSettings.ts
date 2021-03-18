@@ -6,11 +6,11 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { AutoMentorSettings } from '../../../_models/settings/autoMentorSettings';
-import { getAccountContext } from '../../../accountContext';
-import { completeTaskIds } from '../../../constants/completeTaskIds';
-import { BotEvent } from '../../../events/botEvent';
-import { subscribeToEvent } from '../../../pubSub';
+import { AutoMentorSettings } from '../../../_models/settings/autoMentorSettings.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { completeTaskIds } from '../../../constants/completeTaskIds.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const CompleteTasksSettings = objectType({
   name: 'CompleteTasksSettings',

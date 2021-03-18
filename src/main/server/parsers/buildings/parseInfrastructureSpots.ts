@@ -1,12 +1,12 @@
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { TravianPath } from '../../_enums/travianPath';
-import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding';
-import { Tribe } from '../../_models/enums/tribe';
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
-import { fieldIds } from '../../constants/fieldIds';
-import { isInfrastructure } from '../../utils/buildingUtils';
-import { validateUrl } from '../../utils/validateUrl';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding.js';
+import { Tribe } from '../../_models/enums/tribe.js';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { fieldIds } from '../../constants/fieldIds.js';
+import { isInfrastructure } from '../../utils/buildingUtils.js';
+import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls: readonly string[] = [TravianPath.InfrastructureOverview];
 

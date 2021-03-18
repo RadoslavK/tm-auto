@@ -1,4 +1,4 @@
-import { Resources } from '../_models/misc/resources';
+import { Resources } from '../_models/misc/resources.js';
 
 export const partyInfo = {
   small: {

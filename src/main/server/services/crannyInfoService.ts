@@ -1,5 +1,5 @@
-import { Tribe } from '../_models/enums/tribe';
-import { getAccountContext } from '../accountContext';
+import { Tribe } from '../_models/enums/tribe.js';
+import { getAccountContext } from '../accountContext.js';
 
 const capacities: Record<number, number> = {
   1: 200,

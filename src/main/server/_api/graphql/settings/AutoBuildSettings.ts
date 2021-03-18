@@ -10,9 +10,9 @@ import {
 import {
   DualQueuePreferences,
 } from '../../../_models/settings/tasks/autoBuildSettings';
-import { getAccountContext } from '../../../accountContext';
-import { BotEvent } from '../../../events/botEvent';
-import { subscribeToEvent } from '../../../pubSub';
+import { getAccountContext } from '../../../accountContext.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AutoStorageOptionSettings = objectType({
   name: 'AutoStorageOptionSettings',

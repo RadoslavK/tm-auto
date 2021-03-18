@@ -1,8 +1,8 @@
 import {
   BuildingSpotType,
   getBuildingSpotType,
-} from '../../../_enums/buildingSpotType';
-import { QueuedBuilding } from './queuedBuilding';
+} from '../../../_enums/buildingSpotType.js';
+import { QueuedBuilding } from './queuedBuilding.js';
 
 export class BuildingQueue {
   private _buildings: QueuedBuilding[] = [];

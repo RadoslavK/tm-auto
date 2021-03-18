@@ -1,13 +1,13 @@
-import { GameInfo } from './_models/gameInfo';
-import { Hero } from './_models/hero/hero';
-import { MentorTask } from './_models/mentor/mentorTask';
-import { BuildingQueueService } from './services/buildingQueueService';
-import { LogsService } from './services/logsService';
-import { MapScanService } from './services/mapScan/mapScanService';
-import { MapSearchService } from './services/mapSearchService/mapSearchService';
-import { NextExecutionService } from './services/nextExecutionService';
+import { GameInfo } from './_models/gameInfo.js';
+import { Hero } from './_models/hero/hero.js';
+import { MentorTask } from './_models/mentor/mentorTask.js';
+import { BuildingQueueService } from './services/buildingQueueService.js';
+import { LogsService } from './services/logsService.js';
+import { MapScanService } from './services/mapScan/mapScanService.js';
+import { MapSearchService } from './services/mapSearchService/mapSearchService.js';
+import { NextExecutionService } from './services/nextExecutionService.js';
 import { SettingsService } from './services/settings';
-import { VillageService } from './services/villageService';
+import { VillageService } from './services/villageService.js';
 
 export class AccountContext {
   private _buildingQueueServices: Map<string, BuildingQueueService> = new Map<

@@ -1,2 +1,2 @@
-export * from './AutoAdventureSettings';
-export * from './HeroLevelUpSettings';
+export * from './AutoAdventureSettings.js';
+export * from './HeroLevelUpSettings.js';

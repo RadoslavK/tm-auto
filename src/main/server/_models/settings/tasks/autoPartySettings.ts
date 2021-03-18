@@ -1,7 +1,7 @@
-import { mergeDefaults } from '../../../../../_shared/merge';
-import { PartialFields } from '../../../../../_shared/types/fields.type';
-import { CoolDown } from '../../coolDown';
-import { Duration } from '../../duration';
+import { mergeDefaults } from '../../../../../_shared/merge.js';
+import { PartialFields } from '../../../../../_shared/types/fields.type.js';
+import { CoolDown } from '../../coolDown.js';
+import { Duration } from '../../duration.js';
 
 export class AutoPartySettings {
   public readonly useHeroResources: boolean = false;

@@ -1,5 +1,5 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { BuildingSpot } from './buildingSpot';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { BuildingSpot } from './buildingSpot.js';
 
 export class BuildingSpots {
   private readonly _buildings: Record<number, BuildingSpot> = {};

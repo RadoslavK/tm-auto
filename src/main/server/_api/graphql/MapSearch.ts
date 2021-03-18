@@ -7,11 +7,11 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { MapSearchState } from '../../services/mapScan/mapScanService';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
-import { relevantVillageTileTypes } from '../../services/mapScan/utils/scanSector';
+import { MapSearchState } from '../../services/mapScan/mapScanService.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { relevantVillageTileTypes } from '../../services/mapScan/utils/scanSector.js';
 
 export const SearchMapMutation = mutationField(t => {
   t.nullable.boolean('searchMap', {

@@ -7,10 +7,6 @@ import {
 } from 'react-relay/hooks';
 
 import { Duration as DurationModel } from '../../../../_shared/types/duration.type';
-// TODO shared model
-import {
-  AdventureCriterias,
-} from '../../../../main/server/_models/settings/tasks/autoAdventureSettings';
 import { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql';
 import { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql';
 import { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql';
@@ -228,7 +224,8 @@ export const AutoAdventureSettings: React.FC = () => {
       <div>
         <label htmlFor="adventureCriteria">Adventure criteria</label>
         <div id="adventureCriteria">
-          {AdventureCriterias.map((option) => (
+          {/*TODO*/}
+          {['Closest', 'Furthest', 'Random'].map((option) => (
             <React.Fragment key={option}>
               <input
                 checked={option === adventureCriteria}

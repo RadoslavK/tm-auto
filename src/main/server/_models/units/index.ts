@@ -1,5 +1,5 @@
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { UnitsQueue } from './unitsQueue';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { UnitsQueue } from './unitsQueue.js';
 
 export class Units {
   private _counts: Map<number, number> = new Map();

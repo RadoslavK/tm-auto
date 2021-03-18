@@ -1,4 +1,4 @@
-import { getPage } from '../../../../browser/getPage';
+import { getPage } from '../../../../browser/getPage.js';
 
 export const readGoldAdvantanges = async (): Promise<void> => {
   const page = await getPage();

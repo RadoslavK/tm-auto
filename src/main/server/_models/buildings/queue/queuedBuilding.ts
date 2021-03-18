@@ -1,6 +1,6 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { mergeDefaults } from '../../../../../_shared/merge';
-import { PartialFields } from '../../../../../_shared/types/fields.type';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { mergeDefaults } from '../../../../../_shared/merge.js';
+import { PartialFields } from '../../../../../_shared/types/fields.type.js';
 
 export class QueuedBuilding {
   public readonly fieldId: number = 0;

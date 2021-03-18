@@ -1,7 +1,7 @@
 import { Page } from 'puppeteer';
 
-import { getPage } from '../browser/getPage';
-import { accountService } from '../services/accountService';
+import { getPage } from '../browser/getPage.js';
+import { accountService } from '../services/accountService.js';
 
 export const validateUrl = async (
   acceptedUrls: readonly string[],

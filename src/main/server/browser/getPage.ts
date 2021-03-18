@@ -4,8 +4,8 @@ import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
-import { getGeneralSettingsService } from '../services/settings/general';
-import { getServerAppDirectory } from '../utils/getServerAppDirectory';
+import { getGeneralSettingsService } from '../services/settings/general.js';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
 const stealth = pluginStealth();
 // TODO: workaround as typings changed in the original puppeteer or puppeteer extra but on this plugin

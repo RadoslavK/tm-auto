@@ -1,4 +1,4 @@
-import { BuildingType } from '../../../_shared/enums/BuildingType';
+import { BuildingType } from '../../../_shared/enums/BuildingType.js';
 
 export enum BuildingSpotType {
   Any = 'Any',

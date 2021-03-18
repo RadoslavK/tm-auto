@@ -1,7 +1,7 @@
-import { TravianPath } from '../../_enums/travianPath';
-import { Tribe } from '../../_models/enums/tribe';
-import { getPage } from '../../browser/getPage';
-import { ensurePage } from '../../controller/actions/ensurePage';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { Tribe } from '../../_models/enums/tribe.js';
+import { getPage } from '../../browser/getPage.js';
+import { ensurePage } from '../../controller/actions/ensurePage.js';
 
 export const parseTribe = async (): Promise<Tribe> => {
   const page = await getPage();

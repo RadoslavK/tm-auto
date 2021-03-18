@@ -1,5 +1,5 @@
-import { Resources } from '../../_models/misc/resources';
-import { getPage } from '../../browser/getPage';
+import { Resources } from '../../_models/misc/resources.js';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseVillageResources = async (): Promise<Resources> => {
   const page = await getPage();

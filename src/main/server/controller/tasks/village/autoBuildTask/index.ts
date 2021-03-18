@@ -1,36 +1,36 @@
-import { BuildingType } from '../../../../../../_shared/enums/BuildingType';
-import { BuildingCategory } from '../../../../_enums/buildingCategory';
-import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
+import { BuildingType } from '../../../../../../_shared/enums/BuildingType.js';
+import { BuildingCategory } from '../../../../_enums/buildingCategory.js';
+import { BuildingSpotType } from '../../../../_enums/buildingSpotType.js';
 import { Buildings } from '../../../../_models/buildings';
-import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding';
-import { CoolDown } from '../../../../_models/coolDown';
-import { Duration } from '../../../../_models/duration';
-import { Tribe } from '../../../../_models/enums/tribe';
-import { ClaimHeroResourcesReason } from '../../../../_models/logs/content/resourceClaim';
-import { Resources } from '../../../../_models/misc/resources';
-import { TaskType } from '../../../../_models/misc/taskType';
+import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding.js';
+import { CoolDown } from '../../../../_models/coolDown.js';
+import { Duration } from '../../../../_models/duration.js';
+import { Tribe } from '../../../../_models/enums/tribe.js';
+import { ClaimHeroResourcesReason } from '../../../../_models/logs/content/resourceClaim.js';
+import { Resources } from '../../../../_models/misc/resources.js';
+import { TaskType } from '../../../../_models/misc/taskType.js';
 import {
   AutoBuildSettings,
 } from '../../../../_models/settings/tasks/autoBuildSettings';
-import { Village } from '../../../../_models/village/village';
-import { getAccountContext } from '../../../../accountContext';
-import { getPage } from '../../../../browser/getPage';
-import { fieldIds } from '../../../../constants/fieldIds';
-import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress';
-import { buildingInfoService } from '../../../../services/info/buildingInfoService';
-import { isInfrastructure } from '../../../../utils/buildingUtils';
-import { mergeVillageAndHeroResources } from '../../../../utils/mergeVillageAndHeroResources';
+import { Village } from '../../../../_models/village/village.js';
+import { getAccountContext } from '../../../../accountContext.js';
+import { getPage } from '../../../../browser/getPage.js';
+import { fieldIds } from '../../../../constants/fieldIds.js';
+import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress.js';
+import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
+import { isInfrastructure } from '../../../../utils/buildingUtils.js';
+import { mergeVillageAndHeroResources } from '../../../../utils/mergeVillageAndHeroResources.js';
 import {
   ensureBuildingSpotPage,
   ensurePage,
-} from '../../../actions/ensurePage';
-import { claimHeroResources } from '../../../actions/hero/claimHeroResources';
-import { updateActualResources } from '../../../actions/village/updateResources';
+} from '../../../actions/ensurePage.js';
+import { claimHeroResources } from '../../../actions/hero/claimHeroResources.js';
+import { updateActualResources } from '../../../actions/village/updateResources.js';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
-} from '../../../taskEngine/botTaskEngine';
-import { checkAutoStorage } from './checkAutoStorage';
+} from '../../../taskEngine/botTaskEngine.js';
+import { checkAutoStorage } from './checkAutoStorage.js';
 
 export class AutoBuildTask implements BotTaskWithCoolDown {
   private readonly _village: Village;

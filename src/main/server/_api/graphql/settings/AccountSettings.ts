@@ -6,9 +6,9 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { getAccountContext } from '../../../accountContext';
-import { BotEvent } from '../../../events/botEvent';
-import { subscribeToEvent } from '../../../pubSub';
+import { getAccountContext } from '../../../accountContext.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AccountSettings = objectType({
   name: 'AccountSettings',

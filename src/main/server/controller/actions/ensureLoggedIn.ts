@@ -1,11 +1,11 @@
 import { Page } from 'puppeteer';
 
-import { TravianPath } from '../../_enums/travianPath';
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
-import { accountService } from '../../services/accountService';
-import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText';
-import { ensurePage } from './ensurePage';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { accountService } from '../../services/accountService.js';
+import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText.js';
+import { ensurePage } from './ensurePage.js';
 
 export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   const account = accountService.getCurrentAccount();

@@ -1,9 +1,9 @@
-import { getAccountContext } from '../../../accountContext';
-import { BotEvent } from '../../../events/botEvent';
-import { publishPayloadEvent } from '../../../pubSub';
-import { updateBuildings } from '../buildings/updateBuildings';
-import { ensureVillageSelected } from '../ensureVillageSelected';
-import { updateResources } from './updateResources';
+import { getAccountContext } from '../../../accountContext.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { publishPayloadEvent } from '../../../pubSub.js';
+import { updateBuildings } from '../buildings/updateBuildings.js';
+import { ensureVillageSelected } from '../ensureVillageSelected.js';
+import { updateResources } from './updateResources.js';
 
 export const refreshVillage = async (villageId: string): Promise<void> => {
   await ensureVillageSelected(villageId);

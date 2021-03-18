@@ -1,4 +1,4 @@
-import { Duration } from '../types/duration.type';
+import { Duration } from '../types/duration.type.js';
 
 export const formatTime = (duration: Duration): string => {
   const { days, hours, minutes, seconds } = duration;

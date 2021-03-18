@@ -1,4 +1,4 @@
-import { Duration } from '../_models/duration';
+import { Duration } from '../_models/duration.js';
 
 export const convertDelayToDate = (delay: Duration): Date => {
   const date = new Date();

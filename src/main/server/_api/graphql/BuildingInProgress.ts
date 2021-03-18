@@ -5,9 +5,12 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { getDirname } from '../../utils/getDirname.js';
+
+const __dirname = getDirname(import.meta);
 
 export const BuildingInProgress = objectType({
   name: 'BuildingInProgress',

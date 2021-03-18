@@ -1,5 +1,5 @@
-import { VillageCapacity } from '../../_models/village/villageCapacity';
-import { getPage } from '../../browser/getPage';
+import { VillageCapacity } from '../../_models/village/villageCapacity.js';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseVillageCapacity = async (): Promise<VillageCapacity> => {
   const page = await getPage();

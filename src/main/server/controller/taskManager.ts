@@ -1,29 +1,29 @@
-import { getAllEnumValues } from '../../../_shared/enumUtils';
-import { TravianPath } from '../_enums/travianPath';
-import { getAccountContext } from '../accountContext';
-import { BotEvent } from '../events/botEvent';
-import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
-import { publishPayloadEvent } from '../pubSub';
-import { randomElement } from '../utils/randomElement';
-import { shuffle } from '../utils/shuffle';
-import { updateBuildings } from './actions/buildings/updateBuildings';
-import { ensurePage } from './actions/ensurePage';
-import { ensureVillageSelected } from './actions/ensureVillageSelected';
-import { updateHeroResources } from './actions/hero/updateHeroResources';
-import { updatePlayerInfo } from './actions/player/updatePlayerInfo';
-import { updateNewOldVillages } from './actions/village/updateNewOldVillages';
-import { updateResources } from './actions/village/updateResources';
+import { getAllEnumValues } from '../../../_shared/enumUtils.js';
+import { TravianPath } from '../_enums/travianPath.js';
+import { getAccountContext } from '../accountContext.js';
+import { BotEvent } from '../events/botEvent.js';
+import { updateHeroInformation } from '../parsers/hero/updateHeroInformation.js';
+import { publishPayloadEvent } from '../pubSub.js';
+import { randomElement } from '../utils/randomElement.js';
+import { shuffle } from '../utils/shuffle.js';
+import { updateBuildings } from './actions/buildings/updateBuildings.js';
+import { ensurePage } from './actions/ensurePage.js';
+import { ensureVillageSelected } from './actions/ensureVillageSelected.js';
+import { updateHeroResources } from './actions/hero/updateHeroResources.js';
+import { updatePlayerInfo } from './actions/player/updatePlayerInfo.js';
+import { updateNewOldVillages } from './actions/village/updateNewOldVillages.js';
+import { updateResources } from './actions/village/updateResources.js';
 import {
   BotTaskEngine,
   BotTaskEngineWithCoolDown,
   IBotTaskEngine,
-} from './taskEngine/botTaskEngine';
-import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine';
-import { AutoMentorTask } from './tasks/autoMentorTask';
-import { AutoAdventureTask } from './tasks/village/autoAdventureTask';
+} from './taskEngine/botTaskEngine.js';
+import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine.js';
+import { AutoMentorTask } from './tasks/autoMentorTask.js';
+import { AutoAdventureTask } from './tasks/village/autoAdventureTask.js';
 import { AutoBuildTask } from './tasks/village/autoBuildTask';
-import { AutoPartyTask } from './tasks/village/autoPartyTask';
-import { AutoUnitsTask } from './tasks/village/autoUnitsTask';
+import { AutoPartyTask } from './tasks/village/autoPartyTask.js';
+import { AutoUnitsTask } from './tasks/village/autoUnitsTask.js';
 
 export class TaskManager {
   private readonly _generalTasks: readonly IBotTaskEngine[];

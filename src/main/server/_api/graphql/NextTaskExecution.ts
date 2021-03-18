@@ -4,13 +4,13 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { Duration } from '../../_models/duration';
-import { TaskType } from '../../_models/misc/taskType';
-import { Timestamp } from '../../_models/misc/timestamp';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
-import { convertDelayToDate } from '../../utils/convertDelayToDate';
+import { Duration } from '../../_models/duration.js';
+import { TaskType } from '../../_models/misc/taskType.js';
+import { Timestamp } from '../../_models/misc/timestamp.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { convertDelayToDate } from '../../utils/convertDelayToDate.js';
 
 export const NextTasksExecutionQuery = queryField(t => {
   t.field('nextTasksExecution', {

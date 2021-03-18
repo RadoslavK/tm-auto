@@ -1,10 +1,10 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { mergeDefaults } from '../../../../../_shared/merge';
-import { PartialFields } from '../../../../../_shared/types/fields.type';
-import { getAccountContext } from '../../../accountContext';
-import { unitInfoService } from '../../../services/info/unitInfoService';
-import { CoolDown } from '../../coolDown';
-import { Duration } from '../../duration';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { mergeDefaults } from '../../../../../_shared/merge.js';
+import { PartialFields } from '../../../../../_shared/types/fields.type.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { unitInfoService } from '../../../services/info/unitInfoService.js';
+import { CoolDown } from '../../coolDown.js';
+import { Duration } from '../../duration.js';
 
 export class AutoUnitsUnitSettings {
   public readonly autoBuild: boolean = false;

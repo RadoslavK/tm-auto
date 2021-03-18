@@ -1,6 +1,6 @@
-import { TravianPath } from '../../../../_enums/travianPath';
-import { getPage } from '../../../../browser/getPage';
-import { ensurePage } from '../../ensurePage';
+import { TravianPath } from '../../../../_enums/travianPath.js';
+import { getPage } from '../../../../browser/getPage.js';
+import { ensurePage } from '../../ensurePage.js';
 
 export const readMessage = async (): Promise<void> => {
   await ensurePage(TravianPath.Messages);

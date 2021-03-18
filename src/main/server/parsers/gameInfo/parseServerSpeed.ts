@@ -1,4 +1,4 @@
-import { getPage } from '../../browser/getPage';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseServerSpeed = async (): Promise<number> => {
   const page = await getPage();

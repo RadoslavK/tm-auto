@@ -1,4 +1,4 @@
-import { Point } from '../../../_models/map/point';
+import { Point } from '../../../_models/map/point.js';
 
 type Params = {
   readonly coords: Point;

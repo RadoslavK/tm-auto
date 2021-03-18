@@ -5,12 +5,12 @@ import {
   subscriptionField,
   queryField,
 } from 'nexus';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
 import {
   BotState,
   controllerService,
-} from '../../services/controllerService';
+} from '../../services/controllerService.js';
 
 export const SignInMutation = mutationField(t => {
   t.nullable.boolean('signIn', {

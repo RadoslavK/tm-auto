@@ -1,7 +1,7 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { mergeDefaults } from '../../../../../_shared/merge';
-import { PartialFields } from '../../../../../_shared/types/fields.type';
-import { BuildingSpotLevel } from './buildingSpotLevel';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { mergeDefaults } from '../../../../../_shared/merge.js';
+import { PartialFields } from '../../../../../_shared/types/fields.type.js';
+import { BuildingSpotLevel } from './buildingSpotLevel.js';
 
 export class BuildingSpot {
   public fieldId: number = 0;

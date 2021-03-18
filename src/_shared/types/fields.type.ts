@@ -1,4 +1,4 @@
-import { DeepPartial } from '../merge';
+import { DeepPartial } from '../merge.js';
 
 type FunctionPropertyKeys<T> = {
   [P in keyof T]: T[P] extends Function ? P : never;

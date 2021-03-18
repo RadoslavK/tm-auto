@@ -1,20 +1,20 @@
-import { TaskType } from '../../_models/misc/taskType';
-import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings';
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
-import { completeTaskIds } from '../../constants/completeTaskIds';
-import { acceptTaskReward } from '../actions/mentor/acceptTaskReward';
-import { changeVillageName } from '../actions/mentor/completeTasks/changeVillageName';
-import { createMarketOffer } from '../actions/mentor/completeTasks/createMarketOffer';
-import { openCulturePointsTab } from '../actions/mentor/completeTasks/openCulturePointsTab';
-import { openMap } from '../actions/mentor/completeTasks/openMap';
-import { openStatisticsPage } from '../actions/mentor/completeTasks/openStatisticsPage';
-import { openSurroundingReports } from '../actions/mentor/completeTasks/openSurroundingReports';
-import { raidOasis } from '../actions/mentor/completeTasks/raidOasis';
-import { readGoldAdvantanges } from '../actions/mentor/completeTasks/readGoldAdvantanges';
-import { readMessage } from '../actions/mentor/completeTasks/readMessage';
-import { updateMentorTasks } from '../actions/mentor/updateMentorTasks';
-import { BotTask } from '../taskEngine/botTaskEngine';
+import { TaskType } from '../../_models/misc/taskType.js';
+import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { completeTaskIds } from '../../constants/completeTaskIds.js';
+import { acceptTaskReward } from '../actions/mentor/acceptTaskReward.js';
+import { changeVillageName } from '../actions/mentor/completeTasks/changeVillageName.js';
+import { createMarketOffer } from '../actions/mentor/completeTasks/createMarketOffer.js';
+import { openCulturePointsTab } from '../actions/mentor/completeTasks/openCulturePointsTab.js';
+import { openMap } from '../actions/mentor/completeTasks/openMap.js';
+import { openStatisticsPage } from '../actions/mentor/completeTasks/openStatisticsPage.js';
+import { openSurroundingReports } from '../actions/mentor/completeTasks/openSurroundingReports.js';
+import { raidOasis } from '../actions/mentor/completeTasks/raidOasis.js';
+import { readGoldAdvantanges } from '../actions/mentor/completeTasks/readGoldAdvantanges.js';
+import { readMessage } from '../actions/mentor/completeTasks/readMessage.js';
+import { updateMentorTasks } from '../actions/mentor/updateMentorTasks.js';
+import { BotTask } from '../taskEngine/botTaskEngine.js';
 
 type CompleteTask = () => Promise<boolean | void>;
 

@@ -2,33 +2,33 @@ import fs from 'fs';
 import path from 'path';
 
 import { TimeoutError } from 'puppeteer-core/lib/Errors';
-import { formatTime } from '../../../_shared/utils/formatTime';
+import { formatTime } from '../../../_shared/utils/formatTime.js';
 
-import { TravianPath } from '../_enums/travianPath';
-import { CoolDown } from '../_models/coolDown';
-import { Duration } from '../_models/duration';
+import { TravianPath } from '../_enums/travianPath.js';
+import { CoolDown } from '../_models/coolDown.js';
+import { Duration } from '../_models/duration.js';
 import {
   getAccountContext,
   resetAccountContext,
   setAccountContext,
-} from '../accountContext';
-import { getPage, killBrowser } from '../browser/getPage';
-import { updateBuildings } from '../controller/actions/buildings/updateBuildings';
-import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff';
-import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn';
-import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected';
-import { initGameInfo } from '../controller/actions/player/initGameInfo';
-import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo';
-import { refreshVillage } from '../controller/actions/village/refreshVillage';
-import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages';
-import { updateResources } from '../controller/actions/village/updateResources';
-import { TaskManager } from '../controller/taskManager';
-import { BotEvent } from '../events/botEvent';
-import { updateHeroInformation } from '../parsers/hero/updateHeroInformation';
-import { publishPayloadEvent } from '../pubSub';
-import { getServerAppDirectory } from '../utils/getServerAppDirectory';
-import { shuffle } from '../utils/shuffle';
-import { accountService } from './accountService';
+} from '../accountContext.js';
+import { getPage, killBrowser } from '../browser/getPage.js';
+import { updateBuildings } from '../controller/actions/buildings/updateBuildings.js';
+import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff.js';
+import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';
+import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected.js';
+import { initGameInfo } from '../controller/actions/player/initGameInfo.js';
+import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo.js';
+import { refreshVillage } from '../controller/actions/village/refreshVillage.js';
+import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages.js';
+import { updateResources } from '../controller/actions/village/updateResources.js';
+import { TaskManager } from '../controller/taskManager.js';
+import { BotEvent } from '../events/botEvent.js';
+import { updateHeroInformation } from '../parsers/hero/updateHeroInformation.js';
+import { publishPayloadEvent } from '../pubSub.js';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
+import { shuffle } from '../utils/shuffle.js';
+import { accountService } from './accountService.js';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;

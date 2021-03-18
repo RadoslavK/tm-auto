@@ -1,16 +1,16 @@
-import { BuildingType } from '../../../../../../_shared/enums/BuildingType';
-import { BuildingSpotType } from '../../../../_enums/buildingSpotType';
-import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding';
-import { Tribe } from '../../../../_models/enums/tribe';
-import { AutoStorageSettings } from '../../../../_models/settings/tasks/autoBuildSettings/autoStorageSettings';
-import { Village } from '../../../../_models/village/village';
-import { getAccountContext } from '../../../../accountContext';
-import { buildingInfoService } from '../../../../services/info/buildingInfoService';
+import { BuildingType } from '../../../../../../_shared/enums/BuildingType.js';
+import { BuildingSpotType } from '../../../../_enums/buildingSpotType.js';
+import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding.js';
+import { Tribe } from '../../../../_models/enums/tribe.js';
+import { AutoStorageSettings } from '../../../../_models/settings/tasks/autoBuildSettings/autoStorageSettings.js';
+import { Village } from '../../../../_models/village/village.js';
+import { getAccountContext } from '../../../../accountContext.js';
+import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
 import {
   getWithMinimum,
   getWithMinimumSafe,
-} from '../../../../utils/getWithMaximum';
-import { randomElement } from '../../../../utils/randomElement';
+} from '../../../../utils/getWithMaximum.js';
+import { randomElement } from '../../../../utils/randomElement.js';
 
 type Result = {
   readonly buildingsToBuild: readonly QueuedBuilding[];

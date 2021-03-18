@@ -7,11 +7,11 @@ import {
   mutationField,
   subscriptionField,
 } from 'nexus';
-import { BotEvent } from '../../events/botEvent';
+import { BotEvent } from '../../events/botEvent.js';
 import {
   subscribeToEvent,
-} from '../../pubSub';
-import { accountService } from '../../services/accountService';
+} from '../../pubSub.js';
+import { accountService } from '../../services/accountService.js';
 
 export const UserAccount = objectType({
   name: 'UserAccount',

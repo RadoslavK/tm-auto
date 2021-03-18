@@ -1,9 +1,9 @@
-import { Tribe } from '../../../_models/enums/tribe';
-import { getAccountContext } from '../../../accountContext';
-import { parseGameToken } from '../../../parsers/gameInfo/parseGameToken';
-import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize';
-import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed';
-import { parseTribe } from '../../../parsers/gameInfo/parseTribe';
+import { Tribe } from '../../../_models/enums/tribe.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { parseGameToken } from '../../../parsers/gameInfo/parseGameToken.js';
+import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize.js';
+import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed.js';
+import { parseTribe } from '../../../parsers/gameInfo/parseTribe.js';
 
 export const initGameInfo = async (): Promise<void> => {
   const { gameInfo } = getAccountContext();

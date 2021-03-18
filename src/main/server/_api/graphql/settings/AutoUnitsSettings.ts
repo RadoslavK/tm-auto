@@ -6,11 +6,11 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { mergeDefaults } from '../../../../../_shared/merge';
-import { getAccountContext } from '../../../accountContext';
-import { BotEvent } from '../../../events/botEvent';
-import { subscribeToEvent } from '../../../pubSub';
-import { unitInfoService } from '../../../services/info/unitInfoService';
+import { mergeDefaults } from '../../../../../_shared/merge.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
+import { unitInfoService } from '../../../services/info/unitInfoService.js';
 
 export const AutoUnitsUnitSettings = objectType({
   name: 'AutoUnitsUnitSettings',

@@ -1,22 +1,22 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { CoolDown } from '../../../_models/coolDown';
-import { Duration } from '../../../_models/duration';
-import { TaskType } from '../../../_models/misc/taskType';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { CoolDown } from '../../../_models/coolDown.js';
+import { Duration } from '../../../_models/duration.js';
+import { TaskType } from '../../../_models/misc/taskType.js';
 import {
   AutoAdventureSettings,
-} from '../../../_models/settings/tasks/autoAdventureSettings';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
+} from '../../../_models/settings/tasks/autoAdventureSettings.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
 import {
   getWithMaximumSafe,
   getWithMinimumSafe,
-} from '../../../utils/getWithMaximum';
-import { randomElement } from '../../../utils/randomElement';
-import { equipHeroHorse } from '../../actions/hero/equipHeroHorse';
+} from '../../../utils/getWithMaximum.js';
+import { randomElement } from '../../../utils/randomElement.js';
+import { equipHeroHorse } from '../../actions/hero/equipHeroHorse.js';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
-} from '../../taskEngine/botTaskEngine';
+} from '../../taskEngine/botTaskEngine.js';
 
 export class AutoAdventureTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoAdventure;

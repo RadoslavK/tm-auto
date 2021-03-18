@@ -1,11 +1,11 @@
 import { ElementHandle } from 'puppeteer';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
 
-import { Coords } from '../../_models/coords';
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
-import { parseNumber } from '../../utils/numberUtils';
-import { ensureBuildingSpotPage } from './ensurePage';
+import { Coords } from '../../_models/coords.js';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { parseNumber } from '../../utils/numberUtils.js';
+import { ensureBuildingSpotPage } from './ensurePage.js';
 
 enum MovementType {
   Attack = 'Attack',

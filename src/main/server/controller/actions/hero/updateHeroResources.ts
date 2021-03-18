@@ -1,9 +1,9 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { Resources } from '../../../_models/misc/resources';
-import { getAccountContext } from '../../../accountContext';
-import { heroItemIds } from '../../../constants/heroItemIds';
-import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem';
-import { ensurePage } from '../ensurePage';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { Resources } from '../../../_models/misc/resources.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { heroItemIds } from '../../../constants/heroItemIds.js';
+import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';
+import { ensurePage } from '../ensurePage.js';
 
 export const updateHeroResources = async (): Promise<void> => {
   await ensurePage(TravianPath.Hero, true);

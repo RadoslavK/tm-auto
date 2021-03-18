@@ -1,9 +1,9 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { heroItemIds } from '../../../constants/heroItemIds';
-import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem';
-import { ensurePage } from '../ensurePage';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
+import { heroItemIds } from '../../../constants/heroItemIds.js';
+import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';
+import { ensurePage } from '../ensurePage.js';
 
 export const equipHeroHorse = async () => {
   await ensurePage(TravianPath.Hero, true);

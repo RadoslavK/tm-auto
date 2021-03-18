@@ -1,11 +1,11 @@
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { fieldIds } from '../../constants/fieldIds';
-import { getMaximum } from '../../utils/getWithMaximum';
-import { ActualBuilding } from './actual/actualBuilding';
-import { BuildingInProgress } from './inProgress/buildingInProgress';
-import { BuildingsInProgress } from './inProgress/buildingsInProgress';
-import { BuildingQueue } from './queue/buildingQueue';
-import { BuildingSpots } from './spots/buildingSpots';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { fieldIds } from '../../constants/fieldIds.js';
+import { getMaximum } from '../../utils/getWithMaximum.js';
+import { ActualBuilding } from './actual/actualBuilding.js';
+import { BuildingInProgress } from './inProgress/buildingInProgress.js';
+import { BuildingsInProgress } from './inProgress/buildingsInProgress.js';
+import { BuildingQueue } from './queue/buildingQueue.js';
+import { BuildingSpots } from './spots/buildingSpots.js';
 
 export class Buildings {
   public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();

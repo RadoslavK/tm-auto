@@ -1,5 +1,5 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
 
 type HeroLevelUpItem = {
   readonly name: string;

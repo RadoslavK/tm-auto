@@ -1,9 +1,9 @@
-import { HeroState } from '../../_models/hero/hero';
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
-import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes';
-import { BotEvent } from '../../events/botEvent';
-import { publishEvent } from '../../pubSub';
+import { HeroState } from '../../_models/hero/hero.js';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { publishEvent } from '../../pubSub.js';
 
 const parseHealth = async (): Promise<number> => {
   const page = await getPage();

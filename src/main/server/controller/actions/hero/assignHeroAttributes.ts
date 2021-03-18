@@ -1,11 +1,11 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { BotEvent } from '../../../events/botEvent';
-import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp';
-import { publishPayloadEvent } from '../../../pubSub';
-import { replaceInputText } from '../../../utils/browser/replaceInputText';
-import { ensurePage } from '../ensurePage';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp.js';
+import { publishPayloadEvent } from '../../../pubSub.js';
+import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
+import { ensurePage } from '../ensurePage.js';
 
 type EnsurePointParams = {
   readonly availablePoints: number;

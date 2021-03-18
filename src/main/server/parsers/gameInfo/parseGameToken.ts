@@ -1,5 +1,5 @@
-import { Token, TokenType } from '../../_models/gameInfo';
-import { getPage } from '../../browser/getPage';
+import { Token, TokenType } from '../../_models/gameInfo.js';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseGameToken = async (): Promise<Token> => {
   const page = await getPage();

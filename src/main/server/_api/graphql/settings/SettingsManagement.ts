@@ -1,5 +1,5 @@
 import { mutationField } from 'nexus';
-import { settingsManagementService } from '../../../services/settingsManagementService';
+import { settingsManagementService } from '../../../services/settingsManagementService.js';
 
 export const ExportAccountSettingsMutation = mutationField(t => {
   t.nullable.boolean('exportAccountSettings', {

@@ -1,6 +1,6 @@
-import { Village } from '../../_models/village/village';
-import { getPage } from '../../browser/getPage';
-import { parseNumber } from '../../utils/numberUtils';
+import { Village } from '../../_models/village/village.js';
+import { getPage } from '../../browser/getPage.js';
+import { parseNumber } from '../../utils/numberUtils.js';
 
 export const parseVillages = async (): Promise<readonly Village[]> => {
   const page = await getPage();

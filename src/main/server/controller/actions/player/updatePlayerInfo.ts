@@ -1,8 +1,8 @@
-import { TravianPath } from '../../../_enums/travianPath';
-import { getAccountContext } from '../../../accountContext';
-import { parseAllyId } from '../../../parsers/gameInfo/parseAllyId';
-import { parseCapitalVillageCoords } from '../../../parsers/gameInfo/parseCapitalVillageCoords';
-import { ensurePage } from '../ensurePage';
+import { TravianPath } from '../../../_enums/travianPath.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { parseAllyId } from '../../../parsers/gameInfo/parseAllyId.js';
+import { parseCapitalVillageCoords } from '../../../parsers/gameInfo/parseCapitalVillageCoords.js';
+import { ensurePage } from '../ensurePage.js';
 
 export const updatePlayerInfo = async (): Promise<void> => {
   await ensurePage(TravianPath.PlayerProfile);

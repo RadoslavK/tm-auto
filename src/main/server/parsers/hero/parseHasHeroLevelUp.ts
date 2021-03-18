@@ -1,4 +1,4 @@
-import { getPage } from '../../browser/getPage';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseHasHeroLevelUp = async (): Promise<boolean> => {
   const page = await getPage();

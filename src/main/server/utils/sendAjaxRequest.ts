@@ -1,10 +1,10 @@
 import { Page } from 'puppeteer';
 
-import { isObject } from '../../../_shared/merge';
-import { TokenType } from '../_models/gameInfo';
-import { getAccountContext } from '../accountContext';
-import { getPage } from '../browser/getPage';
-import { accountService } from '../services/accountService';
+import { isObject } from '../../../_shared/merge.js';
+import { TokenType } from '../_models/gameInfo.js';
+import { getAccountContext } from '../accountContext.js';
+import { getPage } from '../browser/getPage.js';
+import { accountService } from '../services/accountService.js';
 
 type OldParams = {
   readonly page: Page;

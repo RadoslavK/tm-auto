@@ -1,9 +1,9 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { GeneralVillageSettings } from './generalVillageSettings';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { GeneralVillageSettings } from './generalVillageSettings.js';
 import { AutoBuildSettings } from './tasks/autoBuildSettings';
-import { AutoPartySettings } from './tasks/autoPartySettings';
-import { AutoUnitsSettings } from './tasks/autoUnitsSettings';
+import { AutoPartySettings } from './tasks/autoPartySettings.js';
+import { AutoUnitsSettings } from './tasks/autoUnitsSettings.js';
 
 export class VillageSettings {
   public readonly autoBuild: AutoBuildSettings = new AutoBuildSettings();

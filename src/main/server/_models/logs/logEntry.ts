@@ -1,9 +1,9 @@
-import { Timestamp } from '../misc/timestamp';
-import { Village } from '../village/village';
-import { AutoBuildLogEntryContent } from './content/autoBuild';
-import { AutoUnitsLogEntryContent } from './content/autoUnits';
-import { ResourceClaimLogEntryContent } from './content/resourceClaim';
-import { TextLogEntryContent } from './content/text';
+import { Timestamp } from '../misc/timestamp.js';
+import { Village } from '../village/village.js';
+import { AutoBuildLogEntryContent } from './content/autoBuild.js';
+import { AutoUnitsLogEntryContent } from './content/autoUnits.js';
+import { ResourceClaimLogEntryContent } from './content/resourceClaim.js';
+import { TextLogEntryContent } from './content/text.js';
 
 export type LogEntryContent =
   | TextLogEntryContent

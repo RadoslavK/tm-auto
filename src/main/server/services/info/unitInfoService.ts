@@ -1,8 +1,8 @@
 import unitInfos from '../../../../../resources/unit-infos.json';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { Duration } from '../../_models/duration';
-import { Tribe } from '../../_models/enums/tribe';
-import { Resources } from '../../_models/misc/resources';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { Duration } from '../../_models/duration.js';
+import { Tribe } from '../../_models/enums/tribe.js';
+import { Resources } from '../../_models/misc/resources.js';
 
 type UnitInfo = {
   readonly buildingType: BuildingType;

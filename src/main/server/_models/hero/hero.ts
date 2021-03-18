@@ -1,6 +1,6 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { Resources } from '../misc/resources';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { Resources } from '../misc/resources.js';
 
 export enum HeroState {
   Unknown = 'Unknown',

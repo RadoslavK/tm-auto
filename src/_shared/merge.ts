@@ -1,4 +1,4 @@
-import { PartialFields } from './types/fields.type';
+import { PartialFields } from './types/fields.type.js';
 
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;

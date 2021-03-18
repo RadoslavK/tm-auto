@@ -3,25 +3,25 @@ import path from 'path';
 
 import JSZip from 'jszip';
 
-import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
-import { AccountSettings } from '../_models/settings/accountSettings';
-import { AutoMentorSettings } from '../_models/settings/autoMentorSettings';
-import { GeneralSettings } from '../_models/settings/generalSettings';
-import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
-import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings';
+import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
+import { AccountSettings } from '../_models/settings/accountSettings.js';
+import { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
+import { GeneralSettings } from '../_models/settings/generalSettings.js';
+import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';
+import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
-import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings';
-import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings';
-import { getAccountContextUnsafe } from '../accountContext';
-import { BotEvent } from '../events/botEvent';
-import { publishPayloadEvent } from '../pubSub';
-import { getServerAppDirectory } from '../utils/getServerAppDirectory';
-import { AccountsData, accountService } from './accountService';
-import { BuildingQueueService } from './buildingQueueService';
-import { DataPathService, dataPathService } from './dataPathService';
-import { fileService } from './fileService';
+import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
+import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
+import { getAccountContextUnsafe } from '../accountContext.js';
+import { BotEvent } from '../events/botEvent.js';
+import { publishPayloadEvent } from '../pubSub.js';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
+import { AccountsData, accountService } from './accountService.js';
+import { BuildingQueueService } from './buildingQueueService.js';
+import { DataPathService, dataPathService } from './dataPathService.js';
+import { fileService } from './fileService.js';
 import { SettingsService } from './settings';
-import { getGeneralSettingsService } from './settings/general';
+import { getGeneralSettingsService } from './settings/general.js';
 
 const updateSettings = async <TData = object>(
   zip: JSZip,

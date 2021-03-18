@@ -1,21 +1,21 @@
-import { BuildingType } from '../../../../../_shared/enums/BuildingType';
-import { getBuildingSpotPath } from '../../../_enums/travianPath';
-import { CoolDown } from '../../../_models/coolDown';
-import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim';
-import { TaskType } from '../../../_models/misc/taskType';
-import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings';
-import { Village } from '../../../_models/village/village';
-import { getAccountContext } from '../../../accountContext';
-import { getPage } from '../../../browser/getPage';
-import { partyInfo } from '../../../constants/partyInfo';
-import { getPartyDuration } from '../../../parsers/getPartyDuration';
-import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources';
-import { ensureBuildingSpotPage } from '../../actions/ensurePage';
-import { claimHeroResources } from '../../actions/hero/claimHeroResources';
+import { BuildingType } from '../../../../../_shared/enums/BuildingType.js';
+import { getBuildingSpotPath } from '../../../_enums/travianPath.js';
+import { CoolDown } from '../../../_models/coolDown.js';
+import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
+import { TaskType } from '../../../_models/misc/taskType.js';
+import { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings.js';
+import { Village } from '../../../_models/village/village.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
+import { partyInfo } from '../../../constants/partyInfo.js';
+import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
+import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
+import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
+import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
-} from '../../taskEngine/botTaskEngine';
+} from '../../taskEngine/botTaskEngine.js';
 
 export class AutoPartyTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoParty;

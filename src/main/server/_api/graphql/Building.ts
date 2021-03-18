@@ -8,12 +8,13 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
-import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService';
-import { buildingInfoService } from '../../services/info/buildingInfoService';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService.js';
+import { buildingInfoService } from '../../services/info/buildingInfoService.js';
+import { getDirname } from '../../utils/getDirname.js';
 
 const getBuildingSpots = (villageId: string) => {
   const normalizedSpots = getAccountContext()
@@ -70,7 +71,7 @@ export const BuildingSpot = objectType({
     t.int('type');
   },
   sourceType: {
-    module: join(__dirname, '../../_models/buildings/spots/buildingSpot.ts'),
+    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpot.ts'),
     export: 'BuildingSpot',
   },
 });

@@ -1,8 +1,8 @@
-import { mergeDefaults } from '../../../../../../_shared/merge';
-import { PartialFields } from '../../../../../../_shared/types/fields.type';
-import { CoolDown } from '../../../coolDown';
-import { Duration } from '../../../duration';
-import { AutoStorageSettings } from './autoStorageSettings';
+import { mergeDefaults } from '../../../../../../_shared/merge.js';
+import { PartialFields } from '../../../../../../_shared/types/fields.type.js';
+import { CoolDown } from '../../../coolDown.js';
+import { Duration } from '../../../duration.js';
+import { AutoStorageSettings } from './autoStorageSettings.js';
 
 type DualQueueSettings = {
   readonly allow: boolean;

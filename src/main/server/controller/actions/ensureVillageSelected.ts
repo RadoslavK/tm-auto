@@ -1,7 +1,7 @@
 import { ElementHandle } from 'puppeteer';
 
-import { getAccountContext } from '../../accountContext';
-import { getPage } from '../../browser/getPage';
+import { getAccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
 
 const getVillageSwitch = async (
   switches: readonly ElementHandle[],

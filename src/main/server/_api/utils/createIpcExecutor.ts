@@ -3,20 +3,20 @@ import {
   parse as parseQuery,
 } from 'graphql';
 
-import { GraphqlHandlerPayload } from '../../../../_shared/graphql/models';
+import { GraphqlHandlerPayload } from '../../../../_shared/graphql/models.js';
 import {
   GraphqlHandlerMessage,
   IpcHandler,
   createGraphqlHandlerCompleteMessage,
   createGraphqlHandlerDataMessage,
   createGraphqlHandlerErrorMessage,
-} from '../../../../_shared/ipc/graphqlHandlerMessages';
+} from '../../../../_shared/ipc/graphqlHandlerMessages.js';
 import {
   IpcMessageHandler,
   broadcastMessage,
   startIpcServer,
-} from '../../ipcUtils';
-import { executeGraphqlOperation } from './executeGraphqlOperation';
+} from '../../ipcUtils.js';
+import { executeGraphqlOperation } from './executeGraphqlOperation.js';
 
 type Params = {
   readonly schema: GraphQLSchema;

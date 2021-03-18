@@ -1,8 +1,8 @@
 import fs, { MakeDirectoryOptions } from 'fs';
 import path, { dirname } from 'path';
 
-import { PartialFields } from '../../../_shared/types/fields.type';
-import { getServerAppDirectory } from '../utils/getServerAppDirectory';
+import { PartialFields } from '../../../_shared/types/fields.type.js';
+import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
 class FileService {
   public save = async (targetPath: string, object: unknown): Promise<void> => {

@@ -1,4 +1,4 @@
-import { Resources } from '../../misc/resources';
+import { Resources } from '../../misc/resources.js';
 
 export enum ClaimHeroResourcesReason {
   AutoBuild = 'AutoBuild',

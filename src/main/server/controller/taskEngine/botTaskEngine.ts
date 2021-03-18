@@ -1,5 +1,5 @@
-import { CoolDown } from '../../_models/coolDown';
-import { TaskType } from '../../_models/misc/taskType';
+import { CoolDown } from '../../_models/coolDown.js';
+import { TaskType } from '../../_models/misc/taskType.js';
 
 export type BotTaskWithCoolDownResult = {
   readonly nextCoolDown?: CoolDown | null;

@@ -4,8 +4,9 @@ import {
   enumType,
 } from 'nexus';
 import { join } from 'path';
-import { Tribe } from '../../_models/enums/tribe';
-import { TaskType } from '../../_models/misc/taskType';
+import { Tribe } from '../../_models/enums/tribe.js';
+import { TaskType } from '../../_models/misc/taskType.js';
+import { getDirname } from '../../utils/getDirname.js';
 
 export const CoolDown = objectType({
   name: 'CoolDown',
@@ -46,7 +47,7 @@ export const Resources = objectType({
     });
   },
   sourceType: {
-    module: join(__dirname, '../../_models/misc/resources.ts'),
+    module: join(getDirname(import.meta), '../../_models/misc/resources.ts'),
     export: 'Resources',
   },
 });

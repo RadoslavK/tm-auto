@@ -1,22 +1,22 @@
-import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding';
-import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild';
-import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits';
+import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
+import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild.js';
+import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits.js';
 import {
   ClaimHeroResourcesReason,
   ResourceClaimLogEntryContent,
-} from '../_models/logs/content/resourceClaim';
+} from '../_models/logs/content/resourceClaim.js';
 import {
   TextLogEntryContent,
   TextLogEntryType,
-} from '../_models/logs/content/text';
-import { LogEntry, LogEntryContent } from '../_models/logs/logEntry';
-import { Resources } from '../_models/misc/resources';
-import { Timestamp } from '../_models/misc/timestamp';
-import { getAccountContext } from '../accountContext';
-import { BotEvent } from '../events/botEvent';
-import { publishPayloadEvent } from '../pubSub';
-import { buildingInfoService } from './info/buildingInfoService';
-import { unitInfoService } from './info/unitInfoService';
+} from '../_models/logs/content/text.js';
+import { LogEntry, LogEntryContent } from '../_models/logs/logEntry.js';
+import { Resources } from '../_models/misc/resources.js';
+import { Timestamp } from '../_models/misc/timestamp.js';
+import { getAccountContext } from '../accountContext.js';
+import { BotEvent } from '../events/botEvent.js';
+import { publishPayloadEvent } from '../pubSub.js';
+import { buildingInfoService } from './info/buildingInfoService.js';
+import { unitInfoService } from './info/unitInfoService.js';
 
 type LogAutoUnitsParams = {
   readonly amount: number;

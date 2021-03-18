@@ -2,11 +2,12 @@ import { ChildProcess, ForkOptions, fork } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-
+import type { BrowserWindow as BrowserWindowType } from 'electron';
 import { BrowserWindow, app, ipcMain, session } from 'electron';
+
 import which from 'which';
 
-import { findOpenSocket } from './ipc/findOpenSocket';
+import { findOpenSocket } from './ipc/findOpenSocket.js';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -19,7 +20,7 @@ if (require('electron-squirrel-startup')) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let clientWin: null | BrowserWindow;
+let clientWin: null | BrowserWindowType;
 
 const createClientWindow = async (socketName: string): Promise<void> => {
   clientWin = new BrowserWindow({
@@ -28,7 +29,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'mainPreload.js'),
       enableRemoteModule: true,
     },
   });
@@ -98,16 +99,16 @@ const createBackgroundProcess = (socketName: string): void => {
     console.error('No current node path found');
   }
 
-  const filePath = path.join(__dirname, 'server.js');
-
+  const filePath = isDevelopment ? path.join(__dirname, '../../src/main/server/index.ts') : path.join(__dirname, 'server.js');
   const options: ForkOptions = {
     env: {
+      'TS_NODE_PROJECT': 'src/main/server/tsconfig.json',
       dirname: app.getPath('userData'),
       NODE_ENV: isDevelopment ? 'development' : 'production',
       socketName,
     },
     execArgv: isDevelopment
-      ? ['--inspect=9220', '--enable-source-maps']
+      ? ['--inspect=9220', '--enable-source-maps', '--es-module-specifier-resolution=node', '--loader', 'ts-node/esm/transpile-only']
       : undefined,
     execPath: currentNodePath || undefined,
     silent: true,

@@ -7,7 +7,7 @@ import {
   createServerBroadcastMessage,
   createServerErrorMessage,
   createServerReplyMessage,
-} from '../../_shared/ipc/serverMessages';
+} from '../../_shared/ipc/serverMessages.js';
 
 export type IpcMessageHandler<TPayload = unknown, TResult = void> = (
   payload: TPayload,

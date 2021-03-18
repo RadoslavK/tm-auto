@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { accountService } from './accountService';
+import { accountService } from './accountService.js';
 
 type HeroSettingsPath = {
   readonly autoAdventure: string;

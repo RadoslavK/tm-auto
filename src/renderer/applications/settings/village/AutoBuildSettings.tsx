@@ -5,10 +5,6 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import {
-  //  Dont share stuff from server
-  DualQueuePreferences,
-} from '../../../../main/server/_models/settings/tasks/autoBuildSettings';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
 import {
@@ -286,7 +282,8 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
               name="dualQueuePreference"
               value={dualQueuePreference}
               onChange={onPreferenceChange}>
-              {DualQueuePreferences.map((preference) => (
+              {/*TODO*/}
+              {['Resources', 'Infrastructure'].map((preference) => (
                 <option
                   key={preference}
                   value={preference}

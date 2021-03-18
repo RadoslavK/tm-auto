@@ -1,7 +1,7 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { Resources } from '../misc/resources';
-import { VillageCapacity } from './villageCapacity';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { Resources } from '../misc/resources.js';
+import { VillageCapacity } from './villageCapacity.js';
 
 export class VillageResources {
   public amount: Resources = new Resources();

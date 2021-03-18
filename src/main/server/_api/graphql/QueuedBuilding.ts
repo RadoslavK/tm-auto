@@ -8,17 +8,17 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { BuildingQueue as BuildingQueueModel } from '../../_models/buildings/queue/buildingQueue';
-import { QueuedBuilding as QueuedBuildingModel } from '../../_models/buildings/queue/queuedBuilding';
-import { Duration } from '../../_models/duration';
-import { Resources } from '../../_models/misc/resources';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
-import { buildingInfoService } from '../../services/info/buildingInfoService';
-import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils';
-import { NexusGenObjects } from '../graphqlSchema';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { BuildingQueue as BuildingQueueModel } from '../../_models/buildings/queue/buildingQueue.js';
+import { QueuedBuilding as QueuedBuildingModel } from '../../_models/buildings/queue/queuedBuilding.js';
+import { Duration } from '../../_models/duration.js';
+import { Resources } from '../../_models/misc/resources.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
+import { buildingInfoService } from '../../services/info/buildingInfoService.js';
+import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils.js';
+import type { NexusGenObjects } from '../graphqlSchema';
 
 const mapBuildingQueue = (
   queue: BuildingQueueModel,

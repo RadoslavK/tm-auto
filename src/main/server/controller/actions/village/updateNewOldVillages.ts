@@ -1,8 +1,8 @@
-import { getAccountContext } from '../../../accountContext';
-import { BotEvent } from '../../../events/botEvent';
-import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId';
-import { parseVillages } from '../../../parsers/villages/parseVillages';
-import { publishPayloadEvent } from '../../../pubSub';
+import { getAccountContext } from '../../../accountContext.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId.js';
+import { parseVillages } from '../../../parsers/villages/parseVillages.js';
+import { publishPayloadEvent } from '../../../pubSub.js';
 
 export const updateNewOldVillages = async (): Promise<void> => {
   const villages = await parseVillages();

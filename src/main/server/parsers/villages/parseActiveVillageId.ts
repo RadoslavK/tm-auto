@@ -1,4 +1,4 @@
-import { getPage } from '../../browser/getPage';
+import { getPage } from '../../browser/getPage.js';
 
 export const parseActiveVillageId = async (): Promise<string> => {
   const page = await getPage();

@@ -1,6 +1,6 @@
-import { GeneralSettings } from '../../_models/settings/generalSettings';
-import { DataPathService } from '../dataPathService';
-import { InternalSettingsService } from './internalSettingsService';
+import { GeneralSettings } from '../../_models/settings/generalSettings.js';
+import { DataPathService } from '../dataPathService.js';
+import { InternalSettingsService } from './internalSettingsService.js';
 
 let generalSettingsServiceField: InternalSettingsService<
   GeneralSettings

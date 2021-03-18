@@ -1,10 +1,10 @@
 import { ElementHandle } from 'puppeteer';
 
-import { TravianPath } from '../../_enums/travianPath';
-import { Coords } from '../../_models/coords';
-import { getPage } from '../../browser/getPage';
-import { parseNumber } from '../../utils/numberUtils';
-import { validateUrl } from '../../utils/validateUrl';
+import { TravianPath } from '../../_enums/travianPath.js';
+import { Coords } from '../../_models/coords.js';
+import { getPage } from '../../browser/getPage.js';
+import { parseNumber } from '../../utils/numberUtils.js';
+import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls = [TravianPath.PlayerProfile];
 

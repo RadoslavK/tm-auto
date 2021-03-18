@@ -6,9 +6,9 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { BotEvent } from '../../../events/botEvent';
-import { subscribeToEvent } from '../../../pubSub';
-import { getGeneralSettingsService } from '../../../services/settings/general';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
+import { getGeneralSettingsService } from '../../../services/settings/general.js';
 
 export const GeneralSettings = objectType({
   name: 'GeneralSettings',

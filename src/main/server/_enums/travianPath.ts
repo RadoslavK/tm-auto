@@ -1,4 +1,4 @@
-import { TabInformation } from '../controller/actions/ensurePage';
+import { TabInformation } from '../controller/actions/ensurePage.js';
 
 export enum TravianPath {
   AccountOverview = 'dorf3.php',

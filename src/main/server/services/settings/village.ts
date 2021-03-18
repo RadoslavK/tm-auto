@@ -1,11 +1,11 @@
-import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings';
+import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings.js';
 import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
-import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings';
-import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings';
-import { VillageSettings } from '../../_models/settings/villageSettings';
-import { dataPathService } from '../dataPathService';
-import { ComplexSettingsServiceType } from './_types';
-import { InternalSettingsService } from './internalSettingsService';
+import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings.js';
+import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings.js';
+import { VillageSettings } from '../../_models/settings/villageSettings.js';
+import { dataPathService } from '../dataPathService.js';
+import { ComplexSettingsServiceType } from './_types.js';
+import { InternalSettingsService } from './internalSettingsService.js';
 
 export class VillageSettingsService
   implements ComplexSettingsServiceType<VillageSettings> {

@@ -1,11 +1,11 @@
-import { mergeDefaults } from '../../../../_shared/merge';
-import { PartialFields } from '../../../../_shared/types/fields.type';
-import { BotEvent } from '../../events/botEvent';
-import { publishPayloadEvent } from '../../pubSub';
+import { mergeDefaults } from '../../../../_shared/merge.js';
+import { PartialFields } from '../../../../_shared/types/fields.type.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { publishPayloadEvent } from '../../pubSub.js';
 import { Buildings } from '../buildings';
-import { Coords } from '../coords';
+import { Coords } from '../coords.js';
 import { Units } from '../units';
-import { VillageResources } from './villageResources';
+import { VillageResources } from './villageResources.js';
 
 export class Village {
   public readonly buildings: Buildings = new Buildings(

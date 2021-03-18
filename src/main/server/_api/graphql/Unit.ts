@@ -3,7 +3,7 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { unitInfoService } from '../../services/info/unitInfoService';
+import { unitInfoService } from '../../services/info/unitInfoService.js';
 
 export const UnitInfo = objectType({
   name: 'UnitInfo',

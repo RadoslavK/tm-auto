@@ -1,5 +1,5 @@
-import { Point } from '../../../_models/map/point';
-import { Sector } from '../sector';
+import { Point } from '../../../_models/map/point.js';
+import { Sector } from '../sector.js';
 
 type Params = {
   readonly mapSize: number;

@@ -1,6 +1,6 @@
-import { TaskType } from '../_models/misc/taskType';
-import { BotEvent } from '../events/botEvent';
-import { publishPayloadEvent } from '../pubSub';
+import { TaskType } from '../_models/misc/taskType.js';
+import { BotEvent } from '../events/botEvent.js';
+import { publishPayloadEvent } from '../pubSub.js';
 
 const getDefaultExecutionTime = (): Date => new Date(1970, 1, 1);
 

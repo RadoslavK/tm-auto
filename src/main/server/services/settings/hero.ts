@@ -1,9 +1,9 @@
-import { HeroLevelUpSettings } from '../../_models/settings/heroLevelUpSettings';
-import { HeroSettings } from '../../_models/settings/heroSettings';
-import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings';
-import { dataPathService } from '../dataPathService';
-import { ComplexSettingsServiceType } from './_types';
-import { InternalSettingsService } from './internalSettingsService';
+import { HeroLevelUpSettings } from '../../_models/settings/heroLevelUpSettings.js';
+import { HeroSettings } from '../../_models/settings/heroSettings.js';
+import { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings.js';
+import { dataPathService } from '../dataPathService.js';
+import { ComplexSettingsServiceType } from './_types.js';
+import { InternalSettingsService } from './internalSettingsService.js';
 
 export class HeroSettingsService
   implements ComplexSettingsServiceType<HeroSettings> {

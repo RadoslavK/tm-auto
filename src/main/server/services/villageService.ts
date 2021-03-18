@@ -1,10 +1,10 @@
-import { Coords } from '../_models/coords';
-import { Village } from '../_models/village/village';
-import { BotEvent } from '../events/botEvent';
-import { publishPayloadEvent } from '../pubSub';
-import { accountService } from './accountService';
-import { dataPathService } from './dataPathService';
-import { fileService } from './fileService';
+import { Coords } from '../_models/coords.js';
+import { Village } from '../_models/village/village.js';
+import { BotEvent } from '../events/botEvent.js';
+import { publishPayloadEvent } from '../pubSub.js';
+import { accountService } from './accountService.js';
+import { dataPathService } from './dataPathService.js';
+import { fileService } from './fileService.js';
 
 export class VillageService {
   private _currentVillageId: string = '';

@@ -1,20 +1,20 @@
-import { LogEntry } from '../_models/logs/logEntry';
-import { MapSearchVillageTile } from '../_models/map/villageTile';
-import { TaskType } from '../_models/misc/taskType';
-import { AccountSettings } from '../_models/settings/accountSettings';
-import { AutoMentorSettings } from '../_models/settings/autoMentorSettings';
-import { GeneralSettings } from '../_models/settings/generalSettings';
-import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings';
-import { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings';
-import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings';
+import { LogEntry } from '../_models/logs/logEntry.js';
+import { MapSearchVillageTile } from '../_models/map/villageTile.js';
+import { TaskType } from '../_models/misc/taskType.js';
+import { AccountSettings } from '../_models/settings/accountSettings.js';
+import { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
+import { GeneralSettings } from '../_models/settings/generalSettings.js';
+import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';
+import { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings.js';
+import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
-import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings';
-import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings';
-import { Village } from '../_models/village/village';
-import { UserAccount } from '../services/accountService';
-import { BotState } from '../services/controllerService';
-import { MapSearchState } from '../services/mapScan/mapScanService';
-import { BotEvent } from './botEvent';
+import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
+import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
+import { Village } from '../_models/village/village.js';
+import { UserAccount } from '../services/accountService.js';
+import { BotState } from '../services/controllerService.js';
+import { MapSearchState } from '../services/mapScan/mapScanService.js';
+import { BotEvent } from './botEvent.js';
 
 export type BotEventPayloads = {
   [BotEvent.AccountsUpdated]: {

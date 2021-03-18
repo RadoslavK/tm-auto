@@ -4,11 +4,14 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { HeroState } from '../../_models/hero/hero';
-import { getAccountContext } from '../../accountContext';
-import { BotEvent } from '../../events/botEvent';
-import { subscribeToEvent } from '../../pubSub';
+import { HeroState } from '../../_models/hero/hero.js';
+import { getAccountContext } from '../../accountContext.js';
+import { BotEvent } from '../../events/botEvent.js';
+import { subscribeToEvent } from '../../pubSub.js';
 import { join } from 'path';
+import { getDirname } from '../../utils/getDirname.js';
+
+const __dirname = getDirname(import.meta);
 
 export const HeroStateEnum = enumType({
   name: "HeroState",
