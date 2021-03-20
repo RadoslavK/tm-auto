@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "react",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "noEmit": true
+  },
+  "files": ["src/index.tsx"],
+  "include": [
+    "**/*.d.ts"
+  ],
+  "references": [
+    { "path": "../shared" }
+  ]
+}

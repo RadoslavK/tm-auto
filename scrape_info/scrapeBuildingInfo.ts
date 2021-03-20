@@ -2,8 +2,8 @@ import fs from 'fs';
 
 import { launch } from 'puppeteer-core';
 
-import { Duration } from '../src/main/server/_models/duration';
-import { Resources } from '../src/main/server/_models/misc/resources';
+import { Duration } from '../packages/server/src/_models/duration';
+import { Resources } from '../packages/server/src/_models/misc/resources';
 
 const scrape = async () => {
   const browser = await launch({

@@ -1,0 +1,27 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "author": "Buckyx",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./*": "./dist/*",
+    "./enums/*": "./dist/enums/*",
+    "./ipc/*": "./dist/ipc/*",
+    "./types/*": "./dist/types/*",
+    "./utils/*": "./dist/utils/*"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": ""
+  },
+  "dependencies": {
+    "nanoid": "^3.1.21"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}

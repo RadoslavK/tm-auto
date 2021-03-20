@@ -1,0 +1,51 @@
+{
+  "name": "renderer",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "typecheck": "tsc --noEmit",
+    "relay": "relay-compiler --src ./src --schema ../server/src/_api/schema.graphql --language typescript --artifactDirectory ./src/_graphql/__generated__ --eagerESModules"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "clsx": "^1.1.1",
+    "react": "^17.0.1",
+    "react-dnd": "^14.0.1",
+    "react-dnd-html5-backend": "^14.0.0",
+    "react-dom": "^17.0.1",
+    "react-relay": "^11.0.0",
+    "react-router-dom": "^5.2.0",
+    "react-virtualized": "^9.22.3",
+    "relay-runtime": "^11.0.0",
+    "typeface-roboto": "^1.1.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@snowpack/plugin-build-script": "^2.1.0",
+    "@snowpack/plugin-dotenv": "^2.0.5",
+    "@snowpack/plugin-react-refresh": "^2.4.1",
+    "@snowpack/plugin-run-script": "^2.3.0",
+    "@snowpack/plugin-typescript": "^1.2.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
+    "@types/react-relay": "^7.0.17",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/react-virtualized": "^9.21.11",
+    "@types/relay-runtime": "^10.1.9",
+    "@types/snowpack-env": "^2.3.3",
+    "babel-plugin-macros": "^3.0.1",
+    "babel-plugin-relay": "^11.0.0",
+    "cpy": "^8.1.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-relay": "^1.8.2",
+    "graphql": "^15.5.0",
+    "relay-compiler": "^11.0.0",
+    "relay-compiler-language-typescript": "^13.0.6",
+    "relay-config": "^11.0.0",
+    "snowpack": "^3.1.2",
+    "typescript": "^4.2.3"
+  }
+}

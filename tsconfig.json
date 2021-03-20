@@ -4,9 +4,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
     "inlineSources": true,
     "isolatedModules": true,
-    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -16,6 +16,20 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "strictPropertyInitialization": true
-  }
+    "strictPropertyInitialization": true,
+    "baseUrl": "./packages",
+    "paths": {
+      "shared/*": ["shared/dist/*"],
+      "main/*": ["main/dist/*"],
+      "server/*": ["server/dist*"]
+    }
+  },
+  "files": [],
+  "references": [
+    { "path": "packages/shared" },
+    { "path": "packages/main" },
+    { "path": "packages/server" },
+    { "path": "packages/renderer" },
+    { "path": "packages/app" }
+  ]
 }

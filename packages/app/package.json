@@ -1,0 +1,15 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "electron .",
+    "typecheck": "tsc --noEmit",
+    "lint": ""
+  },
+  "devDependencies": {
+    "esbuild": "^0.9.6"
+  }
+}

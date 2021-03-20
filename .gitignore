@@ -3,9 +3,8 @@
 # IDE files
 .idea
 # produced build
-.webpack
-app/dist
-pack
+build
+dist
 
 yarn-error.log
 node_modules
