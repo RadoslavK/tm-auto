@@ -4,14 +4,14 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { Duration } from '../../../../_shared/types/duration.type';
-import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime';
-import { NextTasksExecutionQuery } from '../../../_graphql/__generated__/NextTasksExecutionQuery.graphql';
-import { NextTasksExecutionResetMutation } from '../../../_graphql/__generated__/NextTasksExecutionResetMutation.graphql';
-import { NextTasksExecutionSetMutation } from '../../../_graphql/__generated__/NextTasksExecutionSetMutation.graphql';
+import { Duration } from '../../../../_shared/types/duration.type.js';
+import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime.js';
+import { NextTasksExecutionQuery } from '../../../_graphql/__generated__/NextTasksExecutionQuery.graphql.js';
+import { NextTasksExecutionResetMutation } from '../../../_graphql/__generated__/NextTasksExecutionResetMutation.graphql.js';
+import { NextTasksExecutionSetMutation } from '../../../_graphql/__generated__/NextTasksExecutionSetMutation.graphql.js';
 
-import { useCountDown } from '../../../hooks/useCountDown';
-import { NextExecutionForm } from './NextExecutionForm';
+import { useCountDown } from '../../../hooks/useCountDown.js';
+import { NextExecutionForm } from './NextExecutionForm.js';
 import graphql from 'babel-plugin-relay/macro';
 
 const nextTasksExecutionQuery = graphql`

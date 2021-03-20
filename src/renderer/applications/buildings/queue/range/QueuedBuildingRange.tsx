@@ -3,15 +3,15 @@ import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 import { useFragment } from 'react-relay/hooks';
-import { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql';
+import { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
 
-import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks';
+import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks.js';
 import {
   DropPosition,
   MovedQueuedBuildingRange,
   QueuedBuildingsDropArea,
-} from '../QueuedBuildingsDropArea';
-import { QueuedBuildingRangeComponent } from './QueuedBuildingRangeComponent';
+} from '../QueuedBuildingsDropArea.js';
+import { QueuedBuildingRangeComponent } from './QueuedBuildingRangeComponent.js';
 
 type StylesProps = {
   readonly isDragging: boolean;

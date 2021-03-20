@@ -3,9 +3,9 @@ import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import { ResourceClaimLogContent_resourceClaimLogEntryContent$key } from '../../../../_graphql/__generated__/ResourceClaimLogContent_resourceClaimLogEntryContent.graphql';
+import { ResourceClaimLogContent_resourceClaimLogEntryContent$key } from '../../../../_graphql/__generated__/ResourceClaimLogContent_resourceClaimLogEntryContent.graphql.js';
 
-import { Resource } from '../../../villages/components/Resource';
+import { Resource } from '../../../villages/components/Resource.js';
 
 const useStyles = makeStyles({
   root: {

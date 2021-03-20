@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 import {
   LogEntry_logEntry,
   LogEntry_logEntry$key,
-} from '../../../_graphql/__generated__/LogEntry_logEntry.graphql';
-import { VillageName } from '../../villages/components/VillageName';
-import { AutoBuildLogContent } from './entries/AutoBuildLogContent';
-import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent';
-import { ResourceClaimLogContent } from './entries/ResourceClaimLogContent';
-import { TextLogContent } from './entries/TextLogContent';
+} from '../../../_graphql/__generated__/LogEntry_logEntry.graphql.js';
+import { VillageName } from '../../villages/components/VillageName.js';
+import { AutoBuildLogContent } from './entries/AutoBuildLogContent.js';
+import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent.js';
+import { ResourceClaimLogContent } from './entries/ResourceClaimLogContent.js';
+import { TextLogContent } from './entries/TextLogContent.js';
 
 type Props = {
   readonly logEntry: LogEntry_logEntry$key;

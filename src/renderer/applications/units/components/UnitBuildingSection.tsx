@@ -5,15 +5,15 @@ import {
   useFragment,
   useMutation,
 } from 'react-relay/hooks';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { Duration as DurationModel } from '../../../../_shared/types/duration.type';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { Duration as DurationModel } from '../../../../_shared/types/duration.type.js';
 
-import { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql';
-import { Duration } from '../../../_shared/components/controls/Duration';
-import { imageLinks } from '../../../utils/imageLinks';
-import { UnitSettings } from './UnitSettings';
+import { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql.js';
+import { Duration } from '../../../_shared/components/controls/Duration.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
+import { UnitSettings } from './UnitSettings.js';
 import graphql from 'babel-plugin-relay/macro';
-import { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql';
+import { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
 
 type StylesProps = {
   readonly buildingType: number;

@@ -7,9 +7,9 @@ import {
   useMutation,
 } from 'react-relay/hooks';
 
-import { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/__generated__/UnitSettings_autoUnitsUnitSettings.graphql';
-import { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql';
-import { imageLinks } from '../../../utils/imageLinks';
+import { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/__generated__/UnitSettings_autoUnitsUnitSettings.graphql.js';
+import { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
 import graphql from 'babel-plugin-relay/macro';
 
 type Props = {

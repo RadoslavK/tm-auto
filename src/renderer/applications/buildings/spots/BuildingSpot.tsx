@@ -8,16 +8,16 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
 
-import { imageLinks } from '../../../utils/imageLinks';
-import { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql';
-import { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql';
-import { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql';
-import { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql';
-import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
-import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog';
-import { BuildingLevelBox } from './BuildingLevelBox';
+import { imageLinks } from '../../../utils/imageLinks.js';
+import { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql.js';
+import { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
+import { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
+import { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
+import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
+import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog.js';
+import { BuildingLevelBox } from './BuildingLevelBox.js';
 
 enum DialogType {
   None,

@@ -8,11 +8,11 @@ import {
   Switch,
   useRouteMatch,
 } from 'react-router-dom';
-import { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql';
+import { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 
-import { Village } from './Village';
-import { VillageSideItem } from './VillageSideItem';
-import { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql';
+import { Village } from './Village.js';
+import { VillageSideItem } from './VillageSideItem.js';
+import { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql.js';
 
 const useStyles = makeStyles({
   root: {

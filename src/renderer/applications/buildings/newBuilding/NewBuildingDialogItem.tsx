@@ -6,11 +6,11 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql';
-import { NewBuildingDialogItemQuery } from '../../../_graphql/__generated__/NewBuildingDialogItemQuery.graphql';
+import { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
+import { NewBuildingDialogItemQuery } from '../../../_graphql/__generated__/NewBuildingDialogItemQuery.graphql.js';
 
-import { imageLinks } from '../../../utils/imageLinks';
-import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog';
+import { imageLinks } from '../../../utils/imageLinks.js';
+import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 
 type StylesProps = {
   readonly buildingType: number;

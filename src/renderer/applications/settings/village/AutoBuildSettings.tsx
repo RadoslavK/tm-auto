@@ -5,15 +5,15 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
+import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 import {
   AutoBuildSettingsQuery,
   AutoBuildSettingsQueryResponse,
-} from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql';
-import { AutoBuildSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoBuildSettingsResetSettingsMutation.graphql';
-import { AutoBuildSettingsUpdateSettingsMutation, UpdateAutoBuildSettingsInput } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql';
-import { CoolDown as CoolDownModel } from '../../../models/coolDown.type';
+} from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
+import { AutoBuildSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoBuildSettingsResetSettingsMutation.graphql.js';
+import { AutoBuildSettingsUpdateSettingsMutation, UpdateAutoBuildSettingsInput } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
+import { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 
 type Settings = Omit<AutoBuildSettingsQueryResponse['autoBuildSettings'], 'autoStorage' | 'dualQueue'> & {
   readonly allowAutoGranary: boolean;

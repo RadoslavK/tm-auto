@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { EnsureTitleQuery } from '../_graphql/__generated__/EnsureTitleQuery.graphql';
+import { EnsureTitleQuery } from '../_graphql/__generated__/EnsureTitleQuery.graphql.js';
 
-import { getServerShortcut } from '../utils/getServerShortcut';
+import { getServerShortcut } from '../utils/getServerShortcut.js';
 
 const ensureTitleQuery = graphql`
   query EnsureTitleQuery {

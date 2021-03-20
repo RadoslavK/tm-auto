@@ -4,9 +4,9 @@ import React from 'react';
 import { useFragment } from 'react-relay/hooks';
 import {
   AutoBuildLogContent_autoBuildLogEntryContent$key,
-} from '../../../../_graphql/__generated__/AutoBuildLogContent_autoBuildLogEntryContent.graphql';
+} from '../../../../_graphql/__generated__/AutoBuildLogContent_autoBuildLogEntryContent.graphql.js';
 
-import { imageLinks } from '../../../../utils/imageLinks';
+import { imageLinks } from '../../../../utils/imageLinks.js';
 import graphql from 'babel-plugin-relay/macro';
 
 type StylesProps = {

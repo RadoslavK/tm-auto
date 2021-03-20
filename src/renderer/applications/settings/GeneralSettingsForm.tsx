@@ -5,9 +5,9 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { GeneralSettingsFormQuery } from '../../_graphql/__generated__/GeneralSettingsFormQuery.graphql';
-import { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql';
-import { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql';
+import { GeneralSettingsFormQuery } from '../../_graphql/__generated__/GeneralSettingsFormQuery.graphql.js';
+import { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql.js';
+import { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql.js';
 
 const generalSettingsFormQuery = graphql`
   query GeneralSettingsFormQuery {

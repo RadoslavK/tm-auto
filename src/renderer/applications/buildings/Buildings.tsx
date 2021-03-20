@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
-import { BuildingsInProgress } from './inProgress/BuildingsInProgress';
-import { BuildingQueue } from './queue/BuildingQueue';
-import { BuildingSpots } from './spots/BuildingSpots';
+import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
+import { BuildingsInProgress } from './inProgress/BuildingsInProgress.js';
+import { BuildingQueue } from './queue/BuildingQueue.js';
+import { BuildingSpots } from './spots/BuildingSpots.js';
 
 const useStyles = makeStyles({
   buildingSpots: {

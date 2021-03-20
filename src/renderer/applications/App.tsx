@@ -7,18 +7,18 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
 
-import { EnsureGraphQL } from './EnsureGraphQL';
+import { EnsureGraphQL } from './EnsureGraphQL.js';
 import {
   EnsureTitle,
-} from './EnsureTitle';
-import { MainRoutes } from './navigation/components/MainRoutes';
+} from './EnsureTitle.js';
+import { MainRoutes } from './navigation/components/MainRoutes.js';
 import {
   Navigation,
-} from './navigation/components/Navigation';
-import { SettingsManagement } from './settings/management/SettingsManagement';
+} from './navigation/components/Navigation.js';
+import { SettingsManagement } from './settings/management/SettingsManagement.js';
 import {
   EnsureSignedIn,
-} from './signIn/components/EnsureSignedIn';
+} from './signIn/components/EnsureSignedIn.js';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {

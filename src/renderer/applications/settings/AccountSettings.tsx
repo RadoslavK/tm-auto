@@ -5,11 +5,11 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { AccountSettingsQuery } from '../../_graphql/__generated__/AccountSettingsQuery.graphql';
-import { AccountSettingsResetSettingsMutation } from '../../_graphql/__generated__/AccountSettingsResetSettingsMutation.graphql';
-import { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql';
-import { CoolDown as CoolDownModel } from '../../models/coolDown.type';
-import { CoolDown } from '../../_shared/components/controls/CoolDown';
+import { AccountSettingsQuery } from '../../_graphql/__generated__/AccountSettingsQuery.graphql.js';
+import { AccountSettingsResetSettingsMutation } from '../../_graphql/__generated__/AccountSettingsResetSettingsMutation.graphql.js';
+import { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
+import { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
+import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
 
 const accountSettingsQuery = graphql`
   query AccountSettingsQuery {

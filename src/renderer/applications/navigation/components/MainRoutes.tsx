@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NextTasksExecution';
-import { BotActivity } from '../../BotActivity';
-import { navigationApps } from './Navigation';
+import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NextTasksExecution.js';
+import { BotActivity } from '../../BotActivity.js';
+import { navigationApps } from './Navigation.js';
 
 export const MainRoutes: React.FC = () => (
   <div>

@@ -5,17 +5,17 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { Duration } from '../../../../_shared/types/duration.type';
-import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime';
+import { Duration } from '../../../../_shared/types/duration.type.js';
+import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime.js';
 import {
   NextTaskExecutionQuery,
   TaskType,
-} from '../../../_graphql/__generated__/NextTaskExecutionQuery.graphql';
-import { NextTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextTaskExecutionResetMutation.graphql';
-import { NextTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextTaskExecutionSetMutation.graphql';
+} from '../../../_graphql/__generated__/NextTaskExecutionQuery.graphql.js';
+import { NextTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextTaskExecutionResetMutation.graphql.js';
+import { NextTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextTaskExecutionSetMutation.graphql.js';
 
-import { useCountDown } from '../../../hooks/useCountDown';
-import { NextExecutionForm } from './NextExecutionForm';
+import { useCountDown } from '../../../hooks/useCountDown.js';
+import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
   readonly task: TaskType;

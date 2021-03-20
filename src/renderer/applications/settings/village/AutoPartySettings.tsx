@@ -4,13 +4,13 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { createOnNumberChanged } from '../../../utils/createOnNumberChanged';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
+import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 import graphql from 'babel-plugin-relay/macro';
-import { AutoPartySettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsResetSettingsMutation.graphql';
-import { AutoPartySettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsUpdateSettingsMutation.graphql';
-import { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql';
-import { CoolDown as CoolDownModel } from '../../../models/coolDown.type';
+import { AutoPartySettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsResetSettingsMutation.graphql.js';
+import { AutoPartySettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsUpdateSettingsMutation.graphql.js';
+import { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
+import { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 
 type Props = {
   readonly villageId: string;

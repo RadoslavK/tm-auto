@@ -2,15 +2,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 import { useFragment } from 'react-relay/hooks';
-import { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql';
+import { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
 
-import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks';
+import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks.js';
 import {
   DropPosition,
   MovedQueuedBuilding,
   QueuedBuildingsDropArea,
-} from '../QueuedBuildingsDropArea';
-import { QueuedBuildingComponent } from './QueuedBuildingComponent';
+} from '../QueuedBuildingsDropArea.js';
+import { QueuedBuildingComponent } from './QueuedBuildingComponent.js';
 import graphql from 'babel-plugin-relay/macro';
 
 type StylesProps = {

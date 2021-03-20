@@ -7,16 +7,16 @@ import {
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
-import { MapSearchMapScanProgressQuery } from '../../_graphql/__generated__/MapSearchMapScanProgressQuery.graphql';
-import { MapSearchMapSearchStateQuery } from '../../_graphql/__generated__/MapSearchMapSearchStateQuery.graphql';
+import { MapSearchMapScanProgressQuery } from '../../_graphql/__generated__/MapSearchMapScanProgressQuery.graphql.js';
+import { MapSearchMapSearchStateQuery } from '../../_graphql/__generated__/MapSearchMapSearchStateQuery.graphql.js';
 import {
   MapSearchOnMapSearchFinishedSubscription,
   MapSearchOnMapSearchFinishedSubscriptionResponse,
-} from '../../_graphql/__generated__/MapSearchOnMapSearchFinishedSubscription.graphql';
-import { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql';
+} from '../../_graphql/__generated__/MapSearchOnMapSearchFinishedSubscription.graphql.js';
+import { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql.js';
 
-import { VirtualizedTable } from '../../_shared/components/VirtualizedTable';
-import { SortOrder } from '../../_shared/SortOrder';
+import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
+import { SortOrder } from '../../_shared/SortOrder.js';
 
 enum SearchMapSortBy {
   Distance,

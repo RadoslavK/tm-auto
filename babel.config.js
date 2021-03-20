@@ -4,7 +4,7 @@ module.exports = (api) => {
   const isDevelopment = !api.env('production');
 
   return {
-    sourceType: 'unambiguous',
+    sourceType: 'module',
     presets: [
       ['@babel/preset-env', {
         corejs: 2,

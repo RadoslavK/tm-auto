@@ -2,11 +2,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { BuildingType } from '../../../../_shared/enums/BuildingType';
-import { UnitsAutoUnitsSettingsQuery } from '../../../_graphql/__generated__/UnitsAutoUnitsSettingsQuery.graphql';
+import { BuildingType } from '../../../../_shared/enums/BuildingType.js';
+import { UnitsAutoUnitsSettingsQuery } from '../../../_graphql/__generated__/UnitsAutoUnitsSettingsQuery.graphql.js';
 
-import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution';
-import { UnitBuildingSection } from './UnitBuildingSection';
+import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
+import { UnitBuildingSection } from './UnitBuildingSection.js';
 
 const useStyles = makeStyles({
   building: {

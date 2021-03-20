@@ -2,10 +2,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import { Resources_villageResources$key } from '../../../_graphql/__generated__/Resources_villageResources.graphql';
+import { Resources_villageResources$key } from '../../../_graphql/__generated__/Resources_villageResources.graphql.js';
 
-import { createFormatter } from '../../../utils/numberFormatting';
-import { Resource } from './Resource';
+import { createFormatter } from '../../../utils/numberFormatting.js';
+import { Resource } from './Resource.js';
 
 const useStyles = makeStyles({
   root: {

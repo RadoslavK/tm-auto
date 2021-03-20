@@ -14,19 +14,19 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-import { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql';
-import { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql';
+import { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
+import { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 
-import { Buildings } from '../../buildings/Buildings';
-import { Parties } from '../../party/Parties';
+import { Buildings } from '../../buildings/Buildings.js';
+import { Parties } from '../../party/Parties.js';
 import {
   VillageSettings,
   VillageSettingsTabType,
-} from '../../settings/village/VillageSettings';
-import { Units } from '../../units/components/Units';
-import { CrannyCapacity } from './CrannyCapacity';
-import { Resources } from './Resources';
-import { VillageTasksActivity } from './VillageTasksActivity';
+} from '../../settings/village/VillageSettings.js';
+import { Units } from '../../units/components/Units.js';
+import { CrannyCapacity } from './CrannyCapacity.js';
+import { Resources } from './Resources.js';
+import { VillageTasksActivity } from './VillageTasksActivity.js';
 
 type NavigationItem = {
   readonly label: string;

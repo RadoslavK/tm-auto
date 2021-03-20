@@ -1,4 +1,4 @@
-import { Duration } from '../../_shared/types/duration.type';
+import { Duration } from '../../_shared/types/duration.type.js';
 
 export type CoolDown = {
   readonly min: Duration;

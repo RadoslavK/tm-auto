@@ -5,15 +5,15 @@ import {
   useMutation,
 } from 'react-relay/hooks';
 
-import { getServerShortcut } from '../../../utils/getServerShortcut';
-import { SettingsManagementFormBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementFormBotStateQuery.graphql';
-import { SettingsManagementFormExportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountSettingsMutation.graphql';
-import { SettingsManagementFormExportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountsMutation.graphql';
-import { SettingsManagementFormImportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountSettingsMutation.graphql';
-import { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql';
-import { SettingsManagementFormExportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportGeneralSettingsMutation.graphql';
-import { SettingsManagementFormImportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountsMutation.graphql';
-import { SettingsManagementFormQuery } from '../../../_graphql/__generated__/SettingsManagementFormQuery.graphql';
+import { getServerShortcut } from '../../../utils/getServerShortcut.js';
+import { SettingsManagementFormBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementFormBotStateQuery.graphql.js';
+import { SettingsManagementFormExportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountSettingsMutation.graphql.js';
+import { SettingsManagementFormExportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountsMutation.graphql.js';
+import { SettingsManagementFormImportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountSettingsMutation.graphql.js';
+import { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql.js';
+import { SettingsManagementFormExportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportGeneralSettingsMutation.graphql.js';
+import { SettingsManagementFormImportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountsMutation.graphql.js';
+import { SettingsManagementFormQuery } from '../../../_graphql/__generated__/SettingsManagementFormQuery.graphql.js';
 
 const settingsManagementFormBotStateQuery = graphql`
   query SettingsManagementFormBotStateQuery {

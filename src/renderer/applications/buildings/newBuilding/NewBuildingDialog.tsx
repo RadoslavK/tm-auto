@@ -2,9 +2,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql';
+import { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql.js';
 
-import { NewBuildingDialogItem } from './NewBuildingDialogItem';
+import { NewBuildingDialogItem } from './NewBuildingDialogItem.js';
 
 const useStyles = makeStyles({
   building: {

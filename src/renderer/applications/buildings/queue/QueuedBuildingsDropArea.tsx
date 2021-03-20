@@ -6,15 +6,15 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql';
-import { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql';
-import { QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery.graphql';
-import { QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery.graphql';
-import { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql';
-import { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql';
+import { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
+import { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
+import { QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery.graphql.js';
+import { QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery.graphql.js';
+import { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql.js';
+import { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql.js';
 
-import { QueuedBuildingComponent } from './building/QueuedBuildingComponent';
-import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent';
+import { QueuedBuildingComponent } from './building/QueuedBuildingComponent.js';
+import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent.js';
 
 export type MovedQueuedBuilding = {
   readonly queueIndex: number;

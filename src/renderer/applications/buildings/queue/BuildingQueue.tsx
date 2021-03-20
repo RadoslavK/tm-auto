@@ -5,13 +5,13 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql';
+import { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 
-import { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql';
-import { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql';
-import { QueuedBuilding } from './building/QueuedBuilding';
-import { Cost } from './Cost';
-import { QueuedBuildingRange } from './range/QueuedBuildingRange';
+import { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
+import { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql.js';
+import { QueuedBuilding } from './building/QueuedBuilding.js';
+import { Cost } from './Cost.js';
+import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
 
 type Props = {
   readonly className: string;

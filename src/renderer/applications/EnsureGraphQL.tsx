@@ -4,8 +4,8 @@ import React, { useEffect, useState, Suspense } from 'react';
 import {
   RelayEnvironmentProvider,
 } from 'react-relay/hooks';
-import { createIpcFetchFunction } from '../_graphql/utils/createIpcFetchFunction';
-import { IpcClient } from '../_ipc/ipcUtils';
+import { createIpcFetchFunction } from '../_graphql/utils/createIpcFetchFunction.js';
+import { IpcClient } from '../_ipc/ipcUtils.js';
 import {
   Environment,
   Network,

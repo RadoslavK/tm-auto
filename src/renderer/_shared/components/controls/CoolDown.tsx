@@ -1,8 +1,8 @@
 import React from 'react';
-import { Duration as DurationModel } from '../../../../_shared/types/duration.type';
+import { Duration as DurationModel } from '../../../../_shared/types/duration.type.js';
 
-import { CoolDown as CoolDownModel } from '../../../models/coolDown.type';
-import { Duration } from './Duration';
+import { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
+import { Duration } from './Duration.js';
 
 type Props = {
   readonly onChange: (coolDown: CoolDownModel) => void;

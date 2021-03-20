@@ -4,9 +4,9 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery } from '../../../_graphql/__generated__/HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery.graphql';
-import { HeroLevelUpItemForm_heroLevelUpItem$key } from '../../../_graphql/__generated__/HeroLevelUpItemForm_heroLevelUpItem.graphql';
-import { HeroLevelUpItemInput } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql';
+import { HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery } from '../../../_graphql/__generated__/HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery.graphql.js';
+import { HeroLevelUpItemForm_heroLevelUpItem$key } from '../../../_graphql/__generated__/HeroLevelUpItemForm_heroLevelUpItem.graphql.js';
+import { HeroLevelUpItemInput } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql.js';
 
 type Props = {
   readonly item?: HeroLevelUpItemInput;

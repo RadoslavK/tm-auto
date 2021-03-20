@@ -1,18 +1,19 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "jsx": "react",
     "lib": [
       "DOM",
       "DOM.Iterable",
       "ESNext"
     ],
-    "target": "ES5",
-    "module": "ESNext",
-    "moduleResolution": "Node",
   },
+  "files": ["index.tsx"],
   "include": [
-    "./**/*",
-    "../_shared/types/window.d.ts"
+    "../_shared/types/window.d.ts",
+    "**/*.d.ts"
   ]
 }

@@ -6,14 +6,14 @@ import {
   useMutation,
 } from 'react-relay/hooks';
 
-import { Duration as DurationModel } from '../../../../_shared/types/duration.type';
-import { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql';
-import { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql';
-import { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql';
-import { CoolDown } from '../../../_shared/components/controls/CoolDown';
-import { Duration } from '../../../_shared/components/controls/Duration';
-import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution';
-import { CoolDown as CoolDownModel } from '../../../models/coolDown.type';
+import { Duration as DurationModel } from '../../../../_shared/types/duration.type.js';
+import { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql.js';
+import { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql.js';
+import { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
+import { Duration } from '../../../_shared/components/controls/Duration.js';
+import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution.js';
+import { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 
 const autoAdventureSettingsQuery = graphql`
   query AutoAdventureSettingsQuery {

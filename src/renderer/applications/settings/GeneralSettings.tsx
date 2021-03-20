@@ -1,7 +1,7 @@
 import Dialog from '@material-ui/core/Dialog';
 import React, { useState } from 'react';
 
-import { GeneralSettingsForm } from './GeneralSettingsForm';
+import { GeneralSettingsForm } from './GeneralSettingsForm.js';
 
 export const GeneralSettings: React.FunctionComponent = () => {
   const [isFormShown, setIsFormShown] = useState(false);

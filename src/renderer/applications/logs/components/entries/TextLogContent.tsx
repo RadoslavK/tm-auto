@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
 
-import { TextLogContent_textLogentryContent$key } from '../../../../_graphql/__generated__/TextLogContent_textLogentryContent.graphql';
+import { TextLogContent_textLogentryContent$key } from '../../../../_graphql/__generated__/TextLogContent_textLogentryContent.graphql.js';
 
 type StylesProps = {
   readonly isError: boolean;

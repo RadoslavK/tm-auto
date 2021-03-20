@@ -4,8 +4,8 @@ import { useFragment } from 'react-relay/hooks';
 import { Link, useLocation } from 'react-router-dom';
 
 import graphql from 'babel-plugin-relay/macro';
-import { VillageSideItem_village$key } from '../../../_graphql/__generated__/VillageSideItem_village.graphql';
-import { VillageName } from './VillageName';
+import { VillageSideItem_village$key } from '../../../_graphql/__generated__/VillageSideItem_village.graphql.js';
+import { VillageName } from './VillageName.js';
 
 type StylesProps = {
   readonly isVillageSelected: boolean;

@@ -6,10 +6,10 @@ import {
   useFragment,
   useMutation,
 } from 'react-relay/hooks';
-import { QueuedBuildingRangeActions_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeActions_queuedBuildingRange.graphql';
-import { QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation.graphql';
-import { imageLinks } from '../../../../utils/imageLinks';
-import { QueuedBuildingRangeActionsDequeueBuildingsBlockMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsDequeueBuildingsBlockMutation.graphql';
+import { QueuedBuildingRangeActions_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeActions_queuedBuildingRange.graphql.js';
+import { QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation.graphql.js';
+import { imageLinks } from '../../../../utils/imageLinks.js';
+import { QueuedBuildingRangeActionsDequeueBuildingsBlockMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsDequeueBuildingsBlockMutation.graphql.js';
 
 const useStyles = makeStyles({
   expand: {

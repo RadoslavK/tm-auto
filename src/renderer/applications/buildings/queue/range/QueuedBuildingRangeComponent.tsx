@@ -5,12 +5,12 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { QueuedBuildingRangeComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponentBuildingInfoQuery.graphql';
+import { QueuedBuildingRangeComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponentBuildingInfoQuery.graphql.js';
 
-import { imageLinks } from '../../../../utils/imageLinks';
-import { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql';
-import { Cost } from '../Cost';
-import { QueuedBuildingRangeActions } from './QueuedBuildingRangeActions';
+import { imageLinks } from '../../../../utils/imageLinks.js';
+import { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
+import { Cost } from '../Cost.js';
+import { QueuedBuildingRangeActions } from './QueuedBuildingRangeActions.js';
 
 type StyleProps = {
   readonly buildingType: number;

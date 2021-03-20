@@ -1,7 +1,7 @@
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import { VillageName_village$key } from '../../../_graphql/__generated__/VillageName_village.graphql';
+import { VillageName_village$key } from '../../../_graphql/__generated__/VillageName_village.graphql.js';
 
 const villageNameVillageFragment = graphql`
   fragment VillageName_village on Village {

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Duration as DurationModel } from '../../../../_shared/types/duration.type';
+import { Duration as DurationModel } from '../../../../_shared/types/duration.type.js';
 
 const useStyles = makeStyles({
   input: {

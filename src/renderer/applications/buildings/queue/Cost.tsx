@@ -3,12 +3,12 @@ import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import { formatTime } from '../../../../_shared/utils/formatTime';
-import { Cost_duration$key } from '../../../_graphql/__generated__/Cost_duration.graphql';
+import { formatTime } from '../../../../_shared/utils/formatTime.js';
+import { Cost_duration$key } from '../../../_graphql/__generated__/Cost_duration.graphql.js';
 
-import { imageLinks } from '../../../utils/imageLinks';
-import { createFormatter } from '../../../utils/numberFormatting';
-import { Cost_resources$key } from '../../../_graphql/__generated__/Cost_resources.graphql';
+import { imageLinks } from '../../../utils/imageLinks.js';
+import { createFormatter } from '../../../utils/numberFormatting.js';
+import { Cost_resources$key } from '../../../_graphql/__generated__/Cost_resources.graphql.js';
 
 type Props = {
   readonly className?: string;

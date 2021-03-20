@@ -2,7 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import { BuildingLevelBox_buildingSpotLevel, BuildingLevelBox_buildingSpotLevel$key } from '../../../_graphql/__generated__/BuildingLevelBox_buildingSpotLevel.graphql';
+import { BuildingLevelBox_buildingSpotLevel, BuildingLevelBox_buildingSpotLevel$key } from '../../../_graphql/__generated__/BuildingLevelBox_buildingSpotLevel.graphql.js';
 
 type Props = {
   readonly className?: string;

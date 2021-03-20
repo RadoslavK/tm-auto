@@ -3,8 +3,8 @@ import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Link } from 'react-router-dom';
 
-import { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql';
-import { VillageName } from '../../villages/components/VillageName';
+import { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql.js';
+import { VillageName } from '../../villages/components/VillageName.js';
 
 const heroInformationQuery = graphql`
   query HeroInformationQuery {

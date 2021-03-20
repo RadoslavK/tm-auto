@@ -4,7 +4,7 @@ import React from 'react';
 import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { BotActivityQuery } from '../_graphql/__generated__/BotActivityQuery.graphql';
+import { BotActivityQuery } from '../_graphql/__generated__/BotActivityQuery.graphql.js';
 
 type StylesProps = {
   readonly isBotActive: boolean;

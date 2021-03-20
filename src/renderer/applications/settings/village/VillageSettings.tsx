@@ -2,13 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql';
-import { VillageName } from '../../villages/components/VillageName';
+import { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
+import { VillageName } from '../../villages/components/VillageName.js';
 
-import { AutoBuildSettings } from './AutoBuildSettings';
-import { AutoPartySettings } from './AutoPartySettings';
-import { AutoUnitsSettings } from './AutoUnitsSettings';
-import { GeneralVillageSettings } from './GeneralVillageSettings';
+import { AutoBuildSettings } from './AutoBuildSettings.js';
+import { AutoPartySettings } from './AutoPartySettings.js';
+import { AutoUnitsSettings } from './AutoUnitsSettings.js';
+import { GeneralVillageSettings } from './GeneralVillageSettings.js';
 
 type LinkProps = {
   readonly isSelected: boolean;

@@ -7,15 +7,15 @@ import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
 import { Link, useLocation } from 'react-router-dom';
-import { NavigationQuery } from '../../../_graphql/__generated__/NavigationQuery.graphql';
+import { NavigationQuery } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
 
-import { Hero } from '../../hero/components/Hero';
-import { Logs } from '../../logs/components/Logs';
-import { MapSearch } from '../../mapSearch/MapSearch';
-import { Settings } from '../../settings/Settings';
-import { Villages } from '../../villages/components/Villages';
-import { BotStateToggle } from './BotStateToggle';
-import { SignOut } from './SignOut';
+import { Hero } from '../../hero/components/Hero.js';
+import { Logs } from '../../logs/components/Logs.js';
+import { MapSearch } from '../../mapSearch/MapSearch.js';
+import { Settings } from '../../settings/Settings.js';
+import { Villages } from '../../villages/components/Villages.js';
+import { BotStateToggle } from './BotStateToggle.js';
+import { SignOut } from './SignOut.js';
 
 type NavigationApp = {
   readonly component: React.ComponentType;

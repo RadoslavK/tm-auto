@@ -10,10 +10,10 @@ import React, { useState } from 'react';
 import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql';
-import { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql';
-import { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql';
-import { SignInFormDialogType } from './SignInForm';
+import { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
+import { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql.js';
+import { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
+import { SignInFormDialogType } from './SignInForm.js';
 
 const useStyles = makeStyles((theme) => ({
   form: {

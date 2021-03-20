@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Duration } from '../../../../_shared/types/duration.type';
+import { Duration } from '../../../../_shared/types/duration.type.js';
 
-import { Duration as DurationComponent } from '../controls/Duration';
+import { Duration as DurationComponent } from '../controls/Duration.js';
 
 type Props = {
   readonly onSubmit: (delay: Duration) => void;

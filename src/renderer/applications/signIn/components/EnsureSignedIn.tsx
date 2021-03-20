@@ -3,10 +3,10 @@ import React from 'react';
 import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql';
+import { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
 
-import { SettingsManagement } from '../../settings/management/SettingsManagement';
-import { SignInForm } from './SignInForm';
+import { SettingsManagement } from '../../settings/management/SettingsManagement.js';
+import { SignInForm } from './SignInForm.js';
 
 const botStateQuery = graphql`
   query EnsureSignedInBotStateQuery {

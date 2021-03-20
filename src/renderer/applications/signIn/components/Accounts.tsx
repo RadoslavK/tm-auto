@@ -8,8 +8,8 @@ import {
   useLazyLoadQuery,
 } from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
-import { getServerShortcut } from '../../../utils/getServerShortcut';
-import { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql';
+import { getServerShortcut } from '../../../utils/getServerShortcut.js';
+import { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

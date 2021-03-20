@@ -4,14 +4,14 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime';
+import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime.js';
 
-import { useCountDown } from '../../../hooks/useCountDown';
-import { Timestamp } from '../../../models/timestamp';
-import { imageLinks } from '../../../utils/imageLinks';
+import { useCountDown } from '../../../hooks/useCountDown.js';
+import { Timestamp } from '../../../models/timestamp.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
 import graphql from 'babel-plugin-relay/macro';
-import { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql';
-import { BuildingInProgressBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingInProgressBuildingInfoQuery.graphql';
+import { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
+import { BuildingInProgressBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingInProgressBuildingInfoQuery.graphql.js';
 
 type Props = {
   readonly building: BuildingInProgress_buildingInProgress$key;

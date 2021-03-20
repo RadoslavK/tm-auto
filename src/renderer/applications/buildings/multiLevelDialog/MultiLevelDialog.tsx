@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MultiLevelDialogItem } from './MultiLevelDialogItem';
+import { MultiLevelDialogItem } from './MultiLevelDialogItem.js';
 
 type Props = {
   readonly maxLevel: number;

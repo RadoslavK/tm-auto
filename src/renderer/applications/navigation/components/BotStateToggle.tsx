@@ -3,7 +3,7 @@ import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useMutation } from 'react-relay/hooks';
 
-import { BotState } from '../../../_graphql/__generated__/NavigationQuery.graphql';
+import { BotState } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
 
 const getToggleText = (botState: BotState): string => {
   switch (botState) {

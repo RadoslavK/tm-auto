@@ -24,14 +24,14 @@ import {
 import {
   AccountInput,
   SignInFormCreateAccountMutation,
-} from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql';
-import { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql';
-import { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql';
-import { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql';
-import { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql';
+} from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
+import { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql.js';
+import { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
+import { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
+import { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
 
-import { Accounts } from './Accounts';
-import { SignInFormDialog } from './SignInFormDialog';
+import { Accounts } from './Accounts.js';
+import { SignInFormDialog } from './SignInFormDialog.js';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {

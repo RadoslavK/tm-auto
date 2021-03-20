@@ -5,14 +5,14 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { Duration } from '../../../../_shared/types/duration.type';
-import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime';
-import { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql';
-import { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql';
+import { Duration } from '../../../../_shared/types/duration.type.js';
+import { formatTimeFromSeconds } from '../../../../_shared/utils/formatTime.js';
+import { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
+import { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 
-import { useCountDown } from '../../../hooks/useCountDown';
-import { NextVillageTaskExecutionQuery, TaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql';
-import { NextExecutionForm } from './NextExecutionForm';
+import { useCountDown } from '../../../hooks/useCountDown.js';
+import { NextVillageTaskExecutionQuery, TaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql.js';
+import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
   readonly task: TaskType;
