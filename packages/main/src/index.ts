@@ -100,30 +100,45 @@ const createBackgroundProcess = (socketName: string): void => {
     silent: true,
   };
 
-  serverProcess = fork(filePath, undefined, options);
+  const start = () => {
+    serverProcess = fork(filePath, undefined, options);
 
-  serverProcess.stderr?.pipe(process.stderr);
-  serverProcess.stdout?.pipe(process.stdout);
+    serverProcess.stderr?.pipe(process.stderr);
+    serverProcess.stdout?.pipe(process.stdout);
 
-  if (isDevelopment) {
-    //  logging
-    serverProcess.on('data', (data) => {
-      console.log(data);
-    });
+    if (isDevelopment) {
+      //  logging
+      serverProcess.on('data', (data) => {
+        console.log(data);
+      });
 
-    serverProcess.on('exit', (code) => {
-      console.log(`server exited with code ${code}`);
-    });
+      serverProcess.on('exit', (code) => {
+        console.log(`server exited with code ${code}`);
+      });
 
-    serverProcess.on('disconnect', () => {
-      console.log('server disconnected');
-    });
+      serverProcess.on('disconnect', async () => {
+        console.log('server disconnected');
 
-    serverProcess.on('error', (error) => {
-      console.error('Server crashed with error');
-      console.error(error);
-    });
-  }
+        serverProcess?.kill();
+        serverProcess = null;
+
+        console.log('Restarting in 5s...');
+
+        await new Promise(resolve => {
+          global.setInterval(resolve, 5000);
+        });
+
+        start();
+      });
+
+      serverProcess.on('error', (error) => {
+        console.error('Server crashed with error');
+        console.error(error);
+      });
+    }
+  };
+
+  start();
 };
 
 type Extension = {

@@ -68,7 +68,7 @@ export const getAccountContextUnsafe = (): AccountContext | null =>
 
 export const setAccountContext = (accountId: string) => {
   if (accountContextField) {
-    throw new Error('Didnt you want to reset account countext first?');
+    throw new Error('Didnt you want to reset account context first?');
   }
 
   accountContextField = new AccountContext(accountId);

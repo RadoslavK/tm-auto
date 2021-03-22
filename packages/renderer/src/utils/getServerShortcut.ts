@@ -11,7 +11,9 @@ const getOldServerShortcut = (server: string): string => {
     return `${match[2]}${match[1]}`;
   }
 
-  throw new Error(`Failed to parse server shortcut: ${server}`);
+  console.error(`Failed to parse server shortcut: ${server}`);
+
+  return 'Unknown Server';
 };
 
 export const getServerShortcut = (server: string): string => {
@@ -27,7 +29,9 @@ export const getServerShortcut = (server: string): string => {
   const typeMatch = /tx(\d+)|ts(\d+)/.exec(type);
 
   if (!typeMatch) {
-    throw new Error('Failed to parse server type');
+    console.error('Failed to parse server type');
+
+    return 'Unknown Server';
   }
 
   const typeName = typeMatch[1] ? `${typeMatch[1]}x` : typeMatch[2];
