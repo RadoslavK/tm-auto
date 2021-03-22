@@ -3,14 +3,14 @@ import type { TabInformation } from '../controller/actions/ensurePage.js';
 export enum TravianPath {
   AccountOverview = 'dorf3.php',
   CenterMap = 'karte.php',
-  Hero = 'hero.php',
+  Hero = 'hero',
   InfrastructureOverview = 'dorf2.php',
   Messages = 'messages.php',
-  PlayerProfile = 'spieler.php',
-  Reports = 'berichte.php',
+  PlayerProfile = 'profile',
+  Reports = 'report',
   ResourceFieldsOverview = 'dorf1.php',
-  Settings = 'options.php',
-  Statistics = 'statistiken.php',
+  Settings = 'options',
+  Statistics = 'statistics',
   Logout = 'logout.php',
 }
 
