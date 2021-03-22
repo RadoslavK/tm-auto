@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { AutoUnitsLogContent_autoUnitsLogEntryContent$key } from '../../../../_graphql/__generated__/AutoUnitsLogContent_autoUnitsLogEntryContent.graphql.js';
 
+import type { AutoUnitsLogContent_autoUnitsLogEntryContent$key } from '../../../../_graphql/__generated__/AutoUnitsLogContent_autoUnitsLogEntryContent.graphql.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type StylesProps = {

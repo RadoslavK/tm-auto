@@ -1,18 +1,20 @@
 import { Dialog } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
+import type {
+  NextVillageTaskExecutionQuery,
+  TaskType, 
+} from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql.js';
 import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
 import type { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
-
 import { useCountDown } from '../../../hooks/useCountDown.js';
-import type { NextVillageTaskExecutionQuery, TaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {

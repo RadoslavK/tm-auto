@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { Resources_villageResources$key } from '../../../_graphql/__generated__/Resources_villageResources.graphql.js';
 
+import type { Resources_villageResources$key } from '../../../_graphql/__generated__/Resources_villageResources.graphql.js';
 import { createFormatter } from '../../../utils/numberFormatting.js';
 import { Resource } from './Resource.js';
 

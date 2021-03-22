@@ -1,18 +1,18 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 import type { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
 import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery.graphql.js';
 import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql.js';
-
 import { QueuedBuildingComponent } from './building/QueuedBuildingComponent.js';
 import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent.js';
 
@@ -185,16 +185,14 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   return (
     <div ref={dropRangeRef}>
       <div ref={dropBuildingRef}>
-        {isBuildingOver &&
-          dropPosition === DropPosition.Above &&
-          movedBuilding && (
-            <div className={classes.buildingPlaceholder}>
-              <QueuedBuildingComponent
-                building={movedBuilding.buildingFragmentKey}
-                isHighlight
-              />
-            </div>
-          )}
+        {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
+          <div className={classes.buildingPlaceholder}>
+            <QueuedBuildingComponent
+              building={movedBuilding.buildingFragmentKey}
+              isHighlight
+            />
+          </div>
+        )}
         {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent
@@ -204,16 +202,14 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
           </div>
         )}
         {children}
-        {isBuildingOver &&
-          dropPosition === DropPosition.Below &&
-          movedBuilding && (
-            <div className={classes.buildingPlaceholder}>
-              <QueuedBuildingComponent
-                building={movedBuilding.buildingFragmentKey}
-                isHighlight
-              />
-            </div>
-          )}
+        {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
+          <div className={classes.buildingPlaceholder}>
+            <QueuedBuildingComponent
+              building={movedBuilding.buildingFragmentKey}
+              isHighlight
+            />
+          </div>
+        )}
         {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent

@@ -1,10 +1,14 @@
 import { Button } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { AutoMentorSettingsQuery } from '../../_graphql/__generated__/AutoMentorSettingsQuery.graphql.js';
 import type { AutoMentorSettingsResetSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsResetSettingsMutation.graphql.js';
 import type { AutoMentorSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsUpdateSettingsMutation.graphql.js';
@@ -63,8 +67,8 @@ export const AutoMentorSettings: React.FC = () => {
               ...state.completeTasks,
               allowedTaskIds: (state.completeTasks.allowedTaskIds as Array<string>),
               taskIds: (state.completeTasks.taskIds as Array<string>),
-            }
-          }
+            },
+          },
         },
       });
     }
@@ -165,11 +169,11 @@ export const AutoMentorSettings: React.FC = () => {
                         ...prevState.completeTasks,
                         allowedTaskIds: allowed
                           ? prevState.completeTasks.allowedTaskIds.concat([
-                              taskId,
-                            ])
+                            taskId,
+                          ])
                           : prevState.completeTasks.allowedTaskIds.filter(
-                              (x) => x !== taskId,
-                            ),
+                            (x) => x !== taskId,
+                          ),
                       },
                     },
                 );

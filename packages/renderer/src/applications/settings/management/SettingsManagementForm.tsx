@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 
-import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 import type { SettingsManagementFormBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementFormBotStateQuery.graphql.js';
 import type { SettingsManagementFormExportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountSettingsMutation.graphql.js';
 import type { SettingsManagementFormExportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountsMutation.graphql.js';
-import type { SettingsManagementFormImportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountSettingsMutation.graphql.js';
-import type { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql.js';
 import type { SettingsManagementFormExportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportGeneralSettingsMutation.graphql.js';
+import type { SettingsManagementFormImportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountSettingsMutation.graphql.js';
 import type { SettingsManagementFormImportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountsMutation.graphql.js';
+import type { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql.js';
 import type { SettingsManagementFormQuery } from '../../../_graphql/__generated__/SettingsManagementFormQuery.graphql.js';
+import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const settingsManagementFormBotStateQuery = graphql`
   query SettingsManagementFormBotStateQuery {

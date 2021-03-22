@@ -1,4 +1,8 @@
 import {
+  Button,
+  colors,
+  Container,
+  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
@@ -6,23 +10,23 @@ import {
   DialogTitle,
   Icon,
   IconButton,
+  makeStyles,
   Snackbar,
   SnackbarContent,
-  Button,
-  colors,
-  Container,
-  CssBaseline,
-  makeStyles,
   Typography,
 } from '@material-ui/core';
 import { Close as CloseIcon } from '@material-ui/icons';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type {
   AccountInput,
   SignInFormCreateAccountMutation,
@@ -31,7 +35,6 @@ import type { SignInFormDeleteAccountMutation } from '../../../_graphql/__genera
 import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
-
 import { Accounts } from './Accounts.js';
 import { SignInFormDialog } from './SignInFormDialog.js';
 
@@ -205,7 +208,7 @@ export const SignInForm: React.FC = () => {
           return;
         }
 
-        const newAccounts = oldAccounts.filter(acc => acc.getDataID() !== selectedAccountId)
+        const newAccounts = oldAccounts.filter(acc => acc.getDataID() !== selectedAccountId);
 
         root.setLinkedRecords(newAccounts, 'accounts');
       },

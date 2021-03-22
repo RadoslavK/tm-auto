@@ -1,17 +1,17 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
+import type { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
+import type { BuildingInProgressBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingInProgressBuildingInfoQuery.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import type { Timestamp } from '../../../models/timestamp.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
-import type { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
-import type { BuildingInProgressBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingInProgressBuildingInfoQuery.graphql.js';
 
 type Props = {
   readonly building: BuildingInProgress_buildingInProgress$key;

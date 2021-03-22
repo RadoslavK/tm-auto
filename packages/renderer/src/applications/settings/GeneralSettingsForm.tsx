@@ -1,10 +1,14 @@
 import { Button } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { GeneralSettingsFormQuery } from '../../_graphql/__generated__/GeneralSettingsFormQuery.graphql.js';
 import type { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql.js';
 import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql.js';

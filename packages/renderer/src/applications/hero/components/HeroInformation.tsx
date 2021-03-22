@@ -1,6 +1,6 @@
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { Link } from 'react-router-dom';
 
 import type { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql.js';

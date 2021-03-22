@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
 import { useMutation } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { QueuedBuildingActionsDequeueBuildingMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsDequeueBuildingMutation.graphql.js';
 import type { QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation.graphql.js';
-
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type Props = {

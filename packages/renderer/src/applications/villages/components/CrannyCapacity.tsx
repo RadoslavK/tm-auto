@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
-import { imageLinks } from '../../../utils/imageLinks.js';
 import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
 
 const useStyles = makeStyles({
   image: {

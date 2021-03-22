@@ -1,10 +1,8 @@
-import React from 'react';
-import {
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
-import type { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
+import React from 'react';
+import { useLazyLoadQuery } from 'react-relay/hooks';
 
+import type { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
 import { SettingsManagement } from '../../settings/management/SettingsManagement.js';
 import { SignInForm } from './SignInForm.js';
 

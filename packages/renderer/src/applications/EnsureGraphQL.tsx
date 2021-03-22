@@ -1,16 +1,22 @@
-import { makeStyles, CircularProgress } from '@material-ui/core';
-import React, { useEffect, useState, Suspense } from 'react';
 import {
-  RelayEnvironmentProvider,
-} from 'react-relay/hooks';
-import { createIpcFetchFunction } from '../_graphql/utils/createIpcFetchFunction.js';
-import { IpcClient } from '../_ipc/ipcUtils.js';
+  CircularProgress,
+  makeStyles, 
+} from '@material-ui/core';
+import React, {
+  Suspense,
+  useEffect,
+  useState, 
+} from 'react';
+import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import {
   Environment,
   Network,
   RecordSource,
   Store,
 } from 'relay-runtime';
+
+import { createIpcFetchFunction } from '../_graphql/utils/createIpcFetchFunction.js';
+import { IpcClient } from '../_ipc/ipcUtils.js';
 
 const useStyles = makeStyles({
   loaderContainer: {

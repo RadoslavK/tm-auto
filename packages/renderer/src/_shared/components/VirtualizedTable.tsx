@@ -1,7 +1,15 @@
-import { makeStyles, TableCell } from '@material-ui/core';
+import {
+  makeStyles,
+  TableCell, 
+} from '@material-ui/core';
 import clsx from 'clsx';
 import React from 'react';
-import { AutoSizer, Column, SortIndicator, Table } from 'react-virtualized';
+import {
+  AutoSizer,
+  Column,
+  SortIndicator,
+  Table, 
+} from 'react-virtualized';
 import type {
   SortDirectionType,
   TableCellRenderer,
@@ -114,18 +122,18 @@ export const VirtualizedTable = <TCellData extends {}>({
 
     const onHeaderClick = isSortable
       ? () => {
-          if (!sort) {
-            return;
-          }
-
-          if (sort.sortBy === dataKey) {
-            sort.onSortDirectionChanged(
-              sort.sortDirection === 'DESC' ? 'ASC' : 'DESC',
-            );
-          } else {
-            sort.onSortByChanged(dataKey as keyof TCellData);
-          }
+        if (!sort) {
+          return;
         }
+
+        if (sort.sortBy === dataKey) {
+          sort.onSortDirectionChanged(
+            sort.sortDirection === 'DESC' ? 'ASC' : 'DESC',
+          );
+        } else {
+          sort.onSortByChanged(dataKey as keyof TCellData);
+        }
+      }
       : undefined;
 
     return (

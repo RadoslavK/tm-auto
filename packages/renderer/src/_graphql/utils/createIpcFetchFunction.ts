@@ -3,6 +3,7 @@ import {
   GraphQLResponse,
   Observable,
 } from 'relay-runtime';
+
 import type { IpcClient } from '../../_ipc/ipcUtils.js';
 import { fetchFunction } from './fetchFunction.js';
 

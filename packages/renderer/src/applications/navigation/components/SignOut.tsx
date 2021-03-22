@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React, { PropsWithChildren } from 'react';
 import { useMutation } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { useHistory } from 'react-router-dom';
 
 const signOutMutation = graphql`

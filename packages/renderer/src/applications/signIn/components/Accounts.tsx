@@ -1,17 +1,17 @@
 import {
-  NativeSelect,
-  InputLabel,
-  InputBase,
   FormControl,
-  makeStyles, withStyles,
+  InputBase,
+  InputLabel,
+  makeStyles,
+  NativeSelect,
+  withStyles,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
-import {
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
-import { getServerShortcut } from '../../../utils/getServerShortcut.js';
+import React, { useEffect } from 'react';
+import { useLazyLoadQuery } from 'react-relay/hooks';
+
 import type { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
+import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

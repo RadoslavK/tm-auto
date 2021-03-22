@@ -1,19 +1,23 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useFragment,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import type { BuildingType } from 'shared/enums/BuildingType.js';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 import type { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql.js';
+import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { UnitSettings } from './UnitSettings.js';
-import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
 
 type StylesProps = {
   readonly buildingType: number;
@@ -52,27 +56,27 @@ type Props = {
 };
 
 const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
-  fragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {
-      allow
-      maxBuildTime {
-          days
-          hours
-          minutes
-          seconds
-      }
-      units {
-          index
-          ...UnitSettings_autoUnitsUnitSettings
-      }
-  }
+    fragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {
+        allow
+        maxBuildTime {
+            days
+            hours
+            minutes
+            seconds
+        }
+        units {
+            index
+            ...UnitSettings_autoUnitsUnitSettings
+        }
+    }
 `;
 
 const unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation = graphql`
-  mutation UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation($settings: UpdateAutoUnitsBuildingSettingsInput!, $villageId: ID!, $buildingType: Int!) {
-      updateAutoUnitsBuildingSettings(settings: $settings, villageId: $villageId, buildingType: $buildingType) {
-          allow
-      }
-  }
+    mutation UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation($settings: UpdateAutoUnitsBuildingSettingsInput!, $villageId: ID!, $buildingType: Int!) {
+        updateAutoUnitsBuildingSettings(settings: $settings, villageId: $villageId, buildingType: $buildingType) {
+            allow
+        }
+    }
 `;
 
 export const UnitBuildingSection: React.FC<Props> = ({

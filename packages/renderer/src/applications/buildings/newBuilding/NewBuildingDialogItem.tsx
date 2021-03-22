@@ -1,13 +1,16 @@
-import { Dialog, makeStyles } from '@material-ui/core';
+import {
+  Dialog,
+  makeStyles, 
+} from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
 import type { NewBuildingDialogItemQuery } from '../../../_graphql/__generated__/NewBuildingDialogItemQuery.graphql.js';
-
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 

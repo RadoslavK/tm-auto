@@ -1,8 +1,11 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import { Link, useLocation } from 'react-router-dom';
+import {
+  Link,
+  useLocation, 
+} from 'react-router-dom';
 
 import type { VillageSideItem_village$key } from '../../../_graphql/__generated__/VillageSideItem_village.graphql.js';
 import { VillageName } from './VillageName.js';

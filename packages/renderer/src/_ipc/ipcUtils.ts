@@ -1,6 +1,6 @@
 import { ServerMessageType } from 'shared/ipc/createServerMessage.js';
-import { generateId } from 'shared/utils/generateId.js';
 import type { ClientMessage } from 'shared/types/clientMessage.js';
+import { generateId } from 'shared/utils/generateId.js';
 
 type ReplyHandler<TPayload> = {
   readonly onError?: (error: Error) => void;

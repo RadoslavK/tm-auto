@@ -1,8 +1,8 @@
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { LogsQuery } from '../../../_graphql/__generated__/LogsQuery.graphql.js';
 
+import type { LogsQuery } from '../../../_graphql/__generated__/LogsQuery.graphql.js';
 import { LogEntry } from './LogEntry.js';
 
 const logsQuery = graphql`

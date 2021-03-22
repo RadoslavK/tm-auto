@@ -1,11 +1,17 @@
 import { makeStyles } from '@material-ui/core';
-import React from 'react';
-import { DragPreviewImage, useDrag } from 'react-dnd';
-import { useFragment } from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
-import type { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
+import React from 'react';
+import {
+  DragPreviewImage,
+  useDrag, 
+} from 'react-dnd';
+import { useFragment } from 'react-relay/hooks';
 
-import { BuildingImageSize, imageLinks } from '../../../../utils/imageLinks.js';
+import type { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
+import {
+  BuildingImageSize,
+  imageLinks, 
+} from '../../../../utils/imageLinks.js';
 import {
   DropPosition,
   MovedQueuedBuildingRange,

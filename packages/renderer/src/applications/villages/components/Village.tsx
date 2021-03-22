@@ -1,10 +1,14 @@
 import { Dialog } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import {
   Link,
   Redirect,
@@ -14,9 +18,9 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
+
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
-
 import { Buildings } from '../../buildings/Buildings.js';
 import { Parties } from '../../party/Parties.js';
 import {

@@ -48,6 +48,10 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
     'form[name=login] input[name=password]',
     account.password,
   );
+
+  const acceptCookies = await page.$('#cmpbntyestxt');
+  acceptCookies?.click();
+
   await page.click('form[name=login] button[type=submit]');
 
   getAccountContext().logsService.logText('Logged in.');

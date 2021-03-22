@@ -1,13 +1,20 @@
 {
   "name": "renderer",
   "version": "1.0.0",
+  "author": "Buckyx",
+  "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src/**/*",
     "relay": "relay-compiler --src ./src --schema ../server/src/_api/schema.graphql --language typescript --artifactDirectory ./src/_graphql/__generated__ --eagerESModules"
   },
+  "browserslist": [
+    "Electron 12.0"
+  ],
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
@@ -36,11 +43,15 @@
     "@types/react-virtualized": "^9.21.11",
     "@types/relay-runtime": "^10.1.9",
     "@types/snowpack-env": "^2.3.3",
+    "@typescript-eslint/parser": "^4.19.0",
     "babel-plugin-macros": "^3.0.1",
     "babel-plugin-relay": "^11.0.0",
     "cpy": "^8.1.2",
+    "eslint": "^7.22.0",
+    "eslint-plugin-modules-newline": "^0.0.6",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-relay": "^1.8.2",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "graphql": "^15.5.0",
     "relay-compiler": "^11.0.0",
     "relay-compiler-language-typescript": "^13.0.6",

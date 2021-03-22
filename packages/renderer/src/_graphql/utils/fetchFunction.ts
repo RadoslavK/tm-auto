@@ -4,16 +4,17 @@ import type {
   Variables,
 } from 'relay-runtime';
 import type { Sink } from 'relay-runtime/lib/network/RelayObservable';
-import { generateId } from 'shared/utils/generateId.js';
 import type {
   GraphqlHandlerPayload,
   SerializableGraphQLRequest,
 } from 'shared/types/models.js';
+import { generateId } from 'shared/utils/generateId.js';
 import {
   GraphqlHandlerMessage,
   GraphqlHandlerMessageType,
-  IpcHandler
+  IpcHandler,
 } from 'shared/utils/graphqlHandlerMessages.js';
+
 import type { IpcClient } from '../../_ipc/ipcUtils.js';
 
 type Params = {

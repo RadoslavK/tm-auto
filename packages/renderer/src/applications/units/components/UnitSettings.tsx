@@ -1,12 +1,15 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 
 import type { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/__generated__/UnitSettings_autoUnitsUnitSettings.graphql.js';
 import type { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql.js';

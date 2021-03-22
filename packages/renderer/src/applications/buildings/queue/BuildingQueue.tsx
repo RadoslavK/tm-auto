@@ -1,12 +1,12 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React, { useCallback } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 
+import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
@@ -89,11 +89,11 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   const [clearQueue] = useMutation<BuildingQueueClearQueueMutation>(buildingQueueClearQueueMutation);
   const collapsedRangeIds = [] as any[];
   //  TODO
-    // useGetCollapsedBuildingQueueRangesQuery({
-    //   variables: {
-    //     villageId,
-    //   },
-    // }).data?.collapsedBuildingQueueRanges || [];
+  // useGetCollapsedBuildingQueueRangesQuery({
+  //   variables: {
+  //     villageId,
+  //   },
+  // }).data?.collapsedBuildingQueueRanges || [];
 
   const setAllCollapsed = useCallback(() => {
     if (buildingQueue?.buildingRanges) {

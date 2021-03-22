@@ -8,12 +8,12 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 
 import type {
   HeroLevelUpItemInput,
@@ -96,7 +96,7 @@ export const HeroLevelUpSettings: React.FC = () => {
       addHeroLevelUpItem({
         variables: {
           item,
-        }
+        },
       });
     }
 

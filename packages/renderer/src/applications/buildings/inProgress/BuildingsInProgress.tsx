@@ -1,9 +1,8 @@
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 
 import type { BuildingsInProgressQuery } from '../../../_graphql/__generated__/BuildingsInProgressQuery.graphql.js';
-
 import { BuildingInProgress } from './BuildingInProgress.js';
 
 type Props = {

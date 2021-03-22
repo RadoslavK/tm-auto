@@ -1,16 +1,16 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 
+import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
+import type { QueuedBuildingComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingComponentBuildingInfoQuery.graphql.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
 import { QueuedBuildingActions } from './QueuedBuildingActions.js';
-import type { QueuedBuildingComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingComponentBuildingInfoQuery.graphql.js';
 
 type StyleProps = {
   readonly buildingType: number;

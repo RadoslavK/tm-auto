@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useMutation } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 
 import type { BotState } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
 

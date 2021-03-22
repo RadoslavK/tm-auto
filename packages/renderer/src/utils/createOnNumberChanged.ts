@@ -1,4 +1,7 @@
-import type { FormEvent, EventHandler } from 'react';
+import type {
+  EventHandler,
+  FormEvent, 
+} from 'react';
 
 type Params = {
   readonly callback: (name: string, value: number) => void;

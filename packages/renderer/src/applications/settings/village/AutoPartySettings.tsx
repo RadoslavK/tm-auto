@@ -1,16 +1,21 @@
 import { Button } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
-import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
+
+import type { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
 import type { AutoPartySettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsResetSettingsMutation.graphql.js';
 import type { AutoPartySettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsUpdateSettingsMutation.graphql.js';
-import type { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
+import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
 type Props = {
   readonly villageId: string;

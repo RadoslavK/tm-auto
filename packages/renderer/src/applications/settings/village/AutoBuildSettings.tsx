@@ -1,19 +1,27 @@
 import { Button } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
-import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
+
 import type {
   AutoBuildSettingsQuery,
   AutoBuildSettingsQueryResponse,
 } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
 import type { AutoBuildSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoBuildSettingsResetSettingsMutation.graphql.js';
-import type { AutoBuildSettingsUpdateSettingsMutation, UpdateAutoBuildSettingsInput } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
+import type {
+  AutoBuildSettingsUpdateSettingsMutation,
+  UpdateAutoBuildSettingsInput, 
+} from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
+import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
+import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
 type Settings = Omit<AutoBuildSettingsQueryResponse['autoBuildSettings'], 'autoStorage' | 'dualQueue'> & {
   readonly allowAutoGranary: boolean;

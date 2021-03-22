@@ -16,14 +16,12 @@ module.exports = (snowpackConfig, pluginOptions) => ({
         esmodules: true,
       },
       plugins: [
-        [
-          'macros', {
+        ['macros', {
           relay: {
             artifactDirectory: './src/_graphql/__generated__',
             eagerESModules: true,
           },
-        },
-        ],
+        }],
       ],
     });
 

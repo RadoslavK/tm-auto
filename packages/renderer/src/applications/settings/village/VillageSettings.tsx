@@ -1,10 +1,13 @@
 import { makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
+import { useLazyLoadQuery } from 'react-relay/hooks';
+
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import { VillageName } from '../../villages/components/VillageName.js';
-
 import { AutoBuildSettings } from './AutoBuildSettings.js';
 import { AutoPartySettings } from './AutoPartySettings.js';
 import { AutoUnitsSettings } from './AutoUnitsSettings.js';

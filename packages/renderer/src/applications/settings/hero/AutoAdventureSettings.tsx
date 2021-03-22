@@ -1,12 +1,16 @@
 import { Button } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
+
 import type { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql.js';
 import type { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql.js';
 import type { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';

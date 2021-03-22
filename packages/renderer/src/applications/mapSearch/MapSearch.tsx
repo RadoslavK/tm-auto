@@ -1,11 +1,18 @@
-import { Paper, LinearProgress } from '@material-ui/core';
-import React, { useMemo, useState } from 'react';
+import {
+  LinearProgress,
+  Paper, 
+} from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useMemo,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { MapSearchMapScanProgressQuery } from '../../_graphql/__generated__/MapSearchMapScanProgressQuery.graphql.js';
 import type { MapSearchMapSearchStateQuery } from '../../_graphql/__generated__/MapSearchMapSearchStateQuery.graphql.js';
 import type {
@@ -13,7 +20,6 @@ import type {
   MapSearchOnMapSearchFinishedSubscriptionResponse,
 } from '../../_graphql/__generated__/MapSearchOnMapSearchFinishedSubscription.graphql.js';
 import type { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql.js';
-
 import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
 import { SortOrder } from '../../_shared/SortOrder.js';
 

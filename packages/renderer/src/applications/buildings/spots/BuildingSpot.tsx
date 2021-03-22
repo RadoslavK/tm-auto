@@ -1,4 +1,8 @@
-import { makeStyles, Dialog } from '@material-ui/core';
+import {
+  Dialog,
+  makeStyles, 
+} from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import {
@@ -6,14 +10,13 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
-import { imageLinks } from '../../../utils/imageLinks.js';
+import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
 import type { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql.js';
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
-import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog.js';
 import { BuildingLevelBox } from './BuildingLevelBox.js';

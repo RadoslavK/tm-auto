@@ -1,5 +1,9 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  Switch, 
+} from 'react-router-dom';
 
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NextTasksExecution.js';
 import { BotActivity } from '../../BotActivity.js';

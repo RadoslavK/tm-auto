@@ -1,9 +1,8 @@
 import { makeStyles } from '@material-ui/core';
-import React from 'react';
-import {
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
+import React from 'react';
+import { useLazyLoadQuery } from 'react-relay/hooks';
+
 import type { BotActivityQuery } from '../_graphql/__generated__/BotActivityQuery.graphql.js';
 
 type StylesProps = {

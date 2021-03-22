@@ -1,23 +1,23 @@
 import 'typeface-roboto';
 
-import { CssBaseline, makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import {
+  CssBaseline,
+  makeStyles, 
+} from '@material-ui/core';
+import React, {
+  useEffect,
+  useState, 
+} from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 import { EnsureGraphQL } from './EnsureGraphQL.js';
-import {
-  EnsureTitle,
-} from './EnsureTitle.js';
+import { EnsureTitle } from './EnsureTitle.js';
 import { MainRoutes } from './navigation/components/MainRoutes.js';
-import {
-  Navigation,
-} from './navigation/components/Navigation.js';
+import { Navigation } from './navigation/components/Navigation.js';
 import { SettingsManagement } from './settings/management/SettingsManagement.js';
-import {
-  EnsureSignedIn,
-} from './signIn/components/EnsureSignedIn.js';
+import { EnsureSignedIn } from './signIn/components/EnsureSignedIn.js';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -74,7 +74,7 @@ const AppRoot: React.FC = () => {
         <App/>
       </EnsureGraphQL>
     )
-    : null
+    : null;
 };
 
 export { AppRoot as App };

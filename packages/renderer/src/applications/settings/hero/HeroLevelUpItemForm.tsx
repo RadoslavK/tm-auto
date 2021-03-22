@@ -1,11 +1,12 @@
+import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
-import type { HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery } from '../../../_graphql/__generated__/HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery.graphql.js';
+
 import type { HeroLevelUpItemForm_heroLevelUpItem$key } from '../../../_graphql/__generated__/HeroLevelUpItemForm_heroLevelUpItem.graphql.js';
+import type { HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery } from '../../../_graphql/__generated__/HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery.graphql.js';
 import type { HeroLevelUpItemInput } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql.js';
 
 type Props = {

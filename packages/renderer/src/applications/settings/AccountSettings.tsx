@@ -1,15 +1,20 @@
 import { Button } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import graphql from 'babel-plugin-relay/macro';
+import React, {
+  useCallback,
+  useEffect,
+  useState, 
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { AccountSettingsQuery } from '../../_graphql/__generated__/AccountSettingsQuery.graphql.js';
 import type { AccountSettingsResetSettingsMutation } from '../../_graphql/__generated__/AccountSettingsResetSettingsMutation.graphql.js';
 import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
-import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
+import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 
 const accountSettingsQuery = graphql`
   query AccountSettingsQuery {

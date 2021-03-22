@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
+
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
 import type { BuildingSpotsQuery } from '../../../_graphql/__generated__/BuildingSpotsQuery.graphql.js';
-
 import { BuildingSpot } from './BuildingSpot.js';
 
 const useStyles = makeStyles({

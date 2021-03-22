@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import { Link } from 'react-router-dom';
+
 import type {
   LogEntry_logEntry,
   LogEntry_logEntry$key,

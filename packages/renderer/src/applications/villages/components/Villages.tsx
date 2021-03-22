@@ -1,18 +1,18 @@
 import { makeStyles } from '@material-ui/core';
+import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import graphql from 'babel-plugin-relay/macro';
 import {
   Redirect,
   Route,
   Switch,
   useRouteMatch,
 } from 'react-router-dom';
-import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 
+import type { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql.js';
+import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 import { Village } from './Village.js';
 import { VillageSideItem } from './VillageSideItem.js';
-import type { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql.js';
 
 const useStyles = makeStyles({
   root: {
