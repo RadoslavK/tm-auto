@@ -10,13 +10,7 @@
       "DOM.Iterable",
       "ESNext"
     ],
-    "noEmit": true
   },
   "files": ["src/index.tsx"],
-  "include": [
-    "**/*.d.ts"
-  ],
-  "references": [
-    { "path": "../shared" }
-  ]
+  "include": ["**/*.d.ts"]
 }

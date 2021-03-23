@@ -1,25 +1,31 @@
 import { makeSchema } from 'nexus';
+import type { BuilderConfigInput } from 'nexus/dist/builder.js';
 import { join } from 'path';
 import { getDirname } from '../utils/getDirname.js';
 import * as types from './graphql/index.js';
 
-const {
-  NODE_ENV,
-  shouldGenerateArtifacts,
-} = process.env;
+const { shouldGenerateArtifacts } = process.env;
 
-const isDevelopment = NODE_ENV !== 'production';
+const getAutoGenerateOptions = (): Partial<BuilderConfigInput> => {
+  if (!shouldGenerateArtifacts) {
+    return {};
+  }
 
-const __dirname = getDirname(import.meta);
+  const __dirname = getDirname(import.meta);
+
+  return {
+    outputs: {
+      typegen: join(__dirname, 'graphqlSchema.d.ts'),
+      schema: join(__dirname, 'schema.graphql'),
+    },
+    shouldGenerateArtifacts: true,
+  };
+};
 
 //  TODO add logging
 export const schema = makeSchema({
   types,
-  shouldGenerateArtifacts: isDevelopment && !!shouldGenerateArtifacts,
-  outputs: {
-    typegen: join(__dirname, 'graphqlSchema.d.ts'),
-    schema: join(__dirname, 'schema.graphql'),
-  },
+  ...getAutoGenerateOptions(),
   nonNullDefaults: {
     output: true,
     input: true,

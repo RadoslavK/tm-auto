@@ -4,11 +4,11 @@
  */
 
 
-import { BuildingInProgress } from "../_models/buildings/inProgress/buildingInProgress.js"
-import { BuildingSpot } from "../_models/buildings/spots/buildingSpot.js"
-import { Hero } from "../_models/hero/hero.js"
-import { Resources } from "../_models/misc/resources.js"
-import { TextLogEntryContent } from "../_models/logs/content/text.js"
+import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
+import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
+import { Hero } from "./../_models/hero/hero"
+import { Resources } from "./../_models/misc/resources"
+import { TextLogEntryContent } from "./../_models/logs/content/text"
 
 
 

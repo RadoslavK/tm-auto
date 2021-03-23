@@ -87,7 +87,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
 };
 
 const createBackgroundProcess = (socketName: string): void => {
-  const filePath = path.join(__dirname, 'server.mjs');
+  const filePath = path.join(__dirname, 'server.cjs');
   const options: ForkOptions = {
     env: {
       dirname: app.getPath('userData'),

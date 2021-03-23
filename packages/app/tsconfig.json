@@ -4,13 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "target": "ES2020",
-    "lib": ["ESNext"],
-    "rootDir": "src",
-    "outDir": "dist"
+    "lib": ["ESNext"]
   },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../main" },
-    { "path": "../server" }
-  ]
+  "include": ["src/**/*"]
 }

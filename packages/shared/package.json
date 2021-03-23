@@ -7,14 +7,19 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
-    "./*": "./dist/*",
-    "./enums/*": "./dist/enums/*",
-    "./ipc/*": "./dist/ipc/*",
-    "./types/*": "./dist/types/*",
-    "./utils/*": "./dist/utils/*"
+    "./*.js": "./src/*.ts",
+    "./enums/*.js": "./src/enums/*.ts",
+    "./ipc/*.js": "./src/ipc/*.ts",
+    "./types/*.js": "./src/types/*.ts",
+    "./utils/*.js": "./src/utils/*.ts",
+
+    "./*": "./src/*",
+    "./enums/*": "./src/enums/*",
+    "./ipc/*": "./src/ipc/*",
+    "./types/*": "./src/types/*",
+    "./utils/*": "./src/utils/*"
   },
   "scripts": {
-    "build": "tsc --build",
     "typecheck": "tsc --noEmit",
     "lint": ""
   },

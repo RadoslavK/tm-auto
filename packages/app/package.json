@@ -5,14 +5,12 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "main": "dist/index.cjs",
   "scripts": {
-    "build": "node build.mjs",
-    "start": "electron .",
-    "typecheck": "tsc --noEmit",
-    "lint": ""
+    "start-main": "yarn workspace main start",
+    "start-renderer": "yarn workspace renderer start",
+    "start": "concurrently \"yarn start-main\" \"yarn start-renderer\""
   },
   "devDependencies": {
-    "esbuild": "^0.9.6"
+    "concurrently": "^6.0.0"
   }
 }
