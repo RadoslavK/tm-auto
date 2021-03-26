@@ -16,6 +16,7 @@ stealth.onBrowser = () => {};
 puppeteer.use(stealth);
 
 const getChromeOptions = () => ({
+  // bundle chrome or something.. with cookies etc??
   executablePath: getGeneralSettingsService().get().chromePath,
   //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
   //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false

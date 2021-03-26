@@ -5,7 +5,6 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "types": "dist/index.d.ts",
   "exports": {
     "./*.js": "./src/*.ts",
     "./enums/*.js": "./src/enums/*.ts",
@@ -13,11 +12,11 @@
     "./types/*.js": "./src/types/*.ts",
     "./utils/*.js": "./src/utils/*.ts",
 
-    "./*": "./src/*",
-    "./enums/*": "./src/enums/*",
-    "./ipc/*": "./src/ipc/*",
-    "./types/*": "./src/types/*",
-    "./utils/*": "./src/utils/*"
+    "./": "./src/*",
+    "./enums/": "./src/enums/*",
+    "./ipc/": "./src/ipc/*",
+    "./types/": "./src/types/*",
+    "./utils/": "./src/utils/*"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

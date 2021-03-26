@@ -5,7 +5,7 @@ const { join } = require('path');
 module.exports = (snowpackConfig, pluginOptions) => ({
   name: 'relay-replace',
   async transform({ id, contents, fileExt }) {
-    if (!(id.includes(join(__dirname), 'src') && fileExt === '.js')) {
+    if (!(id.includes(join(__dirname), 'src') && fileExt === '.js' && !id.endsWith('GraphiQL.js'))) {
       return;
     }
 

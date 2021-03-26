@@ -9,6 +9,10 @@ import {
   ExecutionResult,
 } from 'graphql';
 import { createAsyncIterator, forAwaitEach, isAsyncIterable } from 'iterall';
+import type {
+  Observable,
+  Unsubscribable,
+} from 'shared/types/observable.js';
 
 type Definition = OperationDefinitionNode | FragmentDefinitionNode;
 
@@ -66,22 +70,12 @@ export interface GraphQLRequest {
   readonly extensions?: Record<string, any>;
 }
 
-type Observer<T> = {
-  readonly next: (result: T) => void;
-  readonly complete: () => void;
-  readonly error: (error: Error) => void;
-};
-
-type Observable<T> = {
-  readonly subscribe: (observer: Observer<T>) => void;
-};
-
 export const executeGraphqlOperation = ({
   request,
   schema,
 }: Params): Observable<ExecutionResult> => {
   return {
-    subscribe: async (observer) => {
+    subscribe: (observer): Unsubscribable => {
       const definition = getMainDefinition(request.query);
 
       // input variables might be passed as classes but classes contains __typename field which is not recognized by graphql types
@@ -96,50 +90,48 @@ export const executeGraphqlOperation = ({
         variableValues,
       };
 
-      try {
-        const result = isSubscription(definition)
-          ? await subscribe(args)
-          : execute(args);
+      let cancelled = false;
 
-        const iterable = ensureIterable(result);
+      const cancellableAction = async () => {
+        try {
+          if (cancelled) {
+            return;
+          }
 
-        await forAwaitEach(iterable, (value: any) => observer.next(value));
-        observer.complete();
-      } catch (error) {
-        console.error(error);
+          const result = isSubscription(definition)
+            ? await subscribe(args)
+            : execute(args);
 
-        if (error.result && error.result.errors && error.result.data) {
-          observer.next(error.result);
+          const iterable = ensureIterable(result);
+
+          if (cancelled) {
+            return;
+          }
+
+          await forAwaitEach(iterable, (value: any) => observer.next(value));
+          observer.complete();
+        } catch (error) {
+          console.error(error);
+
+          if (cancelled) {
+            return;
+          }
+
+          if (error.result && error.result.errors && error.result.data) {
+            observer.next(error.result);
+          }
+
+          observer.error(error);
         }
+      };
 
-        observer.error(error);
-      }
+      cancellableAction();
 
-      // new Promise((resolve) => {
-      //   if (isSubscription(definition)) {
-      //     subscribe(args).then(result => resolve(result));
-      //   } else {
-      //     const result = execute(args);
-      //
-      //     resolve(result);
-      //   }
-      // })
-      //   .then(result => {
-      //     const iterable = ensureIterable(result);
-      //
-      //     forAwaitEach(iterable, (value: any) => observer.next(value)).then(() => {
-      //       observer.complete();
-      //     })
-      //   })
-      //   .catch(error => {
-      //     console.error(error);
-      //
-      //     if (error.result && error.result.errors && error.result.data) {
-      //       observer.next(error.result);
-      //     }
-      //
-      //     observer.error(error);
-      //   });
+      return {
+        unsubscribe: () => {
+          cancelled = true;
+        },
+      };
     },
   };
 };

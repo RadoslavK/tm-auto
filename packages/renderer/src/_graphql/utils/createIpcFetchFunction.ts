@@ -12,11 +12,28 @@ export const createIpcFetchFunction = async (ipcClient: IpcClient): Promise<Fetc
 
   return (request, variables) => {
     return Observable.create<GraphQLResponse>(sink => {
+      if (typeof request.text !== 'string') {
+        throw new Error('Invalid query');
+      }
+
       fetchFunction({
         ipcClient,
-        request,
-        sink,
-        variables,
+        request: {
+          name: request.name,
+          query: request.text,
+          variables,
+        },
+        observer: sink,
+        getData: (payload): GraphQLResponse => {
+          // TODO can data and errors be at the same time? or be both null?
+          return payload.data
+            ? {
+              data: payload.data,
+            }
+            : {
+              errors: payload.errors?.map(e => ({ message: e.message })) ?? [],
+            };
+        },
       });
     });
   };

@@ -1,4 +1,3 @@
-* graphiql support
 * styled components instead of emotion
 * dom manipulation things for puppeteer in a separate module with
  the DOM lib to not have it exposed in whole server

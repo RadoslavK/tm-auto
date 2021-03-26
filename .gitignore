@@ -2,6 +2,7 @@
 .eslintcache
 # IDE files
 .idea
+.cache
 # produced build
 build
 dist

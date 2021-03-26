@@ -2,13 +2,12 @@ import fs from 'fs';
 
 import { launch } from 'puppeteer-core';
 
-import { Duration } from '../packages/server/src/_models/duration';
-import { Resources } from '../packages/server/src/_models/misc/resources';
+import { Duration } from 'server/_models/duration.js';
+import { Resources } from 'server/_models/misc/resources.js';
 
 const scrape = async () => {
   const browser = await launch({
-    executablePath:
-      'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
   });
 

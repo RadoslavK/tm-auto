@@ -21,6 +21,10 @@ if (require('electron-squirrel-startup')) {
 let clientWin: null | BrowserWindowType;
 
 const createClientWindow = async (socketName: string): Promise<void> => {
+  ipcMain.on('request-socket-name', (event) => {
+    event.reply('set-socket-name', socketName);
+  });
+
   clientWin = new BrowserWindow({
     icon: path.join(__dirname, '..', 'renderer', 'images', 'TMAuto.ico'),
     show: false,
@@ -40,7 +44,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
   if (isDevelopment) {
     do {
       try {
-        await clientWin.loadURL('http://localhost:8080/');
+        await clientWin.loadURL('http://localhost:8080');
 
         loaded = true;
       } catch {
@@ -81,9 +85,15 @@ const createClientWindow = async (socketName: string): Promise<void> => {
     });
   });
 
-  ipcMain.on('request-socket-name', (event) => {
-    event.reply('set-socket-name', socketName);
+  const clientWin2 = new BrowserWindow({
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.cjs'),
+      enableRemoteModule: true,
+    },
   });
+  await clientWin2.loadURL('http://localhost:8080/graphiql');
 };
 
 const createBackgroundProcess = (socketName: string): void => {
