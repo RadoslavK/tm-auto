@@ -1,20 +1,27 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useCallback } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql.js';
+import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
 import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
 
 type Props = {
   readonly className: string;
+  readonly villageId: string;
 };
 
 const useStyles = makeStyles({
@@ -33,6 +40,33 @@ const useStyles = makeStyles({
 const buildingQueueQuery = graphql`
   query BuildingQueueQuery($villageId: ID!) {
       buildingQueue(villageId: $villageId) {
+          totalCost {
+              ...Cost_resources
+          }
+          totalBuildingTime {
+              ...Cost_duration
+          }
+          infrastructureBuildingTime {
+              ...Cost_duration
+          }
+          resourcesBuildingTime {
+              ...Cost_duration
+          }
+          buildingRanges {
+              id
+              buildings {
+                  queueId
+                  ...QueuedBuilding_queuedBuilding
+              }
+              ...QueuedBuildingRange_queuedBuildingRange
+          }
+      }
+  }
+`;
+
+const buildingQueueSubscription = graphql`
+  subscription BuildingQueueSubscription($villageId: ID!) {
+      queueUpdated(villageId: $villageId) {
           totalCost {
               ...Cost_resources
           }
@@ -76,13 +110,18 @@ const buildingQueueClearQueueMutation = graphql`
   }
 `;
 
-export const BuildingQueue: React.FC<Props> = ({ className }) => {
-  const villageId = '';
-
+export const BuildingQueue: React.FC<Props> = ({ className, villageId }) => {
   const { gameInfo, autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
   const shouldSplitBuildingTimes = gameInfo.tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const { buildingQueue } = useLazyLoadQuery<BuildingQueueQuery>(buildingQueueQuery, { villageId });
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueSubscription> => ({
+    subscription: buildingQueueSubscription,
+    variables: { villageId },
+  }), [villageId]);
+
+  useSubscription(subscriptionConfig);
 
   const classes = useStyles();
 
@@ -96,7 +135,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
   // }).data?.collapsedBuildingQueueRanges || [];
 
   const setAllCollapsed = useCallback(() => {
-    if (buildingQueue?.buildingRanges) {
+    if (buildingQueue.buildingRanges) {
       //  TODO
       // updateCollapsedBuildingQueueRangeIds(
       //   villageId,
@@ -106,11 +145,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
       //   ),
       // );
     }
-  }, [buildingQueue?.buildingRanges, villageId]);
-
-  if (!buildingQueue) {
-    return null;
-  }
+  }, [buildingQueue.buildingRanges, villageId]);
 
   const onRangeCollapse = (rangeId: string) => {
     console.log(rangeId);
@@ -164,6 +199,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
                 key={range.id}
                 onExpand={() => onRangeExpand(range.id)}
                 range={range}
+                villageId={villageId}
               />
             );
           }
@@ -177,6 +213,7 @@ export const BuildingQueue: React.FC<Props> = ({ className }) => {
                   onCollapse={
                     canBeCollapsed ? () => onRangeCollapse(range.id) : undefined
                   }
+                  villageId={villageId}
                 />
               ))}
             </React.Fragment>

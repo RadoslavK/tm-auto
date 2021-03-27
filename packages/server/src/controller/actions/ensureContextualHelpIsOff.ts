@@ -21,7 +21,7 @@ export const ensureContextualHelpIsOff = async (): Promise<void> => {
 
   await input.click();
 
-  const submit = await page.$('#btn_ok');
+  const submit = await page.$('button[type=submit]');
 
   if (!submit) {
     throw new Error('Did not find submit button');

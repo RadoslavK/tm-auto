@@ -4,28 +4,28 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type VillagesQueryVariables = {};
-export type VillagesQueryResponse = {
-    readonly villages: ReadonlyArray<{
+export type VillagesSubscriptionVariables = {};
+export type VillagesSubscriptionResponse = {
+    readonly villagesUpdated: ReadonlyArray<{
         readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     }>;
-    readonly activeVillageId: string;
+    readonly activeVillageIdChanged: string;
 };
-export type VillagesQuery = {
-    readonly response: VillagesQueryResponse;
-    readonly variables: VillagesQueryVariables;
+export type VillagesSubscription = {
+    readonly response: VillagesSubscriptionResponse;
+    readonly variables: VillagesSubscriptionVariables;
 };
 
 
 
 /*
-query VillagesQuery {
-  villages {
+subscription VillagesSubscription {
+  villagesUpdated {
     id
     ...VillageSideItem_village
   }
-  activeVillageId
+  activeVillageIdChanged
 }
 
 fragment VillageName_village on Village {
@@ -55,7 +55,7 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "activeVillageId",
+  "name": "activeVillageIdChanged",
   "storageKey": null
 };
 return {
@@ -63,14 +63,14 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "VillagesQuery",
+    "name": "VillagesSubscription",
     "selections": [
       {
         "alias": null,
         "args": null,
         "concreteType": "Village",
         "kind": "LinkedField",
-        "name": "villages",
+        "name": "villagesUpdated",
         "plural": true,
         "selections": [
           (v0/*: any*/),
@@ -84,21 +84,21 @@ return {
       },
       (v1/*: any*/)
     ],
-    "type": "Query",
+    "type": "Subscription",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "VillagesQuery",
+    "name": "VillagesSubscription",
     "selections": [
       {
         "alias": null,
         "args": null,
         "concreteType": "Village",
         "kind": "LinkedField",
-        "name": "villages",
+        "name": "villagesUpdated",
         "plural": true,
         "selections": [
           (v0/*: any*/),
@@ -148,14 +148,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3991cf0cee972ba13ad66ffbfa14e56a",
+    "cacheID": "710293a63d5e841f48d655216013d302",
     "id": null,
     "metadata": {},
-    "name": "VillagesQuery",
-    "operationKind": "query",
-    "text": "query VillagesQuery {\n  villages {\n    id\n    ...VillageSideItem_village\n  }\n  activeVillageId\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
+    "name": "VillagesSubscription",
+    "operationKind": "subscription",
+    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    ...VillageSideItem_village\n  }\n  activeVillageIdChanged\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = '1c6399c802a3aa9a4175795ccaa469e4';
+(node as any).hash = 'b92c24c2180e95e6522ad2c6b35cb252';
 export default node;

@@ -48,6 +48,7 @@ type Props = {
   readonly getDropPosition: (queueIndex: number) => DropPosition;
   readonly queueIndexTop: number;
   readonly queueIndexBot: number;
+  readonly villageId: string;
 };
 
 const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
@@ -79,8 +80,8 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   getDropPosition,
   queueIndexBot,
   queueIndexTop,
+  villageId,
 }) => {
-  const villageId = '';
   const [moveQueuedBuildingToIndex] = useMutation<QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation>(queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation);
 
   const onDropBuilding = (item: MovedQueuedBuilding) => {
@@ -100,7 +101,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     MovedQueuedBuilding,
     void,
     {
-      readonly movedBuilding: MovedQueuedBuilding;
+      readonly movedBuilding?: MovedQueuedBuilding;
       readonly isBuildingOver: boolean;
     }
   >({
@@ -136,7 +137,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     MovedQueuedBuildingRange,
     void,
     {
-      readonly movedRange: MovedQueuedBuildingRange;
+      readonly movedRange?: MovedQueuedBuildingRange;
       readonly isRangeOver: boolean;
     }
   >({
@@ -160,17 +161,16 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
 
   const { canMoveQueuedBuildingToIndex } = useLazyLoadQuery<QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery>(queuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery, {
     villageId,
-    queueId: movedBuilding.queueId,
+    queueId: movedBuilding?.queueId ?? '',
     index: queueIndexTop,
     skip: !movedBuilding || !isBuildingOver,
   });
 
   const { canMoveQueuedBuildingsBlockToIndex } = useLazyLoadQuery<QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery>(queuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery, {
     villageId,
-    topBuildingQueueId: movedRange.topBuildingQueueId,
-    bottomBuildingQueueId:
-    movedRange.bottomBuildingQueueId,
-    index: movedRange.topBuildingQueueIndex < queueIndexTop
+    topBuildingQueueId: movedRange?.topBuildingQueueId ?? '',
+    bottomBuildingQueueId: movedRange?.bottomBuildingQueueId ?? '',
+    index: (movedRange?.topBuildingQueueIndex ?? 0) < queueIndexTop
       ? queueIndexBot
       : queueIndexTop,
     skip: !movedRange || !isRangeOver,
@@ -190,6 +190,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingComponent
               building={movedBuilding.buildingFragmentKey}
               isHighlight
+              villageId={villageId}
             />
           </div>
         )}
@@ -198,6 +199,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingRangeComponent
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
+              villageId={villageId}
             />
           </div>
         )}
@@ -207,6 +209,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingComponent
               building={movedBuilding.buildingFragmentKey}
               isHighlight
+              villageId={villageId}
             />
           </div>
         )}
@@ -215,6 +218,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingRangeComponent
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
+              villageId={villageId}
             />
           </div>
         )}

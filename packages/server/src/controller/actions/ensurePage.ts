@@ -11,8 +11,8 @@ const navigateByLink = async (
   page: Page,
 ): Promise<boolean> => {
   const selectors = exact
-    ? [`[href="${path}"]`, `[href^="${path}?"]`]
-    : [`[href^="${path}"]`];
+    ? [`[href="/${path}"]`, `[href^="/${path}?"]`]
+    : [`[href^="/${path}"]`];
 
   let link: ElementHandle | null = null;
 

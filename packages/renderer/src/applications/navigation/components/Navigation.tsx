@@ -4,14 +4,26 @@ import {
   Tabs, 
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+import {
+  useLazyLoadQuery,
+  useSubscription,
+} from 'react-relay/hooks';
 import {
   Link,
   useLocation, 
 } from 'react-router-dom';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { nameOf } from 'shared/utils/nameOf.js';
 
-import type { NavigationQuery } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
+import type {
+  NavigationQuery,
+  NavigationQueryResponse,
+} from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
+import type { NavigationSubscription } from '../../../_graphql/__generated__/NavigationSubscription.graphql.js';
 import { Hero } from '../../hero/components/Hero.js';
 import { Logs } from '../../logs/components/Logs.js';
 import { MapSearch } from '../../mapSearch/MapSearch.js';
@@ -40,11 +52,27 @@ const navigationQuery = graphql`
   }
 `;
 
+const navigationSubscription = graphql`
+  subscription NavigationSubscription {
+      botStateChanged
+  }
+`;
+
 export const Navigation: React.FC = () => {
   const { pathname } = useLocation();
   const [lastVillagesPath, setLastVillagesPath] = useState<string>();
 
   const { botState } = useLazyLoadQuery<NavigationQuery>(navigationQuery, {});
+  
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NavigationSubscription> => ({
+    subscription: navigationSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.botStateChanged, nameOf<NavigationQueryResponse>('botState'));
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const currentItemIndex = navigationApps.findIndex((app) =>
     pathname.startsWith(app.path),

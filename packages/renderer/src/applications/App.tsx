@@ -65,7 +65,13 @@ const AppRoot: React.FC = () => {
   const [socketName, setSocketName] = useState<string>();
 
   useEffect(() => {
-    window.api.ipc.getSocketName().then(setSocketName).catch(console.error);
+    const init = async () => {
+      const socketName = await window.api.ipc.getSocketName();
+
+      setSocketName(socketName);
+    };
+
+    init();
   }, []);
 
   return socketName

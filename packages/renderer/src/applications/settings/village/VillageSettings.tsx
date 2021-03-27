@@ -47,6 +47,7 @@ export enum VillageSettingsTabType {
 type Props = {
   readonly getTabType: (tab: string) => VillageSettingsTabType;
   readonly tab: string;
+  readonly villageId: string;
 };
 
 const villageSettingsQuery = graphql`
@@ -58,10 +59,9 @@ const villageSettingsQuery = graphql`
   }
 `;
 
-export const VillageSettings: React.FC<Props> = ({ getTabType, tab }) => {
+export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId }) => {
   const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {});
 
-  const villageId = '';
   const [selectedVillageId, setSelectedVillageId] = useState(villageId);
 
   useEffect(() => {

@@ -39,6 +39,7 @@ type Props = {
   readonly className?: string;
   readonly onExpand: () => void;
   readonly range: QueuedBuildingRangeActions_queuedBuildingRange$key;
+  readonly villageId: string;
 };
 
 const queuedBuildingRangeActionsQueuedBuildingRangeFragment = graphql`
@@ -65,11 +66,10 @@ export const QueuedBuildingRangeActions: React.FC<Props> = ({
   className,
   onExpand,
   range,
+  villageId,
 }) => {
   const queuedBuildingRangeFragment = useFragment(queuedBuildingRangeActionsQueuedBuildingRangeFragment, range);
   const classes = useStyles();
-
-  const villageId = '';
 
   const [moveToTop] = useMutation<QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation>(queuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation);
   const [dequeue] = useMutation<QueuedBuildingRangeActionsDequeueBuildingsBlockMutation>(queuedBuildingRangeActionsDequeueBuildingsBlockMutation);

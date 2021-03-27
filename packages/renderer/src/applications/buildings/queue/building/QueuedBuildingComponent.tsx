@@ -52,6 +52,7 @@ type Props = {
   readonly building: QueuedBuildingComponent_queuedBuilding$key;
   readonly isHighlight?: boolean;
   readonly onCollapse?: () => void;
+  readonly villageId: string;
 };
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
@@ -83,6 +84,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
   building,
   isHighlight,
   onCollapse,
+  villageId,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
   const { buildingLevelInfo, buildingInfo } = useLazyLoadQuery<QueuedBuildingComponentBuildingInfoQuery>(queuedBuildingComponentBuildingInfoQuery, {
@@ -101,6 +103,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
           buildingQueueId={queuedBuildingFragment.queueId}
           className={classes.actions}
           onCollapse={onCollapse}
+          villageId={villageId}
         />
       )}
       <div className={classes.imageWithFieldId}>

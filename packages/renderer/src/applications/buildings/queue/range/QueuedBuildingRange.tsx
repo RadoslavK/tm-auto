@@ -32,6 +32,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly onExpand: () => void;
   readonly range: QueuedBuildingRange_queuedBuildingRange$key;
+  readonly villageId: string;
 };
 
 const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
@@ -45,7 +46,7 @@ const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
   }
 `;
 
-export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range }) => {
+export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageId }) => {
   const rangeFragment = useFragment(queuedBuildingRangeQueuedBuildingRangeFragment, range);
 
   const movedBuilding: MovedQueuedBuildingRange = {
@@ -73,7 +74,9 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range }) => {
           : DropPosition.Below
       }
       queueIndexBot={rangeFragment.buildings[rangeFragment.buildings.length - 1].queueIndex}
-      queueIndexTop={rangeFragment.buildings[0].queueIndex}>
+      queueIndexTop={rangeFragment.buildings[0].queueIndex}
+      villageId={villageId}
+    >
       <div ref={drag} className={classes.root}>
         <DragPreviewImage
           connect={preview}
@@ -82,6 +85,7 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range }) => {
         <QueuedBuildingRangeComponent
           buildingRange={rangeFragment}
           onExpand={onExpand}
+          villageId={villageId}
         />
       </div>
     </QueuedBuildingsDropArea>

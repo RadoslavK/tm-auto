@@ -12,6 +12,7 @@ type Props = {
   readonly buildingQueueId: string;
   readonly className?: string;
   readonly onCollapse?: () => void;
+  readonly villageId: string;
 };
 
 const useStyles = makeStyles({
@@ -54,9 +55,8 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
     buildingQueueId,
     className,
     onCollapse,
+    villageId,
   } = props;
-
-  const villageId = '';
 
   const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(queuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation);
   const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(queuedBuildingActionsDequeueBuildingMutation);

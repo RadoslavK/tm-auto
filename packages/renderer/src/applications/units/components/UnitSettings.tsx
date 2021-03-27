@@ -13,11 +13,13 @@ import {
 
 import type { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/__generated__/UnitSettings_autoUnitsUnitSettings.graphql.js';
 import type { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql.js';
+import type { UnitSettingsUpdateAutoUnitsUnitSettingsMutation } from '../../../_graphql/__generated__/UnitSettingsUpdateAutoUnitsUnitSettingsMutation.graphql.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type Props = {
   readonly className?: string;
   readonly settings: UnitSettings_autoUnitsUnitSettings$key;
+  readonly villageId: string;
 };
 
 type StyleProps = {
@@ -79,16 +81,14 @@ const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
   }
 `;
 
-export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
-  const { index, ...settingsFragment } = useFragment(unitSettingsAutoUnitsUnitSettings, settings);
+export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }) => {
+  const settingsFragment = useFragment(unitSettingsAutoUnitsUnitSettings, settings);
+  const { index } = settingsFragment;
   const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index });
-  const [updateSettings] = useMutation(unitSettingsUpdateAutoUnitsUnitSettingsMutation);
+  const [updateSettings] = useMutation<UnitSettingsUpdateAutoUnitsUnitSettingsMutation>(unitSettingsUpdateAutoUnitsUnitSettingsMutation);
 
   const [state, setState] = useState(settingsFragment);
   const [hasChanges, setHasChanges] = useState(false);
-
-  //  TODO local cache
-  const villageId = '' as any;
 
   useEffect(() => {
     setState(settingsFragment);

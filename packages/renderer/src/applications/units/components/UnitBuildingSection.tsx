@@ -53,6 +53,7 @@ type Props = {
   readonly buildingType: BuildingType;
   readonly className?: string;
   readonly settings: UnitBuildingSection_autoUnitsBuildingSettings$key;
+  readonly villageId: string;
 };
 
 const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
@@ -83,6 +84,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
   buildingType,
   className,
   settings,
+  villageId,
 }) => {
   const buildingSettingsFragment = useFragment(unitBuildingSectionAutoUnitsBuildingSettingsFragment, settings);
 
@@ -104,8 +106,6 @@ export const UnitBuildingSection: React.FC<Props> = ({
     buildingType: buildingType,
     isAllowed: state.allow,
   });
-
-  const villageId = '';
 
   const [updateSettings] = useMutation<UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation>(unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation);
 
@@ -145,6 +145,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
           key={unitSettings.index}
           className={classes.unit}
           settings={unitSettings}
+          villageId={villageId}
         />
       ))}
     </div>

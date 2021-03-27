@@ -19,6 +19,7 @@ import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
   readonly task: TaskType;
+  readonly villageId: string;
 };
 
 const query = graphql`
@@ -45,9 +46,7 @@ const resetMutation = graphql`
     }
 `;
 
-export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
-  const villageId = '';
-
+export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) => {
   const { nextVillageTaskExecution } = useLazyLoadQuery<NextVillageTaskExecutionQuery>(query, {
     task,
     villageId,

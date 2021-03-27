@@ -25,25 +25,15 @@ const getContentNode = (
   content: Content,
   className: string,
 ): JSX.Element => {
-  const fragmentRefs = content[' $fragmentRefs'];
+  const typename = content['__typename'];
 
-  if (fragmentRefs.TextLogContent_textLogentryContent) {
-    return <TextLogContent className={className} content={content} />;
+  switch (typename) {
+    case 'TextLogEntryContent': return <TextLogContent className={className} content={content} />;
+    case 'AutoBuildLogEntryContent': return <AutoBuildLogContent className={className} content={content} />;
+    case 'AutoUnitsLogEntryContent': return <AutoUnitsLogContent className={className} content={content} />;
+    case 'ResourceClaimLogEntryContent': return <ResourceClaimLogContent className={className} content={content} />;
+    default: throw new Error(`Invalid typename: ${typename}`);
   }
-
-  if (fragmentRefs.AutoBuildLogContent_autoBuildLogEntryContent) {
-    return <AutoBuildLogContent className={className} content={content} />;
-  }
-
-  if (fragmentRefs.AutoUnitsLogContent_autoUnitsLogEntryContent) {
-    return <AutoUnitsLogContent className={className} content={content} />;
-  }
-
-  if (fragmentRefs.ResourceClaimLogContent_resourceClaimLogEntryContent) {
-    return <ResourceClaimLogContent className={className} content={content} />;
-  }
-
-  throw new Error(`Unknown content: ${JSON.stringify(content)}`);
 };
 
 const getVillageNode = (
@@ -77,9 +67,12 @@ const useStyles = makeStyles({
   },
 });
 
+//  For some reason the __typename must be included at both levels otherwise its undefined
 const logEntryFragment = graphql`
   fragment LogEntry_logEntry on LogEntry {
+      __typename
       content {
+          __typename
           ...TextLogContent_textLogentryContent
           ...AutoUnitsLogContent_autoUnitsLogEntryContent
           ...AutoBuildLogContent_autoBuildLogEntryContent

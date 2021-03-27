@@ -31,6 +31,7 @@ enum DialogType {
 type Props = {
   readonly building: BuildingSpot_buildingSpot$key;
   readonly className?: string;
+  readonly villageId: string;
 };
 
 const buildingSpotBuildingSpotFragment = graphql`
@@ -92,7 +93,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
   }),
 });
 
-export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }) => {
+export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId }) => {
   const buildingSpotFragment = useFragment(buildingSpotBuildingSpotFragment, building);
 
   const classes = useStyles({ buildingType: buildingSpotFragment.type });
@@ -114,7 +115,6 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
     });
   };
 
-  const villageId = '';
   const [dequeueAtField] = useMutation<BuildingSpotDequeueBuildingAtFieldMutation>(buildingSpotDequeueBuildingAtFieldMutation);
 
   const { buildingInfo } = useLazyLoadQuery<BuildingSpotBuildingInfoQuery>(buildingSpotBuildingInfoQuery, { buildingType: buildingSpotFragment.type });
@@ -197,7 +197,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
         <div className={classes.fieldId}>[{buildingSpotFragment.fieldId}]</div>
       </div>
       <Dialog onClose={closeDialog} open={dialog === DialogType.NewBuilding}>
-        <NewBuildingDialog fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
+        <NewBuildingDialog villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>
         <MultiLevelDialog

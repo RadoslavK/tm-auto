@@ -6,6 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type LogEntry_logEntry = {
     readonly content: {
+        readonly __typename: string;
         readonly " $fragmentRefs": FragmentRefs<"TextLogContent_textLogentryContent" | "AutoUnitsLogContent_autoUnitsLogEntryContent" | "AutoBuildLogContent_autoBuildLogEntryContent" | "ResourceClaimLogContent_resourceClaimLogEntryContent">;
     };
     readonly timestamp: {
@@ -15,6 +16,7 @@ export type LogEntry_logEntry = {
         readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"VillageName_village">;
     } | null;
+    readonly __typename: "LogEntry";
     readonly " $refType": "LogEntry_logEntry";
 };
 export type LogEntry_logEntry$data = LogEntry_logEntry;
@@ -25,12 +27,21 @@ export type LogEntry_logEntry$key = {
 
 
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "LogEntry_logEntry",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -39,6 +50,7 @@ const node: ReaderFragment = {
       "name": "content",
       "plural": false,
       "selections": [
+        (v0/*: any*/),
         {
           "args": null,
           "kind": "FragmentSpread",
@@ -107,5 +119,6 @@ const node: ReaderFragment = {
   "type": "LogEntry",
   "abstractKey": null
 };
-(node as any).hash = '691ca4c6ca3dd38b7dedb6cd735e6e6c';
+})();
+(node as any).hash = 'cfed8c53a2e5f3848c84a1354061afd0';
 export default node;

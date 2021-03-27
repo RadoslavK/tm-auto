@@ -1,13 +1,17 @@
 import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
+  Suspense,
   useCallback,
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useRelayEnvironment,
+  useSubscription,
 } from 'react-relay/hooks';
 import {
   Link,
@@ -18,6 +22,8 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { commitLocalUpdate } from 'relay-runtime';
 
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
@@ -82,12 +88,31 @@ const villageQuery = graphql`
   }
 `;
 
+const villageSubscription = graphql`
+  subscription VillageSubscription($villageId: ID!) {
+      villageUpdated(villageId: $villageId) {
+          id
+          resources {
+              ...Resources_villageResources
+          }
+      }
+  }
+`;
+
 export const Village: React.FC<Props> = ({ villageId }) => {
-  // useEffect(() => {
-  //   updateSelectedVillageId(villageId);
-  //
-  //   return () => updateSelectedVillageId('');
-  // }, [villageId]);
+  const relayEnvironment = useRelayEnvironment();
+
+  useEffect(() => {
+    const selectVillage = (id: string) => {
+      commitLocalUpdate(relayEnvironment, store => {
+        store.getRoot().setValue(id, 'selectedVillageId');
+      });
+    };
+
+    selectVillage(villageId);
+
+    return () => selectVillage('');
+  }, [relayEnvironment, villageId]);
 
   const match = useRouteMatch();
 
@@ -106,6 +131,13 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   };
 
   const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId });
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<any> => ({
+    subscription: villageSubscription,
+    variables: { villageId },
+  }), [villageId]);
+
+  useSubscription(subscriptionConfig);
 
   useEffect(() => {
     if (village === null) {
@@ -154,13 +186,15 @@ export const Village: React.FC<Props> = ({ villageId }) => {
         ))}
       </div>
       <Switch>
-        {navigation.map((n) => (
-          <Route
-            key={n.path}
-            component={n.component}
-            path={`${match.path}/${n.path}`}
-          />
-        ))}
+        <Suspense fallback={null}>
+          {navigation.map((n) => (
+            <Route
+              key={n.path}
+              component={n.component}
+              path={`${match.path}/${n.path}`}
+            />
+          ))}
+        </Suspense>
         <Redirect to={`${match.path}/${navigation[0].path}`} />
       </Switch>
       <Dialog onClose={closeSettings} open={showSettings}>
@@ -173,6 +207,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
               <VillageSettings
                 getTabType={getTabType}
                 tab={tab!}
+                villageId={villageId}
               />
             );
           }}

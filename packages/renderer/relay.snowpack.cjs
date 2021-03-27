@@ -25,13 +25,23 @@ module.exports = (snowpackConfig, pluginOptions) => ({
       ],
     });
 
-    const modules = ['react-relay/hooks'];
-    const regexp = new RegExp("^import (?<variableName>((?!from).|\n)*?) from (?<moduleName>(?:'|\")(?:"+modules.join('|')+")(?:'|\")).*$", "gm");
-    const replacement = `
-import reactRelayPkg from $<moduleName>;
-const $<variableName> = reactRelayPkg;
+    //  TODO improve this thing
+    const relayHooksModule = ['react-relay/hooks'];
+    const relayHooksModuleRegExp = new RegExp("^import (?<variableName>((?!from).|\n)*?) from (?<moduleName>(?:'|\")(?:"+relayHooksModule+")(?:'|\")).*$", "gm");
+    const relayHooksModuleReplacement = `
+import reactRelayHooksPkg from $<moduleName>;
+const $<variableName> = reactRelayHooksPkg;
     `;
 
-    return result.code.replace(regexp, replacement);
+    const relayRuntime = ['relay-runtime'];
+    const relayRuntimeRegExp = new RegExp("^import (?<variableName>((?!from).|\n)*?) from (?<moduleName>(?:'|\")(?:"+relayRuntime+")(?:'|\")).*$", "gm");
+    const relayRuntimeReplacement = `
+import relayRuntimePkg from $<moduleName>;
+const $<variableName> = relayRuntimePkg;
+    `;
+
+    return result.code
+      .replace(relayHooksModuleRegExp, relayHooksModuleReplacement)
+      .replace(relayRuntimeRegExp, relayRuntimeReplacement);
   },
 });

@@ -14,6 +14,8 @@ import type { NextTasksExecutionSetMutation } from '../../../_graphql/__generate
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
+//  TODO subscription
+
 const nextTasksExecutionQuery = graphql`
   query NextTasksExecutionQuery {
       nextTasksExecution {

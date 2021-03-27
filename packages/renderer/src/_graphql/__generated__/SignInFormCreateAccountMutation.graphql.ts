@@ -14,6 +14,7 @@ export type SignInFormCreateAccountMutationVariables = {
 };
 export type SignInFormCreateAccountMutationResponse = {
     readonly createAccount: {
+        readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
     };
 };
@@ -29,8 +30,8 @@ mutation SignInFormCreateAccountMutation(
   $account: AccountInput!
 ) {
   createAccount(account: $account) {
-    ...UserAccount
     id
+    ...UserAccount
   }
 }
 
@@ -56,7 +57,14 @@ v1 = [
     "name": "account",
     "variableName": "account"
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -72,6 +80,7 @@ return {
         "name": "createAccount",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -98,13 +107,7 @@ return {
         "name": "createAccount",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -132,14 +135,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1ec97102a4bddcca3cabd2fcfb6d1aff",
+    "cacheID": "3de1da1f554a24761111cc0c707a8421",
     "id": null,
     "metadata": {},
     "name": "SignInFormCreateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
+    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n    ...UserAccount\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
   }
 };
 })();
-(node as any).hash = '407aeffc3c994a2626b4d18c4d94d7dd';
+(node as any).hash = '8f755f7982e8c707c01c414225139709';
 export default node;

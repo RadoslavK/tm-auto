@@ -13,10 +13,10 @@
     "./utils/*.js": "./src/utils/*.ts",
 
     "./": "./src/*",
-    "./enums/": "./src/enums/*",
-    "./ipc/": "./src/ipc/*",
-    "./types/": "./src/types/*",
-    "./utils/": "./src/utils/*"
+    "./enums/*": "./src/enums/*",
+    "./ipc/*": "./src/ipc/*",
+    "./types/*": "./src/types/*",
+    "./utils/*": "./src/utils/*"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

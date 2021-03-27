@@ -66,7 +66,8 @@ export const BotStateToggle: React.FC<Props> = React.forwardRef<HTMLButtonElemen
         color="primary"
         disabled={isStopping}
         onClick={isStopping ? undefined : toggleBotState}
-        variant="contained">
+        variant="contained"
+      >
         {getToggleText(botState)}
       </Button>
     );

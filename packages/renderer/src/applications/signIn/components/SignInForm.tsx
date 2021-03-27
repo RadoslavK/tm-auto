@@ -109,7 +109,8 @@ const signInMutation = graphql`
 const createAccountMutation = graphql`
   mutation SignInFormCreateAccountMutation($account: AccountInput!) {
     createAccount(account: $account) {
-      ...UserAccount
+        id
+        ...UserAccount
     }
   }   
 `;

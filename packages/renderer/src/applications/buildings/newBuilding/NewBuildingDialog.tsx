@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 type Props = {
   readonly fieldId: number;
   readonly onSelect: () => void;
+  readonly villageId: string;
 };
 
 const newBuildingDialogAvailableNewBuildingsTypes = graphql`
@@ -30,10 +31,9 @@ const newBuildingDialogAvailableNewBuildingsTypes = graphql`
 
 export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
   (props, ref: any) => {
-    const { fieldId, onSelect } = props;
+    const { fieldId, onSelect, villageId } = props;
 
     const classes = useStyles({});
-    const villageId = '';
 
     const { availableNewBuildingsTypes } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(newBuildingDialogAvailableNewBuildingsTypes, {
       input: { fieldId, villageId },
@@ -48,6 +48,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
             fieldId={fieldId}
             onSelect={onSelect}
             type={buildingType}
+            villageId={villageId}
           />
         ))}
       </div>

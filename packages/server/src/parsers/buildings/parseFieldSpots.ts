@@ -11,7 +11,7 @@ export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
   const page = await getPage();
 
   return page.$$eval(
-    '#resourceFieldContainer div.level[class*=buildingSlot][class*=gid]',
+    '#resourceFieldContainer a.level[class*=buildingSlot][class*=gid]',
     (xx) =>
       xx.map(
         (x): ActualBuilding => {

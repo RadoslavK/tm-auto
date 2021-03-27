@@ -37,6 +37,7 @@ type Props = {
   readonly fieldId: number;
   readonly onSelect: (targetLevel?: number) => void;
   readonly type: number;
+  readonly villageId: string;
 };
 
 const newBuildingDialogItemEnqueueBuildingMutation = graphql`
@@ -59,6 +60,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
   fieldId,
   onSelect,
   type,
+  villageId,
 }) => {
   const { buildingInfo } = useLazyLoadQuery<NewBuildingDialogItemQuery>(newBuildingDialogItemQuery, { buildingType: type });
 
@@ -69,7 +71,6 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
 
   const [enqueueBuilding] = useMutation<NewBuildingDialogItemEnqueueBuildingMutation>(newBuildingDialogItemEnqueueBuildingMutation);
 
-  const villageId = '';
   const { maxLevel, name } = buildingInfo;
 
   const enqueue = (targetLevel: number | undefined) => enqueueBuilding({

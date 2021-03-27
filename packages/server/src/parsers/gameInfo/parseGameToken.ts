@@ -1,6 +1,7 @@
 import { Token, TokenType } from '../../_models/gameInfo.js';
 import { getPage } from '../../browser/getPage.js';
 
+//  TODO
 export const parseGameToken = async (): Promise<Token> => {
   const page = await getPage();
   const content = await page.content();

@@ -1,5 +1,0 @@
-directive @client on QUERY
-
-query GetCollapsedBuildingQueueRanges($villageId: ID!) {
-  collapsedBuildingQueueRanges(villageId: $villageId) @client
-}

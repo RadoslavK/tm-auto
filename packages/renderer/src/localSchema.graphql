@@ -1,0 +1,6 @@
+directive @deleteRecord on FIELD
+
+extend type Query {
+    collapsedBuildingQueueRanges(villageId: ID!): [String!]!
+    selectedVillageId: String!
+}
