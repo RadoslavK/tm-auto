@@ -2,17 +2,25 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
+  useEffect,
   useMemo,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useRelayEnvironment,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import {
+  commitLocalUpdate,
+  createOperationDescriptor,
+  getRequest,
+} from 'relay-runtime';
 
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
+import type { BuildingQueueCollapsedBuildingRangesQuery } from '../../../_graphql/__generated__/BuildingQueueCollapsedBuildingRangesQuery.graphql.js';
 import type { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql.js';
 import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
@@ -91,6 +99,13 @@ const buildingQueueClearQueueMutation = graphql`
   }
 `;
 
+const collapsedBuildingRangesQuery = graphql`
+  query BuildingQueueCollapsedBuildingRangesQuery($villageId: ID!) {
+      ... on Query { __typename }
+      collapsedBuildingQueueRanges(villageId: $villageId)
+  }
+`;
+
 export const BuildingQueue: React.FC<Props> = ({ className, villageId }) => {
   const { gameInfo, autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
   const shouldSplitBuildingTimes = gameInfo.tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
@@ -111,43 +126,43 @@ export const BuildingQueue: React.FC<Props> = ({ className, villageId }) => {
   const classes = useStyles();
 
   const [clearQueue] = useMutation<BuildingQueueClearQueueMutation>(buildingQueueClearQueueMutation);
-  const collapsedRangeIds = [] as any[];
-  //  TODO
-  // useGetCollapsedBuildingQueueRangesQuery({
-  //   variables: {
-  //     villageId,
-  //   },
-  // }).data?.collapsedBuildingQueueRanges || [];
+
+
+  const relayEnvironment = useRelayEnvironment();
+
+  useEffect(() => {
+    const request = getRequest(collapsedBuildingRangesQuery);
+    const operation = createOperationDescriptor(request, { villageId });
+    relayEnvironment.retain(operation);
+  }, [relayEnvironment, villageId]);
+
+  const { collapsedBuildingQueueRanges } = useLazyLoadQuery<BuildingQueueCollapsedBuildingRangesQuery>(collapsedBuildingRangesQuery, {
+    villageId,
+  });
+
+  const collapsedRangeIds = collapsedBuildingQueueRanges || [];
+
+  const updateCollapsedBuildingQueueRangeIds = useCallback((rangeIds: string[]) => {
+    commitLocalUpdate(relayEnvironment, store => {
+      store.getRoot().setValue(rangeIds, 'collapsedBuildingQueueRanges', { villageId });
+    });
+  }, [relayEnvironment, villageId]);
 
   const setAllCollapsed = useCallback(() => {
     if (buildingQueue.buildingRanges) {
-      //  TODO
-      // updateCollapsedBuildingQueueRangeIds(
-      //   villageId,
-      //   buildingQueue.buildingRanges.reduce(
-      //     (all, r) => (r.buildings.length > 1 ? [...all, r.id] : all),
-      //     [] as string[],
-      //   ),
-      // );
+      updateCollapsedBuildingQueueRangeIds(buildingQueue.buildingRanges.reduce(
+        (all, r) => (r.buildings.length > 1 ? [...all, r.id] : all),
+        [] as string[],
+      ));
     }
-  }, [buildingQueue.buildingRanges, villageId]);
+  }, [buildingQueue.buildingRanges, updateCollapsedBuildingQueueRangeIds]);
 
   const onRangeCollapse = (rangeId: string) => {
-    console.log(rangeId);
-    // TODO
-    // updateCollapsedBuildingQueueRangeIds(
-    //   villageId,
-    //   collapsedRangeIds.concat([rangeId]),
-    // );
+    updateCollapsedBuildingQueueRangeIds(collapsedRangeIds.concat([rangeId]));
   };
 
   const onRangeExpand = (rangeId: string) => {
-    console.log(rangeId);
-    // TODO
-    // updateCollapsedBuildingQueueRangeIds(
-    //   villageId,
-    //   collapsedRangeIds.filter((id) => id !== rangeId),
-    // );
+    updateCollapsedBuildingQueueRangeIds(collapsedRangeIds.filter((id) => id !== rangeId));
   };
 
   const onClear = async (): Promise<void> => {

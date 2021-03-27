@@ -123,7 +123,6 @@ const updateAccountMutation = graphql`
     }
 `;
 
-//  TODO support @deleteRecord in local schema
 const deleteAccountMutation = graphql`
     mutation SignInFormDeleteAccountMutation($id: ID!) {
         deleteAccount(id: $id) {

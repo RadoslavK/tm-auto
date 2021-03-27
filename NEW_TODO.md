@@ -6,6 +6,9 @@
 * local schema with shared definitions like cooldown fragment etc
 * turn string enums to consts
 * rethink enum usage on server and client have only text enums
+* more granular subscription rathern than subscription something changed -> refetch relevant stuff.
+    * more like this exact thing changed and already retrieve its data
+* remove pointless subscriptions that lead to refetch of the same type as the subscription
 
 # Shortcoming
 * Mutations or Subs that return data. We need to destructure at least 1 prop even without consuming it
