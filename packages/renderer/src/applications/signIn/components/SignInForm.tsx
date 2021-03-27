@@ -183,8 +183,8 @@ export const SignInForm: React.FC = () => {
     if (selectedAccountId) {
       signIn({
         variables: { accountId: selectedAccountId },
-        optimisticResponse: {
-          signIn: 'Pending',
+        optimisticUpdater: (store) => {
+          store.getRoot().setValue('Pending', 'botState');
         },
       });
     }

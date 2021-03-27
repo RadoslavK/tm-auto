@@ -12,6 +12,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
 
+import { ErrorBoundary } from '../ErrorBoundary.js';
 import { EnsureGraphQL } from './EnsureGraphQL.js';
 import { EnsureTitle } from './EnsureTitle.js';
 import { MainRoutes } from './navigation/components/MainRoutes.js';
@@ -37,31 +38,9 @@ const useStyles = makeStyles((theme) => ({
   'toolbar': theme.mixins.toolbar,
 }));
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const classes = useStyles();
 
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <Router>
-        <EnsureSignedIn>
-          <EnsureTitle>
-            <div className={classes.root}>
-              <CssBaseline />
-              <Navigation />
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <SettingsManagement />
-                <MainRoutes />
-              </main>
-            </div>
-          </EnsureTitle>
-        </EnsureSignedIn>
-      </Router>
-    </DndProvider>
-  );
-};
-
-const AppRoot: React.FC = () => {
   const [socketName, setSocketName] = useState<string>();
 
   useEffect(() => {
@@ -74,13 +53,31 @@ const AppRoot: React.FC = () => {
     init();
   }, []);
 
-  return socketName
-    ? (
-      <EnsureGraphQL socketName={socketName}>
-        <App/>
-      </EnsureGraphQL>
-    )
-    : null;
-};
+  if (!socketName) {
+    return null;
+  }
 
-export { AppRoot as App };
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Router>
+        <ErrorBoundary>
+          <EnsureGraphQL socketName={socketName}>
+            <EnsureSignedIn>
+              <EnsureTitle>
+                <div className={classes.root}>
+                  <CssBaseline />
+                  <Navigation />
+                  <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <SettingsManagement />
+                    <MainRoutes />
+                  </main>
+                </div>
+              </EnsureTitle>
+            </EnsureSignedIn>
+          </EnsureGraphQL>
+        </ErrorBoundary>
+      </Router>
+    </DndProvider>
+  );
+};

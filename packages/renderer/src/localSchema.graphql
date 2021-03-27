@@ -1,4 +1,7 @@
 directive @deleteRecord on FIELD
+directive @raw_response_type on QUERY
+directive @raw_response_type on MUTATION
+directive @raw_response_type on SUBSCRIPTION
 
 extend type Query {
     collapsedBuildingQueueRanges(villageId: ID!): [String!]!

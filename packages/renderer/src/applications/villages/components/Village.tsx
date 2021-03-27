@@ -23,10 +23,15 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { commitLocalUpdate } from 'relay-runtime';
+import {
+  commitLocalUpdate,
+  createOperationDescriptor,
+  getRequest,
+} from 'relay-runtime';
 
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
+import type { VillageSubscription } from '../../../_graphql/__generated__/VillageSubscription.graphql.js';
 import { Buildings } from '../../buildings/Buildings.js';
 import { Parties } from '../../party/Parties.js';
 import {
@@ -99,19 +104,26 @@ const villageSubscription = graphql`
   }
 `;
 
+const villageSelectedVillageIdQuery = graphql`
+  query VillageSelectedVillageIdQuery {
+      ... on Query { __typename }
+      selectedVillageId
+  }
+`;
+
 export const Village: React.FC<Props> = ({ villageId }) => {
   const relayEnvironment = useRelayEnvironment();
 
   useEffect(() => {
-    const selectVillage = (id: string) => {
-      commitLocalUpdate(relayEnvironment, store => {
-        store.getRoot().setValue(id, 'selectedVillageId');
-      });
-    };
+    const request = getRequest(villageSelectedVillageIdQuery);
+    const operation = createOperationDescriptor(request, {});
+    relayEnvironment.retain(operation);
+  }, [relayEnvironment]);
 
-    selectVillage(villageId);
-
-    return () => selectVillage('');
+  useEffect(() => {
+    commitLocalUpdate(relayEnvironment, store => {
+      store.getRoot().setValue(villageId, 'selectedVillageId');
+    });
   }, [relayEnvironment, villageId]);
 
   const match = useRouteMatch();
@@ -132,7 +144,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId });
 
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<any> => ({
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSubscription> => ({
     subscription: villageSubscription,
     variables: { villageId },
   }), [villageId]);
@@ -185,8 +197,8 @@ export const Village: React.FC<Props> = ({ villageId }) => {
           </Link>
         ))}
       </div>
-      <Switch>
-        <Suspense fallback={null}>
+      <Suspense fallback={null}>
+        <Switch>
           {navigation.map((n) => (
             <Route
               key={n.path}
@@ -194,9 +206,9 @@ export const Village: React.FC<Props> = ({ villageId }) => {
               path={`${match.path}/${n.path}`}
             />
           ))}
-        </Suspense>
-        <Redirect to={`${match.path}/${navigation[0].path}`} />
-      </Switch>
+          <Redirect to={`${match.path}/${navigation[0].path}`} />
+        </Switch>
+      </Suspense>
       <Dialog onClose={closeSettings} open={showSettings}>
         <Route
           path={`${match.path}/:tab`}
