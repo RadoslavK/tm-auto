@@ -30,7 +30,7 @@ const autoMentorSettingsQuery = graphql`
 const autoMentorSettingsUpdateSettingsMutation = graphql`
   mutation AutoMentorSettingsUpdateSettingsMutation($settings: UpdateAutoMentorSettingsInput!) {
       updateAutoMentorSettings(settings: $settings) {
-          acceptDailyRewards
+          ...AutoMentorSettings
       }
   }
 `;
@@ -38,7 +38,7 @@ const autoMentorSettingsUpdateSettingsMutation = graphql`
 const autoMentorSettingsResetSettingsMutation = graphql`
     mutation AutoMentorSettingsResetSettingsMutation {
         resetAutoMentorSettings {
-            acceptDailyRewards
+            ...AutoMentorSettings
         }
     }
 `;
@@ -70,6 +70,10 @@ export const AutoMentorSettings: React.FC = () => {
             },
           },
         },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAutoMentorSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'autoMentorSettings');
+        },
       });
     }
   }, [state, hasChanges, updateSettings]);
@@ -94,7 +98,13 @@ export const AutoMentorSettings: React.FC = () => {
   };
 
   const onReset = () => {
-    resetSettings({ variables: {} });
+    resetSettings({
+      variables: {},
+      updater: (store) => {
+        const newRecord = store.getRootField('resetAutoMentorSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'autoMentorSettings');
+      },
+    });
   };
 
   return (

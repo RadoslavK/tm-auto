@@ -38,9 +38,9 @@ mutation SignInFormUpdateAccountMutation(
 
 fragment UserAccount on UserAccount {
   id
-  username
   password
   server
+  username
 }
 */
 
@@ -125,13 +125,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "password",
             "storageKey": null
           },
@@ -141,6 +134,13 @@ return {
             "kind": "ScalarField",
             "name": "server",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -148,12 +148,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fa16c88ff67c181a69dce4254673e8fe",
+    "cacheID": "a284f98b5cbf8737de92fabc036cb4d3",
     "id": null,
     "metadata": {},
     "name": "SignInFormUpdateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
+    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
   }
 };
 })();

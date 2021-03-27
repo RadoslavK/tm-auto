@@ -3,18 +3,17 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type BuildingSpotsSubscriptionVariables = {
     villageId: string;
 };
 export type BuildingSpotsSubscriptionResponse = {
     readonly actualBuildingLevelsUpdated: boolean | null;
     readonly buildingsInProgressUpdated: ReadonlyArray<{
-        readonly type: number;
+        readonly " $fragmentRefs": FragmentRefs<"BuildingInProgress">;
     }>;
     readonly queueUpdated: {
-        readonly infrastructureBuildingTime: {
-            readonly days: number;
-        };
+        readonly " $fragmentRefs": FragmentRefs<"BuildingQueue">;
     };
 };
 export type BuildingSpotsSubscription = {
@@ -30,13 +29,84 @@ subscription BuildingSpotsSubscription(
 ) {
   actualBuildingLevelsUpdated(villageId: $villageId)
   buildingsInProgressUpdated(villageId: $villageId) {
-    type
+    ...BuildingInProgress
   }
   queueUpdated(villageId: $villageId) {
-    infrastructureBuildingTime {
-      days
-    }
+    ...BuildingQueue
   }
+}
+
+fragment BuildingInProgress on BuildingInProgress {
+  fieldId
+  finishedAt {
+    ...Timestamp
+  }
+  level
+  type
+}
+
+fragment BuildingQueue on BuildingQueue {
+  buildingRanges {
+    ...QueuedBuildingRange
+  }
+  infrastructureBuildingTime {
+    ...Duration
+  }
+  resourcesBuildingTime {
+    ...Duration
+  }
+  totalBuildingTime {
+    ...Duration
+  }
+  totalCost {
+    ...Resources
+  }
+}
+
+fragment Duration on Duration {
+  days
+  hours
+  minutes
+  seconds
+}
+
+fragment QueuedBuilding on QueuedBuilding {
+  buildingTime {
+    ...Duration
+  }
+  fieldId
+  level
+  queueId
+  queueIndex
+  type
+}
+
+fragment QueuedBuildingRange on QueuedBuildingRange {
+  buildingTime {
+    ...Duration
+  }
+  buildings {
+    ...QueuedBuilding
+  }
+  cost {
+    ...Resources
+  }
+  fieldId
+  id
+  type
+}
+
+fragment Resources on Resources {
+  clay
+  crop
+  freeCrop
+  iron
+  total
+  wood
+}
+
+fragment Timestamp on Timestamp {
+  totalSeconds
 }
 */
 
@@ -55,59 +125,115 @@ v1 = [
     "variableName": "villageId"
   }
 ],
-v2 = [
+v2 = {
+  "alias": null,
+  "args": (v1/*: any*/),
+  "kind": "ScalarField",
+  "name": "actualBuildingLevelsUpdated",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fieldId",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "level",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "type",
+  "storageKey": null
+},
+v6 = [
   {
     "alias": null,
-    "args": (v1/*: any*/),
+    "args": null,
     "kind": "ScalarField",
-    "name": "actualBuildingLevelsUpdated",
+    "name": "days",
     "storageKey": null
   },
   {
     "alias": null,
-    "args": (v1/*: any*/),
-    "concreteType": "BuildingInProgress",
-    "kind": "LinkedField",
-    "name": "buildingsInProgressUpdated",
-    "plural": true,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "type",
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "hours",
     "storageKey": null
   },
   {
     "alias": null,
-    "args": (v1/*: any*/),
-    "concreteType": "BuildingQueue",
-    "kind": "LinkedField",
-    "name": "queueUpdated",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Duration",
-        "kind": "LinkedField",
-        "name": "infrastructureBuildingTime",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "days",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "minutes",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "seconds",
+    "storageKey": null
+  }
+],
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Duration",
+  "kind": "LinkedField",
+  "name": "buildingTime",
+  "plural": false,
+  "selections": (v6/*: any*/),
+  "storageKey": null
+},
+v8 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "clay",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "crop",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "freeCrop",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "iron",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "total",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "wood",
     "storageKey": null
   }
 ];
@@ -117,7 +243,41 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "BuildingSpotsSubscription",
-    "selections": (v2/*: any*/),
+    "selections": [
+      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "BuildingInProgress",
+        "kind": "LinkedField",
+        "name": "buildingsInProgressUpdated",
+        "plural": true,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "BuildingInProgress"
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "BuildingQueue",
+        "kind": "LinkedField",
+        "name": "queueUpdated",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "BuildingQueue"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Subscription",
     "abstractKey": null
   },
@@ -126,17 +286,162 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "BuildingSpotsSubscription",
-    "selections": (v2/*: any*/)
+    "selections": [
+      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "BuildingInProgress",
+        "kind": "LinkedField",
+        "name": "buildingsInProgressUpdated",
+        "plural": true,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Timestamp",
+            "kind": "LinkedField",
+            "name": "finishedAt",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "totalSeconds",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          (v4/*: any*/),
+          (v5/*: any*/)
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "BuildingQueue",
+        "kind": "LinkedField",
+        "name": "queueUpdated",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "QueuedBuildingRange",
+            "kind": "LinkedField",
+            "name": "buildingRanges",
+            "plural": true,
+            "selections": [
+              (v7/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "QueuedBuilding",
+                "kind": "LinkedField",
+                "name": "buildings",
+                "plural": true,
+                "selections": [
+                  (v7/*: any*/),
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "queueId",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "queueIndex",
+                    "storageKey": null
+                  },
+                  (v5/*: any*/)
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Resources",
+                "kind": "LinkedField",
+                "name": "cost",
+                "plural": false,
+                "selections": (v8/*: any*/),
+                "storageKey": null
+              },
+              (v3/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              (v5/*: any*/)
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Duration",
+            "kind": "LinkedField",
+            "name": "infrastructureBuildingTime",
+            "plural": false,
+            "selections": (v6/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Duration",
+            "kind": "LinkedField",
+            "name": "resourcesBuildingTime",
+            "plural": false,
+            "selections": (v6/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Duration",
+            "kind": "LinkedField",
+            "name": "totalBuildingTime",
+            "plural": false,
+            "selections": (v6/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "totalCost",
+            "plural": false,
+            "selections": (v8/*: any*/),
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "9e1d4e07bfe6872224a572e00d7570aa",
+    "cacheID": "c07e27f50a12a5b32c22e34adbde0a85",
     "id": null,
     "metadata": {},
     "name": "BuildingSpotsSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  actualBuildingLevelsUpdated(villageId: $villageId)\n  buildingsInProgressUpdated(villageId: $villageId) {\n    type\n  }\n  queueUpdated(villageId: $villageId) {\n    infrastructureBuildingTime {\n      days\n    }\n  }\n}\n"
+    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  actualBuildingLevelsUpdated(villageId: $villageId)\n  buildingsInProgressUpdated(villageId: $villageId) {\n    ...BuildingInProgress\n  }\n  queueUpdated(villageId: $villageId) {\n    ...BuildingQueue\n  }\n}\n\nfragment BuildingInProgress on BuildingInProgress {\n  fieldId\n  finishedAt {\n    ...Timestamp\n  }\n  level\n  type\n}\n\nfragment BuildingQueue on BuildingQueue {\n  buildingRanges {\n    ...QueuedBuildingRange\n  }\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment QueuedBuilding on QueuedBuilding {\n  buildingTime {\n    ...Duration\n  }\n  fieldId\n  level\n  queueId\n  queueIndex\n  type\n}\n\nfragment QueuedBuildingRange on QueuedBuildingRange {\n  buildingTime {\n    ...Duration\n  }\n  buildings {\n    ...QueuedBuilding\n  }\n  cost {\n    ...Resources\n  }\n  fieldId\n  id\n  type\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'f9b2dddfc065407f4df7350e05c977a5';
+(node as any).hash = '1832700164c1bcdef9cd954b2aa7b1c8';
 export default node;

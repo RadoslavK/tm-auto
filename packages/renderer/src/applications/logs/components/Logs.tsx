@@ -24,10 +24,7 @@ const logsQuery = graphql`
 const logsSubscription = graphql`
   subscription LogsSubscription {
       logEntryAdded {
-          timestamp {
-              totalSeconds
-          }
-          ...LogEntry_logEntry
+        ...LogEntry
       }
   }
 `;
@@ -38,17 +35,13 @@ export const Logs: React.FC = () => {
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<LogsSubscription> => ({
     subscription: logsSubscription,
     variables: {},
-    updater: (store, data) => {
+    updater: (store) => {
       const root = store.getRoot();
+      const newRecord = store.getRootField('logEntryAdded');
       const oldLogs = root.getLinkedRecords('logEntries');
 
-      if (!oldLogs) {
-        return;
-      }
-
-      const newRecord = store.create(data.logEntryAdded.timestamp.totalSeconds.toString(), 'LogEntry');
-      const newLogs = oldLogs.concat([newRecord]);
-      root.setLinkedRecords(newLogs, 'logEntries');
+      oldLogs?.push(newRecord);
+      root.setLinkedRecords(oldLogs, 'logEntries');
     },
   }), []);
 

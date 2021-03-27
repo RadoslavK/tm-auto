@@ -11,13 +11,13 @@ export type AutoPartySettingsQueryResponse = {
         readonly allowLarge: boolean;
         readonly allowSmall: boolean;
         readonly coolDown: {
-            readonly min: {
+            readonly max: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
                 readonly seconds: number;
             };
-            readonly max: {
+            readonly min: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
@@ -44,13 +44,13 @@ query AutoPartySettingsQuery(
     allowLarge
     allowSmall
     coolDown {
-      min {
+      max {
         days
         hours
         minutes
         seconds
       }
-      max {
+      min {
         days
         hours
         minutes
@@ -144,7 +144,7 @@ v2 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "min",
+            "name": "max",
             "plural": false,
             "selections": (v1/*: any*/),
             "storageKey": null
@@ -154,7 +154,7 @@ v2 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "max",
+            "name": "min",
             "plural": false,
             "selections": (v1/*: any*/),
             "storageKey": null
@@ -205,12 +205,12 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "27cbde8a1f21330b7b3ea67004d40b43",
+    "cacheID": "59b35c061ea61d3f6c23f83796d6c6f6",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsQuery",
     "operationKind": "query",
-    "text": "query AutoPartySettingsQuery(\n  $villageId: ID!\n) {\n  autoPartySettings(villageId: $villageId) {\n    allowLarge\n    allowSmall\n    coolDown {\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    minCulturePointsLarge\n    minCulturePointsSmall\n    useHeroResources\n  }\n}\n"
+    "text": "query AutoPartySettingsQuery(\n  $villageId: ID!\n) {\n  autoPartySettings(villageId: $villageId) {\n    allowLarge\n    allowSmall\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    minCulturePointsLarge\n    minCulturePointsSmall\n    useHeroResources\n  }\n}\n"
   }
 };
 })();

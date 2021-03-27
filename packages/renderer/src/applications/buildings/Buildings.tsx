@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 
 import type { BuildingsSelectedVillageIdQuery } from '../../_graphql/__generated__/BuildingsSelectedVillageIdQuery.graphql.js';
@@ -37,21 +37,27 @@ export const Buildings: React.FC = () => {
 
   return (
     <div className={classes.buildings}>
-      <BuildingSpots
-        className={classes.buildingSpots}
-        villageId={villageId}
-      />
+      <Suspense fallback={null}>
+        <BuildingSpots
+          className={classes.buildingSpots}
+          villageId={villageId}
+        />
+      </Suspense>
       <div className={classes.ongoingAndNextExecution}>
         <NextVillageTaskExecution
           task="AutoBuild"
           villageId={villageId}
         />
-        <BuildingsInProgress villageId={villageId} />
+        <Suspense fallback={null}>
+          <BuildingsInProgress villageId={villageId} />
+        </Suspense>
       </div>
-      <BuildingQueue
-        className={classes.queuedBuildings}
-        villageId={villageId}
-      />
+      <Suspense fallback={null}>
+        <BuildingQueue
+          className={classes.queuedBuildings}
+          villageId={villageId}
+        />
+      </Suspense>
     </div>
   );
 };

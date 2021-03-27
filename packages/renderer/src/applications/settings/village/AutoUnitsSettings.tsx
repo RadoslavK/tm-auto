@@ -37,7 +37,7 @@ const autoUnitsSettingsQuery = graphql`
 const autoUnitsSettingsUpdateSettingsMutation = graphql`
   mutation AutoUnitsSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoUnitsSettingsInput!) {
       updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {
-          allow
+          ...AutoUnitsSettings
       }
   }
 `;
@@ -45,7 +45,7 @@ const autoUnitsSettingsUpdateSettingsMutation = graphql`
 const autoUnitsSettingsResetSettingsMutation = graphql`
     mutation AutoUnitsSettingsResetSettingsMutation($villageId: ID!) {
         resetAutoUnitsSettings(villageId: $villageId) {
-            allow
+            ...AutoUnitsSettings
         }
     }
 `;
@@ -72,7 +72,15 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: state } });
+      updateSettings({
+        variables: { villageId, settings: state },
+        updater: (store) => {
+          const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
+          const newRecord = store.getRootField('updateAutoUnitsSettings');
+
+          record?.copyFieldsFrom(newRecord);
+        },
+      });
     }
   }, [state, hasChanges, updateSettings, villageId]);
 
@@ -88,7 +96,15 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   }, []);
 
   const onReset = () => {
-    resetSettings({ variables: { villageId } });
+    resetSettings({
+      variables: { villageId },
+      updater: (store) => {
+        const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
+        const newRecord = store.getRootField('resetAutoUnitsSettings');
+
+        record?.copyFieldsFrom(newRecord);
+      },
+    });
   };
 
   const { allow, coolDown, minCrop, useHeroResources } = state;

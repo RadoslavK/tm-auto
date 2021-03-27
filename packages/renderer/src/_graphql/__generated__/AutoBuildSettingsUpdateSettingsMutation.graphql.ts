@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type DualQueuePreference = "Infrastructure" | "Resources" | "%future added value";
 export type UpdateAutoBuildSettingsInput = {
     allow: boolean;
@@ -42,7 +43,7 @@ export type AutoBuildSettingsUpdateSettingsMutationVariables = {
 };
 export type AutoBuildSettingsUpdateSettingsMutationResponse = {
     readonly updateAutoBuildSettings: {
-        readonly allow: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"AutoBuildSettings">;
     };
 };
 export type AutoBuildSettingsUpdateSettingsMutation = {
@@ -58,7 +59,54 @@ mutation AutoBuildSettingsUpdateSettingsMutation(
   $settings: UpdateAutoBuildSettingsInput!
 ) {
   updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
+    ...AutoBuildSettings
+  }
+}
+
+fragment AutoBuildSettings on AutoBuildSettings {
+  allow
+  autoCropFields
+  autoStorage {
+    ...AutoStorageSettings
+  }
+  coolDown {
+    ...CoolDown
+  }
+  dualQueue {
     allow
+    preference
+  }
+  minCrop
+  useHeroResources
+}
+
+fragment AutoStorageOptionSettings on AutoStorageOptionSettings {
+  allow
+  overflowLevel
+}
+
+fragment AutoStorageSettings on AutoStorageSettings {
+  allowFreeSpots
+  granary {
+    ...AutoStorageOptionSettings
+  }
+  warehouse {
+    ...AutoStorageOptionSettings
+  }
+}
+
+fragment CoolDown on CoolDown {
+  max {
+    days
+    hours
+    minutes
+    seconds
+  }
+  min {
+    days
+    hours
+    minutes
+    seconds
   }
 }
 */
@@ -76,32 +124,60 @@ v1 = {
 },
 v2 = [
   {
+    "kind": "Variable",
+    "name": "settings",
+    "variableName": "settings"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
+  }
+],
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "allow",
+  "storageKey": null
+},
+v4 = [
+  (v3/*: any*/),
+  {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "settings",
-        "variableName": "settings"
-      },
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "AutoBuildSettings",
-    "kind": "LinkedField",
-    "name": "updateAutoBuildSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "allow",
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "overflowLevel",
+    "storageKey": null
+  }
+],
+v5 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "days",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "hours",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "minutes",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "seconds",
     "storageKey": null
   }
 ];
@@ -114,7 +190,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AutoBuildSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoBuildSettings",
+        "kind": "LinkedField",
+        "name": "updateAutoBuildSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "AutoBuildSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -126,17 +219,139 @@ return {
     ],
     "kind": "Operation",
     "name": "AutoBuildSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoBuildSettings",
+        "kind": "LinkedField",
+        "name": "updateAutoBuildSettings",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "autoCropFields",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutoStorageSettings",
+            "kind": "LinkedField",
+            "name": "autoStorage",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "allowFreeSpots",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "AutoStorageOptionSettings",
+                "kind": "LinkedField",
+                "name": "granary",
+                "plural": false,
+                "selections": (v4/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "AutoStorageOptionSettings",
+                "kind": "LinkedField",
+                "name": "warehouse",
+                "plural": false,
+                "selections": (v4/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "CoolDown",
+            "kind": "LinkedField",
+            "name": "coolDown",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "max",
+                "plural": false,
+                "selections": (v5/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "min",
+                "plural": false,
+                "selections": (v5/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "DualQueueSettings",
+            "kind": "LinkedField",
+            "name": "dualQueue",
+            "plural": false,
+            "selections": [
+              (v3/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "preference",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCrop",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "3541f25fb5c9e046015fc8a0b59f2f2c",
+    "cacheID": "c5ece524d6b9f8233aa7fa1b187ae187",
     "id": null,
     "metadata": {},
     "name": "AutoBuildSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoBuildSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoBuildSettingsInput!\n) {\n  updateAutoBuildSettings(villageId: $villageId, settings: $settings) {\n    allow\n  }\n}\n"
+    "text": "mutation AutoBuildSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoBuildSettingsInput!\n) {\n  updateAutoBuildSettings(villageId: $villageId, settings: $settings) {\n    ...AutoBuildSettings\n  }\n}\n\nfragment AutoBuildSettings on AutoBuildSettings {\n  allow\n  autoCropFields\n  autoStorage {\n    ...AutoStorageSettings\n  }\n  coolDown {\n    ...CoolDown\n  }\n  dualQueue {\n    allow\n    preference\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment AutoStorageOptionSettings on AutoStorageOptionSettings {\n  allow\n  overflowLevel\n}\n\nfragment AutoStorageSettings on AutoStorageSettings {\n  allowFreeSpots\n  granary {\n    ...AutoStorageOptionSettings\n  }\n  warehouse {\n    ...AutoStorageOptionSettings\n  }\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f877caee4fb8054bf9d6fcbe292a4e6c';
+(node as any).hash = 'e4a9b807adc466fc32d9e7ed6ee8739a';
 export default node;

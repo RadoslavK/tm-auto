@@ -37,9 +37,9 @@ mutation SignInFormCreateAccountMutation(
 
 fragment UserAccount on UserAccount {
   id
-  username
   password
   server
+  username
 }
 */
 
@@ -112,13 +112,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "password",
             "storageKey": null
           },
@@ -128,6 +121,13 @@ return {
             "kind": "ScalarField",
             "name": "server",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -135,12 +135,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3de1da1f554a24761111cc0c707a8421",
+    "cacheID": "bd301fcbdeb1f9a2d8fd205ba79df5ec",
     "id": null,
     "metadata": {},
     "name": "SignInFormCreateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n    ...UserAccount\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
+    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n    ...UserAccount\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
   }
 };
 })();

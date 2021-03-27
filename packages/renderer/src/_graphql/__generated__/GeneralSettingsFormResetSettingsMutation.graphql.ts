@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type GeneralSettingsFormResetSettingsMutationVariables = {};
 export type GeneralSettingsFormResetSettingsMutationResponse = {
     readonly resetGeneralSettings: {
-        readonly chromePath: string;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralSettings">;
     };
 };
 export type GeneralSettingsFormResetSettingsMutation = {
@@ -19,39 +20,40 @@ export type GeneralSettingsFormResetSettingsMutation = {
 /*
 mutation GeneralSettingsFormResetSettingsMutation {
   resetGeneralSettings {
-    chromePath
+    ...GeneralSettings
   }
+}
+
+fragment GeneralSettings on GeneralSettings {
+  chromePath
+  headlessChrome
 }
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "GeneralSettings",
-    "kind": "LinkedField",
-    "name": "resetGeneralSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "chromePath",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "GeneralSettingsFormResetSettingsMutation",
-    "selections": (v0/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "GeneralSettings",
+        "kind": "LinkedField",
+        "name": "resetGeneralSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "GeneralSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -60,17 +62,42 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "GeneralSettingsFormResetSettingsMutation",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "GeneralSettings",
+        "kind": "LinkedField",
+        "name": "resetGeneralSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "chromePath",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "headlessChrome",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "974dac19330d88be34852078ffd6e2f5",
+    "cacheID": "9612092bbb3eb30682df7b4ab3396293",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    chromePath\n  }\n}\n"
+    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    ...GeneralSettings\n  }\n}\n\nfragment GeneralSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
   }
 };
-})();
-(node as any).hash = '55b0b8c9dd97f0e5785c766923c4a842';
+(node as any).hash = '3ffcdf0e8e1696ca39a7d1c38a12534d';
 export default node;

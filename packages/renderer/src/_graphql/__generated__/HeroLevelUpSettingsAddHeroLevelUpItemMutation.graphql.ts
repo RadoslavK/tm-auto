@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type HeroLevelUpItemInput = {
     defBonus: number;
     name: string;
@@ -15,7 +16,7 @@ export type HeroLevelUpSettingsAddHeroLevelUpItemMutationVariables = {
 };
 export type HeroLevelUpSettingsAddHeroLevelUpItemMutationResponse = {
     readonly addHeroLevelUpItem: {
-        readonly name: string;
+        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItem">;
     };
 };
 export type HeroLevelUpSettingsAddHeroLevelUpItemMutation = {
@@ -30,8 +31,16 @@ mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(
   $item: HeroLevelUpItemInput!
 ) {
   addHeroLevelUpItem(item: $item) {
-    name
+    ...HeroLevelUpItem
   }
+}
+
+fragment HeroLevelUpItem on HeroLevelUpItem {
+  defBonus
+  name
+  offBonus
+  offensiveStrength
+  resources
 }
 */
 
@@ -45,28 +54,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "item",
-        "variableName": "item"
-      }
-    ],
-    "concreteType": "HeroLevelUpItem",
-    "kind": "LinkedField",
-    "name": "addHeroLevelUpItem",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "name",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "item",
+    "variableName": "item"
   }
 ];
 return {
@@ -75,7 +65,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "HeroLevelUpSettingsAddHeroLevelUpItemMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "HeroLevelUpItem",
+        "kind": "LinkedField",
+        "name": "addHeroLevelUpItem",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "HeroLevelUpItem"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -84,17 +91,64 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "HeroLevelUpSettingsAddHeroLevelUpItemMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "HeroLevelUpItem",
+        "kind": "LinkedField",
+        "name": "addHeroLevelUpItem",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "defBonus",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "offBonus",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "offensiveStrength",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "resources",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "794555ac1d90a682de9f226bb7b5125a",
+    "cacheID": "6130b84a0f7182be9a062203c3c4d901",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsAddHeroLevelUpItemMutation",
     "operationKind": "mutation",
-    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    name\n  }\n}\n"
+    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    ...HeroLevelUpItem\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();
-(node as any).hash = '9cbe934dca712222c19956fb0f9d32c4';
+(node as any).hash = 'b124d2608c3b89fa410f2054329a0929';
 export default node;

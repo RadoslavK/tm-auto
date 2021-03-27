@@ -67,26 +67,7 @@ const buildingQueueQuery = graphql`
 const buildingQueueSubscription = graphql`
   subscription BuildingQueueSubscription($villageId: ID!) {
       queueUpdated(villageId: $villageId) {
-          totalCost {
-              ...Cost_resources
-          }
-          totalBuildingTime {
-              ...Cost_duration
-          }
-          infrastructureBuildingTime {
-              ...Cost_duration
-          }
-          resourcesBuildingTime {
-              ...Cost_duration
-          }
-          buildingRanges {
-              id
-              buildings {
-                  queueId
-                  ...QueuedBuilding_queuedBuilding
-              }
-              ...QueuedBuildingRange_queuedBuildingRange
-          }
+         ...BuildingQueue
       }
   }
 `;
@@ -119,6 +100,10 @@ export const BuildingQueue: React.FC<Props> = ({ className, villageId }) => {
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueSubscription> => ({
     subscription: buildingQueueSubscription,
     variables: { villageId },
+    updater: (store) => {
+      const newRecord = store.getRootField('queueUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'buildingQueue', { villageId });
+    },
   }), [villageId]);
 
   useSubscription(subscriptionConfig);

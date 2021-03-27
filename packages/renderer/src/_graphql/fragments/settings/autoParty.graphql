@@ -1,0 +1,10 @@
+fragment AutoPartySettings on AutoPartySettings {
+    allowLarge
+    allowSmall
+    coolDown {
+        ...CoolDown
+    }
+    minCulturePointsLarge
+    minCulturePointsSmall
+    useHeroResources
+}

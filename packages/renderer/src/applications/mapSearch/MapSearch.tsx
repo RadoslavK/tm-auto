@@ -12,6 +12,7 @@ import {
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { MapSearchMapScanProgressQuery } from '../../_graphql/__generated__/MapSearchMapScanProgressQuery.graphql.js';
 import type { MapSearchMapSearchStateQuery } from '../../_graphql/__generated__/MapSearchMapSearchStateQuery.graphql.js';
@@ -19,6 +20,8 @@ import type {
   MapSearchOnMapSearchFinishedSubscription,
   MapSearchOnMapSearchFinishedSubscriptionResponse,
 } from '../../_graphql/__generated__/MapSearchOnMapSearchFinishedSubscription.graphql.js';
+import type { MapSearchProgressSubscription } from '../../_graphql/__generated__/MapSearchProgressSubscription.graphql.js';
+import type { MapSearchStateSubscription } from '../../_graphql/__generated__/MapSearchStateSubscription.graphql.js';
 import type { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql.js';
 import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
 import { SortOrder } from '../../_shared/SortOrder.js';
@@ -95,9 +98,21 @@ const mapScanProgressQuery = graphql`
   }
 `;
 
+const mapScanProgressSubscription = graphql`
+  subscription MapSearchProgressSubscription {
+      mapScanProgressUpdated
+  }
+`;
+
 const mapSearchStateQuery = graphql`
   query MapSearchMapSearchStateQuery {
       mapSearchState
+  }
+`;
+
+const mapSearchStateSubscription = graphql`
+  subscription MapSearchStateSubscription {
+      mapSearchStateChanged
   }
 `;
 
@@ -123,7 +138,27 @@ export const MapSearch: React.FC = () => {
     [villageTiles, sortBy, order],
   );
 
-  useSubscription<MapSearchOnMapSearchFinishedSubscription>({
+  const mapSearchStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<MapSearchStateSubscription> => ({
+    subscription: mapSearchStateSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.mapSearchStateChanged, 'mapSearchState');
+    },
+  }), []);
+
+  useSubscription(mapSearchStateSubscriptionConfig);
+
+  const mapScanProgressSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<MapSearchProgressSubscription> => ({
+    subscription: mapScanProgressSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.mapScanProgressUpdated, 'mapScanProgress');
+    },
+  }), []);
+
+  useSubscription(mapScanProgressSubscriptionConfig);
+
+  const mapSearchFinishedSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<MapSearchOnMapSearchFinishedSubscription> => ({
     subscription: onMapSearchFinishedSubscription,
     variables: {},
     onNext: (data) => {
@@ -131,7 +166,9 @@ export const MapSearch: React.FC = () => {
         setVillageTiles(data.mapSearchFinished);
       }
     },
-  });
+  }), []);
+
+  useSubscription<MapSearchOnMapSearchFinishedSubscription>(mapSearchFinishedSubscriptionConfig);
 
   const onSearchMap = () =>
     searchMap({

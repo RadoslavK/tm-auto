@@ -27,7 +27,7 @@ export const VillageTasksActivity: React.FC = () => {
         task="AutoUnits"
         villageId={villageId}
       />
-      <h2>AutoParty</h2>src/applications/buildings/inProgress/BuildingInProgress.tsx:7:25
+      <h2>AutoParty</h2>
       <NextVillageTaskExecution
         task="AutoParty"
         villageId={villageId}

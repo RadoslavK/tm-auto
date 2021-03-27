@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type UpdateAutoPartySettingsInput = {
     allowLarge: boolean;
     allowSmall: boolean;
@@ -27,7 +28,7 @@ export type AutoPartySettingsUpdateSettingsMutationVariables = {
 };
 export type AutoPartySettingsUpdateSettingsMutationResponse = {
     readonly updateAutoPartySettings: {
-        readonly allowLarge: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"AutoPartySettings">;
     };
 };
 export type AutoPartySettingsUpdateSettingsMutation = {
@@ -43,7 +44,33 @@ mutation AutoPartySettingsUpdateSettingsMutation(
   $settings: UpdateAutoPartySettingsInput!
 ) {
   updateAutoPartySettings(villageId: $villageId, settings: $settings) {
-    allowLarge
+    ...AutoPartySettings
+  }
+}
+
+fragment AutoPartySettings on AutoPartySettings {
+  allowLarge
+  allowSmall
+  coolDown {
+    ...CoolDown
+  }
+  minCulturePointsLarge
+  minCulturePointsSmall
+  useHeroResources
+}
+
+fragment CoolDown on CoolDown {
+  max {
+    days
+    hours
+    minutes
+    seconds
+  }
+  min {
+    days
+    hours
+    minutes
+    seconds
   }
 }
 */
@@ -61,32 +88,43 @@ v1 = {
 },
 v2 = [
   {
+    "kind": "Variable",
+    "name": "settings",
+    "variableName": "settings"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
+  }
+],
+v3 = [
+  {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "settings",
-        "variableName": "settings"
-      },
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "AutoPartySettings",
-    "kind": "LinkedField",
-    "name": "updateAutoPartySettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "allowLarge",
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "days",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "hours",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "minutes",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "seconds",
     "storageKey": null
   }
 ];
@@ -99,7 +137,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AutoPartySettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoPartySettings",
+        "kind": "LinkedField",
+        "name": "updateAutoPartySettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "AutoPartySettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -111,17 +166,95 @@ return {
     ],
     "kind": "Operation",
     "name": "AutoPartySettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoPartySettings",
+        "kind": "LinkedField",
+        "name": "updateAutoPartySettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowLarge",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowSmall",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "CoolDown",
+            "kind": "LinkedField",
+            "name": "coolDown",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "max",
+                "plural": false,
+                "selections": (v3/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "min",
+                "plural": false,
+                "selections": (v3/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCulturePointsLarge",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCulturePointsSmall",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "b3f8847e01e6fd3fe08c50db8828760b",
+    "cacheID": "85f4f17e25e01e6a0c4b6db948398aa4",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    allowLarge\n  }\n}\n"
+    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    ...AutoPartySettings\n  }\n}\n\nfragment AutoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    ...CoolDown\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '3a9ab2726e2c2d8e830d52d93c7beb92';
+(node as any).hash = '86a9945083de7dc3be9d28f6077d1acc';
 export default node;

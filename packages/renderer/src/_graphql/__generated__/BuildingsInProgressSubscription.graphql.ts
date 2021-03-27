@@ -9,9 +9,7 @@ export type BuildingsInProgressSubscriptionVariables = {
 };
 export type BuildingsInProgressSubscriptionResponse = {
     readonly buildingsInProgressUpdated: ReadonlyArray<{
-        readonly fieldId: number;
-        readonly level: number;
-        readonly " $fragmentRefs": FragmentRefs<"BuildingInProgress_buildingInProgress">;
+        readonly " $fragmentRefs": FragmentRefs<"BuildingInProgress">;
     }>;
 };
 export type BuildingsInProgressSubscription = {
@@ -26,19 +24,21 @@ subscription BuildingsInProgressSubscription(
   $villageId: ID!
 ) {
   buildingsInProgressUpdated(villageId: $villageId) {
-    fieldId
-    level
-    ...BuildingInProgress_buildingInProgress
+    ...BuildingInProgress
   }
 }
 
-fragment BuildingInProgress_buildingInProgress on BuildingInProgress {
+fragment BuildingInProgress on BuildingInProgress {
   fieldId
   finishedAt {
-    totalSeconds
+    ...Timestamp
   }
   level
   type
+}
+
+fragment Timestamp on Timestamp {
+  totalSeconds
 }
 */
 
@@ -56,21 +56,7 @@ v1 = [
     "name": "villageId",
     "variableName": "villageId"
   }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "fieldId",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "level",
-  "storageKey": null
-};
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -86,12 +72,10 @@ return {
         "name": "buildingsInProgressUpdated",
         "plural": true,
         "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "BuildingInProgress_buildingInProgress"
+            "name": "BuildingInProgress"
           }
         ],
         "storageKey": null
@@ -114,8 +98,13 @@ return {
         "name": "buildingsInProgressUpdated",
         "plural": true,
         "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "fieldId",
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -138,6 +127,13 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "level",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "type",
             "storageKey": null
           }
@@ -147,14 +143,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b0a3a98269c77fe0dd2be5d48fe0a63a",
+    "cacheID": "76595aa10665c7c9daa6c53cd3fb2231",
     "id": null,
     "metadata": {},
     "name": "BuildingsInProgressSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingsInProgressSubscription(\n  $villageId: ID!\n) {\n  buildingsInProgressUpdated(villageId: $villageId) {\n    fieldId\n    level\n    ...BuildingInProgress_buildingInProgress\n  }\n}\n\nfragment BuildingInProgress_buildingInProgress on BuildingInProgress {\n  fieldId\n  finishedAt {\n    totalSeconds\n  }\n  level\n  type\n}\n"
+    "text": "subscription BuildingsInProgressSubscription(\n  $villageId: ID!\n) {\n  buildingsInProgressUpdated(villageId: $villageId) {\n    ...BuildingInProgress\n  }\n}\n\nfragment BuildingInProgress on BuildingInProgress {\n  fieldId\n  finishedAt {\n    ...Timestamp\n  }\n  level\n  type\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '60aceee0fad5df6970c25834a807c685';
+(node as any).hash = '24e9030a9f53cd779d61d92309bea1fc';
 export default node;

@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type UpdateAutoUnitsSettingsInput = {
     allow: boolean;
     coolDown: CoolDownInput;
@@ -25,7 +26,7 @@ export type AutoUnitsSettingsUpdateSettingsMutationVariables = {
 };
 export type AutoUnitsSettingsUpdateSettingsMutationResponse = {
     readonly updateAutoUnitsSettings: {
-        readonly allow: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"AutoUnitsSettings">;
     };
 };
 export type AutoUnitsSettingsUpdateSettingsMutation = {
@@ -41,8 +42,68 @@ mutation AutoUnitsSettingsUpdateSettingsMutation(
   $settings: UpdateAutoUnitsSettingsInput!
 ) {
   updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {
-    allow
+    ...AutoUnitsSettings
   }
+}
+
+fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
+  allow
+  maxBuildTime {
+    ...Duration
+  }
+  units {
+    ...AutoUnitsUnitSettings
+  }
+}
+
+fragment AutoUnitsSettings on AutoUnitsSettings {
+  allow
+  barracks {
+    ...AutoUnitsBuildingSettings
+  }
+  coolDown {
+    ...CoolDown
+  }
+  minCrop
+  residence {
+    ...AutoUnitsBuildingSettings
+  }
+  stable {
+    ...AutoUnitsBuildingSettings
+  }
+  useHeroResources
+  workshop {
+    ...AutoUnitsBuildingSettings
+  }
+}
+
+fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
+  autoBuild
+  index
+  targetAmount
+  trainForever
+}
+
+fragment CoolDown on CoolDown {
+  max {
+    days
+    hours
+    minutes
+    seconds
+  }
+  min {
+    days
+    hours
+    minutes
+    seconds
+  }
+}
+
+fragment Duration on Duration {
+  days
+  hours
+  minutes
+  seconds
 }
 */
 
@@ -59,29 +120,99 @@ v1 = {
 },
 v2 = [
   {
+    "kind": "Variable",
+    "name": "settings",
+    "variableName": "settings"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
+  }
+],
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "allow",
+  "storageKey": null
+},
+v4 = [
+  {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "settings",
-        "variableName": "settings"
-      },
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "AutoUnitsSettings",
+    "args": null,
+    "kind": "ScalarField",
+    "name": "days",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "hours",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "minutes",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "seconds",
+    "storageKey": null
+  }
+],
+v5 = [
+  (v3/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "Duration",
     "kind": "LinkedField",
-    "name": "updateAutoUnitsSettings",
+    "name": "maxBuildTime",
     "plural": false,
+    "selections": (v4/*: any*/),
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "AutoUnitsUnitSettings",
+    "kind": "LinkedField",
+    "name": "units",
+    "plural": true,
     "selections": [
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "allow",
+        "name": "autoBuild",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "index",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "targetAmount",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "trainForever",
         "storageKey": null
       }
     ],
@@ -97,7 +228,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AutoUnitsSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoUnitsSettings",
+        "kind": "LinkedField",
+        "name": "updateAutoUnitsSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "AutoUnitsSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -109,17 +257,115 @@ return {
     ],
     "kind": "Operation",
     "name": "AutoUnitsSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoUnitsSettings",
+        "kind": "LinkedField",
+        "name": "updateAutoUnitsSettings",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutoUnitsBuildingSettings",
+            "kind": "LinkedField",
+            "name": "barracks",
+            "plural": false,
+            "selections": (v5/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "CoolDown",
+            "kind": "LinkedField",
+            "name": "coolDown",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "max",
+                "plural": false,
+                "selections": (v4/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "min",
+                "plural": false,
+                "selections": (v4/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCrop",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutoUnitsBuildingSettings",
+            "kind": "LinkedField",
+            "name": "residence",
+            "plural": false,
+            "selections": (v5/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutoUnitsBuildingSettings",
+            "kind": "LinkedField",
+            "name": "stable",
+            "plural": false,
+            "selections": (v5/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutoUnitsBuildingSettings",
+            "kind": "LinkedField",
+            "name": "workshop",
+            "plural": false,
+            "selections": (v5/*: any*/),
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "15ece2fd7b484fa6fc537741b28cf636",
+    "cacheID": "a8696070339f9d13617699b83a035637",
     "id": null,
     "metadata": {},
     "name": "AutoUnitsSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoUnitsSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoUnitsSettingsInput!\n) {\n  updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {\n    allow\n  }\n}\n"
+    "text": "mutation AutoUnitsSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoUnitsSettingsInput!\n) {\n  updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {\n    ...AutoUnitsSettings\n  }\n}\n\nfragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    ...Duration\n  }\n  units {\n    ...AutoUnitsUnitSettings\n  }\n}\n\nfragment AutoUnitsSettings on AutoUnitsSettings {\n  allow\n  barracks {\n    ...AutoUnitsBuildingSettings\n  }\n  coolDown {\n    ...CoolDown\n  }\n  minCrop\n  residence {\n    ...AutoUnitsBuildingSettings\n  }\n  stable {\n    ...AutoUnitsBuildingSettings\n  }\n  useHeroResources\n  workshop {\n    ...AutoUnitsBuildingSettings\n  }\n}\n\nfragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {\n  autoBuild\n  index\n  targetAmount\n  trainForever\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'ec10251d1c9a6e4f78d7fe97c61ba7b6';
+(node as any).hash = '468b8813bad81a73f81df3664ca9cb13';
 export default node;

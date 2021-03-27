@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type UpdateGeneralVillageSettingsInput = {
     allowTasks: boolean;
 };
@@ -12,7 +13,7 @@ export type GeneralVillageSettingsUpdateSettingsMutationVariables = {
 };
 export type GeneralVillageSettingsUpdateSettingsMutationResponse = {
     readonly updateGeneralVillageSettings: {
-        readonly allowTasks: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings">;
     };
 };
 export type GeneralVillageSettingsUpdateSettingsMutation = {
@@ -28,8 +29,12 @@ mutation GeneralVillageSettingsUpdateSettingsMutation(
   $settings: UpdateGeneralVillageSettingsInput!
 ) {
   updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
-    allowTasks
+    ...GeneralVillageSettings
   }
+}
+
+fragment GeneralVillageSettings on GeneralVillageSettings {
+  allowTasks
 }
 */
 
@@ -46,33 +51,14 @@ v1 = {
 },
 v2 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "settings",
-        "variableName": "settings"
-      },
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "GeneralVillageSettings",
-    "kind": "LinkedField",
-    "name": "updateGeneralVillageSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "allowTasks",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "settings",
+    "variableName": "settings"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
   }
 ];
 return {
@@ -84,7 +70,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "GeneralVillageSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "GeneralVillageSettings",
+        "kind": "LinkedField",
+        "name": "updateGeneralVillageSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "GeneralVillageSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -96,17 +99,36 @@ return {
     ],
     "kind": "Operation",
     "name": "GeneralVillageSettingsUpdateSettingsMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "GeneralVillageSettings",
+        "kind": "LinkedField",
+        "name": "updateGeneralVillageSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowTasks",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "806eef132b79e75930dd652af0b23499",
+    "cacheID": "0a853e71285056ec1cd1b9a35c753c6f",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    allowTasks\n  }\n}\n"
+    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    ...GeneralVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
   }
 };
 })();
-(node as any).hash = 'd2f02187c9c878f5a884b6903c4cb741';
+(node as any).hash = 'd5458ce09729948aad6dbd79e21231df';
 export default node;

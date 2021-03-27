@@ -3,12 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type GeneralVillageSettingsResetSettingsMutationVariables = {
     villageId: string;
 };
 export type GeneralVillageSettingsResetSettingsMutationResponse = {
     readonly resetGeneralVillageSettings: {
-        readonly allowTasks: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings">;
     };
 };
 export type GeneralVillageSettingsResetSettingsMutation = {
@@ -23,8 +24,12 @@ mutation GeneralVillageSettingsResetSettingsMutation(
   $villageId: ID!
 ) {
   resetGeneralVillageSettings(villageId: $villageId) {
-    allowTasks
+    ...GeneralVillageSettings
   }
+}
+
+fragment GeneralVillageSettings on GeneralVillageSettings {
+  allowTasks
 }
 */
 
@@ -38,28 +43,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "GeneralVillageSettings",
-    "kind": "LinkedField",
-    "name": "resetGeneralVillageSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "allowTasks",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
   }
 ];
 return {
@@ -68,7 +54,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "GeneralVillageSettingsResetSettingsMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "GeneralVillageSettings",
+        "kind": "LinkedField",
+        "name": "resetGeneralVillageSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "GeneralVillageSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -77,17 +80,36 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "GeneralVillageSettingsResetSettingsMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "GeneralVillageSettings",
+        "kind": "LinkedField",
+        "name": "resetGeneralVillageSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowTasks",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "694e79aca521a320dbd7e4d9c254d674",
+    "cacheID": "3cbc34341004f8acb6a907437e512c26",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    allowTasks\n  }\n}\n"
+    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    ...GeneralVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
   }
 };
 })();
-(node as any).hash = '670c70f2048146bbd5b8ec6272acda37';
+(node as any).hash = '7b40329821eedf24102d6d646148e099';
 export default node;

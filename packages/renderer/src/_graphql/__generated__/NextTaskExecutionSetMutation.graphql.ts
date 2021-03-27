@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits" | "%future added value";
 export type DurationInput = {
     days: number;
@@ -16,7 +17,7 @@ export type NextTaskExecutionSetMutationVariables = {
 };
 export type NextTaskExecutionSetMutationResponse = {
     readonly setNextTaskExecution: {
-        readonly totalSeconds: number;
+        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
     };
 };
 export type NextTaskExecutionSetMutation = {
@@ -32,8 +33,12 @@ mutation NextTaskExecutionSetMutation(
   $delay: DurationInput!
 ) {
   setNextTaskExecution(task: $task, delay: $delay) {
-    totalSeconds
+    ...Timestamp
   }
+}
+
+fragment Timestamp on Timestamp {
+  totalSeconds
 }
 */
 
@@ -50,33 +55,14 @@ v1 = {
 },
 v2 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "delay",
-        "variableName": "delay"
-      },
-      {
-        "kind": "Variable",
-        "name": "task",
-        "variableName": "task"
-      }
-    ],
-    "concreteType": "Timestamp",
-    "kind": "LinkedField",
-    "name": "setNextTaskExecution",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "totalSeconds",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "delay",
+    "variableName": "delay"
+  },
+  {
+    "kind": "Variable",
+    "name": "task",
+    "variableName": "task"
   }
 ];
 return {
@@ -88,7 +74,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "NextTaskExecutionSetMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "setNextTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Timestamp"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -100,17 +103,36 @@ return {
     ],
     "kind": "Operation",
     "name": "NextTaskExecutionSetMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "setNextTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "totalSeconds",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "1e311057a54ee63c0b800a5596488f06",
+    "cacheID": "923880de62e73bda4e9348b4c8addc83",
     "id": null,
     "metadata": {},
     "name": "NextTaskExecutionSetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextTaskExecutionSetMutation(\n  $task: TaskType!\n  $delay: DurationInput!\n) {\n  setNextTaskExecution(task: $task, delay: $delay) {\n    totalSeconds\n  }\n}\n"
+    "text": "mutation NextTaskExecutionSetMutation(\n  $task: TaskType!\n  $delay: DurationInput!\n) {\n  setNextTaskExecution(task: $task, delay: $delay) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '552f99de36e6e9656ea672d1a0c083b8';
+(node as any).hash = '453d4b8d5421691f0b5e8b76bee07d47';
 export default node;

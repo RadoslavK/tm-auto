@@ -3,7 +3,7 @@ import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React, {
   useEffect,
-  useState, 
+  useState,
 } from 'react';
 import {
   useFragment,
@@ -76,7 +76,7 @@ const unitSettingsUnitInfoQuery = graphql`
 const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
   mutation UnitSettingsUpdateAutoUnitsUnitSettingsMutation($villageId: ID!, $settings: UpdateAutoUnitsUnitSettingsInput!) {
       updateAutoUnitsUnitSettings(villageId: $villageId, settings: $settings) {
-          allow
+          ...AutoUnitsSettings
       }
   }
 `;
@@ -84,7 +84,7 @@ const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
 export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }) => {
   const settingsFragment = useFragment(unitSettingsAutoUnitsUnitSettings, settings);
   const { index } = settingsFragment;
-  const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index });
+  const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index }, { fetchPolicy: 'store-or-network' });
   const [updateSettings] = useMutation<UnitSettingsUpdateAutoUnitsUnitSettingsMutation>(unitSettingsUpdateAutoUnitsUnitSettingsMutation);
 
   const [state, setState] = useState(settingsFragment);
@@ -109,6 +109,12 @@ export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }
         variables: {
           villageId,
           settings: state,
+        },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAutoUnitsUnitSettings');
+          const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
+
+          record?.copyFieldsFrom(newRecord);
         },
       });
     }

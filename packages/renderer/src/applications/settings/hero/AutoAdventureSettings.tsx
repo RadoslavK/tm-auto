@@ -40,7 +40,7 @@ const autoAdventureSettingsQuery = graphql`
 const autoAdventureSettingsUpdateSettingsMutation = graphql`
   mutation AutoAdventureSettingsUpdateSettingsMutation($settings: UpdateAutoAdventureSettingsInput!) {
       updateAutoAdventureSettings(settings: $settings) {
-          allow
+          ...AutoAdventureSettings
       }
   }
 `;
@@ -48,7 +48,7 @@ const autoAdventureSettingsUpdateSettingsMutation = graphql`
 const autoAdventureSettingsResetSettingsMutation = graphql`
     mutation AutoAdventureSettingsResetSettingsMutation {
         resetAutoAdventureSettings {
-            allow
+            ...AutoAdventureSettings
         }
     }
 `;
@@ -70,7 +70,13 @@ export const AutoAdventureSettings: React.FC = () => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { settings: state } });
+      updateSettings({
+        variables: { settings: state },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAutoAdventureSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'autoAdventureSettings');
+        },
+      });
     }
   }, [state, hasChanges, updateSettings]);
 
@@ -104,7 +110,13 @@ export const AutoAdventureSettings: React.FC = () => {
   }
 
   const onReset = () => {
-    resetSettings({ variables: {} });
+    resetSettings({
+      variables: {},
+      updater: (store) => {
+        const newRecord = store.getRootField('updateAutoAdventureSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'autoAdventureSettings');
+      },
+    });
   };
 
   const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {

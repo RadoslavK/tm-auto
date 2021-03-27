@@ -1,0 +1,9 @@
+fragment AutoMentorSettings on AutoMentorSettings {
+    acceptDailyRewards
+    acceptTaskRewards
+    completeTasks {
+        allow
+        allowedTaskIds
+        taskIds
+    }
+}

@@ -39,7 +39,7 @@ const autoPartySettingsQuery = graphql`
 const autoPartySettingsUpdateSettingsMutation = graphql`
   mutation AutoPartySettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoPartySettingsInput!) {
       updateAutoPartySettings(villageId: $villageId, settings: $settings) {
-          allowLarge
+          ...AutoPartySettings
       }
   }
 `;
@@ -47,7 +47,7 @@ const autoPartySettingsUpdateSettingsMutation = graphql`
 const autoPartySettingsResetSettingsMutation = graphql`
     mutation AutoPartySettingsResetSettingsMutation($villageId: ID!) {
         resetAutoPartySettings(villageId: $villageId) {
-            allowLarge
+            ...AutoPartySettings
         }
     }
 `;
@@ -69,7 +69,13 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: state } });
+      updateSettings({
+        variables: { villageId, settings: state },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAutoPartySettings');
+          store.getRoot().setLinkedRecord(newRecord, 'autoPartySettings', { villageId });
+        },
+      });
     }
   }, [hasChanges, state, updateSettings, villageId]);
 
@@ -92,7 +98,13 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
   }
 
   const onReset = () => {
-    resetSettings({ variables: { villageId } });
+    resetSettings({
+      variables: { villageId },
+      updater: (store) => {
+        const newRecord = store.getRootField('updateAutoPartySettings');
+        store.getRoot().setLinkedRecord(newRecord, 'autoPartySettings', { villageId });
+      },
+    });
   };
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {

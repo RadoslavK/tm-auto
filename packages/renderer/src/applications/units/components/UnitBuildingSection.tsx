@@ -75,7 +75,18 @@ const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
 const unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation = graphql`
     mutation UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation($settings: UpdateAutoUnitsBuildingSettingsInput!, $villageId: ID!, $buildingType: Int!) {
         updateAutoUnitsBuildingSettings(settings: $settings, villageId: $villageId, buildingType: $buildingType) {
-            allow
+            barracks {
+                ...UnitBuildingSection_autoUnitsBuildingSettings
+            }
+            stable {
+                ...UnitBuildingSection_autoUnitsBuildingSettings
+            }
+            workshop {
+                ...UnitBuildingSection_autoUnitsBuildingSettings
+            }
+            residence {
+                ...UnitBuildingSection_autoUnitsBuildingSettings
+            }
         }
     }
 `;
@@ -116,6 +127,12 @@ export const UnitBuildingSection: React.FC<Props> = ({
           buildingType,
           villageId,
           settings: state,
+        },
+        updater: (store) => {
+          const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
+          const newRecord = store.getRootField('updateAutoUnitsBuildingSettings');
+
+          record?.copyFieldsFrom(newRecord);
         },
       });
     }

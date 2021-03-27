@@ -1,10 +1,15 @@
 import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
@@ -14,6 +19,7 @@ import type {
 } from '../../../_graphql/__generated__/NextTaskExecutionQuery.graphql.js';
 import type { NextTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextTaskExecutionResetMutation.graphql.js';
 import type { NextTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextTaskExecutionSetMutation.graphql.js';
+import type { NextTaskExecutionSubscription } from '../../../_graphql/__generated__/NextTaskExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
@@ -32,7 +38,7 @@ const nextTaskExecutionQuery = graphql`
 const nextTaskExecutionSetMutation = graphql`
   mutation NextTaskExecutionSetMutation($task: TaskType!, $delay: DurationInput!) {
       setNextTaskExecution(task: $task, delay: $delay) {
-          totalSeconds
+          ...Timestamp
       }
   }
 `;
@@ -40,15 +46,34 @@ const nextTaskExecutionSetMutation = graphql`
 const nextTaskExecutionResetMutation = graphql`
     mutation NextTaskExecutionResetMutation($task: TaskType!) {
         resetNextTaskExecution(task: $task) {
-            totalSeconds
+            ...Timestamp
         }
     }
+`;
+
+const nextTaskExecutionSubscription = graphql`
+  subscription NextTaskExecutionSubscription($task: TaskType!) {
+      nextTaskExecutionChanged(task: $task) {
+          ...Timestamp
+      }
+  }
 `;
 
 export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   const { nextTaskExecution } = useLazyLoadQuery<NextTaskExecutionQuery>(nextTaskExecutionQuery, { task });
   const [setNextTaskExecution] = useMutation<NextTaskExecutionSetMutation>(nextTaskExecutionSetMutation);
   const [resetNextTaskExecution] = useMutation<NextTaskExecutionResetMutation>(nextTaskExecutionResetMutation);
+
+  const nextTaskExecutionSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NextTaskExecutionSubscription> => ({
+    subscription: nextTaskExecutionSubscription,
+    variables: { task },
+    updater: (store) => {
+      const newRecord = store.getRootField('nextTaskExecutionChanged');
+      store.getRoot().setLinkedRecord(newRecord, 'nextTaskExecution', { task });
+    },
+  }), [task]);
+
+  useSubscription(nextTaskExecutionSubscriptionConfig);
 
   //  TODO aj v podobnych comp pouzit getSecondsUntilTimestamp
   const nextExecutionTimer = useCountDown(nextTaskExecution.totalSeconds);
@@ -61,6 +86,10 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   const submitForm = (duration: Duration): void => {
     setNextTaskExecution({
       variables: { task, delay: duration },
+      updater: (store) => {
+        const newRecord = store.getRootField('setNextTaskExecution');
+        store.getRoot().setLinkedRecord(newRecord, 'nextTaskExecution', { task });
+      },
     });
 
     closeForm();
@@ -69,6 +98,10 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
   const onReset = () => {
     resetNextTaskExecution({
       variables: { task },
+      updater: (store) => {
+        const newRecord = store.getRootField('resetNextTaskExecution');
+        store.getRoot().setLinkedRecord(newRecord, 'nextTaskExecution', { task });
+      },
     });
   };
 

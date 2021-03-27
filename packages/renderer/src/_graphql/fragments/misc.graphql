@@ -1,0 +1,33 @@
+fragment Duration on Duration {
+    days
+    hours
+    minutes
+    seconds
+}
+
+fragment CoolDown on CoolDown {
+    max {
+        ...Duration @relay(mask: false)
+    }
+    min {
+        ...Duration @relay(mask: false)
+    }
+}
+
+fragment Timestamp on Timestamp {
+    totalSeconds
+}
+
+fragment Resources on Resources {
+    clay
+    crop
+    freeCrop
+    iron
+    total
+    wood
+}
+
+fragment Coords on Coords {
+    x
+    y
+}

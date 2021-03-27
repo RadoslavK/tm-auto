@@ -34,7 +34,7 @@ const accountSettingsQuery = graphql`
 const accountSettingsUpdateSettingsMutation = graphql`
   mutation AccountSettingsUpdateSettingsMutation($settings: UpdateAccountSettingsInput!) {
       updateAccountSettings(settings: $settings) {
-          allowTasks
+          ...AccountSettings
       }
   }
 `;
@@ -42,7 +42,7 @@ const accountSettingsUpdateSettingsMutation = graphql`
 const accountSettingsResetSettingsMutation = graphql`
     mutation AccountSettingsResetSettingsMutation {
         resetAccountSettings {
-            allowTasks
+            ...AccountSettings
         }
     }
 `;
@@ -64,7 +64,13 @@ export const AccountSettings: React.FC = () => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { settings: state } });
+      updateSettings({
+        variables: { settings: state },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAccountSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'accountSettings');
+        },
+      });
     }
   }, [hasChanges, state, updateSettings]);
 
@@ -87,7 +93,13 @@ export const AccountSettings: React.FC = () => {
   }
 
   const onReset = () => {
-    resetSettings({ variables: {} });
+    resetSettings({
+      variables: {},
+      updater: (store) => {
+        const newRecord = store.getRootField('resetAccountSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'accountSettings');
+      },
+    });
   };
 
   const onCheckboxChange = (e: React.FormEvent<HTMLInputElement>) => {

@@ -12,13 +12,13 @@ export type AccountSettingsQueryResponse = {
         readonly autoStart: boolean;
         readonly autoUnits: boolean;
         readonly tasksCoolDown: {
-            readonly min: {
+            readonly max: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
                 readonly seconds: number;
             };
-            readonly max: {
+            readonly min: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
@@ -43,13 +43,13 @@ query AccountSettingsQuery {
     autoStart
     autoUnits
     tasksCoolDown {
-      min {
+      max {
         days
         hours
         minutes
         seconds
       }
-      max {
+      min {
         days
         hours
         minutes
@@ -148,7 +148,7 @@ v1 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "min",
+            "name": "max",
             "plural": false,
             "selections": (v0/*: any*/),
             "storageKey": null
@@ -158,7 +158,7 @@ v1 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "max",
+            "name": "min",
             "plural": false,
             "selections": (v0/*: any*/),
             "storageKey": null
@@ -188,12 +188,12 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "446b5a460145be615381a42cd50f92da",
+    "cacheID": "a0729bcb6a120425d26a4a7424bce4a0",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsQuery",
     "operationKind": "query",
-    "text": "query AccountSettingsQuery {\n  accountSettings {\n    allowTasks\n    autoBuild\n    autoParty\n    autoStart\n    autoUnits\n    tasksCoolDown {\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n}\n"
+    "text": "query AccountSettingsQuery {\n  accountSettings {\n    allowTasks\n    autoBuild\n    autoParty\n    autoStart\n    autoUnits\n    tasksCoolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n}\n"
   }
 };
 })();

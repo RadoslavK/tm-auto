@@ -1,10 +1,15 @@
 import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
@@ -14,6 +19,7 @@ import type {
 } from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql.js';
 import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
 import type { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
+import type { NextVillageTaskExecutionSubscription } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
@@ -33,7 +39,7 @@ const query = graphql`
 const setMutation = graphql`
   mutation NextVillageTaskExecutionSetMutation($villageId: ID!, $task: TaskType!, $delay: DurationInput!) {
       setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
-          totalSeconds
+          ...Timestamp
       }
   }
 `;
@@ -41,9 +47,17 @@ const setMutation = graphql`
 const resetMutation = graphql`
     mutation NextVillageTaskExecutionResetMutation($villageId: ID!, $task: TaskType!) {
         resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
-            totalSeconds
+            ...Timestamp
         }
     }
+`;
+
+const subscription = graphql`
+  subscription NextVillageTaskExecutionSubscription($villageId: ID!, $task: TaskType!) {
+      nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {
+          ...Timestamp
+      }
+  }
 `;
 
 export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) => {
@@ -53,6 +67,17 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
   });
   const [setNextExecution] = useMutation<NextVillageTaskExecutionSetMutation>(setMutation);
   const [resetNextExecution] = useMutation<NextVillageTaskExecutionResetMutation>(resetMutation);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NextVillageTaskExecutionSubscription> => ({
+    subscription,
+    variables: { task, villageId },
+    updater: (store) => {
+      const newRecord = store.getRootField('nextVillageTaskExecutionChanged');
+      store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
+    },
+  }), [task, villageId]);
+
+  useSubscription(subscriptionConfig);
 
   const nextExecutionTimer = useCountDown(nextVillageTaskExecution.totalSeconds);
 
@@ -73,6 +98,10 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
         task,
         villageId,
       },
+      updater: (store) => {
+        const newRecord = store.getRootField('setNextVillageTaskExecution');
+        store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
+      },
     });
 
     closeForm();
@@ -83,6 +112,10 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
       variables: {
         task,
         villageId,
+      },
+      updater: (store) => {
+        const newRecord = store.getRootField('resetNextVillageTaskExecution');
+        store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
       },
     });
   };

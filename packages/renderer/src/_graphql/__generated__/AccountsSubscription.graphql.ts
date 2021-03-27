@@ -3,12 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AccountsSubscriptionVariables = {};
 export type AccountsSubscriptionResponse = {
     readonly accountsUpdated: ReadonlyArray<{
-        readonly id: string;
-        readonly username: string;
-        readonly server: string;
+        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
     }>;
 };
 export type AccountsSubscription = {
@@ -21,55 +20,43 @@ export type AccountsSubscription = {
 /*
 subscription AccountsSubscription {
   accountsUpdated {
+    ...UserAccount
     id
-    username
-    server
   }
+}
+
+fragment UserAccount on UserAccount {
+  id
+  password
+  server
+  username
 }
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "UserAccount",
-    "kind": "LinkedField",
-    "name": "accountsUpdated",
-    "plural": true,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "username",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "server",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "AccountsSubscription",
-    "selections": (v0/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "accountsUpdated",
+        "plural": true,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "UserAccount"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Subscription",
     "abstractKey": null
   },
@@ -78,17 +65,56 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "AccountsSubscription",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "accountsUpdated",
+        "plural": true,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "password",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "server",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "159de5e49869210a6fb53e6133f5c0df",
+    "cacheID": "ca844bcce0746ca0dd146b3c008e686e",
     "id": null,
     "metadata": {},
     "name": "AccountsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AccountsSubscription {\n  accountsUpdated {\n    id\n    username\n    server\n  }\n}\n"
+    "text": "subscription AccountsSubscription {\n  accountsUpdated {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
   }
 };
-})();
-(node as any).hash = '0aa6f765d5cef73df07e1af4ffbf65a9';
+(node as any).hash = 'fd6bbc0a2cb72238c980246a7ac3d057';
 export default node;

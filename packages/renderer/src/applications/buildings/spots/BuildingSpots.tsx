@@ -63,12 +63,10 @@ const buildingSpotsSubscription = graphql`
     subscription BuildingSpotsSubscription($villageId: ID!) {
         actualBuildingLevelsUpdated(villageId: $villageId)
         buildingsInProgressUpdated(villageId: $villageId) {
-            type
+            ...BuildingInProgress
         }
         queueUpdated(villageId: $villageId) {
-            infrastructureBuildingTime {
-                days
-            }
+            ...BuildingQueue
         }
     }
 `;

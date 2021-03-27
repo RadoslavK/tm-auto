@@ -90,9 +90,7 @@ const accountsQuery = graphql`
 const accountsSubscription = graphql`
   subscription AccountsSubscription {
       accountsUpdated {
-          id
-          username
-          server
+          ...UserAccount
       }
   }
 `;
@@ -107,26 +105,16 @@ export const Accounts: React.FC<Props> = ({
   const subscriptionConfig: GraphQLSubscriptionConfig<AccountsSubscription> = useMemo(() => ({
     subscription: accountsSubscription,
     variables: {},
-    updater: (store, data) => {
+    updater: (store) => {
       const root = store.getRoot();
-      const oldAccounts = root.getLinkedRecords('accounts');
+      const newAccounts = store.getPluralRootField('accountsUpdated');
 
-      if (!oldAccounts) {
+      if (!newAccounts) {
         return;
       }
 
-      const newLinkedRecords = data.accountsUpdated.reduce(
-        (linkedRecords, acc) => {
-          const record = store.get(acc.id);
-
-          return record ? [...linkedRecords, record] : linkedRecords;
-        },
-        [] as RecordProxy[],
-      );
-
-      const newAccounts = oldAccounts.concat(newLinkedRecords);
-
-      root.setLinkedRecords(newAccounts, 'accounts');
+      const oldAccounts = root.getLinkedRecords('accounts');
+      root.setLinkedRecords(oldAccounts?.concat(newAccounts as ConcatArray<RecordProxy>), 'accounts');
     },
   }), []);
 

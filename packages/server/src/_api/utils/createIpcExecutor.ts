@@ -3,7 +3,7 @@ import {
   parse as parseQuery,
 } from 'graphql';
 
-import type { GraphqlHandlerPayload } from 'shared/types/models.js';
+import type { GraphqlHandlerPayload } from 'shared/types/graphql.js';
 import {
   GraphqlHandlerMessage,
   IpcHandler,

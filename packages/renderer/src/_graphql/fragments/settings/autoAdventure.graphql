@@ -1,0 +1,13 @@
+fragment AutoAdventureSettings on AutoAdventureSettings {
+    adventureCriteria
+    allow
+    coolDown {
+        ...CoolDown
+    }
+    hardMinHealth
+    maxTravelTime {
+        ...Duration
+    }
+    normalMinHealth
+    preferHard
+}

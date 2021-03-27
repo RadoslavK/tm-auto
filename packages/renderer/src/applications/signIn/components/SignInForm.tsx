@@ -154,6 +154,7 @@ export const SignInForm: React.FC = () => {
       root.setValue(data.lastSignedAccountIdUpdated, nameOf<SignInFormQueryResponse>('lastSignedAccountId'));
     },
   }), []);
+
   useSubscription(botStateSubConfig);
 
   const [selectedAccountId, setSelectedAccountId] = useState(lastSignedAccountId);

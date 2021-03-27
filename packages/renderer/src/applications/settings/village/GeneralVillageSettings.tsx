@@ -28,7 +28,7 @@ const generalVillageSettingsQuery = graphql`
 const generalVillageSettingsUpdateSettingsMutation = graphql`
   mutation GeneralVillageSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateGeneralVillageSettingsInput!) {
       updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
-          allowTasks
+          ...GeneralVillageSettings
       }
   }
 `;
@@ -36,7 +36,7 @@ const generalVillageSettingsUpdateSettingsMutation = graphql`
 const generalVillageSettingsResetSettingsMutation = graphql`
     mutation GeneralVillageSettingsResetSettingsMutation($villageId: ID!) {
         resetGeneralVillageSettings(villageId: $villageId) {
-            allowTasks
+            ...GeneralVillageSettings
         }
     }
 `;
@@ -60,7 +60,13 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { villageId, settings: state } });
+      updateSettings({
+        variables: { villageId, settings: state },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateGeneralVillageSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'generalVillageSettings', { villageId });
+        },
+      });
     }
   }, [hasChanges, state, updateSettings, villageId]);
 
@@ -82,7 +88,13 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
   }
 
   const onReset = () => {
-    resetSettings({ variables: { villageId } });
+    resetSettings({
+      variables: { villageId },
+      updater: (store) => {
+        const newRecord = store.getRootField('updateGeneralVillageSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'generalVillageSettings', { villageId });
+      },
+    });
   };
 
   const { allowTasks } = state;

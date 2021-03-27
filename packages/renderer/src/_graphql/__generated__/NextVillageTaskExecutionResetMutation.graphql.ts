@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits" | "%future added value";
 export type NextVillageTaskExecutionResetMutationVariables = {
     villageId: string;
@@ -10,7 +11,7 @@ export type NextVillageTaskExecutionResetMutationVariables = {
 };
 export type NextVillageTaskExecutionResetMutationResponse = {
     readonly resetNextVillageTaskExecution: {
-        readonly totalSeconds: number;
+        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
     };
 };
 export type NextVillageTaskExecutionResetMutation = {
@@ -26,8 +27,12 @@ mutation NextVillageTaskExecutionResetMutation(
   $task: TaskType!
 ) {
   resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
-    totalSeconds
+    ...Timestamp
   }
+}
+
+fragment Timestamp on Timestamp {
+  totalSeconds
 }
 */
 
@@ -44,33 +49,14 @@ v1 = {
 },
 v2 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "task",
-        "variableName": "task"
-      },
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "Timestamp",
-    "kind": "LinkedField",
-    "name": "resetNextVillageTaskExecution",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "totalSeconds",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "task",
+    "variableName": "task"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
   }
 ];
 return {
@@ -82,7 +68,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "NextVillageTaskExecutionResetMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "resetNextVillageTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Timestamp"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -94,17 +97,36 @@ return {
     ],
     "kind": "Operation",
     "name": "NextVillageTaskExecutionResetMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "resetNextVillageTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "totalSeconds",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "5fb70ab0bea6f2d824cddcaf0d549ece",
+    "cacheID": "2ea42f3f8062efac7ed875df74401482",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionResetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    totalSeconds\n  }\n}\n"
+    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '962e05e7e84a592aabfa2f321f4ff51d';
+(node as any).hash = 'a017c012c9ba4dd59c6011dc9ebec007';
 export default node;

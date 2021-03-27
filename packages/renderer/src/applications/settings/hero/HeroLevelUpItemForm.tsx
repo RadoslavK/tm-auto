@@ -26,6 +26,7 @@ const heroLevelUpItemFormHeroLevelUpItemFragment = graphql`
   }
 `;
 
+//  TODO prevent this suspending
 const heroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery = graphql`
   query HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery($name: ID!, $include: Boolean!) {
       isHeroLevelUpItemNameUsed(name: $name) @include(if: $include)

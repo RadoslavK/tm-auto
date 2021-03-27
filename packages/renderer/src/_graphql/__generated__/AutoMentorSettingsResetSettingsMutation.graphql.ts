@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AutoMentorSettingsResetSettingsMutationVariables = {};
 export type AutoMentorSettingsResetSettingsMutationResponse = {
     readonly resetAutoMentorSettings: {
-        readonly acceptDailyRewards: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings">;
     };
 };
 export type AutoMentorSettingsResetSettingsMutation = {
@@ -19,39 +20,45 @@ export type AutoMentorSettingsResetSettingsMutation = {
 /*
 mutation AutoMentorSettingsResetSettingsMutation {
   resetAutoMentorSettings {
-    acceptDailyRewards
+    ...AutoMentorSettings
+  }
+}
+
+fragment AutoMentorSettings on AutoMentorSettings {
+  acceptDailyRewards
+  acceptTaskRewards
+  completeTasks {
+    allow
+    allowedTaskIds
+    taskIds
   }
 }
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "AutoMentorSettings",
-    "kind": "LinkedField",
-    "name": "resetAutoMentorSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "acceptDailyRewards",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "AutoMentorSettingsResetSettingsMutation",
-    "selections": (v0/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "AutoMentorSettings",
+        "kind": "LinkedField",
+        "name": "resetAutoMentorSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "AutoMentorSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -60,17 +67,74 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "AutoMentorSettingsResetSettingsMutation",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "AutoMentorSettings",
+        "kind": "LinkedField",
+        "name": "resetAutoMentorSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "acceptDailyRewards",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "acceptTaskRewards",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "CompleteTasksSettings",
+            "kind": "LinkedField",
+            "name": "completeTasks",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "allow",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "allowedTaskIds",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "taskIds",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "32e5086a4efc12df63154835586205e8",
+    "cacheID": "e677c2b870536839317b5142948e1d2f",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    acceptDailyRewards\n  }\n}\n"
+    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n  completeTasks {\n    allow\n    allowedTaskIds\n    taskIds\n  }\n}\n"
   }
 };
-})();
-(node as any).hash = '74db1b9949be399270b33996792a45f5';
+(node as any).hash = '1cc0b00debe150cbbc0dca1e187ad7b9';
 export default node;

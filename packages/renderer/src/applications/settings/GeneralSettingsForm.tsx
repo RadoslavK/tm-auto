@@ -25,7 +25,7 @@ const generalSettingsFormQuery = graphql`
 const generalSettingsFormUpdateSettingsMutation = graphql`
   mutation GeneralSettingsFormUpdateSettingsMutation($settings: UpdateGeneralSettingsInput!) {
       updateGeneralSettings(settings: $settings) {
-          chromePath
+          ...GeneralSettings
       }
   }
 `;
@@ -33,7 +33,7 @@ const generalSettingsFormUpdateSettingsMutation = graphql`
 const generalSettingsFormResetSettingsMutation = graphql`
     mutation GeneralSettingsFormResetSettingsMutation {
         resetGeneralSettings {
-            chromePath
+            ...GeneralSettings
         }
     }
 `;
@@ -55,7 +55,13 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (state && hasChanges) {
-      updateSettings({ variables: { settings: state } });
+      updateSettings({
+        variables: { settings: state },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateGeneralSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'generalSettings');
+        },
+      });
     }
   }, [state, hasChanges, updateSettings]);
 
@@ -74,7 +80,13 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
   };
 
   const onReset = () => {
-    resetSettings({ variables: {} });
+    resetSettings({
+      variables: {},
+      updater: (store) => {
+        const newRecord = store.getRootField('resetGeneralSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'generalSettings');
+      },
+    });
   };
 
   return (

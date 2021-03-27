@@ -16,7 +16,7 @@ const getToggleText = (botState: BotState): string => {
 
     default:
       throw new Error(
-        `Bot shouldnt be in this state (${botState}) while navigation is rendered`,
+        `Bot shouldn't be in this state (${botState}) while navigation is rendered`,
       );
   }
 };

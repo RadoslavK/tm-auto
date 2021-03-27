@@ -1,0 +1,10 @@
+fragment AccountSettings on AccountSettings {
+    allowTasks
+    autoBuild
+    autoParty
+    autoStart
+    autoUnits
+    tasksCoolDown {
+        ...CoolDown
+    }
+}

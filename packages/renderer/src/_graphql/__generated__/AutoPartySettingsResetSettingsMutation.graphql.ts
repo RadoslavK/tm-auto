@@ -3,12 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AutoPartySettingsResetSettingsMutationVariables = {
     villageId: string;
 };
 export type AutoPartySettingsResetSettingsMutationResponse = {
     readonly resetAutoPartySettings: {
-        readonly allowLarge: boolean;
+        readonly " $fragmentRefs": FragmentRefs<"AutoPartySettings">;
     };
 };
 export type AutoPartySettingsResetSettingsMutation = {
@@ -23,7 +24,33 @@ mutation AutoPartySettingsResetSettingsMutation(
   $villageId: ID!
 ) {
   resetAutoPartySettings(villageId: $villageId) {
-    allowLarge
+    ...AutoPartySettings
+  }
+}
+
+fragment AutoPartySettings on AutoPartySettings {
+  allowLarge
+  allowSmall
+  coolDown {
+    ...CoolDown
+  }
+  minCulturePointsLarge
+  minCulturePointsSmall
+  useHeroResources
+}
+
+fragment CoolDown on CoolDown {
+  max {
+    days
+    hours
+    minutes
+    seconds
+  }
+  min {
+    days
+    hours
+    minutes
+    seconds
   }
 }
 */
@@ -38,27 +65,38 @@ var v0 = [
 ],
 v1 = [
   {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
+  }
+],
+v2 = [
+  {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "AutoPartySettings",
-    "kind": "LinkedField",
-    "name": "resetAutoPartySettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "allowLarge",
-        "storageKey": null
-      }
-    ],
+    "args": null,
+    "kind": "ScalarField",
+    "name": "days",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "hours",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "minutes",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "seconds",
     "storageKey": null
   }
 ];
@@ -68,7 +106,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AutoPartySettingsResetSettingsMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "AutoPartySettings",
+        "kind": "LinkedField",
+        "name": "resetAutoPartySettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "AutoPartySettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -77,17 +132,95 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "AutoPartySettingsResetSettingsMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "AutoPartySettings",
+        "kind": "LinkedField",
+        "name": "resetAutoPartySettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowLarge",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "allowSmall",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "CoolDown",
+            "kind": "LinkedField",
+            "name": "coolDown",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "max",
+                "plural": false,
+                "selections": (v2/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "min",
+                "plural": false,
+                "selections": (v2/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCulturePointsLarge",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "minCulturePointsSmall",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "18508654e8d31185f7c663624d04aa2c",
+    "cacheID": "8ce517e8ecf4f7d16b84788bdf95eeef",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoPartySettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoPartySettings(villageId: $villageId) {\n    allowLarge\n  }\n}\n"
+    "text": "mutation AutoPartySettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoPartySettings(villageId: $villageId) {\n    ...AutoPartySettings\n  }\n}\n\nfragment AutoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    ...CoolDown\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '0a2b08b669fedb2708487e3d8b70367b';
+(node as any).hash = 'ee7406c9e69c2ab866f238eb39286a23';
 export default node;

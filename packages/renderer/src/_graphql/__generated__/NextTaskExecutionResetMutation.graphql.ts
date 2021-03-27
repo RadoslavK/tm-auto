@@ -3,13 +3,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits" | "%future added value";
 export type NextTaskExecutionResetMutationVariables = {
     task: TaskType;
 };
 export type NextTaskExecutionResetMutationResponse = {
     readonly resetNextTaskExecution: {
-        readonly totalSeconds: number;
+        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
     };
 };
 export type NextTaskExecutionResetMutation = {
@@ -24,8 +25,12 @@ mutation NextTaskExecutionResetMutation(
   $task: TaskType!
 ) {
   resetNextTaskExecution(task: $task) {
-    totalSeconds
+    ...Timestamp
   }
+}
+
+fragment Timestamp on Timestamp {
+  totalSeconds
 }
 */
 
@@ -39,28 +44,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "task",
-        "variableName": "task"
-      }
-    ],
-    "concreteType": "Timestamp",
-    "kind": "LinkedField",
-    "name": "resetNextTaskExecution",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "totalSeconds",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "task",
+    "variableName": "task"
   }
 ];
 return {
@@ -69,7 +55,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "NextTaskExecutionResetMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "resetNextTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Timestamp"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -78,17 +81,36 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "NextTaskExecutionResetMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "resetNextTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "totalSeconds",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "038bf6e9a41e6a7570e2392748b14671",
+    "cacheID": "f824e549f6e22ed713334d006be957de",
     "id": null,
     "metadata": {},
     "name": "NextTaskExecutionResetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextTaskExecutionResetMutation(\n  $task: TaskType!\n) {\n  resetNextTaskExecution(task: $task) {\n    totalSeconds\n  }\n}\n"
+    "text": "mutation NextTaskExecutionResetMutation(\n  $task: TaskType!\n) {\n  resetNextTaskExecution(task: $task) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '4956104fcb370c847ca69185c08b5278';
+(node as any).hash = '110e748b955fc1fba85ffe65b0a0c458';
 export default node;

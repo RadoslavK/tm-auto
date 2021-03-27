@@ -28,9 +28,7 @@ const buildingsInProgressQuery = graphql`
 const buildingsInProgressSubscription = graphql`
     subscription BuildingsInProgressSubscription($villageId: ID!) {
         buildingsInProgressUpdated(villageId: $villageId) {
-            fieldId
-            level
-            ...BuildingInProgress_buildingInProgress
+            ...BuildingInProgress
         }
     }
 `;
@@ -41,19 +39,10 @@ export const BuildingsInProgress: React.FC<Props> = ({ className, villageId }) =
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingsInProgressSubscription> => ({
     subscription: buildingsInProgressSubscription,
     variables: { villageId },
-    //   TODO make these have normal id so we can insert linked records
-    // updater: (store, data) => {
-    //   const root = store.getRoot();
-    //   const newBuildings = data.buildingsInProgressUpdated.reduce(
-    //     (records, building) => {
-    //       const record = store.get(building.fieldId as any);
-    //       return record ? [...records, record] : records;
-    //     },
-    //     [] as RecordProxy[],
-    //   );
-    //
-    //   root.setLinkedRecords(newBuildings, 'buildingsInProgress');
-    // },
+    updater: (store) => {
+      const newRecords = store.getPluralRootField('buildingsInProgressUpdated');
+      store.getRoot().setLinkedRecords(newRecords, 'buildingsInProgress', { villageId });
+    },
   }), [villageId]);
 
   useSubscription(subscriptionConfig);

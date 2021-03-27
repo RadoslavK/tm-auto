@@ -10,13 +10,13 @@ export type AutoUnitsSettingsQueryResponse = {
     readonly autoUnitsSettings: {
         readonly allow: boolean;
         readonly coolDown: {
-            readonly min: {
+            readonly max: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
                 readonly seconds: number;
             };
-            readonly max: {
+            readonly min: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
@@ -41,13 +41,13 @@ query AutoUnitsSettingsQuery(
   autoUnitsSettings(villageId: $villageId) {
     allow
     coolDown {
-      min {
+      max {
         days
         hours
         minutes
         seconds
       }
-      max {
+      min {
         days
         hours
         minutes
@@ -133,7 +133,7 @@ v2 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "min",
+            "name": "max",
             "plural": false,
             "selections": (v1/*: any*/),
             "storageKey": null
@@ -143,7 +143,7 @@ v2 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "max",
+            "name": "min",
             "plural": false,
             "selections": (v1/*: any*/),
             "storageKey": null
@@ -187,12 +187,12 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "2d644a2620bd61c7c66e34509220e172",
+    "cacheID": "bd5ff747ccb7c0bf3331909f1ff392e7",
     "id": null,
     "metadata": {},
     "name": "AutoUnitsSettingsQuery",
     "operationKind": "query",
-    "text": "query AutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    allow\n    coolDown {\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    minCrop\n    useHeroResources\n  }\n}\n"
+    "text": "query AutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    minCrop\n    useHeroResources\n  }\n}\n"
   }
 };
 })();

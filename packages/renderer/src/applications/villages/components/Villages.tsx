@@ -11,10 +11,7 @@ import {
   Switch,
   useRouteMatch,
 } from 'react-router-dom';
-import type {
-  GraphQLSubscriptionConfig,
-  RecordProxy,
-} from 'relay-runtime';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { nameOf } from 'shared/utils/nameOf.js';
 
 import type {
@@ -72,15 +69,8 @@ export const Villages: React.FC = () => {
 
       root.setValue(data.activeVillageIdChanged, nameOf<VillagesQueryResponse>('activeVillageId'));
 
-      const villagesRecords = data.villagesUpdated.reduce(
-        (records, village) => {
-          const record = store.get(village.id);
-
-          return record ? [...records, record] : records;
-        },
-        [] as RecordProxy[],
-      );
-      root.setLinkedRecords(villagesRecords, nameOf<VillagesQueryResponse>('villages'));
+      const newRecords = store.getPluralRootField('villagesUpdated');
+      root.setLinkedRecords(newRecords, nameOf<VillagesQueryResponse>('villages'));
     },
   }), []);
 

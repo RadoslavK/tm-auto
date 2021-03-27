@@ -1,5 +1,0 @@
-query GetUnitInfo($index: Int!) {
-  unitInfo(index: $index) {
-    name
-  }
-}

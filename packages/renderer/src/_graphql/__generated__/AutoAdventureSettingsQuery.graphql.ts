@@ -10,13 +10,13 @@ export type AutoAdventureSettingsQueryResponse = {
         readonly adventureCriteria: AdventureCriteria;
         readonly allow: boolean;
         readonly coolDown: {
-            readonly min: {
+            readonly max: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
                 readonly seconds: number;
             };
-            readonly max: {
+            readonly min: {
                 readonly days: number;
                 readonly hours: number;
                 readonly minutes: number;
@@ -47,13 +47,13 @@ query AutoAdventureSettingsQuery {
     adventureCriteria
     allow
     coolDown {
-      min {
+      max {
         days
         hours
         minutes
         seconds
       }
-      max {
+      min {
         days
         hours
         minutes
@@ -140,7 +140,7 @@ v1 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "min",
+            "name": "max",
             "plural": false,
             "selections": (v0/*: any*/),
             "storageKey": null
@@ -150,7 +150,7 @@ v1 = [
             "args": null,
             "concreteType": "Duration",
             "kind": "LinkedField",
-            "name": "max",
+            "name": "min",
             "plural": false,
             "selections": (v0/*: any*/),
             "storageKey": null
@@ -211,12 +211,12 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "b768117eadccada54743b9ab538e5ed5",
+    "cacheID": "8ef10d2d345fee838e286d64f1b04cfe",
     "id": null,
     "metadata": {},
     "name": "AutoAdventureSettingsQuery",
     "operationKind": "query",
-    "text": "query AutoAdventureSettingsQuery {\n  autoAdventureSettings {\n    adventureCriteria\n    allow\n    coolDown {\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    hardMinHealth\n    maxTravelTime {\n      days\n      hours\n      minutes\n      seconds\n    }\n    normalMinHealth\n    preferHard\n  }\n}\n"
+    "text": "query AutoAdventureSettingsQuery {\n  autoAdventureSettings {\n    adventureCriteria\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    hardMinHealth\n    maxTravelTime {\n      days\n      hours\n      minutes\n      seconds\n    }\n    normalMinHealth\n    preferHard\n  }\n}\n"
   }
 };
 })();

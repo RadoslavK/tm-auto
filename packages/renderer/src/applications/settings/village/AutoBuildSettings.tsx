@@ -136,7 +136,7 @@ const autoBuildSettingsQuery = graphql`
 const autoBuildSettingsUpdateSettingsMutation = graphql`
   mutation AutoBuildSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoBuildSettingsInput!) {
       updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
-          allow
+          ...AutoBuildSettings
       }
   }
 `;
@@ -144,7 +144,7 @@ const autoBuildSettingsUpdateSettingsMutation = graphql`
 const autoBuildSettingsResetSettingsMutation = graphql`
     mutation AutoBuildSettingsResetSettingsMutation($villageId: ID!) {
         resetAutoBuildSettings(villageId: $villageId) {
-            allow
+            ...AutoBuildSettings
         }
     }
 `;
@@ -168,6 +168,10 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     if (state && hasChanges) {
       updateSettings({
         variables: { villageId, settings: getSettingsFromState(state) },
+        updater: (store) => {
+          const newRecord = store.getRootField('updateAutoBuildSettings');
+          store.getRoot().setLinkedRecord(newRecord, 'autoBuildSettings', { villageId });
+        },
       });
     }
   }, [state, hasChanges, updateSettings, villageId]);
@@ -189,7 +193,13 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const isRoman = gameInfo.tribe === 'Romans';
 
   const onReset = () => {
-    resetSettings({ variables: { villageId } });
+    resetSettings({
+      variables: { villageId },
+      updater: (store) => {
+        const newRecord = store.getRootField('updateAutoBuildSettings');
+        store.getRoot().setLinkedRecord(newRecord, 'autoBuildSettings', { villageId });
+      },
+    });
   };
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {

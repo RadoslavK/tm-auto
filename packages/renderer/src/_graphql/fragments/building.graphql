@@ -1,0 +1,52 @@
+fragment BuildingInProgress on BuildingInProgress {
+    fieldId
+    finishedAt {
+        ...Timestamp
+    }
+    level
+    type
+}
+
+fragment QueuedBuilding on QueuedBuilding {
+    buildingTime {
+        ...Duration
+    }
+    fieldId
+    level
+    queueId
+    queueIndex
+    type
+}
+
+fragment QueuedBuildingRange on QueuedBuildingRange {
+    buildingTime {
+        ...Duration
+    }
+    buildings {
+        ...QueuedBuilding
+    }
+    cost {
+        ...Resources
+    }
+    fieldId
+    id
+    type
+}
+
+fragment BuildingQueue on BuildingQueue {
+    buildingRanges {
+        ...QueuedBuildingRange
+    }
+    infrastructureBuildingTime {
+        ...Duration
+    }
+    resourcesBuildingTime {
+        ...Duration
+    }
+    totalBuildingTime {
+        ...Duration
+    }
+    totalCost {
+        ...Resources
+    }
+}

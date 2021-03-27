@@ -1,0 +1,6 @@
+fragment UserAccount on UserAccount {
+    id
+    password
+    server
+    username
+}

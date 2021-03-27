@@ -2,11 +2,17 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
+import {
+  useLazyLoadQuery,
+  useSubscription,
+} from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
+import type { VillageSettingsSubscription } from '../../../_graphql/__generated__/VillageSettingsSubscription.graphql.js';
 import { formatVillageName } from '../../villages/components/VillageName.js';
 import { AutoBuildSettings } from './AutoBuildSettings.js';
 import { AutoPartySettings } from './AutoPartySettings.js';
@@ -53,19 +59,33 @@ type Props = {
 const villageSettingsQuery = graphql`
   query VillageSettingsQuery {
       villages {
-          id
-          name
-          coords {
-              x
-              y
-          }
-          isCapital
+          ...Village @relay(mask: false)
+      }
+  }
+`;
+
+const villagesSubscription = graphql`
+  subscription VillageSettingsSubscription {
+      villagesUpdated {
+          ...Village
       }
   }
 `;
 
 export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId }) => {
   const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {});
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSettingsSubscription> => ({
+    subscription: villagesSubscription,
+    variables: {},
+    updater: (store) => {
+      const newRecords = store.getPluralRootField('villagesUpdated');
+
+      store.getRoot().setLinkedRecords(newRecords, 'villages');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const [selectedVillageId, setSelectedVillageId] = useState(villageId);
 

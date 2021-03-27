@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   Redirect,
   Route,
@@ -13,16 +13,18 @@ export const MainRoutes: React.FC = () => (
   <div>
     <BotActivity />
     <NextTasksExecution />
-    <Switch>
-      <Route
-        exact
-        path="/"
-        render={() => <Redirect to={navigationApps[0].path} />}
-      />
-      {navigationApps.map((app) => (
-        <Route key={app.path} component={app.component} path={app.path} />
-      ))}
-      <Redirect to={navigationApps[0].path} />
-    </Switch>
+    <Suspense fallback={null}>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => <Redirect to={navigationApps[0].path} />}
+        />
+        {navigationApps.map((app) => (
+          <Route key={app.path} component={app.component} path={app.path} />
+        ))}
+        <Redirect to={navigationApps[0].path} />
+      </Switch>
+    </Suspense>
   </div>
 );

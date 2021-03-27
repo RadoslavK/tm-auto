@@ -7,10 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type LogsSubscriptionVariables = {};
 export type LogsSubscriptionResponse = {
     readonly logEntryAdded: {
-        readonly timestamp: {
-            readonly totalSeconds: number;
-        };
-        readonly " $fragmentRefs": FragmentRefs<"LogEntry_logEntry">;
+        readonly " $fragmentRefs": FragmentRefs<"LogEntry">;
     };
 };
 export type LogsSubscription = {
@@ -23,10 +20,7 @@ export type LogsSubscription = {
 /*
 subscription LogsSubscription {
   logEntryAdded {
-    timestamp {
-      totalSeconds
-    }
-    ...LogEntry_logEntry
+    ...LogEntry
   }
 }
 
@@ -43,22 +37,26 @@ fragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryConten
   unitName
 }
 
-fragment LogEntry_logEntry on LogEntry {
-  __typename
+fragment LogEntry on LogEntry {
   content {
     __typename
-    ...TextLogContent_textLogentryContent
-    ...AutoUnitsLogContent_autoUnitsLogEntryContent
-    ...AutoBuildLogContent_autoBuildLogEntryContent
-    ...ResourceClaimLogContent_resourceClaimLogEntryContent
+    ...LogEntryContent
   }
   timestamp {
-    totalSeconds
+    ...Timestamp
   }
   village {
     id
     ...VillageName_village
   }
+}
+
+fragment LogEntryContent on LogEntryContent {
+  __isLogEntryContent: __typename
+  ...ResourceClaimLogContent_resourceClaimLogEntryContent
+  ...AutoBuildLogContent_autoBuildLogEntryContent
+  ...AutoUnitsLogContent_autoUnitsLogEntryContent
+  ...TextLogContent_textLogentryContent
 }
 
 fragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {
@@ -76,6 +74,10 @@ fragment TextLogContent_textLogentryContent on TextLogEntryContent {
   messageType
 }
 
+fragment Timestamp on Timestamp {
+  totalSeconds
+}
+
 fragment VillageName_village on Village {
   coords {
     x
@@ -88,31 +90,6 @@ fragment VillageName_village on Village {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Timestamp",
-  "kind": "LinkedField",
-  "name": "timestamp",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "totalSeconds",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
-  "storageKey": null
-},
-v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -134,11 +111,10 @@ return {
         "name": "logEntryAdded",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "LogEntry_logEntry"
+            "name": "LogEntry"
           }
         ],
         "storageKey": null
@@ -161,8 +137,6 @@ return {
         "name": "logEntryAdded",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -171,84 +145,16 @@ return {
             "name": "content",
             "plural": false,
             "selections": [
-              (v1/*: any*/),
               {
-                "kind": "InlineFragment",
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "message",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "messageType",
-                    "storageKey": null
-                  }
-                ],
-                "type": "TextLogEntryContent",
-                "abstractKey": null
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "__typename",
+                "storageKey": null
               },
               {
-                "kind": "InlineFragment",
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "amount",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "index",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "unitName",
-                    "storageKey": null
-                  }
-                ],
-                "type": "AutoUnitsLogEntryContent",
-                "abstractKey": null
-              },
-              {
-                "kind": "InlineFragment",
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "fieldId",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "level",
-                    "storageKey": null
-                  },
-                  (v2/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "type",
-                    "storageKey": null
-                  }
-                ],
-                "type": "AutoBuildLogEntryContent",
-                "abstractKey": null
+                "kind": "TypeDiscriminator",
+                "abstractKey": "__isLogEntryContent"
               },
               {
                 "kind": "InlineFragment",
@@ -302,6 +208,102 @@ return {
                 ],
                 "type": "ResourceClaimLogEntryContent",
                 "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "fieldId",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "level",
+                    "storageKey": null
+                  },
+                  (v0/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "type",
+                    "storageKey": null
+                  }
+                ],
+                "type": "AutoBuildLogEntryContent",
+                "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "amount",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "index",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "unitName",
+                    "storageKey": null
+                  }
+                ],
+                "type": "AutoUnitsLogEntryContent",
+                "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "message",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "messageType",
+                    "storageKey": null
+                  }
+                ],
+                "type": "TextLogEntryContent",
+                "abstractKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Timestamp",
+            "kind": "LinkedField",
+            "name": "timestamp",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "totalSeconds",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -353,7 +355,7 @@ return {
                 "name": "isCapital",
                 "storageKey": null
               },
-              (v2/*: any*/)
+              (v0/*: any*/)
             ],
             "storageKey": null
           }
@@ -363,14 +365,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "71f967bf5e9994091fc5eb123173d5b6",
+    "cacheID": "ad0d6d471f7edc986f0b5109420def8c",
     "id": null,
     "metadata": {},
     "name": "LogsSubscription",
     "operationKind": "subscription",
-    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    timestamp {\n      totalSeconds\n    }\n    ...LogEntry_logEntry\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry_logEntry on LogEntry {\n  __typename\n  content {\n    __typename\n    ...TextLogContent_textLogentryContent\n    ...AutoUnitsLogContent_autoUnitsLogEntryContent\n    ...AutoBuildLogContent_autoBuildLogEntryContent\n    ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  }\n  timestamp {\n    totalSeconds\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...LogEntry\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry on LogEntry {\n  content {\n    __typename\n    ...LogEntryContent\n  }\n  timestamp {\n    ...Timestamp\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment LogEntryContent on LogEntryContent {\n  __isLogEntryContent: __typename\n  ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  ...AutoBuildLogContent_autoBuildLogEntryContent\n  ...AutoUnitsLogContent_autoUnitsLogEntryContent\n  ...TextLogContent_textLogentryContent\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
 })();
-(node as any).hash = '634b41a19f6fcd6f296650106bea9927';
+(node as any).hash = '70c461e84572132db11602752a795186';
 export default node;

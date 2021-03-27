@@ -1,5 +1,5 @@
 import type { ExecutionResult } from 'graphql';
-import type { GraphqlHandlerPayload } from 'shared/types/models.js';
+import type { GraphqlHandlerPayload } from 'shared/types/graphql.js';
 import type {
   Observer,
   Unsubscribable,

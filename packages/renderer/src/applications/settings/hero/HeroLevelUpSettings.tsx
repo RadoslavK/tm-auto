@@ -9,11 +9,16 @@ import {
   TableRow,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type {
   HeroLevelUpItemInput,
@@ -21,6 +26,7 @@ import type {
 } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql.js';
 import type { HeroLevelUpSettingsQuery } from '../../../_graphql/__generated__/HeroLevelUpSettingsQuery.graphql.js';
 import type { HeroLevelUpSettingsRemoveHeroLevelUpItemMutation } from '../../../_graphql/__generated__/HeroLevelUpSettingsRemoveHeroLevelUpItemMutation.graphql.js';
+import type { HeroLevelUpSettingsSubscription } from '../../../_graphql/__generated__/HeroLevelUpSettingsSubscription.graphql.js';
 import type { HeroLevelUpSettingsUpdateHeroLevelUpItemMutation } from '../../../_graphql/__generated__/HeroLevelUpSettingsUpdateHeroLevelUpItemMutation.graphql.js';
 import { HeroLevelUpItemForm } from './HeroLevelUpItemForm.js';
 
@@ -42,7 +48,7 @@ const heroLevelUpSettingsQuery = graphql`
 const heroLevelUpSettingsAddHeroLevelUpItemMutation = graphql`
   mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation($item: HeroLevelUpItemInput!) {
       addHeroLevelUpItem(item: $item) {
-          name
+          ...HeroLevelUpItem
       }
   } 
 `;
@@ -50,7 +56,7 @@ const heroLevelUpSettingsAddHeroLevelUpItemMutation = graphql`
 const heroLevelUpSettingsUpdateHeroLevelUpItemMutation = graphql`
     mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation($item: HeroLevelUpItemInput!, $previousName: ID!) {
         updateHeroLevelUpItem(item: $item, previousName: $previousName) {
-            name
+            ...HeroLevelUpItem
         }
     }
 `;
@@ -58,9 +64,18 @@ const heroLevelUpSettingsUpdateHeroLevelUpItemMutation = graphql`
 const heroLevelUpSettingsRemoveHeroLevelUpItemMutation = graphql`
     mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation($name: ID!) {
         removeHeroLevelUpItem(name: $name) {
-            name
+            name @deleteRecord
+            ...HeroLevelUpItem
         }
     }
+`;
+
+const heroLevelUpSettingsSubscription = graphql`
+  subscription HeroLevelUpSettingsSubscription {
+      heroLevelUpSettingsChanged {
+          ...HeroLevelUpSettings
+      }
+  }
 `;
 
 export const HeroLevelUpSettings: React.FC = () => {
@@ -68,6 +83,17 @@ export const HeroLevelUpSettings: React.FC = () => {
   const [addHeroLevelUpItem] = useMutation<HeroLevelUpSettingsAddHeroLevelUpItemMutation>(heroLevelUpSettingsAddHeroLevelUpItemMutation);
   const [updateHeroLevelUpItem] = useMutation<HeroLevelUpSettingsUpdateHeroLevelUpItemMutation>(heroLevelUpSettingsUpdateHeroLevelUpItemMutation);
   const [removeHeroLevelUpItem] = useMutation<HeroLevelUpSettingsRemoveHeroLevelUpItemMutation>(heroLevelUpSettingsRemoveHeroLevelUpItemMutation);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroLevelUpSettingsSubscription> => ({
+    subscription: heroLevelUpSettingsSubscription,
+    variables: {},
+    updater: (store) => {
+      const newRecord = store.getRootField('heroLevelUpSettingsChanged');
+      store.getRoot().setLinkedRecord(newRecord, 'heroLevelUpSettings');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const [isItemFormShown, setIsItemFormShown] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<HeroLevelUpItemInput | undefined>();
@@ -94,8 +120,20 @@ export const HeroLevelUpSettings: React.FC = () => {
       });
     } else {
       addHeroLevelUpItem({
-        variables: {
-          item,
+        variables: { item },
+        updater: (store) => {
+          const newRecord = store.getRootField('addHeroLevelUpItem');
+          const root = store.getRoot();
+          const oldSettings = root.getLinkedRecord('heroLevelUpSettings');
+
+          if (!oldSettings) {
+            return;
+          }
+
+          const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
+
+          oldRecords?.push(newRecord);
+          oldSettings.setLinkedRecords(oldRecords, 'heroLevelUpSettings');
         },
       });
     }
@@ -138,6 +176,19 @@ export const HeroLevelUpSettings: React.FC = () => {
 
                         removeHeroLevelUpItem({
                           variables: { name: item.name },
+                          updater: (store) => {
+                            const root = store.getRoot();
+                            const oldSettings = root.getLinkedRecord('heroLevelUpSettings');
+
+                            if (!oldSettings) {
+                              return;
+                            }
+
+                            const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
+
+                            const newRecords = oldRecords?.filter(r => !!r && r.getDataID() !== item.name);
+                            oldSettings.setLinkedRecords(newRecords, 'heroLevelUpSettings');
+                          },
                         });
                       }}>
                       X

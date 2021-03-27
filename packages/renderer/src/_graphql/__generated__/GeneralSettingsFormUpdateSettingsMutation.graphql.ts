@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type UpdateGeneralSettingsInput = {
     chromePath: string;
     headlessChrome: boolean;
@@ -12,7 +13,7 @@ export type GeneralSettingsFormUpdateSettingsMutationVariables = {
 };
 export type GeneralSettingsFormUpdateSettingsMutationResponse = {
     readonly updateGeneralSettings: {
-        readonly chromePath: string;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralSettings">;
     };
 };
 export type GeneralSettingsFormUpdateSettingsMutation = {
@@ -27,8 +28,13 @@ mutation GeneralSettingsFormUpdateSettingsMutation(
   $settings: UpdateGeneralSettingsInput!
 ) {
   updateGeneralSettings(settings: $settings) {
-    chromePath
+    ...GeneralSettings
   }
+}
+
+fragment GeneralSettings on GeneralSettings {
+  chromePath
+  headlessChrome
 }
 */
 
@@ -42,28 +48,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "settings",
-        "variableName": "settings"
-      }
-    ],
-    "concreteType": "GeneralSettings",
-    "kind": "LinkedField",
-    "name": "updateGeneralSettings",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "chromePath",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "settings",
+    "variableName": "settings"
   }
 ];
 return {
@@ -72,7 +59,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "GeneralSettingsFormUpdateSettingsMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "GeneralSettings",
+        "kind": "LinkedField",
+        "name": "updateGeneralSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "GeneralSettings"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -81,17 +85,43 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "GeneralSettingsFormUpdateSettingsMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "GeneralSettings",
+        "kind": "LinkedField",
+        "name": "updateGeneralSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "chromePath",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "headlessChrome",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "78b8495c38dc58e7bc7c6147cb82e26e",
+    "cacheID": "d6c6da313f92575495ab5fec0193a6a8",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    chromePath\n  }\n}\n"
+    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    ...GeneralSettings\n  }\n}\n\nfragment GeneralSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
   }
 };
 })();
-(node as any).hash = '32fc728fb9b79771e1775accdd67f24b';
+(node as any).hash = '762ead6d4f19b1b9e67f3fbefb4ab597';
 export default node;
