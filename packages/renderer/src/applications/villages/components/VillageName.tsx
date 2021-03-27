@@ -1,6 +1,7 @@
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
+import type { Coords } from 'shared/types/coords.js';
 
 import type { VillageName_village$key } from '../../../_graphql/__generated__/VillageName_village.graphql.js';
 
@@ -19,6 +20,9 @@ type Props = {
   readonly village: VillageName_village$key;
 };
 
+export const formatVillageName = (name: string, coords: Coords, isCapital: boolean): string =>
+  `${name} [${coords.x}|${coords.y}] ${isCapital ? ' (Capital)' : ''}`;
+
 export const VillageName: React.FC<Props> = ({ village }) => {
   const {
     name,
@@ -26,7 +30,7 @@ export const VillageName: React.FC<Props> = ({ village }) => {
     coords,
   } = useFragment(villageNameVillageFragment, village);
 
-  return <>{name} [{coords.x}|{coords.y}] {isCapital ? ' (Capital)' : ''}</>;
+  return <>{formatVillageName(name, coords, isCapital)}</>;
 };
 
 VillageName.displayName = 'VillageName';

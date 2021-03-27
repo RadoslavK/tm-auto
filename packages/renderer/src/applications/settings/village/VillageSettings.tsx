@@ -7,7 +7,7 @@ import React, {
 import { useLazyLoadQuery } from 'react-relay/hooks';
 
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
-import { VillageName } from '../../villages/components/VillageName.js';
+import { formatVillageName } from '../../villages/components/VillageName.js';
 import { AutoBuildSettings } from './AutoBuildSettings.js';
 import { AutoPartySettings } from './AutoPartySettings.js';
 import { AutoUnitsSettings } from './AutoUnitsSettings.js';
@@ -54,7 +54,12 @@ const villageSettingsQuery = graphql`
   query VillageSettingsQuery {
       villages {
           id
-          ...VillageName_village
+          name
+          coords {
+              x
+              y
+          }
+          isCapital
       }
   }
 `;
@@ -102,9 +107,11 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId })
           }}
           value={selectedVillageId}>
           {villages.map((village) => (
-            <option key={village.id} value={village.id}>
-              <VillageName village={village} />
-            </option>
+            <option
+              key={village.id}
+              value={village.id}
+              label={formatVillageName(village.name, village.coords, village.isCapital)}
+            />
           ))}
         </select>
       </div>
