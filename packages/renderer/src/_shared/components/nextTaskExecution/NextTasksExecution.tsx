@@ -18,6 +18,7 @@ import type { NextTasksExecutionResetMutation } from '../../../_graphql/__genera
 import type { NextTasksExecutionSetMutation } from '../../../_graphql/__generated__/NextTasksExecutionSetMutation.graphql.js';
 import type { NextTasksExecutionSubscription } from '../../../_graphql/__generated__/NextTasksExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
+import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 const nextTasksExecutionQuery = graphql`
@@ -68,7 +69,7 @@ export const NextTasksExecution: React.FC = () => {
 
   useSubscription(nextTasksExecutionSubscriptionConfig);
 
-  const timer = useCountDown(nextTasksExecution.totalSeconds);
+  const timer = useCountDown(getSecondsUntilTimestamp(nextTasksExecution));
 
   const [isFormShown, setIsFormShown] = useState(false);
 

@@ -21,6 +21,7 @@ import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__
 import type { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type { NextVillageTaskExecutionSubscription } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
+import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
@@ -79,7 +80,7 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
 
   useSubscription(subscriptionConfig);
 
-  const nextExecutionTimer = useCountDown(nextVillageTaskExecution.totalSeconds);
+  const nextExecutionTimer = useCountDown(getSecondsUntilTimestamp(nextVillageTaskExecution));
 
   const [isFormShown, setIsFormShown] = useState(false);
 
