@@ -37,10 +37,16 @@ export const fetchFunction = <TResult>({
   const processMessage = (message: GraphqlHandlerMessage): void => {
     switch (message.type) {
       case GraphqlHandlerMessageType.Data: {
+        if ((message.payload.errors ?? []).length) {
+          console.error(message.payload.errors);
+        }
+
         return observer.next(getData(message.payload));
       }
 
       case GraphqlHandlerMessageType.Error: {
+        console.error(message.error);
+
         observer.error({
           name: 'TODO',
           message: message.error.message,

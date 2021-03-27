@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AccountInput = {
     password: string;
     server: string;
@@ -13,7 +14,7 @@ export type SignInFormCreateAccountMutationVariables = {
 };
 export type SignInFormCreateAccountMutationResponse = {
     readonly createAccount: {
-        readonly id: string;
+        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
     };
 };
 export type SignInFormCreateAccountMutation = {
@@ -28,8 +29,16 @@ mutation SignInFormCreateAccountMutation(
   $account: AccountInput!
 ) {
   createAccount(account: $account) {
+    ...UserAccount
     id
   }
+}
+
+fragment UserAccount on UserAccount {
+  id
+  username
+  password
+  server
 }
 */
 
@@ -43,28 +52,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "account",
-        "variableName": "account"
-      }
-    ],
-    "concreteType": "UserAccount",
-    "kind": "LinkedField",
-    "name": "createAccount",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "account",
+    "variableName": "account"
   }
 ];
 return {
@@ -73,7 +63,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "SignInFormCreateAccountMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "createAccount",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "UserAccount"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -82,17 +89,57 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "SignInFormCreateAccountMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "createAccount",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "password",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "server",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "71a6edb51391eb3d702574f281fd4928",
+    "cacheID": "1ec97102a4bddcca3cabd2fcfb6d1aff",
     "id": null,
     "metadata": {},
     "name": "SignInFormCreateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n  }\n}\n"
+    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
   }
 };
 })();
-(node as any).hash = 'c32cab3e35ff39a9a59c8b994fbb6fc0';
+(node as any).hash = '407aeffc3c994a2626b4d18c4d94d7dd';
 export default node;

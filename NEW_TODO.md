@@ -9,5 +9,6 @@
 
 # Shortcoming
 * Mutations or Subs that return data. We need to destructure at least 1 prop even without consuming it
+  * ...specified used to update the local state, if dont want to consume then remove from schema lol
 * Nexus needs mutable arrays
 * Type backing needs a text reference instead of import

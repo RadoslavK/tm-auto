@@ -19,21 +19,30 @@ import { Close as CloseIcon } from '@material-ui/icons';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React, {
+  Suspense,
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { nameOf } from 'shared/utils/nameOf.js';
 
 import type {
   AccountInput,
   SignInFormCreateAccountMutation,
 } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql.js';
-import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
+import type {
+  SignInFormQuery,
+  SignInFormQueryResponse,
+} from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
+import type { SignInFormSubscription } from '../../../_graphql/__generated__/SignInFormSubscription.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
 import { Accounts } from './Accounts.js';
 import { SignInFormDialog } from './SignInFormDialog.js';
@@ -100,7 +109,7 @@ const signInMutation = graphql`
 const createAccountMutation = graphql`
   mutation SignInFormCreateAccountMutation($account: AccountInput!) {
     createAccount(account: $account) {
-      id
+      ...UserAccount
     }
   }   
 `;
@@ -108,11 +117,12 @@ const createAccountMutation = graphql`
 const updateAccountMutation = graphql`
     mutation SignInFormUpdateAccountMutation($id: ID!, $account: AccountInput!) {
         updateAccount(id: $id, account: $account) {
-            id
+            ...UserAccount
         }
     }
 `;
 
+//  TODO support @deleteRecord in local schema
 const deleteAccountMutation = graphql`
     mutation SignInFormDeleteAccountMutation($id: ID!) {
         deleteAccount(id: $id) {
@@ -121,22 +131,39 @@ const deleteAccountMutation = graphql`
     }
 `;
 
+const signInFormSubscription = graphql`
+  subscription SignInFormSubscription {
+      botStateChanged
+      lastSignedAccountIdUpdated
+  }
+`;
+
 export const SignInForm: React.FC = () => {
   const {
     botState,
     lastSignedAccountId,
   } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {});
 
+  const botStateSubConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormSubscription> => ({
+    subscription: signInFormSubscription,
+    variables: {},
+    updater: (store, data) => {
+      const root = store.getRoot();
+      root.setValue(data.botStateChanged, nameOf<SignInFormQueryResponse>('botState'));
+      root.setValue(data.lastSignedAccountIdUpdated, nameOf<SignInFormQueryResponse>('lastSignedAccountId'));
+    },
+  }), []);
+  useSubscription(botStateSubConfig);
+
   const [selectedAccountId, setSelectedAccountId] = useState(lastSignedAccountId);
 
   useEffect(() => {
-    setSelectedAccountId(selectedAccountId);
-  }, [selectedAccountId]);
+    setSelectedAccountId(lastSignedAccountId);
+  }, [lastSignedAccountId]);
 
   const classes = useStyles();
 
   const [submitMessage, setSubmitMessage] = useState<string>();
-  const [isSigningIn, setIsSigningIn] = useState(false);
 
   useEffect(() => {
     document.title = 'TM Auto';
@@ -149,12 +176,16 @@ export const SignInForm: React.FC = () => {
   const [deleteAccount] = useMutation<SignInFormDeleteAccountMutation>(deleteAccountMutation);
   const [signIn] = useMutation<SignInFormSignInMutation>(signInMutation);
 
-  const disabled = botState === 'Pending' || isSigningIn;
+  const disabled = botState === 'Pending';
 
   const onSignIn = (): void => {
     if (selectedAccountId) {
-      setIsSigningIn(false);
-      signIn({ variables: { accountId: selectedAccountId } });
+      signIn({
+        variables: { accountId: selectedAccountId },
+        optimisticResponse: {
+          signIn: 'Pending',
+        },
+      });
     }
   };
 
@@ -208,7 +239,8 @@ export const SignInForm: React.FC = () => {
           return;
         }
 
-        const newAccounts = oldAccounts.filter(acc => acc.getDataID() !== selectedAccountId);
+        //  TODO: @deleteRecords leaves null in the array and is triggered first?
+        const newAccounts = oldAccounts.filter(acc => !!acc && acc.getDataID() !== selectedAccountId);
 
         root.setLinkedRecords(newAccounts, 'accounts');
       },
@@ -224,11 +256,13 @@ export const SignInForm: React.FC = () => {
             TM Auto
           </Typography>
           <div className={classes.form}>
-            <Accounts
-              disabled={disabled}
-              onAccountChanged={setSelectedAccountId}
-              selectedId={selectedAccountId}
-            />
+            <Suspense fallback={null}>
+              <Accounts
+                disabled={disabled}
+                onAccountChanged={setSelectedAccountId}
+                selectedId={selectedAccountId}
+              />
+            </Suspense>
             <Button
               className={classes.submit}
               color="primary"
@@ -305,11 +339,13 @@ export const SignInForm: React.FC = () => {
           dialogType === SignInFormDialogType.Update
         }
       >
-        <SignInFormDialog
-          onSubmit={onSubmitForm}
-          selectedAccountId={selectedAccountId}
-          type={dialogType}
-        />
+        <Suspense fallback={null}>
+          <SignInFormDialog
+            onSubmit={onSubmitForm}
+            selectedAccountId={selectedAccountId}
+            type={dialogType}
+          />
+        </Suspense>
       </Dialog>
       <Dialog
         onClose={() => setDialogType(SignInFormDialogType.None)}

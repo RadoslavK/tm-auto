@@ -51,6 +51,7 @@ export const EnsureGraphQL: React.FC<Props> = ({ children, socketName }) => {
           switch (event.name) {
             case 'network.error': {
               console.error(event.transactionID, event.error);
+              break;
             }
           }
         },

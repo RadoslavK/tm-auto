@@ -8,8 +8,16 @@ import {
   Typography,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  fetchQuery,
+  useLazyLoadQuery,
+  useRelayEnvironment,
+} from 'react-relay/hooks';
 
 import type { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql.js';
@@ -64,27 +72,44 @@ export const SignInFormDialog: React.FC<Props> = ({
 
   const { account } = useLazyLoadQuery<SignInFormDialogQuery>(signInFormDialogAccountQuery, {
     id: selectedAccountId || '',
-    skip: !selectedAccountId,
+    skip: type !== SignInFormDialogType.Update || !selectedAccountId,
   });
 
   const [username, setUsername] = useState(account?.username ?? '');
   const [password, setPassword] = useState(account?.password ?? '');
   const [server, setServer] = useState(account?.server ?? '');
 
-  const newAccount: SignInFormCreateAccountMutationVariables['account'] = {
+  const newAccount = useMemo((): SignInFormCreateAccountMutationVariables['account'] => ({
     password,
     server,
     username,
-  };
+  }), [username, password, server]);
 
-  const { isAccountTaken } = useLazyLoadQuery<SignInFormDialogIsAccountTakenQuery>(
-    isAccountTakenQuery,
-    {
+  // TODO rewrite when React supports Concurrent rendering so the suspense wont trigger on each form change
+  //  Suspended = Component unmounts and user loses focus from the input
+  const relayEnvironment = useRelayEnvironment();
+  const [isAccountTaken, setIsAccountTaken] = useState<boolean>(false);
+  useEffect(() => {
+    fetchQuery<SignInFormDialogIsAccountTakenQuery>(relayEnvironment, isAccountTakenQuery, {
       account: newAccount,
       skip: type === SignInFormDialogType.Update,
-    },
-    { fetchPolicy: 'network-only' },
-  );
+    }, { fetchPolicy: 'network-only' })
+      .subscribe({
+        next: (response) => {
+          setIsAccountTaken(!!response.isAccountTaken);
+        },
+      });
+  }, [relayEnvironment, newAccount, type]);
+
+  //  TODO dont cache this in Relay devtools at least it still shows cached
+  // const { isAccountTaken } = useLazyLoadQuery<SignInFormDialogIsAccountTakenQuery>(
+  //   isAccountTakenQuery,
+  //   {
+  //     account: newAccount,
+  //     skip: type === SignInFormDialogType.Update,
+  //   },
+  //   { fetchPolicy: 'network-only' },
+  // );
 
   const submitAccount = () => onSubmit(newAccount);
 

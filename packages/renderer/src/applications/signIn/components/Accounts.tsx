@@ -7,10 +7,21 @@ import {
   withStyles,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useEffect } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
+import {
+  useLazyLoadQuery,
+  useSubscription,
+} from 'react-relay/hooks';
+import type {
+  GraphQLSubscriptionConfig,
+  RecordProxy,
+} from 'relay-runtime';
 
 import type { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
+import type { AccountsSubscription } from '../../../_graphql/__generated__/AccountsSubscription.graphql.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -76,12 +87,50 @@ const accountsQuery = graphql`
   }
 `;
 
+const accountsSubscription = graphql`
+  subscription AccountsSubscription {
+      accountsUpdated {
+          id
+          username
+          server
+      }
+  }
+`;
+
 export const Accounts: React.FC<Props> = ({
   disabled,
   onAccountChanged,
   selectedId,
 }) => {
   const { accounts } = useLazyLoadQuery<AccountsQuery>(accountsQuery, {});
+
+  const subscriptionConfig: GraphQLSubscriptionConfig<AccountsSubscription> = useMemo(() => ({
+    subscription: accountsSubscription,
+    variables: {},
+    updater: (store, data) => {
+      const root = store.getRoot();
+      const oldAccounts = root.getLinkedRecords('accounts');
+
+      if (!oldAccounts) {
+        return;
+      }
+
+      const newLinkedRecords = data.accountsUpdated.reduce(
+        (linkedRecords, acc) => {
+          const record = store.get(acc.id);
+
+          return record ? [...linkedRecords, record] : linkedRecords;
+        },
+        [] as RecordProxy[],
+      );
+
+      const newAccounts = oldAccounts.concat(newLinkedRecords);
+
+      root.setLinkedRecords(newAccounts, 'accounts');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   useEffect(() => {
     if (!selectedId && accounts.length > 0) {

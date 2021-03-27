@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AccountInput = {
     password: string;
     server: string;
@@ -14,7 +15,7 @@ export type SignInFormUpdateAccountMutationVariables = {
 };
 export type SignInFormUpdateAccountMutationResponse = {
     readonly updateAccount: {
-        readonly id: string;
+        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
     };
 };
 export type SignInFormUpdateAccountMutation = {
@@ -30,8 +31,16 @@ mutation SignInFormUpdateAccountMutation(
   $account: AccountInput!
 ) {
   updateAccount(id: $id, account: $account) {
+    ...UserAccount
     id
   }
+}
+
+fragment UserAccount on UserAccount {
+  id
+  username
+  password
+  server
 }
 */
 
@@ -48,33 +57,14 @@ v1 = {
 },
 v2 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "account",
-        "variableName": "account"
-      },
-      {
-        "kind": "Variable",
-        "name": "id",
-        "variableName": "id"
-      }
-    ],
-    "concreteType": "UserAccount",
-    "kind": "LinkedField",
-    "name": "updateAccount",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "account",
+    "variableName": "account"
+  },
+  {
+    "kind": "Variable",
+    "name": "id",
+    "variableName": "id"
   }
 ];
 return {
@@ -86,7 +76,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "SignInFormUpdateAccountMutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "updateAccount",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "UserAccount"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -98,17 +105,57 @@ return {
     ],
     "kind": "Operation",
     "name": "SignInFormUpdateAccountMutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "updateAccount",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "password",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "server",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "ee05c8c598a007827615d3a2ace43088",
+    "cacheID": "fa16c88ff67c181a69dce4254673e8fe",
     "id": null,
     "metadata": {},
     "name": "SignInFormUpdateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    id\n  }\n}\n"
+    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  username\n  password\n  server\n}\n"
   }
 };
 })();
-(node as any).hash = 'c7002f871dbbca415fcc7463157f83da';
+(node as any).hash = '5f6372b75e4de2be5fc48c531917f90d';
 export default node;
