@@ -16,6 +16,7 @@ import {
 } from 'relay-runtime';
 
 import { createIpcFetchFunction } from '../_graphql/utils/createIpcFetchFunction.js';
+import { createIpcSubscriptionFunction } from '../_graphql/utils/createIpcSubscriptionFunction.js';
 import { IpcClient } from '../_ipc/ipcUtils.js';
 
 const useStyles = makeStyles({
@@ -39,10 +40,12 @@ export const EnsureGraphQL: React.FC<Props> = ({ children, socketName }) => {
     const ipcClient = new IpcClient(socketName);
 
     const init = async (): Promise<void> => {
-      const fetchFunction = await createIpcFetchFunction(ipcClient);
+      await ipcClient.initConnection();
+      const fetchFunction = createIpcFetchFunction(ipcClient);
+      const subscriptionFunction = createIpcSubscriptionFunction(ipcClient);
 
       const relayEnvironment = new Environment({
-        network: Network.create(fetchFunction),
+        network: Network.create(fetchFunction, subscriptionFunction),
         store: new Store(new RecordSource()),
         log: event => {
           switch (event.name) {
