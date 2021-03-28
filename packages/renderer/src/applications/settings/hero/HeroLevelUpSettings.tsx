@@ -34,6 +34,7 @@ const heroLevelUpSettingsQuery = graphql`
   query HeroLevelUpSettingsQuery {
       heroLevelUpSettings {
           levelUpItems {
+              id
               defBonus
               name
               offBonus
@@ -54,17 +55,17 @@ const heroLevelUpSettingsAddHeroLevelUpItemMutation = graphql`
 `;
 
 const heroLevelUpSettingsUpdateHeroLevelUpItemMutation = graphql`
-    mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation($item: HeroLevelUpItemInput!, $previousName: ID!) {
-        updateHeroLevelUpItem(item: $item, previousName: $previousName) {
+    mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation($item: HeroLevelUpItemInput!, $id: ID!) {
+        updateHeroLevelUpItem(item: $item, id: $id) {
             ...HeroLevelUpItem
         }
     }
 `;
 
 const heroLevelUpSettingsRemoveHeroLevelUpItemMutation = graphql`
-    mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation($name: ID!) {
-        removeHeroLevelUpItem(name: $name) {
-            name @deleteRecord
+    mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation($id: ID!) {
+        removeHeroLevelUpItem(id: $id) {
+            id @deleteRecord
             ...HeroLevelUpItem
         }
     }
@@ -95,26 +96,27 @@ export const HeroLevelUpSettings: React.FC = () => {
 
   useSubscription(subscriptionConfig);
 
-  const [isItemFormShown, setIsItemFormShown] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState<HeroLevelUpItemInput | undefined>();
+  const { levelUpItems } = heroLevelUpSettings;
 
-  const openForm = (itemToEdit?: HeroLevelUpItemInput) => {
-    setItemToEdit(itemToEdit);
+  const [isItemFormShown, setIsItemFormShown] = useState(false);
+  const [editedItemId, setEditedItemId] = useState<string | undefined>();
+  const itemToEdit = levelUpItems.find(i => i.id === editedItemId);
+
+  const openForm = (id?: string) => {
     setIsItemFormShown(true);
+    setEditedItemId(id);
   };
 
   const closeForm = () => {
     setIsItemFormShown(false);
-    setItemToEdit(undefined);
+    setEditedItemId(undefined);
   };
-
-  const { levelUpItems } = heroLevelUpSettings;
 
   const submitItem = (item: HeroLevelUpItemInput) => {
     if (itemToEdit) {
       updateHeroLevelUpItem({
         variables: {
-          previousName: itemToEdit.name,
+          id: itemToEdit.id,
           item,
         },
       });
@@ -123,6 +125,7 @@ export const HeroLevelUpSettings: React.FC = () => {
         variables: { item },
         updater: (store) => {
           const newRecord = store.getRootField('addHeroLevelUpItem');
+
           const root = store.getRoot();
           const oldSettings = root.getLinkedRecord('heroLevelUpSettings');
 
@@ -133,7 +136,8 @@ export const HeroLevelUpSettings: React.FC = () => {
           const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
 
           oldRecords?.push(newRecord);
-          oldSettings.setLinkedRecords(oldRecords, 'heroLevelUpSettings');
+          oldSettings.setLinkedRecords(oldRecords, 'levelUpItems');
+          root.setLinkedRecord(oldSettings, 'heroLevelUpSettings');
         },
       });
     }
@@ -167,7 +171,7 @@ export const HeroLevelUpSettings: React.FC = () => {
             </TableHead>
             <TableBody>
               {levelUpItems.map((item) => (
-                <TableRow key={item.name} onClick={() => openForm(item)}>
+                <TableRow key={item.id} onClick={() => openForm(item.id)}>
                   <TableCell component="th" scope="row">
                     {item.name}
                     <button
@@ -175,7 +179,7 @@ export const HeroLevelUpSettings: React.FC = () => {
                         e.stopPropagation();
 
                         removeHeroLevelUpItem({
-                          variables: { name: item.name },
+                          variables: { id: item.id },
                           updater: (store) => {
                             const root = store.getRoot();
                             const oldSettings = root.getLinkedRecord('heroLevelUpSettings');
@@ -184,10 +188,12 @@ export const HeroLevelUpSettings: React.FC = () => {
                               return;
                             }
 
+                            const deletedItem = store.getRootField('removeHeroLevelUpItem');
                             const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
+                            const newRecords = oldRecords?.filter(r => !!r && r.getDataID() !== deletedItem.getDataID());
 
-                            const newRecords = oldRecords?.filter(r => !!r && r.getDataID() !== item.name);
-                            oldSettings.setLinkedRecords(newRecords, 'heroLevelUpSettings');
+                            oldSettings.setLinkedRecords(newRecords, 'levelUpItems');
+                            root.setLinkedRecord(oldSettings, 'heroLevelUpSettings');
                           },
                         });
                       }}>

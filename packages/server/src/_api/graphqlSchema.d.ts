@@ -66,7 +66,7 @@ export interface NexusGenInputs {
   }
   HeroLevelUpItemInput: { // input type
     defBonus: number; // Int!
-    name: string; // ID!
+    name: string; // String!
     offBonus: number; // Int!
     offensiveStrength: number; // Int!
     resources: number; // Int!
@@ -320,7 +320,8 @@ export interface NexusGenObjects {
   HeroInformation: Hero;
   HeroLevelUpItem: { // root type
     defBonus: number; // Int!
-    name: string; // ID!
+    id: string; // ID!
+    name: string; // String!
     offBonus: number; // Int!
     offensiveStrength: number; // Int!
     resources: number; // Int!
@@ -576,7 +577,8 @@ export interface NexusGenFieldTypes {
   }
   HeroLevelUpItem: { // field return type
     defBonus: number; // Int!
-    name: string; // ID!
+    id: string; // ID!
+    name: string; // String!
     offBonus: number; // Int!
     offensiveStrength: number; // Int!
     resources: number; // Int!
@@ -673,7 +675,6 @@ export interface NexusGenFieldTypes {
     heroLevelUpSettings: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
     isAccountTaken: boolean; // Boolean!
     isBotActive: boolean; // Boolean!
-    isHeroLevelUpItemNameUsed: boolean; // Boolean!
     lastSignedAccountId: string | null; // String
     logEntries: NexusGenRootTypes['LogEntry'][]; // [LogEntry!]!
     mapScanProgress: number; // Float!
@@ -951,7 +952,8 @@ export interface NexusGenFieldTypeNames {
   }
   HeroLevelUpItem: { // field return type name
     defBonus: 'Int'
-    name: 'ID'
+    id: 'ID'
+    name: 'String'
     offBonus: 'Int'
     offensiveStrength: 'Int'
     resources: 'Int'
@@ -1048,7 +1050,6 @@ export interface NexusGenFieldTypeNames {
     heroLevelUpSettings: 'HeroLevelUpSettings'
     isAccountTaken: 'Boolean'
     isBotActive: 'Boolean'
-    isHeroLevelUpItemNameUsed: 'Boolean'
     lastSignedAccountId: 'String'
     logEntries: 'LogEntry'
     mapScanProgress: 'Float'
@@ -1241,7 +1242,7 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     removeHeroLevelUpItem: { // args
-      name: string; // ID!
+      id: string; // ID!
     }
     resetAutoBuildSettings: { // args
       villageId: string; // ID!
@@ -1322,8 +1323,8 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     updateHeroLevelUpItem: { // args
+      id: string; // ID!
       item: NexusGenInputs['HeroLevelUpItemInput']; // HeroLevelUpItemInput!
-      previousName: string; // ID!
     }
   }
   Query: {
@@ -1377,9 +1378,6 @@ export interface NexusGenArgTypes {
     }
     isAccountTaken: { // args
       account: NexusGenInputs['AccountInput']; // AccountInput!
-    }
-    isHeroLevelUpItemNameUsed: { // args
-      name: string; // ID!
     }
     nextTaskExecution: { // args
       task: NexusGenEnums['TaskType']; // TaskType!

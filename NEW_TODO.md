@@ -10,6 +10,7 @@
     * more like this exact thing changed and already retrieve its data
 * remove pointless subscriptions that lead to refetch of the same type as the subscription
 * Search Map option - around village, players/farms/alliance scan
+* use context and dont import services directly
 
 # Shortcoming
 * Mutations or Subs that return data. We need to destructure at least 1 prop even without consuming it

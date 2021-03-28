@@ -6,6 +6,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+import { generateId } from 'shared/utils/generateId.js';
 import { getAccountContext } from '../../../../accountContext.js';
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';
@@ -13,7 +14,8 @@ import { subscribeToEvent } from '../../../../pubSub.js';
 export const HeroLevelUpItem = objectType({
   name: 'HeroLevelUpItem',
   definition: t => {
-    t.id('name');
+    t.id('id');
+    t.string('name');
     t.int('offensiveStrength')
     t.int('offBonus');
     t.int('defBonus');
@@ -24,7 +26,7 @@ export const HeroLevelUpItem = objectType({
 export const HeroLevelUpItemInput = inputObjectType({
   name: 'HeroLevelUpItemInput',
   definition: t => {
-    t.id('name');
+    t.string('name');
     t.int('offensiveStrength');
     t.int('offBonus');
     t.int('defBonus');
@@ -55,19 +57,6 @@ export const HeroLevelUpSettingsQuery = queryField(t => {
   });
 });
 
-export const IsHeroLevelUpItemNameUsedQuery = queryField(t => {
-  t.boolean('isHeroLevelUpItemNameUsed', {
-    args: {
-      name: 'ID',
-    },
-    resolve: (_, { name }) =>
-      getSettingsService()
-        .get()
-        .levelUpItems.map((x) => x.name)
-        .includes(name),
-  });
-});
-
 export const AddHeroLevelUpItemMutation = mutationField(t => {
   t.field('addHeroLevelUpItem', {
     type: HeroLevelUpItem,
@@ -77,12 +66,13 @@ export const AddHeroLevelUpItemMutation = mutationField(t => {
     resolve: (_, { item }) => {
       const service = getSettingsService();
       const settings = service.get();
+      const newItem = { ...item, id: generateId() };
 
       service.merge({
-        levelUpItems: settings.levelUpItems.concat([item]),
+        levelUpItems: settings.levelUpItems.concat([newItem]),
       });
 
-      return item;
+      return newItem;
     },
   });
 });
@@ -91,30 +81,30 @@ export const UpdateHeroLevelUpItemMutation = mutationField(t => {
   t.field('updateHeroLevelUpItem', {
     type: HeroLevelUpItem,
     args: {
-      previousName: 'ID',
+      id: 'ID',
       item: HeroLevelUpItemInput,
     },
-    resolve: (_, { previousName, item }) => {
+    resolve: (_, { id, item }) => {
       const service = getSettingsService();
       const settings = service.get();
       const index = settings.levelUpItems.findIndex(
-        (x) => x.name === previousName,
+        (x) => x.id === id,
       );
 
       if (index === -1) {
         throw new Error(
-          `Did not find hero level up item with name: ${previousName}`,
+          `Did not find hero level up item with id: ${id}`,
         );
       }
 
       const updatedItems = settings.levelUpItems.slice();
-      updatedItems[index] = item;
+      updatedItems[index] = { ...item, id };
 
       service.merge({
         levelUpItems: updatedItems,
       });
 
-      return item;
+      return updatedItems[index];
     },
   });
 });
@@ -123,15 +113,15 @@ export const RemoveHeroLevelUpItemMutation = mutationField(t => {
   t.field('removeHeroLevelUpItem', {
     type: HeroLevelUpItem,
     args: {
-      name: 'ID',
+      id: 'ID',
     },
-    resolve: (_, { name }) => {
+    resolve: (_, { id }) => {
       const service = getSettingsService();
       const settings = service.get();
-      const index = settings.levelUpItems.findIndex((x) => x.name === name);
+      const index = settings.levelUpItems.findIndex((x) => x.id === id);
 
       if (index === -1) {
-        throw new Error(`Did not find hero level up item with name: ${name}`);
+        throw new Error(`Did not find hero level up item with id: ${id}`);
       }
 
       const updatedSettings = settings.levelUpItems.slice();

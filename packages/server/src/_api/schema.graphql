@@ -267,7 +267,8 @@ type HeroInformation {
 
 type HeroLevelUpItem {
   defBonus: Int!
-  name: ID!
+  id: ID!
+  name: String!
   offBonus: Int!
   offensiveStrength: Int!
   resources: Int!
@@ -275,7 +276,7 @@ type HeroLevelUpItem {
 
 input HeroLevelUpItemInput {
   defBonus: Int!
-  name: ID!
+  name: String!
   offBonus: Int!
   offensiveStrength: Int!
   resources: Int!
@@ -328,7 +329,7 @@ type Mutation {
   moveQueuedBuildingsBlockAsHighAsPossible(bottomBuildingQueueId: ID!, topBuildingQueueId: ID!, villageId: ID!): Boolean
   moveQueuedBuildingsBlockToIndex(bottomBuildingQueueId: ID!, index: Int!, topBuildingQueueId: ID!, villageId: ID!): Boolean
   refreshVillage(villageId: ID!): Boolean
-  removeHeroLevelUpItem(name: ID!): HeroLevelUpItem!
+  removeHeroLevelUpItem(id: ID!): HeroLevelUpItem!
   resetAccountSettings: AccountSettings!
   resetAutoAdventureSettings: AutoAdventureSettings!
   resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
@@ -361,7 +362,7 @@ type Mutation {
   updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!, villageId: ID!): AutoUnitsSettings!
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
   updateGeneralVillageSettings(settings: UpdateGeneralVillageSettingsInput!, villageId: ID!): GeneralVillageSettings!
-  updateHeroLevelUpItem(item: HeroLevelUpItemInput!, previousName: ID!): HeroLevelUpItem!
+  updateHeroLevelUpItem(id: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
 }
 
 interface Node {
@@ -396,7 +397,6 @@ type Query {
   heroLevelUpSettings: HeroLevelUpSettings!
   isAccountTaken(account: AccountInput!): Boolean!
   isBotActive: Boolean!
-  isHeroLevelUpItemNameUsed(name: ID!): Boolean!
   lastSignedAccountId: String
   logEntries: [LogEntry!]!
   mapScanProgress: Float!

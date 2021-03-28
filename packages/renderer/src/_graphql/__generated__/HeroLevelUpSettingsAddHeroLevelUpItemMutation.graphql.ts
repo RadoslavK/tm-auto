@@ -32,6 +32,7 @@ mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(
 ) {
   addHeroLevelUpItem(item: $item) {
     ...HeroLevelUpItem
+    id
   }
 }
 
@@ -134,6 +135,13 @@ return {
             "kind": "ScalarField",
             "name": "resources",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -141,12 +149,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6130b84a0f7182be9a062203c3c4d901",
+    "cacheID": "e1e7b84f2ecf3fe2e54008d85ef17ea3",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsAddHeroLevelUpItemMutation",
     "operationKind": "mutation",
-    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    ...HeroLevelUpItem\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    ...HeroLevelUpItem\n    id\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();

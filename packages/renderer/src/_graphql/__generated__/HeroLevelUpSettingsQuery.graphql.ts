@@ -8,6 +8,7 @@ export type HeroLevelUpSettingsQueryVariables = {};
 export type HeroLevelUpSettingsQueryResponse = {
     readonly heroLevelUpSettings: {
         readonly levelUpItems: ReadonlyArray<{
+            readonly id: string;
             readonly defBonus: number;
             readonly name: string;
             readonly offBonus: number;
@@ -28,6 +29,7 @@ export type HeroLevelUpSettingsQuery = {
 query HeroLevelUpSettingsQuery {
   heroLevelUpSettings {
     levelUpItems {
+      id
       defBonus
       name
       offBonus
@@ -52,31 +54,38 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "defBonus",
+  "name": "id",
   "storageKey": null
 },
 v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "defBonus",
   "storageKey": null
 },
 v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "offBonus",
+  "name": "name",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "offensiveStrength",
+  "name": "offBonus",
   "storageKey": null
 },
 v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "offensiveStrength",
+  "storageKey": null
+},
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -111,6 +120,7 @@ return {
               (v2/*: any*/),
               (v3/*: any*/),
               (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -152,7 +162,8 @@ return {
               (v1/*: any*/),
               (v2/*: any*/),
               (v3/*: any*/),
-              (v4/*: any*/)
+              (v4/*: any*/),
+              (v5/*: any*/)
             ],
             "storageKey": null
           }
@@ -162,14 +173,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9b246c32b7be9cc80878a2ba9e2109a8",
+    "cacheID": "fd654a6835ea245114b59ba91bf23bc5",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsQuery",
     "operationKind": "query",
-    "text": "query HeroLevelUpSettingsQuery {\n  heroLevelUpSettings {\n    levelUpItems {\n      defBonus\n      name\n      offBonus\n      offensiveStrength\n      resources\n      ...HeroLevelUpItemForm_heroLevelUpItem\n    }\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "query HeroLevelUpSettingsQuery {\n  heroLevelUpSettings {\n    levelUpItems {\n      id\n      defBonus\n      name\n      offBonus\n      offensiveStrength\n      resources\n      ...HeroLevelUpItemForm_heroLevelUpItem\n    }\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();
-(node as any).hash = 'b04c569d6d32de66f6e6e4440af3efae';
+(node as any).hash = 'e3e1ca552f5131094adc8ad23e2881be';
 export default node;

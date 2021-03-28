@@ -1,12 +1,8 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
-import {
-  useFragment,
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
 
 import type { HeroLevelUpItemForm_heroLevelUpItem$key } from '../../../_graphql/__generated__/HeroLevelUpItemForm_heroLevelUpItem.graphql.js';
-import type { HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery } from '../../../_graphql/__generated__/HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery.graphql.js';
 import type { HeroLevelUpItemInput } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql.js';
 
 type Props = {
@@ -23,13 +19,6 @@ const heroLevelUpItemFormHeroLevelUpItemFragment = graphql`
       offBonus
       offensiveStrength
       resources
-  }
-`;
-
-//  TODO prevent this suspending
-const heroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery = graphql`
-  query HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery($name: ID!, $include: Boolean!) {
-      isHeroLevelUpItemNameUsed(name: $name) @include(if: $include)
   }
 `;
 
@@ -51,11 +40,6 @@ export const HeroLevelUpItemForm: React.FC<Props> = ({
     (item || lastItemFragment)?.resources || 0,
   );
 
-  const { isHeroLevelUpItemNameUsed } = useLazyLoadQuery<HeroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery>(heroLevelUpItemFormQueryIsHeroLevelUpItemNameUsedQuery, {
-    name,
-    include: !!name && name !== item?.name,
-  });
-
   const submitForm = () => {
     const item: HeroLevelUpItemInput = {
       name,
@@ -68,13 +52,13 @@ export const HeroLevelUpItemForm: React.FC<Props> = ({
     onSubmit(item);
   };
 
-  const isNameValid = !!name && !isHeroLevelUpItemNameUsed;
+  const isNameValid = !!name;
 
   return (
     <div>
       <div>
         <div>
-          <label>Name{isHeroLevelUpItemNameUsed ? ' (invalid)' : ''}</label>
+          <label>Name</label>
           <input
             value={name}
             onChange={(e) => {

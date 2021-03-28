@@ -5,11 +5,11 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type HeroLevelUpSettingsRemoveHeroLevelUpItemMutationVariables = {
-    name: string;
+    id: string;
 };
 export type HeroLevelUpSettingsRemoveHeroLevelUpItemMutationResponse = {
     readonly removeHeroLevelUpItem: {
-        readonly name: string;
+        readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItem">;
     };
 };
@@ -22,10 +22,10 @@ export type HeroLevelUpSettingsRemoveHeroLevelUpItemMutation = {
 
 /*
 mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation(
-  $name: ID!
+  $id: ID!
 ) {
-  removeHeroLevelUpItem(name: $name) {
-    name
+  removeHeroLevelUpItem(id: $id) {
+    id
     ...HeroLevelUpItem
   }
 }
@@ -44,21 +44,21 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "name"
+    "name": "id"
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "name",
-    "variableName": "name"
+    "name": "id",
+    "variableName": "id"
   }
 ],
 v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "id",
   "storageKey": null
 };
 return {
@@ -111,13 +111,20 @@ return {
             "handle": "deleteRecord",
             "key": "",
             "kind": "ScalarHandle",
-            "name": "name"
+            "name": "id"
           },
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
             "name": "defBonus",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
             "storageKey": null
           },
           {
@@ -147,14 +154,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fde4167f8bc05bc81541da7470dd90ce",
+    "cacheID": "f83fd6caaae90835ca15ffbc47e8da58",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsRemoveHeroLevelUpItemMutation",
     "operationKind": "mutation",
-    "text": "mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation(\n  $name: ID!\n) {\n  removeHeroLevelUpItem(name: $name) {\n    name\n    ...HeroLevelUpItem\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation(\n  $id: ID!\n) {\n  removeHeroLevelUpItem(id: $id) {\n    id\n    ...HeroLevelUpItem\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();
-(node as any).hash = 'b477fd990585361ea3df630f4b0eb619';
+(node as any).hash = '8c96c96b0faff2f5a447c49818006477';
 export default node;
