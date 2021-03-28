@@ -38,7 +38,7 @@ export const Logs: React.FC = () => {
       const newRecord = store.getRootField('logEntryAdded');
       const oldLogs = root.getLinkedRecords('logEntries');
 
-      oldLogs?.push(newRecord);
+      oldLogs?.unshift(newRecord);
       root.setLinkedRecords(oldLogs, 'logEntries');
     },
   }), []);
