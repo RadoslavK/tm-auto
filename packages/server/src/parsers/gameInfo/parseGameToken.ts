@@ -1,7 +1,9 @@
-import { Token, TokenType } from '../../_models/gameInfo.js';
+import {
+  Token,
+  TokenType,
+} from '../../_models/gameInfo.js';
 import { getPage } from '../../browser/getPage.js';
 
-//  TODO
 export const parseGameToken = async (): Promise<Token> => {
   const page = await getPage();
   const content = await page.content();
@@ -9,6 +11,18 @@ export const parseGameToken = async (): Promise<Token> => {
   const usesAjaxToken = await page.evaluate(() => !!(window as any).ajaxToken);
 
   if (!usesAjaxToken) {
+    const tokenMatch = /eval\(atob\('(.*?)'\)\)/.exec(content);
+
+    if (tokenMatch) {
+      const [, tokenEvalCommand] = tokenMatch;
+      const token = await page.evaluate((cmd) => eval(atob(cmd)), tokenEvalCommand);
+
+      return {
+        type: TokenType.Bearer,
+        value: token,
+      };
+    }
+
     const bearerVariableMatch = /Travian\.Game\.Preferences.*?Travian\.(.*?) =.*?<\/script>/s.exec(
       content,
     );

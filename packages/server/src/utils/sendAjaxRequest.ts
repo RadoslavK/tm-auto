@@ -91,14 +91,11 @@ export const sendAjaxRequest = async <T = any>(
     });
   }
 
-  const body = JSON.stringify({
-    cmd: command,
-    ...params,
-  });
+  const body = JSON.stringify(params);
 
-  const result = await page.evaluate(
-    ({ account, bearerToken, body }) => {
-      return fetch(`${account.server}/api/v1/ajax`, {
+  return await page.evaluate(
+    ({ server, bearerToken, body, command }) => {
+      return fetch(`${server}/api/v1/ajax/${command}`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -108,8 +105,6 @@ export const sendAjaxRequest = async <T = any>(
         body,
       }).then((r) => r.json());
     },
-    { account, bearerToken: token.value, body },
+    { server: account.server, bearerToken: token.value, body, command },
   );
-
-  return result.data;
 };

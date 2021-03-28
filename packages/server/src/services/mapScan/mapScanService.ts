@@ -193,7 +193,7 @@ export class MapScanService {
             page,
           }));
         } catch (error) {
-          getAccountContext().logsService.logError(error.message);
+          getAccountContext().logsService.logError(`Failed map scan for sector [${sector.x}|${sector.y}], message: ${error.message}`);
         }
       } while (!oasesTiles || !villageTiles);
 
