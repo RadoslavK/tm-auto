@@ -104,53 +104,55 @@ export const assignHeroAttributes = async () => {
       return;
     }
 
-    const strengthResult = await ensureHeroPoint({
-      inputName: 'attributepower',
-      requested: item.offensiveStrength,
-      availablePoints,
-    });
+    const tryAssignPoints = async (): Promise<boolean> => {
+      const strengthResult = await ensureHeroPoint({
+        inputName: 'attributepower',
+        requested: item.offensiveStrength,
+        availablePoints,
+      });
 
-    if (!strengthResult.success) {
-      return;
-    }
+      if (!strengthResult.success) {
+        return false;
+      }
 
-    availablePoints -= strengthResult.added;
+      availablePoints -= strengthResult.added;
 
-    const offBonusResult = await ensureHeroPoint({
-      inputName: 'attributeoffBonus',
-      requested: item.offBonus,
-      availablePoints,
-    });
+      const offBonusResult = await ensureHeroPoint({
+        inputName: 'attributeoffBonus',
+        requested: item.offBonus,
+        availablePoints,
+      });
 
-    if (!offBonusResult.success) {
-      return;
-    }
+      if (!offBonusResult.success) {
+        return false;
+      }
 
-    availablePoints -= offBonusResult.added;
+      availablePoints -= offBonusResult.added;
 
-    const defBonusResult = await ensureHeroPoint({
-      inputName: 'attributedefBonus',
-      requested: item.defBonus,
-      availablePoints,
-    });
+      const defBonusResult = await ensureHeroPoint({
+        inputName: 'attributedefBonus',
+        requested: item.defBonus,
+        availablePoints,
+      });
 
-    if (!defBonusResult.success) {
-      return;
-    }
+      if (!defBonusResult.success) {
+        return false;
+      }
 
-    availablePoints -= defBonusResult.added;
+      availablePoints -= defBonusResult.added;
 
-    const resourcesResult = await ensureHeroPoint({
-      inputName: 'attributeproductionPoints',
-      requested: item.resources,
-      availablePoints,
-    });
+      const resourcesResult = await ensureHeroPoint({
+        inputName: 'attributeproductionPoints',
+        requested: item.resources,
+        availablePoints,
+      });
 
-    if (!resourcesResult.success) {
-      return;
-    }
+      availablePoints -= resourcesResult.added;
 
-    availablePoints -= resourcesResult.added;
+      return resourcesResult.success;
+    };
+
+    const lastAttributeSuccess = await tryAssignPoints();
 
     // Click away for the submit button to appear
     await Promise.all([
@@ -176,5 +178,9 @@ export const assignHeroAttributes = async () => {
         levelUpItems: updatedLevelUpItems,
       },
     });
+
+    if (!lastAttributeSuccess) {
+      return;
+    }
   }
 };
