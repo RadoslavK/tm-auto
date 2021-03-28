@@ -2,15 +2,19 @@ import { Button } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { AutoMentorSettingsQuery } from '../../_graphql/__generated__/AutoMentorSettingsQuery.graphql.js';
 import type { AutoMentorSettingsResetSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsResetSettingsMutation.graphql.js';
+import type { AutoMentorSettingsSubscription } from '../../_graphql/__generated__/AutoMentorSettingsSubscription.graphql.js';
 import type { AutoMentorSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsUpdateSettingsMutation.graphql.js';
 
 const autoMentorSettingsQuery = graphql`
@@ -43,10 +47,29 @@ const autoMentorSettingsResetSettingsMutation = graphql`
     }
 `;
 
+const subscription = graphql`
+  subscription AutoMentorSettingsSubscription {
+      autoMentorSettingsUpdated {
+          ...AutoMentorSettings
+      }
+  }
+`;
+
 export const AutoMentorSettings: React.FC = () => {
   const { autoMentorSettings } = useLazyLoadQuery<AutoMentorSettingsQuery>(autoMentorSettingsQuery, {});
   const [updateSettings] = useMutation<AutoMentorSettingsUpdateSettingsMutation>(autoMentorSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoMentorSettingsResetSettingsMutation>(autoMentorSettingsResetSettingsMutation);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<AutoMentorSettingsSubscription> => ({
+    subscription,
+    variables: {},
+    updater: (store) => {
+      const newRecord = store.getRootField('autoMentorSettingsUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'autoMentorSettings');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const [state, setState] = useState(autoMentorSettings);
   const [hasChanges, setHasChanges] = useState(false);
@@ -109,7 +132,7 @@ export const AutoMentorSettings: React.FC = () => {
 
   return (
     <div>
-      <h1>General settings</h1>
+      <h1>Mentor settings</h1>
       <div>
         <Button
           color="primary"

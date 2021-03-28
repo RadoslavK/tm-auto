@@ -3,15 +3,19 @@ import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { AccountSettingsQuery } from '../../_graphql/__generated__/AccountSettingsQuery.graphql.js';
 import type { AccountSettingsResetSettingsMutation } from '../../_graphql/__generated__/AccountSettingsResetSettingsMutation.graphql.js';
+import type { AccountSettingsSubscription } from '../../_graphql/__generated__/AccountSettingsSubscription.graphql.js';
 import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
@@ -47,10 +51,29 @@ const accountSettingsResetSettingsMutation = graphql`
     }
 `;
 
+const subscription = graphql`
+  subscription AccountSettingsSubscription {
+      accountSettingsUpdated {
+          ...AccountSettings
+      }
+  }
+`;
+
 export const AccountSettings: React.FC = () => {
   const { accountSettings } = useLazyLoadQuery<AccountSettingsQuery>(accountSettingsQuery, {});
   const [updateSettings] = useMutation<AccountSettingsUpdateSettingsMutation>(accountSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AccountSettingsResetSettingsMutation>(accountSettingsResetSettingsMutation);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<AccountSettingsSubscription> => ({
+    subscription: subscription,
+    variables: {},
+    updater: (store) => {
+      const newRecord = store.getRootField('accountSettingsUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'accountSettings');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const [state, setState] = useState(accountSettings);
   const [hasChanges, setHasChanges] = useState(false);

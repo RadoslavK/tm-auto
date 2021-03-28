@@ -3,16 +3,20 @@ import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
   useEffect,
-  useState, 
+  useMemo,
+  useState,
 } from 'react';
 import {
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 import type { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql.js';
 import type { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql.js';
+import type { AutoAdventureSettingsSubscription } from '../../../_graphql/__generated__/AutoAdventureSettingsSubscription.graphql.js';
 import type { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
@@ -53,10 +57,29 @@ const autoAdventureSettingsResetSettingsMutation = graphql`
     }
 `;
 
+const subscription = graphql`
+  subscription AutoAdventureSettingsSubscription {
+      autoAdventureSettingsUpdated {
+          ...AutoAdventureSettings
+      }
+  }
+`;
+
 export const AutoAdventureSettings: React.FC = () => {
   const { autoAdventureSettings } = useLazyLoadQuery<AutoAdventureSettingsQuery>(autoAdventureSettingsQuery, {});
   const [updateSettings] = useMutation<AutoAdventureSettingsUpdateSettingsMutation>(autoAdventureSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoAdventureSettingsResetSettingsMutation>(autoAdventureSettingsResetSettingsMutation);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<AutoAdventureSettingsSubscription> => ({
+    subscription,
+    variables: {},
+    updater: (store) => {
+      const newRecord = store.getRootField('autoAdventureSettingsUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'autoAdventureSettings');
+    },
+  }), []);
+
+  useSubscription(subscriptionConfig);
 
   const [state, setState] = useState(autoAdventureSettings);
   const [hasChanges, setHasChanges] = useState(false);

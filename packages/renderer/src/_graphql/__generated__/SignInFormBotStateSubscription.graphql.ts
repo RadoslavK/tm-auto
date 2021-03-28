@@ -4,22 +4,20 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type BotState = "None" | "Paused" | "Pending" | "Running" | "Stopping" | "%future added value";
-export type SignInFormSubscriptionVariables = {};
-export type SignInFormSubscriptionResponse = {
+export type SignInFormBotStateSubscriptionVariables = {};
+export type SignInFormBotStateSubscriptionResponse = {
     readonly botStateChanged: BotState;
-    readonly lastSignedAccountIdUpdated: string | null;
 };
-export type SignInFormSubscription = {
-    readonly response: SignInFormSubscriptionResponse;
-    readonly variables: SignInFormSubscriptionVariables;
+export type SignInFormBotStateSubscription = {
+    readonly response: SignInFormBotStateSubscriptionResponse;
+    readonly variables: SignInFormBotStateSubscriptionVariables;
 };
 
 
 
 /*
-subscription SignInFormSubscription {
+subscription SignInFormBotStateSubscription {
   botStateChanged
-  lastSignedAccountIdUpdated
 }
 */
 
@@ -31,13 +29,6 @@ var v0 = [
     "kind": "ScalarField",
     "name": "botStateChanged",
     "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "lastSignedAccountIdUpdated",
-    "storageKey": null
   }
 ];
 return {
@@ -45,7 +36,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SignInFormSubscription",
+    "name": "SignInFormBotStateSubscription",
     "selections": (v0/*: any*/),
     "type": "Subscription",
     "abstractKey": null
@@ -54,18 +45,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "SignInFormSubscription",
+    "name": "SignInFormBotStateSubscription",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "269f7ff7edc7440ef51121ee524cf0f7",
+    "cacheID": "b0c2b3819ad22f0ca71374e6b1e6b42a",
     "id": null,
     "metadata": {},
-    "name": "SignInFormSubscription",
+    "name": "SignInFormBotStateSubscription",
     "operationKind": "subscription",
-    "text": "subscription SignInFormSubscription {\n  botStateChanged\n  lastSignedAccountIdUpdated\n}\n"
+    "text": "subscription SignInFormBotStateSubscription {\n  botStateChanged\n}\n"
   }
 };
 })();
-(node as any).hash = '9bb5c6843651bd2aec6ad158db318243';
+(node as any).hash = 'eb3a0b71907b3df1d5726edbad1edc47';
 export default node;

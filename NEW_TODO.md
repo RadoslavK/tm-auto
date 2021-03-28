@@ -9,6 +9,7 @@
 * more granular subscription rathern than subscription something changed -> refetch relevant stuff.
     * more like this exact thing changed and already retrieve its data
 * remove pointless subscriptions that lead to refetch of the same type as the subscription
+* Search Map option - around village, players/farms/alliance scan
 
 # Shortcoming
 * Mutations or Subs that return data. We need to destructure at least 1 prop even without consuming it

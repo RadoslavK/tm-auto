@@ -32,17 +32,18 @@ import {
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { nameOf } from 'shared/utils/nameOf.js';
 
+import type { SignInFormBotStateSubscription } from '../../../_graphql/__generated__/SignInFormBotStateSubscription.graphql.js';
 import type {
   AccountInput,
   SignInFormCreateAccountMutation,
 } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql.js';
+import type { SignInFormLastSignedAccountIdSubscription } from '../../../_graphql/__generated__/SignInFormLastSignedAccountIdSubscription.graphql.js';
 import type {
   SignInFormQuery,
   SignInFormQueryResponse,
 } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
-import type { SignInFormSubscription } from '../../../_graphql/__generated__/SignInFormSubscription.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
 import { Accounts } from './Accounts.js';
 import { SignInFormDialog } from './SignInFormDialog.js';
@@ -131,9 +132,14 @@ const deleteAccountMutation = graphql`
     }
 `;
 
-const signInFormSubscription = graphql`
-  subscription SignInFormSubscription {
+const botStateSubscription = graphql`
+  subscription SignInFormBotStateSubscription {
       botStateChanged
+  }
+`;
+
+const lastSignedAccountIdSubscription = graphql`
+  subscription SignInFormLastSignedAccountIdSubscription {
       lastSignedAccountIdUpdated
   }
 `;
@@ -144,17 +150,25 @@ export const SignInForm: React.FC = () => {
     lastSignedAccountId,
   } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {});
 
-  const botStateSubConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormSubscription> => ({
-    subscription: signInFormSubscription,
+  const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormBotStateSubscription> => ({
+    subscription: botStateSubscription,
     variables: {},
     updater: (store, data) => {
-      const root = store.getRoot();
-      root.setValue(data.botStateChanged, nameOf<SignInFormQueryResponse>('botState'));
-      root.setValue(data.lastSignedAccountIdUpdated, nameOf<SignInFormQueryResponse>('lastSignedAccountId'));
+      store.getRoot().setValue(data.botStateChanged, nameOf<SignInFormQueryResponse>('botState'));
     },
   }), []);
 
-  useSubscription(botStateSubConfig);
+  useSubscription(botStateSubscriptionConfig);
+
+  const lastSignedAccountIdSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormLastSignedAccountIdSubscription> => ({
+    subscription: lastSignedAccountIdSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.lastSignedAccountIdUpdated, nameOf<SignInFormQueryResponse>('lastSignedAccountId'));
+    },
+  }), []);
+
+  useSubscription(lastSignedAccountIdSubscriptionConfig);
 
   const [selectedAccountId, setSelectedAccountId] = useState(lastSignedAccountId);
 
