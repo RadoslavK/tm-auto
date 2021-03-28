@@ -22,7 +22,7 @@
 - Use video feature to speed up building construction
 - Building Queue
   - Block of queued buildings
-    - Drag, Move to the top, delete
+    -finish Move to the top for it / move as high as possible
 - Show what task is the bot actually performing
 - Reset everything to default
 - Allow creating own defaults
@@ -67,6 +67,9 @@
 - Reports and surroundings analysis
 - Read messages
 - Auto Hero revive: http://travian.kirilloid.ru/hero4.php#tribe=7&s=1.44
+- Hero level up items:
+  * show actual stats so the level up items make more sense in that context
+  * and maybe some colors etc to see what attribute is already accomplished and how much of other is needed
 
 ## Bugs
 

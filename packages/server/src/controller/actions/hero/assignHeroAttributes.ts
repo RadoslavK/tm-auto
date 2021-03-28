@@ -7,10 +7,12 @@ import { publishPayloadEvent } from '../../../pubSub.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
 import { ensurePage } from '../ensurePage.js';
 
+type InputName = 'attributepower' | 'attributeoffBonus' | 'attributedefBonus' | 'attributeproductionPoints';
+
 type EnsurePointParams = {
   readonly availablePoints: number;
   readonly requested: number;
-  readonly inputName: string;
+  readonly inputName: InputName;
 };
 
 type EnsurePointResult = {
@@ -50,7 +52,7 @@ const ensureHeroPoint = async ({
   const total = actual + toAdd;
 
   getAccountContext().logsService.logText(
-    `Adding hero attribute Offensive Strength: ${actual} -> ${total}`,
+    `Adding hero attribute ${inputName}: ${actual} -> ${total}`,
   );
 
   const input = await page.$(`[name="${inputName}"]`);
