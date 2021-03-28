@@ -13,6 +13,9 @@ import {
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
+import type { BuildingSpotsActualBuildingLevelSubscription } from '../../../_graphql/__generated__/BuildingSpotsActualBuildingLevelSubscription.graphql.js';
+import type { BuildingSpotsBuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingSpotsBuildingQueueSubscription.graphql.js';
+import type { BuildingSpotsBuildingsInProgressSubscription } from '../../../_graphql/__generated__/BuildingSpotsBuildingsInProgressSubscription.graphql.js';
 import type { BuildingSpotsQuery } from '../../../_graphql/__generated__/BuildingSpotsQuery.graphql.js';
 import { BuildingSpot } from './BuildingSpot.js';
 
@@ -59,12 +62,22 @@ const buildingSpotsQuery = graphql`
   }
 `;
 
-const buildingSpotsSubscription = graphql`
-    subscription BuildingSpotsSubscription($villageId: ID!) {
+const buildingSpotsActualBuildingLevelSubscription = graphql`
+    subscription BuildingSpotsActualBuildingLevelSubscription($villageId: ID!) {
         actualBuildingLevelsUpdated(villageId: $villageId)
+    }
+`;
+
+const buildingSpotsBuildingsInProgressSubscription = graphql`
+    subscription BuildingSpotsBuildingsInProgressSubscription($villageId: ID!) { 
         buildingsInProgressUpdated(villageId: $villageId) {
             ...BuildingInProgress
         }
+    }
+`;
+
+const buildingSpotsBuildingQueueSubscription = graphql`
+    subscription BuildingSpotsBuildingQueueSubscription($villageId: ID!) {
         queueUpdated(villageId: $villageId) {
             ...BuildingQueue
         }
@@ -88,13 +101,29 @@ export const BuildingSpots: React.FC<Props> = ({ className, villageId }) => {
     }));
   }, []);
 
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<any> => ({
-    subscription: buildingSpotsSubscription,
+  const buildingSpotsActualBuildingLevelSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotsActualBuildingLevelSubscription> => ({
+    subscription: buildingSpotsActualBuildingLevelSubscription,
     variables: { villageId },
-    onCompleted: () => refresh(),
+    onNext: () => refresh(),
   }), [villageId, refresh]);
 
-  useSubscription(subscriptionConfig);
+  useSubscription(buildingSpotsActualBuildingLevelSubscriptionConfig);
+
+  const buildingSpotsBuildingsInProgressSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotsBuildingsInProgressSubscription> => ({
+    subscription: buildingSpotsBuildingsInProgressSubscription,
+    variables: { villageId },
+    onNext: () => refresh(),
+  }), [villageId, refresh]);
+
+  useSubscription(buildingSpotsBuildingsInProgressSubscriptionConfig);
+
+  const buildingSpotsBuildingQueueSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotsBuildingQueueSubscription> => ({
+    subscription: buildingSpotsBuildingQueueSubscription,
+    variables: { villageId },
+    onNext: () => refresh(),
+  }), [villageId, refresh]);
+
+  useSubscription(buildingSpotsBuildingQueueSubscriptionConfig);
 
   return (
     <div className={className}>

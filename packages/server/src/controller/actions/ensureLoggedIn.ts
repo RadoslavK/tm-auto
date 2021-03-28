@@ -52,6 +52,7 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   const acceptCookies = await page.$('#cmpbntyestxt');
   acceptCookies?.click();
 
+  //  TODO verify successful login action
   await page.click('form[name=login] button[type=submit]');
 
   getAccountContext().logsService.logText('Logged in.');

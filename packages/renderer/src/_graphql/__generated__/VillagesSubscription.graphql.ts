@@ -10,7 +10,6 @@ export type VillagesSubscriptionResponse = {
         readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     }>;
-    readonly activeVillageIdChanged: string;
 };
 export type VillagesSubscription = {
     readonly response: VillagesSubscriptionResponse;
@@ -25,7 +24,6 @@ subscription VillagesSubscription {
     id
     ...VillageSideItem_village
   }
-  activeVillageIdChanged
 }
 
 fragment VillageName_village on Village {
@@ -49,13 +47,6 @@ var v0 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "activeVillageIdChanged",
   "storageKey": null
 };
 return {
@@ -81,8 +72,7 @@ return {
           }
         ],
         "storageKey": null
-      },
-      (v1/*: any*/)
+      }
     ],
     "type": "Subscription",
     "abstractKey": null
@@ -143,19 +133,18 @@ return {
           }
         ],
         "storageKey": null
-      },
-      (v1/*: any*/)
+      }
     ]
   },
   "params": {
-    "cacheID": "710293a63d5e841f48d655216013d302",
+    "cacheID": "c6f7df34ebfc5e3c9e54b1e674c62e22",
     "id": null,
     "metadata": {},
     "name": "VillagesSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    ...VillageSideItem_village\n  }\n  activeVillageIdChanged\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
+    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = 'b92c24c2180e95e6522ad2c6b35cb252';
+(node as any).hash = 'a962891b7f87cc333ff7f6bebcae4f32';
 export default node;

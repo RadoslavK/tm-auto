@@ -57,13 +57,13 @@ class ControllerService {
   private setState = async (state: BotState): Promise<void> => {
     this._botState = state;
 
-    await publishPayloadEvent(BotEvent.BotRunningChanged, { state });
+    publishPayloadEvent(BotEvent.BotRunningChanged, { state });
   };
 
   private setActivity = async (activity: boolean): Promise<void> => {
     this._isActive = activity;
 
-    await publishPayloadEvent(BotEvent.BotActivityChanged, {
+    publishPayloadEvent(BotEvent.BotActivityChanged, {
       isActive: activity,
     });
   };

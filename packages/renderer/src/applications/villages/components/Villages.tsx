@@ -14,6 +14,7 @@ import {
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { nameOf } from 'shared/utils/nameOf.js';
 
+import type { VillagesActiveVillageIdChangedSubscription } from '../../../_graphql/__generated__/VillagesActiveVillageIdChangedSubscription.graphql.js';
 import type {
   VillagesQuery,
   VillagesQueryResponse,
@@ -51,8 +52,13 @@ const villagesSubscription = graphql`
            id
            ...VillageSideItem_village
        }
-       activeVillageIdChanged
    }
+`;
+
+const activeVillageIdChangedSubscription = graphql`
+  subscription VillagesActiveVillageIdChangedSubscription {
+      activeVillageIdChanged
+  }
 `;
 
 export const Villages: React.FC = () => {
@@ -64,17 +70,23 @@ export const Villages: React.FC = () => {
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesSubscription> => ({
     subscription: villagesSubscription,
     variables: {},
-    updater: (store, data) => {
-      const root = store.getRoot();
-
-      root.setValue(data.activeVillageIdChanged, nameOf<VillagesQueryResponse>('activeVillageId'));
-
+    updater: (store) => {
       const newRecords = store.getPluralRootField('villagesUpdated');
-      root.setLinkedRecords(newRecords, nameOf<VillagesQueryResponse>('villages'));
+      store.getRoot().setLinkedRecords(newRecords, nameOf<VillagesQueryResponse>('villages'));
     },
   }), []);
 
   useSubscription(subscriptionConfig);
+
+  const activeVillageIdChangedSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesActiveVillageIdChangedSubscription> => ({
+    subscription: activeVillageIdChangedSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.activeVillageIdChanged, nameOf<VillagesQueryResponse>('activeVillageId'));
+    },
+  }), []);
+
+  useSubscription(activeVillageIdChangedSubscriptionConfig);
 
   return (
     <div className={classes.root}>

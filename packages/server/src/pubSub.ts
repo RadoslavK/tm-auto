@@ -15,18 +15,14 @@ type EventWithoutPayload<TEvent extends BotEvent> = Extends<
   ? never
   : TEvent;
 
-export const publishPayloadEvent = async <
-  TEvent extends keyof BotEventPayloads
->(
+export const publishPayloadEvent = <TEvent extends keyof BotEventPayloads>(
   event: TEvent,
   payload: BotEventPayloads[TEvent],
-): Promise<void> => {
+): void => {
   pubSub.publish(event, payload);
 };
 
-export const publishEvent = async <TEvent extends BotEvent>(
-  event: EventWithoutPayload<TEvent>,
-): Promise<void> => {
+export const publishEvent = <TEvent extends BotEvent>(event: EventWithoutPayload<TEvent>): void => {
   pubSub.publish(event, null);
 };
 
