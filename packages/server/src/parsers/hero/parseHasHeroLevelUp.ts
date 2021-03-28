@@ -3,5 +3,5 @@ import { getPage } from '../../browser/getPage.js';
 export const parseHasHeroLevelUp = async (): Promise<boolean> => {
   const page = await getPage();
 
-  return !!(await page.$('#topBarHero .levelUp'));
+  return !!(await page.$('#topBarHero .levelUp.show'));
 };
