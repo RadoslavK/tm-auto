@@ -101,7 +101,7 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
     resetSettings({
       variables: { villageId },
       updater: (store) => {
-        const newRecord = store.getRootField('updateAutoPartySettings');
+        const newRecord = store.getRootField('resetAutoPartySettings');
         store.getRoot().setLinkedRecord(newRecord, 'autoPartySettings', { villageId });
       },
     });

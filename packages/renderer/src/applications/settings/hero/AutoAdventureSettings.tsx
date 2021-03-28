@@ -113,7 +113,7 @@ export const AutoAdventureSettings: React.FC = () => {
     resetSettings({
       variables: {},
       updater: (store) => {
-        const newRecord = store.getRootField('updateAutoAdventureSettings');
+        const newRecord = store.getRootField('resetAutoAdventureSettings');
         store.getRoot().setLinkedRecord(newRecord, 'autoAdventureSettings');
       },
     });

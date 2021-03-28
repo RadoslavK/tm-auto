@@ -196,7 +196,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     resetSettings({
       variables: { villageId },
       updater: (store) => {
-        const newRecord = store.getRootField('updateAutoBuildSettings');
+        const newRecord = store.getRootField('resetAutoBuildSettings');
         store.getRoot().setLinkedRecord(newRecord, 'autoBuildSettings', { villageId });
       },
     });

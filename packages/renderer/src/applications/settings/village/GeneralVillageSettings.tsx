@@ -91,7 +91,7 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
     resetSettings({
       variables: { villageId },
       updater: (store) => {
-        const newRecord = store.getRootField('updateGeneralVillageSettings');
+        const newRecord = store.getRootField('resetGeneralVillageSettings');
         store.getRoot().setLinkedRecord(newRecord, 'generalVillageSettings', { villageId });
       },
     });
