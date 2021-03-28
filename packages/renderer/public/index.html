@@ -4,18 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="TM Auto" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <title>TM Auto</title>
   </head>
   <body>
-    <script type="module" src="dist/index.js">
-      if (!window.api.isDev) {
-        const tag = document.createElement('meta');
-
-        tag.setAttribute("http-equiv", "Content-Security-Policy");
-        tag.setAttribute("content", "default-src 'self'; style-src 'self' 'unsafe-inline';");
-        document.head.appendChild(tag);
-      }
-    </script>
+    <script type="module" src="dist/index.js"></script>
     <div id="app"></div>
   </body>
 </html>

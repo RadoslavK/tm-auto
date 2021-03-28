@@ -14,7 +14,6 @@ type IpcApi = {
 };
 export type Api = {
   readonly ipc: IpcApi;
-  readonly isDev: boolean;
   readonly openSaveFileDialog: (defaultName?: string) => string | undefined;
   readonly openLoadFileDialog: () => string | undefined;
 };

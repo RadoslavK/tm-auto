@@ -2,7 +2,8 @@ import { build } from 'esbuild';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-await build({
+/** @type(import("esbuild").BuildOptions) */
+const options = {
   platform: 'node',
   target: 'node14.16',
   minify: !isDevelopment,
@@ -10,18 +11,12 @@ await build({
     NODE_ENV: process.env.NODE_ENV,
   },
   logLevel: 'warning',
-  sourcemap: isDevelopment,
   outdir: 'dist',
   format: 'cjs',
   outExtension: {
     '.js': '.cjs',
   },
   bundle: true,
-  entryPoints: [
-    'src/index.ts',
-    'src/preload.ts',
-    'src/server.ts',
-  ],
   external: [
     'electron',
     'puppeteer-core',
@@ -29,4 +24,20 @@ await build({
     'puppeteer-extra-plugin-stealth',
     'jsdom',
   ],
+};
+
+await build({
+  ...options,
+  sourcemap: isDevelopment,
+  entryPoints: [
+    'src/index.ts',
+    'src/server.ts',
+  ],
+});
+
+//  separate source map file is not picked by browser for preload script
+await build({
+  ...options,
+  sourcemap: isDevelopment ? 'inline' : false,
+  entryPoints: ['src/preload.ts'],
 });

@@ -6,8 +6,6 @@ import type { Api } from 'shared/types/api.type.js';
 const ipc = new IPC();
 
 const api: Api = {
-  isDev: process.env.NODE_ENV !== 'production',
-
   ipc: {
     connect: ({
       id,
