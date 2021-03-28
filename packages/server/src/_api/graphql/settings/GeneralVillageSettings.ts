@@ -4,11 +4,8 @@ import {
   mutationField,
   objectType,
   queryField,
-  subscriptionField,
 } from 'nexus';
 import { getAccountContext } from '../../../accountContext.js';
-import { BotEvent } from '../../../events/botEvent.js';
-import { subscribeToEvent } from '../../../pubSub.js';
 
 export const GeneralVillageSettings = objectType({
   name: 'GeneralVillageSettings',
@@ -57,21 +54,5 @@ export const ResetGeneralVillageSettingsMutation = mutationField(t => {
     },
     resolve: (_, args) =>
       getService(args.villageId).reset(),
-  });
-});
-
-export const GeneralVillageSettingsUpdatedSubscription = subscriptionField(t => {
-  t.field('generalVillageSettingsUpdated', {
-    type: GeneralVillageSettings,
-    args: {
-      villageId: 'ID',
-    },
-    ...subscribeToEvent(
-      BotEvent.GeneralVillageSettingsUpdated,
-      {
-        filter: (p, args) => p.villageId === args.villageId,
-        resolve: (p) => p.settings,
-      },
-    ),
   });
 });

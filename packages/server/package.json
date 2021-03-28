@@ -6,7 +6,8 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./_models/*": "./src/_models/*"
   },
   "scripts": {
     "nexus": "set shouldGenerateArtifacts=true&& nodemon --config nodemon.nexus.json",

@@ -3,12 +3,8 @@ import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { TaskType } from '../_models/misc/taskType.js';
 import type { AccountSettings } from '../_models/settings/accountSettings.js';
 import type { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
-import type { GeneralSettings } from '../_models/settings/generalSettings.js';
-import type { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';
 import type { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings.js';
 import type { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
-import type { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
-import type { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
 import type { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
 import type { Village } from '../_models/village/village.js';
 import type { UserAccount } from '../services/accountService.js';
@@ -33,31 +29,12 @@ export type BotEventPayloads = {
     readonly settings: AutoAdventureSettings;
   };
 
-  [BotEvent.AutoBuildSettingsUpdated]: {
-    readonly settings: AutoBuildSettings;
-    readonly villageId: string;
-  };
-
   [BotEvent.AutoMentorSettingsUpdated]: {
     readonly settings: AutoMentorSettings;
   };
 
-  [BotEvent.AutoPartySettingsUpdated]: {
-    readonly settings: AutoPartySettings;
-    readonly villageId: string;
-  };
-
   [BotEvent.AutoUnitsSettingsUpdated]: {
     readonly settings: AutoUnitsSettings;
-    readonly villageId: string;
-  };
-
-  [BotEvent.GeneralSettingsUpdated]: {
-    readonly settings: GeneralSettings;
-  };
-
-  [BotEvent.GeneralVillageSettingsUpdated]: {
-    readonly settings: GeneralVillageSettings;
     readonly villageId: string;
   };
 

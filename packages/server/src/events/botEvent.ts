@@ -4,12 +4,8 @@ export enum BotEvent {
   LastSignedAccountIdUpdated = 'LastSignedAccountIdUpdated',
   AccountSettingsUpdated = 'AccountSettingsUpdated',
   AutoAdventureSettingsUpdated = 'AutoAdventureSettingsUpdated',
-  AutoBuildSettingsUpdated = 'AutoBuildSettingsUpdated',
   AutoMentorSettingsUpdated = 'AutoMentorSettingsUpdated',
-  AutoPartySettingsUpdated = 'AutoPartySettingsUpdated',
   AutoUnitsSettingsUpdated = 'AutoUnitsSettingsUpdated',
-  GeneralSettingsUpdated = 'GeneralSettingsUpdated',
-  GeneralVillageSettingsUpdated = 'GeneralVillageSettingsUpdated',
   HeroLevelUpSettingsChanged = 'HeroLevelUpSettingsChanged',
 
   BotActivityChanged = 'BotActivityChanged',

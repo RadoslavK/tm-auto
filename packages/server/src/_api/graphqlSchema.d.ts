@@ -726,15 +726,11 @@ export interface NexusGenFieldTypes {
     activeVillageIdChanged: string; // ID!
     actualBuildingLevelsUpdated: boolean | null; // Boolean
     autoAdventureSettingsUpdated: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
-    autoBuildSettingsUpdated: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettingsUpdated: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
-    autoPartySettingsUpdated: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     botActivityChanged: boolean; // Boolean!
     botStateChanged: NexusGenEnums['BotState']; // BotState!
     buildingsInProgressUpdated: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
-    generalSettingsUpdated: NexusGenRootTypes['GeneralSettings']; // GeneralSettings!
-    generalVillageSettingsUpdated: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
     heroInformationUpdated: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettingsChanged: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
     lastSignedAccountIdUpdated: string | null; // String
@@ -1105,15 +1101,11 @@ export interface NexusGenFieldTypeNames {
     activeVillageIdChanged: 'ID'
     actualBuildingLevelsUpdated: 'Boolean'
     autoAdventureSettingsUpdated: 'AutoAdventureSettings'
-    autoBuildSettingsUpdated: 'AutoBuildSettings'
     autoMentorSettingsUpdated: 'AutoMentorSettings'
-    autoPartySettingsUpdated: 'AutoPartySettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
     botActivityChanged: 'Boolean'
     botStateChanged: 'BotState'
     buildingsInProgressUpdated: 'BuildingInProgress'
-    generalSettingsUpdated: 'GeneralSettings'
-    generalVillageSettingsUpdated: 'GeneralVillageSettings'
     heroInformationUpdated: 'HeroInformation'
     heroLevelUpSettingsChanged: 'HeroLevelUpSettings'
     lastSignedAccountIdUpdated: 'String'
@@ -1407,19 +1399,10 @@ export interface NexusGenArgTypes {
     actualBuildingLevelsUpdated: { // args
       villageId: string; // ID!
     }
-    autoBuildSettingsUpdated: { // args
-      villageId: string; // ID!
-    }
-    autoPartySettingsUpdated: { // args
-      villageId: string; // ID!
-    }
     autoUnitsSettingsUpdated: { // args
       villageId: string; // ID!
     }
     buildingsInProgressUpdated: { // args
-      villageId: string; // ID!
-    }
-    generalVillageSettingsUpdated: { // args
       villageId: string; // ID!
     }
     nextTaskExecutionChanged: { // args

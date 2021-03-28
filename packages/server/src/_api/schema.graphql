@@ -467,15 +467,11 @@ type Subscription {
   activeVillageIdChanged: ID!
   actualBuildingLevelsUpdated(villageId: ID!): Boolean
   autoAdventureSettingsUpdated: AutoAdventureSettings!
-  autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
-  autoPartySettingsUpdated(villageId: ID!): AutoPartySettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   botActivityChanged: Boolean!
   botStateChanged: BotState!
   buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
-  generalSettingsUpdated: GeneralSettings!
-  generalVillageSettingsUpdated(villageId: ID!): GeneralVillageSettings!
   heroInformationUpdated: HeroInformation!
   heroLevelUpSettingsChanged: HeroLevelUpSettings!
   lastSignedAccountIdUpdated: String

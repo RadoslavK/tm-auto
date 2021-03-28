@@ -4,10 +4,7 @@ import {
   mutationField,
   objectType,
   queryField,
-  subscriptionField,
 } from 'nexus';
-import { BotEvent } from '../../../events/botEvent.js';
-import { subscribeToEvent } from '../../../pubSub.js';
 import { getGeneralSettingsService } from '../../../services/settings/general.js';
 
 export const GeneralSettings = objectType({
@@ -51,14 +48,5 @@ export const ResetGeneralSettingsMutation = mutationField(t => {
   t.field('resetGeneralSettings', {
     type: GeneralSettings,
     resolve: () => getGeneralSettingsService().reset(),
-  });
-});
-
-export const GeneralSettingsUpdatedSubscription = subscriptionField(t => {
-  t.field('generalSettingsUpdated', {
-    type: GeneralSettings,
-    ...subscribeToEvent(BotEvent.GeneralSettingsUpdated, {
-      resolve: (p) => p.settings,
-    }),
   });
 });

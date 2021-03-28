@@ -4,11 +4,8 @@ import {
   mutationField,
   objectType,
   queryField,
-  subscriptionField,
 } from 'nexus';
 import { getAccountContext } from '../../../accountContext.js';
-import { BotEvent } from '../../../events/botEvent.js';
-import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AutoPartySettings = objectType({
   name: 'AutoPartySettings',
@@ -68,21 +65,5 @@ export const ResetAutoPartySettingsMutation = mutationField(t => {
       villageId: 'ID',
     },
     resolve: (_, args) => getService(args.villageId).reset(),
-  });
-});
-
-export const AutoPartySettingsUpdatedSubscription = subscriptionField(t => {
-  t.field('autoPartySettingsUpdated', {
-    type: AutoPartySettings,
-    args: {
-      villageId: 'ID',
-    },
-    ...subscribeToEvent(
-      BotEvent.AutoPartySettingsUpdated,
-      {
-        filter: (p, args) => p.villageId === args.villageId,
-        resolve: (p) => p.settings,
-      },
-    ),
   });
 });

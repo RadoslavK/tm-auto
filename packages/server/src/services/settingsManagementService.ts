@@ -288,10 +288,6 @@ class SettingsManagementService {
             const newSettings = new AutoBuildSettings(autoBuildSettings);
 
             villageSettingsService.autoBuild.update(newSettings);
-            publishPayloadEvent(BotEvent.AutoBuildSettingsUpdated, {
-              settings: newSettings,
-              villageId,
-            });
           },
         );
 
@@ -316,10 +312,6 @@ class SettingsManagementService {
             const newSettings = new AutoPartySettings(autoPartySettings);
 
             villageSettingsService.autoParty.update(newSettings);
-            publishPayloadEvent(BotEvent.AutoPartySettingsUpdated, {
-              settings: newSettings,
-              villageId,
-            });
           },
         );
 
@@ -327,10 +319,6 @@ class SettingsManagementService {
           const newSettings = new GeneralVillageSettings(settings);
 
           villageSettingsService.general.update(newSettings);
-          publishPayloadEvent(BotEvent.GeneralVillageSettingsUpdated, {
-            settings: newSettings,
-            villageId,
-          });
         });
       }
     });
@@ -344,9 +332,6 @@ class SettingsManagementService {
           const newSettings = new GeneralSettings(generalSettings);
 
           getGeneralSettingsService().update(newSettings);
-          publishPayloadEvent(BotEvent.GeneralSettingsUpdated, {
-            settings: newSettings,
-          });
         },
       );
     });
