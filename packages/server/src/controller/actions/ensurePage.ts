@@ -172,7 +172,7 @@ export const ensureBuildingSpotPage = async (
       await ensurePage(TravianPath.InfrastructureOverview);
     }
 
-    await ensurePage(spotPath, true);
+    await ensurePage(spotPath);
   }
 
   if (tab === undefined) {
