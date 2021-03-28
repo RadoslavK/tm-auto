@@ -1,3 +1,4 @@
+import { collectTaskRewards } from 'server/controller/actions/mentor/collectTaskRewards.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import type { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
 import { getAccountContext } from '../../accountContext.js';
@@ -13,7 +14,6 @@ import { openSurroundingReports } from '../actions/mentor/completeTasks/openSurr
 import { raidOasis } from '../actions/mentor/completeTasks/raidOasis.js';
 import { readGoldAdvantanges } from '../actions/mentor/completeTasks/readGoldAdvantanges.js';
 import { readMessage } from '../actions/mentor/completeTasks/readMessage.js';
-import { updateMentorTasks } from '../actions/mentor/updateMentorTasks.js';
 import type { BotTask } from '../taskEngine/botTaskEngine.js';
 
 type CompleteTask = () => Promise<boolean | void>;
@@ -133,7 +133,10 @@ export class AutoMentorTask implements BotTask {
     do {
       hadAutomatedTasks = false;
 
-      await updateMentorTasks();
+      await collectTaskRewards();
+      // TODO: complete tasks
+
+      return;
 
       for (const task of getAccountContext().mentorTasks) {
         if (!task.completed) {
