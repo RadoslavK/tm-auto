@@ -246,10 +246,21 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       ).cost;
 
       if (
-        this._village.resources.amount.areLowerThan(cropLandResourceCost) ||
+        totalResources.areLowerThan(cropLandResourceCost) ||
         !this._village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)
       ) {
         return;
+      }
+
+      if (settings.useHeroResources) {
+        const resourcesNeeded = cropLandResourceCost.subtract(currentResources);
+
+        if (resourcesNeeded.getTotal() > 0) {
+          await claimHeroResources(
+            resourcesNeeded,
+            ClaimHeroResourcesReason.AutoBuild,
+          );
+        }
       }
 
       // !!inQueueCropLand === isQueued
