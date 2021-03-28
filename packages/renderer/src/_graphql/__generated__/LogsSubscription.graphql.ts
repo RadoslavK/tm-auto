@@ -21,6 +21,7 @@ export type LogsSubscription = {
 subscription LogsSubscription {
   logEntryAdded {
     ...LogEntry
+    id
   }
 }
 
@@ -94,6 +95,13 @@ var v0 = {
   "args": null,
   "kind": "ScalarField",
   "name": "name",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
   "storageKey": null
 };
 return {
@@ -316,13 +324,7 @@ return {
             "name": "village",
             "plural": false,
             "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
+              (v1/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -358,19 +360,20 @@ return {
               (v0/*: any*/)
             ],
             "storageKey": null
-          }
+          },
+          (v1/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "ad0d6d471f7edc986f0b5109420def8c",
+    "cacheID": "3f3d01fd780a5d30dbc423ebab655e87",
     "id": null,
     "metadata": {},
     "name": "LogsSubscription",
     "operationKind": "subscription",
-    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...LogEntry\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry on LogEntry {\n  content {\n    __typename\n    ...LogEntryContent\n  }\n  timestamp {\n    ...Timestamp\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment LogEntryContent on LogEntryContent {\n  __isLogEntryContent: __typename\n  ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  ...AutoBuildLogContent_autoBuildLogEntryContent\n  ...AutoUnitsLogContent_autoUnitsLogEntryContent\n  ...TextLogContent_textLogentryContent\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...LogEntry\n    id\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry on LogEntry {\n  content {\n    __typename\n    ...LogEntryContent\n  }\n  timestamp {\n    ...Timestamp\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment LogEntryContent on LogEntryContent {\n  __isLogEntryContent: __typename\n  ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  ...AutoBuildLogContent_autoBuildLogEntryContent\n  ...AutoUnitsLogContent_autoUnitsLogEntryContent\n  ...TextLogContent_textLogentryContent\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
 })();

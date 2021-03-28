@@ -330,6 +330,7 @@ export interface NexusGenObjects {
   }
   LogEntry: { // root type
     content: NexusGenRootTypes['LogEntryContent']; // LogEntryContent!
+    id: string; // ID!
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village?: NexusGenRootTypes['Village'] | null; // Village
   }
@@ -585,6 +586,7 @@ export interface NexusGenFieldTypes {
   }
   LogEntry: { // field return type
     content: NexusGenRootTypes['LogEntryContent']; // LogEntryContent!
+    id: string; // ID!
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village: NexusGenRootTypes['Village'] | null; // Village
   }
@@ -963,6 +965,7 @@ export interface NexusGenFieldTypeNames {
   }
   LogEntry: { // field return type name
     content: 'LogEntryContent'
+    id: 'ID'
     timestamp: 'Timestamp'
     village: 'Village'
   }

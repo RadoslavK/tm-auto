@@ -12,6 +12,7 @@ export type LogEntryContent =
   | ResourceClaimLogEntryContent;
 
 export type LogEntry = {
+  readonly id: string;
   readonly content: LogEntryContent;
   readonly timestamp: Timestamp;
   readonly village: Village | null;

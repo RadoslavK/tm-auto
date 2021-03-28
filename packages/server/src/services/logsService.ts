@@ -1,3 +1,4 @@
+import { generateId } from 'shared/utils/generateId.js';
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild.js';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits.js';
@@ -94,6 +95,7 @@ export class LogsService {
       : null;
 
     this.addEntry({
+      id: generateId(),
       content,
       timestamp,
       village,

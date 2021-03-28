@@ -295,6 +295,7 @@ enum HeroState {
 
 type LogEntry {
   content: LogEntryContent!
+  id: ID!
   timestamp: Timestamp!
   village: Village
 }

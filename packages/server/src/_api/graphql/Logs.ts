@@ -112,6 +112,7 @@ export const LogEntryContent = unionType({
 export const LogEntry = objectType({
   name: 'LogEntry',
   definition: t => {
+    t.id('id');
     t.field('timestamp', {
       type: 'Timestamp',
     });

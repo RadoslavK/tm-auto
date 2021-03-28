@@ -13,9 +13,7 @@ import { LogEntry } from './LogEntry.js';
 const logsQuery = graphql`
   query LogsQuery {
       logEntries {
-          timestamp {
-              totalSeconds
-          }
+          id
           ...LogEntry_logEntry
       }
   }
@@ -50,7 +48,7 @@ export const Logs: React.FC = () => {
   return (
     <div>
       {logEntries.map(logEntry => (
-        <LogEntry key={logEntry.timestamp.totalSeconds} logEntry={logEntry} />
+        <LogEntry key={logEntry.id} logEntry={logEntry} />
       ))}
     </div>
   );
