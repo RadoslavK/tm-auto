@@ -4,13 +4,13 @@ import { getPage } from 'server/browser/getPage.js';
 export const collectTaskRewards = async (): Promise<void> => {
   const page = await getPage();
 
-  const questMasterNode = await page.$('#questmasterButton');
-
-  if (!questMasterNode) {
-    throw new Error('Did not find quest master');
-  }
-
   do {
+    const questMasterNode = await page.$('#questmasterButton');
+
+    if (!questMasterNode) {
+      throw new Error('Did not find quest master');
+    }
+
     const hasRewards = await questMasterNode.$('.bigSpeechBubble');
 
     if (!hasRewards) {
@@ -18,8 +18,8 @@ export const collectTaskRewards = async (): Promise<void> => {
     }
 
     await Promise.all([
-      questMasterNode.click(),
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      questMasterNode.click(),
     ]);
 
     const tasksToCollect = await page.$$("#tasks .achieved");
