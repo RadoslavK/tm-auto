@@ -59,7 +59,12 @@ type Props = {
 const villageSettingsQuery = graphql`
   query VillageSettingsQuery {
       villages {
-          ...Village @relay(mask: false)
+          id
+          name
+          coords {
+              ...Coords @relay(mask: false)
+          }
+          isCapital
       }
   }
 `;
@@ -67,7 +72,12 @@ const villageSettingsQuery = graphql`
 const villagesSubscription = graphql`
   subscription VillageSettingsSubscription {
       villagesUpdated {
-          ...Village
+          id
+          name
+          coords {
+              ...Coords @relay(mask: false)
+          }
+          isCapital
       }
   }
 `;

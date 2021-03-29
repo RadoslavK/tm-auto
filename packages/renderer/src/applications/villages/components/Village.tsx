@@ -96,7 +96,10 @@ const villageQuery = graphql`
 const villageSubscription = graphql`
   subscription VillageSubscription($villageId: ID!) {
       villageUpdated(villageId: $villageId) {
-          ...Village
+          id
+          resources {
+              ...Resources_villageResources
+          }
       }
   }
 `;

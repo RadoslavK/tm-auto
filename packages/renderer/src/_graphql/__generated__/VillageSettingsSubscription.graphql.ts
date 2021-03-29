@@ -3,11 +3,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
 export type VillageSettingsSubscriptionVariables = {};
 export type VillageSettingsSubscriptionResponse = {
     readonly villagesUpdated: ReadonlyArray<{
-        readonly " $fragmentRefs": FragmentRefs<"Village">;
+        readonly id: string;
+        readonly name: string;
+        readonly coords: {
+            readonly x: number;
+            readonly y: number;
+        };
+        readonly isCapital: boolean;
     }>;
 };
 export type VillageSettingsSubscription = {
@@ -20,46 +25,84 @@ export type VillageSettingsSubscription = {
 /*
 subscription VillageSettingsSubscription {
   villagesUpdated {
-    ...Village
     id
+    name
+    coords {
+      x
+      y
+    }
+    isCapital
   }
-}
-
-fragment Village on Village {
-  id
-  name
-  coords {
-    x
-    y
-  }
-  isCapital
 }
 */
 
-const node: ConcreteRequest = {
+const node: ConcreteRequest = (function(){
+var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "Village",
+    "kind": "LinkedField",
+    "name": "villagesUpdated",
+    "plural": true,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "name",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Coords",
+        "kind": "LinkedField",
+        "name": "coords",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "x",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "y",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isCapital",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
+return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "VillageSettingsSubscription",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Village",
-        "kind": "LinkedField",
-        "name": "villagesUpdated",
-        "plural": true,
-        "selections": [
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "Village"
-          }
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v0/*: any*/),
     "type": "Subscription",
     "abstractKey": null
   },
@@ -68,74 +111,17 @@ const node: ConcreteRequest = {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "VillageSettingsSubscription",
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Village",
-        "kind": "LinkedField",
-        "name": "villagesUpdated",
-        "plural": true,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "name",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Coords",
-            "kind": "LinkedField",
-            "name": "coords",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "x",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "y",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "isCapital",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "7660a19b22e5908c3f13bb7f0028c94e",
+    "cacheID": "5ea4fc5fbe22562dbcd91b78786d1ee4",
     "id": null,
     "metadata": {},
     "name": "VillageSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillageSettingsSubscription {\n  villagesUpdated {\n    ...Village\n    id\n  }\n}\n\nfragment Village on Village {\n  id\n  name\n  coords {\n    x\n    y\n  }\n  isCapital\n}\n"
+    "text": "subscription VillageSettingsSubscription {\n  villagesUpdated {\n    id\n    name\n    coords {\n      x\n      y\n    }\n    isCapital\n  }\n}\n"
   }
 };
-(node as any).hash = '574129d3d89286aa8a0c9879380f390e';
+})();
+(node as any).hash = 'd5dd136b2cc77f3ff242f33ba22d6981';
 export default node;

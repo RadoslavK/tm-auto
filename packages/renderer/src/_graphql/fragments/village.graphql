@@ -1,8 +1,0 @@
-fragment Village on Village {
-    id
-    name
-    coords {
-        ...Coords @relay(mask: false)
-    }
-    isCapital
-}
