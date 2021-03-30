@@ -18,7 +18,7 @@ export const collectTaskRewards = async (): Promise<void> => {
     }
 
     await Promise.all([
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.waitForSelector('#tasks .achieved'),
       questMasterNode.click(),
     ]);
 

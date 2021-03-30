@@ -5,7 +5,7 @@ export enum TravianPath {
   CenterMap = 'karte.php',
   Hero = 'hero',
   InfrastructureOverview = 'dorf2.php',
-  Messages = 'messages.php',
+  Messages = 'messages',
   PlayerProfile = 'profile',
   Reports = 'report',
   ResourceFieldsOverview = 'dorf1.php',
