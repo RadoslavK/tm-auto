@@ -28,6 +28,7 @@
     "react-relay": "^11.0.0",
     "react-router-dom": "^5.2.0",
     "react-virtualized": "^9.22.3",
+    "recoil": "^0.2.0",
     "relay-runtime": "^11.0.0",
     "typeface-roboto": "^1.1.13"
   },

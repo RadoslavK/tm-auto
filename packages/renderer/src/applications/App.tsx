@@ -11,8 +11,10 @@ import React, {
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MemoryRouter as Router } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 import { ErrorBoundary } from '../ErrorBoundary.js';
+import { EnsureGlobalState } from './EnsureGlobalState.js';
 import { EnsureGraphQL } from './EnsureGraphQL.js';
 import { EnsureTitle } from './EnsureTitle.js';
 import { MainRoutes } from './navigation/components/MainRoutes.js';
@@ -61,21 +63,25 @@ export const App: React.FC = () => {
     <DndProvider backend={HTML5Backend}>
       <Router>
         <ErrorBoundary>
-          <EnsureGraphQL socketName={socketName}>
-            <EnsureSignedIn>
-              <EnsureTitle>
-                <div className={classes.root}>
-                  <CssBaseline />
-                  <Navigation />
-                  <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <SettingsManagement />
-                    <MainRoutes />
-                  </main>
-                </div>
-              </EnsureTitle>
-            </EnsureSignedIn>
-          </EnsureGraphQL>
+          <RecoilRoot>
+            <EnsureGraphQL socketName={socketName}>
+              <EnsureSignedIn>
+                <EnsureGlobalState>
+                  <EnsureTitle>
+                    <div className={classes.root}>
+                      <CssBaseline />
+                      <Navigation />
+                      <main className={classes.content}>
+                        <div className={classes.toolbar} />
+                        <SettingsManagement />
+                        <MainRoutes />
+                      </main>
+                    </div>
+                  </EnsureTitle>
+                </EnsureGlobalState>
+              </EnsureSignedIn>
+            </EnsureGraphQL>
+          </RecoilRoot>
         </ErrorBoundary>
       </Router>
     </DndProvider>

@@ -5,13 +5,14 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { UnitsAutoUnitsSettingsQuery } from '../../../_graphql/__generated__/UnitsAutoUnitsSettingsQuery.graphql.js';
-import type { UnitsGameInfoQuery } from '../../../_graphql/__generated__/UnitsGameInfoQuery.graphql.js';
 import type { UnitsQuery } from '../../../_graphql/__generated__/UnitsQuery.graphql.js';
 import type { UnitsSubscription } from '../../../_graphql/__generated__/UnitsSubscription.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
 import { UnitBuildingSection } from './UnitBuildingSection.js';
 
@@ -59,19 +60,10 @@ const unitsSubscription = graphql`
     }
 `;
 
-const gameInfoQuery = graphql`
-  query UnitsGameInfoQuery {
-      gameInfo {
-          tribe
-      }
-  }
-`;
-
 export const Units: React.FC = () => {
   const classes = useStyles();
 
-  const { gameInfo: { tribe } } = useLazyLoadQuery<UnitsGameInfoQuery>(gameInfoQuery, {});
-
+  const [tribe] = useRecoilState(tribeState);
   const { selectedVillageId: villageId } = useLazyLoadQuery<UnitsQuery>(unitsQuery, {});
   const { autoUnitsSettings } = useLazyLoadQuery<UnitsAutoUnitsSettingsQuery>(unitsAutoUnitsSettingsQuery, { villageId });
 

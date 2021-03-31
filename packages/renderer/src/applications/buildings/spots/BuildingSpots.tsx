@@ -18,8 +18,7 @@ const mapBuilding = (
   building: BuildingSpot_buildingSpot$key,
   index: number,
   villageId: string,
-  tribe: string,
-): JSX.Element => <BuildingSpot tribe={tribe} key={index} building={building} villageId={villageId} />;
+): JSX.Element => <BuildingSpot key={index} building={building} villageId={villageId} />;
 
 const buildingSpotsFragment = graphql`
   fragment BuildingSpots_buildingSpots on BuildingSpots {
@@ -77,7 +76,6 @@ type Props = {
   readonly buildingSpotsKey: BuildingSpots_buildingSpots$key;
   readonly className: string;
   readonly refresh: () => void;
-  readonly tribe: string;
   readonly villageId: string;
 };
 
@@ -86,7 +84,6 @@ export const BuildingSpots: React.FC<Props> = ({
   className,
   refresh,
   villageId,
-  tribe,
 }) => {
   const classes = useStyles({});
 
@@ -119,19 +116,19 @@ export const BuildingSpots: React.FC<Props> = ({
   return (
     <div className={className}>
       <div className={classes.buildingType}>
-        {buildingSpots.resources.wood.map((x, i) => mapBuilding(x, i, villageId, tribe))}
+        {buildingSpots.resources.wood.map((x, i) => mapBuilding(x, i, villageId))}
       </div>
       <div className={classes.buildingType}>
-        {buildingSpots.resources.clay.map((x, i) => mapBuilding(x, i, villageId, tribe))}
+        {buildingSpots.resources.clay.map((x, i) => mapBuilding(x, i, villageId))}
       </div>
       <div className={classes.buildingType}>
-        {buildingSpots.resources.iron.map((x, i) => mapBuilding(x, i, villageId, tribe))}
+        {buildingSpots.resources.iron.map((x, i) => mapBuilding(x, i, villageId))}
       </div>
       <div className={classes.buildingType}>
-        {buildingSpots.resources.crop.map((x, i) => mapBuilding(x, i, villageId, tribe))}
+        {buildingSpots.resources.crop.map((x, i) => mapBuilding(x, i, villageId))}
       </div>
       <div className={classes.buildingType}>
-        {buildingSpots.infrastructure.map((x, i) => mapBuilding(x, i, villageId, tribe))}
+        {buildingSpots.infrastructure.map((x, i) => mapBuilding(x, i, villageId))}
       </div>
     </div>
   );

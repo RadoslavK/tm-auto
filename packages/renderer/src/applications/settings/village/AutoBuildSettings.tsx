@@ -9,6 +9,7 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 
 import type {
   AutoBuildSettingsQuery,
@@ -19,6 +20,7 @@ import type {
   AutoBuildSettingsUpdateSettingsMutation,
   UpdateAutoBuildSettingsInput, 
 } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
@@ -103,9 +105,6 @@ type Props = {
 
 const autoBuildSettingsQuery = graphql`
   query AutoBuildSettingsQuery($villageId: ID!) {
-      gameInfo {
-          tribe
-      }
       autoBuildSettings(villageId: $villageId) {
           allow
           autoCropFields
@@ -150,7 +149,7 @@ const autoBuildSettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoBuildSettings, gameInfo } = useLazyLoadQuery<AutoBuildSettingsQuery>(autoBuildSettingsQuery, { villageId });
+  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(autoBuildSettingsQuery, { villageId });
   const [updateSettings] = useMutation<AutoBuildSettingsUpdateSettingsMutation>(autoBuildSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoBuildSettingsResetSettingsMutation>(autoBuildSettingsResetSettingsMutation);
 
@@ -190,7 +189,8 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     [],
   );
 
-  const isRoman = gameInfo.tribe === 'Romans';
+  const [tribe] = useRecoilState(tribeState);
+  const isRoman = tribe === 'Romans';
 
   const onReset = () => {
     resetSettings({

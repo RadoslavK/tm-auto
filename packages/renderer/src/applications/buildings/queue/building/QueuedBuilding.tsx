@@ -6,8 +6,10 @@ import {
   useDrag, 
 } from 'react-dnd';
 import { useFragment } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 
 import type { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
+import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import {
   BuildingImageSize,
   imageLinks,
@@ -33,7 +35,6 @@ type Props = {
   readonly building: QueuedBuilding_queuedBuilding$key;
   readonly onCollapse?: () => void;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const queuedBuildingQueuedBuildingFragment = graphql`
@@ -45,7 +46,7 @@ const queuedBuildingQueuedBuildingFragment = graphql`
   }
 `;
 
-export const QueuedBuilding: React.FC<Props> = ({ tribe, building, onCollapse, villageId }) => {
+export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageId }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
 
   const movedBuilding: MovedQueuedBuilding = {
@@ -63,6 +64,7 @@ export const QueuedBuilding: React.FC<Props> = ({ tribe, building, onCollapse, v
   });
 
   const classes = useStyles({ isDragging });
+  const [tribe] = useRecoilState(tribeState);
 
   return (
     <QueuedBuildingsDropArea
@@ -74,14 +76,13 @@ export const QueuedBuilding: React.FC<Props> = ({ tribe, building, onCollapse, v
       queueIndexBot={queuedBuildingFragment.queueIndex}
       queueIndexTop={queuedBuildingFragment.queueIndex}
       villageId={villageId}
-      tribe={tribe}
     >
       <div ref={drag} className={classes.root}>
         <DragPreviewImage
           connect={preview}
           src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
         />
-        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} villageId={villageId} tribe={tribe} />
+        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} villageId={villageId} />
       </div>
     </QueuedBuildingsDropArea>
   );

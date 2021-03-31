@@ -4,21 +4,21 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type Tribe = "Egyptians" | "Gauls" | "Huns" | "Natars" | "Nature" | "Romans" | "Teutons" | "%future added value";
-export type UnitsGameInfoQueryVariables = {};
-export type UnitsGameInfoQueryResponse = {
+export type EnsureGlobalStateGameInfoQueryVariables = {};
+export type EnsureGlobalStateGameInfoQueryResponse = {
     readonly gameInfo: {
         readonly tribe: Tribe;
     };
 };
-export type UnitsGameInfoQuery = {
-    readonly response: UnitsGameInfoQueryResponse;
-    readonly variables: UnitsGameInfoQueryVariables;
+export type EnsureGlobalStateGameInfoQuery = {
+    readonly response: EnsureGlobalStateGameInfoQueryResponse;
+    readonly variables: EnsureGlobalStateGameInfoQueryVariables;
 };
 
 
 
 /*
-query UnitsGameInfoQuery {
+query EnsureGlobalStateGameInfoQuery {
   gameInfo {
     tribe
   }
@@ -51,7 +51,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "UnitsGameInfoQuery",
+    "name": "EnsureGlobalStateGameInfoQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -60,18 +60,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "UnitsGameInfoQuery",
+    "name": "EnsureGlobalStateGameInfoQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "3e4857d0d98cbd3e91e42694d237a61b",
+    "cacheID": "845c1d4dff131fa75a011f7a30fdf737",
     "id": null,
     "metadata": {},
-    "name": "UnitsGameInfoQuery",
+    "name": "EnsureGlobalStateGameInfoQuery",
     "operationKind": "query",
-    "text": "query UnitsGameInfoQuery {\n  gameInfo {\n    tribe\n  }\n}\n"
+    "text": "query EnsureGlobalStateGameInfoQuery {\n  gameInfo {\n    tribe\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '20d084034a00532d2ffa8a7cee1f5661';
+(node as any).hash = 'af19365eb5928ba89e6818a579eb83d0';
 export default node;

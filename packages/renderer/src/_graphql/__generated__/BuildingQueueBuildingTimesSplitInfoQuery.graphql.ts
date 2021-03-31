@@ -3,14 +3,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type Tribe = "Egyptians" | "Gauls" | "Huns" | "Natars" | "Nature" | "Romans" | "Teutons" | "%future added value";
 export type BuildingQueueBuildingTimesSplitInfoQueryVariables = {
     villageId: string;
 };
 export type BuildingQueueBuildingTimesSplitInfoQueryResponse = {
-    readonly gameInfo: {
-        readonly tribe: Tribe;
-    };
     readonly autoBuildSettings: {
         readonly dualQueue: {
             readonly allow: boolean;
@@ -28,9 +24,6 @@ export type BuildingQueueBuildingTimesSplitInfoQuery = {
 query BuildingQueueBuildingTimesSplitInfoQuery(
   $villageId: ID!
 ) {
-  gameInfo {
-    tribe
-  }
   autoBuildSettings(villageId: $villageId) {
     dualQueue {
       allow
@@ -48,24 +41,6 @@ var v0 = [
   }
 ],
 v1 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "GameInfo",
-    "kind": "LinkedField",
-    "name": "gameInfo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "tribe",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
   {
     "alias": null,
     "args": [
@@ -120,14 +95,14 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "6d85f52817696ef3f1caab83fa22b966",
+    "cacheID": "81c87216360cfe014d44b355be93e906",
     "id": null,
     "metadata": {},
     "name": "BuildingQueueBuildingTimesSplitInfoQuery",
     "operationKind": "query",
-    "text": "query BuildingQueueBuildingTimesSplitInfoQuery(\n  $villageId: ID!\n) {\n  gameInfo {\n    tribe\n  }\n  autoBuildSettings(villageId: $villageId) {\n    dualQueue {\n      allow\n    }\n  }\n}\n"
+    "text": "query BuildingQueueBuildingTimesSplitInfoQuery(\n  $villageId: ID!\n) {\n  autoBuildSettings(villageId: $villageId) {\n    dualQueue {\n      allow\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e9056db0a4c2a67ac5f15d22fbbbae8b';
+(node as any).hash = '734089ece5a0d52b8ccba082dd61d47b';
 export default node;

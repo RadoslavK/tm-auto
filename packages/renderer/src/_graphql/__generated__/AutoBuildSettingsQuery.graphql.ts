@@ -4,14 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type DualQueuePreference = "Infrastructure" | "Resources" | "%future added value";
-export type Tribe = "Egyptians" | "Gauls" | "Huns" | "Natars" | "Nature" | "Romans" | "Teutons" | "%future added value";
 export type AutoBuildSettingsQueryVariables = {
     villageId: string;
 };
 export type AutoBuildSettingsQueryResponse = {
-    readonly gameInfo: {
-        readonly tribe: Tribe;
-    };
     readonly autoBuildSettings: {
         readonly allow: boolean;
         readonly autoCropFields: boolean;
@@ -59,9 +55,6 @@ export type AutoBuildSettingsQuery = {
 query AutoBuildSettingsQuery(
   $villageId: ID!
 ) {
-  gameInfo {
-    tribe
-  }
   autoBuildSettings(villageId: $villageId) {
     allow
     autoCropFields
@@ -156,24 +149,6 @@ v3 = [
   }
 ],
 v4 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "GameInfo",
-    "kind": "LinkedField",
-    "name": "gameInfo",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "tribe",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
   {
     "alias": null,
     "args": [
@@ -320,14 +295,14 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "6fa27efe91c3438bffdf9bb557376593",
+    "cacheID": "31815401ab6ae27dc5ed6f4e2abe17fc",
     "id": null,
     "metadata": {},
     "name": "AutoBuildSettingsQuery",
     "operationKind": "query",
-    "text": "query AutoBuildSettingsQuery(\n  $villageId: ID!\n) {\n  gameInfo {\n    tribe\n  }\n  autoBuildSettings(villageId: $villageId) {\n    allow\n    autoCropFields\n    autoStorage {\n      allowFreeSpots\n      granary {\n        allow\n        overflowLevel\n      }\n      warehouse {\n        allow\n        overflowLevel\n      }\n    }\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    dualQueue {\n      allow\n      preference\n    }\n    minCrop\n    useHeroResources\n  }\n}\n"
+    "text": "query AutoBuildSettingsQuery(\n  $villageId: ID!\n) {\n  autoBuildSettings(villageId: $villageId) {\n    allow\n    autoCropFields\n    autoStorage {\n      allowFreeSpots\n      granary {\n        allow\n        overflowLevel\n      }\n      warehouse {\n        allow\n        overflowLevel\n      }\n    }\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    dualQueue {\n      allow\n      preference\n    }\n    minCrop\n    useHeroResources\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f6eda74bb2c8b085149659300c67168f';
+(node as any).hash = 'c621626cae712045d908c5b82248f5fb';
 export default node;

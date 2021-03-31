@@ -29,7 +29,6 @@ import {
   getRequest,
 } from 'relay-runtime';
 
-import type { VillageGameInfoQuery } from '../../../_graphql/__generated__/VillageGameInfoQuery.graphql.js';
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 import type { VillageSubscription } from '../../../_graphql/__generated__/VillageSubscription.graphql.js';
@@ -116,14 +115,6 @@ const villageSelectedVillageIdQuery = graphql`
   }
 `;
 
-const gameInfoQuery = graphql`
-  query VillageGameInfoQuery {
-      gameInfo {
-          tribe
-      }
-  }
-`;
-
 export const Village: React.FC<Props> = ({ villageId }) => {
   const relayEnvironment = useRelayEnvironment();
 
@@ -139,8 +130,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
       refreshBuildingSpots(villageId);
     }
   }, [refreshBuildingSpots,  villageId, prevVillageId]);
-
-  const { gameInfo } = useLazyLoadQuery<VillageGameInfoQuery>(gameInfoQuery, {}, { fetchPolicy: 'store-or-network' });
 
   useEffect(() => {
     const request = getRequest(villageSelectedVillageIdQuery);
@@ -215,10 +204,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   return (
     <div>
       <Resources resources={village.resources} />
-      <CrannyCapacity
-        tribe={gameInfo.tribe}
-        villageId={village.id}
-      />
+      <CrannyCapacity villageId={village.id} />
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}
       <button onClick={onRefreshVillage}>Refresh</button>
       <div>
@@ -259,7 +245,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
                       buildingsQueryRef={buildingsQueryRef}
                       refreshBuildingSpots={refreshBuildingSpots}
                       villageId={villageId}
-                      tribe={gameInfo.tribe}
                     />
                   )}
                 />

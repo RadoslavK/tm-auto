@@ -2,13 +2,11 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
-import {
-  useFragment,
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 
 import type { AutoBuildLogContent_autoBuildLogEntryContent$key } from '../../../../_graphql/__generated__/AutoBuildLogContent_autoBuildLogEntryContent.graphql.js';
-import type { AutoBuildLogContentGameInfoQuery } from '../../../../_graphql/__generated__/AutoBuildLogContentGameInfoQuery.graphql.js';
+import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type StylesProps = {
@@ -44,14 +42,6 @@ const autoBuildLogContentFragment = graphql`
   }
 `;
 
-const gameInfoQuery = graphql`
-  query AutoBuildLogContentGameInfoQuery {
-      gameInfo {
-          tribe
-      }
-  }
-`;
-
 export const AutoBuildLogContent: React.FC<Props> = ({
   className,
   content,
@@ -63,7 +53,7 @@ export const AutoBuildLogContent: React.FC<Props> = ({
     type,
   } = useFragment(autoBuildLogContentFragment, content);
 
-  const { gameInfo: { tribe } } = useLazyLoadQuery<AutoBuildLogContentGameInfoQuery>(gameInfoQuery, {});
+  const [tribe] = useRecoilState(tribeState);
 
   const classes = useStyles({
     buildingType: type,

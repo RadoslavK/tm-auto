@@ -5,9 +5,11 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 
 import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 import type { QueuedBuildingComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingComponentBuildingInfoQuery.graphql.js';
+import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
 import { QueuedBuildingActions } from './QueuedBuildingActions.js';
@@ -54,7 +56,6 @@ type Props = {
   readonly isHighlight?: boolean;
   readonly onCollapse?: () => void;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
@@ -87,14 +88,13 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
   isHighlight,
   onCollapse,
   villageId,
-  tribe,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
   const { buildingLevelInfo, buildingInfo } = useLazyLoadQuery<QueuedBuildingComponentBuildingInfoQuery>(queuedBuildingComponentBuildingInfoQuery, {
     buildingType: queuedBuildingFragment.type,
     level: queuedBuildingFragment.level,
   });
-
+  const [tribe] = useRecoilState(tribeState);
   const classes = useStyles({
     buildingType: queuedBuildingFragment.type,
     tribe,

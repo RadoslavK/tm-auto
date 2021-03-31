@@ -14,7 +14,6 @@ type Props = {
   readonly buildingsInProgressKey: BuildingsInProgress_buildingsInProgress$key;
   readonly className?: string;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const buildingsInProgressFragment = graphql`
@@ -37,7 +36,6 @@ export const BuildingsInProgress: React.FC<Props> = ({
   buildingsInProgressKey,
   className,
   villageId,
-  tribe,
 }) => {
   const buildingsInProgress = useFragment(buildingsInProgressFragment, buildingsInProgressKey);
 
@@ -58,7 +56,6 @@ export const BuildingsInProgress: React.FC<Props> = ({
         <BuildingInProgress
           key={`${building.fieldId}|${building.level}`}
           building={building}
-          tribe={tribe}
         />
       ))}
     </div>

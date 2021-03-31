@@ -10,12 +10,14 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
 import type { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql.js';
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog.js';
@@ -32,7 +34,6 @@ type Props = {
   readonly building: BuildingSpot_buildingSpot$key;
   readonly className?: string;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const buildingSpotBuildingSpotFragment = graphql`
@@ -95,9 +96,9 @@ const useStyles = makeStyles<unknown, StyleProps>({
   }),
 });
 
-export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId, tribe }) => {
+export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId }) => {
   const buildingSpotFragment = useFragment(buildingSpotBuildingSpotFragment, building);
-
+  const [tribe] = useRecoilState(tribeState);
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
 

@@ -10,6 +10,7 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
@@ -17,6 +18,7 @@ import type { CrannyCapacityActualBuildingLevelSubscription } from '../../../_gr
 import type { CrannyCapacityBuildingQueueSubscription } from '../../../_graphql/__generated__/CrannyCapacityBuildingQueueSubscription.graphql.js';
 import type { CrannyCapacityBuildingsInProgressSubscription } from '../../../_graphql/__generated__/CrannyCapacityBuildingsInProgressSubscription.graphql.js';
 import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type StylesProps = {
@@ -69,11 +71,11 @@ const buildingQueueSubscription = graphql`
 `;
 
 type Props = {
-  readonly tribe: string;
   readonly villageId: string;
 };
 
-export const CrannyCapacity: React.FC<Props> = ({ tribe, villageId }) => {
+export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
+  const [tribe] = useRecoilState(tribeState);
   const classes = useStyles({ tribe });
 
   const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<{

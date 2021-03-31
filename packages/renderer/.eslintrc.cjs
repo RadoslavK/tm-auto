@@ -26,6 +26,10 @@ module.exports = {
     'indent': ['error', 2, {
       SwitchCase: 1,
     }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': ['warn', {
+      'additionalHooks': 'useRecoilCallback',
+    }],
     'object-curly-newline': ['error', {
       ImportDeclaration: { multiline: true, minProperties: 2 },
       ExportDeclaration: { multiline: true, minProperties: 2 },

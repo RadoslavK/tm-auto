@@ -6,8 +6,10 @@ import {
   useDrag, 
 } from 'react-dnd';
 import { useFragment } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 
 import type { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
+import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import {
   BuildingImageSize,
   imageLinks,
@@ -33,7 +35,6 @@ type Props = {
   readonly onExpand: () => void;
   readonly range: QueuedBuildingRange_queuedBuildingRange$key;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
@@ -47,7 +48,7 @@ const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
   }
 `;
 
-export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageId, tribe }) => {
+export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageId }) => {
   const rangeFragment = useFragment(queuedBuildingRangeQueuedBuildingRangeFragment, range);
 
   const movedBuilding: MovedQueuedBuildingRange = {
@@ -65,11 +66,11 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
     type: 'QueuedBuildingRange',
   });
 
+  const [tribe] = useRecoilState(tribeState);
   const classes = useStyles({ isDragging });
 
   return (
     <QueuedBuildingsDropArea
-      tribe={tribe}
       getDropPosition={(queueIndex) =>
         queueIndex > rangeFragment.buildings[0].queueIndex
           ? DropPosition.Above
@@ -88,7 +89,6 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
           buildingRange={rangeFragment}
           onExpand={onExpand}
           villageId={villageId}
-          tribe={tribe}
         />
       </div>
     </QueuedBuildingsDropArea>

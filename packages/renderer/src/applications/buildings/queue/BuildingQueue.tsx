@@ -12,6 +12,7 @@ import {
   useRelayEnvironment,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import {
   commitLocalUpdate,
@@ -24,6 +25,7 @@ import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCollapsedBuildingRangesQuery } from '../../../_graphql/__generated__/BuildingQueueCollapsedBuildingRangesQuery.graphql.js';
 import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
 import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
@@ -82,9 +84,6 @@ const buildingQueueSubscription = graphql`
 
 const buildingQueueBuildingTimesSplitInfoQuery = graphql`
     query BuildingQueueBuildingTimesSplitInfoQuery($villageId: ID!) {
-        gameInfo {
-            tribe
-        }
         autoBuildSettings(villageId: $villageId) {
             dualQueue {
                 allow
@@ -111,8 +110,9 @@ export const BuildingQueue: React.FC<Props> = ({
   className,
   villageId,
 }) => {
-  const { gameInfo, autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
-  const shouldSplitBuildingTimes = gameInfo.tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
+  const { autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
+  const [tribe] = useRecoilState(tribeState);
+  const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);
 
@@ -204,7 +204,6 @@ export const BuildingQueue: React.FC<Props> = ({
                 onExpand={() => onRangeExpand(range.id)}
                 range={range}
                 villageId={villageId}
-                tribe={gameInfo.tribe}
               />
             );
           }
@@ -213,7 +212,6 @@ export const BuildingQueue: React.FC<Props> = ({
             <React.Fragment key={range.id}>
               {range.buildings.map((building) => (
                 <QueuedBuilding
-                  tribe={gameInfo.tribe}
                   key={building.queueId}
                   building={building}
                   onCollapse={
