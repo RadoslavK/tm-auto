@@ -32,7 +32,11 @@ import {
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 import type { VillageSubscription } from '../../../_graphql/__generated__/VillageSubscription.graphql.js';
-import { Buildings } from '../../buildings/Buildings.js';
+import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
+import {
+  Buildings,
+  useBuildingsQuery,
+} from '../../buildings/Buildings.js';
 import { Parties } from '../../party/Parties.js';
 import {
   VillageSettings,
@@ -45,7 +49,7 @@ import { VillageTasksActivity } from './VillageTasksActivity.js';
 
 type NavigationItem = {
   readonly label: string;
-  readonly component: React.ComponentType;
+  readonly component: React.ComponentType<any>;
   readonly path: string;
   readonly tabType?: VillageSettingsTabType;
 };
@@ -70,7 +74,7 @@ const navigation: readonly NavigationItem[] = [
     tabType: VillageSettingsTabType.AutoParty,
   },
   { label: 'Tasks', path: 'tasks-activity', component: VillageTasksActivity },
-];
+] as const;
 
 type Props = {
   readonly villageId: string;
@@ -113,6 +117,19 @@ const villageSelectedVillageIdQuery = graphql`
 
 export const Village: React.FC<Props> = ({ villageId }) => {
   const relayEnvironment = useRelayEnvironment();
+
+  const {
+    buildingsQueryRef,
+    refreshBuildingSpots,
+  } = useBuildingsQuery();
+
+  const prevVillageId = usePrevious(villageId);
+
+  useEffect(() => {
+    if (villageId !== prevVillageId) {
+      refreshBuildingSpots(villageId, true);
+    }
+  }, [refreshBuildingSpots,  villageId, prevVillageId]);
 
   useEffect(() => {
     const request = getRequest(villageSelectedVillageIdQuery);
@@ -193,19 +210,46 @@ export const Village: React.FC<Props> = ({ villageId }) => {
       <div>
         {navigation.map((n) => (
           <Link key={n.path} to={`${match.url}/${n.path}`}>
-            {n.label}
+            <span
+              onMouseEnter={() => {
+                if (n.path !== 'buildings') {
+                  return;
+                }
+
+                refreshBuildingSpots(villageId);
+              }}
+            >
+              {n.label}
+            </span>
           </Link>
         ))}
       </div>
       <Suspense fallback={null}>
         <Switch>
-          {navigation.map((n) => (
-            <Route
-              key={n.path}
-              component={n.component}
-              path={`${match.path}/${n.path}`}
-            />
-          ))}
+          {navigation.map((n) => {
+            return n.path !== 'buildings'
+              ? (
+                <Route
+                  key={n.path}
+                  component={n.component}
+                  path={`${match.path}/${n.path}`}
+                />
+              )
+              : (
+                <Route
+                  key={n.path}
+                  path={`${match.path}/${n.path}`}
+                  render={() => buildingsQueryRef && (
+                    <Buildings
+                      key={n.path}
+                      buildingsQueryRef={buildingsQueryRef}
+                      refreshBuildingSpots={refreshBuildingSpots}
+                      villageId={villageId}
+                    />
+                  )}
+                />
+              );
+          })}
           <Redirect to={`${match.path}/${navigation[0].path}`} />
         </Switch>
       </Suspense>

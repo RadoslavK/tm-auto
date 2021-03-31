@@ -1,0 +1,116 @@
+/* tslint:disable */
+/* eslint-disable */
+// @ts-nocheck
+
+import { ReaderFragment } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
+export type BuildingSpots_buildingSpots = {
+    readonly infrastructure: ReadonlyArray<{
+        readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
+    }>;
+    readonly resources: {
+        readonly wood: ReadonlyArray<{
+            readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
+        }>;
+        readonly clay: ReadonlyArray<{
+            readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
+        }>;
+        readonly iron: ReadonlyArray<{
+            readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
+        }>;
+        readonly crop: ReadonlyArray<{
+            readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
+        }>;
+    };
+    readonly " $refType": "BuildingSpots_buildingSpots";
+};
+export type BuildingSpots_buildingSpots$data = BuildingSpots_buildingSpots;
+export type BuildingSpots_buildingSpots$key = {
+    readonly " $data"?: BuildingSpots_buildingSpots$data;
+    readonly " $fragmentRefs": FragmentRefs<"BuildingSpots_buildingSpots">;
+};
+
+
+
+const node: ReaderFragment = (function(){
+var v0 = [
+  {
+    "args": null,
+    "kind": "FragmentSpread",
+    "name": "BuildingSpot_buildingSpot"
+  }
+];
+return {
+  "argumentDefinitions": [],
+  "kind": "Fragment",
+  "metadata": null,
+  "name": "BuildingSpots_buildingSpots",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "BuildingSpot",
+      "kind": "LinkedField",
+      "name": "infrastructure",
+      "plural": true,
+      "selections": (v0/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ResourceFields",
+      "kind": "LinkedField",
+      "name": "resources",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "BuildingSpot",
+          "kind": "LinkedField",
+          "name": "wood",
+          "plural": true,
+          "selections": (v0/*: any*/),
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "BuildingSpot",
+          "kind": "LinkedField",
+          "name": "clay",
+          "plural": true,
+          "selections": (v0/*: any*/),
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "BuildingSpot",
+          "kind": "LinkedField",
+          "name": "iron",
+          "plural": true,
+          "selections": (v0/*: any*/),
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "BuildingSpot",
+          "kind": "LinkedField",
+          "name": "crop",
+          "plural": true,
+          "selections": (v0/*: any*/),
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "type": "BuildingSpots",
+  "abstractKey": null
+};
+})();
+(node as any).hash = 'f00baeb04a3b818fe224a7f5cfe7514b';
+export default node;

@@ -1,36 +1,18 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
-import type { FetchPolicy } from 'react-relay';
+import React, { useMemo } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
+import type { BuildingSpots_buildingSpots$key } from '../../../_graphql/__generated__/BuildingSpots_buildingSpots.graphql.js';
 import type { BuildingSpotsActualBuildingLevelSubscription } from '../../../_graphql/__generated__/BuildingSpotsActualBuildingLevelSubscription.graphql.js';
 import type { BuildingSpotsBuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingSpotsBuildingQueueSubscription.graphql.js';
 import type { BuildingSpotsBuildingsInProgressSubscription } from '../../../_graphql/__generated__/BuildingSpotsBuildingsInProgressSubscription.graphql.js';
-import type { BuildingSpotsQuery } from '../../../_graphql/__generated__/BuildingSpotsQuery.graphql.js';
 import { BuildingSpot } from './BuildingSpot.js';
-
-const useStyles = makeStyles({
-  buildingType: {
-    display: 'flex',
-    flex: '1',
-    flexWrap: 'wrap',
-  },
-});
-
-type Props = {
-  readonly className: string;
-  readonly villageId: string;
-};
 
 const mapBuilding = (
   building: BuildingSpot_buildingSpot$key,
@@ -38,25 +20,23 @@ const mapBuilding = (
   villageId: string,
 ): JSX.Element => <BuildingSpot key={index} building={building} villageId={villageId} />;
 
-const buildingSpotsQuery = graphql`
-  query BuildingSpotsQuery($villageId: ID!) {
-      buildingSpots(villageId: $villageId) {
-          infrastructure {
+const buildingSpotsFragment = graphql`
+  fragment BuildingSpots_buildingSpots on BuildingSpots {
+      infrastructure {
+          ...BuildingSpot_buildingSpot
+      }
+      resources {
+          wood {
               ...BuildingSpot_buildingSpot
           }
-          resources {
-              wood {
-                  ...BuildingSpot_buildingSpot
-              }
-              clay {
-                  ...BuildingSpot_buildingSpot
-              }
-              iron {
-                  ...BuildingSpot_buildingSpot
-              }
-              crop {
-                  ...BuildingSpot_buildingSpot
-              }
+          clay {
+              ...BuildingSpot_buildingSpot
+          }
+          iron {
+              ...BuildingSpot_buildingSpot
+          }
+          crop {
+              ...BuildingSpot_buildingSpot
           }
       }
   }
@@ -84,22 +64,30 @@ const buildingSpotsBuildingQueueSubscription = graphql`
     }
 `;
 
-export const BuildingSpots: React.FC<Props> = ({ className, villageId }) => {
+const useStyles = makeStyles({
+  buildingType: {
+    display: 'flex',
+    flex: '1',
+    flexWrap: 'wrap',
+  },
+});
+
+type Props = {
+  readonly buildingSpotsKey: BuildingSpots_buildingSpots$key;
+  readonly className: string;
+  readonly refresh: () => void;
+  readonly villageId: string;
+};
+
+export const BuildingSpots: React.FC<Props> = ({
+  buildingSpotsKey,
+  className,
+  refresh,
+  villageId,
+}) => {
   const classes = useStyles({});
 
-  const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<{
-    readonly fetchKey?: number;
-    readonly fetchPolicy?: FetchPolicy;
-  }>({});
-
-  const { buildingSpots } = useLazyLoadQuery<BuildingSpotsQuery>(buildingSpotsQuery, { villageId }, refreshedQueryOptions);
-
-  const refresh = useCallback(() => {
-    setRefreshedQueryOptions(prev => ({
-      fetchKey: (prev?.fetchKey ?? 0) + 1,
-      fetchPolicy: 'network-only',
-    }));
-  }, []);
+  const buildingSpots = useFragment(buildingSpotsFragment, buildingSpotsKey);
 
   const buildingSpotsActualBuildingLevelSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotsActualBuildingLevelSubscription> => ({
     subscription: buildingSpotsActualBuildingLevelSubscription,

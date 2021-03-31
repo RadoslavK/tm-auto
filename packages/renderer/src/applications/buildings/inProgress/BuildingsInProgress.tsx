@@ -1,27 +1,26 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { BuildingsInProgressQuery } from '../../../_graphql/__generated__/BuildingsInProgressQuery.graphql.js';
+import type { BuildingsInProgress_buildingsInProgress$key } from '../../../_graphql/__generated__/BuildingsInProgress_buildingsInProgress.graphql.js';
 import type { BuildingsInProgressSubscription } from '../../../_graphql/__generated__/BuildingsInProgressSubscription.graphql.js';
 import { BuildingInProgress } from './BuildingInProgress.js';
 
 type Props = {
+  readonly buildingsInProgressKey: BuildingsInProgress_buildingsInProgress$key;
   readonly className?: string;
   readonly villageId: string;
 };
 
-const buildingsInProgressQuery = graphql`
-  query BuildingsInProgressQuery($villageId: ID!) {
-      buildingsInProgress(villageId: $villageId) {
-          fieldId
-          level
-          ...BuildingInProgress_buildingInProgress
-      }
+const buildingsInProgressFragment = graphql`
+  fragment BuildingsInProgress_buildingsInProgress on BuildingInProgress @relay(plural: true) {
+      fieldId
+      level
+      ...BuildingInProgress_buildingInProgress
   }
 `;
 
@@ -33,8 +32,12 @@ const buildingsInProgressSubscription = graphql`
     }
 `;
 
-export const BuildingsInProgress: React.FC<Props> = ({ className, villageId }) => {
-  const { buildingsInProgress } = useLazyLoadQuery<BuildingsInProgressQuery>(buildingsInProgressQuery, { villageId });
+export const BuildingsInProgress: React.FC<Props> = ({
+  buildingsInProgressKey,
+  className,
+  villageId,
+}) => {
+  const buildingsInProgress = useFragment(buildingsInProgressFragment, buildingsInProgressKey);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingsInProgressSubscription> => ({
     subscription: buildingsInProgressSubscription,

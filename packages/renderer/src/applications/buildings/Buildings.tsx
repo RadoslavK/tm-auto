@@ -1,9 +1,16 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { Suspense } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
+import React, {
+  Suspense,
+  useCallback,
+} from 'react';
+import {
+  PreloadedQuery,
+  usePreloadedQuery,
+  useQueryLoader,
+} from 'react-relay/hooks';
 
-import type { BuildingsSelectedVillageIdQuery } from '../../_graphql/__generated__/BuildingsSelectedVillageIdQuery.graphql.js';
+import type { BuildingsQuery } from '../../_graphql/__generated__/BuildingsQuery.graphql.js';
 import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
 import { BuildingsInProgress } from './inProgress/BuildingsInProgress.js';
 import { BuildingQueue } from './queue/BuildingQueue.js';
@@ -24,22 +31,55 @@ const useStyles = makeStyles({
   },
 });
 
-const buildingsSelectedVillageIdQuery = graphql`
-    query BuildingsSelectedVillageIdQuery {
-        ... on Query { __typename }
-        selectedVillageId
-    }
+const buildingsQuery = graphql`
+  query BuildingsQuery($villageId: ID!) {
+      buildingSpots(villageId: $villageId) {
+        ...BuildingSpots_buildingSpots
+      }
+      buildingQueue(villageId: $villageId) {
+          ...BuildingQueue_buildingQueue
+      }
+      buildingsInProgress(villageId: $villageId) {
+          ...BuildingsInProgress_buildingsInProgress
+      }
+  }
 `;
 
-export const Buildings: React.FC = () => {
-  const { selectedVillageId: villageId } = useLazyLoadQuery<BuildingsSelectedVillageIdQuery>(buildingsSelectedVillageIdQuery, {});
+export const useBuildingsQuery = () => {
+  const [buildingsQueryRef, loadBuildingsQuery] = useQueryLoader<BuildingsQuery>(buildingsQuery);
+
+  const refreshBuildingSpots = useCallback((vId: string) => {
+    loadBuildingsQuery({ villageId: vId }, { fetchPolicy: 'network-only' });
+  }, [loadBuildingsQuery]);
+
+  return {
+    buildingsQueryRef,
+    refreshBuildingSpots,
+  };
+};
+
+type Props = {
+  readonly buildingsQueryRef: PreloadedQuery<BuildingsQuery>;
+  readonly refreshBuildingSpots: (villageId: string) => void;
+  readonly villageId: string;
+};
+
+export const Buildings: React.FC<Props> = ({
+  buildingsQueryRef,
+  refreshBuildingSpots,
+  villageId,
+}) => {
   const classes = useStyles({});
+
+  const { buildingSpots, buildingQueue, buildingsInProgress } = usePreloadedQuery(buildingsQuery, buildingsQueryRef);
 
   return (
     <div className={classes.buildings}>
       <Suspense fallback={null}>
         <BuildingSpots
+          buildingSpotsKey={buildingSpots}
           className={classes.buildingSpots}
+          refresh={() => refreshBuildingSpots(villageId)}
           villageId={villageId}
         />
       </Suspense>
@@ -49,11 +89,14 @@ export const Buildings: React.FC = () => {
           villageId={villageId}
         />
         <Suspense fallback={null}>
-          <BuildingsInProgress villageId={villageId} />
+          <BuildingsInProgress
+            buildingsInProgressKey={buildingsInProgress}
+            villageId={villageId} />
         </Suspense>
       </div>
       <Suspense fallback={null}>
         <BuildingQueue
+          buildingQueueKey={buildingQueue}
           className={classes.queuedBuildings}
           villageId={villageId}
         />

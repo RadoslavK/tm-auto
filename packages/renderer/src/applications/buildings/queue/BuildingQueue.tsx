@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import {
+  useFragment,
   useLazyLoadQuery,
   useMutation,
   useRelayEnvironment,
@@ -18,16 +19,17 @@ import {
   getRequest,
 } from 'relay-runtime';
 
+import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__generated__/BuildingQueue_buildingQueue.graphql.js';
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCollapsedBuildingRangesQuery } from '../../../_graphql/__generated__/BuildingQueueCollapsedBuildingRangesQuery.graphql.js';
-import type { BuildingQueueQuery } from '../../../_graphql/__generated__/BuildingQueueQuery.graphql.js';
 import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
 import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
 
 type Props = {
+  readonly buildingQueueKey: BuildingQueue_buildingQueue$key;
   readonly className: string;
   readonly villageId: string;
 };
@@ -45,29 +47,27 @@ const useStyles = makeStyles({
   },
 });
 
-const buildingQueueQuery = graphql`
-  query BuildingQueueQuery($villageId: ID!) {
-      buildingQueue(villageId: $villageId) {
-          totalCost {
-              ...Cost_resources
+const buildingQueueFragment = graphql`
+  fragment BuildingQueue_buildingQueue on BuildingQueue {
+      totalCost {
+          ...Cost_resources
+      }
+      totalBuildingTime {
+          ...Cost_duration
+      }
+      infrastructureBuildingTime {
+          ...Cost_duration
+      }
+      resourcesBuildingTime {
+          ...Cost_duration
+      }
+      buildingRanges {
+          id
+          buildings {
+              queueId
+              ...QueuedBuilding_queuedBuilding
           }
-          totalBuildingTime {
-              ...Cost_duration
-          }
-          infrastructureBuildingTime {
-              ...Cost_duration
-          }
-          resourcesBuildingTime {
-              ...Cost_duration
-          }
-          buildingRanges {
-              id
-              buildings {
-                  queueId
-                  ...QueuedBuilding_queuedBuilding
-              }
-              ...QueuedBuildingRange_queuedBuildingRange
-          }
+          ...QueuedBuildingRange_queuedBuildingRange
       }
   }
 `;
@@ -75,7 +75,7 @@ const buildingQueueQuery = graphql`
 const buildingQueueSubscription = graphql`
   subscription BuildingQueueSubscription($villageId: ID!) {
       queueUpdated(villageId: $villageId) {
-         ...BuildingQueue
+         ...BuildingQueue_buildingQueue
       }
   }
 `;
@@ -106,11 +106,15 @@ const collapsedBuildingRangesQuery = graphql`
   }
 `;
 
-export const BuildingQueue: React.FC<Props> = ({ className, villageId }) => {
+export const BuildingQueue: React.FC<Props> = ({
+  buildingQueueKey,
+  className,
+  villageId,
+}) => {
   const { gameInfo, autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
   const shouldSplitBuildingTimes = gameInfo.tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
-  const { buildingQueue } = useLazyLoadQuery<BuildingQueueQuery>(buildingQueueQuery, { villageId });
+  const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueSubscription> => ({
     subscription: buildingQueueSubscription,
