@@ -10,7 +10,7 @@ import { useFragment } from 'react-relay/hooks';
 import type { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
 import {
   BuildingImageSize,
-  imageLinks, 
+  imageLinks,
 } from '../../../../utils/imageLinks.js';
 import {
   DropPosition,
@@ -33,6 +33,7 @@ type Props = {
   readonly onExpand: () => void;
   readonly range: QueuedBuildingRange_queuedBuildingRange$key;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
@@ -46,7 +47,7 @@ const queuedBuildingRangeQueuedBuildingRangeFragment = graphql`
   }
 `;
 
-export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageId }) => {
+export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageId, tribe }) => {
   const rangeFragment = useFragment(queuedBuildingRangeQueuedBuildingRangeFragment, range);
 
   const movedBuilding: MovedQueuedBuildingRange = {
@@ -68,6 +69,7 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
 
   return (
     <QueuedBuildingsDropArea
+      tribe={tribe}
       getDropPosition={(queueIndex) =>
         queueIndex > rangeFragment.buildings[0].queueIndex
           ? DropPosition.Above
@@ -80,12 +82,13 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
       <div ref={drag} className={classes.root}>
         <DragPreviewImage
           connect={preview}
-          src={imageLinks.getBuilding(rangeFragment.type, BuildingImageSize.Small)}
+          src={imageLinks.getBuilding(rangeFragment.type, tribe, BuildingImageSize.Small)}
         />
         <QueuedBuildingRangeComponent
           buildingRange={rangeFragment}
           onExpand={onExpand}
           villageId={villageId}
+          tribe={tribe}
         />
       </div>
     </QueuedBuildingsDropArea>

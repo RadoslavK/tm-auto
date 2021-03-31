@@ -22,6 +22,7 @@ import { UnitSettings } from './UnitSettings.js';
 type StylesProps = {
   readonly buildingType: number;
   readonly isAllowed: boolean;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
@@ -29,8 +30,8 @@ const useStyles = makeStyles<unknown, StylesProps>({
     alignItems: 'center',
     display: 'flex',
   },
-  buildingImage: ({ buildingType, isAllowed }) => ({
-    backgroundImage: `url("${imageLinks.getBuilding(buildingType)}")`,
+  buildingImage: ({ buildingType, tribe, isAllowed }) => ({
+    backgroundImage: `url("${imageLinks.getBuilding(buildingType, tribe)}")`,
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -54,6 +55,7 @@ type Props = {
   readonly className?: string;
   readonly settings: UnitBuildingSection_autoUnitsBuildingSettings$key;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
@@ -96,6 +98,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
   className,
   settings,
   villageId,
+  tribe,
 }) => {
   const buildingSettingsFragment = useFragment(unitBuildingSectionAutoUnitsBuildingSettingsFragment, settings);
 
@@ -116,6 +119,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
   const classes = useStyles({
     buildingType: buildingType,
     isAllowed: state.allow,
+    tribe,
   });
 
   const [updateSettings] = useMutation<UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation>(unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation);

@@ -21,6 +21,7 @@ type Props = {
   readonly fieldId: number;
   readonly onSelect: () => void;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const newBuildingDialogAvailableNewBuildingsTypes = graphql`
@@ -31,7 +32,7 @@ const newBuildingDialogAvailableNewBuildingsTypes = graphql`
 
 export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
   (props, ref: any) => {
-    const { fieldId, onSelect, villageId } = props;
+    const { fieldId, onSelect, villageId, tribe } = props;
 
     const classes = useStyles({});
 
@@ -43,6 +44,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
       <div ref={ref} className={classes.root}>
         {availableNewBuildingsTypes.map((buildingType) => (
           <NewBuildingDialogItem
+            tribe={tribe}
             key={buildingType}
             className={classes.building}
             fieldId={fieldId}

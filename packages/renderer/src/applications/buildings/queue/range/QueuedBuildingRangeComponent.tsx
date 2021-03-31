@@ -14,11 +14,12 @@ import { QueuedBuildingRangeActions } from './QueuedBuildingRangeActions.js';
 
 type StyleProps = {
   readonly buildingType: number;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({
   buildingImage: (props) => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: '4rem',
@@ -48,6 +49,7 @@ type Props = {
   readonly isHighlight?: boolean;
   readonly onExpand?: (id: string) => void;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const queuedBuildingRangeComponentQueuedBuildingRangeFragment = graphql`
@@ -81,12 +83,14 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
   isHighlight,
   onExpand,
   villageId,
+  tribe,
 }) => {
   const buildingRangeFragment = useFragment(queuedBuildingRangeComponentQueuedBuildingRangeFragment, buildingRange);
   const { buildingInfo } = useLazyLoadQuery<QueuedBuildingRangeComponentBuildingInfoQuery>(queuedBuildingRangeComponentBuildingInfoQuery, { buildingType: buildingRangeFragment.type });
 
   const classes = useStyles({
     buildingType: buildingRangeFragment.type,
+    tribe,
   });
 
   return (

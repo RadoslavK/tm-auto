@@ -19,9 +19,13 @@ import type { CrannyCapacityBuildingsInProgressSubscription } from '../../../_gr
 import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
-const useStyles = makeStyles({
+type StylesProps = {
+  readonly tribe: string;
+};
+
+const useStyles = makeStyles<unknown, StylesProps>({
   image: {
-    backgroundImage: `url("${imageLinks.getBuilding(BuildingType.Cranny)}")`,
+    backgroundImage: props => `url("${imageLinks.getBuilding(BuildingType.Cranny, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: 24,
@@ -65,11 +69,12 @@ const buildingQueueSubscription = graphql`
 `;
 
 type Props = {
+  readonly tribe: string;
   readonly villageId: string;
 };
 
-export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
-  const classes = useStyles();
+export const CrannyCapacity: React.FC<Props> = ({ tribe, villageId }) => {
+  const classes = useStyles({ tribe });
 
   const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<{
     readonly fetchKey?: number;

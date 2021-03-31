@@ -15,6 +15,7 @@ import { imageLinks } from '../../../utils/imageLinks.js';
 
 type Props = {
   readonly building: BuildingInProgress_buildingInProgress$key;
+  readonly tribe: string;
 };
 
 const buildingInProgress_buildingInProgress = graphql`
@@ -46,11 +47,12 @@ const getInitialTimer = (finishedAt: Timestamp): number => {
 
 type StylesType = {
   readonly buildingType: number;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StylesType>({
   image: (props) => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     flex: 'auto',
@@ -73,11 +75,11 @@ const useStyles = makeStyles<unknown, StylesType>({
   },
 });
 
-export const BuildingInProgress: React.FC<Props> = ({ building }) => {
+export const BuildingInProgress: React.FC<Props> = ({ building, tribe }) => {
   const buildingFragment = useFragment(buildingInProgress_buildingInProgress, building);
   const { buildingInfo } = useLazyLoadQuery<BuildingInProgressBuildingInfoQuery>(buildingInProgressBuildingInfoQuery, { buildingType: buildingFragment.type });
 
-  const classes = useStyles({ buildingType: buildingFragment.type });
+  const classes = useStyles({ buildingType: buildingFragment.type, tribe });
   const timer = useCountDown(getInitialTimer(buildingFragment.finishedAt));
   const time = formatTimeFromSeconds(timer);
 

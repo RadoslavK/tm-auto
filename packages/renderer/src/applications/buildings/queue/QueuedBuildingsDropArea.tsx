@@ -49,6 +49,7 @@ type Props = {
   readonly queueIndexTop: number;
   readonly queueIndexBot: number;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
@@ -81,6 +82,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   queueIndexBot,
   queueIndexTop,
   villageId,
+  tribe,
 }) => {
   const [moveQueuedBuildingToIndex] = useMutation<QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation>(queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation);
 
@@ -191,12 +193,14 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
               building={movedBuilding.buildingFragmentKey}
               isHighlight
               villageId={villageId}
+              tribe={tribe}
             />
           </div>
         )}
         {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent
+              tribe={tribe}
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
               villageId={villageId}
@@ -210,12 +214,14 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
               building={movedBuilding.buildingFragmentKey}
               isHighlight
               villageId={villageId}
+              tribe={tribe}
             />
           </div>
         )}
         {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
           <div className={classes.buildingPlaceholder}>
             <QueuedBuildingRangeComponent
+              tribe={tribe}
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
               villageId={villageId}

@@ -32,6 +32,7 @@ type Props = {
   readonly building: BuildingSpot_buildingSpot$key;
   readonly className?: string;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const buildingSpotBuildingSpotFragment = graphql`
@@ -71,6 +72,7 @@ const buildingSpotEnqueueBuildingMutation = graphql`
 
 type StyleProps = {
   readonly buildingType: number;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({
@@ -83,7 +85,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
     alignItems: 'flex-start',
     justifyContent:
       props.buildingType === BuildingType.None ? 'flex-end' : 'space-between',
-    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundSize: 'contain',
     border: '1px solid black',
     display: 'flex',
@@ -93,10 +95,10 @@ const useStyles = makeStyles<unknown, StyleProps>({
   }),
 });
 
-export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId }) => {
+export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId, tribe }) => {
   const buildingSpotFragment = useFragment(buildingSpotBuildingSpotFragment, building);
 
-  const classes = useStyles({ buildingType: buildingSpotFragment.type });
+  const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
 
   const closeDialog = () => setDialog(DialogType.None);
@@ -197,7 +199,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, 
         <div className={classes.fieldId}>[{buildingSpotFragment.fieldId}]</div>
       </div>
       <Dialog onClose={closeDialog} open={dialog === DialogType.NewBuilding}>
-        <NewBuildingDialog villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
+        <NewBuildingDialog tribe={tribe} villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>
         <MultiLevelDialog

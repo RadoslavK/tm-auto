@@ -31,13 +31,10 @@ export const imageLinks = {
 
   getBuilding: (
     buildingType: number,
+    tribe: string,
     size: BuildingImageSize = BuildingImageSize.Normal,
   ): string => {
-    if (size === BuildingImageSize.Normal) {
-      return `${baseUrl}/buildings/${buildingType}.png`;
-    }
-
-    return `${baseUrl}/buildings/small/${buildingType}.png`;
+    return `${baseUrl}/buildings/${tribe}/${size === BuildingImageSize.Small ? 'small/' : ''}${buildingType}.png`;
   },
 
   getUnit: (unitIndex: number): string => `${baseUrl}/units/u${unitIndex}.gif`,

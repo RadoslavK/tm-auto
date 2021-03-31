@@ -204,6 +204,7 @@ export const BuildingQueue: React.FC<Props> = ({
                 onExpand={() => onRangeExpand(range.id)}
                 range={range}
                 villageId={villageId}
+                tribe={gameInfo.tribe}
               />
             );
           }
@@ -212,6 +213,7 @@ export const BuildingQueue: React.FC<Props> = ({
             <React.Fragment key={range.id}>
               {range.buildings.map((building) => (
                 <QueuedBuilding
+                  tribe={gameInfo.tribe}
                   key={building.queueId}
                   building={building}
                   onCollapse={

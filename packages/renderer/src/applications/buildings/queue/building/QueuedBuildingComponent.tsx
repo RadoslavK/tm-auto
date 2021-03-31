@@ -14,6 +14,7 @@ import { QueuedBuildingActions } from './QueuedBuildingActions.js';
 
 type StyleProps = {
   readonly buildingType: number;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StyleProps>({
@@ -23,7 +24,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
     },
   },
   buildingImage: (props) => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: '4rem',
@@ -53,6 +54,7 @@ type Props = {
   readonly isHighlight?: boolean;
   readonly onCollapse?: () => void;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
@@ -85,6 +87,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
   isHighlight,
   onCollapse,
   villageId,
+  tribe,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
   const { buildingLevelInfo, buildingInfo } = useLazyLoadQuery<QueuedBuildingComponentBuildingInfoQuery>(queuedBuildingComponentBuildingInfoQuery, {
@@ -94,6 +97,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
 
   const classes = useStyles({
     buildingType: queuedBuildingFragment.type,
+    tribe,
   });
 
   return (

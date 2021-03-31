@@ -10,7 +10,7 @@ import { useFragment } from 'react-relay/hooks';
 import type { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
 import {
   BuildingImageSize,
-  imageLinks, 
+  imageLinks,
 } from '../../../../utils/imageLinks.js';
 import {
   DropPosition,
@@ -33,6 +33,7 @@ type Props = {
   readonly building: QueuedBuilding_queuedBuilding$key;
   readonly onCollapse?: () => void;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const queuedBuildingQueuedBuildingFragment = graphql`
@@ -44,7 +45,7 @@ const queuedBuildingQueuedBuildingFragment = graphql`
   }
 `;
 
-export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageId }) => {
+export const QueuedBuilding: React.FC<Props> = ({ tribe, building, onCollapse, villageId }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
 
   const movedBuilding: MovedQueuedBuilding = {
@@ -73,13 +74,14 @@ export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageI
       queueIndexBot={queuedBuildingFragment.queueIndex}
       queueIndexTop={queuedBuildingFragment.queueIndex}
       villageId={villageId}
+      tribe={tribe}
     >
       <div ref={drag} className={classes.root}>
         <DragPreviewImage
           connect={preview}
-          src={imageLinks.getBuilding(queuedBuildingFragment.type, BuildingImageSize.Small)}
+          src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
         />
-        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} villageId={villageId} />
+        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} villageId={villageId} tribe={tribe} />
       </div>
     </QueuedBuildingsDropArea>
   );

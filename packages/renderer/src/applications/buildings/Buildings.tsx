@@ -62,12 +62,14 @@ type Props = {
   readonly buildingsQueryRef: PreloadedQuery<BuildingsQuery>;
   readonly refreshBuildingSpots: (villageId: string) => void;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 export const Buildings: React.FC<Props> = ({
   buildingsQueryRef,
   refreshBuildingSpots,
   villageId,
+  tribe,
 }) => {
   const classes = useStyles({});
 
@@ -81,6 +83,7 @@ export const Buildings: React.FC<Props> = ({
           className={classes.buildingSpots}
           refresh={() => refreshBuildingSpots(villageId)}
           villageId={villageId}
+          tribe={tribe}
         />
       </Suspense>
       <div className={classes.ongoingAndNextExecution}>
@@ -91,7 +94,9 @@ export const Buildings: React.FC<Props> = ({
         <Suspense fallback={null}>
           <BuildingsInProgress
             buildingsInProgressKey={buildingsInProgress}
-            villageId={villageId} />
+            villageId={villageId}
+            tribe={tribe}
+          />
         </Suspense>
       </div>
       <Suspense fallback={null}>

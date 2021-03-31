@@ -16,11 +16,12 @@ import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 
 type StylesProps = {
   readonly buildingType: number;
+  readonly tribe: string;
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
   image: (props) => ({
-    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType)}")`,
+    backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: 96,
@@ -38,6 +39,7 @@ type Props = {
   readonly onSelect: (targetLevel?: number) => void;
   readonly type: number;
   readonly villageId: string;
+  readonly tribe: string;
 };
 
 const newBuildingDialogItemEnqueueBuildingMutation = graphql`
@@ -61,12 +63,14 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
   onSelect,
   type,
   villageId,
+  tribe,
 }) => {
   const { buildingInfo } = useLazyLoadQuery<NewBuildingDialogItemQuery>(newBuildingDialogItemQuery, { buildingType: type });
 
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
   const classes = useStyles({
     buildingType: type,
+    tribe,
   });
 
   const [enqueueBuilding] = useMutation<NewBuildingDialogItemEnqueueBuildingMutation>(newBuildingDialogItemEnqueueBuildingMutation);
