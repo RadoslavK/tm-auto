@@ -335,3 +335,5 @@ export const MapSearch: React.FC = () => {
     </div>
   );
 };
+
+MapSearch.displayName = 'MapSearch';

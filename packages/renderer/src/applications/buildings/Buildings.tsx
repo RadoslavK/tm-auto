@@ -102,3 +102,5 @@ export const Buildings: React.FC<Props> = ({
     </div>
   );
 };
+
+Buildings.displayName = 'Buildings';

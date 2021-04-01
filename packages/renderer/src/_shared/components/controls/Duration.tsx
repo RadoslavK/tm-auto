@@ -124,3 +124,5 @@ export const Duration: React.FC<Props> = ({ onChange, value }) => {
     </div>
   );
 };
+
+Duration.displayName = 'Duration';

@@ -386,3 +386,5 @@ export const SignInForm: React.FC = () => {
     </>
   );
 };
+
+SignInForm.displayName = 'SignInForm';

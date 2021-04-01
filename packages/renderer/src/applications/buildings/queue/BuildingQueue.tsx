@@ -227,3 +227,5 @@ export const BuildingQueue: React.FC<Props> = ({
     </div>
   );
 };
+
+BuildingQueue.displayName = 'BuildingQueue';

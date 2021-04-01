@@ -226,3 +226,5 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     </div>
   );
 };
+
+QueuedBuildingsDropArea.displayName = 'QueuedBuildingsDropArea';

@@ -49,3 +49,5 @@ export const BotActivity: React.FC = () => {
 
   return <div className={classes.root}>{isBotActive ? 'ACTIVE' : 'INACTIVE'}</div>;
 };
+
+BotActivity.displayName = 'BotActivity';

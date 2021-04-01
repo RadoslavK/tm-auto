@@ -73,3 +73,5 @@ export const BotStateToggle: React.FC<Props> = React.forwardRef<HTMLButtonElemen
     );
   },
 );
+
+BotStateToggle.displayName = 'BotStateToggle';

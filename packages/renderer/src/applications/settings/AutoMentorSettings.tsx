@@ -219,3 +219,5 @@ export const AutoMentorSettings: React.FC = () => {
     </div>
   );
 };
+
+AutoMentorSettings.displayName = 'AutoMentorSettings';

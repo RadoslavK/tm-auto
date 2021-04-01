@@ -81,3 +81,5 @@ export const Resource: React.FC<Props> = ({
     </span>
   );
 };
+
+Resource.displayName = 'Resource';

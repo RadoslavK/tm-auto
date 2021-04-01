@@ -114,3 +114,5 @@ export const Navigation: React.FC = () => {
     </AppBar>
   );
 };
+
+Navigation.displayName = 'Navigation';

@@ -273,3 +273,5 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+Village.displayName = 'Village';

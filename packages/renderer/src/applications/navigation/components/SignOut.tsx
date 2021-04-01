@@ -26,3 +26,5 @@ export const SignOut: React.FC = React.forwardRef<HTMLButtonElement, PropsWithCh
     </Button>
   );
 });
+
+SignOut.displayName = 'SignOut';

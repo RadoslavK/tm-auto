@@ -113,3 +113,5 @@ export const QueuedBuildingRangeActions: React.FC<Props> = ({
     </div>
   );
 };
+
+QueuedBuildingRangeActions.displayName = 'QueuedBuildingRangeActions';

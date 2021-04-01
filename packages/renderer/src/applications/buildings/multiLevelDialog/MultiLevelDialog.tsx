@@ -27,3 +27,5 @@ export const MultiLevelDialog: React.FC<Props> = ({
     })}
   </div>
 );
+
+MultiLevelDialog.displayName = 'MultiLevelDialog';

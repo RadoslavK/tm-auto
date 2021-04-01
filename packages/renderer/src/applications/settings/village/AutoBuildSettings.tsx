@@ -406,3 +406,5 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+AutoBuildSettings.displayName = 'AutoBuildSettings';

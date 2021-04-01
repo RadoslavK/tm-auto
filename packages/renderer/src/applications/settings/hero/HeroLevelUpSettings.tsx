@@ -213,3 +213,5 @@ export const HeroLevelUpSettings: React.FC = () => {
     </div>
   );
 };
+
+HeroLevelUpSettings.displayName = 'HeroLevelUpSettings';

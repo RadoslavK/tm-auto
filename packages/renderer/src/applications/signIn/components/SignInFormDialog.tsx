@@ -188,3 +188,5 @@ export const SignInFormDialog: React.FC<Props> = ({
     </Container>
   );
 };
+
+SignInFormDialog.displayName = 'SignInFormDialog';

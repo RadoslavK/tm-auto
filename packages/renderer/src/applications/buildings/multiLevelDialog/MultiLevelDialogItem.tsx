@@ -8,3 +8,5 @@ type Props = {
 export const MultiLevelDialogItem: React.FC<Props> = ({ level, onSelect }) => (
   <div onClick={onSelect}>Level {level}</div>
 );
+
+MultiLevelDialogItem.displayName = 'MultiLevelDialogItem';

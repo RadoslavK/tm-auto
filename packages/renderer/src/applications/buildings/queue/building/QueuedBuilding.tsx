@@ -87,3 +87,5 @@ export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageI
     </QueuedBuildingsDropArea>
   );
 };
+
+QueuedBuilding.displayName = 'QueuedBuilding';

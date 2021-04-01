@@ -95,3 +95,5 @@ export const BuildingSpots: React.FC<Props> = ({
     </div>
   );
 };
+
+BuildingSpots.displayName = 'BuildingSpots';

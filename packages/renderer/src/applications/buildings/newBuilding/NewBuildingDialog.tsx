@@ -61,3 +61,5 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
     );
   },
 );
+
+NewBuildingDialog.displayName = 'NewBuildingDialog';

@@ -87,7 +87,7 @@ export const VirtualizedTable = <TCellData extends {}>({
   data,
   getCellData,
   sort,
-}: Props<TCellData>) => {
+}: Props<TCellData>): ReturnType<React.FC<Props<TCellData>>> => {
   const classes = useStyles();
 
   const getRowClassName = ({ index }: { readonly index: number }) => {
@@ -188,3 +188,5 @@ export const VirtualizedTable = <TCellData extends {}>({
     </AutoSizer>
   );
 };
+
+(VirtualizedTable as React.FC<Props<unknown>>).displayName = 'VirtualizedTable';

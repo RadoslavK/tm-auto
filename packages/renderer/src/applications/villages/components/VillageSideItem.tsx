@@ -69,3 +69,5 @@ export const VillageSideItem: React.FC<Props> = ({
     </div>
   );
 };
+
+VillageSideItem.displayName = 'VillageSideItem';

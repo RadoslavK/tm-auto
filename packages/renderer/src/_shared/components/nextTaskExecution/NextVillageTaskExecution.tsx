@@ -134,3 +134,5 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
     </div>
   );
 };
+
+NextVillageTaskExecution.displayName = 'NextVillageTaskExecution';

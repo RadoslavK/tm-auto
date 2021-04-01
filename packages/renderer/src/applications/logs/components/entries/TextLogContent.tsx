@@ -39,3 +39,5 @@ export const TextLogContent: React.FC<Props> = ({ className, content }) => {
     <span className={clsx(className, classes.root)}>{message}</span>
   );
 };
+
+TextLogContent.displayName = 'TextLogContent';

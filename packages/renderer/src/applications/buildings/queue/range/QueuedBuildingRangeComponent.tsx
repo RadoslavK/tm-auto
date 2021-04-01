@@ -120,3 +120,5 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
     </div>
   );
 };
+
+QueuedBuildingRangeComponent.displayName = 'QueuedBuildingRangeComponent';

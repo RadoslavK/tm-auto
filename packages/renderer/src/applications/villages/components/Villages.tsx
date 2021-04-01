@@ -132,3 +132,5 @@ export const Villages: React.FC = () => {
     </div>
   );
 };
+
+Villages.displayName = 'Villages';

@@ -112,3 +112,5 @@ export const Units: React.FC = () => {
     </div>
   );
 };
+
+Units.displayName = 'Units';

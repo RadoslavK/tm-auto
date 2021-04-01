@@ -125,3 +125,5 @@ export const HeroLevelUpItemForm: React.FC<Props> = ({
     </div>
   );
 };
+
+HeroLevelUpItemForm.displayName = 'HeroLevelUpItemForm';

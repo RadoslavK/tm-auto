@@ -49,3 +49,5 @@ export const ResourceClaimLogContent: React.FC<Props> = ({
     </div>
   );
 };
+
+ResourceClaimLogContent.displayName = 'ResourceClaimLogContent';

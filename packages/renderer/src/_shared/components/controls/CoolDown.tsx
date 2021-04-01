@@ -22,3 +22,5 @@ export const CoolDown: React.FC<Props> = ({ onChange, value }) => {
     </div>
   );
 };
+
+CoolDown.displayName = 'CoolDown';

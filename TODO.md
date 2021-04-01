@@ -76,7 +76,6 @@
 - [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
   - Check requirements are met when peeking
 - Reload window breaks the IPC + GraphQL functionality
-- GraphQL plugin does not ignore the generated schema, then there is invalid highlighting and code navigation
 - Packaged app does not work with "asar:true" build
 
 ## Bot Detection
@@ -94,8 +93,6 @@
 ## QoL
 
 - Store map search result and filter in GraphQL local cache.
-- Handle UI updates. Like prevent incorrect interactions. When clicking something and it does not get result from server immediatly.
-- Use new icons for resources, buildings, nations... Maybe have 2 versions for buildings
 - Use some big toggle instead of Checkboxes for allow
 - Show the Multi-level enqueue dialog close to the cursor/clicked building - React-Tether?
 - Option to clear server data
@@ -103,42 +100,28 @@
 ## Code Quality
 
 - subscribeToEvent typings.
-  - Similar to which module.
   - Make it have possible versions of configs and results rather than having one with complex types.
 - refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
-- Use mapper for union log entry in schema
-- Better support for logic execution on particular pages
 - Rethink bot task engines. Maybe they are not needed at all.
 
 ## Performance
 
 - First load takes a long time as it needs to scan all villages
 - Enqueuing buildings take longer to update UI
-- Switching to buildings tab takes a long time when queue is long
-- remove loading state for queries where possible. We can reuse old queue values so its faster renderer? so just check data presence
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
 
 ## Error Handling / Fault Tolerance
 
-- Occasionally some "Unknown Error" happens. Detect and wait similarly to maintenance.
-- React error boundary for client errors -> refresh button?
 - Bot Task CoolDownType is set only when task is successful.
   - Improve retry policy, error handling and cooldown manipulation
-- Check if login succeeded
-- Check that server is running against required node version
-- Detect server is down and notify client, or automatic restart
 - Log all exceptions to file
   - puppeteer when creating page
   - IPC utils
   - Log graphql errors too
   - index.ts on server
   - Verify all console.error and console.warn, sometimes exception is not thrown there. Is it ok?
-- Client is not always logging exceptions from GraphQL. For example when we are using fragments but not the import.
-  - The it will ignore the link error handler.
-  - https://github.com/apollographql/apollo-link/issues/793
-- Validate GraphQL schema and resolvers before run
-  - in development only
+- Better error logging on client/server/main
 - Recover from failed to navigate pages/clicks. Throw custom error instance.
 
 ## Inspiration / Future

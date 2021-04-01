@@ -61,3 +61,5 @@ export const BuildingsInProgress: React.FC<Props> = ({
     </div>
   );
 };
+
+BuildingsInProgress.displayName = 'BuildingsInProgress';

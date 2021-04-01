@@ -56,3 +56,5 @@ export const AutoUnitsLogContent: React.FC<Props> = ({
     </div>
   );
 };
+
+AutoUnitsLogContent.displayName = 'AutoUnitsLogContent';

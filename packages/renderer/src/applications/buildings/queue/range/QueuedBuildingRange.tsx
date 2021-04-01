@@ -94,3 +94,5 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
     </QueuedBuildingsDropArea>
   );
 };
+
+QueuedBuildingRange.displayName = 'QueuedBuildingRange';

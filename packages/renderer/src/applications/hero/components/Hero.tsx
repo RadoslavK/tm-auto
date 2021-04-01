@@ -12,3 +12,5 @@ export const Hero: React.FC = () => (
     <HeroLevelUpSettings />
   </div>
 );
+
+Hero.displayName = 'Hero';

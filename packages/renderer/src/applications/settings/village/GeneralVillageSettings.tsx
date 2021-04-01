@@ -122,3 +122,5 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+GeneralVillageSettings.displayName = 'GeneralVillageSettings';

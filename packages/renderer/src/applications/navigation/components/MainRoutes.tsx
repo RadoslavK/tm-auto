@@ -28,3 +28,5 @@ export const MainRoutes: React.FC = () => (
     </Suspense>
   </div>
 );
+
+MainRoutes.displayName = 'MainRoutes';

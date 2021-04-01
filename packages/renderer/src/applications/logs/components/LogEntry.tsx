@@ -105,3 +105,5 @@ export const LogEntry: React.FC<Props> = ({ logEntry }) => {
     </div>
   );
 };
+
+LogEntry.displayName = 'LogEntry';

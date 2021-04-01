@@ -154,3 +154,5 @@ export const Cost: React.FC<Props> = ({
     </div>
   );
 };
+
+Cost.displayName = 'Cost';

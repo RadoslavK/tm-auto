@@ -118,3 +118,5 @@ export const NextTaskExecution: React.FC<Props> = ({ task }) => {
     </div>
   );
 };
+
+NextTaskExecution.displayName = 'NextTaskExecution';

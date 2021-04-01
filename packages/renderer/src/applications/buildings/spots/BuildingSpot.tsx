@@ -252,3 +252,5 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, 
     </>
   );
 });
+
+BuildingSpot.displayName = 'BuildingSpot';

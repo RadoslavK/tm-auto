@@ -215,3 +215,5 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+AutoPartySettings.displayName = 'AutoPartySettings';

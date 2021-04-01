@@ -186,3 +186,5 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+AutoUnitsSettings.displayName = 'AutoUnitsSettings';

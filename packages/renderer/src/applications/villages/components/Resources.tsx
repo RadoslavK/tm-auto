@@ -106,3 +106,5 @@ export const Resources: React.FC<Props> = ({ resources }) => {
     </div>
   );
 };
+
+Resources.displayName = 'Resources';

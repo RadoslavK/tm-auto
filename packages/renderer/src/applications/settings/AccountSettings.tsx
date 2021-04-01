@@ -225,3 +225,5 @@ export const AccountSettings: React.FC = () => {
     </div>
   );
 };
+
+AccountSettings.displayName = 'AccountSettings';

@@ -19,3 +19,5 @@ export const Parties: React.FC = () => {
     <NextVillageTaskExecution task="AutoParty" villageId={villageId}/>
   );
 };
+
+Parties.displayName = 'Parties';

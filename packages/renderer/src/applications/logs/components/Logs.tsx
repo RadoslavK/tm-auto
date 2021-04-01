@@ -53,3 +53,5 @@ export const Logs: React.FC = () => {
     </div>
   );
 };
+
+Logs.displayName = 'Logs';

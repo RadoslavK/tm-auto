@@ -20,3 +20,5 @@ export const SettingsManagement: React.FunctionComponent = () => {
     </>
   );
 };
+
+SettingsManagement.displayName = 'SettingsManagement';

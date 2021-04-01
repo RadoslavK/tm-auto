@@ -155,3 +155,5 @@ export const Accounts: React.FC<Props> = ({
     </FormControl>
   );
 };
+
+Accounts.displayName = 'Accounts';

@@ -23,3 +23,5 @@ export const EnsureTitle: React.FC = ({ children }) => {
 
   return <>{children}</>;
 };
+
+EnsureTitle.displayName = 'EnsureTitle';

@@ -74,3 +74,5 @@ export const HeroInformation: React.FC = () => {
     </div>
   );
 };
+
+HeroInformation.displayName = 'HeroInformation';

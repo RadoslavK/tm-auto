@@ -173,3 +173,5 @@ export const UnitBuildingSection: React.FC<Props> = ({
     </div>
   );
 };
+
+UnitBuildingSection.displayName = 'UnitBuildingSection';

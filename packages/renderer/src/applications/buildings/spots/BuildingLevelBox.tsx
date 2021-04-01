@@ -95,3 +95,5 @@ export const BuildingLevelBox: React.FC<Props> = ({ className, level, maxLevel }
     </div>
   );
 };
+
+BuildingLevelBox.displayName = 'BuildingLevelBox';

@@ -94,3 +94,5 @@ export const QueuedBuildingActions: React.FC<Props> = (props) => {
     </div>
   );
 };
+
+QueuedBuildingActions.displayName = 'QueuedBuildingActions';

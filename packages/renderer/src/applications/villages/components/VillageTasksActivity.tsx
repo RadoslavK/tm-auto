@@ -35,3 +35,5 @@ export const VillageTasksActivity: React.FC = () => {
     </div>
   );
 };
+
+VillageTasksActivity.displayName = 'VillageTasksActivity';

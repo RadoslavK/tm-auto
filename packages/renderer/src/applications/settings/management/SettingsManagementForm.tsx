@@ -218,3 +218,5 @@ export const SettingsManagementForm: React.FC = () => {
     </div>
   );
 };
+
+SettingsManagementForm.displayName = 'SettingsManagementForm';

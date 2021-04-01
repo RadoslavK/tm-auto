@@ -171,3 +171,5 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId })
     </div>
   );
 };
+
+VillageSettings.displayName = 'VillageSettings';

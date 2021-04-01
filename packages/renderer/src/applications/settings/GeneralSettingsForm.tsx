@@ -125,3 +125,5 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
     </div>
   );
 };
+
+GeneralSettingsForm.displayName = 'GeneralSettingsForm';

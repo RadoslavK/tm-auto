@@ -126,3 +126,5 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
     </div>
   );
 };
+
+QueuedBuildingComponent.displayName = 'QueuedBuildingComponent';

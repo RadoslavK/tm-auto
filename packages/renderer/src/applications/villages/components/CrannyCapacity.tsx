@@ -81,3 +81,5 @@ export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
     </div>
   );
 };
+
+CrannyCapacity.displayName = 'CrannyCapacity';

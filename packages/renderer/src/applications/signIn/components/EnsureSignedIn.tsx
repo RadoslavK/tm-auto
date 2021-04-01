@@ -47,3 +47,5 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
 
   return <>{children}</>;
 };
+
+EnsureSignedIn.displayName = 'EnsureSignedIn';

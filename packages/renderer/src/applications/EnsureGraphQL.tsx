@@ -78,3 +78,5 @@ export const EnsureGraphQL: React.FC<Props> = ({ children, socketName }) => {
       </div>
     );
 };
+
+EnsureGraphQL.displayName = 'EnsureGraphQL';

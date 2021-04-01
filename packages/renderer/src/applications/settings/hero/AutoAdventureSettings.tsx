@@ -288,3 +288,5 @@ export const AutoAdventureSettings: React.FC = () => {
     </div>
   );
 };
+
+AutoAdventureSettings.displayName = 'AutoAdventureSettings';

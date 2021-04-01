@@ -28,3 +28,5 @@ export const NextExecutionForm: React.FC<Props> = ({ onSubmit }) => {
     </div>
   );
 };
+
+NextExecutionForm.displayName = 'NextExecutionForm';

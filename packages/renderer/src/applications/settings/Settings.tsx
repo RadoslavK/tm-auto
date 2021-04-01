@@ -9,3 +9,5 @@ export const Settings: React.FunctionComponent = () => (
     <AutoMentorSettings />
   </>
 );
+
+Settings.displayName = 'Settings';

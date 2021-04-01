@@ -87,3 +87,5 @@ export const App: React.FC = () => {
     </DndProvider>
   );
 };
+
+App.displayName = 'App';

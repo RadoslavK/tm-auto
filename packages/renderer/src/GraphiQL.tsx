@@ -88,4 +88,6 @@ const App: React.FC = () => {
   return <GraphiQL fetcher={fetcher} />;
 };
 
+App.displayName = 'App';
+
 ReactDOM.render(<App />, document.getElementById('app'));

@@ -72,3 +72,5 @@ export const AutoBuildLogContent: React.FC<Props> = ({
     </div>
   );
 };
+
+AutoBuildLogContent.displayName = 'AutoBuildLogContent';

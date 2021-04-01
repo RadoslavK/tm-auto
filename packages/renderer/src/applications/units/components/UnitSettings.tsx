@@ -185,3 +185,5 @@ export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }
     </div>
   );
 };
+
+UnitSettings.displayName = 'UnitSettings';

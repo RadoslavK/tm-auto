@@ -121,3 +121,5 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
     </>
   );
 };
+
+NewBuildingDialogItem.displayName = 'NewBuildingDialogItem';

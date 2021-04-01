@@ -18,3 +18,5 @@ export const GeneralSettings: React.FunctionComponent = () => {
     </div>
   );
 };
+
+GeneralSettings.displayName = 'GeneralSettings';
