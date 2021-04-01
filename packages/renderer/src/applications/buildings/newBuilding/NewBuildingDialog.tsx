@@ -35,9 +35,15 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
 
     const classes = useStyles({});
 
-    const { availableNewBuildingsTypes } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(newBuildingDialogAvailableNewBuildingsTypes, {
-      input: { fieldId, villageId },
-    });
+    const { availableNewBuildingsTypes } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(
+      newBuildingDialogAvailableNewBuildingsTypes,
+      {
+        input: { fieldId, villageId },
+      },
+      {
+        fetchPolicy: 'network-only',
+      },
+    );
 
     return (
       <div ref={ref} className={classes.root}>

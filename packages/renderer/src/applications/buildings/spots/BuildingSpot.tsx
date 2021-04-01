@@ -1,6 +1,6 @@
 import {
   Dialog,
-  makeStyles, 
+  makeStyles,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
@@ -37,32 +37,32 @@ type Props = {
 };
 
 const buildingSpotBuildingSpotFragment = graphql`
-  fragment BuildingSpot_buildingSpot on BuildingSpot {
-      type
-      fieldId
-      level {
-          actual
-          ongoing
-          queued
-          total
-          ...BuildingLevelBox_buildingSpotLevel
-      }
-  }
+    fragment BuildingSpot_buildingSpot on BuildingSpot {
+        type
+        fieldId
+        level {
+            actual
+            ongoing
+            queued
+            total
+            ...BuildingLevelBox_buildingSpotLevel
+        }
+    }
 `;
 
 const buildingSpotBuildingInfoQuery = graphql`
-  query BuildingSpotBuildingInfoQuery($buildingType: Int!) {
-      buildingInfo(buildingType: $buildingType) {
-          maxLevel
-          name
-      }
-  }
+    query BuildingSpotBuildingInfoQuery($buildingType: Int!) {
+        buildingInfo(buildingType: $buildingType) {
+            maxLevel
+            name
+        }
+    }
 `;
 
 const buildingSpotDequeueBuildingAtFieldMutation = graphql`
-  mutation BuildingSpotDequeueBuildingAtFieldMutation($input: DequeueBuildingAtFieldInput!) {
-      dequeueBuildingAtField(input: $input)
-  }
+    mutation BuildingSpotDequeueBuildingAtFieldMutation($input: DequeueBuildingAtFieldInput!) {
+        dequeueBuildingAtField(input: $input)
+    }
 `;
 
 const buildingSpotEnqueueBuildingMutation = graphql`
@@ -200,17 +200,23 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, 
         <div className={classes.fieldId}>[{buildingSpotFragment.fieldId}]</div>
       </div>
       <Dialog onClose={closeDialog} open={dialog === DialogType.NewBuilding}>
-        <NewBuildingDialog villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
+        {dialog === DialogType.NewBuilding && (
+          <NewBuildingDialog villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
+        )}
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>
-        <MultiLevelDialog
-          maxLevel={maxLevel}
-          minLevel={buildingSpotFragment.level.total + 1}
-          onSelect={onMultiLevelEnqueue}
-        />
+        {dialog === DialogType.MultiEnqueue && (
+          <MultiLevelDialog
+            maxLevel={maxLevel}
+            minLevel={buildingSpotFragment.level.total + 1}
+            onSelect={onMultiLevelEnqueue}
+          />
+        )}
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiDequeue}>
-        {buildingSpotFragment.level.queued && (
+        {dialog === DialogType.MultiDequeue
+        && buildingSpotFragment.level.queued
+        && (
           <MultiLevelDialog
             maxLevel={buildingSpotFragment.level.queued - 1}
             minLevel={buildingSpotFragment.level.ongoing || buildingSpotFragment.level.actual}
