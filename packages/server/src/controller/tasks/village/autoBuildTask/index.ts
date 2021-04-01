@@ -58,6 +58,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
+    this._addedCroplandInQueue = false;
     const { queue } = this._village.buildings;
 
     const {
