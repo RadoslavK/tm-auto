@@ -48,25 +48,23 @@ const buildingsQuery = graphql`
 export const useBuildingsQuery = () => {
   const [buildingsQueryRef, loadBuildingsQuery] = useQueryLoader<BuildingsQuery>(buildingsQuery);
 
-  const refreshBuildingSpots = useCallback((vId: string) => {
+  const reloadBuildingsQuery = useCallback((vId: string) => {
     loadBuildingsQuery({ villageId: vId }, { fetchPolicy: 'network-only' });
   }, [loadBuildingsQuery]);
 
   return {
     buildingsQueryRef,
-    refreshBuildingSpots,
+    reloadBuildingsQuery,
   };
 };
 
 type Props = {
   readonly buildingsQueryRef: PreloadedQuery<BuildingsQuery>;
-  readonly refreshBuildingSpots: (villageId: string) => void;
   readonly villageId: string;
 };
 
 export const Buildings: React.FC<Props> = ({
   buildingsQueryRef,
-  refreshBuildingSpots,
   villageId,
 }) => {
   const classes = useStyles({});
@@ -79,7 +77,6 @@ export const Buildings: React.FC<Props> = ({
         <BuildingSpots
           buildingSpotsKey={buildingSpots}
           className={classes.buildingSpots}
-          refresh={() => refreshBuildingSpots(villageId)}
           villageId={villageId}
         />
       </Suspense>

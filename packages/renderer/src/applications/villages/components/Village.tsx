@@ -120,16 +120,16 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   const {
     buildingsQueryRef,
-    refreshBuildingSpots,
+    reloadBuildingsQuery,
   } = useBuildingsQuery();
 
   const prevVillageId = usePrevious(villageId);
 
   useEffect(() => {
     if (villageId !== prevVillageId) {
-      refreshBuildingSpots(villageId);
+      reloadBuildingsQuery(villageId);
     }
-  }, [refreshBuildingSpots,  villageId, prevVillageId]);
+  }, [reloadBuildingsQuery,  villageId, prevVillageId]);
 
   useEffect(() => {
     const request = getRequest(villageSelectedVillageIdQuery);
@@ -203,8 +203,10 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   return (
     <div>
-      <Resources resources={village.resources} />
-      <CrannyCapacity villageId={village.id} />
+      <Suspense fallback={null}>
+        <Resources resources={village.resources} />
+        <CrannyCapacity villageId={village.id} />
+      </Suspense>
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}
       <button onClick={onRefreshVillage}>Refresh</button>
       <div>
@@ -216,7 +218,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
                   return;
                 }
 
-                refreshBuildingSpots(villageId);
+                reloadBuildingsQuery(villageId);
               }}
             >
               {n.label}
@@ -243,7 +245,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
                     <Buildings
                       key={n.path}
                       buildingsQueryRef={buildingsQueryRef}
-                      refreshBuildingSpots={refreshBuildingSpots}
                       villageId={villageId}
                     />
                   )}

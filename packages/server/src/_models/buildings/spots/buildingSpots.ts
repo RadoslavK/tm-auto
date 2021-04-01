@@ -1,4 +1,5 @@
 import type { BuildingType } from 'shared/enums/BuildingType.js';
+import { generateId } from 'shared/utils/generateId.js';
 import { BuildingSpot } from './buildingSpot.js';
 
 export class BuildingSpots {
@@ -7,7 +8,10 @@ export class BuildingSpots {
   constructor() {
     for (let i = 0; i < 40; i++) {
       const fieldId = i + 1;
-      this._buildings[fieldId] = new BuildingSpot({ fieldId });
+      this._buildings[fieldId] = new BuildingSpot({
+        fieldId,
+        id: `buildingSpot:${generateId()}`,
+      });
     }
 
     Object.freeze(this._buildings);

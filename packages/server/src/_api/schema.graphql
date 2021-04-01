@@ -146,6 +146,7 @@ type BuildingQueue {
 
 type BuildingSpot {
   fieldId: Int!
+  id: ID!
   level: BuildingSpotLevel!
   type: Int!
 }
@@ -465,7 +466,6 @@ type Subscription {
   accountSettingsUpdated: AccountSettings!
   accountsUpdated: [UserAccount!]!
   activeVillageIdChanged: ID!
-  actualBuildingLevelsUpdated(villageId: ID!): Boolean
   autoAdventureSettingsUpdated: AutoAdventureSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
@@ -482,6 +482,8 @@ type Subscription {
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
   nextTasksExecutionChanged: Timestamp!
   nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
+  onBuildingSpotUpdated(fieldId: Int!, villageId: ID!): BuildingSpot!
+  onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
   queueUpdated(villageId: ID!): BuildingQueue!
   villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!

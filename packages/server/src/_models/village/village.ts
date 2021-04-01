@@ -1,5 +1,5 @@
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { publishPayloadEvent } from '../../pubSub.js';
 import { Buildings } from '../buildings';
@@ -9,15 +9,18 @@ import { VillageResources } from './villageResources.js';
 
 export class Village {
   public readonly buildings: Buildings = new Buildings(
-    () =>
-      publishPayloadEvent(BotEvent.ActualBuildingLevelsUpdated, {
+    (buildingSpot) =>
+      publishPayloadEvent(BotEvent.BuildingSpotUpdated, {
         villageId: this.id,
+        buildingSpot,
       }),
-    () =>
+    () => {
       publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, {
         villageId: this.id,
-      }),
+      });
+    },
     () => publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.id }),
+    () => publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
   );
 
   public readonly coords: Coords = new Coords();

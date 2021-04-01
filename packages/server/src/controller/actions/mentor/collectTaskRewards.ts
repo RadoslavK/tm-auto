@@ -1,5 +1,5 @@
-import { getAccountContext } from 'server/accountContext.js';
-import { getPage } from 'server/browser/getPage.js';
+import { getAccountContext } from '../../../accountContext.js';
+import { getPage } from '../../../browser/getPage.js';
 
 export const collectTaskRewards = async (): Promise<void> => {
   const page = await getPage();

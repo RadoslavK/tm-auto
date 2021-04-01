@@ -524,6 +524,7 @@ export interface NexusGenFieldTypes {
   }
   BuildingSpot: { // field return type
     fieldId: number; // Int!
+    id: string; // ID!
     level: NexusGenRootTypes['BuildingSpotLevel']; // BuildingSpotLevel!
     type: number; // Int!
   }
@@ -725,7 +726,6 @@ export interface NexusGenFieldTypes {
     accountSettingsUpdated: NexusGenRootTypes['AccountSettings']; // AccountSettings!
     accountsUpdated: NexusGenRootTypes['UserAccount'][]; // [UserAccount!]!
     activeVillageIdChanged: string; // ID!
-    actualBuildingLevelsUpdated: boolean | null; // Boolean
     autoAdventureSettingsUpdated: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     autoMentorSettingsUpdated: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
@@ -742,6 +742,8 @@ export interface NexusGenFieldTypes {
     nextTaskExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextTasksExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextVillageTaskExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
+    onBuildingSpotUpdated: NexusGenRootTypes['BuildingSpot']; // BuildingSpot!
+    onCrannyCapacityUpdated: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
     queueUpdated: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     villageUpdated: NexusGenRootTypes['Village']; // Village!
     villagesUpdated: NexusGenRootTypes['Village'][]; // [Village!]!
@@ -899,6 +901,7 @@ export interface NexusGenFieldTypeNames {
   }
   BuildingSpot: { // field return type name
     fieldId: 'Int'
+    id: 'ID'
     level: 'BuildingSpotLevel'
     type: 'Int'
   }
@@ -1100,7 +1103,6 @@ export interface NexusGenFieldTypeNames {
     accountSettingsUpdated: 'AccountSettings'
     accountsUpdated: 'UserAccount'
     activeVillageIdChanged: 'ID'
-    actualBuildingLevelsUpdated: 'Boolean'
     autoAdventureSettingsUpdated: 'AutoAdventureSettings'
     autoMentorSettingsUpdated: 'AutoMentorSettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
@@ -1117,6 +1119,8 @@ export interface NexusGenFieldTypeNames {
     nextTaskExecutionChanged: 'Timestamp'
     nextTasksExecutionChanged: 'Timestamp'
     nextVillageTaskExecutionChanged: 'Timestamp'
+    onBuildingSpotUpdated: 'BuildingSpot'
+    onCrannyCapacityUpdated: 'VillageCrannyCapacity'
     queueUpdated: 'BuildingQueue'
     villageUpdated: 'Village'
     villagesUpdated: 'Village'
@@ -1394,9 +1398,6 @@ export interface NexusGenArgTypes {
     }
   }
   Subscription: {
-    actualBuildingLevelsUpdated: { // args
-      villageId: string; // ID!
-    }
     autoUnitsSettingsUpdated: { // args
       villageId: string; // ID!
     }
@@ -1408,6 +1409,13 @@ export interface NexusGenArgTypes {
     }
     nextVillageTaskExecutionChanged: { // args
       task: NexusGenEnums['TaskType']; // TaskType!
+      villageId: string; // ID!
+    }
+    onBuildingSpotUpdated: { // args
+      fieldId: number; // Int!
+      villageId: string; // ID!
+    }
+    onCrannyCapacityUpdated: { // args
       villageId: string; // ID!
     }
     queueUpdated: { // args

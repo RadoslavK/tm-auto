@@ -1,11 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
-import type { FetchPolicy } from 'react-relay';
+import React, { useMemo } from 'react';
 import {
   useLazyLoadQuery,
   useSubscription,
@@ -14,10 +9,8 @@ import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
-import type { CrannyCapacityActualBuildingLevelSubscription } from '../../../_graphql/__generated__/CrannyCapacityActualBuildingLevelSubscription.graphql.js';
-import type { CrannyCapacityBuildingQueueSubscription } from '../../../_graphql/__generated__/CrannyCapacityBuildingQueueSubscription.graphql.js';
-import type { CrannyCapacityBuildingsInProgressSubscription } from '../../../_graphql/__generated__/CrannyCapacityBuildingsInProgressSubscription.graphql.js';
 import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
+import type { CrannyCapacitySubscription } from '../../../_graphql/__generated__/CrannyCapacitySubscription.graphql.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
@@ -48,24 +41,12 @@ const crannyCapacityQuery = graphql`
     }
 `;
 
-const actualBuildingLevelSubscription = graphql`
-    subscription CrannyCapacityActualBuildingLevelSubscription($villageId: ID!) {
-        actualBuildingLevelsUpdated(villageId: $villageId)
-    }
-`;
-
-const buildingsInProgressSubscription = graphql`
-    subscription CrannyCapacityBuildingsInProgressSubscription($villageId: ID!) {
-        buildingsInProgressUpdated(villageId: $villageId) {
-            ...BuildingInProgress
-        }
-    }
-`;
-
-const buildingQueueSubscription = graphql`
-    subscription CrannyCapacityBuildingQueueSubscription($villageId: ID!) {
-        queueUpdated(villageId: $villageId) {
-            ...BuildingQueue
+const subscription = graphql`
+    subscription CrannyCapacitySubscription($villageId: ID!) {
+        onCrannyCapacityUpdated(villageId: $villageId) {
+            actual
+            ongoing
+            total
         }
     }
 `;
@@ -78,43 +59,18 @@ export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ tribe });
 
-  const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<{
-    readonly fetchKey?: number;
-    readonly fetchPolicy?: FetchPolicy;
-  }>({});
+  const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId });
 
-  const refresh = useCallback(() => {
-    setRefreshedQueryOptions(prev => ({
-      fetchKey: (prev?.fetchKey ?? 0) + 1,
-      fetchPolicy: 'network-only',
-    }));
-  }, []);
-
-  const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId }, refreshedQueryOptions);
-
-  const actualBuildingLevelSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacityActualBuildingLevelSubscription> => ({
-    subscription: actualBuildingLevelSubscription,
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacitySubscription> => ({
+    subscription,
     variables: { villageId },
-    onNext: () => refresh(),
-  }), [villageId, refresh]);
+    updater: (store) => {
+      const newRecord = store.getRootField('onCrannyCapacityUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'crannyCapacity', { villageId });
+    },
+  }), [villageId]);
 
-  useSubscription(actualBuildingLevelSubscriptionConfig);
-
-  const buildingsInProgressSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacityBuildingsInProgressSubscription> => ({
-    subscription: buildingsInProgressSubscription,
-    variables: { villageId },
-    onNext: () => refresh(),
-  }), [villageId, refresh]);
-
-  useSubscription(buildingsInProgressSubscriptionConfig);
-
-  const buildingQueueSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacityBuildingQueueSubscription> => ({
-    subscription: buildingQueueSubscription,
-    variables: { villageId },
-    onNext: () => refresh(),
-  }), [villageId, refresh]);
-
-  useSubscription(buildingQueueSubscriptionConfig);
+  useSubscription(subscriptionConfig);
 
   return (
     <div className={classes.root}>

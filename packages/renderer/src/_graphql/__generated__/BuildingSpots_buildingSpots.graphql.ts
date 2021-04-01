@@ -6,19 +6,24 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type BuildingSpots_buildingSpots = {
     readonly infrastructure: ReadonlyArray<{
+        readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
     }>;
     readonly resources: {
         readonly wood: ReadonlyArray<{
+            readonly id: string;
             readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
         }>;
         readonly clay: ReadonlyArray<{
+            readonly id: string;
             readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
         }>;
         readonly iron: ReadonlyArray<{
+            readonly id: string;
             readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
         }>;
         readonly crop: ReadonlyArray<{
+            readonly id: string;
             readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
         }>;
     };
@@ -34,6 +39,13 @@ export type BuildingSpots_buildingSpots$key = {
 
 const node: ReaderFragment = (function(){
 var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "id",
+    "storageKey": null
+  },
   {
     "args": null,
     "kind": "FragmentSpread",
@@ -112,5 +124,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'f00baeb04a3b818fe224a7f5cfe7514b';
+(node as any).hash = 'd3238815875cf695832be729895b09cf';
 export default node;

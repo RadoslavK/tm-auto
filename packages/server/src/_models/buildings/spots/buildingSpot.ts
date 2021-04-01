@@ -4,6 +4,8 @@ import type { PartialFields } from 'shared/types/fields.type.js';
 import { BuildingSpotLevel } from './buildingSpotLevel.js';
 
 export class BuildingSpot {
+  public id: string = '';
+
   public fieldId: number = 0;
 
   public level: BuildingSpotLevel = new BuildingSpotLevel();

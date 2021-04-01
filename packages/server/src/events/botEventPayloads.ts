@@ -1,3 +1,4 @@
+import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
 import type { LogEntry } from '../_models/logs/logEntry.js';
 import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { TaskType } from '../_models/misc/taskType.js';
@@ -51,8 +52,9 @@ export type BotEventPayloads = {
     readonly state: BotState;
   };
 
-  [BotEvent.ActualBuildingLevelsUpdated]: {
+  [BotEvent.BuildingSpotUpdated]: {
     readonly villageId: string;
+    readonly buildingSpot: BuildingSpot;
   };
 
   [BotEvent.QueuedUpdated]: {
@@ -89,6 +91,10 @@ export type BotEventPayloads = {
   [BotEvent.VillageUpdated]: {
     readonly village: Village;
   };
+
+  [BotEvent.CrannyCapacityUpdated]: {
+    readonly villageId: string;
+  }
 
   [BotEvent.VillagesUpdated]: {
     readonly villages: readonly Village[];

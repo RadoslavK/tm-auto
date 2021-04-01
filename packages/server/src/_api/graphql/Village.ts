@@ -6,12 +6,41 @@ import {
   subscriptionField,
 } from 'nexus';
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { VillageCrannyCapacity as VillageCrannyCapacityModel } from '../../_models/village/villageCrannyCapacity.js';
 import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { controllerService } from '../../services/controllerService.js';
 import { crannyInfoService } from '../../services/crannyInfoService.js';
-import { VillageCrannyCapacity as VillageCrannyCapacityModel } from '../../_models/village/villageCrannyCapacity.js';
+
+const getCrannyCapacity = (villageId: string) => {
+  const crannies = getAccountContext()
+    .villageService.village(villageId)
+    .buildings.spots.buildings()
+    .filter((s) => s.type === BuildingType.Cranny);
+
+  const emptyCapacity = new VillageCrannyCapacityModel();
+
+  if (!crannies.length) {
+    return emptyCapacity;
+  }
+
+  return crannies.reduce<VillageCrannyCapacityModel>((capacity, cranny) => {
+    const actual = crannyInfoService.getCapacity(cranny.level.actual);
+    const ongoing = crannyInfoService.getCapacity(
+      cranny.level.getActualAndOngoing(),
+    );
+    const total = crannyInfoService.getCapacity(cranny.level.getTotal());
+
+    return capacity.add(
+      new VillageCrannyCapacityModel({
+        actual,
+        ongoing,
+        total,
+      }),
+    );
+  }, emptyCapacity);
+};
 
 export const VillageCapacity = objectType({
   name: 'VillageCapacity',
@@ -84,35 +113,21 @@ export const CrannyCapacityQuery = queryField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args) => {
-      const crannies = getAccountContext()
-        .villageService.village(args.villageId)
-        .buildings.spots.buildings()
-        .filter((s) => s.type === BuildingType.Cranny);
-
-      const emptyCapacity = new VillageCrannyCapacityModel();
-
-      if (!crannies.length) {
-        return emptyCapacity;
-      }
-
-      return crannies.reduce<VillageCrannyCapacityModel>((capacity, cranny) => {
-        const actual = crannyInfoService.getCapacity(cranny.level.actual);
-        const ongoing = crannyInfoService.getCapacity(
-          cranny.level.getActualAndOngoing(),
-        );
-        const total = crannyInfoService.getCapacity(cranny.level.getTotal());
-
-        return capacity.add(
-          new VillageCrannyCapacityModel({
-            actual,
-            ongoing,
-            total,
-          }),
-        );
-      }, emptyCapacity);
-    },
+    resolve: (_, args) => getCrannyCapacity(args.villageId),
   });
+});
+
+export const CrannyCapacitySubscription = subscriptionField(t => {
+  t.field('onCrannyCapacityUpdated', {
+    type: 'VillageCrannyCapacity',
+    args: {
+      villageId: idArg(),
+    },
+    ...subscribeToEvent(BotEvent.CrannyCapacityUpdated, {
+      filter: (payload, args) => payload.villageId === args.villageId,
+      resolve: ({ villageId }) => getCrannyCapacity(villageId),
+    })
+  })
 });
 
 export const RefreshVillageMutation = mutationField(t => {

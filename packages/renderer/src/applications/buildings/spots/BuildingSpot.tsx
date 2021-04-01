@@ -4,19 +4,25 @@ import {
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
   useMutation,
+  useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
 import type { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql.js';
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
+import type { BuildingSpotSubscription } from '../../../_graphql/__generated__/BuildingSpotSubscription.graphql.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
@@ -38,6 +44,7 @@ type Props = {
 
 const buildingSpotBuildingSpotFragment = graphql`
     fragment BuildingSpot_buildingSpot on BuildingSpot {
+        id
         type
         fieldId
         level {
@@ -71,6 +78,14 @@ const buildingSpotEnqueueBuildingMutation = graphql`
     }
 `;
 
+const subscription = graphql`
+  subscription BuildingSpotSubscription($villageId: ID!, $fieldId: Int!) {
+      onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {
+          ...BuildingSpot_buildingSpot
+      }
+  }
+`;
+
 type StyleProps = {
   readonly buildingType: number;
   readonly tribe: string;
@@ -101,6 +116,16 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, 
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotSubscription> => ({
+    subscription,
+    variables: {
+      fieldId: buildingSpotFragment.fieldId,
+      villageId,
+    },
+  }), [villageId, buildingSpotFragment.fieldId]);
+
+  useSubscription(subscriptionConfig);
 
   const closeDialog = () => setDialog(DialogType.None);
 

@@ -1,4 +1,4 @@
-import { collectTaskRewards } from 'server/controller/actions/mentor/collectTaskRewards.js';
+import { collectTaskRewards } from '../actions/mentor/collectTaskRewards.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import type { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
 import { getAccountContext } from '../../accountContext.js';

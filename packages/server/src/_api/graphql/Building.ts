@@ -60,6 +60,7 @@ export const BuildingSpotLevel = objectType({
 export const BuildingSpot = objectType({
   name: 'BuildingSpot',
   definition: t => {
+    t.id('id');
     t.int('fieldId');
     t.field('level', {
       type: BuildingSpotLevel,
@@ -157,18 +158,18 @@ export const BuildingSpotsQuery = queryField(t => {
   });
 });
 
-export const ActualBuildingLevelsUpdatedSubscription = subscriptionField(t => {
-  t.nullable.boolean('actualBuildingLevelsUpdated', {
+export const BuildingSpotSubscription = subscriptionField(t => {
+  t.field('onBuildingSpotUpdated', {
+    type: 'BuildingSpot',
     args: {
       villageId: idArg(),
+      fieldId: intArg(),
     },
-    ...subscribeToEvent(
-      BotEvent.ActualBuildingLevelsUpdated,
-      {
-        filter: (payload, variables) =>
-          payload.villageId === variables.villageId,
-        resolve: () => null,
-      },
-    ),
-  });
+    ...subscribeToEvent(BotEvent.BuildingSpotUpdated, {
+      filter: (payload, variables) =>
+        payload.villageId === variables.villageId
+        && payload.buildingSpot.fieldId === variables.fieldId,
+      resolve: ({ buildingSpot }) => buildingSpot,
+    })
+  })
 });
