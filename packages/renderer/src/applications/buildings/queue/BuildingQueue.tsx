@@ -12,7 +12,7 @@ import {
   useRelayEnvironment,
   useSubscription,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import {
   commitLocalUpdate,
@@ -111,7 +111,7 @@ export const BuildingQueue: React.FC<Props> = ({
   villageId,
 }) => {
   const { autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId });
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);

@@ -1,7 +1,7 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useEffect } from 'react';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import type { EnsureGlobalStateGameInfoQuery } from '../_graphql/__generated__/EnsureGlobalStateGameInfoQuery.graphql.js';
 import { tribeState } from '../_recoil/atoms/tribe.js';
@@ -19,7 +19,7 @@ const gameInfoQuery = graphql`
 `;
 
 export const EnsureGlobalState: React.FC<Props> = ({ children }) => {
-  const [, setTribeState] = useRecoilState(tribeState);
+  const setTribeState = useSetRecoilState(tribeState);
 
   const { gameInfo } = useLazyLoadQuery<EnsureGlobalStateGameInfoQuery>(gameInfoQuery, {}, { fetchPolicy: 'store-and-network' });
 

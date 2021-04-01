@@ -9,7 +9,7 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import type {
   AutoBuildSettingsQuery,
@@ -189,7 +189,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
     [],
   );
 
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const isRoman = tribe === 'Romans';
 
   const onReset = () => {

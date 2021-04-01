@@ -5,7 +5,7 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
@@ -79,7 +79,7 @@ const useStyles = makeStyles<unknown, StylesType>({
 export const BuildingInProgress: React.FC<Props> = ({ building }) => {
   const buildingFragment = useFragment(buildingInProgress_buildingInProgress, building);
   const { buildingInfo } = useLazyLoadQuery<BuildingInProgressBuildingInfoQuery>(buildingInProgressBuildingInfoQuery, { buildingType: buildingFragment.type });
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ buildingType: buildingFragment.type, tribe });
   const timer = useCountDown(getInitialTimer(buildingFragment.finishedAt));
   const time = formatTimeFromSeconds(timer);

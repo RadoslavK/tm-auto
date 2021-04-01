@@ -10,11 +10,13 @@ import {
   useFragment,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 import type { BuildingType } from 'shared/enums/BuildingType.js';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 import type { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql.js';
 import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { UnitSettings } from './UnitSettings.js';
@@ -55,7 +57,6 @@ type Props = {
   readonly className?: string;
   readonly settings: UnitBuildingSection_autoUnitsBuildingSettings$key;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
@@ -98,7 +99,6 @@ export const UnitBuildingSection: React.FC<Props> = ({
   className,
   settings,
   villageId,
-  tribe,
 }) => {
   const buildingSettingsFragment = useFragment(unitBuildingSectionAutoUnitsBuildingSettingsFragment, settings);
 
@@ -116,6 +116,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
     setHasChanges(false);
   }, [buildingSettingsFragment]);
 
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({
     buildingType: buildingType,
     isAllowed: state.allow,

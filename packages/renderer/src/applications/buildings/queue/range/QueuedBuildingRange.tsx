@@ -6,7 +6,7 @@ import {
   useDrag, 
 } from 'react-dnd';
 import { useFragment } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingRange_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRange_queuedBuildingRange.graphql.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
@@ -66,7 +66,7 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range, villageI
     type: 'QueuedBuildingRange',
   });
 
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ isDragging });
 
   return (

@@ -8,9 +8,11 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
 import type { NewBuildingDialogItemQuery } from '../../../_graphql/__generated__/NewBuildingDialogItemQuery.graphql.js';
+import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 
@@ -39,7 +41,6 @@ type Props = {
   readonly onSelect: (targetLevel?: number) => void;
   readonly type: number;
   readonly villageId: string;
-  readonly tribe: string;
 };
 
 const newBuildingDialogItemEnqueueBuildingMutation = graphql`
@@ -63,10 +64,9 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
   onSelect,
   type,
   villageId,
-  tribe,
 }) => {
   const { buildingInfo } = useLazyLoadQuery<NewBuildingDialogItemQuery>(newBuildingDialogItemQuery, { buildingType: type });
-
+  const tribe = useRecoilValue(tribeState);
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
   const classes = useStyles({
     buildingType: type,

@@ -5,14 +5,12 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { UnitsAutoUnitsSettingsQuery } from '../../../_graphql/__generated__/UnitsAutoUnitsSettingsQuery.graphql.js';
 import type { UnitsQuery } from '../../../_graphql/__generated__/UnitsQuery.graphql.js';
 import type { UnitsSubscription } from '../../../_graphql/__generated__/UnitsSubscription.graphql.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
 import { UnitBuildingSection } from './UnitBuildingSection.js';
 
@@ -63,7 +61,6 @@ const unitsSubscription = graphql`
 export const Units: React.FC = () => {
   const classes = useStyles();
 
-  const [tribe] = useRecoilState(tribeState);
   const { selectedVillageId: villageId } = useLazyLoadQuery<UnitsQuery>(unitsQuery, {});
   const { autoUnitsSettings } = useLazyLoadQuery<UnitsAutoUnitsSettingsQuery>(unitsAutoUnitsSettingsQuery, { villageId });
 
@@ -92,28 +89,24 @@ export const Units: React.FC = () => {
           className={classes.building}
           settings={autoUnitsSettings.barracks}
           villageId={villageId}
-          tribe={tribe}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Stable}
           className={classes.building}
           settings={autoUnitsSettings.stable}
           villageId={villageId}
-          tribe={tribe}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Workshop}
           className={classes.building}
           settings={autoUnitsSettings.workshop}
           villageId={villageId}
-          tribe={tribe}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Residence}
           className={classes.building}
           settings={autoUnitsSettings.residence}
           villageId={villageId}
-          tribe={tribe}
         />
       </div>
     </div>

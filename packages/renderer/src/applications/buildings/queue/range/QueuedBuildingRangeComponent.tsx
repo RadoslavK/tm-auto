@@ -5,7 +5,7 @@ import {
   useFragment,
   useLazyLoadQuery,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
 import type { QueuedBuildingRangeComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponentBuildingInfoQuery.graphql.js';
@@ -87,7 +87,7 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
 }) => {
   const buildingRangeFragment = useFragment(queuedBuildingRangeComponentQueuedBuildingRangeFragment, buildingRange);
   const { buildingInfo } = useLazyLoadQuery<QueuedBuildingRangeComponentBuildingInfoQuery>(queuedBuildingRangeComponentBuildingInfoQuery, { buildingType: buildingRangeFragment.type });
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({
     buildingType: buildingRangeFragment.type,
     tribe,

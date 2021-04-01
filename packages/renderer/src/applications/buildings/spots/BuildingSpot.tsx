@@ -10,7 +10,7 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
@@ -98,7 +98,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
 
 export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, villageId }) => {
   const buildingSpotFragment = useFragment(buildingSpotBuildingSpotFragment, building);
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
 
@@ -200,7 +200,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className, 
         <div className={classes.fieldId}>[{buildingSpotFragment.fieldId}]</div>
       </div>
       <Dialog onClose={closeDialog} open={dialog === DialogType.NewBuilding}>
-        <NewBuildingDialog tribe={tribe} villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
+        <NewBuildingDialog villageId={villageId} fieldId={buildingSpotFragment.fieldId} onSelect={closeDialog} />
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>
         <MultiLevelDialog

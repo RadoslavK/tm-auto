@@ -10,7 +10,7 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
@@ -75,7 +75,7 @@ type Props = {
 };
 
 export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
-  const [tribe] = useRecoilState(tribeState);
+  const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ tribe });
 
   const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<{
