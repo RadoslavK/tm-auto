@@ -50,7 +50,6 @@ type Props = {
   readonly buildingRange: QueuedBuildingRangeComponent_QueuedBuildingRange$key;
   readonly isHighlight?: boolean;
   readonly onExpand?: (id: string) => void;
-  readonly villageId: string;
 };
 
 const queuedBuildingRangeComponentQueuedBuildingRangeFragment = graphql`
@@ -83,7 +82,6 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
   buildingRange,
   isHighlight,
   onExpand,
-  villageId,
 }) => {
   const buildingRangeFragment = useFragment(queuedBuildingRangeComponentQueuedBuildingRangeFragment, buildingRange);
   const { buildingInfo } = useLazyLoadQuery<QueuedBuildingRangeComponentBuildingInfoQuery>(queuedBuildingRangeComponentBuildingInfoQuery, { buildingType: buildingRangeFragment.type });
@@ -100,7 +98,6 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
           className={classes.actions}
           onExpand={() => onExpand(buildingRangeFragment.id)}
           range={buildingRangeFragment}
-          villageId={villageId}
         />
       )}
       <div className={classes.imageWithFieldId}>

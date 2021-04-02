@@ -9,6 +9,7 @@ import {
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
@@ -20,13 +21,13 @@ import type {
 import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
 import type { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type { NextVillageTaskExecutionSubscription } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
   readonly task: TaskType;
-  readonly villageId: string;
 };
 
 const query = graphql`
@@ -61,7 +62,8 @@ const subscription = graphql`
   }
 `;
 
-export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) => {
+export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
+  const villageId = useRecoilValue(selectedVillageIdState);
   const { nextVillageTaskExecution } = useLazyLoadQuery<NextVillageTaskExecutionQuery>(query, {
     task,
     villageId,

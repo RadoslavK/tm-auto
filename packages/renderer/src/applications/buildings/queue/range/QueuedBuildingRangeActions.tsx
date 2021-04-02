@@ -6,10 +6,12 @@ import {
   useFragment,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingRangeActions_queuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeActions_queuedBuildingRange.graphql.js';
 import type { QueuedBuildingRangeActionsDequeueBuildingsBlockMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsDequeueBuildingsBlockMutation.graphql.js';
 import type { QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation.graphql.js';
+import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 const useStyles = makeStyles({
@@ -39,7 +41,6 @@ type Props = {
   readonly className?: string;
   readonly onExpand: () => void;
   readonly range: QueuedBuildingRangeActions_queuedBuildingRange$key;
-  readonly villageId: string;
 };
 
 const queuedBuildingRangeActionsQueuedBuildingRangeFragment = graphql`
@@ -66,14 +67,13 @@ export const QueuedBuildingRangeActions: React.FC<Props> = ({
   className,
   onExpand,
   range,
-  villageId,
 }) => {
   const queuedBuildingRangeFragment = useFragment(queuedBuildingRangeActionsQueuedBuildingRangeFragment, range);
   const classes = useStyles();
 
   const [moveToTop] = useMutation<QueuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation>(queuedBuildingRangeActionsMoveQueuedBuildingsBlockAsHighAsPossibleMutation);
   const [dequeue] = useMutation<QueuedBuildingRangeActionsDequeueBuildingsBlockMutation>(queuedBuildingRangeActionsDequeueBuildingsBlockMutation);
-
+  const villageId = useRecoilValue(selectedVillageIdState);
   const onMoveToTop = () => {
     moveToTop({
       variables: {

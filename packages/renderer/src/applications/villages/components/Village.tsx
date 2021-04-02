@@ -10,7 +10,6 @@ import React, {
 import {
   useLazyLoadQuery,
   useMutation,
-  useRelayEnvironment,
   useSubscription,
 } from 'react-relay/hooks';
 import {
@@ -22,16 +21,13 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
-import {
-  commitLocalUpdate,
-  createOperationDescriptor,
-  getRequest,
-} from 'relay-runtime';
 
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 import type { VillageSubscription } from '../../../_graphql/__generated__/VillageSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
   Buildings,
@@ -108,16 +104,7 @@ const villageSubscription = graphql`
   }
 `;
 
-const villageSelectedVillageIdQuery = graphql`
-  query VillageSelectedVillageIdQuery {
-      ... on Query { __typename }
-      selectedVillageId
-  }
-`;
-
 export const Village: React.FC<Props> = ({ villageId }) => {
-  const relayEnvironment = useRelayEnvironment();
-
   const {
     buildingsQueryRef,
     reloadBuildingsQuery,
@@ -131,17 +118,11 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     }
   }, [reloadBuildingsQuery,  villageId, prevVillageId]);
 
-  useEffect(() => {
-    const request = getRequest(villageSelectedVillageIdQuery);
-    const operation = createOperationDescriptor(request, {});
-    relayEnvironment.retain(operation);
-  }, [relayEnvironment]);
+  const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
   useEffect(() => {
-    commitLocalUpdate(relayEnvironment, store => {
-      store.getRoot().setValue(villageId, 'selectedVillageId');
-    });
-  }, [relayEnvironment, villageId]);
+    setSelectedVillageId(villageId);
+  }, [setSelectedVillageId, villageId]);
 
   const match = useRouteMatch();
 
@@ -205,7 +186,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     <div>
       <Suspense fallback={null}>
         <Resources resources={village.resources} />
-        <CrannyCapacity villageId={village.id} />
+        <CrannyCapacity />
       </Suspense>
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}
       <button onClick={onRefreshVillage}>Refresh</button>
@@ -245,7 +226,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
                     <Buildings
                       key={n.path}
                       buildingsQueryRef={buildingsQueryRef}
-                      villageId={villageId}
                     />
                   )}
                 />
@@ -264,7 +244,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
               <VillageSettings
                 getTabType={getTabType}
                 tab={tab!}
-                villageId={villageId}
               />
             );
           }}

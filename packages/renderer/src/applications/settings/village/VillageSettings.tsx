@@ -9,10 +9,12 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import type { VillageSettingsSubscription } from '../../../_graphql/__generated__/VillageSettingsSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { formatVillageName } from '../../villages/components/VillageName.js';
 import { AutoBuildSettings } from './AutoBuildSettings.js';
 import { AutoPartySettings } from './AutoPartySettings.js';
@@ -53,7 +55,6 @@ export enum VillageSettingsTabType {
 type Props = {
   readonly getTabType: (tab: string) => VillageSettingsTabType;
   readonly tab: string;
-  readonly villageId: string;
 };
 
 const villageSettingsQuery = graphql`
@@ -82,7 +83,7 @@ const villagesSubscription = graphql`
   }
 `;
 
-export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId }) => {
+export const VillageSettings: React.FC<Props> = ({ getTabType, tab }) => {
   const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSettingsSubscription> => ({
@@ -97,6 +98,7 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId })
 
   useSubscription(subscriptionConfig);
 
+  const villageId = useRecoilValue(selectedVillageIdState);
   const [selectedVillageId, setSelectedVillageId] = useState(villageId);
 
   useEffect(() => {

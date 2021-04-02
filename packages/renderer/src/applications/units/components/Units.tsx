@@ -5,12 +5,13 @@ import {
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { UnitsAutoUnitsSettingsQuery } from '../../../_graphql/__generated__/UnitsAutoUnitsSettingsQuery.graphql.js';
-import type { UnitsQuery } from '../../../_graphql/__generated__/UnitsQuery.graphql.js';
 import type { UnitsSubscription } from '../../../_graphql/__generated__/UnitsSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
 import { UnitBuildingSection } from './UnitBuildingSection.js';
 
@@ -43,13 +44,6 @@ const unitsAutoUnitsSettingsQuery = graphql`
   }
 `;
 
-const unitsQuery = graphql`
-    query UnitsQuery {
-        ... on Query { __typename }
-        selectedVillageId
-    }
-`;
-
 const unitsSubscription = graphql`
     subscription UnitsSubscription($villageId: ID!) {
         autoUnitsSettingsUpdated(villageId: $villageId) {
@@ -61,7 +55,7 @@ const unitsSubscription = graphql`
 export const Units: React.FC = () => {
   const classes = useStyles();
 
-  const { selectedVillageId: villageId } = useLazyLoadQuery<UnitsQuery>(unitsQuery, {});
+  const villageId = useRecoilValue(selectedVillageIdState);
   const { autoUnitsSettings } = useLazyLoadQuery<UnitsAutoUnitsSettingsQuery>(unitsAutoUnitsSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<UnitsSubscription> => ({
@@ -79,34 +73,27 @@ export const Units: React.FC = () => {
 
   return (
     <div>
-      <NextVillageTaskExecution
-        task={'AutoUnits'}
-        villageId={villageId}
-      />
+      <NextVillageTaskExecution task="AutoUnits" />
       <div className={classes.buildings}>
         <UnitBuildingSection
           buildingType={BuildingType.Barracks}
           className={classes.building}
           settings={autoUnitsSettings.barracks}
-          villageId={villageId}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Stable}
           className={classes.building}
           settings={autoUnitsSettings.stable}
-          villageId={villageId}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Workshop}
           className={classes.building}
           settings={autoUnitsSettings.workshop}
-          villageId={villageId}
         />
         <UnitBuildingSection
           buildingType={BuildingType.Residence}
           className={classes.building}
           settings={autoUnitsSettings.residence}
-          villageId={villageId}
         />
       </div>
     </div>

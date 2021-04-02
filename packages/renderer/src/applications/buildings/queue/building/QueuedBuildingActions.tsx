@@ -3,16 +3,17 @@ import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React from 'react';
 import { useMutation } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingActionsDequeueBuildingMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsDequeueBuildingMutation.graphql.js';
 import type { QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation.graphql.js';
+import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type Props = {
   readonly buildingQueueId: string;
   readonly className?: string;
   readonly onCollapse?: () => void;
-  readonly villageId: string;
 };
 
 const useStyles = makeStyles({
@@ -50,17 +51,14 @@ const queuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation = graphql`
     }
 `;
 
-export const QueuedBuildingActions: React.FC<Props> = (props) => {
-  const {
-    buildingQueueId,
-    className,
-    onCollapse,
-    villageId,
-  } = props;
-
+export const QueuedBuildingActions: React.FC<Props> = ({
+  buildingQueueId,
+  className,
+  onCollapse,
+}) => {
   const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(queuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation);
   const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(queuedBuildingActionsDequeueBuildingMutation);
-
+  const villageId = useRecoilValue(selectedVillageIdState);
   const classes = useStyles({});
 
   const onMoveToTop = () => {

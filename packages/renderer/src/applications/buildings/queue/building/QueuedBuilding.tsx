@@ -34,7 +34,6 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly building: QueuedBuilding_queuedBuilding$key;
   readonly onCollapse?: () => void;
-  readonly villageId: string;
 };
 
 const queuedBuildingQueuedBuildingFragment = graphql`
@@ -46,7 +45,7 @@ const queuedBuildingQueuedBuildingFragment = graphql`
   }
 `;
 
-export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageId }) => {
+export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
 
   const movedBuilding: MovedQueuedBuilding = {
@@ -75,14 +74,13 @@ export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse, villageI
       }
       queueIndexBot={queuedBuildingFragment.queueIndex}
       queueIndexTop={queuedBuildingFragment.queueIndex}
-      villageId={villageId}
     >
       <div ref={drag} className={classes.root}>
         <DragPreviewImage
           connect={preview}
           src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
         />
-        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} villageId={villageId} />
+        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} />
       </div>
     </QueuedBuildingsDropArea>
   );

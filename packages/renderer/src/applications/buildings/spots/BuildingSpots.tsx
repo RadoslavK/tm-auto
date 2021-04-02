@@ -44,13 +44,11 @@ const useStyles = makeStyles({
 type Props = {
   readonly buildingSpotsKey: BuildingSpots_buildingSpots$key;
   readonly className: string;
-  readonly villageId: string;
 };
 
 export const BuildingSpots: React.FC<Props> = ({
   buildingSpotsKey,
   className,
-  villageId,
 }) => {
   const classes = useStyles({});
   const buildingSpots = useFragment(buildingSpotsFragment, buildingSpotsKey);
@@ -60,35 +58,35 @@ export const BuildingSpots: React.FC<Props> = ({
       <div className={classes.buildingType}>
         {buildingSpots.resources.wood.map((building) => (
           <Suspense key={building.id} fallback={null}>
-            <BuildingSpot building={building} villageId={villageId} />
+            <BuildingSpot building={building} />
           </Suspense>
         ))}
       </div>
       <div className={classes.buildingType}>
         {buildingSpots.resources.clay.map((building) => (
           <Suspense key={building.id} fallback={null}>
-            <BuildingSpot building={building} villageId={villageId} />
+            <BuildingSpot building={building} />
           </Suspense>
         ))}
       </div>
       <div className={classes.buildingType}>
         {buildingSpots.resources.iron.map((building) => (
           <Suspense key={building.id} fallback={null}>
-            <BuildingSpot building={building} villageId={villageId} />
+            <BuildingSpot building={building} />
           </Suspense>
         ))}
       </div>
       <div className={classes.buildingType}>
         {buildingSpots.resources.crop.map((building) => (
           <Suspense key={building.id} fallback={null}>
-            <BuildingSpot building={building} villageId={villageId} />
+            <BuildingSpot building={building} />
           </Suspense>
         ))}
       </div>
       <div className={classes.buildingType}>
         {buildingSpots.infrastructure.map((building) => (
           <Suspense key={building.id} fallback={null}>
-            <BuildingSpot building={building} villageId={villageId} />
+            <BuildingSpot building={building} />
           </Suspense>
         ))}
       </div>

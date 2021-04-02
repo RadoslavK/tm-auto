@@ -16,6 +16,7 @@ import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 import type { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql.js';
 import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
@@ -56,7 +57,6 @@ type Props = {
   readonly buildingType: BuildingType;
   readonly className?: string;
   readonly settings: UnitBuildingSection_autoUnitsBuildingSettings$key;
-  readonly villageId: string;
 };
 
 const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
@@ -98,7 +98,6 @@ export const UnitBuildingSection: React.FC<Props> = ({
   buildingType,
   className,
   settings,
-  villageId,
 }) => {
   const buildingSettingsFragment = useFragment(unitBuildingSectionAutoUnitsBuildingSettingsFragment, settings);
 
@@ -123,6 +122,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
     tribe,
   });
 
+  const villageId = useRecoilValue(selectedVillageIdState);
   const [updateSettings] = useMutation<UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation>(unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation);
 
   useEffect(() => {
@@ -167,7 +167,6 @@ export const UnitBuildingSection: React.FC<Props> = ({
           key={unitSettings.index}
           className={classes.unit}
           settings={unitSettings}
-          villageId={villageId}
         />
       ))}
     </div>

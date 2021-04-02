@@ -6,6 +6,7 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 import type { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
@@ -13,6 +14,7 @@ import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery } f
 import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { QueuedBuildingComponent } from './building/QueuedBuildingComponent.js';
 import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent.js';
 
@@ -48,7 +50,6 @@ type Props = {
   readonly getDropPosition: (queueIndex: number) => DropPosition;
   readonly queueIndexTop: number;
   readonly queueIndexBot: number;
-  readonly villageId: string;
 };
 
 const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
@@ -80,10 +81,9 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
   getDropPosition,
   queueIndexBot,
   queueIndexTop,
-  villageId,
 }) => {
   const [moveQueuedBuildingToIndex] = useMutation<QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation>(queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation);
-
+  const villageId = useRecoilValue(selectedVillageIdState);
   const onDropBuilding = (item: MovedQueuedBuilding) => {
     const targetIndex =
       item.queueIndex < queueIndexTop ? queueIndexBot : queueIndexTop;
@@ -191,7 +191,6 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingComponent
               building={movedBuilding.buildingFragmentKey}
               isHighlight
-              villageId={villageId}
             />
           </div>
         )}
@@ -200,7 +199,6 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingRangeComponent
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
-              villageId={villageId}
             />
           </div>
         )}
@@ -210,7 +208,6 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingComponent
               building={movedBuilding.buildingFragmentKey}
               isHighlight
-              villageId={villageId}
             />
           </div>
         )}
@@ -219,7 +216,6 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
             <QueuedBuildingRangeComponent
               buildingRange={movedRange.rangeFragmentKey}
               isHighlight
-              villageId={villageId}
             />
           </div>
         )}

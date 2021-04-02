@@ -60,12 +60,10 @@ export const useBuildingsQuery = () => {
 
 type Props = {
   readonly buildingsQueryRef: PreloadedQuery<BuildingsQuery>;
-  readonly villageId: string;
 };
 
 export const Buildings: React.FC<Props> = ({
   buildingsQueryRef,
-  villageId,
 }) => {
   const classes = useStyles({});
 
@@ -77,26 +75,18 @@ export const Buildings: React.FC<Props> = ({
         <BuildingSpots
           buildingSpotsKey={buildingSpots}
           className={classes.buildingSpots}
-          villageId={villageId}
         />
       </Suspense>
       <div className={classes.ongoingAndNextExecution}>
-        <NextVillageTaskExecution
-          task="AutoBuild"
-          villageId={villageId}
-        />
+        <NextVillageTaskExecution task="AutoBuild" />
         <Suspense fallback={null}>
-          <BuildingsInProgress
-            buildingsInProgressKey={buildingsInProgress}
-            villageId={villageId}
-          />
+          <BuildingsInProgress buildingsInProgressKey={buildingsInProgress} />
         </Suspense>
       </div>
       <Suspense fallback={null}>
         <BuildingQueue
           buildingQueueKey={buildingQueue}
           className={classes.queuedBuildings}
-          villageId={villageId}
         />
       </Suspense>
     </div>

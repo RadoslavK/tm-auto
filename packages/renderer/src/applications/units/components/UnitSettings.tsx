@@ -10,16 +10,17 @@ import {
   useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
 
 import type { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/__generated__/UnitSettings_autoUnitsUnitSettings.graphql.js';
 import type { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql.js';
 import type { UnitSettingsUpdateAutoUnitsUnitSettingsMutation } from '../../../_graphql/__generated__/UnitSettingsUpdateAutoUnitsUnitSettingsMutation.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type Props = {
   readonly className?: string;
   readonly settings: UnitSettings_autoUnitsUnitSettings$key;
-  readonly villageId: string;
 };
 
 type StyleProps = {
@@ -81,7 +82,7 @@ const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
   }
 `;
 
-export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }) => {
+export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
   const settingsFragment = useFragment(unitSettingsAutoUnitsUnitSettings, settings);
   const { index } = settingsFragment;
   const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index });
@@ -102,6 +103,8 @@ export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }
     trainForever,
     unitIndex: index,
   });
+
+  const villageId = useRecoilValue(selectedVillageIdState);
 
   useEffect(() => {
     if (hasChanges) {

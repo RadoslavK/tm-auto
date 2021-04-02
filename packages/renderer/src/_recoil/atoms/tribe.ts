@@ -1,10 +1,9 @@
 import { atom } from 'recoil';
 
 import type { EnsureGlobalStateGameInfoQueryResponse } from '../../_graphql/__generated__/EnsureGlobalStateGameInfoQuery.graphql.js';
-
-export const TribeStateKey = 'tribe';
+import { RecoilKeys } from '../keys.js';
 
 export const tribeState = atom<EnsureGlobalStateGameInfoQueryResponse['gameInfo']['tribe']>({
-  key: TribeStateKey,
+  key: RecoilKeys.Tribe,
   default: 'Romans',
 });

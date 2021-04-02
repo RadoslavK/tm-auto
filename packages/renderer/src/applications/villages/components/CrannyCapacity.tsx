@@ -11,6 +11,7 @@ import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
 import type { CrannyCapacitySubscription } from '../../../_graphql/__generated__/CrannyCapacitySubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
@@ -51,14 +52,10 @@ const subscription = graphql`
     }
 `;
 
-type Props = {
-  readonly villageId: string;
-};
-
-export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
+export const CrannyCapacity: React.FC = () => {
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ tribe });
-
+  const villageId = useRecoilValue(selectedVillageIdState);
   const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId }, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacitySubscription> => ({

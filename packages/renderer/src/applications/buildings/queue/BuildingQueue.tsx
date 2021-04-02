@@ -25,6 +25,7 @@ import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCollapsedBuildingRangesQuery } from '../../../_graphql/__generated__/BuildingQueueCollapsedBuildingRangesQuery.graphql.js';
 import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
@@ -33,7 +34,6 @@ import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
 type Props = {
   readonly buildingQueueKey: BuildingQueue_buildingQueue$key;
   readonly className: string;
-  readonly villageId: string;
 };
 
 const useStyles = makeStyles({
@@ -108,14 +108,13 @@ const collapsedBuildingRangesQuery = graphql`
 export const BuildingQueue: React.FC<Props> = ({
   buildingQueueKey,
   className,
-  villageId,
 }) => {
+  const villageId = useRecoilValue(selectedVillageIdState);
   const { autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const tribe = useRecoilValue(tribeState);
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);
-
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueSubscription> => ({
     subscription: buildingQueueSubscription,
     variables: { villageId },
@@ -203,7 +202,6 @@ export const BuildingQueue: React.FC<Props> = ({
                 key={range.id}
                 onExpand={() => onRangeExpand(range.id)}
                 range={range}
-                villageId={villageId}
               />
             );
           }
@@ -217,7 +215,6 @@ export const BuildingQueue: React.FC<Props> = ({
                   onCollapse={
                     canBeCollapsed ? () => onRangeCollapse(range.id) : undefined
                   }
-                  villageId={villageId}
                 />
               ))}
             </React.Fragment>
