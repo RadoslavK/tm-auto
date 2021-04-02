@@ -1,8 +1,13 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+} from 'react';
 import {
-  useLazyLoadQuery,
+  PreloadedQuery,
+  usePreloadedQuery,
+  useQueryLoader,
   useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
@@ -52,11 +57,30 @@ const unitsSubscription = graphql`
     }
 `;
 
-export const Units: React.FC = () => {
+export const useUnitsQuery = () => {
+  const [unitSettingsQueryRef, loadUnitSettingsQuery] = useQueryLoader<UnitsAutoUnitsSettingsQuery>(unitsAutoUnitsSettingsQuery);
+
+  const reloadUnitSettingsQuery = useCallback((villageId: string) => {
+    loadUnitSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+  }, [loadUnitSettingsQuery]);
+
+  return {
+    reloadUnitSettingsQuery,
+    unitSettingsQueryRef,
+  };
+};
+
+type Props = {
+  readonly unitSettingsQueryRef: PreloadedQuery<UnitsAutoUnitsSettingsQuery>;
+};
+
+export const Units: React.FC<Props> = ({
+  unitSettingsQueryRef,
+}) => {
   const classes = useStyles();
 
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { autoUnitsSettings } = useLazyLoadQuery<UnitsAutoUnitsSettingsQuery>(unitsAutoUnitsSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { autoUnitsSettings } = usePreloadedQuery(unitsAutoUnitsSettingsQuery, unitSettingsQueryRef);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<UnitsSubscription> => ({
     subscription: unitsSubscription,
