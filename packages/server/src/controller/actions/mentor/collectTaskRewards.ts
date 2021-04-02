@@ -37,11 +37,12 @@ export const collectTaskRewards = async (): Promise<void> => {
         throw new Error('Did not find collectible task title');
       }
 
+
       getAccountContext().logsService.logText(`Collecting rewards for task: ${title}`);
 
       await Promise.all([
         collectButton.click(),
-        page.waitForXPath(`//*[@id="tasks"]//*[@class="title" and text()="${title}"]`, { hidden: true }),
+        page.waitForXPath(`//*[@id="tasks"]//*[.//*[@class="title" and text()="${title}"] and .//*[contains(@class, "green")]]`, { hidden: true }),
       ]);
     }
   } while (true);
