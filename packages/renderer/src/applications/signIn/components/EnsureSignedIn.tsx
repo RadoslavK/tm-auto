@@ -24,7 +24,7 @@ const botStateSubscription = graphql`
 `;
 
 export const EnsureSignedIn: React.FC = ({ children }) => {
-  const { botState } = useLazyLoadQuery<EnsureSignedInBotStateQuery>(botStateQuery, {});
+  const { botState } = useLazyLoadQuery<EnsureSignedInBotStateQuery>(botStateQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<EnsureSignedInBotStateSubscription> => ({
     subscription: botStateSubscription,

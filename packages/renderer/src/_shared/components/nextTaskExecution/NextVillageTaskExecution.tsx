@@ -65,7 +65,7 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, villageId }) =
   const { nextVillageTaskExecution } = useLazyLoadQuery<NextVillageTaskExecutionQuery>(query, {
     task,
     villageId,
-  });
+  }, { fetchPolicy: 'store-and-network' });
   const [setNextExecution] = useMutation<NextVillageTaskExecutionSetMutation>(setMutation);
   const [resetNextExecution] = useMutation<NextVillageTaskExecutionResetMutation>(resetMutation);
 

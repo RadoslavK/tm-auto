@@ -62,7 +62,7 @@ export const Navigation: React.FC = () => {
   const { pathname } = useLocation();
   const [lastVillagesPath, setLastVillagesPath] = useState<string>();
 
-  const { botState } = useLazyLoadQuery<NavigationQuery>(navigationQuery, {});
+  const { botState } = useLazyLoadQuery<NavigationQuery>(navigationQuery, {}, { fetchPolicy: 'store-and-network' });
   
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NavigationSubscription> => ({
     subscription: navigationSubscription,

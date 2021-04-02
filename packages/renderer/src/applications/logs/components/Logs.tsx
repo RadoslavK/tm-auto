@@ -28,7 +28,7 @@ const logsSubscription = graphql`
 `;
 
 export const Logs: React.FC = () => {
-  const { logEntries } = useLazyLoadQuery<LogsQuery>(logsQuery, {});
+  const { logEntries } = useLazyLoadQuery<LogsQuery>(logsQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<LogsSubscription> => ({
     subscription: logsSubscription,

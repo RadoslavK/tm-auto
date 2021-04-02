@@ -65,7 +65,7 @@ export const Villages: React.FC = () => {
   const classes = useStyles();
   const match = useRouteMatch();
 
-  const { activeVillageId, villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {});
+  const { activeVillageId, villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesSubscription> => ({
     subscription: villagesSubscription,

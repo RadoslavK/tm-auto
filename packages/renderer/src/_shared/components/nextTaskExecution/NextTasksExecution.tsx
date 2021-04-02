@@ -54,7 +54,7 @@ const nextTasksExecutionSubscription = graphql`
 `;
 
 export const NextTasksExecution: React.FC = () => {
-  const { nextTasksExecution } = useLazyLoadQuery<NextTasksExecutionQuery>(nextTasksExecutionQuery, {});
+  const { nextTasksExecution } = useLazyLoadQuery<NextTasksExecutionQuery>(nextTasksExecutionQuery, {}, { fetchPolicy: 'store-and-network' });
   const [setNextTasksExecution] = useMutation<NextTasksExecutionSetMutation>(setNextTasksExecutionMutation);
   const [resetNextTasksExecution] = useMutation<NextTasksExecutionResetMutation>(resetNextTasksExecutionMutation);
 

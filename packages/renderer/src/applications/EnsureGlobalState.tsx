@@ -21,7 +21,7 @@ const gameInfoQuery = graphql`
 export const EnsureGlobalState: React.FC<Props> = ({ children }) => {
   const setTribeState = useSetRecoilState(tribeState);
 
-  const { gameInfo } = useLazyLoadQuery<EnsureGlobalStateGameInfoQuery>(gameInfoQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { gameInfo } = useLazyLoadQuery<EnsureGlobalStateGameInfoQuery>(gameInfoQuery, {});
 
   useEffect(() => {
     setTribeState(gameInfo.tribe);

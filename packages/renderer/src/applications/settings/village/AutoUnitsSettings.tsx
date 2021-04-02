@@ -51,7 +51,7 @@ const autoUnitsSettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoUnitsSettings } = useLazyLoadQuery<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery, { villageId });
+  const { autoUnitsSettings } = useLazyLoadQuery<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoUnitsSettingsUpdateSettingsMutation>(autoUnitsSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoUnitsSettingsResetSettingsMutation>(autoUnitsSettingsResetSettingsMutation);
 

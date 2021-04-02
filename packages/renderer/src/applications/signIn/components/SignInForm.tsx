@@ -148,7 +148,7 @@ export const SignInForm: React.FC = () => {
   const {
     botState,
     lastSignedAccountId,
-  } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {});
+  } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormBotStateSubscription> => ({
     subscription: botStateSubscription,

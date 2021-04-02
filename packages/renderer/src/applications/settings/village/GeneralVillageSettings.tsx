@@ -42,7 +42,7 @@ const generalVillageSettingsResetSettingsMutation = graphql`
 `;
 
 export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
-  const { generalVillageSettings } = useLazyLoadQuery<GeneralVillageSettingsQuery>(generalVillageSettingsQuery, { villageId });
+  const { generalVillageSettings } = useLazyLoadQuery<GeneralVillageSettingsQuery>(generalVillageSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<GeneralVillageSettingsUpdateSettingsMutation>(generalVillageSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralVillageSettingsResetSettingsMutation>(generalVillageSettingsResetSettingsMutation);
 

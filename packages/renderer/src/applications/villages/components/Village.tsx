@@ -159,7 +159,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     });
   };
 
-  const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId });
+  const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId }, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSubscription> => ({
     subscription: villageSubscription,

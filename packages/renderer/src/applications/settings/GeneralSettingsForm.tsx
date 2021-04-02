@@ -39,7 +39,7 @@ const generalSettingsFormResetSettingsMutation = graphql`
 `;
 
 export const GeneralSettingsForm: React.FunctionComponent = () => {
-  const { generalSettings } = useLazyLoadQuery<GeneralSettingsFormQuery>(generalSettingsFormQuery, {});
+  const { generalSettings } = useLazyLoadQuery<GeneralSettingsFormQuery>(generalSettingsFormQuery, {}, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<GeneralSettingsFormUpdateSettingsMutation>(generalSettingsFormUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralSettingsFormResetSettingsMutation>(generalSettingsFormResetSettingsMutation);
 

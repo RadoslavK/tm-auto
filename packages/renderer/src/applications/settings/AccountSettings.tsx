@@ -60,7 +60,7 @@ const subscription = graphql`
 `;
 
 export const AccountSettings: React.FC = () => {
-  const { accountSettings } = useLazyLoadQuery<AccountSettingsQuery>(accountSettingsQuery, {});
+  const { accountSettings } = useLazyLoadQuery<AccountSettingsQuery>(accountSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AccountSettingsUpdateSettingsMutation>(accountSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AccountSettingsResetSettingsMutation>(accountSettingsResetSettingsMutation);
 

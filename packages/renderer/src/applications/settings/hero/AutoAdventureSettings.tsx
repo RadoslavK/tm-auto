@@ -66,7 +66,7 @@ const subscription = graphql`
 `;
 
 export const AutoAdventureSettings: React.FC = () => {
-  const { autoAdventureSettings } = useLazyLoadQuery<AutoAdventureSettingsQuery>(autoAdventureSettingsQuery, {});
+  const { autoAdventureSettings } = useLazyLoadQuery<AutoAdventureSettingsQuery>(autoAdventureSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoAdventureSettingsUpdateSettingsMutation>(autoAdventureSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoAdventureSettingsResetSettingsMutation>(autoAdventureSettingsResetSettingsMutation);
 

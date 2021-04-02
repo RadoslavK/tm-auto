@@ -83,7 +83,7 @@ const villagesSubscription = graphql`
 `;
 
 export const VillageSettings: React.FC<Props> = ({ getTabType, tab, villageId }) => {
-  const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {});
+  const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSettingsSubscription> => ({
     subscription: villagesSubscription,

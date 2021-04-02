@@ -53,7 +53,7 @@ const autoPartySettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
-  const { autoPartySettings } = useLazyLoadQuery<AutoPartySettingsQuery>(autoPartySettingsQuery, { villageId });
+  const { autoPartySettings } = useLazyLoadQuery<AutoPartySettingsQuery>(autoPartySettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoPartySettingsUpdateSettingsMutation>(autoPartySettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoPartySettingsResetSettingsMutation>(autoPartySettingsResetSettingsMutation);
 

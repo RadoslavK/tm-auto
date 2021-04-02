@@ -100,7 +100,7 @@ export const Accounts: React.FC<Props> = ({
   onAccountChanged,
   selectedId,
 }) => {
-  const { accounts } = useLazyLoadQuery<AccountsQuery>(accountsQuery, {});
+  const { accounts } = useLazyLoadQuery<AccountsQuery>(accountsQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig: GraphQLSubscriptionConfig<AccountsSubscription> = useMemo(() => ({
     subscription: accountsSubscription,

@@ -84,7 +84,7 @@ const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
 export const UnitSettings: React.FC<Props> = ({ className, settings, villageId }) => {
   const settingsFragment = useFragment(unitSettingsAutoUnitsUnitSettings, settings);
   const { index } = settingsFragment;
-  const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index }, { fetchPolicy: 'store-or-network' });
+  const { unitInfo } = useLazyLoadQuery<UnitSettingsUnitInfoQuery>(unitSettingsUnitInfoQuery, { index });
   const [updateSettings] = useMutation<UnitSettingsUpdateAutoUnitsUnitSettingsMutation>(unitSettingsUpdateAutoUnitsUnitSettingsMutation);
 
   const [state, setState] = useState(settingsFragment);

@@ -33,7 +33,7 @@ const heroInformationSubscription = graphql`
 `;
 
 export const HeroInformation: React.FC = () => {
-  const { heroInformation } = useLazyLoadQuery<HeroInformationQuery>(heroInformationQuery, {});
+  const { heroInformation } = useLazyLoadQuery<HeroInformationQuery>(heroInformationQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const heroInformationSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroInformationSubscription> => ({
     subscription: heroInformationSubscription,

@@ -127,8 +127,8 @@ export const MapSearch: React.FC = () => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { mapScanProgress } = useLazyLoadQuery<MapSearchMapScanProgressQuery>(mapScanProgressQuery, {});
-  const { mapSearchState } = useLazyLoadQuery<MapSearchMapSearchStateQuery>(mapSearchStateQuery, {});
+  const { mapScanProgress } = useLazyLoadQuery<MapSearchMapScanProgressQuery>(mapScanProgressQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { mapSearchState } = useLazyLoadQuery<MapSearchMapSearchStateQuery>(mapSearchStateQuery, {}, { fetchPolicy: 'store-and-network' });
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
   const [stopScan] = useMutation(stopMapScanMutation);

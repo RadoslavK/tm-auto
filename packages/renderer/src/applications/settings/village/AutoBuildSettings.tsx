@@ -149,7 +149,7 @@ const autoBuildSettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(autoBuildSettingsQuery, { villageId });
+  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(autoBuildSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoBuildSettingsUpdateSettingsMutation>(autoBuildSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoBuildSettingsResetSettingsMutation>(autoBuildSettingsResetSettingsMutation);
 

@@ -49,7 +49,7 @@ export const useBuildingsQuery = () => {
   const [buildingsQueryRef, loadBuildingsQuery] = useQueryLoader<BuildingsQuery>(buildingsQuery);
 
   const reloadBuildingsQuery = useCallback((vId: string) => {
-    loadBuildingsQuery({ villageId: vId }, { fetchPolicy: 'network-only' });
+    loadBuildingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' });
   }, [loadBuildingsQuery]);
 
   return {

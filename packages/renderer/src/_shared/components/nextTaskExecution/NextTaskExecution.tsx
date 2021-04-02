@@ -61,7 +61,7 @@ const nextTaskExecutionSubscription = graphql`
 `;
 
 export const NextTaskExecution: React.FC<Props> = ({ task }) => {
-  const { nextTaskExecution } = useLazyLoadQuery<NextTaskExecutionQuery>(nextTaskExecutionQuery, { task });
+  const { nextTaskExecution } = useLazyLoadQuery<NextTaskExecutionQuery>(nextTaskExecutionQuery, { task }, { fetchPolicy: 'store-and-network' });
   const [setNextTaskExecution] = useMutation<NextTaskExecutionSetMutation>(nextTaskExecutionSetMutation);
   const [resetNextTaskExecution] = useMutation<NextTaskExecutionResetMutation>(nextTaskExecutionResetMutation);
 

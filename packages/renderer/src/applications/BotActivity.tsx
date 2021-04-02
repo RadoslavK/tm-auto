@@ -33,7 +33,7 @@ const botActivitySubscription = graphql`
 `;
 
 export const BotActivity: React.FC = () => {
-  const { isBotActive } = useLazyLoadQuery<BotActivityQuery>(botActivityQuery, {});
+  const { isBotActive } = useLazyLoadQuery<BotActivityQuery>(botActivityQuery, {}, { fetchPolicy: 'store-and-network' });
   
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BotActivitySubscription> => ({
     subscription: botActivitySubscription,

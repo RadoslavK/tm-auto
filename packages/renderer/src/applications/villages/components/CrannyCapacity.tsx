@@ -59,7 +59,7 @@ export const CrannyCapacity: React.FC<Props> = ({ villageId }) => {
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ tribe });
 
-  const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId });
+  const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId }, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacitySubscription> => ({
     subscription,

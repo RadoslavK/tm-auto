@@ -159,6 +159,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
       movedRange &&
       getDropPosition(movedRange.topBuildingQueueIndex));
 
+  //  TODO fetch policies and refetching
   const { canMoveQueuedBuildingToIndex } = useLazyLoadQuery<QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery>(queuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery, {
     villageId,
     queueId: movedBuilding?.queueId ?? '',

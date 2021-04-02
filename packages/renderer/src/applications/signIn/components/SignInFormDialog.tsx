@@ -73,7 +73,7 @@ export const SignInFormDialog: React.FC<Props> = ({
   const { account } = useLazyLoadQuery<SignInFormDialogQuery>(signInFormDialogAccountQuery, {
     id: selectedAccountId || '',
     skip: type !== SignInFormDialogType.Update || !selectedAccountId,
-  });
+  }, { fetchPolicy: 'network-only' });
 
   const [username, setUsername] = useState(account?.username ?? '');
   const [password, setPassword] = useState(account?.password ?? '');

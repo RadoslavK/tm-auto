@@ -74,10 +74,11 @@ const mutations = {
 };
 
 export const SettingsManagementForm: React.FC = () => {
-  const { botState } = useLazyLoadQuery<SettingsManagementFormBotStateQuery>(settingsManagementFormBotStateQuery, {});
+  const { botState } = useLazyLoadQuery<SettingsManagementFormBotStateQuery>(settingsManagementFormBotStateQuery, {}, { fetchPolicy: 'store-and-network' });
+
   const { accounts, currentAccount } = useLazyLoadQuery<SettingsManagementFormQuery>(settingsManagementFormQuery, {
     includeCurrentAccount: botState === 'Running' || botState === 'Paused',
-  });
+  }, { fetchPolicy: 'store-and-network' });
 
   const [selectedAccountId, setSelectedAccountId] = useState('');
 
