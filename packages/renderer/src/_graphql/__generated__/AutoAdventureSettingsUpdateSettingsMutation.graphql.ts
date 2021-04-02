@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type AdventureCriteria = "Closest" | "Furthest" | "Random" | "%future added value";
+export type AdventureCriteria = "Closest" | "Furthest" | "Random";
 export type UpdateAutoAdventureSettingsInput = {
     adventureCriteria: AdventureCriteria;
     allow: boolean;

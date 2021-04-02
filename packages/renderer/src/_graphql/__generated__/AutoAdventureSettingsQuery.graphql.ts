@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type AdventureCriteria = "Closest" | "Furthest" | "Random" | "%future added value";
+export type AdventureCriteria = "Closest" | "Furthest" | "Random";
 export type AutoAdventureSettingsQueryVariables = {};
 export type AutoAdventureSettingsQueryResponse = {
     readonly autoAdventureSettings: {

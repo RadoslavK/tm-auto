@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type HeroState = "Dead" | "InVillage" | "OnAdventure" | "Reviving" | "Unknown" | "%future added value";
+export type HeroState = "Dead" | "InVillage" | "OnAdventure" | "Reviving" | "Unknown";
 export type HeroInformationQueryVariables = {};
 export type HeroInformationQueryResponse = {
     readonly heroInformation: {

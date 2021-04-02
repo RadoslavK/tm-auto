@@ -9,4 +9,5 @@ module.exports = {
   exclude: ['**/__generated__/**'],
   artifactDirectory: './src/_graphql/__generated__',
   eagerESModules: true,
+  noFutureProofEnums: true,
 };

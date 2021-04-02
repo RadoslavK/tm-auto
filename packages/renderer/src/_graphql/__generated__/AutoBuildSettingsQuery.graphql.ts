@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type DualQueuePreference = "Infrastructure" | "Resources" | "%future added value";
+export type DualQueuePreference = "Infrastructure" | "Resources";
 export type AutoBuildSettingsQueryVariables = {
     villageId: string;
 };

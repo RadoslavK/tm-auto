@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type DualQueuePreference = "Infrastructure" | "Resources" | "%future added value";
+export type DualQueuePreference = "Infrastructure" | "Resources";
 export type UpdateAutoBuildSettingsInput = {
     allow: boolean;
     autoCropFields: boolean;

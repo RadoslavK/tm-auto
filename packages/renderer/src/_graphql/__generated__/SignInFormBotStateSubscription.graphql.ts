@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type BotState = "None" | "Paused" | "Pending" | "Running" | "Stopping" | "%future added value";
+export type BotState = "None" | "Paused" | "Pending" | "Running" | "Stopping";
 export type SignInFormBotStateSubscriptionVariables = {};
 export type SignInFormBotStateSubscriptionResponse = {
     readonly botStateChanged: BotState;

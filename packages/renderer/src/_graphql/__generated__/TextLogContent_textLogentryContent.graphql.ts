@@ -4,7 +4,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TextLogEntryType = "Error" | "Info" | "%future added value";
+export type TextLogEntryType = "Error" | "Info";
 export type TextLogContent_textLogentryContent = {
     readonly message: string;
     readonly messageType: TextLogEntryType;

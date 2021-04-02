@@ -11,7 +11,7 @@
     "build-graphiql": "rollup -c",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*",
-    "relay": "relay-compiler --src ./src --schema ../server/src/_api/schema.graphql --language typescript --artifactDirectory ./src/_graphql/__generated__ --eagerESModules"
+    "relay": "relay-compiler --src ./src --schema ../server/src/_api/schema.graphql --language typescript --artifactDirectory ./src/_graphql/__generated__ --eagerESModules --noFutureProofEnums"
   },
   "browserslist": [
     "Electron 12.0"

@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type MapSearchState = "None" | "Scanning" | "Searching" | "%future added value";
+export type MapSearchState = "None" | "Scanning" | "Searching";
 export type MapSearchMapSearchStateQueryVariables = {};
 export type MapSearchMapSearchStateQueryResponse = {
     readonly mapSearchState: MapSearchState;
