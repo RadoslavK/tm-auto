@@ -1,50 +1,23 @@
-import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useDrop } from 'react-dnd';
-import {
-  useLazyLoadQuery,
-  useMutation,
-} from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
-import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
-import type { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
-import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery.graphql.js';
-import type { QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { QueuedBuildingComponent } from './building/QueuedBuildingComponent.js';
-import { QueuedBuildingRangeComponent } from './range/QueuedBuildingRangeComponent.js';
-
-export type MovedQueuedBuilding = {
-  readonly queueIndex: number;
-  readonly queueId: string;
-  readonly buildingFragmentKey: QueuedBuildingComponent_queuedBuilding$key;
-};
-
-export type MovedQueuedBuildingRange = {
-  readonly bottomBuildingQueueId: string;
-  readonly topBuildingQueueId: string
-  readonly topBuildingQueueIndex: number;
-  readonly rangeFragmentKey: QueuedBuildingRangeComponent_QueuedBuildingRange$key;
-};
+import {
+  DroppedQueuedBuilding,
+  MovedQueuedBuilding,
+} from './DroppedQueuedBuilding.js';
+import type { MovedQueuedBuildingRange } from './DroppedQueuedRange.js';
+import { DroppedQueuedRange } from './DroppedQueuedRange.js';
 
 export enum DropPosition {
   Above = 'Above',
   Below = 'Below',
 }
-
-type StylesProps = {
-  readonly canBeMoved: boolean;
-};
-
-const useStyles = makeStyles<unknown, StylesProps>({
-  buildingPlaceholder: {
-    backgroundColor: (props) => (props.canBeMoved ? 'green' : 'red'),
-  },
-});
 
 type Props = {
   readonly getDropPosition: (queueIndex: number) => DropPosition;
@@ -61,18 +34,6 @@ const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
 const queuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation = graphql`
     mutation QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!, $index: Int!) {
         moveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
-    }
-`;
-
-const queuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery = graphql`
-  query QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery($villageId: ID!, $queueId: ID!, $index: Int!, $skip: Boolean!) {
-      canMoveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index) @skip(if: $skip)
-  }
-`;
-
-const queuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery = graphql`
-    query QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!, $index: Int!, $skip: Boolean!) {
-        canMoveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index) @skip(if: $skip)
     }
 `;
 
@@ -159,65 +120,45 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
       movedRange &&
       getDropPosition(movedRange.topBuildingQueueIndex));
 
-  //  TODO fetch policies and refetching
-  const { canMoveQueuedBuildingToIndex } = useLazyLoadQuery<QueuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery>(queuedBuildingsDropAreaCanMoveQueuedBuildingToIndexQuery, {
-    villageId,
-    queueId: movedBuilding?.queueId ?? '',
-    index: queueIndexTop,
-    skip: !movedBuilding || !isBuildingOver,
-  });
-
-  const { canMoveQueuedBuildingsBlockToIndex } = useLazyLoadQuery<QueuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery>(queuedBuildingsDropAreaCanMoveQueuedBuildingsBlockToIndexQuery, {
-    villageId,
-    topBuildingQueueId: movedRange?.topBuildingQueueId ?? '',
-    bottomBuildingQueueId: movedRange?.bottomBuildingQueueId ?? '',
-    index: (movedRange?.topBuildingQueueIndex ?? 0) < queueIndexTop
-      ? queueIndexBot
-      : queueIndexTop,
-    skip: !movedRange || !isRangeOver,
-  });
-
-  const canDroppedBuildingBeMovedHere =
-    (isBuildingOver && !!canMoveQueuedBuildingToIndex)
-    || (isRangeOver && !!canMoveQueuedBuildingsBlockToIndex);
-
-  const classes = useStyles({ canBeMoved: canDroppedBuildingBeMovedHere });
+  const indexForRange = (movedRange?.topBuildingQueueIndex ?? 0) < queueIndexTop
+    ? queueIndexBot
+    : queueIndexTop;
 
   return (
     <div ref={dropRangeRef}>
       <div ref={dropBuildingRef}>
         {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingComponent
-              building={movedBuilding.buildingFragmentKey}
-              isHighlight
+          <Suspense fallback={null}>
+            <DroppedQueuedBuilding
+              index={queueIndexTop}
+              movedBuilding={movedBuilding}
             />
-          </div>
+          </Suspense>
         )}
         {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingRangeComponent
-              buildingRange={movedRange.rangeFragmentKey}
-              isHighlight
+          <Suspense fallback={null}>
+            <DroppedQueuedRange
+              index={indexForRange}
+              movedRange={movedRange}
             />
-          </div>
+          </Suspense>
         )}
         {children}
         {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingComponent
-              building={movedBuilding.buildingFragmentKey}
-              isHighlight
+          <Suspense fallback={null}>
+            <DroppedQueuedBuilding
+              index={queueIndexTop}
+              movedBuilding={movedBuilding}
             />
-          </div>
+          </Suspense>
         )}
         {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
-          <div className={classes.buildingPlaceholder}>
-            <QueuedBuildingRangeComponent
-              buildingRange={movedRange.rangeFragmentKey}
-              isHighlight
+          <Suspense fallback={null}>
+            <DroppedQueuedRange
+              index={indexForRange}
+              movedRange={movedRange}
             />
-          </div>
+          </Suspense>
         )}
       </div>
     </div>

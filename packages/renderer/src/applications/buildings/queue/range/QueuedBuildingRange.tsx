@@ -14,9 +14,9 @@ import {
   BuildingImageSize,
   imageLinks,
 } from '../../../../utils/imageLinks.js';
+import type { MovedQueuedBuildingRange } from '../DroppedQueuedRange.js';
 import {
   DropPosition,
-  MovedQueuedBuildingRange,
   QueuedBuildingsDropArea,
 } from '../QueuedBuildingsDropArea.js';
 import { QueuedBuildingRangeComponent } from './QueuedBuildingRangeComponent.js';
@@ -78,11 +78,11 @@ export const QueuedBuildingRange: React.FC<Props> = ({ onExpand, range }) => {
       queueIndexBot={rangeFragment.buildings[rangeFragment.buildings.length - 1].queueIndex}
       queueIndexTop={rangeFragment.buildings[0].queueIndex}
     >
+      <DragPreviewImage
+        connect={preview}
+        src={imageLinks.getBuilding(rangeFragment.type, tribe, BuildingImageSize.Small)}
+      />
       <div ref={drag} className={classes.root}>
-        <DragPreviewImage
-          connect={preview}
-          src={imageLinks.getBuilding(rangeFragment.type, tribe, BuildingImageSize.Small)}
-        />
         <QueuedBuildingRangeComponent
           buildingRange={rangeFragment}
           onExpand={onExpand}

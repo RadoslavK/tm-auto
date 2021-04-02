@@ -14,9 +14,9 @@ import {
   BuildingImageSize,
   imageLinks,
 } from '../../../../utils/imageLinks.js';
+import type { MovedQueuedBuilding } from '../DroppedQueuedBuilding.js';
 import {
   DropPosition,
-  MovedQueuedBuilding,
   QueuedBuildingsDropArea,
 } from '../QueuedBuildingsDropArea.js';
 import { QueuedBuildingComponent } from './QueuedBuildingComponent.js';
@@ -75,11 +75,11 @@ export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse }) => {
       queueIndexBot={queuedBuildingFragment.queueIndex}
       queueIndexTop={queuedBuildingFragment.queueIndex}
     >
+      <DragPreviewImage
+        connect={preview}
+        src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
+      />
       <div ref={drag} className={classes.root}>
-        <DragPreviewImage
-          connect={preview}
-          src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
-        />
         <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} />
       </div>
     </QueuedBuildingsDropArea>

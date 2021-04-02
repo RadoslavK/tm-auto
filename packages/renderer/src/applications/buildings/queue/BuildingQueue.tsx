@@ -130,7 +130,6 @@ export const BuildingQueue: React.FC<Props> = ({
 
   const [clearQueue] = useMutation<BuildingQueueClearQueueMutation>(buildingQueueClearQueueMutation);
 
-
   const relayEnvironment = useRelayEnvironment();
 
   useEffect(() => {
