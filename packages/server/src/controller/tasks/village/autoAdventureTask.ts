@@ -5,7 +5,9 @@ import { TaskType } from '../../../_models/misc/taskType.js';
 import type {
   AutoAdventureSettings,
 } from '../../../_models/settings/tasks/autoAdventureSettings.js';
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import {
   getWithMaximumSafe,
@@ -22,18 +24,18 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoAdventure;
 
   private settings = (): AutoAdventureSettings =>
-    getAccountContext().settingsService.hero.autoAdventure.get();
+    AccountContext.getContext().settingsService.hero.autoAdventure.get();
 
   public allowExecution = (): boolean => this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
-    const village = getAccountContext().villageService.currentVillage();
+    const village = AccountContext.getContext().villageService.currentVillage();
     const settings = this.settings();
 
     const { spots } = village.buildings;
-    const { hero } = getAccountContext();
+    const { hero } = AccountContext.getContext();
 
     if (!spots.isBuilt(BuildingType.RallyPoint) || !hero.canGoToAdventure()) {
       return;
@@ -151,7 +153,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
       throw new Error('Link element for selected adventure was not found');
     }
 
-    getAccountContext().logsService.logText('Sending hero to adventure');
+    AccountContext.getContext().logsService.logText('Sending hero to adventure');
 
     await Promise.all([
       sendLinkElement.click(),

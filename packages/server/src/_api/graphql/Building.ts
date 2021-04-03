@@ -9,28 +9,9 @@ import {
 } from 'nexus';
 import { join } from 'path';
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import { AvailableBuildingTypesService } from '../../services/availableBuildingTypesService.js';
-import { buildingInfoService } from '../../services/info/buildingInfoService.js';
 import { getDirname } from '../../utils/getDirname.js';
-
-const getBuildingSpots = (villageId: string) => {
-  const normalizedSpots = getAccountContext()
-    .villageService.village(villageId)
-    .buildings.spots.buildings();
-
-  return {
-    infrastructure: normalizedSpots.filter((s) => s.fieldId >= 19),
-    resources: {
-      clay: normalizedSpots.filter((s) => s.type === BuildingType.Clay),
-      crop: normalizedSpots.filter((s) => s.type === BuildingType.Crop),
-      iron: normalizedSpots.filter((s) => s.type === BuildingType.Iron),
-      wood: normalizedSpots.filter((s) => s.type === BuildingType.Wood),
-    },
-  };
-};
 
 export const BuildingInfo = objectType({
   name: 'BuildingInfo',
@@ -116,11 +97,11 @@ export const AvailableNewBuildingsTypesQuery = queryField(t => {
     args: {
       input: arg({ type: AvailableNewBuildingsInput }),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const { fieldId, villageId } = args.input;
+      const village = ctx.villageService.village(villageId);
 
-      const manager = new AvailableBuildingTypesService(villageId);
-      return [...manager.availableBuildingTypes(fieldId)];
+      return [...ctx.availableBuildingTypesService.availableBuildingTypes(village, fieldId)];
     },
   });
 });
@@ -131,8 +112,8 @@ export const BuildingInfoQuery = queryField(t => {
     args: {
       buildingType: intArg(),
     },
-    resolve: (_, args) =>
-      buildingInfoService.getBuildingInfo(args.buildingType),
+    resolve: (_, args, ctx) =>
+      ctx.buildingInfoService.getBuildingInfo(args.buildingType),
   });
 });
 
@@ -143,8 +124,8 @@ export const BuildingLevelInfoQuery = queryField(t => {
       buildingType: intArg(),
       level: intArg(),
     },
-    resolve: (_, { buildingType, level }) =>
-      buildingInfoService.getBuildingLevelInfo(buildingType, level),
+    resolve: (_, { buildingType, level }, ctx) =>
+      ctx.buildingInfoService.getBuildingLevelInfo(buildingType, level),
   });
 });
 
@@ -154,7 +135,21 @@ export const BuildingSpotsQuery = queryField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args) => getBuildingSpots(args.villageId),
+    resolve(_, args, ctx) {
+      const normalizedSpots = ctx
+        .villageService.village(args.villageId)
+        .buildings.spots.buildings();
+
+      return {
+        infrastructure: normalizedSpots.filter((s) => s.fieldId >= 19),
+        resources: {
+          clay: normalizedSpots.filter((s) => s.type === BuildingType.Clay),
+          crop: normalizedSpots.filter((s) => s.type === BuildingType.Crop),
+          iron: normalizedSpots.filter((s) => s.type === BuildingType.Iron),
+          wood: normalizedSpots.filter((s) => s.type === BuildingType.Wood),
+        },
+      };
+    },
   });
 });
 

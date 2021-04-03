@@ -1,7 +1,7 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
-import { getAccountContext } from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
@@ -43,7 +43,7 @@ const getUnitsOfType = (
     return units;
   }
 
-  const { tribe } = getAccountContext().gameInfo;
+  const { tribe } = AccountContext.getContext().gameInfo;
 
   units = unitInfoService
     .getAllInfos()

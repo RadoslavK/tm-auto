@@ -5,7 +5,6 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { getAccountContext } from '../../../accountContext.js';
 
 export const GeneralVillageSettings = objectType({
   name: 'GeneralVillageSettings',
@@ -21,16 +20,13 @@ export const UpdateGeneralVillageSettingsInput = inputObjectType({
   },
 });
 
-const getService = (villageId: string) =>
-  getAccountContext().settingsService.village(villageId).general;
-
 export const GeneralVillageSettingsQuery = queryField(t => {
   t.field('generalVillageSettings', {
     type: GeneralVillageSettings,
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).get(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).general.get(),
   });
 });
 
@@ -41,8 +37,8 @@ export const UpdateGeneralVillageSettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateGeneralVillageSettingsInput }),
     },
-    resolve: (_, args) =>
-      getService(args.villageId).merge(args.settings),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.village(args.villageId).general.merge(args.settings),
   });
 });
 
@@ -52,7 +48,7 @@ export const ResetGeneralVillageSettingsMutation = mutationField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) =>
-      getService(args.villageId).reset(),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.village(args.villageId).general.reset(),
   });
 });

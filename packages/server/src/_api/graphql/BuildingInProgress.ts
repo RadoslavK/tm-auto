@@ -5,7 +5,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { getDirname } from '../../utils/getDirname.js';
@@ -37,8 +36,8 @@ export const BuildingsInProgressQuery = queryField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args) =>
-      [...getAccountContext()
+    resolve: (_, args, ctx) =>
+      [...ctx
         .villageService.village(args.villageId)
         .buildings.ongoing.buildings()],
   });
@@ -54,8 +53,8 @@ export const BuildingsInProgressUpdatedSubscription = subscriptionField(t => {
       BotEvent.BuildingsInProgressUpdated,
       {
         filter: (payload, args) => payload.villageId === args.villageId,
-        resolve: (p) =>
-          [...getAccountContext()
+        resolve: (p, _args, ctx) =>
+          [...ctx
             .villageService.village(p.villageId)
             .buildings.ongoing.buildings()],
       },

@@ -1,5 +1,7 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';
@@ -27,5 +29,5 @@ export const equipHeroHorse = async () => {
     throw new Error('Did not equip the horse');
   }
 
-  getAccountContext().logsService.logText('Equipped hero horse.');
+  AccountContext.getContext().logsService.logText('Equipped hero horse.');
 };

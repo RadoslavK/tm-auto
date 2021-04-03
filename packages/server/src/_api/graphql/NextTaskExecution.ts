@@ -7,7 +7,6 @@ import {
 import { Duration } from '../../_models/duration.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import { Timestamp } from '../../_models/misc/timestamp.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { convertDelayToDate } from '../../utils/convertDelayToDate.js';
@@ -15,8 +14,8 @@ import { convertDelayToDate } from '../../utils/convertDelayToDate.js';
 export const NextTasksExecutionQuery = queryField(t => {
   t.field('nextTasksExecution', {
     type: 'Timestamp',
-    resolve: () =>
-      Timestamp.fromDate(getAccountContext().nextExecutionService.tasks()),
+    resolve: (_, _args, ctx) =>
+      Timestamp.fromDate(ctx.nextExecutionService.tasks()),
   });
 });
 
@@ -26,9 +25,9 @@ export const NextTaskExecutionQuery = queryField(t => {
     args: {
       task: 'TaskType',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.get(TaskType[args.task]),
+        ctx.nextExecutionService.get(TaskType[args.task]),
       ),
   });
 });
@@ -40,9 +39,9 @@ export const NextVillageTaskExecutionQuery = queryField(t => {
       villageId: idArg(),
       task: 'TaskType',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.getForVillage(
+        ctx.nextExecutionService.getForVillage(
           args.villageId,
           TaskType[args.task],
         ),
@@ -57,9 +56,9 @@ export const SetNextTaskExecutionMutation = mutationField(t => {
       task: 'TaskType',
       delay: 'DurationInput',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.set(
+        ctx.nextExecutionService.set(
           TaskType[args.task],
           convertDelayToDate(new Duration(args.delay)),
         ),
@@ -73,9 +72,9 @@ export const SetNextTasksExecutionMutation = mutationField(t => {
     args: {
       delay: 'DurationInput',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.setTasks(
+        ctx.nextExecutionService.setTasks(
           convertDelayToDate(new Duration(args.delay)),
         ),
       ),
@@ -90,9 +89,9 @@ export const SetNextVillageTaskExecutionMutation = mutationField(t => {
       task: 'TaskType',
       delay: 'DurationInput',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.setForVillage(
+        ctx.nextExecutionService.setForVillage(
           args.villageId,
           TaskType[args.task],
           convertDelayToDate(new Duration(args.delay)),
@@ -107,9 +106,9 @@ export const ResetNextTaskExecutionMutation = mutationField(t => {
     args: {
       task: 'TaskType',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.resetNextTaskExecution(
+        ctx.nextExecutionService.resetNextTaskExecution(
           TaskType[args.task],
         ),
       ),
@@ -119,9 +118,9 @@ export const ResetNextTaskExecutionMutation = mutationField(t => {
 export const ResetNextTasksExecutionMutation = mutationField(t => {
   t.field('resetNextTasksExecution', {
     type: 'Timestamp',
-    resolve: () =>
+    resolve: (_, _args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.resetNextTasksExecution(),
+        ctx.nextExecutionService.resetNextTasksExecution(),
       ),
   });
 });
@@ -133,9 +132,9 @@ export const ResetNextVillageTaskExecutionMutation = mutationField(t => {
       villageId: 'ID',
       task: 'TaskType',
     },
-    resolve: (_, args) =>
+    resolve: (_, args, ctx) =>
       Timestamp.fromDate(
-        getAccountContext().nextExecutionService.resetNextVillageTaskExecution(
+        ctx.nextExecutionService.resetNextVillageTaskExecution(
           args.villageId,
           TaskType[args.task],
         ),

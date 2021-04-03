@@ -1,4 +1,6 @@
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
 import { updateBuildings } from '../buildings/updateBuildings.js';
@@ -11,6 +13,6 @@ export const refreshVillage = async (villageId: string): Promise<void> => {
   await updateResources();
   await updateBuildings();
 
-  const village = getAccountContext().villageService.village(villageId);
+  const village = AccountContext.getContext().villageService.village(villageId);
   publishPayloadEvent(BotEvent.VillageUpdated, { village });
 };

@@ -4,6 +4,7 @@
  */
 
 
+import { ApiContext } from "./apiContext.type"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
 import { Hero } from "./../_models/hero/hero"
@@ -1461,7 +1462,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: ApiContext;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

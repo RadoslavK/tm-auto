@@ -4,7 +4,9 @@ import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuildi
 import { Tribe } from '../../../../_models/enums/tribe.js';
 import type { AutoStorageSettings } from '../../../../_models/settings/tasks/autoBuildSettings/autoStorageSettings.js';
 import type { Village } from '../../../../_models/village/village.js';
-import { getAccountContext } from '../../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../../accountContext.js';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
 import {
   getWithMinimum,
@@ -27,7 +29,7 @@ export const checkAutoStorage = async (
 
   // Check if next building exceeds Granary/Warehouse capacity
 
-  if (getAccountContext().gameInfo.tribe === Tribe.Romans) {
+  if (AccountContext.getContext().gameInfo.tribe === Tribe.Romans) {
     const resourceField = village.buildings.queue.peek(BuildingSpotType.Fields);
 
     if (resourceField) {

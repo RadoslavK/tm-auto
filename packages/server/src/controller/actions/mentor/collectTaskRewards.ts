@@ -1,4 +1,6 @@
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 
 export const collectTaskRewards = async (): Promise<void> => {
@@ -38,7 +40,7 @@ export const collectTaskRewards = async (): Promise<void> => {
       }
 
 
-      getAccountContext().logsService.logText(`Collecting rewards for task: ${title}`);
+      AccountContext.getContext().logsService.logText(`Collecting rewards for task: ${title}`);
 
       await Promise.all([
         collectButton.click(),

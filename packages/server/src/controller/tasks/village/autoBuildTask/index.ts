@@ -13,7 +13,9 @@ import type {
   AutoBuildSettings,
 } from '../../../../_models/settings/tasks/autoBuildSettings';
 import type { Village } from '../../../../_models/village/village.js';
-import { getAccountContext } from '../../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { fieldIds } from '../../../../constants/fieldIds.js';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress.js';
@@ -47,12 +49,12 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
   }
 
   private settings = (): AutoBuildSettings =>
-    getAccountContext()
+    AccountContext.getContext()
       .settingsService.village(this._village.id)
       .autoBuild.get();
 
   public allowExecution = (): boolean =>
-    getAccountContext().settingsService.account.get().autoBuild &&
+    AccountContext.getContext().settingsService.account.get().autoBuild &&
     this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -82,7 +84,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const isRoman = getAccountContext().gameInfo.tribe === Tribe.Romans;
+    const isRoman = AccountContext.getContext().gameInfo.tribe === Tribe.Romans;
 
     let finishedAt: Date | undefined;
     if (isRoman && allowDualQueue) {
@@ -173,7 +175,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     await updateActualResources();
 
     const currentResources = this._village.resources.amount;
-    const { hero } = getAccountContext();
+    const { hero } = AccountContext.getContext();
     const totalResources =
       settings.useHeroResources && hero.villageId === this._village.id
         ? mergeVillageAndHeroResources(this._village.id)
@@ -205,7 +207,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         return;
       }
 
-      getAccountContext().logsService.logText(
+      AccountContext.getContext().logsService.logText(
         'Not enough free crop. Building crop land next',
         true,
       );
@@ -273,7 +275,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     queuedBuilding: QueuedBuilding,
     isQueued = true,
   ): Promise<void> => {
-    getAccountContext().logsService.logAutoBuild(queuedBuilding);
+    AccountContext.getContext().logsService.logAutoBuild(queuedBuilding);
 
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
@@ -323,7 +325,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
     if (isQueued) {
       // might be a temporary created object to insta build
-      const queueService = getAccountContext().buildingQueueService.for(
+      const queueService = AccountContext.getContext().buildingQueueService.for(
         this._village.id,
       );
       queueService.dequeueBuilding(queuedBuilding.queueId, false);

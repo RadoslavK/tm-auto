@@ -10,6 +10,32 @@ import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService.js';
 
 export class AccountContext {
+  private static _context: AccountContext | null = null;
+
+  public static resetContext = (): void => {
+    AccountContext._context = null;
+  };
+
+  public static setContext = (accountId: string) => {
+    if (AccountContext._context) {
+      throw new Error('Didnt you want to reset account context first?');
+    }
+
+    AccountContext._context = new AccountContext(accountId);
+  };
+
+  public static getContext = (): AccountContext => {
+    if (!AccountContext._context) {
+      throw new Error('Account context has not been initialized');
+    }
+
+    return AccountContext._context;
+  };
+
+  public static getContextUnsafe = (): AccountContext | null => {
+    return AccountContext._context;
+  };
+
   private _buildingQueueServices: Map<string, BuildingQueueService> = new Map<
     string,
     BuildingQueueService
@@ -52,28 +78,3 @@ export class AccountContext {
     this.mapScanService = new MapScanService(accountId);
   }
 }
-
-let accountContextField: AccountContext | null = null;
-
-export const getAccountContext = (): AccountContext => {
-  if (!accountContextField) {
-    throw new Error('Account context has not been initialized');
-  }
-
-  return accountContextField;
-};
-
-export const getAccountContextUnsafe = (): AccountContext | null =>
-  accountContextField;
-
-export const setAccountContext = (accountId: string) => {
-  if (accountContextField) {
-    throw new Error('Didnt you want to reset account context first?');
-  }
-
-  accountContextField = new AccountContext(accountId);
-};
-
-export const resetAccountContext = () => {
-  accountContextField = null;
-};

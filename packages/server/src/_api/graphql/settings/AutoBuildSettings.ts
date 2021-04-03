@@ -7,7 +7,6 @@ import {
   queryField,
 } from 'nexus';
 import { DualQueuePreferences } from 'server/_models/settings/tasks/autoBuildSettings/index.js';
-import { getAccountContext } from '../../../accountContext.js';
 
 export const AutoStorageOptionSettings = objectType({
   name: 'AutoStorageOptionSettings',
@@ -92,16 +91,13 @@ export const UpdateAutoBuildSettingsInput = inputObjectType({
   },
 });
 
-const getService = (villageId: string) =>
-  getAccountContext().settingsService.village(villageId).autoBuild;
-
 export const AutoBuildSettingQuery = queryField(t => {
   t.field('autoBuildSettings', {
     type: AutoBuildSettings,
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).get(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.get(),
   });
 });
 
@@ -112,8 +108,8 @@ export const UpdateAutoBuildSettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateAutoBuildSettingsInput }),
     },
-    resolve: (_, args) =>
-      getService(args.villageId).merge(args.settings),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.village(args.villageId).autoBuild.merge(args.settings),
   });
 });
 
@@ -123,6 +119,6 @@ export const ResetAutoBuildSettingsMutation = mutationField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).reset(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.reset(),
   });
 });

@@ -1,9 +1,11 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { getAccountContext } from '../../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../../accountContext.js';
 import { ensureBuildingSpotPage } from '../../ensurePage.js';
 
 export const openCulturePointsTab = async (): Promise<boolean> => {
-  const { villageService } = getAccountContext();
+  const { villageService } = AccountContext.getContext();
 
   const building = villageService
     .currentVillage()

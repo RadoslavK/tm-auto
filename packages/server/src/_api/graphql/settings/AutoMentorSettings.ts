@@ -7,7 +7,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import type { AutoMentorSettings } from '../../../_models/settings/autoMentorSettings.js';
-import { getAccountContext } from '../../../accountContext.js';
 import { completeTaskIds } from '../../../constants/completeTaskIds.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
@@ -50,8 +49,6 @@ export const UpdateAutoMentorSettingsInput = inputObjectType({
   },
 });
 
-const getService = () => getAccountContext().settingsService.autoMentor;
-
 const mapResult = (result: AutoMentorSettings) => {
   return {
     ...result,
@@ -65,7 +62,7 @@ const mapResult = (result: AutoMentorSettings) => {
 export const AutoMentorSettingsQuery = queryField(t => {
   t.field('autoMentorSettings', {
     type: AutoMentorSettingsObject,
-    resolve: () => mapResult(getService().get()),
+    resolve: (_, _args, ctx) => mapResult(ctx.settingsService.autoMentor.get()),
   });
 });
 
@@ -75,14 +72,14 @@ export const UpdateAutoMentorSettingsMutation = mutationField(t => {
     args: {
       settings: arg({ type: UpdateAutoMentorSettingsInput }),
     },
-    resolve: (_, args) => mapResult(getService().merge(args.settings)),
+    resolve: (_, args, ctx) => mapResult(ctx.settingsService.autoMentor.merge(args.settings)),
   });
 });
 
 export const ResetAutoMentorSettingsMutation = mutationField(t => {
   t.field('resetAutoMentorSettings', {
     type: AutoMentorSettingsObject,
-    resolve: () => mapResult(getService().reset()),
+    resolve: (_, _args, ctx) => mapResult(ctx.settingsService.autoMentor.reset()),
   });
 });
 

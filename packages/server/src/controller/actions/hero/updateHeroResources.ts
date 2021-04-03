@@ -1,6 +1,6 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
 import { Resources } from '../../../_models/misc/resources.js';
-import { getAccountContext } from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';
 import { ensurePage } from '../ensurePage.js';
@@ -13,7 +13,7 @@ export const updateHeroResources = async (): Promise<void> => {
   const { amount: iron } = await getHeroInventoryItem(heroItemIds.iron);
   const { amount: crop } = await getHeroInventoryItem(heroItemIds.crop);
 
-  const { hero } = getAccountContext();
+  const { hero } = AccountContext.getContext();
 
   hero.hasHorseInInventory = !!(await getHeroInventoryItem(heroItemIds.horse))
     .amount;

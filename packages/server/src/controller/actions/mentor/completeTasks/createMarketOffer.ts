@@ -1,10 +1,12 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { getAccountContext } from '../../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { ensureBuildingSpotPage } from '../../ensurePage.js';
 
 export const createMarketOffer = async (): Promise<boolean> => {
-  const { villageService } = getAccountContext();
+  const { villageService } = AccountContext.getContext();
 
   const building = villageService
     .currentVillage()

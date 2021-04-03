@@ -1,5 +1,7 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp.js';
@@ -51,7 +53,7 @@ const ensureHeroPoint = async ({
 
   const total = actual + toAdd;
 
-  getAccountContext().logsService.logText(
+  AccountContext.getContext().logsService.logText(
     `Adding hero attribute ${inputName}: ${actual} -> ${total}`,
   );
 
@@ -70,7 +72,7 @@ const ensureHeroPoint = async ({
 };
 
 export const assignHeroAttributes = async () => {
-  const settingsService = getAccountContext().settingsService.hero.heroLevelUp;
+  const settingsService = AccountContext.getContext().settingsService.hero.heroLevelUp;
   const { levelUpItems } = settingsService.get();
 
   if (!levelUpItems.length) {

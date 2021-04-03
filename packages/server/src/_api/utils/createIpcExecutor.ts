@@ -16,6 +16,7 @@ import {
   broadcastMessage,
   startIpcServer,
 } from '../../ipcUtils.js';
+import { createApiContextProxy } from '../createApiContextProxy.js';
 import { executeGraphqlOperation } from './executeGraphqlOperation.js';
 
 type Params = {
@@ -28,9 +29,11 @@ export const createIpcExecutor = async ({
   socketName,
 }: Params): Promise<void> => {
   const handlers = new Map<string, IpcMessageHandler<GraphqlHandlerPayload>>();
+  const context = createApiContextProxy();
 
   const graphqlHandler = ({ request, subscriptionId }: GraphqlHandlerPayload): void => {
     const result = executeGraphqlOperation({
+      context,
       request: {
         ...request,
         query: parseQuery(request.query),

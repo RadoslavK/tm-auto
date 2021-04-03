@@ -12,7 +12,7 @@ import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSe
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
 import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
-import { getAccountContextUnsafe } from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
@@ -21,7 +21,9 @@ import { BuildingQueueService } from './buildingQueueService.js';
 import { DataPathService, dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';
 import { SettingsService } from './settings';
-import { getGeneralSettingsService } from './settings/general.js';
+import {
+  GeneralSettingsService,
+} from './settings/general.js';
 
 const updateSettings = async <TData = object>(
   zip: JSZip,
@@ -37,7 +39,7 @@ const updateSettings = async <TData = object>(
   update(JSON.parse(textData));
 };
 
-class SettingsManagementService {
+export class SettingsManagementService {
   private saveZip = (zipPath: string, populateZip: (zip: JSZip) => void) => {
     const zip = new JSZip();
 
@@ -62,7 +64,7 @@ class SettingsManagementService {
     this.saveZip(zipPath, (zip) => {
       const accContext =
         accountService.currentAccountId === accountId
-          ? getAccountContextUnsafe()
+          ? AccountContext.getContextUnsafe()
           : null;
 
       let settingsService: SettingsService;
@@ -173,7 +175,7 @@ class SettingsManagementService {
     this.saveZip(zipPath, (zip) => {
       zip.file(
         DataPathService.generalPath(),
-        JSON.stringify(getGeneralSettingsService().get()),
+        JSON.stringify(GeneralSettingsService.getService().get()),
       );
     });
 
@@ -189,7 +191,7 @@ class SettingsManagementService {
     this.readZip(zipPath, async (zip) => {
       const accContext =
         accountService.currentAccountId === accountId
-          ? getAccountContextUnsafe()
+          ? AccountContext.getContextUnsafe()
           : null;
 
       const settingsService = accContext
@@ -331,7 +333,7 @@ class SettingsManagementService {
         (generalSettings) => {
           const newSettings = new GeneralSettings(generalSettings);
 
-          getGeneralSettingsService().update(newSettings);
+          GeneralSettingsService.getService().update(newSettings);
         },
       );
     });
@@ -351,5 +353,3 @@ class SettingsManagementService {
       });
     });
 }
-
-export const settingsManagementService = new SettingsManagementService();

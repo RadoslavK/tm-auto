@@ -8,7 +8,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import { MapSearchState } from '../../services/mapScan/mapScanService.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { relevantVillageTileTypes } from '../../services/mapScan/utils/scanSector.js';
@@ -18,8 +17,8 @@ export const SearchMapMutation = mutationField(t => {
     args: {
       input: arg({ type: SearchMapInput }),
     },
-    resolve: async (_, { input: { types, origin, cropBonus } }) => {
-      await getAccountContext().mapSearchService.searchVillageTiles(
+    resolve: (_, { input: { types, origin, cropBonus } }, ctx) => {
+      ctx.mapSearchService.searchVillageTiles(
         types,
         origin,
         cropBonus,
@@ -32,8 +31,8 @@ export const SearchMapMutation = mutationField(t => {
 
 export const ScanWholeMapMutation = mutationField(t => {
   t.nullable.boolean('scanWholeMap', {
-    resolve: async () => {
-      await getAccountContext().mapScanService.scanMap();
+    resolve: (_, _args, ctx) => {
+      ctx.mapScanService.scanMap();
 
       return null;
     },
@@ -42,8 +41,8 @@ export const ScanWholeMapMutation = mutationField(t => {
 
 export const StopMapScanMutation = mutationField(t => {
   t.nullable.boolean('stopMapScan', {
-    resolve: async () => {
-      await getAccountContext().mapScanService.stopScan();
+    resolve: (_, _args, ctx) => {
+      ctx.mapScanService.stopScan();
 
       return null;
     },
@@ -59,16 +58,16 @@ export const VillageTileTypesQuery = queryField(t => {
 export const MapSearchStateQuery = queryField(t => {
   t.field('mapSearchState', {
     type: MapSearchStateEnum,
-    resolve: () =>
-      getAccountContext().mapScanService.isInProgress()
+    resolve: (_, _args, ctx) =>
+      ctx.mapScanService.isInProgress()
         ? MapSearchState.Scanning
-        : getAccountContext().mapSearchService.getState(),
+        : ctx.mapSearchService.getState(),
   });
 });
 
 export const MapScanProgressQuery = queryField(t => {
   t.float('mapScanProgress', {
-    resolve: () => getAccountContext().mapScanService.getScanProgress(),
+    resolve: (_, _args, ctx) => ctx.mapScanService.getScanProgress(),
   });
 });
 

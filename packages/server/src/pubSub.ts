@@ -130,12 +130,12 @@ class PubSubAsyncIterator<TEvent extends BotEvent>
   };
 }
 
-type Options<TEvent, TArgs, TResult> = {
+type Options<TEvent, TArgs, TContext, TResult> = {
   readonly filter?: (
     payload: EventPayload<TEvent>,
     subscriptionVariables: TArgs,
   ) => boolean;
-  readonly resolve: (payload: EventPayload<TEvent>) => TResult;
+  readonly resolve: (payload: EventPayload<TEvent>, args: TArgs, context: TContext) => TResult;
 };
 
 type Subscribe<TEvent, TArgs> = (
@@ -148,10 +148,11 @@ type Subscribe<TEvent, TArgs> = (
 export const subscribeToEvent = <
   TEvent extends BotEvent,
   TArgs,
+  TContext,
   TResult,
 >(
   event: TEvent,
-  options: Options<TEvent, TArgs, TResult>,
+  options: Options<TEvent, TArgs, TContext, TResult>,
 ) => {
   const { filter, resolve } = options;
 

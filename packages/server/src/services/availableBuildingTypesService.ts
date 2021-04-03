@@ -6,21 +6,18 @@ import {
 } from '../_models/buildings/buildingConditions.js';
 import { Tribe } from '../_models/enums/tribe.js';
 import type { Village } from '../_models/village/village.js';
-import { getAccountContext } from '../accountContext.js';
+import {
+  AccountContext,
+} from '../accountContext.js';
 import { fieldIds } from '../constants/fieldIds.js';
 import { buildingInfoService } from './info/buildingInfoService.js';
 
 export class AvailableBuildingTypesService {
-  private readonly _village: Village;
-
-  constructor(villageId: string) {
-    this._village = getAccountContext().villageService.village(villageId);
-  }
-
   public availableBuildingTypes = (
+    village: Village,
     fieldId: number,
   ): readonly BuildingType[] => {
-    const { tribe } = getAccountContext().gameInfo;
+    const { tribe } = AccountContext.getContext().gameInfo;
 
     const buildingTypes: BuildingType[] = [];
 
@@ -95,6 +92,7 @@ export class AvailableBuildingTypesService {
             const buildingConditions = buildingInfoService.getBuildingInfo(type)
               .conditions;
             const meetVillageConditions = this.newBuildingMeetsConditions(
+              village,
               type,
               buildingConditions,
             );
@@ -103,7 +101,7 @@ export class AvailableBuildingTypesService {
               return;
             }
 
-            const normalizedBuildingSlots = this._village.buildings.spots.buildings();
+            const normalizedBuildingSlots = village.buildings.spots.buildings();
             const spotsOfType = normalizedBuildingSlots.filter(
               (b) => b.type === type,
             );
@@ -145,6 +143,7 @@ export class AvailableBuildingTypesService {
   };
 
   private newBuildingMeetsConditions = (
+    village: Village,
     type: BuildingType,
     conditions: BuildingConditions,
   ): boolean => {
@@ -157,12 +156,12 @@ export class AvailableBuildingTypesService {
 
     if (
       conditions.playerTribe !== null &&
-      conditions.playerTribe !== getAccountContext().gameInfo.tribe
+      conditions.playerTribe !== AccountContext.getContext().gameInfo.tribe
     ) {
       return false;
     }
 
-    const { isCapital } = this._village;
+    const { isCapital } = village;
     if (
       (conditions.capital === CapitalCondition.Prohibited && isCapital) ||
       (conditions.capital === CapitalCondition.Required && !isCapital)
@@ -170,7 +169,7 @@ export class AvailableBuildingTypesService {
       return false;
     }
 
-    const normalizedBuildingSpots = this._village.buildings.spots.buildings();
+    const normalizedBuildingSpots = village.buildings.spots.buildings();
 
     // vsetky budovy aj v queue
     const buildings = normalizedBuildingSpots.filter((b) => b.type === type);

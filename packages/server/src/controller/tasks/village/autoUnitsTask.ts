@@ -6,7 +6,7 @@ import { TaskType } from '../../../_models/misc/taskType.js';
 import type { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings.js';
 import type { Units } from '../../../_models/units';
 import type { Village } from '../../../_models/village/village.js';
-import { getAccountContext } from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
@@ -38,12 +38,12 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
   }
 
   private settings = (): AutoUnitsSettings =>
-    getAccountContext()
+    AccountContext.getContext()
       .settingsService.village(this._village.id)
       .autoUnits.get();
 
   public allowExecution = (): boolean =>
-    getAccountContext().settingsService.account.get().autoUnits &&
+    AccountContext.getContext().settingsService.account.get().autoUnits &&
     this.settings().allow &&
     [
       BuildingType.Barracks,
@@ -111,7 +111,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     this._units.setQueue(type, unitQueue);
 
     const suitableToBuild: Record<number, number> = {};
-    const { hero } = getAccountContext();
+    const { hero } = AccountContext.getContext();
     const totalVillageResources =
       settings.useHeroResources && hero.villageId === this._village.id
         ? mergeVillageAndHeroResources(this._village.id)
@@ -168,7 +168,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
         return;
       }
 
-      const { speed } = getAccountContext().gameInfo;
+      const { speed } = AccountContext.getContext().gameInfo;
       const buildTime = getActualUnitBuildTime(
         originalBuildTime,
         speed,
@@ -222,12 +222,12 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     const page = await getPage();
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {
-      getAccountContext().logsService.logAutoUnits({
+      AccountContext.getContext().logsService.logAutoUnits({
         amount,
         index: +uIndex,
       });
 
-      const { tribe } = getAccountContext().gameInfo;
+      const { tribe } = AccountContext.getContext().gameInfo;
       const inputUnitIndex = +uIndex - 10 * (tribe - 1);
       const input = await page.$(`[name=t${inputUnitIndex}]`);
 

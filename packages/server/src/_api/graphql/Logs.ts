@@ -16,7 +16,6 @@ import {
   TextLogEntryContent,
   TextLogEntryType,
 } from '../../_models/logs/content/text.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { getDirname } from '../../utils/getDirname.js';
@@ -128,7 +127,7 @@ export const LogEntry = objectType({
 export const LogEntriesQuery = queryField(t => {
   t.list.field('logEntries', {
     type: LogEntry,
-    resolve: () => [...getAccountContext().logsService.logEntries()],
+    resolve: (_, _args, ctx) => [...ctx.logsService.logEntries()],
   });
 });
 

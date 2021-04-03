@@ -2,7 +2,9 @@ import type { Page } from 'puppeteer';
 
 import { isObject } from 'shared/utils/merge.js';
 import { TokenType } from '../_models/gameInfo.js';
-import { getAccountContext } from '../accountContext.js';
+import {
+  AccountContext,
+} from '../accountContext.js';
 import { getPage } from '../browser/getPage.js';
 import { accountService } from '../services/accountService.js';
 
@@ -79,7 +81,7 @@ export const sendAjaxRequest = async <T = any>(
   const account = accountService.getCurrentAccount();
   const {
     gameInfo: { token },
-  } = getAccountContext();
+  } = AccountContext.getContext();
 
   if (token.type === TokenType.Ajax) {
     return sendAjaxRequestOld({

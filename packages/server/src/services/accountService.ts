@@ -34,7 +34,7 @@ const getBaseServerUrl = (server: string, safe = false): string => {
   return correctedServerMatch[1];
 };
 
-class AccountService {
+export class AccountService {
   public accountsData: AccountsData | null = null;
 
   public currentAccountId: string | null = null;

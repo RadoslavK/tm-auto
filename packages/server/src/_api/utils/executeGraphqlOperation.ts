@@ -13,6 +13,7 @@ import type {
   Observable,
   Unsubscribable,
 } from 'shared/types/observable.js';
+import type { ApiContext } from '../apiContext.type.js';
 
 type Definition = OperationDefinitionNode | FragmentDefinitionNode;
 
@@ -28,6 +29,7 @@ const ensureIterable = (data: any): AsyncIterable<any> =>
   isAsyncIterable(data) ? data : (createAsyncIterator([data]) as any);
 
 type Params = {
+  readonly context: ApiContext;
   readonly request: GraphQLRequest;
   readonly schema: GraphQLSchema;
 };
@@ -71,6 +73,7 @@ export interface GraphQLRequest {
 }
 
 export const executeGraphqlOperation = ({
+  context,
   request,
   schema,
 }: Params): Observable<ExecutionResult> => {
@@ -88,6 +91,7 @@ export const executeGraphqlOperation = ({
         operationName: request.operationName,
         schema,
         variableValues,
+        contextValue: context,
       };
 
       let cancelled = false;

@@ -8,7 +8,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import { AdventureCriterias } from '../../../../_models/settings/tasks/autoAdventureSettings.js';
-import { getAccountContext } from '../../../../accountContext.js';
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';
 
@@ -45,12 +44,10 @@ export const UpdateAutoAdventureSettingsInput = inputObjectType({
   },
 });
 
-const getService = () => getAccountContext().settingsService.hero.autoAdventure;
-
 export const AutoAdventureSettingsQuery = queryField(t => {
   t.field('autoAdventureSettings', {
     type: AutoAdventureSettings,
-    resolve: () => getService().get(),
+    resolve: (_, _args, ctx) => ctx.settingsService.hero.autoAdventure.get(),
   });
 });
 
@@ -60,14 +57,14 @@ export const UpdateAutoAdventureSettingsMutation = mutationField(t => {
     args: {
       settings: arg({ type: UpdateAutoAdventureSettingsInput }),
     },
-    resolve: (_, args) => getService().merge(args.settings),
+    resolve: (_, args, ctx) => ctx.settingsService.hero.autoAdventure.merge(args.settings),
   });
 });
 
 export const ResetAutoAdventureSettingsMutation = mutationField(t => {
   t.field('resetAutoAdventureSettings', {
     type: AutoAdventureSettings,
-    resolve: () => getService().reset(),
+    resolve: (_, _args, ctx) => ctx.settingsService.hero.autoAdventure.reset(),
   });
 });
 

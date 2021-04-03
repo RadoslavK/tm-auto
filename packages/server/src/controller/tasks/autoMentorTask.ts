@@ -1,7 +1,9 @@
 import { collectTaskRewards } from '../actions/mentor/collectTaskRewards.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import type { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import type { completeTaskIds } from '../../constants/completeTaskIds.js';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward.js';
@@ -50,7 +52,7 @@ export const getCompleteTask = (
 
 export class AutoMentorTask implements BotTask {
   private settings = (): AutoMentorSettings =>
-    getAccountContext().settingsService.autoMentor.get();
+    AccountContext.getContext().settingsService.autoMentor.get();
 
   public allowExecution = (): boolean => {
     const {
@@ -113,7 +115,7 @@ export class AutoMentorTask implements BotTask {
       throw new Error('Did not find claim reward button');
     }
 
-    getAccountContext().logsService.logText('Claiming daily reward');
+    AccountContext.getContext().logsService.logText('Claiming daily reward');
 
     await Promise.all([
       claimRewardButton.click(),
@@ -138,7 +140,7 @@ export class AutoMentorTask implements BotTask {
 
       return;
 
-      for (const task of getAccountContext().mentorTasks) {
+      for (const task of AccountContext.getContext().mentorTasks) {
         if (!task.completed) {
           if (
             completeTasks.allow &&
@@ -151,7 +153,7 @@ export class AutoMentorTask implements BotTask {
             const result = await action();
 
             if (result !== false) {
-              getAccountContext().logsService.logText(
+              AccountContext.getContext().logsService.logText(
                 `Completed mentor task: ${task.id}`,
               );
 

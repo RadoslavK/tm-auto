@@ -11,12 +11,10 @@ import { BotEvent } from '../../events/botEvent.js';
 import {
   subscribeToEvent,
 } from '../../pubSub.js';
-import { accountService } from '../../services/accountService.js';
 
 export const UserAccount = objectType({
   name: 'UserAccount',
   definition(t) {
-    t.implements('Node');
     t.id('id');
     t.string('username');
     t.string('password');
@@ -39,7 +37,7 @@ export const AccountQuery = queryField(t => {
     args: {
       id: idArg(),
     },
-    resolve: (_p, args) => accountService.getAccount(args.id),
+    resolve: (_p, args, ctx) => ctx.accountService.getAccount(args.id),
   })
 });
 
@@ -47,14 +45,14 @@ export const AccountsQuery = queryField(t => {
   t.list.field('accounts', {
     type: UserAccount,
     //  TODO this cannot work with readonly arrays for some reason
-    resolve: () => [...accountService.getAccounts()],
+    resolve: (_, _args, ctx) => [...ctx.accountService.getAccounts()],
   });
 });
 
 export const CurrentAccountQuery = queryField(t => {
   t.field('currentAccount', {
     type: UserAccount,
-    resolve: () => accountService.getCurrentAccount(),
+    resolve: (_, _args,  ctx) => ctx.accountService.getCurrentAccount(),
   });
 });
 
@@ -64,14 +62,14 @@ export const IsAccountTakenQuery = queryField(t => {
     args: {
       account: arg({ type: AccountInput }),
     },
-    resolve: (_, args) => accountService.isAccountTaken(args.account),
+    resolve: (_, args, ctx) => ctx.accountService.isAccountTaken(args.account),
   });
 });
 
 export const LastSignedAccountIdQuery = queryField(t => {
   t.nullable.field('lastSignedAccountId', {
     type: 'String',
-    resolve: () => accountService.lastSignedAccountId(),
+    resolve: (_, _args, ctx) => ctx.accountService.lastSignedAccountId(),
   });
 });
 
@@ -81,7 +79,7 @@ export const CreateAccountMutation = mutationField(t => {
     args: {
       account: arg({ type: AccountInput }),
     },
-    resolve: (_p, args) => accountService.createAccount(args.account),
+    resolve: (_p, args, ctx) => ctx.accountService.createAccount(args.account),
   });
 });
 
@@ -92,7 +90,7 @@ export const UpdateAccountMutation = mutationField(t => {
       id: idArg(),
       account: arg({ type: AccountInput }),
     },
-    resolve: (_p, args) => accountService.updateAccount({ ...args.account, id: args.id }),
+    resolve: (_p, args, ctx) => ctx.accountService.updateAccount({ ...args.account, id: args.id }),
   });
 });
 
@@ -102,7 +100,7 @@ export const DeleteAccountMutation = mutationField(t => {
     args: {
       id: idArg(),
     },
-    resolve: (_p, args) => accountService.deleteAccount(args.id),
+    resolve: (_p, args, ctx) => ctx.accountService.deleteAccount(args.id),
   });
 });
 

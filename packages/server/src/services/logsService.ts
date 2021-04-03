@@ -13,7 +13,9 @@ import {
 import type { LogEntry, LogEntryContent } from '../_models/logs/logEntry.js';
 import type { Resources } from '../_models/misc/resources.js';
 import { Timestamp } from '../_models/misc/timestamp.js';
-import { getAccountContext } from '../accountContext.js';
+import {
+  AccountContext,
+} from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 import { buildingInfoService } from './info/buildingInfoService.js';
@@ -61,7 +63,7 @@ export class LogsService {
   public logAutoUnits = (params: LogAutoUnitsParams): void => {
     const { amount, index } = params;
 
-    const { tribe } = getAccountContext().gameInfo;
+    const { tribe } = AccountContext.getContext().gameInfo;
     const { name } = unitInfoService.getUnitInfo(index);
 
     const content = new AutoUnitsLogEntryContent({
@@ -91,7 +93,7 @@ export class LogsService {
       totalSeconds: Math.round(Date.now() / 1000),
     });
     const village = fromVillage
-      ? getAccountContext().villageService.currentVillage()
+      ? AccountContext.getContext().villageService.currentVillage()
       : null;
 
     this.addEntry({

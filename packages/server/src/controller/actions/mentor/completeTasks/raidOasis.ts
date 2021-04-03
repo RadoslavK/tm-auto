@@ -1,6 +1,8 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { TravianPath } from '../../../../_enums/travianPath.js';
-import { getAccountContext } from '../../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { replaceInputText } from '../../../../utils/browser/replaceInputText.js';
 import { sendAjaxRequest } from '../../../../utils/sendAjaxRequest.js';
@@ -38,7 +40,7 @@ const findFreeOasesInArea = async (x: number, y: number) => {
 };
 
 export const raidOasis = async (): Promise<boolean> => {
-  const { villageService } = getAccountContext();
+  const { villageService } = AccountContext.getContext();
 
   const rallyPoint = villageService
     .currentVillage()
@@ -57,7 +59,7 @@ export const raidOasis = async (): Promise<boolean> => {
 
   const {
     gameInfo: { tribe },
-  } = getAccountContext();
+  } = AccountContext.getContext();
 
   let count;
 

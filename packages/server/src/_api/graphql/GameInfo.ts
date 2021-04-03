@@ -2,7 +2,6 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { getAccountContext } from '../../accountContext.js';
 
 export const GameInfo = objectType({
   name: 'GameInfo',
@@ -14,8 +13,6 @@ export const GameInfo = objectType({
 export const GameInfoQuery = queryField(t => {
   t.field('gameInfo', {
     type: GameInfo,
-    resolve: () => {
-      return getAccountContext().gameInfo;
-    },
+    resolve: (_, _args, ctx) => ctx.gameInfo,
   });
 });

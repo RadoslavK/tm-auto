@@ -3,7 +3,9 @@ import { CapitalCondition } from '../_models/buildings/buildingConditions.js';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
 import type { Village } from '../_models/village/village.js';
-import { getAccountContext } from '../accountContext.js';
+import {
+  AccountContext,
+} from '../accountContext.js';
 import { accountService } from './accountService.js';
 import { dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';
@@ -52,7 +54,7 @@ export class BuildingQueueService {
 
   constructor(villageId: string) {
     const { id: accountId } = accountService.getCurrentAccount();
-    this._village = getAccountContext().villageService.village(villageId);
+    this._village = AccountContext.getContext().villageService.village(villageId);
     this._filePath = dataPathService.villagePath(accountId, villageId).queue;
   }
 
@@ -645,12 +647,12 @@ export class BuildingQueueService {
   ): boolean => {
     if (
       queuedBuilding.type === BuildingType.Palace &&
-      getAccountContext()
+      AccountContext.getContext()
         .villageService.allVillages()
         .some(
           (otherVillage) =>
             otherVillage.id !== this._village.id &&
-            getAccountContext()
+            AccountContext.getContext()
               .villageService.village(otherVillage.id)
               .buildings.spots.buildings()
               .some((b) => b.type === BuildingType.Palace),

@@ -1,7 +1,9 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
 import type { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import type { Resources } from '../../../_models/misc/resources.js';
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
@@ -12,7 +14,7 @@ export const claimHeroResources = async (
   resources: Resources,
   reason: ClaimHeroResourcesReason,
 ): Promise<void> => {
-  getAccountContext().logsService.logResourceClaim(resources, reason);
+  AccountContext.getContext().logsService.logResourceClaim(resources, reason);
   const page = await getPage();
 
   const claimResource = async (
@@ -24,7 +26,7 @@ export const claimHeroResources = async (
       return;
     }
 
-    if (amount > getAccountContext().hero.resources[resource]) {
+    if (amount > AccountContext.getContext().hero.resources[resource]) {
       throw new Error('Requested more resources than available!');
     }
 

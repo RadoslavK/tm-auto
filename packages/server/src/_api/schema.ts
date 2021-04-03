@@ -18,6 +18,10 @@ const getAutoGenerateOptions = (): Partial<BuilderConfigInput> => {
       typegen: join(__dirname, 'graphqlSchema.d.ts'),
       schema: join(__dirname, 'schema.graphql'),
     },
+    contextType: {
+      module: join(__dirname, 'apiContext.type.ts'),
+      export: 'ApiContext',
+    },
     shouldGenerateArtifacts: true,
   };
 };

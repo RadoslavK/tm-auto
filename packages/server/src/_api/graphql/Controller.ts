@@ -7,18 +7,15 @@ import {
 } from 'nexus';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import {
-  BotState,
-  controllerService,
-} from '../../services/controllerService.js';
+import { BotState } from '../../services/controllerService.js';
 
 export const SignInMutation = mutationField(t => {
   t.nullable.boolean('signIn', {
     args: {
       accountId: idArg(),
     },
-    resolve(_p, args) {
-      controllerService.signIn(args.accountId);
+    resolve(_p, args, ctx) {
+      ctx.controllerService.signIn(args.accountId);
 
       return null;
     },
@@ -27,8 +24,8 @@ export const SignInMutation = mutationField(t => {
 
 export const SignOutMutation = mutationField(t => {
   t.nullable.boolean('signOut', {
-    resolve() {
-      controllerService.signOut();
+    resolve(_p, _args, ctx) {
+      ctx.controllerService.signOut();
 
       return null;
     },
@@ -37,8 +34,8 @@ export const SignOutMutation = mutationField(t => {
 
 export const StartBotMutation = mutationField(t => {
   t.nullable.boolean('startBot', {
-    resolve() {
-      controllerService.start();
+    resolve(_p, _args, ctx) {
+      ctx.controllerService.start();
 
       return null;
     },
@@ -47,8 +44,8 @@ export const StartBotMutation = mutationField(t => {
 
 export const StopBotMutation = mutationField(t => {
   t.nullable.boolean('stopBot', {
-    resolve() {
-      controllerService.stop();
+    resolve(_p, _args, ctx) {
+      ctx.controllerService.stop();
 
       return null;
     },
@@ -57,14 +54,14 @@ export const StopBotMutation = mutationField(t => {
 
 export const IsBotActiveQuery = queryField(t => {
   t.boolean('isBotActive', {
-    resolve: () => controllerService.isActive(),
+    resolve: (_p, _args, ctx) => ctx.controllerService.isActive(),
   });
 });
 
 export const BotStateQuery = queryField(t => {
   t.field('botState', {
     type: BotStateEnum,
-    resolve: () => controllerService.state(),
+    resolve: (_p, _args, ctx) => ctx.controllerService.state(),
   });
 });
 

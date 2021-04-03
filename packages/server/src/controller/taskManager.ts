@@ -1,6 +1,8 @@
 import { getAllEnumValues } from 'shared/utils/enumUtils.js';
 import { TravianPath } from '../_enums/travianPath.js';
-import { getAccountContext } from '../accountContext.js';
+import {
+  AccountContext,
+} from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation.js';
 import { publishPayloadEvent } from '../pubSub.js';
@@ -45,9 +47,9 @@ export class TaskManager {
     this._autoAdventureTask = new BotTaskEngineWithCoolDown(
       autoAdventureTask,
       () =>
-        getAccountContext().nextExecutionService.get(autoAdventureTask.type),
+        AccountContext.getContext().nextExecutionService.get(autoAdventureTask.type),
       (nextExecution) => {
-        getAccountContext().nextExecutionService.set(
+        AccountContext.getContext().nextExecutionService.set(
           autoAdventureTask.type,
           nextExecution,
         );
@@ -56,7 +58,7 @@ export class TaskManager {
   }
 
   public execute = async (): Promise<void> => {
-    if (!getAccountContext().settingsService.account.get().allowTasks) {
+    if (!AccountContext.getContext().settingsService.account.get().allowTasks) {
       return;
     }
 
@@ -84,11 +86,11 @@ export class TaskManager {
   };
 
   private doVillageTasks = async (): Promise<void> => {
-    const villages = getAccountContext().villageService.allVillages();
+    const villages = AccountContext.getContext().villageService.allVillages();
 
     for (const village of shuffle(villages)) {
       if (
-        !getAccountContext().settingsService.village(village.id).general.get()
+        !AccountContext.getContext().settingsService.village(village.id).general.get()
           .allowTasks
       ) {
         continue;

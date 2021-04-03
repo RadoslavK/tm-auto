@@ -1,5 +1,7 @@
 import { HeroState } from '../../_models/hero/hero.js';
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes.js';
 import { BotEvent } from '../../events/botEvent.js';
@@ -83,7 +85,7 @@ const parseHeroVillageId = async (): Promise<string> => {
 };
 
 export const updateHeroInformation = async (): Promise<void> => {
-  const { hero } = getAccountContext();
+  const { hero } = AccountContext.getContext();
 
   hero.health = await parseHealth();
 

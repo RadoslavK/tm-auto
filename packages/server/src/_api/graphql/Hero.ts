@@ -5,7 +5,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import { HeroState } from '../../_models/hero/hero.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { join } from 'path';
@@ -27,9 +26,9 @@ export const HeroInformation = objectType({
     });
     t.nullable.field('village', {
       type: 'Village',
-      resolve: (hero) =>
+      resolve: (hero, _args, ctx) =>
         hero.villageId
-          ? getAccountContext().villageService.village(hero.villageId)
+          ? ctx.villageService.village(hero.villageId)
           : null,
     });
   },
@@ -42,7 +41,7 @@ export const HeroInformation = objectType({
 export const HeroInformationQuery = queryField(t => {
   t.field('heroInformation', {
     type: HeroInformation,
-    resolve: () => getAccountContext().hero,
+    resolve: (_, _args, ctx) => ctx.hero,
   });
 });
 
@@ -50,7 +49,7 @@ export const HeroInformationUpdateSubscription = subscriptionField(t => {
   t.field('heroInformationUpdated', {
     type: HeroInformation,
     ...subscribeToEvent(BotEvent.HeroInformationUpdated, {
-      resolve: () => getAccountContext().hero,
+      resolve: (_, _args, ctx) => ctx.hero,
     }),
   });
 });

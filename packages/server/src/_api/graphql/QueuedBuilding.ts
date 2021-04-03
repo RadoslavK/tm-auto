@@ -13,16 +13,16 @@ import type { BuildingQueue as BuildingQueueModel } from '../../_models/building
 import type { QueuedBuilding as QueuedBuildingModel } from '../../_models/buildings/queue/queuedBuilding.js';
 import { Duration } from '../../_models/duration.js';
 import { Resources } from '../../_models/misc/resources.js';
-import { getAccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import { buildingInfoService } from '../../services/info/buildingInfoService.js';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils.js';
+import type { ApiContext } from '../apiContext.type.js';
 import type { NexusGenObjects } from '../graphqlSchema.js';
 
 const mapBuildingQueue = (
   queue: BuildingQueueModel,
   mbLevels: Record<string, number>,
+  ctx: ApiContext,
 ): NexusGenObjects['BuildingQueue'] => {
   const ranges = queue
     .buildings()
@@ -57,7 +57,7 @@ const mapBuildingQueue = (
       [] as (QueuedBuildingModel & { readonly index: number })[][],
     );
 
-  const { speed } = getAccountContext().gameInfo;
+  const { speed } = ctx.gameInfo;
 
   return ranges.reduce(
     (
@@ -87,7 +87,7 @@ const mapBuildingQueue = (
           const {
             buildingTime,
             cost,
-          } = buildingInfoService.getBuildingLevelInfo(
+          } = ctx.buildingInfoService.getBuildingLevelInfo(
             building.type,
             building.level,
           );
@@ -176,13 +176,13 @@ const mapBuildingQueue = (
   );
 };
 
-const getBuildingQueue = (villageId: string) => {
-  const village = getAccountContext().villageService.village(villageId);
+const getBuildingQueue = (villageId: string, ctx: ApiContext) => {
+  const village = ctx.villageService.village(villageId);
   const { queue } = village.buildings;
-  const queueService = getAccountContext().buildingQueueService.for(villageId);
+  const queueService = ctx.buildingQueueService.for(villageId);
   const mbLevels = queueService.getMainBuildingLevels();
 
-  return mapBuildingQueue(queue, mbLevels);
+  return mapBuildingQueue(queue, mbLevels, ctx);
 };
 
 export const QueuedBuilding = objectType({
@@ -226,7 +226,7 @@ export const BuildingQueueQuery = queryField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args) => getBuildingQueue(args.villageId),
+    resolve: (_, args, ctx) => getBuildingQueue(args.villageId, ctx),
   });
 });
 
@@ -237,8 +237,8 @@ export const CanMoveQueuedBuildingToIndexQuery = queryField(t => {
       queueId: idArg(),
       index: intArg(),
     },
-    resolve: (_, { index, queueId, villageId }) => {
-      const queueService = getAccountContext().buildingQueueService.for(
+    resolve: (_, { index, queueId, villageId }, ctx) => {
+      const queueService = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -255,8 +255,8 @@ export const CanMoveQueuedBuildingsBlockToIndexQuery = queryField(t => {
       bottomBuildingQueueId: idArg(),
       index: intArg(),
     },
-    resolve: (_, args) => {
-      const queueService = getAccountContext().buildingQueueService.for(
+    resolve: (_, args, ctx) => {
+      const queueService = ctx.buildingQueueService.for(
         args.villageId,
       );
 
@@ -308,10 +308,10 @@ export const ClearQueueMutation = mutationField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const { villageId } = args;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -327,10 +327,10 @@ export const DequeueBuildingMutation = mutationField(t => {
     args: {
       input: arg({ type: DequeueBuildingInput }),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const { queueId, villageId } = args.input;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager =ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -348,10 +348,10 @@ export const DequeueBuildingsBlockMutation = mutationField(t => {
       topBuildingQueueId: idArg(),
       bottomBuildingQueueId: idArg(),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const { bottomBuildingQueueId, topBuildingQueueId, villageId } = args;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -370,10 +370,10 @@ export const DequeueBuildingAtFieldMutation = mutationField(t => {
     args: {
       input: arg({ type: DequeueBuildingAtFieldInput }),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const { villageId, ...input } = args.input;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -389,10 +389,10 @@ export const EnqueueBuildingMutation = mutationField(t => {
     args: {
       input: arg({ type: EnqueueBuildingInput }),
     },
-    resolve: async (_, args) => {
+    resolve: async (_, args ,ctx) => {
       const { villageId, ...enqueuedBuilding } = args.input;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -410,8 +410,8 @@ export const MoveQueuedBuildingToIndexMutation = mutationField(t => {
       queueId: idArg(),
       index: intArg(),
     },
-    resolve: (_, { index, queueId, villageId }) => {
-      const queueManager = getAccountContext().buildingQueueService.for(
+    resolve: (_, { index, queueId, villageId }, ctx) => {
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -430,7 +430,7 @@ export const MoveQueuedBuildingsBlockToIndexMutation = mutationField(t => {
       bottomBuildingQueueId: idArg(),
       index: intArg(),
     },
-    resolve: (_, args) => {
+    resolve: (_, args, ctx) => {
       const {
         bottomBuildingQueueId,
         index,
@@ -438,7 +438,7 @@ export const MoveQueuedBuildingsBlockToIndexMutation = mutationField(t => {
         villageId,
       } = args;
 
-      const queueManager = getAccountContext().buildingQueueService.for(
+      const queueManager = ctx.buildingQueueService.for(
         villageId,
       );
 
@@ -459,8 +459,8 @@ export const MoveQueuedBuildingAsHighAsPossibleMutation = mutationField(t => {
       villageId: idArg(),
       queueId: idArg(),
     },
-    resolve: (_, args) => {
-      const queueManager = getAccountContext().buildingQueueService.for(
+    resolve: (_, args, ctx) => {
+      const queueManager = ctx.buildingQueueService.for(
         args.villageId,
       );
 
@@ -478,8 +478,8 @@ export const MoveQueuedBuildingsBlockAsHighAsPossibleMutation = mutationField(t 
       topBuildingQueueId: idArg(),
       bottomBuildingQueueId: idArg(),
     },
-    resolve: (_, args) => {
-      const queueManager = getAccountContext().buildingQueueService.for(
+    resolve: (_, args, ctx) => {
+      const queueManager = ctx.buildingQueueService.for(
         args.villageId,
       );
 
@@ -501,7 +501,7 @@ export const QueueUpdatedSubscription = subscriptionField(t => {
     },
     ...subscribeToEvent(BotEvent.QueuedUpdated, {
       filter: (payload, variables) => payload.villageId === variables.villageId,
-      resolve: (p) => getBuildingQueue(p.villageId),
+      resolve: (p, _args, ctx) => getBuildingQueue(p.villageId, ctx),
     }),
   });
 });

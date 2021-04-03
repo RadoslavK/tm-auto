@@ -1,5 +1,4 @@
 import { mutationField } from 'nexus';
-import { settingsManagementService } from '../../../services/settingsManagementService.js';
 
 export const ExportAccountSettingsMutation = mutationField(t => {
   t.nullable.boolean('exportAccountSettings', {
@@ -7,8 +6,8 @@ export const ExportAccountSettingsMutation = mutationField(t => {
       accountId: 'ID',
       path: 'String',
     },
-    resolve(_, { accountId, path }) {
-      settingsManagementService.exportAccountSettings(accountId, path);
+    resolve(_, { accountId, path }, ctx) {
+      ctx.settingsManagementService.exportAccountSettings(accountId, path);
 
       return null;
     },
@@ -20,8 +19,8 @@ export const ExportGeneralSettingsMutation = mutationField(t => {
     args: {
       path: 'String',
     },
-    resolve(_, { path }) {
-      settingsManagementService.exportGeneralSettings(path);
+    resolve(_, { path }, ctx) {
+      ctx.settingsManagementService.exportGeneralSettings(path);
 
       return null;
     },
@@ -33,8 +32,8 @@ export const ExportAccountsMutation = mutationField(t => {
     args: {
       path: 'String',
     },
-    resolve(_, { path }) {
-      settingsManagementService.exportAccounts(path);
+    resolve(_, { path }, ctx) {
+      ctx.settingsManagementService.exportAccounts(path);
 
       return null;
     },
@@ -47,8 +46,8 @@ export const ImportAccountSettingsMutation = mutationField(t => {
       accountId: 'ID',
       path: 'String',
     },
-    resolve(_, { accountId, path }) {
-      settingsManagementService.importAccountSettings(accountId, path);
+    resolve(_, { accountId, path }, ctx) {
+      ctx.settingsManagementService.importAccountSettings(accountId, path);
 
       return null;
     },
@@ -60,8 +59,8 @@ export const ImportGeneralSettingsMutation = mutationField(t => {
     args: {
       path: 'String',
     },
-    resolve(_, { path }) {
-      settingsManagementService.importGeneralSettings(path);
+    resolve(_, { path }, ctx) {
+      ctx.settingsManagementService.importGeneralSettings(path);
 
       return null;
     },
@@ -73,8 +72,8 @@ export const ImportAccountsMutation = mutationField(t => {
     args: {
       path: 'String',
     },
-    resolve(_, { path }) {
-      settingsManagementService.importAccounts(path);
+    resolve(_, { path }, ctx) {
+      ctx.settingsManagementService.importAccounts(path);
 
       return null;
     },

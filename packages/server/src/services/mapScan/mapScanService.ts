@@ -1,7 +1,9 @@
 import { TravianPath } from '../../_enums/travianPath.js';
 import type { VillageTile } from '../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../_models/map/wheatOasis.js';
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import { createPage } from '../../browser/getPage.js';
 import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn.js';
 import { ensurePage } from '../../controller/actions/ensurePage.js';
@@ -134,7 +136,7 @@ export class MapScanService {
 
     const {
       gameInfo: { mapSize },
-    } = getAccountContext();
+    } = AccountContext.getContext();
 
     const scannedSectorIds = new Set<string>(await this.getScannedSectorIds());
 
@@ -180,7 +182,7 @@ export class MapScanService {
         if (attempt > 3) {
           await page.close();
           this.markStopped();
-          getAccountContext().logsService.logError('Failed to scan the map!');
+          AccountContext.getContext().logsService.logError('Failed to scan the map!');
 
           return;
         }
@@ -193,7 +195,7 @@ export class MapScanService {
             page,
           }));
         } catch (error) {
-          getAccountContext().logsService.logError(`Failed map scan for sector [${sector.x}|${sector.y}], message: ${error.message}`);
+          AccountContext.getContext().logsService.logError(`Failed map scan for sector [${sector.x}|${sector.y}], message: ${error.message}`);
         }
       } while (!oasesTiles || !villageTiles);
 

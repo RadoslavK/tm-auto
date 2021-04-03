@@ -8,9 +8,7 @@ import { TravianPath } from '../_enums/travianPath.js';
 import type { CoolDown } from '../_models/coolDown.js';
 import { Duration } from '../_models/duration.js';
 import {
-  getAccountContext,
-  resetAccountContext,
-  setAccountContext,
+  AccountContext,
 } from '../accountContext.js';
 import { getPage, killBrowser } from '../browser/getPage.js';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings.js';
@@ -43,7 +41,7 @@ export enum BotState {
   Paused = 'Paused'
 }
 
-class ControllerService {
+export class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
   private _isActive: boolean = false;
@@ -70,7 +68,7 @@ class ControllerService {
 
   private handleError = async (error: Error): Promise<HandleErrorResult> => {
     console.error(error.stack);
-    getAccountContext().logsService.logError(error.message);
+    AccountContext.getContext().logsService.logError(error.message);
 
     // Maybe its maintenance
     try {
@@ -98,7 +96,7 @@ class ControllerService {
             ? Math.pow(2, maintenanceCount) * 30
             : (Math.random() * (40 - 30) + 30) * 60;
 
-        getAccountContext().logsService.logText(
+        AccountContext.getContext().logsService.logText(
           `There is a maintenance on the server, waiting ${formatTime(
             Duration.fromSeconds(nextCoolDownSeconds),
           )} minutes...`,
@@ -117,10 +115,10 @@ class ControllerService {
       } while (true);
     } catch (tryMaintenanceError) {
       console.error(tryMaintenanceError.stack);
-      getAccountContext().logsService.logError(
+      AccountContext.getContext().logsService.logError(
         'Tried to wait for maintenance but failed with message...',
       );
-      getAccountContext().logsService.logError(tryMaintenanceError.message);
+      AccountContext.getContext().logsService.logError(tryMaintenanceError.message);
     }
 
     //  Maybe its some forced dialog about server progress
@@ -132,7 +130,7 @@ class ControllerService {
       );
 
       if (continueButton) {
-        getAccountContext().logsService.logText(
+        AccountContext.getContext().logsService.logText(
           'Found a dialog about server progress, continuing...',
         );
 
@@ -145,10 +143,10 @@ class ControllerService {
       }
     } catch (tryContinueError) {
       console.error(tryContinueError.stack);
-      getAccountContext().logsService.logError(
+      AccountContext.getContext().logsService.logError(
         'Tried to continue the server progress dialog but failed with message...',
       );
-      getAccountContext().logsService.logError(tryContinueError.message);
+      AccountContext.getContext().logsService.logError(tryContinueError.message);
     }
 
     const now = new Date();
@@ -187,7 +185,7 @@ class ControllerService {
       });
     } catch (screenshotError) {
       console.error(screenshotError.stack);
-      getAccountContext().logsService.logError(screenshotError.message);
+      AccountContext.getContext().logsService.logError(screenshotError.message);
 
       await fs.promises.writeFile(
         path.join(directory, `${format}-screenshot-error.txt`),
@@ -204,7 +202,7 @@ class ControllerService {
   };
 
   public signIn = async (accountId: string): Promise<void> => {
-    setAccountContext(accountId);
+    AccountContext.setContext(accountId);
     accountService.setCurrentAccountId(accountId);
 
     let allowContinue = true;
@@ -222,10 +220,10 @@ class ControllerService {
       await initGameInfo();
       await updateHeroInformation();
 
-      const allVillages = getAccountContext().villageService.allVillages();
+      const allVillages = AccountContext.getContext().villageService.allVillages();
 
       for (const village of shuffle(allVillages)) {
-        const buildingQueueService = getAccountContext().buildingQueueService.for(
+        const buildingQueueService = AccountContext.getContext().buildingQueueService.for(
           village.id,
         );
         await buildingQueueService.loadQueueAndUpdate();
@@ -247,7 +245,7 @@ class ControllerService {
       return;
     }
 
-    const generalSettings = getAccountContext().settingsService.account.get();
+    const generalSettings = AccountContext.getContext().settingsService.account.get();
 
     if (generalSettings.autoStart) {
       await this.start();
@@ -258,7 +256,7 @@ class ControllerService {
 
   public signOut = async (): Promise<void> => {
     this.setState(BotState.None);
-    resetAccountContext();
+    AccountContext.resetContext();
     accountService.setCurrentAccountId(null);
   };
 
@@ -274,7 +272,7 @@ class ControllerService {
 
     this._refreshRequests.clear();
 
-    if (getAccountContext().nextExecutionService.tasks() > new Date()) {
+    if (AccountContext.getContext().nextExecutionService.tasks() > new Date()) {
       this._timeout = global.setTimeout(async () => {
         await this.execute();
       }, 1000);
@@ -308,12 +306,12 @@ class ControllerService {
 
     const tasksCoolDown =
       coolDown ||
-      getAccountContext().settingsService.account.get().tasksCoolDown;
+      AccountContext.getContext().settingsService.account.get().tasksCoolDown;
     const nextTimeout = tasksCoolDown.getRandomDelay();
 
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
-    getAccountContext().nextExecutionService.setTasks(nextExecution);
+    AccountContext.getContext().nextExecutionService.setTasks(nextExecution);
     this.setActivity(false);
 
     this._timeout = global.setTimeout(async () => {
@@ -343,5 +341,3 @@ class ControllerService {
     await refreshVillage(villageId);
   };
 }
-
-export const controllerService = new ControllerService();

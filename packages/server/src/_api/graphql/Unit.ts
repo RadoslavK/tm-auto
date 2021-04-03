@@ -3,7 +3,6 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { unitInfoService } from '../../services/info/unitInfoService.js';
 
 export const UnitInfo = objectType({
   name: 'UnitInfo',
@@ -18,6 +17,6 @@ export const UnitInfoQuery = queryField(t => {
     args: {
       index: intArg(),
     },
-    resolve: (_, args) => unitInfoService.getUnitInfo(args.index),
+    resolve: (_, args, ctx) => ctx.unitInfoService.getUnitInfo(args.index),
   });
 });

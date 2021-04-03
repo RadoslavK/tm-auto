@@ -13,7 +13,7 @@ type UnitInfo = {
   readonly tribe: Tribe;
 };
 
-class UnitInfoService {
+export class UnitInfoService {
   private unitInfos: Map<number, UnitInfo> | undefined;
 
   public getAllInfos = (): readonly UnitInfo[] => [...this.infos().values()];

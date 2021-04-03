@@ -6,7 +6,6 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { getAccountContext } from '../../../accountContext.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
 
@@ -37,7 +36,7 @@ export const UpdateAccountSettingsInput = inputObjectType({
 export const AccountSettingsQuery = queryField(t => {
   t.field('accountSettings', {
     type: AccountSettings,
-    resolve: () => getAccountContext().settingsService.account.get(),
+    resolve: (_, _args, ctx) => ctx.settingsService.account.get(),
   });
 });
 
@@ -47,16 +46,16 @@ export const UpdateAccountSettingsMutation = mutationField(t => {
     args: {
       settings: arg({ type: UpdateAccountSettingsInput }),
     },
-    resolve: (_, args) =>
-      getAccountContext().settingsService.account.merge(args.settings),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.account.merge(args.settings),
   });
 });
 
 export const ResetAccountSettingsMutation = mutationField(t => {
   t.field('resetAccountSettings', {
     type: AccountSettings,
-    resolve: () =>
-      getAccountContext().settingsService.account.reset(),
+    resolve: (_, _args, ctx) =>
+      ctx.settingsService.account.reset(),
   });
 });
 

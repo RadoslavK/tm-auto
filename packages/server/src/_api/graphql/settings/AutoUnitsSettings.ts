@@ -7,10 +7,8 @@ import {
   subscriptionField,
 } from 'nexus';
 import { mergeDefaults } from 'shared/utils/merge.js';
-import { getAccountContext } from '../../../accountContext.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
-import { unitInfoService } from '../../../services/info/unitInfoService.js';
 
 export const AutoUnitsUnitSettings = objectType({
   name: 'AutoUnitsUnitSettings',
@@ -75,16 +73,13 @@ export const UpdateAutoUnitsSettingsInput = inputObjectType({
   },
 });
 
-const getService = (villageId: string) =>
-  getAccountContext().settingsService.village(villageId).autoUnits;
-
 export const AutoUnitsSettingsQuery = queryField(t => {
   t.field('autoUnitsSettings', {
     type: AutoUnitsSettings,
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).get(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoUnits.get(),
   });
 });
 
@@ -95,8 +90,8 @@ export const UpdateAutoUnitsSettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateAutoUnitsSettingsInput }),
     },
-    resolve: (_, args) =>
-      getService(args.villageId).merge(args.settings),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.village(args.villageId).autoUnits.merge(args.settings),
   });
 });
 
@@ -108,8 +103,8 @@ export const UpdateAutoUnitsBuildingSettingsMutation = mutationField(t => {
       buildingType: 'Int',
       settings: arg({ type: UpdateAutoUnitsBuildingSettingsInput }),
     },
-    resolve: (_, args) => {
-      const service = getService(args.villageId);
+    resolve: (_, args, ctx) => {
+      const service = ctx.settingsService.village(args.villageId).autoUnits;
       const settings = service.get();
       const buildingSettings = settings.forBuilding(args.buildingType);
 
@@ -128,10 +123,10 @@ export const UpdateAutoUnitsUnitSettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateAutoUnitsUnitSettingsInput }),
     },
-    resolve: (_, args) => {
-      const service = getService(args.villageId);
+    resolve: (_, args, ctx) => {
+      const service = ctx.settingsService.village(args.villageId).autoUnits;
       const settings = service.get();
-      const unitInfo = unitInfoService.getUnitInfo(args.settings.index);
+      const unitInfo = ctx.unitInfoService.getUnitInfo(args.settings.index);
       const buildingSettings = settings.forBuilding(unitInfo.buildingType);
       const unitSettings = buildingSettings.units.find(
         (u) => u.index === args.settings.index,
@@ -151,7 +146,7 @@ export const ResetAutoUnitsSettingsMutation = mutationField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).reset(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoUnits.reset(),
   });
 });
 

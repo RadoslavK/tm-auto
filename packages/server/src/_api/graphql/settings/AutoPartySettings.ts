@@ -5,7 +5,6 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { getAccountContext } from '../../../accountContext.js';
 
 export const AutoPartySettings = objectType({
   name: 'AutoPartySettings',
@@ -33,16 +32,13 @@ export const UpdateAutoPartySettingsInput = inputObjectType({
   },
 });
 
-const getService = (villageId: string) =>
-  getAccountContext().settingsService.village(villageId).autoParty;
-
 export const AutoPartySettingsQuery = queryField(t => {
   t.field('autoPartySettings', {
     type: AutoPartySettings,
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).get(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoParty.get(),
   });
 });
 
@@ -53,8 +49,8 @@ export const UpdateAutoPartySettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateAutoPartySettingsInput }),
     },
-    resolve: (_, args) =>
-      getService(args.villageId).merge(args.settings),
+    resolve: (_, args, ctx) =>
+      ctx.settingsService.village(args.villageId).autoParty.merge(args.settings),
   });
 });
 
@@ -64,6 +60,6 @@ export const ResetAutoPartySettingsMutation = mutationField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args) => getService(args.villageId).reset(),
+    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoParty.reset(),
   });
 });

@@ -7,7 +7,6 @@ import {
   subscriptionField,
 } from 'nexus';
 import { generateId } from 'shared/utils/generateId.js';
-import { getAccountContext } from '../../../../accountContext.js';
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';
 
@@ -41,14 +40,11 @@ export const HeroLevelUpSettings = objectType({
   },
 });
 
-const getSettingsService = () =>
-  getAccountContext().settingsService.hero.heroLevelUp;
-
 export const HeroLevelUpSettingsQuery = queryField(t => {
   t.field('heroLevelUpSettings', {
     type: HeroLevelUpSettings,
-    resolve: () => {
-      const res = getSettingsService().get();
+    resolve: (_, _args, ctx) => {
+      const res = ctx.settingsService.hero.heroLevelUp.get();
 
       return {
         levelUpItems: [...res.levelUpItems],
@@ -63,8 +59,8 @@ export const AddHeroLevelUpItemMutation = mutationField(t => {
     args: {
       item: arg({ type: HeroLevelUpItemInput }),
     },
-    resolve: (_, { item }) => {
-      const service = getSettingsService();
+    resolve: (_, { item }, ctx) => {
+      const service = ctx.settingsService.hero.heroLevelUp;
       const settings = service.get();
       const newItem = { ...item, id: generateId() };
 
@@ -84,8 +80,8 @@ export const UpdateHeroLevelUpItemMutation = mutationField(t => {
       id: 'ID',
       item: HeroLevelUpItemInput,
     },
-    resolve: (_, { id, item }) => {
-      const service = getSettingsService();
+    resolve: (_, { id, item }, ctx) => {
+      const service = ctx.settingsService.hero.heroLevelUp;
       const settings = service.get();
       const index = settings.levelUpItems.findIndex(
         (x) => x.id === id,
@@ -115,8 +111,8 @@ export const RemoveHeroLevelUpItemMutation = mutationField(t => {
     args: {
       id: 'ID',
     },
-    resolve: (_, { id }) => {
-      const service = getSettingsService();
+    resolve: (_, { id }, ctx) => {
+      const service = ctx.settingsService.hero.heroLevelUp;
       const settings = service.get();
       const index = settings.levelUpItems.findIndex((x) => x.id === id);
 

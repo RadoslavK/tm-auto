@@ -5,7 +5,9 @@ import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resource
 import { TaskType } from '../../../_models/misc/taskType.js';
 import type { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings.js';
 import type { Village } from '../../../_models/village/village.js';
-import { getAccountContext } from '../../../accountContext.js';
+import {
+  AccountContext,
+} from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { partyInfo } from '../../../constants/partyInfo.js';
 import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
@@ -27,12 +29,12 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
   }
 
   private settings = (): AutoPartySettings =>
-    getAccountContext()
+    AccountContext.getContext()
       .settingsService.village(this._village.id)
       .autoParty.get();
 
   public allowExecution = (): boolean =>
-    getAccountContext().settingsService.account.get().autoParty &&
+    AccountContext.getContext().settingsService.account.get().autoParty &&
     (this.settings().allowSmall || this.settings().allowLarge);
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -54,7 +56,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const { hero } = getAccountContext();
+    const { hero } = AccountContext.getContext();
     const villageRes = this._village.resources.amount;
     const totalRes =
       useHeroResources && hero.villageId === this._village.id
@@ -138,7 +140,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       throw new Error('Did not find hold party button');
     }
 
-    getAccountContext().logsService.logText(
+    AccountContext.getContext().logsService.logText(
       `Throwing ${partyType} parties`,
       true,
     );

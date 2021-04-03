@@ -1,6 +1,8 @@
 import type { ElementHandle } from 'puppeteer';
 
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 
 const getVillageSwitch = async (
@@ -25,7 +27,7 @@ const getVillageSwitch = async (
 export const ensureVillageSelected = async (
   villageId: string,
 ): Promise<void> => {
-  const { currentVillageId } = getAccountContext().villageService;
+  const { currentVillageId } = AccountContext.getContext().villageService;
 
   if (currentVillageId !== villageId) {
     const page = await getPage();
@@ -37,6 +39,6 @@ export const ensureVillageSelected = async (
       page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
-    getAccountContext().villageService.currentVillageId = villageId;
+    AccountContext.getContext().villageService.currentVillageId = villageId;
   }
 };

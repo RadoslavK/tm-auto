@@ -2,7 +2,9 @@ import type { Point } from '../../_models/map/point.js';
 import type { MapSearchVillageTile } from '../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../_models/map/wheatOasis.js';
 import { MapSearchState } from '../mapScan/mapScanService.js';
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { publishPayloadEvent } from '../../pubSub.js';
 import { getTotalAxisLength } from '../mapScan/utils/getTotalAxisLength.js';
@@ -73,7 +75,7 @@ export class MapSearchService {
     origin: Origin,
     cropBonus: number,
   ) => {
-    const { mapScanService } = getAccountContext();
+    const { mapScanService } = AccountContext.getContext();
 
     this._state = MapSearchState.Scanning;
 
@@ -98,7 +100,7 @@ export class MapSearchService {
 
     const {
       gameInfo: { mapSize },
-    } = getAccountContext();
+    } = AccountContext.getContext();
     const totalAxisLength = getTotalAxisLength(mapSize);
 
     let shouldSave: boolean = false;

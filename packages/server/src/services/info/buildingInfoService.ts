@@ -26,7 +26,7 @@ export type BuildingInfo = {
   readonly type: number;
 };
 
-class BuildingInfoService {
+export class BuildingInfoService {
   private buildingInfos: Map<BuildingType, BuildingInfo> | undefined;
 
   public getBuildingInfo = (type: BuildingType): BuildingInfo => {

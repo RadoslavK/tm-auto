@@ -5,7 +5,6 @@ import {
   objectType,
   queryField,
 } from 'nexus';
-import { getGeneralSettingsService } from '../../../services/settings/general.js';
 
 export const GeneralSettings = objectType({
   name: 'GeneralSettings',
@@ -18,7 +17,7 @@ export const GeneralSettings = objectType({
 export const GeneralSettingsQuery = queryField(t => {
   t.field('generalSettings', {
     type: GeneralSettings,
-    resolve: () => getGeneralSettingsService().get(),
+    resolve: (_, _args, ctx) => ctx.generalSettingsService.get(),
   });
 });
 
@@ -36,8 +35,8 @@ export const UpdateGeneralSettingsMutation = mutationField(t => {
     args: {
       settings: arg({ type: UpdateGeneralSettingsInput }),
     },
-    resolve: (_, { settings }) =>
-      getGeneralSettingsService().merge({
+    resolve: (_, { settings }, ctx) =>
+      ctx.generalSettingsService.merge({
         ...settings,
         chromePath: settings.chromePath || undefined,
       }),
@@ -47,6 +46,6 @@ export const UpdateGeneralSettingsMutation = mutationField(t => {
 export const ResetGeneralSettingsMutation = mutationField(t => {
   t.field('resetGeneralSettings', {
     type: GeneralSettings,
-    resolve: () => getGeneralSettingsService().reset(),
+    resolve: (_, _args, ctx) => ctx.generalSettingsService.reset(),
   });
 });

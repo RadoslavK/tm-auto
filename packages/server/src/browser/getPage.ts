@@ -3,8 +3,8 @@ import path from 'path';
 import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
+import { GeneralSettingsService } from '../services/settings/general.js';
 
-import { getGeneralSettingsService } from '../services/settings/general.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
 const stealth = pluginStealth();
@@ -17,10 +17,10 @@ puppeteer.use(stealth);
 
 const getChromeOptions = () => ({
   // bundle chrome or something.. with cookies etc??
-  executablePath: getGeneralSettingsService().get().chromePath,
+  executablePath: GeneralSettingsService.getService().get().chromePath,
   //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
   //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
-  headless: getGeneralSettingsService().get().headlessChrome,
+  headless: GeneralSettingsService.getService().get().headlessChrome,
   slowMo: 25,
   userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
 });

@@ -1,5 +1,7 @@
 import type { Village } from '../../_models/village/village.js';
-import { getAccountContext } from '../../accountContext.js';
+import {
+  AccountContext,
+} from '../../accountContext.js';
 import {
   BotTask,
   BotTaskBase,
@@ -26,12 +28,12 @@ export class VillageBotTasksEngine {
         return new BotTaskEngineWithCoolDown(
           task,
           () =>
-            getAccountContext().nextExecutionService.getForVillage(
+            AccountContext.getContext().nextExecutionService.getForVillage(
               village.id,
               task.type,
             ),
           (nextExecution) => {
-            getAccountContext().nextExecutionService.setForVillage(
+            AccountContext.getContext().nextExecutionService.setForVillage(
               village.id,
               task.type,
               nextExecution,
