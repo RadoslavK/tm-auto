@@ -5,12 +5,16 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type QueuedBuildingComponent_queuedBuilding = {
+    readonly name: string;
     readonly type: number;
     readonly level: number;
     readonly fieldId: number;
     readonly queueId: string;
     readonly buildingTime: {
         readonly " $fragmentRefs": FragmentRefs<"Cost_duration">;
+    };
+    readonly cost: {
+        readonly " $fragmentRefs": FragmentRefs<"Cost_resources">;
     };
     readonly " $refType": "QueuedBuildingComponent_queuedBuilding";
 };
@@ -28,6 +32,13 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "QueuedBuildingComponent_queuedBuilding",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -71,10 +82,26 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Resources",
+      "kind": "LinkedField",
+      "name": "cost",
+      "plural": false,
+      "selections": [
+        {
+          "args": null,
+          "kind": "FragmentSpread",
+          "name": "Cost_resources"
+        }
+      ],
+      "storageKey": null
     }
   ],
   "type": "QueuedBuilding",
   "abstractKey": null
 };
-(node as any).hash = 'b109f2ba5a41b2563e4799cdc065dc23';
+(node as any).hash = '61886591eac1fd5c73eaef74d261fdf1';
 export default node;

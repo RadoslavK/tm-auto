@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 import {
   useFragment,
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -19,7 +18,6 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
-import type { BuildingSpotBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingSpotBuildingInfoQuery.graphql.js';
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
 import type { BuildingSpotSubscription } from '../../../_graphql/__generated__/BuildingSpotSubscription.graphql.js';
@@ -45,6 +43,8 @@ type Props = {
 const buildingSpotBuildingSpotFragment = graphql`
     fragment BuildingSpot_buildingSpot on BuildingSpot {
         id
+        name
+        maxLevel
         type
         fieldId
         level {
@@ -53,15 +53,6 @@ const buildingSpotBuildingSpotFragment = graphql`
             queued
             total
             ...BuildingLevelBox_buildingSpotLevel
-        }
-    }
-`;
-
-const buildingSpotBuildingInfoQuery = graphql`
-    query BuildingSpotBuildingInfoQuery($buildingType: Int!) {
-        buildingInfo(buildingType: $buildingType) {
-            maxLevel
-            name
         }
     }
 `;
@@ -145,13 +136,13 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
 
   const [dequeueAtField] = useMutation<BuildingSpotDequeueBuildingAtFieldMutation>(buildingSpotDequeueBuildingAtFieldMutation);
 
-  const { buildingInfo } = useLazyLoadQuery<BuildingSpotBuildingInfoQuery>(buildingSpotBuildingInfoQuery, { buildingType: buildingSpotFragment.type });
-  const { maxLevel, name } = buildingInfo;
+  const { maxLevel, name } = buildingSpotFragment;
 
   const onEnqueue = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ): void => {
     if (
+      //  TODO handle on server
       buildingSpotFragment.type !== BuildingType.None &&
       buildingSpotFragment.level.total >= maxLevel
     ) {
@@ -162,6 +153,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else {
+        //  TODO have max level flag option rather
         enqueue(event.shiftKey ? maxLevel : undefined);
       }
     } else {

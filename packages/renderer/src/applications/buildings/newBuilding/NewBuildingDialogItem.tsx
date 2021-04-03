@@ -5,13 +5,13 @@ import {
 import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useMutation,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
+import type { NewBuildingDialogItem_availableNewBuildingFragment$key } from '../../../_graphql/__generated__/NewBuildingDialogItem_availableNewBuildingFragment.graphql.js';
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
-import type { NewBuildingDialogItemQuery } from '../../../_graphql/__generated__/NewBuildingDialogItemQuery.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
@@ -37,10 +37,10 @@ const useStyles = makeStyles<unknown, StylesProps>({
 });
 
 type Props = {
+  readonly availableNewBuildingKey: NewBuildingDialogItem_availableNewBuildingFragment$key;
   readonly className?: string;
   readonly fieldId: number;
   readonly onSelect: (targetLevel?: number) => void;
-  readonly type: number;
 };
 
 const newBuildingDialogItemEnqueueBuildingMutation = graphql`
@@ -49,22 +49,22 @@ const newBuildingDialogItemEnqueueBuildingMutation = graphql`
   }
 `;
 
-const newBuildingDialogItemQuery = graphql`
-  query NewBuildingDialogItemQuery($buildingType: Int!) {
-      buildingInfo(buildingType: $buildingType) {
-          maxLevel
-          name
-      }
+const availableNewBuildingFragmentDefinition = graphql`
+  fragment NewBuildingDialogItem_availableNewBuildingFragment on AvailableNewBuilding {
+      type
+      name
+      maxLevel
   }
 `;
 
 export const NewBuildingDialogItem: React.FC<Props> = ({
+  availableNewBuildingKey,
   className,
   fieldId,
   onSelect,
-  type,
 }) => {
-  const { buildingInfo } = useLazyLoadQuery<NewBuildingDialogItemQuery>(newBuildingDialogItemQuery, { buildingType: type });
+  const availableNewBuildingFragment = useFragment(availableNewBuildingFragmentDefinition, availableNewBuildingKey);
+  const { maxLevel, name, type } = availableNewBuildingFragment;
   const tribe = useRecoilValue(tribeState);
   const villageId = useRecoilValue(selectedVillageIdState);
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
@@ -74,8 +74,6 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
   });
 
   const [enqueueBuilding] = useMutation<NewBuildingDialogItemEnqueueBuildingMutation>(newBuildingDialogItemEnqueueBuildingMutation);
-
-  const { maxLevel, name } = buildingInfo;
 
   const enqueue = (targetLevel: number | undefined) => enqueueBuilding({
     variables: {

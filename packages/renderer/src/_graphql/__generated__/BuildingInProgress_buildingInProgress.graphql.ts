@@ -5,6 +5,7 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type BuildingInProgress_buildingInProgress = {
+    readonly name: string;
     readonly fieldId: number;
     readonly finishedAt: {
         readonly totalSeconds: number;
@@ -27,6 +28,13 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "BuildingInProgress_buildingInProgress",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -70,5 +78,5 @@ const node: ReaderFragment = {
   "type": "BuildingInProgress",
   "abstractKey": null
 };
-(node as any).hash = 'a03a1fb86c5efe9c6628bf55bc8d6e8d';
+(node as any).hash = 'f61b224a541a72d31139c3f7128717d8';
 export default node;

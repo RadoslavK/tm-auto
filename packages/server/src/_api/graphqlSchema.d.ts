@@ -4,12 +4,12 @@
  */
 
 
-import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress";
-import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot";
-import { Hero } from "./../_models/hero/hero";
-import { TextLogEntryContent } from "./../_models/logs/content/text";
-import { Resources } from "./../_models/misc/resources";
-import { ApiContext } from "./apiContext.type";
+import { ApiContext } from "./apiContext.type"
+import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
+import { BuildingSpotLevel } from "./../_models/buildings/spots/buildingSpotLevel"
+import { Hero } from "./../_models/hero/hero"
+import { Resources } from "./../_models/misc/resources"
+import { TextLogEntryContent } from "./../_models/logs/content/text"
 
 
 
@@ -260,14 +260,10 @@ export interface NexusGenObjects {
     targetAmount: number; // Int!
     trainForever: boolean; // Boolean!
   }
+  AvailableNewBuilding: { // root type
+    type: number; // Int!
+  }
   BuildingInProgress: BuildingInProgress;
-  BuildingInfo: { // root type
-    maxLevel: number; // Int!
-    name: string; // String!
-  }
-  BuildingLevelInfo: { // root type
-    cost: NexusGenRootTypes['Resources']; // Resources!
-  }
   BuildingQueue: { // root type
     buildingRanges: NexusGenRootTypes['QueuedBuildingRange'][]; // [QueuedBuildingRange!]!
     infrastructureBuildingTime: NexusGenRootTypes['Duration']; // Duration!
@@ -275,13 +271,13 @@ export interface NexusGenObjects {
     totalBuildingTime: NexusGenRootTypes['Duration']; // Duration!
     totalCost: NexusGenRootTypes['Resources']; // Resources!
   }
-  BuildingSpot: BuildingSpot;
-  BuildingSpotLevel: { // root type
-    actual: number; // Int!
-    ongoing?: number | null; // Int
-    queued?: number | null; // Int
-    total: number; // Int!
+  BuildingSpot: { // root type
+    fieldId: number; // Int!
+    id: string; // ID!
+    level: NexusGenRootTypes['BuildingSpotLevel']; // BuildingSpotLevel!
+    type: number; // Int!
   }
+  BuildingSpotLevel: BuildingSpotLevel;
   BuildingSpots: { // root type
     infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
@@ -410,14 +406,13 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['UserAccount'];
 }
 
 export interface NexusGenUnions {
   LogEntryContent: NexusGenRootTypes['AutoBuildLogEntryContent'] | NexusGenRootTypes['AutoUnitsLogEntryContent'] | NexusGenRootTypes['ResourceClaimLogEntryContent'] | NexusGenRootTypes['TextLogEntryContent'];
 }
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenUnions
+export type NexusGenRootTypes = NexusGenObjects & NexusGenUnions
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
@@ -503,18 +498,17 @@ export interface NexusGenFieldTypes {
     targetAmount: number; // Int!
     trainForever: boolean; // Boolean!
   }
+  AvailableNewBuilding: { // field return type
+    maxLevel: number; // Int!
+    name: string; // String!
+    type: number; // Int!
+  }
   BuildingInProgress: { // field return type
     fieldId: number; // Int!
     finishedAt: NexusGenRootTypes['Timestamp']; // Timestamp!
     level: number; // Int!
-    type: number; // Int!
-  }
-  BuildingInfo: { // field return type
-    maxLevel: number; // Int!
     name: string; // String!
-  }
-  BuildingLevelInfo: { // field return type
-    cost: NexusGenRootTypes['Resources']; // Resources!
+    type: number; // Int!
   }
   BuildingQueue: { // field return type
     buildingRanges: NexusGenRootTypes['QueuedBuildingRange'][]; // [QueuedBuildingRange!]!
@@ -527,6 +521,8 @@ export interface NexusGenFieldTypes {
     fieldId: number; // Int!
     id: string; // ID!
     level: NexusGenRootTypes['BuildingSpotLevel']; // BuildingSpotLevel!
+    maxLevel: number; // Int!
+    name: string; // String!
     type: number; // Int!
   }
   BuildingSpotLevel: { // field return type
@@ -659,10 +655,8 @@ export interface NexusGenFieldTypes {
     autoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     autoPartySettings: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
     autoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
-    availableNewBuildingsTypes: number[]; // [Int!]!
+    availableNewBuildings: NexusGenRootTypes['AvailableNewBuilding'][]; // [AvailableNewBuilding!]!
     botState: NexusGenEnums['BotState']; // BotState!
-    buildingInfo: NexusGenRootTypes['BuildingInfo']; // BuildingInfo!
-    buildingLevelInfo: NexusGenRootTypes['BuildingLevelInfo']; // BuildingLevelInfo!
     buildingQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingSpots: NexusGenRootTypes['BuildingSpots']; // BuildingSpots!
     buildingsInProgress: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
@@ -691,8 +685,10 @@ export interface NexusGenFieldTypes {
   }
   QueuedBuilding: { // field return type
     buildingTime: NexusGenRootTypes['Duration']; // Duration!
+    cost: NexusGenRootTypes['Resources']; // Resources!
     fieldId: number; // Int!
     level: number; // Int!
+    name: string; // String!
     queueId: string; // ID!
     queueIndex: number; // Int!
     type: number; // Int!
@@ -703,6 +699,7 @@ export interface NexusGenFieldTypes {
     cost: NexusGenRootTypes['Resources']; // Resources!
     fieldId: number; // Int!
     id: string; // String!
+    name: string; // String!
     type: number; // Int!
   }
   ResourceClaimLogEntryContent: { // field return type
@@ -793,9 +790,6 @@ export interface NexusGenFieldTypes {
     distance: number; // Float!
     type: string; // String!
   }
-  Node: { // field return type
-    id: string; // ID!
-  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -880,18 +874,17 @@ export interface NexusGenFieldTypeNames {
     targetAmount: 'Int'
     trainForever: 'Boolean'
   }
+  AvailableNewBuilding: { // field return type name
+    maxLevel: 'Int'
+    name: 'String'
+    type: 'Int'
+  }
   BuildingInProgress: { // field return type name
     fieldId: 'Int'
     finishedAt: 'Timestamp'
     level: 'Int'
-    type: 'Int'
-  }
-  BuildingInfo: { // field return type name
-    maxLevel: 'Int'
     name: 'String'
-  }
-  BuildingLevelInfo: { // field return type name
-    cost: 'Resources'
+    type: 'Int'
   }
   BuildingQueue: { // field return type name
     buildingRanges: 'QueuedBuildingRange'
@@ -904,6 +897,8 @@ export interface NexusGenFieldTypeNames {
     fieldId: 'Int'
     id: 'ID'
     level: 'BuildingSpotLevel'
+    maxLevel: 'Int'
+    name: 'String'
     type: 'Int'
   }
   BuildingSpotLevel: { // field return type name
@@ -1036,10 +1031,8 @@ export interface NexusGenFieldTypeNames {
     autoMentorSettings: 'AutoMentorSettings'
     autoPartySettings: 'AutoPartySettings'
     autoUnitsSettings: 'AutoUnitsSettings'
-    availableNewBuildingsTypes: 'Int'
+    availableNewBuildings: 'AvailableNewBuilding'
     botState: 'BotState'
-    buildingInfo: 'BuildingInfo'
-    buildingLevelInfo: 'BuildingLevelInfo'
     buildingQueue: 'BuildingQueue'
     buildingSpots: 'BuildingSpots'
     buildingsInProgress: 'BuildingInProgress'
@@ -1068,8 +1061,10 @@ export interface NexusGenFieldTypeNames {
   }
   QueuedBuilding: { // field return type name
     buildingTime: 'Duration'
+    cost: 'Resources'
     fieldId: 'Int'
     level: 'Int'
+    name: 'String'
     queueId: 'ID'
     queueIndex: 'Int'
     type: 'Int'
@@ -1080,6 +1075,7 @@ export interface NexusGenFieldTypeNames {
     cost: 'Resources'
     fieldId: 'Int'
     id: 'String'
+    name: 'String'
     type: 'Int'
   }
   ResourceClaimLogEntryContent: { // field return type name
@@ -1169,9 +1165,6 @@ export interface NexusGenFieldTypeNames {
     cropBonus: 'Int'
     distance: 'Float'
     type: 'String'
-  }
-  Node: { // field return type name
-    id: 'ID'
   }
 }
 
@@ -1345,15 +1338,8 @@ export interface NexusGenArgTypes {
     autoUnitsSettings: { // args
       villageId: string; // ID!
     }
-    availableNewBuildingsTypes: { // args
+    availableNewBuildings: { // args
       input: NexusGenInputs['AvailableNewBuildingsInput']; // AvailableNewBuildingsInput!
-    }
-    buildingInfo: { // args
-      buildingType: number; // Int!
-    }
-    buildingLevelInfo: { // args
-      buildingType: number; // Int!
-      level: number; // Int!
     }
     buildingQueue: { // args
       villageId: string; // ID!
@@ -1430,11 +1416,9 @@ export interface NexusGenArgTypes {
 
 export interface NexusGenAbstractTypeMembers {
   LogEntryContent: "AutoBuildLogEntryContent" | "AutoUnitsLogEntryContent" | "ResourceClaimLogEntryContent" | "TextLogEntryContent"
-  Node: "UserAccount"
 }
 
 export interface NexusGenTypeInterfaces {
-  UserAccount: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -1443,7 +1427,7 @@ export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 
-export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
+export type NexusGenInterfaceNames = never;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -1451,7 +1435,7 @@ export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "LogEntryContent" | "Node";
+export type NexusGenAbstractsUsingStrategyResolveType = "LogEntryContent";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

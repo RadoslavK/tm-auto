@@ -1,14 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import {
-  useFragment,
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingRangeComponent_QueuedBuildingRange$key } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponent_QueuedBuildingRange.graphql.js';
-import type { QueuedBuildingRangeComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingRangeComponentBuildingInfoQuery.graphql.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
@@ -54,6 +50,7 @@ type Props = {
 
 const queuedBuildingRangeComponentQueuedBuildingRangeFragment = graphql`
   fragment QueuedBuildingRangeComponent_QueuedBuildingRange on QueuedBuildingRange {
+      name
       type
       id
       fieldId
@@ -70,21 +67,12 @@ const queuedBuildingRangeComponentQueuedBuildingRangeFragment = graphql`
   }
 `;
 
-const queuedBuildingRangeComponentBuildingInfoQuery = graphql`
-  query QueuedBuildingRangeComponentBuildingInfoQuery($buildingType: Int!) {
-      buildingInfo(buildingType: $buildingType) {
-          name
-      }
-  }
-`;
-
 export const QueuedBuildingRangeComponent: React.FC<Props> = ({
   buildingRange,
   isHighlight,
   onExpand,
 }) => {
   const buildingRangeFragment = useFragment(queuedBuildingRangeComponentQueuedBuildingRangeFragment, buildingRange);
-  const { buildingInfo } = useLazyLoadQuery<QueuedBuildingRangeComponentBuildingInfoQuery>(queuedBuildingRangeComponentBuildingInfoQuery, { buildingType: buildingRangeFragment.type });
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({
     buildingType: buildingRangeFragment.type,
@@ -106,7 +94,7 @@ export const QueuedBuildingRangeComponent: React.FC<Props> = ({
       </div>
       <div className={classes.info}>
         <div>
-          {buildingInfo.name} Levels {buildingRangeFragment.buildings[0].level}-
+          {buildingRangeFragment.name} Levels {buildingRangeFragment.buildings[0].level}-
           {buildingRangeFragment.buildings[buildingRangeFragment.buildings.length - 1].level}
         </div>
         <Cost

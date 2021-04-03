@@ -1,15 +1,11 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import {
-  useFragment,
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
-import type { BuildingInProgressBuildingInfoQuery } from '../../../_graphql/__generated__/BuildingInProgressBuildingInfoQuery.graphql.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import type { Timestamp } from '../../../models/timestamp.js';
@@ -21,20 +17,13 @@ type Props = {
 
 const buildingInProgress_buildingInProgress = graphql`
   fragment BuildingInProgress_buildingInProgress on BuildingInProgress {
+      name
       fieldId
       finishedAt {
           totalSeconds
       }
       level
       type
-  }
-`;
-
-const buildingInProgressBuildingInfoQuery = graphql`
-  query BuildingInProgressBuildingInfoQuery($buildingType: Int!) {
-      buildingInfo(buildingType: $buildingType) {
-          name
-      }
   }
 `;
 
@@ -78,7 +67,6 @@ const useStyles = makeStyles<unknown, StylesType>({
 
 export const BuildingInProgress: React.FC<Props> = ({ building }) => {
   const buildingFragment = useFragment(buildingInProgress_buildingInProgress, building);
-  const { buildingInfo } = useLazyLoadQuery<BuildingInProgressBuildingInfoQuery>(buildingInProgressBuildingInfoQuery, { buildingType: buildingFragment.type });
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ buildingType: buildingFragment.type, tribe });
   const timer = useCountDown(getInitialTimer(buildingFragment.finishedAt));
@@ -91,7 +79,7 @@ export const BuildingInProgress: React.FC<Props> = ({ building }) => {
         <div>[{buildingFragment.fieldId}]</div>
       </div>
       <div className={classes.info}>
-        <div>{buildingInfo.name}</div>
+        <div>{buildingFragment.name}</div>
         <div>
           Level
           {buildingFragment.level}

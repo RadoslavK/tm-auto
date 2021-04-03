@@ -26,7 +26,10 @@ type Props = {
 
 const newBuildingDialogAvailableNewBuildingsTypes = graphql`
   query NewBuildingDialogAvailableNewBuildingsTypesQuery($input: AvailableNewBuildingsInput!) {
-      availableNewBuildingsTypes(input: $input)
+      availableNewBuildings(input: $input) {
+          type
+          ...NewBuildingDialogItem_availableNewBuildingFragment
+      }
   }
 `;
 
@@ -36,7 +39,7 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
 
     const classes = useStyles({});
     const villageId = useRecoilValue(selectedVillageIdState);
-    const { availableNewBuildingsTypes } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(
+    const { availableNewBuildings } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(
       newBuildingDialogAvailableNewBuildingsTypes,
       {
         input: { fieldId, villageId },
@@ -48,13 +51,13 @@ export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
 
     return (
       <div ref={ref} className={classes.root}>
-        {availableNewBuildingsTypes.map((buildingType) => (
+        {availableNewBuildings.map((availableNewBuilding) => (
           <NewBuildingDialogItem
-            key={buildingType}
+            key={availableNewBuilding.type}
             className={classes.building}
             fieldId={fieldId}
             onSelect={onSelect}
-            type={buildingType}
+            availableNewBuildingKey={availableNewBuilding}
           />
         ))}
       </div>

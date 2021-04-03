@@ -55,6 +55,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
   }),
 });
 
+//  TODO compute this on BE and send for BuildingSpot aka get rid of maxLevel from BuildingSpot
 const getLevelState = (level: BuildingLevelBox_buildingSpotLevel, maxLevel: number): BuildingState => {
   const isCompleted = level.actual === maxLevel;
   const isMaxed = level.total === maxLevel;

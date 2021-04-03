@@ -1,5 +1,5 @@
 import graphql from 'babel-plugin-relay/macro';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useDrop } from 'react-dnd';
 import { useMutation } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
@@ -128,37 +128,29 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     <div ref={dropRangeRef}>
       <div ref={dropBuildingRef}>
         {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
-          <Suspense fallback={null}>
-            <DroppedQueuedBuilding
-              index={queueIndexTop}
-              movedBuilding={movedBuilding}
-            />
-          </Suspense>
+          <DroppedQueuedBuilding
+            index={queueIndexTop}
+            movedBuilding={movedBuilding}
+          />
         )}
         {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
-          <Suspense fallback={null}>
-            <DroppedQueuedRange
-              index={indexForRange}
-              movedRange={movedRange}
-            />
-          </Suspense>
+          <DroppedQueuedRange
+            index={indexForRange}
+            movedRange={movedRange}
+          />
         )}
         {children}
         {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
-          <Suspense fallback={null}>
-            <DroppedQueuedBuilding
-              index={queueIndexTop}
-              movedBuilding={movedBuilding}
-            />
-          </Suspense>
+          <DroppedQueuedBuilding
+            index={queueIndexTop}
+            movedBuilding={movedBuilding}
+          />
         )}
         {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
-          <Suspense fallback={null}>
-            <DroppedQueuedRange
-              index={indexForRange}
-              movedRange={movedRange}
-            />
-          </Suspense>
+          <DroppedQueuedRange
+            index={indexForRange}
+            movedRange={movedRange}
+          />
         )}
       </div>
     </div>

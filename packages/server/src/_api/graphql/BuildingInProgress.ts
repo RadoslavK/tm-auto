@@ -23,6 +23,9 @@ export const BuildingInProgress = objectType({
       }),
     });
     t.int('type');
+    t.string('name', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
+    });
     t.int('fieldId');
   },
   sourceType: {

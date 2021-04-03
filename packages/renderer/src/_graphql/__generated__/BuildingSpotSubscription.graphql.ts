@@ -40,6 +40,8 @@ fragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {
 
 fragment BuildingSpot_buildingSpot on BuildingSpot {
   id
+  name
+  maxLevel
   type
   fieldId
   level {
@@ -133,6 +135,20 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "maxLevel",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "type",
             "storageKey": null
           },
@@ -188,12 +204,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4e26c26f83efc677ecf6f51d8afe9a7f",
+    "cacheID": "31f3ef559a86db39674e7295100a6deb",
     "id": null,
     "metadata": {},
     "name": "BuildingSpotSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotSubscription(\n  $villageId: ID!\n  $fieldId: Int!\n) {\n  onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
+    "text": "subscription BuildingSpotSubscription(\n  $villageId: ID!\n  $fieldId: Int!\n) {\n  onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
   }
 };
 })();

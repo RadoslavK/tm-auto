@@ -1,14 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import {
-  useFragment,
-  useLazyLoadQuery,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
-import type { QueuedBuildingComponentBuildingInfoQuery } from '../../../../_graphql/__generated__/QueuedBuildingComponentBuildingInfoQuery.graphql.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
@@ -59,6 +55,7 @@ type Props = {
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
     fragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {
+        name
         type
         level
         fieldId
@@ -66,20 +63,10 @@ const queuedBuildingComponentQueuedBuildingFragment = graphql`
         buildingTime {
             ...Cost_duration
         }
+        cost {
+            ...Cost_resources
+        }
     }
-`;
-
-const queuedBuildingComponentBuildingInfoQuery = graphql`
-  query QueuedBuildingComponentBuildingInfoQuery($buildingType: Int!, $level: Int!) {
-      buildingInfo(buildingType: $buildingType) {
-          name
-      }
-      buildingLevelInfo(buildingType: $buildingType, level: $level) {
-          cost {
-              ...Cost_resources
-          }
-      }
-  }
 `;
 
 export const QueuedBuildingComponent: React.FC<Props> = ({
@@ -88,10 +75,6 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
   onCollapse,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
-  const { buildingLevelInfo, buildingInfo } = useLazyLoadQuery<QueuedBuildingComponentBuildingInfoQuery>(queuedBuildingComponentBuildingInfoQuery, {
-    buildingType: queuedBuildingFragment.type,
-    level: queuedBuildingFragment.level,
-  });
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({
     buildingType: queuedBuildingFragment.type,
@@ -113,11 +96,11 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
       </div>
       <div className={classes.info}>
         <div>
-          {buildingInfo.name} Level {queuedBuildingFragment.level}
+          {queuedBuildingFragment.name} Level {queuedBuildingFragment.level}
         </div>
         <Cost
           buildTime={queuedBuildingFragment.buildingTime}
-          resources={buildingLevelInfo.cost}
+          resources={queuedBuildingFragment.cost}
         />
       </div>
     </div>

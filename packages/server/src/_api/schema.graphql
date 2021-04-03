@@ -107,6 +107,12 @@ type AutoUnitsUnitSettings {
   trainForever: Boolean!
 }
 
+type AvailableNewBuilding {
+  maxLevel: Int!
+  name: String!
+  type: Int!
+}
+
 input AvailableNewBuildingsInput {
   fieldId: Int!
   villageId: ID!
@@ -124,16 +130,8 @@ type BuildingInProgress {
   fieldId: Int!
   finishedAt: Timestamp!
   level: Int!
-  type: Int!
-}
-
-type BuildingInfo {
-  maxLevel: Int!
   name: String!
-}
-
-type BuildingLevelInfo {
-  cost: Resources!
+  type: Int!
 }
 
 type BuildingQueue {
@@ -148,6 +146,8 @@ type BuildingSpot {
   fieldId: Int!
   id: ID!
   level: BuildingSpotLevel!
+  maxLevel: Int!
+  name: String!
   type: Int!
 }
 
@@ -366,10 +366,6 @@ type Mutation {
   updateHeroLevelUpItem(id: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
 }
 
-interface Node {
-  id: ID!
-}
-
 type Query {
   account(id: ID!): UserAccount!
   accountSettings: AccountSettings!
@@ -380,10 +376,8 @@ type Query {
   autoMentorSettings: AutoMentorSettings!
   autoPartySettings(villageId: ID!): AutoPartySettings!
   autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
-  availableNewBuildingsTypes(input: AvailableNewBuildingsInput!): [Int!]!
+  availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
   botState: BotState!
-  buildingInfo(buildingType: Int!): BuildingInfo!
-  buildingLevelInfo(buildingType: Int!, level: Int!): BuildingLevelInfo!
   buildingQueue(villageId: ID!): BuildingQueue!
   buildingSpots(villageId: ID!): BuildingSpots!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
@@ -413,8 +407,10 @@ type Query {
 
 type QueuedBuilding {
   buildingTime: Duration!
+  cost: Resources!
   fieldId: Int!
   level: Int!
+  name: String!
   queueId: ID!
   queueIndex: Int!
   type: Int!
@@ -426,6 +422,7 @@ type QueuedBuildingRange {
   cost: Resources!
   fieldId: Int!
   id: String!
+  name: String!
   type: Int!
 }
 
@@ -612,7 +609,7 @@ input UpdateGeneralVillageSettingsInput {
   allowTasks: Boolean!
 }
 
-type UserAccount implements Node {
+type UserAccount {
   id: ID!
   password: String!
   server: String!

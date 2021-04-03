@@ -14,28 +14,32 @@ import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { getDirname } from '../../utils/getDirname.js';
 
-export const BuildingInfo = objectType({
-  name: 'BuildingInfo',
-  definition: t => {
-    t.int('maxLevel');
-    t.string('name');
-  },
-});
-
-export const BuildingLevelInfo = objectType({
-  name: 'BuildingLevelInfo',
-  definition: t => {
-    t.field('cost', { type: 'Resources' });
-  },
-});
-
 export const BuildingSpotLevel = objectType({
   name: 'BuildingSpotLevel',
   definition: t => {
     t.int('actual');
     t.nullable.int('ongoing');
     t.nullable.int('queued');
-    t.int('total');
+    t.int('total', {
+      resolve: (level) => level.getTotal(),
+    });
+  },
+  sourceType: {
+    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpotLevel.ts'),
+    export: 'BuildingSpotLevel',
+  },
+});
+
+export const AvailableNewBuilding = objectType({
+  name: 'AvailableNewBuilding',
+  definition: t => {
+    t.int('type');
+    t.string('name', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
+    });
+    t.int('maxLevel', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).maxLevel,
+    });
   },
 });
 
@@ -46,16 +50,14 @@ export const BuildingSpot = objectType({
     t.int('fieldId');
     t.field('level', {
       type: BuildingSpotLevel,
-      resolve: (spot) => ({
-        ...spot.level,
-        total: spot.level.getTotal(),
-      }),
     });
     t.int('type');
-  },
-  sourceType: {
-    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpot.ts'),
-    export: 'BuildingSpot',
+    t.string('name', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
+    });
+    t.int('maxLevel', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).maxLevel,
+    });
   },
 });
 
@@ -94,7 +96,8 @@ export const AvailableNewBuildingsInput = inputObjectType({
 });
 
 export const AvailableNewBuildingsTypesQuery = queryField(t => {
-  t.list.int('availableNewBuildingsTypes', {
+  t.list.field('availableNewBuildings', {
+    type: AvailableNewBuilding,
     args: {
       input: arg({ type: AvailableNewBuildingsInput }),
     },
@@ -102,31 +105,8 @@ export const AvailableNewBuildingsTypesQuery = queryField(t => {
       const { fieldId, villageId } = args.input;
       const village = ctx.villageService.village(villageId);
 
-      return [...ctx.availableBuildingTypesService.availableBuildingTypes(village, fieldId)];
+      return [...ctx.availableBuildingTypesService.availableBuildingTypes(village, fieldId).map(type => ({ type }))];
     },
-  });
-});
-
-export const BuildingInfoQuery = queryField(t => {
-  t.field('buildingInfo', {
-    type: BuildingInfo,
-    args: {
-      buildingType: intArg(),
-    },
-    resolve: (_, args, ctx) =>
-      ctx.buildingInfoService.getBuildingInfo(args.buildingType),
-  });
-});
-
-export const BuildingLevelInfoQuery = queryField(t => {
-  t.field('buildingLevelInfo', {
-    type: BuildingLevelInfo,
-    args: {
-      buildingType: intArg(),
-      level: intArg(),
-    },
-    resolve: (_, { buildingType, level }, ctx) =>
-      ctx.buildingInfoService.getBuildingLevelInfo(buildingType, level),
   });
 });
 

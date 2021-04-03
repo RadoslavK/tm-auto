@@ -192,6 +192,13 @@ export const QueuedBuilding = objectType({
     t.field('buildingTime', { type: 'Duration' });
     t.int('level');
     t.int('type');
+    t.string('name', {
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
+    });
+    t.field('cost', {
+      type: 'Resources',
+      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingLevelInfo(building.type, building.level).cost,
+    });
     t.id('queueId');
     t.int('queueIndex');
     t.int('fieldId');
@@ -204,6 +211,9 @@ export const QueuedBuildingRange = objectType({
     t.string('id');
     t.list.field('buildings', { type: QueuedBuilding });
     t.int('type');
+    t.string('name', {
+      resolve: (range, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(range.type).name,
+    });
     t.int('fieldId');
     t.field('buildingTime', { type: 'Duration' });
     t.field('cost', { type: 'Resources' });
