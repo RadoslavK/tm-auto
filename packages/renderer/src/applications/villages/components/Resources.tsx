@@ -99,7 +99,6 @@ export const Resources: React.FC<Props> = ({ resources }) => {
       <Resource
         amount={totalAmount}
         capacity={totalCapacity}
-        capacityFormatter={capacityFormatter}
         resourceName="total"
       />
       <Resource amount={amount.freeCrop} resourceName="freeCrop" />
