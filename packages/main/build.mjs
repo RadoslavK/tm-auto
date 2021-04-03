@@ -1,18 +1,18 @@
 import { build } from 'esbuild';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = process.argv[2] !== 'production';
 
 //  Electron does not support ESM yet // https://github.com/electron/electron/issues/21457
 /** @type(import("esbuild").BuildOptions) */
 const options = {
   platform: 'node',
   target: 'node14.16',
-  minify: !isDevelopment,
+  // minify: !isDevelopment,
   define: {
-    NODE_ENV: process.env.NODE_ENV,
+    'process.env.NODE_ENV': `"${process.argv[2]}"`,
   },
   logLevel: 'warning',
-  outdir: 'dist',
+  outdir: isDevelopment ? 'dist' : 'dist-prod',
   format: 'cjs',
   outExtension: {
     '.js': '.cjs',

@@ -2,6 +2,9 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   ignorePatterns: [
     'node_modules',
+    'build',
+    'dist',
+    'dist-prod',
     '*.json',
     '*.graphql',
     '*.json',

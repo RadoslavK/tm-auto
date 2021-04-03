@@ -6,6 +6,7 @@
 # produced build
 build
 dist
+dist-prod
 
 yarn-error.log
 node_modules

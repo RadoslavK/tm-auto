@@ -102,7 +102,18 @@ const createClientWindow = async (socketName: string): Promise<void> => {
       enableRemoteModule: true,
     },
   });
-  await clientWin2.loadURL('http://localhost:8080/graphiql');
+
+  if (isDevelopment) {
+    await clientWin2.loadURL('http://localhost:8080/graphiql');
+  } else {
+    await clientWin2.loadURL(
+      url.format({
+        pathname: path.join(__dirname, '..', 'renderer', 'graphiql.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
+  }
 };
 
 const createBackgroundProcess = (socketName: string): void => {

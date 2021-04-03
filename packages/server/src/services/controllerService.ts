@@ -52,7 +52,7 @@ export class ControllerService {
 
   public state = (): BotState => this._botState;
 
-  private setState = async (state: BotState): Promise<void> => {
+  private setState = (state: BotState): void => {
     this._botState = state;
 
     publishPayloadEvent(BotEvent.BotRunningChanged, { state });

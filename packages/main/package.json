@@ -6,9 +6,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "node build.mjs",
+    "build-prod": "node build.mjs production",
+    "build-dev": "node build.mjs development",
     "start": "electron dist/index.cjs",
-    "start-r": "yarn build&& yarn start",
+    "start-r": "yarn build-dev&& yarn start",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*"
   },

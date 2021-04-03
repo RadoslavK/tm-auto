@@ -1,5 +1,14 @@
-## New features
+## Existing features improvements
 
+- AutoUnits
+  - min troop count to build at the same time. E.g. build at least 5 units or none.
+- AutoBuild
+  - Use video feature to speed up building construction
+- Building Queue
+  - Block of queued buildings
+    -finish Move to the top for it / move as high as possible
+  
+## New features
 - Store context like village ids, speed, tribe
     - so it can be parsed only once
     - and can remove old villages on login and faster render UI etc
@@ -10,19 +19,10 @@
   - So the bot does not need to follow the queue.
     - Settings like prefer cheapest buildings or balance resources.
   - Needs to check requirements if its not first in the row.
-- Milder events/UI updates
-  - Resources, even after each claimed
-  - Building spots etc
-- AutoUnits
-  - min troop count to build at the same time. E.g. build at least 5 units or none.
 - Second village ref builder
 - Use gold for some tasks. settlers or residence when chasing 2nd village
 - scheduling task??? -> settle village etc
 - If not enough resources to build units/buildings/parties.. set waiter. they might interact between each other but we have priorities :P
-- Use video feature to speed up building construction
-- Building Queue
-  - Block of queued buildings
-    -finish Move to the top for it / move as high as possible
 - Show what task is the bot actually performing
 - Reset everything to default
 - Allow creating own defaults
@@ -33,7 +33,6 @@
   - Have a toggle for this
   - Double queue: allow only delete because its just a view
 - Reload logs from previous run... settings keep, a time range
-- Add relevant tooltips in UI
 - If the next building in queue is not possible to build in the moment (lack res). Tooltip how much res needed and when enough res will be in the village.
 - For village capacity show similar to cranny. Maybe find a better solution to show such information cause it would be cluttered af
 - Alarms/Notifications
@@ -90,12 +89,16 @@
 
 - Store logs to file
 
+## UX
+- Add relevant tooltips in UI
+
 ## QoL
 
-- Store map search result and filter in GraphQL local cache.
 - Use some big toggle instead of Checkboxes for allow
 - Show the Multi-level enqueue dialog close to the cursor/clicked building - React-Tether?
 - Option to clear server data
+- Milder events/UI updates
+  - Resources etc, even after each claimed
 
 ## Code Quality
 
@@ -106,6 +109,7 @@
 
 ## Performance
 
+- Store map search result and filter in GraphQL local cache.
 - First load takes a long time as it needs to scan all villages
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
