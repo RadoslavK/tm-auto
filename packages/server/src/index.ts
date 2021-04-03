@@ -2,7 +2,6 @@
 import makePromisesSafe from 'make-promises-safe';
 makePromisesSafe.logError = console.error;
 import { schema } from './_api/schema.js';
-
 import { createIpcExecutor } from './_api/utils/createIpcExecutor.js';
 
 const execute = async () => {

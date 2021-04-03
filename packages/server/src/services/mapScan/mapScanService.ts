@@ -1,9 +1,7 @@
 import { TravianPath } from '../../_enums/travianPath.js';
 import type { VillageTile } from '../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../_models/map/wheatOasis.js';
-import {
-  AccountContext,
-} from '../../accountContext.js';
+import { AccountContext } from '../../accountContext.js';
 import { createPage } from '../../browser/getPage.js';
 import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn.js';
 import { ensurePage } from '../../controller/actions/ensurePage.js';
@@ -145,12 +143,12 @@ export class MapScanService {
 
     const relevantSectorPoints = params
       ? filterSectorsInRadius({
-          sectors: allSectors,
-          sectorSize,
-          mapSize,
-          radius: params.radius,
-          origin: { x: params.x, y: params.y },
-        })
+        sectors: allSectors,
+        sectorSize,
+        mapSize,
+        radius: params.radius,
+        origin: { x: params.x, y: params.y },
+      })
       : allSectors;
 
     const sectorsToScan = relevantSectorPoints.filter(

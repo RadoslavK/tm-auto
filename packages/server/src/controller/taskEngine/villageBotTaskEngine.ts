@@ -1,7 +1,5 @@
 import type { Village } from '../../_models/village/village.js';
-import {
-  AccountContext,
-} from '../../accountContext.js';
+import { AccountContext } from '../../accountContext.js';
 import {
   BotTask,
   BotTaskBase,

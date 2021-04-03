@@ -1,9 +1,7 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
 import type { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import type { Resources } from '../../../_models/misc/resources.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';

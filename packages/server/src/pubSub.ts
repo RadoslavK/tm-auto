@@ -30,8 +30,7 @@ type EventPayload<TEvent> = TEvent extends keyof BotEventPayloads
   ? BotEventPayloads[TEvent]
   : undefined;
 
-class PubSubAsyncIterator<TEvent extends BotEvent>
-  implements AsyncIterator<EventPayload<TEvent>> {
+class PubSubAsyncIterator<TEvent extends BotEvent> implements AsyncIterator<EventPayload<TEvent>> {
   private pullQueue: ((value: IteratorResult<EventPayload<TEvent>>) => void)[];
 
   private pushQueue: EventPayload<TEvent>[];
@@ -145,12 +144,7 @@ type Subscribe<TEvent, TArgs> = (
   info: GraphQLResolveInfo,
 ) => AsyncIterator<TEvent>;
 
-export const subscribeToEvent = <
-  TEvent extends BotEvent,
-  TArgs,
-  TContext,
-  TResult,
->(
+export const subscribeToEvent = <TEvent extends BotEvent, TArgs, TContext, TResult>(
   event: TEvent,
   options: Options<TEvent, TArgs, TContext, TResult>,
 ) => {

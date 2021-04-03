@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { UnitsQueue } from './unitsQueue.js';
 
 export class Units {

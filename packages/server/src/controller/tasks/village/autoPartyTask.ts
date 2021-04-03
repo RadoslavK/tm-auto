@@ -1,13 +1,12 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { getBuildingSpotPath } from '../../../_enums/travianPath.js';
 import { CoolDown } from '../../../_models/coolDown.js';
 import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import { TaskType } from '../../../_models/misc/taskType.js';
 import type { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings.js';
 import type { Village } from '../../../_models/village/village.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { partyInfo } from '../../../constants/partyInfo.js';
 import { getPartyDuration } from '../../../parsers/getPartyDuration.js';

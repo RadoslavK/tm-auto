@@ -1,10 +1,11 @@
 import {
-  idArg,
   enumType,
+  idArg,
   mutationField,
-  subscriptionField,
   queryField,
+  subscriptionField,
 } from 'nexus';
+
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { BotState } from '../../services/controllerService.js';

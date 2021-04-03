@@ -1,16 +1,15 @@
 import {
-  objectType,
   arg,
   idArg,
   inputObjectType,
-  queryField,
   mutationField,
+  objectType,
+  queryField,
   subscriptionField,
 } from 'nexus';
+
 import { BotEvent } from '../../events/botEvent.js';
-import {
-  subscribeToEvent,
-} from '../../pubSub.js';
+import { subscribeToEvent } from '../../pubSub.js';
 
 export const UserAccount = objectType({
   name: 'UserAccount',
@@ -38,7 +37,7 @@ export const AccountQuery = queryField(t => {
       id: idArg(),
     },
     resolve: (_p, args, ctx) => ctx.accountService.getAccount(args.id),
-  })
+  });
 });
 
 export const AccountsQuery = queryField(t => {
@@ -121,6 +120,6 @@ export const LastSignedAccountIdUpdatedSubscription = subscriptionField(t => {
       {
         resolve: (p) => p.lastSignedAccountId,
       },
-    )
+    ),
   });
 });

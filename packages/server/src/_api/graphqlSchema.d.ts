@@ -4,12 +4,12 @@
  */
 
 
-import { ApiContext } from "./apiContext.type"
-import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
-import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
-import { Hero } from "./../_models/hero/hero"
-import { Resources } from "./../_models/misc/resources"
-import { TextLogEntryContent } from "./../_models/logs/content/text"
+import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress";
+import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot";
+import { Hero } from "./../_models/hero/hero";
+import { TextLogEntryContent } from "./../_models/logs/content/text";
+import { Resources } from "./../_models/misc/resources";
+import { ApiContext } from "./apiContext.type";
 
 
 

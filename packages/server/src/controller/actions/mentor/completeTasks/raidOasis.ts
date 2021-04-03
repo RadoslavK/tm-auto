@@ -1,8 +1,7 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { TravianPath } from '../../../../_enums/travianPath.js';
-import {
-  AccountContext,
-} from '../../../../accountContext.js';
+import { AccountContext } from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { replaceInputText } from '../../../../utils/browser/replaceInputText.js';
 import { sendAjaxRequest } from '../../../../utils/sendAjaxRequest.js';

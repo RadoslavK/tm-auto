@@ -1,4 +1,7 @@
-import type { ElementHandle, Page } from 'puppeteer';
+import type {
+  ElementHandle,
+  Page, 
+} from 'puppeteer';
 
 // TODO take selector and retrieve input here?
 export const replaceInputText = async (

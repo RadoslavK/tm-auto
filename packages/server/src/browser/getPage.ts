@@ -1,10 +1,12 @@
 import path from 'path';
-
-import type { Browser, Page } from 'puppeteer';
+import type {
+  Browser,
+  Page, 
+} from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
-import { GeneralSettingsService } from '../services/settings/general.js';
 
+import { GeneralSettingsService } from '../services/settings/general.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
 const stealth = pluginStealth();

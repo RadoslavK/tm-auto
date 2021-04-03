@@ -1,10 +1,9 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { Tribe } from '../_models/enums/tribe.js';
 import type { Village } from '../_models/village/village.js';
 import { VillageCrannyCapacity as VillageCrannyCapacityModel } from '../_models/village/villageCrannyCapacity.js';
-import {
-  AccountContext,
-} from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 
 const capacities: Record<number, number> = {
   1: 200,

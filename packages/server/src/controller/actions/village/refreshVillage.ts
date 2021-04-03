@@ -1,6 +1,4 @@
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
 import { updateBuildings } from '../buildings/updateBuildings.js';

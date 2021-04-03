@@ -1,8 +1,7 @@
 import { getAllEnumValues } from 'shared/utils/enumUtils.js';
+
 import { TravianPath } from '../_enums/travianPath.js';
-import {
-  AccountContext,
-} from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation.js';
 import { publishPayloadEvent } from '../pubSub.js';

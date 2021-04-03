@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-
 import { TimeoutError } from 'puppeteer-core/lib/Errors';
 import { formatTime } from 'shared/utils/formatTime.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
 import type { CoolDown } from '../_models/coolDown.js';
 import { Duration } from '../_models/duration.js';
+import { AccountContext } from '../accountContext.js';
 import {
-  AccountContext,
-} from '../accountContext.js';
-import { getPage, killBrowser } from '../browser/getPage.js';
+  getPage,
+  killBrowser, 
+} from '../browser/getPage.js';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings.js';
 import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff.js';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';

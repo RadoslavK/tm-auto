@@ -1,5 +1,6 @@
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { completeTaskIds } from '../../constants/completeTaskIds.js';
 
 type CompleteTasksSettings = {

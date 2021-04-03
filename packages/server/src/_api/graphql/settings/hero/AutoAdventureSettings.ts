@@ -7,6 +7,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+
 import { AdventureCriterias } from '../../../../_models/settings/tasks/autoAdventureSettings.js';
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';

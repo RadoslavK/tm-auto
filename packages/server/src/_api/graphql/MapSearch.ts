@@ -7,9 +7,10 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { MapSearchState } from '../../services/mapScan/mapScanService.js';
+
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
+import { MapSearchState } from '../../services/mapScan/mapScanService.js';
 import { relevantVillageTileTypes } from '../../services/mapScan/utils/scanSector.js';
 
 export const SearchMapMutation = mutationField(t => {

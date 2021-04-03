@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import type { CoolDown } from '../../../_models/coolDown.js';
 import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import { Resources } from '../../../_models/misc/resources.js';
@@ -14,8 +15,8 @@ import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import {
-  TabInformation,
   ensureBuildingSpotPage,
+  TabInformation,
 } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateUnitsInformation } from '../../actions/updateUnitsInformation.js';

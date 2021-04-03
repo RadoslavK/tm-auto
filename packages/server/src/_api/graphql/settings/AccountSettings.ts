@@ -6,6 +6,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
 

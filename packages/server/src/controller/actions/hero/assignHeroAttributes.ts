@@ -1,7 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp.js';

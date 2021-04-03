@@ -1,11 +1,10 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { CapitalCondition } from '../_models/buildings/buildingConditions.js';
 import { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
 import type { Village } from '../_models/village/village.js';
-import {
-  AccountContext,
-} from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 import { accountService } from './accountService.js';
 import { dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';

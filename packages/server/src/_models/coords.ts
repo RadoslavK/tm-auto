@@ -1,6 +1,6 @@
-import { mergeDefaults } from 'shared/utils/merge.js';
-import type { PartialFields } from 'shared/types/fields.type.js';
 import type { Coords as CoordsModel } from 'shared/types/coords.js';
+import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
 
 export class Coords implements CoordsModel {
   public readonly x: number = 0;

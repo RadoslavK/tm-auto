@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { Duration } from '../_models/duration.js';
 
 const roundToNearest10 = (seconds: number): number =>

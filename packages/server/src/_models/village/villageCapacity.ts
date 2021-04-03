@@ -1,5 +1,5 @@
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
 
 export class VillageCapacity {
   public readonly granary: number = 0;

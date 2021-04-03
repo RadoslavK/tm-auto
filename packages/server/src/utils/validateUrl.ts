@@ -14,9 +14,9 @@ export const validateUrl = async (
   const pageUrl = page.url().replace(regExp, '');
   const isValid = exact
     ? acceptedUrls.some(
-        (acceptedUrl) =>
-          pageUrl === acceptedUrl || pageUrl.startsWith(`${acceptedUrl}?`),
-      )
+      (acceptedUrl) =>
+        pageUrl === acceptedUrl || pageUrl.startsWith(`${acceptedUrl}?`),
+    )
     : acceptedUrls.some((acceptedUrl) => pageUrl.startsWith(acceptedUrl));
 
   if (!isValid) {

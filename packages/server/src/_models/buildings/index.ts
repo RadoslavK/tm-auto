@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { fieldIds } from '../../constants/fieldIds.js';
 import { getMaximum } from '../../utils/getWithMaximum.js';
 import type { ActualBuilding } from './actual/actualBuilding.js';

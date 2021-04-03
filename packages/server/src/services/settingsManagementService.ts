@@ -1,7 +1,6 @@
 import fs from 'fs';
-import path from 'path';
-
 import JSZip from 'jszip';
+import path from 'path';
 
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import { AccountSettings } from '../_models/settings/accountSettings.js';
@@ -16,14 +15,18 @@ import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
-import { AccountsData, accountService } from './accountService.js';
+import {
+  AccountsData,
+  accountService, 
+} from './accountService.js';
 import { BuildingQueueService } from './buildingQueueService.js';
-import { DataPathService, dataPathService } from './dataPathService.js';
+import {
+  DataPathService,
+  dataPathService, 
+} from './dataPathService.js';
 import { fileService } from './fileService.js';
 import { SettingsService } from './settings';
-import {
-  GeneralSettingsService,
-} from './settings/general.js';
+import { GeneralSettingsService } from './settings/general.js';
 
 const updateSettings = async <TData = object>(
   zip: JSZip,
@@ -124,12 +127,12 @@ export class SettingsManagementService {
 
         const buildings = accContext
           ? accContext.villageService
-              .village(villageId)
-              .buildings.queue.buildings()
+            .village(villageId)
+            .buildings.queue.buildings()
           : fileService.load<QueuedBuilding[]>(
-              dataPathService.villagePath(accountId, villageId).queue,
-              [],
-            );
+            dataPathService.villagePath(accountId, villageId).queue,
+            [],
+          );
 
         zip.file(villageQueuePath, JSON.stringify(buildings));
 
@@ -209,13 +212,13 @@ export class SettingsManagementService {
 
         villageIds = villagesFolder
           ? // Cannot read folders from zip so need to extract from absolute path
-            Object.values(villagesFolder.files).reduce((ids, x) => {
-              const suffix = x.name.slice(villagesPath.length);
-              const match = new RegExp(/\\(\d+)/).exec(suffix);
-              const id = match && match[1];
+          Object.values(villagesFolder.files).reduce((ids, x) => {
+            const suffix = x.name.slice(villagesPath.length);
+            const match = new RegExp(/\\(\d+)/).exec(suffix);
+            const id = match && match[1];
 
-              return id && !ids.includes(id) ? [...ids, id] : ids;
-            }, [] as string[])
+            return id && !ids.includes(id) ? [...ids, id] : ids;
+          }, [] as string[])
           : [];
       }
 

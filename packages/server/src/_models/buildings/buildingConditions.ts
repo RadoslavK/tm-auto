@@ -1,4 +1,5 @@
 import type { BuildingType } from 'shared/enums/BuildingType.js';
+
 import type { Tribe } from '../enums/tribe.js';
 
 export enum CapitalCondition {

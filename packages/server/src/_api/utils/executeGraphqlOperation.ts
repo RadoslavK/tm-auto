@@ -1,18 +1,23 @@
 import {
+  DocumentNode,
+  execute,
   ExecutionArgs,
+  ExecutionResult,
   FragmentDefinitionNode,
   GraphQLSchema,
   OperationDefinitionNode,
-  execute,
   subscribe,
-  DocumentNode,
-  ExecutionResult,
 } from 'graphql';
-import { createAsyncIterator, forAwaitEach, isAsyncIterable } from 'iterall';
+import {
+  createAsyncIterator,
+  forAwaitEach,
+  isAsyncIterable, 
+} from 'iterall';
 import type {
   Observable,
   Unsubscribable,
 } from 'shared/types/observable.js';
+
 import type { ApiContext } from '../apiContext.type.js';
 
 type Definition = OperationDefinitionNode | FragmentDefinitionNode;

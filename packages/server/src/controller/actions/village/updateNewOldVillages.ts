@@ -1,6 +1,4 @@
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId.js';
 import { parseVillages } from '../../../parsers/villages/parseVillages.js';

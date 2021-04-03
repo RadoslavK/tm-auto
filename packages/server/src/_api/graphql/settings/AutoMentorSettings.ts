@@ -6,6 +6,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+
 import type { AutoMentorSettings } from '../../../_models/settings/autoMentorSettings.js';
 import { completeTaskIds } from '../../../constants/completeTaskIds.js';
 import { BotEvent } from '../../../events/botEvent.js';
@@ -57,7 +58,7 @@ const mapResult = (result: AutoMentorSettings) => {
       allowedTaskIds: [...result.completeTasks.allowedTaskIds],
     },
   };
-}
+};
 
 export const AutoMentorSettingsQuery = queryField(t => {
   t.field('autoMentorSettings', {

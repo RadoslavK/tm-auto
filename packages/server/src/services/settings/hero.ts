@@ -5,8 +5,7 @@ import { dataPathService } from '../dataPathService.js';
 import type { ComplexSettingsServiceType } from './_types.js';
 import { InternalSettingsService } from './internalSettingsService.js';
 
-export class HeroSettingsService
-  implements ComplexSettingsServiceType<HeroSettings> {
+export class HeroSettingsService implements ComplexSettingsServiceType<HeroSettings> {
   public autoAdventure: InternalSettingsService<AutoAdventureSettings>;
   public heroLevelUp: InternalSettingsService<HeroLevelUpSettings>;
 

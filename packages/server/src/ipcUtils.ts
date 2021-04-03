@@ -1,12 +1,10 @@
 import type { Socket } from 'net';
-
 import ipc from 'node-ipc';
 import {
   createServerBroadcastMessage,
   createServerErrorMessage,
   createServerReplyMessage,
 } from 'shared/ipc/createServerMessage.js';
-
 import type { ClientMessage } from 'shared/types/clientMessage.js';
 
 export type IpcMessageHandler<TPayload = unknown, TResult = void> = (

@@ -1,4 +1,8 @@
-import { contextBridge, ipcRenderer, remote } from 'electron';
+import {
+  contextBridge,
+  ipcRenderer,
+  remote, 
+} from 'electron';
 import type { Socket } from 'net';
 import { IPC } from 'node-ipc';
 import type { Api } from 'shared/types/api.type.js';
@@ -28,7 +32,7 @@ const api: Api = {
     },
 
     sendMessage: (id: string, message: any) => {
-      const client = ipc.of[id] as Socket
+      const client = ipc.of[id] as Socket;
 
       client.emit('message', message);
     },

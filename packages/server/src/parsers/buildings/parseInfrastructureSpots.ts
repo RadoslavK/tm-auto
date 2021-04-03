@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { TravianPath } from '../../_enums/travianPath.js';
 import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding.js';
 import { Tribe } from '../../_models/enums/tribe.js';
@@ -74,9 +75,9 @@ export const parseInfrastructureSpots = async (): Promise<
           type === BuildingType.None
             ? 0
             : +(await node.$eval(
-                '.labelLayer',
-                (levelNode) => (levelNode as HTMLElement).innerText,
-              ));
+              '.labelLayer',
+              (levelNode) => (levelNode as HTMLElement).innerText,
+            ));
 
         if (fieldId === fieldIds.RallyPoint) {
           type = BuildingType.RallyPoint;

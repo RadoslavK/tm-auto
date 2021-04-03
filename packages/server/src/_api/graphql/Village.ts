@@ -5,6 +5,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 
@@ -53,7 +54,7 @@ export const ActiveVillageIdQuery = queryField(t => {
   t.id('activeVillageId', {
     resolve: (_, _args, ctx) => ctx.villageService.currentVillageId,
   });
-})
+});
 
 export const VillageQuery = queryField(t => {
   t.nullable.field('village', {
@@ -100,8 +101,8 @@ export const CrannyCapacitySubscription = subscriptionField(t => {
 
         return ctx.crannyInfoService.getCapacity(village);
       },
-    })
-  })
+    }),
+  });
 });
 
 export const RefreshVillageMutation = mutationField(t => {
@@ -127,7 +128,7 @@ export const VillageUpdatedSubscription = subscriptionField(t => {
       filter: (p, args) => p.village.id === args.villageId,
       resolve: (p) => p.village,
     }),
-  })
+  });
 });
 
 export const VillagesUpdatedSubscription = subscriptionField(t => {

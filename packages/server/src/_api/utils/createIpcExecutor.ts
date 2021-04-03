@@ -2,18 +2,18 @@ import {
   GraphQLSchema,
   parse as parseQuery,
 } from 'graphql';
-
 import type { GraphqlHandlerPayload } from 'shared/types/graphql.js';
 import {
-  GraphqlHandlerMessage,
-  IpcHandler,
   createGraphqlHandlerCompleteMessage,
   createGraphqlHandlerDataMessage,
   createGraphqlHandlerErrorMessage,
+  GraphqlHandlerMessage,
+  IpcHandler,
 } from 'shared/utils/graphqlHandlerMessages.js';
+
 import {
-  IpcMessageHandler,
   broadcastMessage,
+  IpcMessageHandler,
   startIpcServer,
 } from '../../ipcUtils.js';
 import { createApiContextProxy } from '../createApiContextProxy.js';

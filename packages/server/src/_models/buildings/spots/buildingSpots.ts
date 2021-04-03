@@ -1,5 +1,6 @@
 import type { BuildingType } from 'shared/enums/BuildingType.js';
 import { generateId } from 'shared/utils/generateId.js';
+
 import { BuildingSpot } from './buildingSpot.js';
 
 export class BuildingSpots {

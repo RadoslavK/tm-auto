@@ -1,6 +1,6 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
 
 export class ActualBuilding {
   public fieldId: number = 0;

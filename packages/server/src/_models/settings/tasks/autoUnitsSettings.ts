@@ -1,6 +1,7 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { AccountContext } from '../../../accountContext.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
 import { CoolDown } from '../../coolDown.js';

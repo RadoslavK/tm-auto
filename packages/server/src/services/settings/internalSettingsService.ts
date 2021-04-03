@@ -2,8 +2,9 @@ import debouncePkg from 'debounce';
 //  TODO: debounce is CommonJS.. some automatic resolution like SnowPack namedExports
 const { debounce } = debouncePkg;
 
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { fileService } from '../fileService.js';
 
 export class InternalSettingsService<TSettings extends object> {

@@ -1,7 +1,5 @@
 import { Tribe } from '../../../_models/enums/tribe.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { parseGameToken } from '../../../parsers/gameInfo/parseGameToken.js';
 import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize.js';
 import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed.js';

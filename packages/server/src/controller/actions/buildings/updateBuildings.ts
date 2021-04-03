@@ -1,7 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { parseBuildingsInProgress } from '../../../parsers/buildings/parseBuildingsInProgress.js';
 import { parseFieldSpots } from '../../../parsers/buildings/parseFieldSpots.js';
 import { parseInfrastructureSpots } from '../../../parsers/buildings/parseInfrastructureSpots.js';

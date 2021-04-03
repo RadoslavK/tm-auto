@@ -1,6 +1,7 @@
 import { makeSchema } from 'nexus';
 import type { BuilderConfigInput } from 'nexus/dist/builder.js';
 import { join } from 'path';
+
 import { getDirname } from '../utils/getDirname.js';
 import * as types from './graphql/index.js';
 

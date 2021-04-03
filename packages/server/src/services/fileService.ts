@@ -1,7 +1,7 @@
 import fs, { MakeDirectoryOptions } from 'fs';
 import path, { dirname } from 'path';
-
 import type { PartialFields } from 'shared/types/fields.type.js';
+
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
 class FileService {

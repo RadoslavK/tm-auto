@@ -1,6 +1,4 @@
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 
 export const collectTaskRewards = async (): Promise<void> => {

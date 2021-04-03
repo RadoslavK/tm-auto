@@ -1,6 +1,7 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { BuildingSpotLevel } from './buildingSpotLevel.js';
 
 export class BuildingSpot {

@@ -7,6 +7,7 @@ import {
   subscriptionField,
 } from 'nexus';
 import { generateId } from 'shared/utils/generateId.js';
+
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';
 
@@ -15,7 +16,7 @@ export const HeroLevelUpItem = objectType({
   definition: t => {
     t.id('id');
     t.string('name');
-    t.int('offensiveStrength')
+    t.int('offensiveStrength');
     t.int('offBonus');
     t.int('defBonus');
     t.int('resources');

@@ -9,6 +9,7 @@ import {
 } from 'nexus';
 import { join } from 'path';
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { getDirname } from '../../utils/getDirname.js';
@@ -165,6 +166,6 @@ export const BuildingSpotSubscription = subscriptionField(t => {
         payload.villageId === variables.villageId
         && payload.buildingSpot.fieldId === variables.fieldId,
       resolve: ({ buildingSpot }) => buildingSpot,
-    })
-  })
+    }),
+  });
 });

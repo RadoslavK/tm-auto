@@ -1,4 +1,5 @@
 import { generateId } from 'shared/utils/generateId.js';
+
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import { AutoBuildLogEntryContent } from '../_models/logs/content/autoBuild.js';
 import { AutoUnitsLogEntryContent } from '../_models/logs/content/autoUnits.js';
@@ -10,12 +11,13 @@ import {
   TextLogEntryContent,
   TextLogEntryType,
 } from '../_models/logs/content/text.js';
-import type { LogEntry, LogEntryContent } from '../_models/logs/logEntry.js';
+import type {
+  LogEntry,
+  LogEntryContent, 
+} from '../_models/logs/logEntry.js';
 import type { Resources } from '../_models/misc/resources.js';
 import { Timestamp } from '../_models/misc/timestamp.js';
-import {
-  AccountContext,
-} from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 import { buildingInfoService } from './info/buildingInfoService.js';

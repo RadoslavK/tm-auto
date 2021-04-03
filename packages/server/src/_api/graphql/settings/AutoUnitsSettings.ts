@@ -7,6 +7,7 @@ import {
   subscriptionField,
 } from 'nexus';
 import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
 
@@ -27,7 +28,7 @@ export const UpdateAutoUnitsUnitSettingsInput = inputObjectType({
     t.boolean('autoBuild');
     t.boolean('trainForever');
     t.int('targetAmount');
-  }
+  },
 });
 
 export const AutoUnitsBuildingSettings = objectType({

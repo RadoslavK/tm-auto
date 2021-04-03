@@ -1,9 +1,10 @@
-import buildingInfos from '../../building-infos.json';
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import type { BuildingCategory } from '../../_enums/buildingCategory.js';
 import type { BuildingConditions } from '../../_models/buildings/buildingConditions.js';
 import { Duration } from '../../_models/duration.js';
 import { Resources } from '../../_models/misc/resources.js';
+import buildingInfos from '../../building-infos.json';
 
 export type BuildingLevelInfo = {
   readonly buildingTime: Duration;

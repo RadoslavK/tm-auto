@@ -1,7 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';

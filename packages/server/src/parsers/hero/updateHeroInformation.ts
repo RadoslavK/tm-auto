@@ -1,7 +1,5 @@
 import { HeroState } from '../../_models/hero/hero.js';
-import {
-  AccountContext,
-} from '../../accountContext.js';
+import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes.js';
 import { BotEvent } from '../../events/botEvent.js';

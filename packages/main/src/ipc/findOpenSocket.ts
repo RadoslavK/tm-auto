@@ -1,5 +1,4 @@
 import { IPC } from 'node-ipc';
-
 import { generateId } from 'shared/utils/generateId.js';
 
 const isSocketTaken = (name: string): Promise<boolean> =>

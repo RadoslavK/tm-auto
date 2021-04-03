@@ -1,9 +1,10 @@
 import {
-  objectType,
-  inputObjectType,
   enumType,
+  inputObjectType,
+  objectType,
 } from 'nexus';
 import { join } from 'path';
+
 import { Tribe } from '../../_models/enums/tribe.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import { getDirname } from '../../utils/getDirname.js';

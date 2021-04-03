@@ -25,5 +25,10 @@
     "build": "concurrently \"yarn build-mai\" \"yarn build-renderer\" \"yarn build-server\"",
     "start-r": "set NODE_ENV=development&& webpack serve --config webpack.renderer.config.js",
     "relay": "relay-compiler"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint-plugin-modules-newline": "^0.0.6",
+    "eslint-plugin-simple-import-sort": "^7.0.0"
   }
 }

@@ -1,12 +1,11 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType.js';
 import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding.js';
 import { Tribe } from '../../../../_models/enums/tribe.js';
 import type { AutoStorageSettings } from '../../../../_models/settings/tasks/autoBuildSettings/autoStorageSettings.js';
 import type { Village } from '../../../../_models/village/village.js';
-import {
-  AccountContext,
-} from '../../../../accountContext.js';
+import { AccountContext } from '../../../../accountContext.js';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
 import {
   getWithMinimum,

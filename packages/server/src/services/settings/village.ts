@@ -7,8 +7,7 @@ import { dataPathService } from '../dataPathService.js';
 import type { ComplexSettingsServiceType } from './_types.js';
 import { InternalSettingsService } from './internalSettingsService.js';
 
-export class VillageSettingsService
-  implements ComplexSettingsServiceType<VillageSettings> {
+export class VillageSettingsService implements ComplexSettingsServiceType<VillageSettings> {
   public autoBuild: InternalSettingsService<VillageSettings['autoBuild']>;
 
   public autoParty: InternalSettingsService<VillageSettings['autoParty']>;

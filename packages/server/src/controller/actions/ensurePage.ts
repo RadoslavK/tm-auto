@@ -1,8 +1,17 @@
-import type { ElementHandle, Page } from 'puppeteer';
+import type {
+  ElementHandle,
+  Page, 
+} from 'puppeteer';
 
-import { TravianPath, getBuildingSpotPath } from '../../_enums/travianPath.js';
+import {
+  getBuildingSpotPath,
+  TravianPath, 
+} from '../../_enums/travianPath.js';
 import { getPage } from '../../browser/getPage.js';
-import { isInfrastructure, isResourceField } from '../../utils/buildingUtils.js';
+import {
+  isInfrastructure,
+  isResourceField, 
+} from '../../utils/buildingUtils.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
 const navigateByLink = async (

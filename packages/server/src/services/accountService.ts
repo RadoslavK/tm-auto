@@ -1,5 +1,6 @@
-import { mergeDefaults } from 'shared/utils/merge.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';
 

@@ -6,6 +6,7 @@ import {
   unionType,
 } from 'nexus';
 import { join } from 'path';
+
 import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild.js';
 import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits.js';
 import {
@@ -92,20 +93,20 @@ export const LogEntryContent = unionType({
     );
   },
   resolveType: (content) => {
-      if (content instanceof TextLogEntryContent) {
-        return 'TextLogEntryContent';
-      }
-      if (content instanceof AutoBuildLogEntryContent) {
-        return 'AutoBuildLogEntryContent';
-      }
-      if (content instanceof AutoUnitsLogEntryContent) {
-        return 'AutoUnitsLogEntryContent';
-      }
-      if (content instanceof ResourceClaimLogEntryContent) {
-        return 'ResourceClaimLogEntryContent';
-      }
-      return null;
-    },
+    if (content instanceof TextLogEntryContent) {
+      return 'TextLogEntryContent';
+    }
+    if (content instanceof AutoBuildLogEntryContent) {
+      return 'AutoBuildLogEntryContent';
+    }
+    if (content instanceof AutoUnitsLogEntryContent) {
+      return 'AutoUnitsLogEntryContent';
+    }
+    if (content instanceof ResourceClaimLogEntryContent) {
+      return 'ResourceClaimLogEntryContent';
+    }
+    return null;
+  },
 });
 
 export const LogEntry = objectType({

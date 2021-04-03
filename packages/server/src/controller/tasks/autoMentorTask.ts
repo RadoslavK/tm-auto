@@ -1,12 +1,10 @@
-import { collectTaskRewards } from '../actions/mentor/collectTaskRewards.js';
 import { TaskType } from '../../_models/misc/taskType.js';
 import type { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
-import {
-  AccountContext,
-} from '../../accountContext.js';
+import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import type { completeTaskIds } from '../../constants/completeTaskIds.js';
 import { acceptTaskReward } from '../actions/mentor/acceptTaskReward.js';
+import { collectTaskRewards } from '../actions/mentor/collectTaskRewards.js';
 import { changeVillageName } from '../actions/mentor/completeTasks/changeVillageName.js';
 import { createMarketOffer } from '../actions/mentor/completeTasks/createMarketOffer.js';
 import { openCulturePointsTab } from '../actions/mentor/completeTasks/openCulturePointsTab.js';

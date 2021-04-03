@@ -1,9 +1,18 @@
-import { ChildProcess, ForkOptions, fork } from 'child_process';
+import {
+  ChildProcess,
+  fork,
+  ForkOptions, 
+} from 'child_process';
+import type { BrowserWindow as BrowserWindowType } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  session, 
+} from 'electron';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import type { BrowserWindow as BrowserWindowType } from 'electron';
-import { BrowserWindow, app, ipcMain, session } from 'electron';
 
 import { findOpenSocket } from './ipc/findOpenSocket.js';
 

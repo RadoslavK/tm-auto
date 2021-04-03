@@ -1,4 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+
 import { BuildingCategory } from '../../../../_enums/buildingCategory.js';
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType.js';
 import type { Buildings } from '../../../../_models/buildings';
@@ -9,13 +10,9 @@ import { Tribe } from '../../../../_models/enums/tribe.js';
 import { ClaimHeroResourcesReason } from '../../../../_models/logs/content/resourceClaim.js';
 import { Resources } from '../../../../_models/misc/resources.js';
 import { TaskType } from '../../../../_models/misc/taskType.js';
-import type {
-  AutoBuildSettings,
-} from '../../../../_models/settings/tasks/autoBuildSettings';
+import type { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
 import type { Village } from '../../../../_models/village/village.js';
-import {
-  AccountContext,
-} from '../../../../accountContext.js';
+import { AccountContext } from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { fieldIds } from '../../../../constants/fieldIds.js';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress.js';

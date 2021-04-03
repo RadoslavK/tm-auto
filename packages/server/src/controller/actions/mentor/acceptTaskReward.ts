@@ -1,7 +1,5 @@
 import type { MentorTask } from '../../../_models/mentor/mentorTask.js';
-import {
-  AccountContext,
-} from '../../../accountContext.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 
 export const acceptTaskReward = async (task: MentorTask): Promise<void> => {

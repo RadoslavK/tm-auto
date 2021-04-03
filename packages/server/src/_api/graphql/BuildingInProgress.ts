@@ -5,6 +5,7 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
+
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { getDirname } from '../../utils/getDirname.js';

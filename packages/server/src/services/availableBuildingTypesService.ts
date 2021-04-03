@@ -1,14 +1,13 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { getAllEnumValues } from 'shared/utils/enumUtils.js';
+
 import {
   BuildingConditions,
   CapitalCondition,
 } from '../_models/buildings/buildingConditions.js';
 import { Tribe } from '../_models/enums/tribe.js';
 import type { Village } from '../_models/village/village.js';
-import {
-  AccountContext,
-} from '../accountContext.js';
+import { AccountContext } from '../accountContext.js';
 import { fieldIds } from '../constants/fieldIds.js';
 import { buildingInfoService } from './info/buildingInfoService.js';
 

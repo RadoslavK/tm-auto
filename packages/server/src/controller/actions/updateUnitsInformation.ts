@@ -2,9 +2,7 @@ import type { ElementHandle } from 'puppeteer';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import { Coords } from '../../_models/coords.js';
-import {
-  AccountContext,
-} from '../../accountContext.js';
+import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { parseNumber } from '../../utils/numberUtils.js';
 import { ensureBuildingSpotPage } from './ensurePage.js';
