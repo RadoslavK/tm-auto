@@ -6,8 +6,10 @@
 
 import { ApiContext } from "./apiContext.type"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
+import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { BuildingSpotLevel } from "./../_models/buildings/spots/buildingSpotLevel"
 import { Hero } from "./../_models/hero/hero"
+import { QueuedBuilding } from "./../_models/buildings/queue/queuedBuilding"
 import { Resources } from "./../_models/misc/resources"
 import { TextLogEntryContent } from "./../_models/logs/content/text"
 
@@ -26,9 +28,6 @@ export interface NexusGenInputs {
   }
   AvailableNewBuildingsInput: { // input type
     fieldId: number; // Int!
-    villageId: string; // ID!
-  }
-  ClearQueueInput: { // input type
     villageId: string; // ID!
   }
   CoolDownInput: { // input type
@@ -257,13 +256,7 @@ export interface NexusGenObjects {
     type: number; // Int!
   }
   BuildingInProgress: BuildingInProgress;
-  BuildingQueue: { // root type
-    buildingRanges: NexusGenRootTypes['QueuedBuildingRange'][]; // [QueuedBuildingRange!]!
-    infrastructureBuildingTime: NexusGenRootTypes['Duration']; // Duration!
-    resourcesBuildingTime: NexusGenRootTypes['Duration']; // Duration!
-    totalBuildingTime: NexusGenRootTypes['Duration']; // Duration!
-    totalCost: NexusGenRootTypes['Resources']; // Resources!
-  }
+  BuildingQueue: BuildingQueue;
   BuildingSpot: { // root type
     fieldId: number; // Int!
     id: string; // ID!
@@ -293,6 +286,11 @@ export interface NexusGenObjects {
     minutes: number; // Int!
     seconds: number; // Int!
   }
+  EnqueueBuildingPayload: { // root type
+    addedNew: boolean; // Boolean!
+    building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
+    queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
+  }
   GameInfo: { // root type
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
@@ -321,24 +319,14 @@ export interface NexusGenObjects {
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village?: NexusGenRootTypes['Village'] | null; // Village
   }
+  ModificationPayload: { // root type
+    queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
+    removedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
+    updatedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
+  }
   Mutation: {};
   Query: {};
-  QueuedBuilding: { // root type
-    buildingTime: NexusGenRootTypes['Duration']; // Duration!
-    fieldId: number; // Int!
-    level: number; // Int!
-    queueId: string; // ID!
-    queueIndex: number; // Int!
-    type: number; // Int!
-  }
-  QueuedBuildingRange: { // root type
-    buildingTime: NexusGenRootTypes['Duration']; // Duration!
-    buildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
-    cost: NexusGenRootTypes['Resources']; // Resources!
-    fieldId: number; // Int!
-    id: string; // String!
-    type: number; // Int!
-  }
+  QueuedBuilding: QueuedBuilding;
   ResourceClaimLogEntryContent: { // root type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
     resources: NexusGenRootTypes['Resources']; // Resources!
@@ -499,7 +487,7 @@ export interface NexusGenFieldTypes {
     type: number; // Int!
   }
   BuildingQueue: { // field return type
-    buildingRanges: NexusGenRootTypes['QueuedBuildingRange'][]; // [QueuedBuildingRange!]!
+    buildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
     infrastructureBuildingTime: NexusGenRootTypes['Duration']; // Duration!
     resourcesBuildingTime: NexusGenRootTypes['Duration']; // Duration!
     totalBuildingTime: NexusGenRootTypes['Duration']; // Duration!
@@ -541,6 +529,11 @@ export interface NexusGenFieldTypes {
     minutes: number; // Int!
     seconds: number; // Int!
   }
+  EnqueueBuildingPayload: { // field return type
+    addedNew: boolean; // Boolean!
+    building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
+    queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
+  }
   GameInfo: { // field return type
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
@@ -573,25 +566,27 @@ export interface NexusGenFieldTypes {
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village: NexusGenRootTypes['Village'] | null; // Village
   }
+  ModificationPayload: { // field return type
+    queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
+    removedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
+    updatedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
+  }
   Mutation: { // field return type
     addHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
-    clearQueue: boolean | null; // Boolean
+    clearQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     createAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
     deleteAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
-    dequeueBuilding: boolean | null; // Boolean
-    dequeueBuildingAtField: boolean | null; // Boolean
-    dequeueBuildingsBlock: boolean | null; // Boolean
-    enqueueBuilding: boolean | null; // Boolean
+    dequeueBuilding: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
+    dequeueBuildingAtField: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
+    enqueueBuilding: NexusGenRootTypes['EnqueueBuildingPayload'] | null; // EnqueueBuildingPayload
     exportAccountSettings: boolean | null; // Boolean
     exportAccounts: boolean | null; // Boolean
     exportGeneralSettings: boolean | null; // Boolean
     importAccountSettings: boolean | null; // Boolean
     importAccounts: boolean | null; // Boolean
     importGeneralSettings: boolean | null; // Boolean
-    moveQueuedBuildingAsHighAsPossible: boolean | null; // Boolean
-    moveQueuedBuildingToIndex: boolean | null; // Boolean
-    moveQueuedBuildingsBlockAsHighAsPossible: boolean | null; // Boolean
-    moveQueuedBuildingsBlockToIndex: boolean | null; // Boolean
+    moveQueuedBuildingAsHighAsPossible: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
+    moveQueuedBuildingToIndex: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     refreshVillage: boolean | null; // Boolean
     removeHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
     resetAccountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
@@ -643,8 +638,7 @@ export interface NexusGenFieldTypes {
     buildingQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingSpots: NexusGenRootTypes['BuildingSpots']; // BuildingSpots!
     buildingsInProgress: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
-    canMoveQueuedBuildingToIndex: boolean; // Boolean!
-    canMoveQueuedBuildingsBlockToIndex: boolean; // Boolean!
+    canMoveQueuedBuilding: boolean; // Boolean!
     crannyCapacity: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
     currentAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
     gameInfo: NexusGenRootTypes['GameInfo']; // GameInfo!
@@ -670,20 +664,12 @@ export interface NexusGenFieldTypes {
     buildingTime: NexusGenRootTypes['Duration']; // Duration!
     cost: NexusGenRootTypes['Resources']; // Resources!
     fieldId: number; // Int!
-    level: number; // Int!
+    id: string; // ID!
     name: string; // String!
-    queueId: string; // ID!
-    queueIndex: number; // Int!
+    startingLevel: number; // Int!
+    targetLevel: number; // Int!
     type: number; // Int!
-  }
-  QueuedBuildingRange: { // field return type
-    buildingTime: NexusGenRootTypes['Duration']; // Duration!
-    buildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
-    cost: NexusGenRootTypes['Resources']; // Resources!
-    fieldId: number; // Int!
-    id: string; // String!
-    name: string; // String!
-    type: number; // Int!
+    villageId: string; // ID!
   }
   ResourceClaimLogEntryContent: { // field return type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
@@ -712,6 +698,7 @@ export interface NexusGenFieldTypes {
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     botActivityChanged: boolean; // Boolean!
     botStateChanged: NexusGenEnums['BotState']; // BotState!
+    buildingQueueCorrected: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     buildingsInProgressUpdated: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
     heroInformationUpdated: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettingsChanged: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
@@ -725,7 +712,7 @@ export interface NexusGenFieldTypes {
     nextVillageTaskExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
     onBuildingSpotUpdated: NexusGenRootTypes['BuildingSpot']; // BuildingSpot!
     onCrannyCapacityUpdated: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
-    queueUpdated: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
+    queuedBuildingUpdated: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     villageUpdated: NexusGenRootTypes['Village']; // Village!
     villagesUpdated: NexusGenRootTypes['Village'][]; // [Village!]!
   }
@@ -869,7 +856,7 @@ export interface NexusGenFieldTypeNames {
     type: 'Int'
   }
   BuildingQueue: { // field return type name
-    buildingRanges: 'QueuedBuildingRange'
+    buildings: 'QueuedBuilding'
     infrastructureBuildingTime: 'Duration'
     resourcesBuildingTime: 'Duration'
     totalBuildingTime: 'Duration'
@@ -911,6 +898,11 @@ export interface NexusGenFieldTypeNames {
     minutes: 'Int'
     seconds: 'Int'
   }
+  EnqueueBuildingPayload: { // field return type name
+    addedNew: 'Boolean'
+    building: 'QueuedBuilding'
+    queue: 'BuildingQueue'
+  }
   GameInfo: { // field return type name
     tribe: 'Tribe'
   }
@@ -943,25 +935,27 @@ export interface NexusGenFieldTypeNames {
     timestamp: 'Timestamp'
     village: 'Village'
   }
+  ModificationPayload: { // field return type name
+    queue: 'BuildingQueue'
+    removedBuildings: 'QueuedBuilding'
+    updatedBuildings: 'QueuedBuilding'
+  }
   Mutation: { // field return type name
     addHeroLevelUpItem: 'HeroLevelUpItem'
-    clearQueue: 'Boolean'
+    clearQueue: 'BuildingQueue'
     createAccount: 'UserAccount'
     deleteAccount: 'UserAccount'
-    dequeueBuilding: 'Boolean'
-    dequeueBuildingAtField: 'Boolean'
-    dequeueBuildingsBlock: 'Boolean'
-    enqueueBuilding: 'Boolean'
+    dequeueBuilding: 'ModificationPayload'
+    dequeueBuildingAtField: 'ModificationPayload'
+    enqueueBuilding: 'EnqueueBuildingPayload'
     exportAccountSettings: 'Boolean'
     exportAccounts: 'Boolean'
     exportGeneralSettings: 'Boolean'
     importAccountSettings: 'Boolean'
     importAccounts: 'Boolean'
     importGeneralSettings: 'Boolean'
-    moveQueuedBuildingAsHighAsPossible: 'Boolean'
-    moveQueuedBuildingToIndex: 'Boolean'
-    moveQueuedBuildingsBlockAsHighAsPossible: 'Boolean'
-    moveQueuedBuildingsBlockToIndex: 'Boolean'
+    moveQueuedBuildingAsHighAsPossible: 'ModificationPayload'
+    moveQueuedBuildingToIndex: 'ModificationPayload'
     refreshVillage: 'Boolean'
     removeHeroLevelUpItem: 'HeroLevelUpItem'
     resetAccountSettings: 'AccountSettings'
@@ -1013,8 +1007,7 @@ export interface NexusGenFieldTypeNames {
     buildingQueue: 'BuildingQueue'
     buildingSpots: 'BuildingSpots'
     buildingsInProgress: 'BuildingInProgress'
-    canMoveQueuedBuildingToIndex: 'Boolean'
-    canMoveQueuedBuildingsBlockToIndex: 'Boolean'
+    canMoveQueuedBuilding: 'Boolean'
     crannyCapacity: 'VillageCrannyCapacity'
     currentAccount: 'UserAccount'
     gameInfo: 'GameInfo'
@@ -1040,20 +1033,12 @@ export interface NexusGenFieldTypeNames {
     buildingTime: 'Duration'
     cost: 'Resources'
     fieldId: 'Int'
-    level: 'Int'
+    id: 'ID'
     name: 'String'
-    queueId: 'ID'
-    queueIndex: 'Int'
+    startingLevel: 'Int'
+    targetLevel: 'Int'
     type: 'Int'
-  }
-  QueuedBuildingRange: { // field return type name
-    buildingTime: 'Duration'
-    buildings: 'QueuedBuilding'
-    cost: 'Resources'
-    fieldId: 'Int'
-    id: 'String'
-    name: 'String'
-    type: 'Int'
+    villageId: 'ID'
   }
   ResourceClaimLogEntryContent: { // field return type name
     reason: 'ClaimHeroResourcesReason'
@@ -1082,6 +1067,7 @@ export interface NexusGenFieldTypeNames {
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
     botActivityChanged: 'Boolean'
     botStateChanged: 'BotState'
+    buildingQueueCorrected: 'ModificationPayload'
     buildingsInProgressUpdated: 'BuildingInProgress'
     heroInformationUpdated: 'HeroInformation'
     heroLevelUpSettingsChanged: 'HeroLevelUpSettings'
@@ -1095,7 +1081,7 @@ export interface NexusGenFieldTypeNames {
     nextVillageTaskExecutionChanged: 'Timestamp'
     onBuildingSpotUpdated: 'BuildingSpot'
     onCrannyCapacityUpdated: 'VillageCrannyCapacity'
-    queueUpdated: 'BuildingQueue'
+    queuedBuildingUpdated: 'ModificationPayload'
     villageUpdated: 'Village'
     villagesUpdated: 'Village'
   }
@@ -1165,11 +1151,6 @@ export interface NexusGenArgTypes {
     dequeueBuildingAtField: { // args
       input: NexusGenInputs['DequeueBuildingAtFieldInput']; // DequeueBuildingAtFieldInput!
     }
-    dequeueBuildingsBlock: { // args
-      bottomBuildingQueueId: string; // ID!
-      topBuildingQueueId: string; // ID!
-      villageId: string; // ID!
-    }
     enqueueBuilding: { // args
       input: NexusGenInputs['EnqueueBuildingInput']; // EnqueueBuildingInput!
     }
@@ -1198,19 +1179,8 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     moveQueuedBuildingToIndex: { // args
-      index: number; // Int!
       queueId: string; // ID!
-      villageId: string; // ID!
-    }
-    moveQueuedBuildingsBlockAsHighAsPossible: { // args
-      bottomBuildingQueueId: string; // ID!
-      topBuildingQueueId: string; // ID!
-      villageId: string; // ID!
-    }
-    moveQueuedBuildingsBlockToIndex: { // args
-      bottomBuildingQueueId: string; // ID!
-      index: number; // Int!
-      topBuildingQueueId: string; // ID!
+      targetQueueId: string; // ID!
       villageId: string; // ID!
     }
     refreshVillage: { // args
@@ -1327,15 +1297,9 @@ export interface NexusGenArgTypes {
     buildingsInProgress: { // args
       villageId: string; // ID!
     }
-    canMoveQueuedBuildingToIndex: { // args
-      index: number; // Int!
+    canMoveQueuedBuilding: { // args
       queueId: string; // ID!
-      villageId: string; // ID!
-    }
-    canMoveQueuedBuildingsBlockToIndex: { // args
-      bottomBuildingQueueId: string; // ID!
-      index: number; // Int!
-      topBuildingQueueId: string; // ID!
+      targetQueueId: string; // ID!
       villageId: string; // ID!
     }
     crannyCapacity: { // args
@@ -1365,6 +1329,9 @@ export interface NexusGenArgTypes {
     autoUnitsSettingsUpdated: { // args
       villageId: string; // ID!
     }
+    buildingQueueCorrected: { // args
+      villageId: string; // ID!
+    }
     buildingsInProgressUpdated: { // args
       villageId: string; // ID!
     }
@@ -1382,7 +1349,8 @@ export interface NexusGenArgTypes {
     onCrannyCapacityUpdated: { // args
       villageId: string; // ID!
     }
-    queueUpdated: { // args
+    queuedBuildingUpdated: { // args
+      id: string; // ID!
       villageId: string; // ID!
     }
     villageUpdated: { // args

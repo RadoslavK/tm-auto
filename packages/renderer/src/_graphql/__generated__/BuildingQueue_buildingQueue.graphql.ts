@@ -5,6 +5,10 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type BuildingQueue_buildingQueue = {
+    readonly buildings: ReadonlyArray<{
+        readonly id: string;
+        readonly " $fragmentRefs": FragmentRefs<"QueuedBuilding_queuedBuilding">;
+    }>;
     readonly totalCost: {
         readonly " $fragmentRefs": FragmentRefs<"Cost_resources">;
     };
@@ -17,14 +21,6 @@ export type BuildingQueue_buildingQueue = {
     readonly resourcesBuildingTime: {
         readonly " $fragmentRefs": FragmentRefs<"Cost_duration">;
     };
-    readonly buildingRanges: ReadonlyArray<{
-        readonly id: string;
-        readonly buildings: ReadonlyArray<{
-            readonly queueId: string;
-            readonly " $fragmentRefs": FragmentRefs<"QueuedBuilding_queuedBuilding">;
-        }>;
-        readonly " $fragmentRefs": FragmentRefs<"QueuedBuildingRange_queuedBuildingRange">;
-    }>;
     readonly " $refType": "BuildingQueue_buildingQueue";
 };
 export type BuildingQueue_buildingQueue$data = BuildingQueue_buildingQueue;
@@ -49,6 +45,29 @@ return {
   "metadata": null,
   "name": "BuildingQueue_buildingQueue",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "QueuedBuilding",
+      "kind": "LinkedField",
+      "name": "buildings",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "id",
+          "storageKey": null
+        },
+        {
+          "args": null,
+          "kind": "FragmentSpread",
+          "name": "QueuedBuilding_queuedBuilding"
+        }
+      ],
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -94,57 +113,11 @@ return {
       "plural": false,
       "selections": (v0/*: any*/),
       "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "QueuedBuildingRange",
-      "kind": "LinkedField",
-      "name": "buildingRanges",
-      "plural": true,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "QueuedBuilding",
-          "kind": "LinkedField",
-          "name": "buildings",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "queueId",
-              "storageKey": null
-            },
-            {
-              "args": null,
-              "kind": "FragmentSpread",
-              "name": "QueuedBuilding_queuedBuilding"
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "args": null,
-          "kind": "FragmentSpread",
-          "name": "QueuedBuildingRange_queuedBuildingRange"
-        }
-      ],
-      "storageKey": null
     }
   ],
   "type": "BuildingQueue",
   "abstractKey": null
 };
 })();
-(node as any).hash = '19ee887329dab938d76b31fbacb783c3';
+(node as any).hash = 'dfca37b1c0297732d55c7f215a4d1859';
 export default node;

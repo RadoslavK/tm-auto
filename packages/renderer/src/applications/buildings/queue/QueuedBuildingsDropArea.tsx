@@ -4,15 +4,13 @@ import { useDrop } from 'react-dnd';
 import { useMutation } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
-import type { QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation.graphql.js';
 import type { QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation } from '../../../_graphql/__generated__/QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import {
   DroppedQueuedBuilding,
   MovedQueuedBuilding,
 } from './DroppedQueuedBuilding.js';
-import type { MovedQueuedBuildingRange } from './DroppedQueuedRange.js';
-import { DroppedQueuedRange } from './DroppedQueuedRange.js';
 
 export enum DropPosition {
   Above = 'Above',
@@ -21,39 +19,38 @@ export enum DropPosition {
 
 type Props = {
   readonly getDropPosition: (queueIndex: number) => DropPosition;
-  readonly queueIndexTop: number;
-  readonly queueIndexBot: number;
+  readonly index: number;
+  readonly queueId: string;
 };
 
 const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
-  mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation($villageId: ID!, $queueId: ID!, $index: Int!) {
-      moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+  mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation($villageId: ID!, $queueId: ID!, $targetQueueId: ID!) {
+      moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId) {
+          ...ModificationPayload @arguments(includeOrderChanges: true)
+      }
   }
-`;
-
-const queuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation = graphql`
-    mutation QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation($villageId: ID!, $topBuildingQueueId: ID!, $bottomBuildingQueueId: ID!, $index: Int!) {
-        moveQueuedBuildingsBlockToIndex(villageId: $villageId, topBuildingQueueId: $topBuildingQueueId, bottomBuildingQueueId: $bottomBuildingQueueId, index: $index)
-    }
 `;
 
 export const QueuedBuildingsDropArea: React.FC<Props> = ({
   children,
   getDropPosition,
-  queueIndexBot,
-  queueIndexTop,
+  index,
+  queueId,
 }) => {
   const [moveQueuedBuildingToIndex] = useMutation<QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation>(queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation);
   const villageId = useRecoilValue(selectedVillageIdState);
   const onDropBuilding = (item: MovedQueuedBuilding) => {
-    const targetIndex =
-      item.queueIndex < queueIndexTop ? queueIndexBot : queueIndexTop;
+    const targetQueueId = queueId;
 
     moveQueuedBuildingToIndex({
       variables: {
         villageId,
         queueId: item.queueId,
-        index: targetIndex,
+        targetQueueId,
+      },
+      updater: (store) => {
+        const rootField = store.getRootField('moveQueuedBuildingToIndex');
+        modificationQueuePayloadUpdater(store, rootField, villageId);
       },
     });
   };
@@ -67,7 +64,7 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     }
   >({
     accept: 'QueuedBuilding',
-    canDrop: (droppedItem) => droppedItem.queueIndex !== queueIndexTop,
+    canDrop: (droppedItem) => droppedItem.index !== index,
     collect: (monitor) => ({
       movedBuilding: monitor.getItem(),
       isBuildingOver: monitor.isOver() && monitor.canDrop(),
@@ -75,84 +72,19 @@ export const QueuedBuildingsDropArea: React.FC<Props> = ({
     drop: onDropBuilding,
   });
 
-  const [moveQueuedBuildingsBlockToIndex] = useMutation<QueuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation>(queuedBuildingsDropAreaMoveQueuedBuildingsBlockToIndexMutation);
-
-  const onDropRange = (item: MovedQueuedBuildingRange) => {
-    const targetIndex =
-      item.topBuildingQueueIndex < queueIndexTop
-        ? queueIndexBot
-        : queueIndexTop;
-
-    moveQueuedBuildingsBlockToIndex({
-      variables: {
-        villageId,
-        index: targetIndex,
-        topBuildingQueueId: item.topBuildingQueueId,
-        bottomBuildingQueueId:
-        item.bottomBuildingQueueId,
-      },
-    });
-  };
-
-  const [{ isRangeOver, movedRange }, dropRangeRef] = useDrop<
-    MovedQueuedBuildingRange,
-    void,
-    {
-      readonly movedRange?: MovedQueuedBuildingRange;
-      readonly isRangeOver: boolean;
-    }
-  >({
-    accept: 'QueuedBuildingRange',
-    canDrop: (droppedItem) =>
-      droppedItem.topBuildingQueueIndex !== queueIndexTop,
-    collect: (monitor) => ({
-      movedRange: monitor.getItem(),
-      isRangeOver: monitor.isOver() && monitor.canDrop(),
-    }),
-    drop: onDropRange,
-  });
-
-  const dropPosition =
-    (isBuildingOver &&
-      movedBuilding &&
-      getDropPosition(movedBuilding.queueIndex)) ||
-    (isRangeOver &&
-      movedRange &&
-      getDropPosition(movedRange.topBuildingQueueIndex));
-
-  const indexForRange = (movedRange?.topBuildingQueueIndex ?? 0) < queueIndexTop
-    ? queueIndexBot
-    : queueIndexTop;
+  const dropPosition = isBuildingOver
+    && movedBuilding
+    && getDropPosition(movedBuilding.index);
 
   return (
-    <div ref={dropRangeRef}>
-      <div ref={dropBuildingRef}>
-        {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
-          <DroppedQueuedBuilding
-            index={queueIndexTop}
-            movedBuilding={movedBuilding}
-          />
-        )}
-        {isRangeOver && dropPosition === DropPosition.Above && movedRange && (
-          <DroppedQueuedRange
-            index={indexForRange}
-            movedRange={movedRange}
-          />
-        )}
-        {children}
-        {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
-          <DroppedQueuedBuilding
-            index={queueIndexTop}
-            movedBuilding={movedBuilding}
-          />
-        )}
-        {isRangeOver && dropPosition === DropPosition.Below && movedRange && (
-          <DroppedQueuedRange
-            index={indexForRange}
-            movedRange={movedRange}
-          />
-        )}
-      </div>
+    <div ref={dropBuildingRef}>
+      {isBuildingOver && dropPosition === DropPosition.Above && movedBuilding && (
+        <DroppedQueuedBuilding movedBuilding={movedBuilding} queueId={queueId} />
+      )}
+      {children}
+      {isBuildingOver && dropPosition === DropPosition.Below && movedBuilding && (
+        <DroppedQueuedBuilding movedBuilding={movedBuilding} queueId={queueId} />
+      )}
     </div>
   );
 };

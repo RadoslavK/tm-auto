@@ -8,15 +8,20 @@ import { useRecoilValue } from 'recoil';
 import type { QueuedBuildingActionsDequeueBuildingMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsDequeueBuildingMutation.graphql.js';
 import type { QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation.graphql.js';
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
+import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type Props = {
   readonly buildingQueueId: string;
   readonly className?: string;
   readonly onCollapse?: () => void;
+  readonly onExpand?: () => void;
 };
 
 const useStyles = makeStyles({
+  expand: {
+    backgroundImage: `url("${imageLinks.actions.expand}")`,
+  },
   collapse: {
     backgroundImage: `url("${imageLinks.actions.collapse}")`,
   },
@@ -39,15 +44,19 @@ const useStyles = makeStyles({
   },
 });
 
-const queuedBuildingActionsDequeueBuildingMutation = graphql`
+const dequeueBuildingMutation = graphql`
   mutation QueuedBuildingActionsDequeueBuildingMutation($input: DequeueBuildingInput!) {
-      dequeueBuilding(input: $input)
+      dequeueBuilding(input: $input) {
+         ...ModificationPayload
+      }
   }
 `;
 
-const queuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation = graphql`
+const moveQueuedBuildingAsHighAsPossibleMutation = graphql`
     mutation QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation($queueId: ID!, $villageId: ID!) {
-        moveQueuedBuildingAsHighAsPossible(queueId: $queueId, villageId: $villageId)
+        moveQueuedBuildingAsHighAsPossible(queueId: $queueId, villageId: $villageId) {
+            ...ModificationPayload @arguments(includeOrderChanges: true)
+        }
     }
 `;
 
@@ -55,21 +64,30 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   buildingQueueId,
   className,
   onCollapse,
+  onExpand,
 }) => {
-  const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(queuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation);
-  const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(queuedBuildingActionsDequeueBuildingMutation);
+  const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(moveQueuedBuildingAsHighAsPossibleMutation);
+  const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(dequeueBuildingMutation);
   const villageId = useRecoilValue(selectedVillageIdState);
   const classes = useStyles({});
 
   const onMoveToTop = () => {
-    return moveToTop({
+    moveToTop({
       variables: { queueId: buildingQueueId, villageId },
+      updater: (store) => {
+        const rootField = store.getRootField('moveQueuedBuildingAsHighAsPossible');
+        modificationQueuePayloadUpdater(store, rootField, villageId);
+      },
     });
   };
 
   const onDequeue = () => {
-    return dequeue({
+    dequeue({
       variables: { input: { queueId: buildingQueueId, villageId } },
+      updater: (store) => {
+        const rootField = store.getRootField('dequeueBuilding');
+        modificationQueuePayloadUpdater(store, rootField, villageId);
+      },
     });
   };
 
@@ -83,6 +101,12 @@ export const QueuedBuildingActions: React.FC<Props> = ({
         className={clsx(classes.image, classes.delete)}
         onClick={onDequeue}
       />
+      {onExpand && (
+        <button
+          className={clsx(classes.image, classes.expand)}
+          onClick={onExpand}
+        />
+      )}
       {onCollapse && (
         <button
           className={clsx(classes.image, classes.collapse)}

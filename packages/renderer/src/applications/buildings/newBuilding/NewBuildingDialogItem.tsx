@@ -14,6 +14,7 @@ import type { NewBuildingDialogItem_availableNewBuildingFragment$key } from '../
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 
@@ -45,7 +46,15 @@ type Props = {
 
 const newBuildingDialogItemEnqueueBuildingMutation = graphql`
   mutation NewBuildingDialogItemEnqueueBuildingMutation($input: EnqueueBuildingInput!) {
-      enqueueBuilding(input: $input)
+      enqueueBuilding(input: $input) {
+          addedNew
+          building {
+              ...QueuedBuilding_queuedBuilding
+          }
+          queue {
+              ...BuildingQueueDurationAndCost
+          }
+      }
   }
 `;
 
@@ -83,6 +92,17 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
         type,
         villageId,
       },
+    },
+    updater: (store, data) => {
+      if (!data.enqueueBuilding) {
+        return;
+      }
+
+      const result = store.getRootField('enqueueBuilding');
+      const addedBuilding = result.getLinkedRecord('building');
+      const queue = result.getLinkedRecord('queue');
+
+      enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, queue, villageId);
     },
   });
 

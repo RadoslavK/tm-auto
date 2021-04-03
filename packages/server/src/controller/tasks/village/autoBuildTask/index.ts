@@ -16,6 +16,7 @@ import { AccountContext } from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
 import { fieldIds } from '../../../../constants/fieldIds.js';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress.js';
+import { DequeueMode } from '../../../../services/buildingQueueService.js';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
 import { isInfrastructure } from '../../../../utils/buildingUtils.js';
 import { mergeVillageAndHeroResources } from '../../../../utils/mergeVillageAndHeroResources.js';
@@ -73,7 +74,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     for (const autoStorageBuilding of buildingsToBuild) {
       await this.startBuildingIfQueueIsFree(
         autoStorageBuilding,
-        !!autoStorageBuilding.queueId,
+        !!autoStorageBuilding.id,
       );
     }
 
@@ -163,7 +164,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     const settings = this.settings();
     const { cost } = buildingInfoService.getBuildingLevelInfo(
       queuedBuilding.type,
-      queuedBuilding.level,
+      queuedBuilding.startingLevel,
     );
     const requiredResources = cost.add(
       new Resources({ crop: settings.minCrop }),
@@ -220,7 +221,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       const inQueueCropLand = this._buildings.queue
         .buildings()
         .find(
-          (x) => x.type === BuildingType.Crop && x.level === newCropLandLevel,
+          (x) => x.type === BuildingType.Crop && x.startingLevel === newCropLandLevel,
         );
 
       let qBuilding: QueuedBuilding;
@@ -232,7 +233,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         const newCropLandFieldId = lowestLevelCropLand.fieldId;
         qBuilding = new QueuedBuilding({
           fieldId: newCropLandFieldId,
-          level: newCropLandLevel,
+          startingLevel: newCropLandLevel,
+          targetLevel: newCropLandFieldId,
           type: BuildingType.Crop,
         });
       }
@@ -281,7 +283,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     );
 
     if (
-      queuedBuilding.level === 1 &&
+      queuedBuilding.startingLevel === 1 &&
       isInfrastructure(queuedBuilding.fieldId)
     ) {
       //  They have the category but dont have to be selected through category
@@ -325,7 +327,10 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       const queueService = AccountContext.getContext().buildingQueueService.for(
         this._village.id,
       );
-      queueService.dequeueBuilding(queuedBuilding.queueId, false);
+      queueService.dequeueBuilding({
+        queueId: queuedBuilding.id,
+        mode: DequeueMode.AutomaticLastLevel,
+      });
     }
 
     const ongoing = await parseBuildingsInProgress();

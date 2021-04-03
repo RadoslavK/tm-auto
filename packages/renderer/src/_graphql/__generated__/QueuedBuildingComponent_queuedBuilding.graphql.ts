@@ -5,11 +5,12 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type QueuedBuildingComponent_queuedBuilding = {
+    readonly id: string;
     readonly name: string;
     readonly type: number;
-    readonly level: number;
     readonly fieldId: number;
-    readonly queueId: string;
+    readonly startingLevel: number;
+    readonly targetLevel: number;
     readonly buildingTime: {
         readonly " $fragmentRefs": FragmentRefs<"Cost_duration">;
     };
@@ -36,6 +37,13 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
       "name": "name",
       "storageKey": null
     },
@@ -50,13 +58,6 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "level",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "fieldId",
       "storageKey": null
     },
@@ -64,7 +65,14 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "queueId",
+      "name": "startingLevel",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "targetLevel",
       "storageKey": null
     },
     {
@@ -103,5 +111,5 @@ const node: ReaderFragment = {
   "type": "QueuedBuilding",
   "abstractKey": null
 };
-(node as any).hash = '61886591eac1fd5c73eaef74d261fdf1';
+(node as any).hash = '2afee133f6ac7ac2ea7ec642f12a80b5';
 export default node;

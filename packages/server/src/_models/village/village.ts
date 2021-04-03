@@ -20,7 +20,6 @@ export class Village {
         villageId: this.id,
       });
     },
-    () => publishPayloadEvent(BotEvent.QueuedUpdated, { villageId: this.id }),
     () => publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
   );
 

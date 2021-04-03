@@ -134,7 +134,7 @@ type BuildingInProgress {
 }
 
 type BuildingQueue {
-  buildingRanges: [QueuedBuildingRange!]!
+  buildings: [QueuedBuilding!]!
   infrastructureBuildingTime: Duration!
   resourcesBuildingTime: Duration!
   totalBuildingTime: Duration!
@@ -166,10 +166,6 @@ enum ClaimHeroResourcesReason {
   AutoBuild
   AutoParty
   AutoUnits
-}
-
-input ClearQueueInput {
-  villageId: ID!
 }
 
 type CoolDown {
@@ -232,6 +228,12 @@ input EnqueueBuildingInput {
   targetLevel: Int
   type: Int!
   villageId: ID!
+}
+
+type EnqueueBuildingPayload {
+  addedNew: Boolean!
+  building: QueuedBuilding!
+  queue: BuildingQueue!
 }
 
 type GameInfo {
@@ -297,25 +299,28 @@ enum MapSearchState {
   Searching
 }
 
+type ModificationPayload {
+  queue: BuildingQueue!
+  removedBuildings: [QueuedBuilding!]!
+  updatedBuildings: [QueuedBuilding!]!
+}
+
 type Mutation {
   addHeroLevelUpItem(item: HeroLevelUpItemInput!): HeroLevelUpItem!
-  clearQueue(villageId: ID!): Boolean
+  clearQueue(villageId: ID!): BuildingQueue!
   createAccount(account: AccountInput!): UserAccount!
   deleteAccount(id: ID!): UserAccount!
-  dequeueBuilding(input: DequeueBuildingInput!): Boolean
-  dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): Boolean
-  dequeueBuildingsBlock(bottomBuildingQueueId: ID!, topBuildingQueueId: ID!, villageId: ID!): Boolean
-  enqueueBuilding(input: EnqueueBuildingInput!): Boolean
+  dequeueBuilding(input: DequeueBuildingInput!): ModificationPayload!
+  dequeueBuildingAtField(input: DequeueBuildingAtFieldInput!): ModificationPayload!
+  enqueueBuilding(input: EnqueueBuildingInput!): EnqueueBuildingPayload
   exportAccountSettings(accountId: ID!, path: String!): Boolean
   exportAccounts(path: String!): Boolean
   exportGeneralSettings(path: String!): Boolean
   importAccountSettings(accountId: ID!, path: String!): Boolean
   importAccounts(path: String!): Boolean
   importGeneralSettings(path: String!): Boolean
-  moveQueuedBuildingAsHighAsPossible(queueId: ID!, villageId: ID!): Boolean
-  moveQueuedBuildingToIndex(index: Int!, queueId: ID!, villageId: ID!): Boolean
-  moveQueuedBuildingsBlockAsHighAsPossible(bottomBuildingQueueId: ID!, topBuildingQueueId: ID!, villageId: ID!): Boolean
-  moveQueuedBuildingsBlockToIndex(bottomBuildingQueueId: ID!, index: Int!, topBuildingQueueId: ID!, villageId: ID!): Boolean
+  moveQueuedBuildingAsHighAsPossible(queueId: ID!, villageId: ID!): ModificationPayload!
+  moveQueuedBuildingToIndex(queueId: ID!, targetQueueId: ID!, villageId: ID!): ModificationPayload!
   refreshVillage(villageId: ID!): Boolean
   removeHeroLevelUpItem(id: ID!): HeroLevelUpItem!
   resetAccountSettings: AccountSettings!
@@ -368,8 +373,7 @@ type Query {
   buildingQueue(villageId: ID!): BuildingQueue!
   buildingSpots(villageId: ID!): BuildingSpots!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
-  canMoveQueuedBuildingToIndex(index: Int!, queueId: ID!, villageId: ID!): Boolean!
-  canMoveQueuedBuildingsBlockToIndex(bottomBuildingQueueId: ID!, index: Int!, topBuildingQueueId: ID!, villageId: ID!): Boolean!
+  canMoveQueuedBuilding(queueId: ID!, targetQueueId: ID!, villageId: ID!): Boolean!
   crannyCapacity(villageId: ID!): VillageCrannyCapacity!
   currentAccount: UserAccount!
   gameInfo: GameInfo!
@@ -396,21 +400,12 @@ type QueuedBuilding {
   buildingTime: Duration!
   cost: Resources!
   fieldId: Int!
-  level: Int!
+  id: ID!
   name: String!
-  queueId: ID!
-  queueIndex: Int!
+  startingLevel: Int!
+  targetLevel: Int!
   type: Int!
-}
-
-type QueuedBuildingRange {
-  buildingTime: Duration!
-  buildings: [QueuedBuilding!]!
-  cost: Resources!
-  fieldId: Int!
-  id: String!
-  name: String!
-  type: Int!
+  villageId: ID!
 }
 
 type ResourceClaimLogEntryContent {
@@ -455,6 +450,7 @@ type Subscription {
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   botActivityChanged: Boolean!
   botStateChanged: BotState!
+  buildingQueueCorrected(villageId: ID!): ModificationPayload!
   buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
   heroInformationUpdated: HeroInformation!
   heroLevelUpSettingsChanged: HeroLevelUpSettings!
@@ -468,7 +464,7 @@ type Subscription {
   nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
   onBuildingSpotUpdated(fieldId: Int!, villageId: ID!): BuildingSpot!
   onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
-  queueUpdated(villageId: ID!): BuildingQueue!
+  queuedBuildingUpdated(id: ID!, villageId: ID!): ModificationPayload!
   villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!
 }

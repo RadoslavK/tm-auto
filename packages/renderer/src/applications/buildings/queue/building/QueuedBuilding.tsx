@@ -1,15 +1,22 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   DragPreviewImage,
-  useDrag, 
+  useDrag,
 } from 'react-dnd';
-import { useFragment } from 'react-relay/hooks';
+import {
+  useFragment,
+  useSubscription,
+} from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
+import type { QueuedBuildingSubscription } from '../../../../_graphql/__generated__/QueuedBuildingSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
+import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import {
   BuildingImageSize,
   imageLinks,
@@ -33,25 +40,50 @@ const useStyles = makeStyles<unknown, StylesProps>({
 
 type Props = {
   readonly building: QueuedBuilding_queuedBuilding$key;
+  readonly index: number;
   readonly onCollapse?: () => void;
+  readonly onExpand?: () => void;
 };
 
 const queuedBuildingQueuedBuildingFragment = graphql`
   fragment QueuedBuilding_queuedBuilding on QueuedBuilding {
-      queueIndex
-      queueId
+      id
       type
       ...QueuedBuildingComponent_queuedBuilding
   }
 `;
 
-export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse }) => {
+const subscription = graphql`
+  subscription QueuedBuildingSubscription($villageId: ID!, $id: ID!) {
+      queuedBuildingUpdated(villageId: $villageId, id: $id) {
+          ...ModificationPayload
+      }
+  }
+`;
+
+export const QueuedBuilding: React.FC<Props> = ({
+  building,
+  index,
+  onCollapse,
+  onExpand,
+}) => {
   const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
+  const villageId = useRecoilValue(selectedVillageIdState);
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<QueuedBuildingSubscription> => ({
+    subscription,
+    variables: { villageId, id: queuedBuildingFragment.id },
+    updater: (store) => {
+      const rootField = store.getRootField('queuedBuildingUpdated');
+      modificationQueuePayloadUpdater(store, rootField, villageId);
+    },
+  }), [villageId, queuedBuildingFragment.id]);
+
+  useSubscription(subscriptionConfig);
 
   const movedBuilding: MovedQueuedBuilding = {
     buildingFragmentKey: queuedBuildingFragment,
-    queueId: queuedBuildingFragment.queueId,
-    queueIndex: queuedBuildingFragment.queueIndex,
+    index,
+    queueId: queuedBuildingFragment.id,
   };
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -68,19 +100,23 @@ export const QueuedBuilding: React.FC<Props> = ({ building, onCollapse }) => {
   return (
     <QueuedBuildingsDropArea
       getDropPosition={(queueIndex) =>
-        queueIndex > queuedBuildingFragment.queueIndex
+        queueIndex > index
           ? DropPosition.Above
           : DropPosition.Below
       }
-      queueIndexBot={queuedBuildingFragment.queueIndex}
-      queueIndexTop={queuedBuildingFragment.queueIndex}
+      queueId={queuedBuildingFragment.id}
+      index={index}
     >
       <DragPreviewImage
         connect={preview}
         src={imageLinks.getBuilding(queuedBuildingFragment.type, tribe, BuildingImageSize.Small)}
       />
       <div ref={drag} className={classes.root}>
-        <QueuedBuildingComponent building={queuedBuildingFragment} onCollapse={onCollapse} />
+        <QueuedBuildingComponent
+          building={queuedBuildingFragment}
+          onCollapse={onCollapse}
+          onExpand={onExpand}
+        />
       </div>
     </QueuedBuildingsDropArea>
   );

@@ -19,7 +19,6 @@ export class Buildings {
   constructor(
     private onBuildingSpotUpdated: (buildingSpot: BuildingSpot) => void,
     private onOngoingUpdated: () => void,
-    private onQueuedUpdated: () => void,
     private onCrannyCapacityUpdate: () => void,
   ) {}
 
@@ -96,7 +95,7 @@ export class Buildings {
     this.spots.buildings().forEach((spot) => {
       let updated = false;
       const queuedForSpot = queuedBuildings.filter((b) => b.fieldId === spot.fieldId);
-      const queuedLevel = getMaximum(queuedForSpot.map((b) => b.level));
+      const queuedLevel = getMaximum(queuedForSpot.map((b) => b.targetLevel));
 
       if (spot.level.queued !== queuedLevel) {
         spot.level.queued = queuedLevel;
@@ -123,8 +122,6 @@ export class Buildings {
         this.onBuildingSpotUpdated(spot);
       }
     });
-
-    this.onQueuedUpdated();
 
     if (updatedAny) {
       this.onCrannyCapacityUpdate();

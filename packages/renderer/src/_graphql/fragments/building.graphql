@@ -1,33 +1,4 @@
-fragment QueuedBuilding on QueuedBuilding {
-    buildingTime {
-        ...Duration
-    }
-    fieldId
-    level
-    queueId
-    queueIndex
-    type
-}
-
-fragment QueuedBuildingRange on QueuedBuildingRange {
-    buildingTime {
-        ...Duration
-    }
-    buildings {
-        ...QueuedBuilding
-    }
-    cost {
-        ...Resources
-    }
-    fieldId
-    id
-    type
-}
-
-fragment BuildingQueue on BuildingQueue {
-    buildingRanges {
-        ...QueuedBuildingRange
-    }
+fragment BuildingQueueDurationAndCost on BuildingQueue {
     infrastructureBuildingTime {
         ...Duration
     }
@@ -39,5 +10,23 @@ fragment BuildingQueue on BuildingQueue {
     }
     totalCost {
         ...Resources
+    }
+}
+
+fragment ModificationPayload on ModificationPayload @argumentDefinitions(includeOrderChanges: { type: "Boolean", defaultValue: false }) {
+    removedBuildings {
+        id @deleteRecord
+    }
+    updatedBuildings {
+        ...QueuedBuilding_queuedBuilding
+    }
+    queue {
+        buildings @include(if: $includeOrderChanges) {
+            id
+            buildingTime {
+                ...Duration
+            }
+        }
+       ...BuildingQueueDurationAndCost
     }
 }

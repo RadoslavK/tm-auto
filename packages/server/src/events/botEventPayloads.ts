@@ -1,3 +1,4 @@
+import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
 import type { LogEntry } from '../_models/logs/logEntry.js';
 import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
@@ -12,6 +13,8 @@ import type { UserAccount } from '../services/accountService.js';
 import type { BotState } from '../services/controllerService.js';
 import type { MapSearchState } from '../services/mapScan/mapScanService.js';
 import { BotEvent } from './botEvent.js';
+
+export type QueuedBuildingUpdatedType = 'changed' | 'removed';
 
 export type BotEventPayloads = {
   [BotEvent.AccountsUpdated]: {
@@ -57,8 +60,15 @@ export type BotEventPayloads = {
     readonly buildingSpot: BuildingSpot;
   };
 
-  [BotEvent.QueuedUpdated]: {
+  [BotEvent.QueuedBuildingUpdated]: {
     readonly villageId: string;
+    readonly queuedBuilding: QueuedBuilding;
+    readonly type: QueuedBuildingUpdatedType;
+  };
+
+  [BotEvent.BuildingQueueCorrected]: {
+    readonly villageId: string;
+    readonly removedBuildings: readonly QueuedBuilding[];
   };
 
   [BotEvent.BuildingsInProgressUpdated]: {

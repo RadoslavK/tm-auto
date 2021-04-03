@@ -54,7 +54,7 @@ export class LogsService {
   public logAutoBuild = (building: QueuedBuilding): void => {
     const content = new AutoBuildLogEntryContent({
       fieldId: building.fieldId,
-      level: building.level,
+      level: building.startingLevel,
       name: buildingInfoService.getBuildingInfo(building.type).name,
       type: building.type,
     });

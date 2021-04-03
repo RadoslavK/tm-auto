@@ -4,7 +4,10 @@ import React from 'react';
 import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
-import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
+import type {
+  QueuedBuildingComponent_queuedBuilding$data,
+  QueuedBuildingComponent_queuedBuilding$key,
+} from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
@@ -51,15 +54,17 @@ type Props = {
   readonly building: QueuedBuildingComponent_queuedBuilding$key;
   readonly isHighlight?: boolean;
   readonly onCollapse?: () => void;
+  readonly onExpand?: () => void;
 };
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
     fragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {
+        id
         name
         type
-        level
         fieldId
-        queueId
+        startingLevel
+        targetLevel
         buildingTime {
             ...Cost_duration
         }
@@ -69,10 +74,21 @@ const queuedBuildingComponentQueuedBuildingFragment = graphql`
     }
 `;
 
+const getNameLabel = (building: QueuedBuildingComponent_queuedBuilding$data): string => {
+  const spanMultipleLevels = building.startingLevel !== building.targetLevel;
+
+  if (spanMultipleLevels) {
+    return `${building.name} Levels ${building.startingLevel}-${building.targetLevel}`;
+  }
+
+  return `${building.name} ${building.startingLevel}`;
+};
+
 export const QueuedBuildingComponent: React.FC<Props> = ({
   building,
   isHighlight,
   onCollapse,
+  onExpand,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
   const tribe = useRecoilValue(tribeState);
@@ -85,9 +101,10 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
     <div className={classes.root}>
       {!isHighlight && (
         <QueuedBuildingActions
-          buildingQueueId={queuedBuildingFragment.queueId}
+          buildingQueueId={queuedBuildingFragment.id}
           className={classes.actions}
           onCollapse={onCollapse}
+          onExpand={onExpand}
         />
       )}
       <div className={classes.imageWithFieldId}>
@@ -96,7 +113,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
       </div>
       <div className={classes.info}>
         <div>
-          {queuedBuildingFragment.name} Level {queuedBuildingFragment.level}
+          {getNameLabel(queuedBuildingFragment)}
         </div>
         <Cost
           buildTime={queuedBuildingFragment.buildingTime}

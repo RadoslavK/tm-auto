@@ -19,6 +19,8 @@ export const updatePlayerInfo = async (): Promise<void> => {
     const queueService = AccountContext.getContext().buildingQueueService.for(
       currentVillageId,
     );
-    queueService.removeAndCorrectQueue();
+    queueService.removeAndCorrectQueue({
+      triggerCorrectionEvent: true,
+    });
   }
 };

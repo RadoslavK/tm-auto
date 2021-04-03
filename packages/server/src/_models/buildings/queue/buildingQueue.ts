@@ -20,27 +20,56 @@ export class BuildingQueue {
       ? this._buildings[0]
       : this._buildings.find((x) => getBuildingSpotType(x.type) === type);
 
+  public peekLast = (): QueuedBuilding | undefined => this._buildings.length
+    ? this._buildings[this._buildings.length - 1]
+    : undefined;
+
   public getAllAtField = (
     fieldId: number,
     predicate: (building: QueuedBuilding) => boolean,
   ): readonly QueuedBuilding[] =>
     this.buildings().filter((b) => b.fieldId === fieldId && predicate(b));
 
-  public getLastAtField = (fieldId: number): QueuedBuilding | undefined =>
+  public getLastAtField = (
+    fieldId: number,
+    predicate?: (building: QueuedBuilding) => boolean,
+  ): QueuedBuilding | undefined =>
     this._buildings
       .slice()
       .reverse()
-      .find((b) => b.fieldId === fieldId);
+      .find((b) => b.fieldId === fieldId && (!predicate || predicate(b)));
 
-  public remove = (queueId: string): number => this.removeBulk([queueId]);
+  public removeLast = (queueId: string): boolean => {
+    const building = this._buildings.find(b => b.id === queueId);
 
-  public removeBulk = (queueIds: string[]): number => {
-    const originalCount = this._buildings.length;
-    this._buildings = this._buildings.filter(
-      (b) => !queueIds.includes(b.queueId),
-    );
+    if (!building) {
+      return false;
+    }
 
-    return originalCount - this._buildings.length;
+    if (building.startingLevel === building.targetLevel) {
+      this._buildings = this._buildings.filter((b) => b.id !== queueId);
+    } else {
+      building.targetLevel--;
+    }
+
+    return true;
+  };
+
+  public remove = (queueId: string): ReadonlyArray<QueuedBuilding> => this.removeBulk(new Set<string>([queueId]));
+
+  public removeBulk = (queueIds: ReadonlySet<string>): ReadonlyArray<QueuedBuilding> => {
+    const removedBuildings: QueuedBuilding[] = [];
+
+    for (let i = this._buildings.length - 1; i >= 0; i--) {
+      const building = this._buildings[i];
+
+      if (queueIds.has(building.id)) {
+        removedBuildings.push(building);
+        this._buildings.splice(i, 1);
+      }
+    }
+
+    return removedBuildings;
   };
 
   public clear = (): void => {

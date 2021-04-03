@@ -34,7 +34,7 @@ export const checkAutoStorage = async (
     if (resourceField) {
       const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
         resourceField.type,
-        resourceField.level,
+        resourceField.startingLevel,
       ).cost;
 
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
@@ -48,7 +48,7 @@ export const checkAutoStorage = async (
     if (infrastructureField) {
       const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
         infrastructureField.type,
-        infrastructureField.level,
+        infrastructureField.startingLevel,
       ).cost;
 
       nextTaskHighestWarehouseCost = Math.max(
@@ -66,7 +66,7 @@ export const checkAutoStorage = async (
     if (building) {
       const resourcesNeeded = buildingInfoService.getBuildingLevelInfo(
         building.type,
-        building.level,
+        building.startingLevel,
       ).cost;
       nextTaskHighestWarehouseCost = resourcesNeeded.getRequiredWarehouseSize();
       nextTaskHighestGranaryCost = resourcesNeeded.crop;
@@ -112,7 +112,7 @@ export const checkAutoStorage = async (
       village.buildings.queue
         .buildings()
         .filter((b) => b.fieldId === neededBuildingType),
-      (b) => b.level,
+      (b) => b.startingLevel,
     );
 
     const lowestLevelBuildingInVillage = getWithMinimum(
@@ -133,7 +133,7 @@ export const checkAutoStorage = async (
 
     if (
       qBuilding &&
-      qBuilding.level === levelOfLowestLevelBuildingInVillage + 1
+      qBuilding.startingLevel === levelOfLowestLevelBuildingInVillage + 1
     ) {
       // is already in queue and equal to minimum next level, so build that one
       buildingsToBuild.push(qBuilding);
@@ -141,9 +141,10 @@ export const checkAutoStorage = async (
       // exists and not max level
       const queuedBuilding = new QueuedBuilding({
         fieldId: lowestLevelBuildingInVillage.fieldId,
-        level: lowestLevelBuildingInVillage.level.getTotal() + 1,
+        startingLevel: lowestLevelBuildingInVillage.level.getTotal() + 1,
+        targetLevel: lowestLevelBuildingInVillage.level.getTotal() + 1,
         //  id is not important is it wont be placed into the queue
-        queueId: '',
+        id: '',
         type: lowestLevelBuildingInVillage.type,
       });
 
@@ -163,9 +164,10 @@ export const checkAutoStorage = async (
       const freeFieldId = randomElement(freeFieldIds);
       const queuedBuilding = new QueuedBuilding({
         fieldId: freeFieldId,
-        level: 1,
+        startingLevel: 1,
+        targetLevel: 1,
         //  id is not important is it wont be placed into the queue
-        queueId: '',
+        id: '',
         type: neededBuildingType,
       });
 

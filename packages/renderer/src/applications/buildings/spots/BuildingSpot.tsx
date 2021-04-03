@@ -23,6 +23,8 @@ import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__ge
 import type { BuildingSpotSubscription } from '../../../_graphql/__generated__/BuildingSpotSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
+import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
 import { NewBuildingDialog } from '../newBuilding/NewBuildingDialog.js';
@@ -59,13 +61,23 @@ const buildingSpotBuildingSpotFragment = graphql`
 
 const buildingSpotDequeueBuildingAtFieldMutation = graphql`
     mutation BuildingSpotDequeueBuildingAtFieldMutation($input: DequeueBuildingAtFieldInput!) {
-        dequeueBuildingAtField(input: $input)
+        dequeueBuildingAtField(input: $input) {
+            ...ModificationPayload
+        }
     }
 `;
 
 const buildingSpotEnqueueBuildingMutation = graphql`
     mutation BuildingSpotEnqueueBuildingMutation($input: EnqueueBuildingInput!) {
-        enqueueBuilding(input: $input)
+        enqueueBuilding(input: $input) {
+            addedNew
+            building {
+                ...QueuedBuilding_queuedBuilding
+            }
+            queue {
+                ...BuildingQueueDurationAndCost
+            }
+        }
     }
 `;
 
@@ -131,6 +143,17 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
           targetLevel,
         },
       },
+      updater: (store, data) => {
+        if (!data.enqueueBuilding) {
+          return;
+        }
+
+        const result = store.getRootField('enqueueBuilding');
+        const addedBuilding = result.getLinkedRecord('building');
+        const queue = result.getLinkedRecord('queue');
+
+        enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, queue, villageId);
+      },
     });
   };
 
@@ -181,6 +204,10 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
             villageId,
           },
         },
+        updater: (store) => {
+          const rootField = store.getRootField('dequeueBuildingAtField');
+          modificationQueuePayloadUpdater(store, rootField, villageId);
+        },
       });
     }
   };
@@ -198,6 +225,10 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
           fieldId: buildingSpotFragment.fieldId,
           villageId,
         },
+      },
+      updater: (store) => {
+        const rootField = store.getRootField('dequeueBuildingAtField');
+        modificationQueuePayloadUpdater(store, rootField, villageId);
       },
     });
 

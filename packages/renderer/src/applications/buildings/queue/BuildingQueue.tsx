@@ -1,35 +1,24 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { useMemo } from 'react';
 import {
   useFragment,
   useLazyLoadQuery,
   useMutation,
-  useRelayEnvironment,
   useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
-import {
-  commitLocalUpdate,
-  createOperationDescriptor,
-  getRequest,
-} from 'relay-runtime';
 
 import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__generated__/BuildingQueue_buildingQueue.graphql.js';
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
-import type { BuildingQueueCollapsedBuildingRangesQuery } from '../../../_graphql/__generated__/BuildingQueueCollapsedBuildingRangesQuery.graphql.js';
-import type { BuildingQueueSubscription } from '../../../_graphql/__generated__/BuildingQueueSubscription.graphql.js';
+import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
-import { QueuedBuildingRange } from './range/QueuedBuildingRange.js';
 
 type Props = {
   readonly buildingQueueKey: BuildingQueue_buildingQueue$key;
@@ -51,6 +40,10 @@ const useStyles = makeStyles({
 
 const buildingQueueFragment = graphql`
   fragment BuildingQueue_buildingQueue on BuildingQueue {
+      buildings {
+          id
+          ...QueuedBuilding_queuedBuilding
+      }
       totalCost {
           ...Cost_resources
       }
@@ -62,22 +55,6 @@ const buildingQueueFragment = graphql`
       }
       resourcesBuildingTime {
           ...Cost_duration
-      }
-      buildingRanges {
-          id
-          buildings {
-              queueId
-              ...QueuedBuilding_queuedBuilding
-          }
-          ...QueuedBuildingRange_queuedBuildingRange
-      }
-  }
-`;
-
-const buildingQueueSubscription = graphql`
-  subscription BuildingQueueSubscription($villageId: ID!) {
-      queueUpdated(villageId: $villageId) {
-         ...BuildingQueue_buildingQueue
       }
   }
 `;
@@ -94,18 +71,21 @@ const buildingQueueBuildingTimesSplitInfoQuery = graphql`
 
 const buildingQueueClearQueueMutation = graphql`
   mutation BuildingQueueClearQueueMutation($villageId: ID!) {
-      clearQueue(villageId: $villageId)
+      clearQueue(villageId: $villageId) {
+          ...BuildingQueue_buildingQueue
+      }
   }
 `;
 
-// ... on Query { __typename } workaround  https://github.com/facebook/relay/issues/2471
-const collapsedBuildingRangesQuery = graphql`
-  query BuildingQueueCollapsedBuildingRangesQuery($villageId: ID!) {
-      ... on Query { __typename }
-      collapsedBuildingQueueRanges(villageId: $villageId)
+const correctionSubscription = graphql`
+  subscription BuildingQueueCorrectionSubscription($villageId: ID!) {
+      buildingQueueCorrected(villageId: $villageId) {
+          ...ModificationPayload
+      }
   }
 `;
 
+//  TODO add collapsing and expanding
 export const BuildingQueue: React.FC<Props> = ({
   buildingQueueKey,
   className,
@@ -116,61 +96,29 @@ export const BuildingQueue: React.FC<Props> = ({
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueSubscription> => ({
-    subscription: buildingQueueSubscription,
-    variables: { villageId },
-    updater: (store) => {
-      const newRecord = store.getRootField('queueUpdated');
-      store.getRoot().setLinkedRecord(newRecord, 'buildingQueue', { villageId });
-    },
-  }), [villageId]);
-
-  useSubscription(subscriptionConfig);
 
   const classes = useStyles();
 
   const [clearQueue] = useMutation<BuildingQueueClearQueueMutation>(buildingQueueClearQueueMutation);
 
-  const relayEnvironment = useRelayEnvironment();
+  const correctionSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueCorrectionSubscription> => ({
+    subscription: correctionSubscription,
+    variables: { villageId },
+    updater: (store) => {
+      const rootField = store.getRootField('buildingQueueCorrected');
+      modificationQueuePayloadUpdater(store, rootField, villageId);
+    },
+  }), [villageId]);
 
-  useEffect(() => {
-    const request = getRequest(collapsedBuildingRangesQuery);
-    const operation = createOperationDescriptor(request, { villageId });
-    relayEnvironment.retain(operation);
-  }, [relayEnvironment, villageId]);
+  useSubscription(correctionSubscriptionConfig);
 
-  const { collapsedBuildingQueueRanges } = useLazyLoadQuery<BuildingQueueCollapsedBuildingRangesQuery>(collapsedBuildingRangesQuery, {
-    villageId,
-  });
-
-  const collapsedRangeIds = collapsedBuildingQueueRanges || [];
-
-  const updateCollapsedBuildingQueueRangeIds = useCallback((rangeIds: string[]) => {
-    commitLocalUpdate(relayEnvironment, store => {
-      store.getRoot().setValue(rangeIds, 'collapsedBuildingQueueRanges', { villageId });
-    });
-  }, [relayEnvironment, villageId]);
-
-  const setAllCollapsed = useCallback(() => {
-    if (buildingQueue.buildingRanges) {
-      updateCollapsedBuildingQueueRangeIds(buildingQueue.buildingRanges.reduce(
-        (all, r) => (r.buildings.length > 1 ? [...all, r.id] : all),
-        [] as string[],
-      ));
-    }
-  }, [buildingQueue.buildingRanges, updateCollapsedBuildingQueueRangeIds]);
-
-  const onRangeCollapse = (rangeId: string) => {
-    updateCollapsedBuildingQueueRangeIds(collapsedRangeIds.concat([rangeId]));
-  };
-
-  const onRangeExpand = (rangeId: string) => {
-    updateCollapsedBuildingQueueRangeIds(collapsedRangeIds.filter((id) => id !== rangeId));
-  };
-
-  const onClear = async (): Promise<void> => {
+  const onClear = (): void => {
     clearQueue({
       variables: { villageId },
+      updater: (store) => {
+        const newRecord = store.getRootField('clearQueue');
+        store.getRoot().setLinkedRecord(newRecord, 'buildingQueue', { villageId });
+      },
     });
   };
 
@@ -179,7 +127,7 @@ export const BuildingQueue: React.FC<Props> = ({
       <button className={classes.action} onClick={onClear}>
         Clear queue
       </button>
-      <button className={classes.action} onClick={setAllCollapsed}>
+      <button className={classes.action} onClick={() => undefined}>
         Collapse all
       </button>
       <Cost
@@ -190,36 +138,13 @@ export const BuildingQueue: React.FC<Props> = ({
         resources={buildingQueue.totalCost}
       />
       <div className={classes.buildings}>
-        {buildingQueue.buildingRanges.map((range) => {
-          const [topBuilding] = range.buildings;
-          const botBuilding = range.buildings[range.buildings.length - 1];
-          const canBeCollapsed = topBuilding !== botBuilding;
-          const isCollapsed = collapsedRangeIds.includes(range.id);
-
-          if (isCollapsed) {
-            return (
-              <QueuedBuildingRange
-                key={range.id}
-                onExpand={() => onRangeExpand(range.id)}
-                range={range}
-              />
-            );
-          }
-
-          return (
-            <React.Fragment key={range.id}>
-              {range.buildings.map((building) => (
-                <QueuedBuilding
-                  key={building.queueId}
-                  building={building}
-                  onCollapse={
-                    canBeCollapsed ? () => onRangeCollapse(range.id) : undefined
-                  }
-                />
-              ))}
-            </React.Fragment>
-          );
-        })}
+        {buildingQueue.buildings.map((building, index) => (
+          <QueuedBuilding
+            key={building.id}
+            building={building}
+            index={index}
+          />
+        ))}
       </div>
     </div>
   );

@@ -2,232 +2,166 @@ import {
   arg,
   idArg,
   inputObjectType,
-  intArg,
   mutationField,
   objectType,
   queryField,
   subscriptionField,
 } from 'nexus';
+import { join } from 'path';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
-import type { BuildingQueue as BuildingQueueModel } from '../../_models/buildings/queue/buildingQueue.js';
-import type { QueuedBuilding as QueuedBuildingModel } from '../../_models/buildings/queue/queuedBuilding.js';
+import type { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
 import { Duration } from '../../_models/duration.js';
 import { Resources } from '../../_models/misc/resources.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
+import { DequeueMode } from '../../services/buildingQueueService.js';
+import {
+  isInfrastructure,
+  isResourceField,
+} from '../../utils/buildingUtils.js';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils.js';
+import { getDirname } from '../../utils/getDirname.js';
 import type { ApiContext } from '../apiContext.type.js';
-import type { NexusGenObjects } from '../graphqlSchema.js';
 
-const mapBuildingQueue = (
-  queue: BuildingQueueModel,
-  mbLevels: Record<string, number>,
-  ctx: ApiContext,
-): NexusGenObjects['BuildingQueue'] => {
-  const ranges = queue
-    .buildings()
-    .reduce(
-      (
-        reducedRanges,
-        building,
-        index,
-        buildings,
-      ): (QueuedBuildingModel & {
-        readonly index: number;
-      })[][] => {
-        const buildingWithIndex = { ...building, index };
+const getTotalQueuedBuildingCost = (qBuilding: QueuedBuilding, ctx: ApiContext): Resources => {
+  let cost = new Resources();
 
-        if (index === 0) {
-          reducedRanges.push([buildingWithIndex]);
-        } else {
-          const previousBuilding = buildings[index - 1];
-          const isFromSameRangeAsPrevious =
-            previousBuilding.fieldId === building.fieldId &&
-            previousBuilding.level + 1 === building.level;
+  for (let level = qBuilding.startingLevel; level <= qBuilding.targetLevel; level++) {
+    const levelCost = ctx.buildingInfoService.getBuildingLevelInfo(qBuilding.type, level).cost;
+    cost = cost.add(levelCost);
+  }
 
-          if (isFromSameRangeAsPrevious) {
-            reducedRanges[reducedRanges.length - 1].push(buildingWithIndex);
-          } else {
-            reducedRanges.push([buildingWithIndex]);
-          }
-        }
+  return cost;
+};
 
-        return reducedRanges;
-      },
-      [] as (QueuedBuildingModel & { readonly index: number })[][],
+const getTotalQueuedBuildingDuration = (qBuilding: QueuedBuilding, ctx: ApiContext): Duration => {
+  const { speed } = ctx.gameInfo;
+  const mbLevels = ctx.buildingQueueService.for(qBuilding.villageId).getMainBuildingLevels();
+  let buildingTime = new Duration();
+  let mbLevel = mbLevels.get(qBuilding.id) ?? 0;
+
+  for (let level = qBuilding.startingLevel; level <= qBuilding.targetLevel; level++) {
+    const levelBuildingTime = ctx.buildingInfoService.getBuildingLevelInfo(qBuilding.type, level).buildingTime;
+
+    const actualBuildTime = getActualBuildingBuildTime(
+      levelBuildingTime,
+      speed,
+      mbLevel,
+      qBuilding.type,
     );
 
-  const { speed } = ctx.gameInfo;
+    buildingTime = buildingTime.add(actualBuildTime);
 
-  return ranges.reduce(
-    (
-      reducedQueue,
-      range,
-    ): {
-      readonly buildingRanges: NexusGenObjects['QueuedBuildingRange'][];
-      resourcesBuildingTime: Duration;
-      infrastructureBuildingTime: Duration;
-      totalCost: Resources;
-      totalBuildingTime: Duration;
-    } => {
-      const [firstBuilding] = range;
-      const lastBuilding = range[range.length - 1];
+    //  increase mbLevel because mbLevels contains info about mb level prior to this queued building with multiple levels
+    //  and if this q building is MB with multiple levels we need to update the level prior to each following level
+    if (qBuilding.type === BuildingType.MainBuilding) {
+      mbLevel++;
+    }
+  }
 
-      const rangeResult = range.reduce(
-        (
-          reducedResult,
-          building,
-        ): {
-          readonly cost: Resources;
-          readonly resourcesBuildingTime: Duration;
-          readonly infrastructureBuildingTime: Duration;
-          readonly buildings: NexusGenObjects['QueuedBuilding'][];
-        } => {
-          const mbLevel = mbLevels[building.queueId];
-          const {
-            buildingTime,
-            cost,
-          } = ctx.buildingInfoService.getBuildingLevelInfo(
-            building.type,
-            building.level,
-          );
-
-          const actualBuildTime = getActualBuildingBuildTime(
-            buildingTime,
-            speed,
-            mbLevel,
-            building.type,
-          );
-
-          const clientBuildingModel: NexusGenObjects['QueuedBuilding'] = {
-            ...building,
-            buildingTime: actualBuildTime,
-            queueIndex: building.index,
-          };
-
-          if (building.type > BuildingType.Crop) {
-            reducedResult.infrastructureBuildingTime = reducedResult.infrastructureBuildingTime.add(
-              actualBuildTime,
-            );
-          } else {
-            reducedResult.resourcesBuildingTime = reducedResult.resourcesBuildingTime.add(
-              actualBuildTime,
-            );
-          }
-
-          reducedResult.buildings.push(clientBuildingModel);
-          reducedResult.cost = reducedResult.cost.add(cost);
-
-          return reducedResult;
-        },
-        {
-          buildings: [],
-          resourcesBuildingTime: new Duration(),
-          infrastructureBuildingTime: new Duration(),
-          cost: new Resources(),
-        } as {
-          cost: Resources;
-          infrastructureBuildingTime: Duration;
-          resourcesBuildingTime: Duration;
-          readonly buildings: NexusGenObjects['QueuedBuilding'][];
-        },
-      );
-
-      const totalBuildingTime = rangeResult.resourcesBuildingTime.add(
-        rangeResult.infrastructureBuildingTime,
-      );
-
-      const clientRange: NexusGenObjects['QueuedBuildingRange'] = {
-        id: `${firstBuilding.fieldId}_${lastBuilding.level}`,
-        type: firstBuilding.type,
-        cost: rangeResult.cost,
-        fieldId: firstBuilding.fieldId,
-        buildingTime: totalBuildingTime,
-        buildings: rangeResult.buildings,
-      };
-
-      return {
-        buildingRanges: reducedQueue.buildingRanges.concat(clientRange),
-        totalCost: reducedQueue.totalCost.add(rangeResult.cost),
-        totalBuildingTime: reducedQueue.totalBuildingTime.add(
-          totalBuildingTime,
-        ),
-        resourcesBuildingTime: reducedQueue.resourcesBuildingTime.add(
-          rangeResult.resourcesBuildingTime,
-        ),
-        infrastructureBuildingTime: reducedQueue.infrastructureBuildingTime.add(
-          rangeResult.infrastructureBuildingTime,
-        ),
-      };
-    },
-    {
-      totalCost: new Resources(),
-      totalBuildingTime: new Duration(),
-      infrastructureBuildingTime: new Duration(),
-      resourcesBuildingTime: new Duration(),
-      buildingRanges: [],
-    } as {
-      readonly buildingRanges: NexusGenObjects['QueuedBuildingRange'][];
-      totalCost: Resources;
-      resourcesBuildingTime: Duration;
-      infrastructureBuildingTime: Duration;
-      totalBuildingTime: Duration;
-    },
-  );
+  return buildingTime;
 };
 
-const getBuildingQueue = (villageId: string, ctx: ApiContext) => {
-  const village = ctx.villageService.village(villageId);
-  const { queue } = village.buildings;
-  const queueService = ctx.buildingQueueService.for(villageId);
-  const mbLevels = queueService.getMainBuildingLevels();
-
-  return mapBuildingQueue(queue, mbLevels, ctx);
-};
-
-export const QueuedBuilding = objectType({
+export const QueuedBuildingObject = objectType({
   name: 'QueuedBuilding',
   definition: t => {
-    t.field('buildingTime', { type: 'Duration' });
-    t.int('level');
+    t.field('buildingTime', {
+      type: 'Duration',
+      resolve: (qBuilding, _args, ctx) => getTotalQueuedBuildingDuration(qBuilding, ctx),
+    });
+    t.int('startingLevel');
+    t.int('targetLevel');
     t.int('type');
     t.string('name', {
       resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
     });
     t.field('cost', {
       type: 'Resources',
-      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingLevelInfo(building.type, building.level).cost,
+      resolve: (qBuilding, _args, ctx) => getTotalQueuedBuildingCost(qBuilding, ctx),
     });
-    t.id('queueId');
-    t.int('queueIndex');
+    t.id('id');
     t.int('fieldId');
+    t.id('villageId');
   },
-});
-
-export const QueuedBuildingRange = objectType({
-  name: 'QueuedBuildingRange',
-  definition: t => {
-    t.string('id');
-    t.list.field('buildings', { type: QueuedBuilding });
-    t.int('type');
-    t.string('name', {
-      resolve: (range, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(range.type).name,
-    });
-    t.int('fieldId');
-    t.field('buildingTime', { type: 'Duration' });
-    t.field('cost', { type: 'Resources' });
+  sourceType: {
+    module: join(getDirname(import.meta), '../../_models/buildings/queue/queuedBuilding.ts'),
+    export: 'QueuedBuilding',
   },
 });
 
 export const BuildingQueue = objectType({
   name: 'BuildingQueue',
   definition: t => {
-    t.list.field('buildingRanges', { type: QueuedBuildingRange });
-    t.field('totalBuildingTime', { type: 'Duration' });
-    t.field('resourcesBuildingTime', { type: 'Duration' });
-    t.field('infrastructureBuildingTime', { type: 'Duration' });
-    t.field('totalCost', { type: 'Resources' });
+    t.list.field('buildings', { type: QueuedBuildingObject });
+    t.field('totalBuildingTime', {
+      type: 'Duration',
+      resolve: (queue, _args, ctx) => {
+        return queue.buildings().reduce(
+          (totalBuildingTime, qBuilding) => {
+            let buildingTime = new Duration();
+
+            for (let level = qBuilding.startingLevel; level <= qBuilding.targetLevel; level++) {
+              const levelBuildingTime = ctx.buildingInfoService.getBuildingLevelInfo(qBuilding.type, level).buildingTime;
+              buildingTime = buildingTime.add(levelBuildingTime);
+            }
+
+            return totalBuildingTime.add(buildingTime);
+          },
+          new Duration(),
+        );
+      },
+    });
+    //  TODO compute these only for Roman
+    t.field('resourcesBuildingTime', {
+      type: 'Duration',
+      resolve: (queue, _args, ctx) => {
+        return queue.buildings().reduce(
+          (totalBuildingTime, qBuilding) => {
+            if (!isResourceField(qBuilding.fieldId)) {
+              return totalBuildingTime;
+            }
+
+            let buildingTime = getTotalQueuedBuildingDuration(qBuilding, ctx);
+            return totalBuildingTime.add(buildingTime);
+          },
+          new Duration(),
+        );
+      },
+    });
+    t.field('infrastructureBuildingTime', {
+      type: 'Duration',
+      resolve: (queue, _args, ctx) => {
+        return queue.buildings().reduce(
+          (totalBuildingTime, qBuilding) => {
+            if (!isInfrastructure(qBuilding.fieldId)) {
+              return totalBuildingTime;
+            }
+
+            let buildingTime = getTotalQueuedBuildingDuration(qBuilding, ctx);
+            return totalBuildingTime.add(buildingTime);
+          },
+          new Duration(),
+        );
+      },
+    });
+    t.field('totalCost', {
+      type: 'Resources',
+      resolve: (queue, _args, ctx) => {
+        return queue.buildings().reduce(
+          (totalCost, qBuilding) => {
+            let cost = getTotalQueuedBuildingCost(qBuilding, ctx);
+
+            return totalCost.add(cost);
+          },
+          new Resources(),
+        );
+      },
+    });
+  },
+  sourceType: {
+    module: join(getDirname(import.meta), '../../_models/buildings/queue/buildingQueue.ts'),
+    export: 'BuildingQueue',
   },
 });
 
@@ -237,54 +171,27 @@ export const BuildingQueueQuery = queryField(t => {
     args: {
       villageId: idArg(),
     },
-    resolve: (_, args, ctx) => getBuildingQueue(args.villageId, ctx),
+    resolve(_, args, ctx) {
+      return ctx.villageService.village(args.villageId).buildings.queue;
+    },
   });
 });
 
-export const CanMoveQueuedBuildingToIndexQuery = queryField(t => {
-  t.boolean('canMoveQueuedBuildingToIndex', {
+export const CanMoveQueuedBuildingQuery = queryField(t => {
+  t.boolean('canMoveQueuedBuilding', {
     args: {
       villageId: idArg(),
       queueId: idArg(),
-      index: intArg(),
+      targetQueueId: idArg(),
     },
-    resolve: (_, { index, queueId, villageId }, ctx) => {
+    resolve: (_, { targetQueueId, queueId, villageId }, ctx) => {
       const queueService = ctx.buildingQueueService.for(
         villageId,
       );
 
-      return queueService.canMoveBuildingToIndex(queueId, index);
+      return queueService.canMoveBuildingToIndex(queueId, targetQueueId);
     },
   });
-});
-
-export const CanMoveQueuedBuildingsBlockToIndexQuery = queryField(t => {
-  t.boolean('canMoveQueuedBuildingsBlockToIndex', {
-    args: {
-      villageId: idArg(),
-      topBuildingQueueId: idArg(),
-      bottomBuildingQueueId: idArg(),
-      index: intArg(),
-    },
-    resolve: (_, args, ctx) => {
-      const queueService = ctx.buildingQueueService.for(
-        args.villageId,
-      );
-
-      return queueService.canMoveBuildingsBlockToIndex(
-        args.topBuildingQueueId,
-        args.bottomBuildingQueueId,
-        args.index,
-      );
-    },
-  });
-});
-
-export const ClearQueueInput = inputObjectType({
-  name: 'ClearQueueInput',
-  definition: t => {
-    t.id('villageId');
-  },
 });
 
 export const EnqueueBuildingInput = inputObjectType({
@@ -297,6 +204,45 @@ export const EnqueueBuildingInput = inputObjectType({
   },
 });
 
+export const EnqueueBuildingPayload = objectType({
+  name: 'EnqueueBuildingPayload',
+  definition: t => {
+    t.boolean('addedNew');
+    t.field('building', { type: QueuedBuildingObject });
+    t.field('queue', { type: BuildingQueue });
+  },
+});
+
+export const EnqueueBuildingMutation = mutationField(t => {
+  t.nullable.field('enqueueBuilding', {
+    type: EnqueueBuildingPayload,
+    args: {
+      input: arg({ type: EnqueueBuildingInput }),
+    },
+    resolve: (_, args ,ctx) => {
+      const { villageId, ...enqueuedBuilding } = args.input;
+
+      const result = ctx.buildingQueueService.for(villageId).enqueue.enqueueBuilding(enqueuedBuilding);
+
+      return result && {
+        ...result,
+        queue: ctx.villageService.village(villageId).buildings.queue,
+      };
+    },
+  });
+});
+
+export const ClearQueueMutation = mutationField(t => {
+  t.field('clearQueue', {
+    type: BuildingQueue,
+    args: {
+      villageId: idArg(),
+    },
+    resolve: (_, args, ctx) =>
+      ctx.buildingQueueService.for(args.villageId).clearQueue(),
+  });
+});
+
 export const DequeueBuildingInput = inputObjectType({
   name: 'DequeueBuildingInput',
   definition: t => {
@@ -305,214 +251,150 @@ export const DequeueBuildingInput = inputObjectType({
   },
 });
 
-export const DequeueBuildingAtFieldInput = inputObjectType({
-  name: 'DequeueBuildingAtFieldInput',
+export const ModificationPayload = objectType({
+  name: 'ModificationPayload',
   definition: t => {
-    t.nullable.int('targetLevel');
-    t.int('fieldId');
-    t.id('villageId');
+    t.list.field('removedBuildings', { type: QueuedBuildingObject });
+    t.list.field('updatedBuildings', { type: QueuedBuildingObject });
+    t.field('queue', { type: BuildingQueue });
   },
 });
 
-export const ClearQueueMutation = mutationField(t => {
-  t.nullable.boolean('clearQueue', {
-    args: {
-      villageId: idArg(),
-    },
-    resolve: (_, args, ctx) => {
-      const { villageId } = args;
-
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
-
-      queueManager.clearQueue();
-
-      return null;
-    },
-  });
-});
-
 export const DequeueBuildingMutation = mutationField(t => {
-  t.nullable.boolean('dequeueBuilding', {
+  t.field('dequeueBuilding', {
+    type: ModificationPayload,
     args: {
       input: arg({ type: DequeueBuildingInput }),
     },
-    resolve: (_, args, ctx) => {
-      const { queueId, villageId } = args.input;
+    resolve: async (_, args, ctx) => {
+      const { villageId, queueId } = args.input;
 
-      const queueManager =ctx.buildingQueueService.for(
-        villageId,
-      );
+      const removedBuildings = await ctx.buildingQueueService.for(villageId).dequeueBuilding({
+        queueId,
+        mode: DequeueMode.FromApi,
+      });
+      const { queue } = ctx.villageService.village(villageId).buildings;
 
-      queueManager.dequeueBuilding(queueId, true);
-
-      return null;
+      return {
+        removedBuildings: [...removedBuildings],
+        updatedBuildings: [],
+        queue,
+      };
     },
   });
 });
 
-export const DequeueBuildingsBlockMutation = mutationField(t => {
-  t.nullable.boolean('dequeueBuildingsBlock', {
-    args: {
-      villageId: idArg(),
-      topBuildingQueueId: idArg(),
-      bottomBuildingQueueId: idArg(),
-    },
-    resolve: (_, args, ctx) => {
-      const { bottomBuildingQueueId, topBuildingQueueId, villageId } = args;
-
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
-
-      queueManager.dequeueBuildingsBlock(
-        topBuildingQueueId,
-        bottomBuildingQueueId,
-      );
-
-      return null;
-    },
-  });
+export const DequeueBuildingAtFieldInput = inputObjectType({
+  name: 'DequeueBuildingAtFieldInput',
+  definition: t => {
+    t.id('villageId');
+    t.int('fieldId');
+    t.nullable.int('targetLevel');
+  },
 });
 
 export const DequeueBuildingAtFieldMutation = mutationField(t => {
-  t.nullable.boolean('dequeueBuildingAtField', {
+  t.field('dequeueBuildingAtField', {
+    type: ModificationPayload,
     args: {
       input: arg({ type: DequeueBuildingAtFieldInput }),
     },
-    resolve: (_, args, ctx) => {
+    resolve: async (_, args, ctx) => {
       const { villageId, ...input } = args.input;
 
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
+      const { removedBuildings, updatedBuilding } = await ctx.buildingQueueService.for(villageId).dequeueBuildingAtField(input);
+      const { queue } = ctx.villageService.village(villageId).buildings;
 
-      queueManager.dequeueBuildingAtField(input);
-
-      return null;
+      return {
+        removedBuildings: [...removedBuildings],
+        updatedBuildings: updatedBuilding ? [updatedBuilding] : [],
+        queue,
+      };
     },
   });
 });
 
-export const EnqueueBuildingMutation = mutationField(t => {
-  t.nullable.boolean('enqueueBuilding', {
-    args: {
-      input: arg({ type: EnqueueBuildingInput }),
-    },
-    resolve: async (_, args ,ctx) => {
-      const { villageId, ...enqueuedBuilding } = args.input;
-
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
-
-      queueManager.enqueueBuilding(enqueuedBuilding);
-
-      return null;
-    },
-  });
-});
-
-export const MoveQueuedBuildingToIndexMutation = mutationField(t => {
-  t.nullable.boolean('moveQueuedBuildingToIndex', {
+export const MoveQueuedBuildingMutation = mutationField(t => {
+  t.field('moveQueuedBuildingToIndex', {
+    type: ModificationPayload,
     args: {
       villageId: idArg(),
       queueId: idArg(),
-      index: intArg(),
+      targetQueueId: idArg(),
     },
-    resolve: (_, { index, queueId, villageId }, ctx) => {
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
+    resolve: async (_, { targetQueueId, queueId, villageId }, ctx) => {
+      const queueManager = ctx.buildingQueueService.for(villageId);
 
-      queueManager.moveBuildingToIndex(queueId, index);
+      const { removedBuildings, updatedBuildings } = await queueManager.moveBuildingToIndex(queueId, targetQueueId);
+      const { queue } = ctx.villageService.village(villageId).buildings;
 
-      return null;
-    },
-  });
-});
-
-export const MoveQueuedBuildingsBlockToIndexMutation = mutationField(t => {
-  t.nullable.boolean('moveQueuedBuildingsBlockToIndex', {
-    args: {
-      villageId: idArg(),
-      topBuildingQueueId: idArg(),
-      bottomBuildingQueueId: idArg(),
-      index: intArg(),
-    },
-    resolve: (_, args, ctx) => {
-      const {
-        bottomBuildingQueueId,
-        index,
-        topBuildingQueueId,
-        villageId,
-      } = args;
-
-      const queueManager = ctx.buildingQueueService.for(
-        villageId,
-      );
-
-      queueManager.moveQueuedBuildingsBlockToIndex(
-        topBuildingQueueId,
-        bottomBuildingQueueId,
-        index,
-      );
-
-      return null;
+      return {
+        queue,
+        removedBuildings: [...removedBuildings],
+        updatedBuildings: [...updatedBuildings],
+      };
     },
   });
 });
 
 export const MoveQueuedBuildingAsHighAsPossibleMutation = mutationField(t => {
-  t.nullable.boolean('moveQueuedBuildingAsHighAsPossible', {
+  t.field('moveQueuedBuildingAsHighAsPossible', {
+    type: ModificationPayload,
     args: {
       villageId: idArg(),
       queueId: idArg(),
     },
-    resolve: (_, args, ctx) => {
-      const queueManager = ctx.buildingQueueService.for(
-        args.villageId,
-      );
+    resolve: async (_, args, ctx) => {
+      const queueManager = ctx.buildingQueueService.for(args.villageId);
 
-      queueManager.moveAsHighAsPossible(args.queueId);
+      const { updatedBuildings, removedBuildings } = await queueManager.moveAsHighAsPossible(args.queueId);
+      const { queue } = ctx.villageService.village(args.villageId).buildings;
 
-      return null;
+      return {
+        queue,
+        removedBuildings: [...removedBuildings],
+        updatedBuildings: [...updatedBuildings],
+      };
     },
   });
 });
 
-export const MoveQueuedBuildingsBlockAsHighAsPossibleMutation = mutationField(t => {
-  t.nullable.boolean('moveQueuedBuildingsBlockAsHighAsPossible', {
+export const QueuedBuildingUpdatedSubscription = subscriptionField(t => {
+  t.field('queuedBuildingUpdated', {
+    type: ModificationPayload,
     args: {
       villageId: idArg(),
-      topBuildingQueueId: idArg(),
-      bottomBuildingQueueId: idArg(),
+      id: idArg(),
     },
-    resolve: (_, args, ctx) => {
-      const queueManager = ctx.buildingQueueService.for(
-        args.villageId,
-      );
-
-      queueManager.moveBlockAsHighAsPossible(
-        args.topBuildingQueueId,
-        args.bottomBuildingQueueId,
-      );
-
-      return null;
-    },
+    ...subscribeToEvent(BotEvent.QueuedBuildingUpdated, {
+      filter: (payload, variables) =>
+        payload.villageId === variables.villageId
+        && payload.queuedBuilding.id === variables.id,
+      resolve: (p, args, ctx) => {
+        const removed = p.type === 'removed';
+        return {
+          updatedBuildings: removed ? [] : [p.queuedBuilding],
+          removedBuildings: removed ? [p.queuedBuilding] : [],
+          queue: ctx.villageService.village(args.villageId).buildings.queue,
+        };
+      },
+    }),
   });
 });
 
-export const QueueUpdatedSubscription = subscriptionField(t => {
-  t.field('queueUpdated', {
-    type: BuildingQueue,
+export const BuildingQueueCorrectedSubscription = subscriptionField(t => {
+  t.field('buildingQueueCorrected', {
+    type: ModificationPayload,
     args: {
       villageId: idArg(),
     },
-    ...subscribeToEvent(BotEvent.QueuedUpdated, {
-      filter: (payload, variables) => payload.villageId === variables.villageId,
-      resolve: (p, _args, ctx) => getBuildingQueue(p.villageId, ctx),
+    ...subscribeToEvent(BotEvent.BuildingQueueCorrected, {
+      filter: (p, variables) => variables.villageId === p.villageId,
+      resolve: (p, args, ctx) => ({
+        removedBuildings: [...p.removedBuildings],
+        updatedBuildings: [],
+        queue: ctx.villageService.village(args.villageId).buildings.queue,
+      }),
     }),
   });
 });

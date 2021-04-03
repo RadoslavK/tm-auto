@@ -9,49 +9,49 @@ import {
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
-import type { DroppedQueuedBuildingCanMoveQueuedBuildingToIndexQuery } from '../../../_graphql/__generated__/DroppedQueuedBuildingCanMoveQueuedBuildingToIndexQuery.graphql.js';
+import type { DroppedQueuedBuildingCanMoveQueuedBuildingQuery } from '../../../_graphql/__generated__/DroppedQueuedBuildingCanMoveQueuedBuildingQuery.graphql.js';
 import type { QueuedBuildingComponent_queuedBuilding$key } from '../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { QueuedBuildingComponent } from './building/QueuedBuildingComponent.js';
 import { useDroppedStyles } from './useDroppedStyles.js';
 
-const canMoveQueuedBuildingToIndexQuery = graphql`
-    query DroppedQueuedBuildingCanMoveQueuedBuildingToIndexQuery($villageId: ID!, $queueId: ID!, $index: Int!) {
-        canMoveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, index: $index)
+const canMoveQueuedBuilding = graphql`
+    query DroppedQueuedBuildingCanMoveQueuedBuildingQuery($villageId: ID!, $queueId: ID!, $targetQueueId: ID!) {
+        canMoveQueuedBuilding(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId)
     }
 `;
 
 export type MovedQueuedBuilding = {
-  readonly queueIndex: number;
-  readonly queueId: string;
   readonly buildingFragmentKey: QueuedBuildingComponent_queuedBuilding$key;
+  readonly index: number;
+  readonly queueId: string;
 };
 
 type Props = {
-  readonly index: number;
   readonly movedBuilding: MovedQueuedBuilding;
+  readonly queueId: string;
 };
 
 export const DroppedQueuedBuilding: React.FC<Props> = ({
-  index,
   movedBuilding,
+  queueId,
 }) => {
   const villageId = useRecoilValue(selectedVillageIdState);
   const relayEnvironment = useRelayEnvironment();
   const [canBeMoved, setCanBeMoved] = useState<boolean>();
 
   useEffect(() => {
-    fetchQuery<DroppedQueuedBuildingCanMoveQueuedBuildingToIndexQuery>(relayEnvironment, canMoveQueuedBuildingToIndexQuery, {
+    fetchQuery<DroppedQueuedBuildingCanMoveQueuedBuildingQuery>(relayEnvironment, canMoveQueuedBuilding, {
       villageId,
       queueId: movedBuilding.queueId,
-      index,
+      targetQueueId: queueId,
     }, { fetchPolicy: 'network-only' })
       .subscribe({
-        next: ({ canMoveQueuedBuildingToIndex }) => {
-          setCanBeMoved(canMoveQueuedBuildingToIndex);
+        next: ({ canMoveQueuedBuilding }) => {
+          setCanBeMoved(canMoveQueuedBuilding);
         },
       });
-  }, [relayEnvironment, villageId, movedBuilding.queueId, index]);
+  }, [relayEnvironment, villageId, movedBuilding.queueId, queueId]);
 
   const classes = useDroppedStyles({ canBeMoved });
 
