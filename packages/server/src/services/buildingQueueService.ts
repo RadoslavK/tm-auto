@@ -71,7 +71,7 @@ export class BuildingQueueService {
     this.onUpdate();
   };
 
-  public enqueueBuilding = (building: EnqueuedBuilding): void => {
+  public enqueueBuilding = async (building: EnqueuedBuilding): Promise<void> => {
     const { fieldId, targetLevel, type } = building;
 
     const spot = this._village.buildings.spots.at(fieldId);
@@ -106,11 +106,11 @@ export class BuildingQueueService {
     }
 
     if (enqueued) {
-      this.onUpdate();
+      await this.onUpdate();
     }
   };
 
-  public removeAndCorrectQueue = (queueIds: string[] = []): void => {
+  public removeAndCorrectQueue = async (queueIds: string[] = []): Promise<void> => {
     const rangesToRemove = this.correctBuildingQueue(queueIds);
     const idsToRemove = rangesToRemove
       .flatMap((range) => range.buildings)
@@ -118,14 +118,14 @@ export class BuildingQueueService {
     const removedCount = this._village.buildings.queue.removeBulk(idsToRemove);
 
     if (removedCount) {
-      this.onUpdate();
+      await this.onUpdate();
     }
   };
 
-  public dequeueBuilding = (queueId: string, correctQueue: boolean): void => {
+  public dequeueBuilding = async (queueId: string, correctQueue: boolean): Promise<void> => {
     if (correctQueue) {
       //  handles updates too
-      this.removeAndCorrectQueue([queueId]);
+      await this.removeAndCorrectQueue([queueId]);
     } else {
       const bToRemove = this._village.buildings.queue
         .buildings()
@@ -138,15 +138,15 @@ export class BuildingQueueService {
       const removedCount = this._village.buildings.queue.remove(queueId);
 
       if (removedCount > 0) {
-        this.onUpdate();
+        await this.onUpdate();
       }
     }
   };
 
-  public dequeueBuildingsBlock = (
+  public dequeueBuildingsBlock = async (
     topBuildingQueueId: string,
     bottomBuildingQueueId: string,
-  ): void => {
+  ): Promise<void> => {
     const topIndex = this._village.buildings.queue
       .buildings()
       .findIndex((b) => b.queueId === topBuildingQueueId);
@@ -159,19 +159,20 @@ export class BuildingQueueService {
       .slice(topIndex, botIndex + 1)
       .map((b) => b.queueId);
 
-    this.removeAndCorrectQueue(idsToRemove);
+    await this.removeAndCorrectQueue(idsToRemove);
   };
 
-  public dequeueBuildingAtField = ({
+  public dequeueBuildingAtField = async ({
     fieldId,
     targetLevel,
-  }: DequeueAtFieldInput): void => {
+  }: DequeueAtFieldInput): Promise<void> => {
     if (targetLevel !== undefined && targetLevel !== null) {
       const buildings = this._village.buildings.queue.getAllAtField(
         fieldId,
         (b) => b.level > targetLevel,
       );
-      this.removeAndCorrectQueue(buildings.map((b) => b.queueId));
+
+      await this.removeAndCorrectQueue(buildings.map((b) => b.queueId));
     } else {
       const building = this._village.buildings.queue.getLastAtField(fieldId);
 
@@ -179,11 +180,11 @@ export class BuildingQueueService {
         return;
       }
 
-      this.removeAndCorrectQueue([building.queueId]);
+      await this.removeAndCorrectQueue([building.queueId]);
     }
   };
 
-  public moveAsHighAsPossible = (queueId: string): void => {
+  public moveAsHighAsPossible = async (queueId: string): Promise<void> => {
     const offsets = new Offsets();
     const queuedBuildings = this._village.buildings.queue.buildings();
 
@@ -221,13 +222,13 @@ export class BuildingQueueService {
 
     this._village.buildings.queue.moveTo(queueIndex, newIndex);
 
-    this.onUpdate();
+    await this.onUpdate();
   };
 
-  public moveBlockAsHighAsPossible = (
+  public moveBlockAsHighAsPossible = async (
     topBuildingQueueId: string,
     bottomBuildingQueueId: string,
-  ): void => {
+  ): Promise<void> => {
     if (topBuildingQueueId || bottomBuildingQueueId) {
       throw new Error('Not implemented yet');
     } else {
@@ -447,7 +448,7 @@ export class BuildingQueueService {
     return true;
   };
 
-  public moveBuildingToIndex = (queueId: string, newIndex: number): void => {
+  public moveBuildingToIndex = async (queueId: string, newIndex: number): Promise<void> => {
     const currentIndex = this._village.buildings.queue
       .buildings()
       .findIndex((b) => b.queueId === queueId);
@@ -458,14 +459,14 @@ export class BuildingQueueService {
 
     this._village.buildings.queue.moveTo(currentIndex, newIndex);
 
-    this.onUpdate();
+    await this.onUpdate();
   };
 
-  public moveQueuedBuildingsBlockToIndex = (
+  public moveQueuedBuildingsBlockToIndex = async (
     topBuildingQueueId: string,
     bottomBuildingQueueId: string,
     newIndex: number,
-  ): void => {
+  ): Promise<void> => {
     const topBuildingCurrentIndex = this._village.buildings.queue
       .buildings()
       .findIndex((b) => b.queueId === topBuildingQueueId);
@@ -495,17 +496,17 @@ export class BuildingQueueService {
       newIndex,
     );
 
-    this.onUpdate();
+    await this.onUpdate();
   };
 
-  public clearQueue = (): void => {
+  public clearQueue = async (): Promise<void> => {
     if (!this._village.buildings.queue.buildings().length) {
       return;
     }
 
     this._village.buildings.queue.clear();
 
-    this.onUpdate();
+    await this.onUpdate();
   };
 
   private willQueuedBuildingStillMeetItsRequirements = (
