@@ -22,11 +22,6 @@ const autoMentorSettingsQuery = graphql`
       autoMentorSettings {
           acceptDailyRewards
           acceptTaskRewards
-          completeTasks {
-              allow
-              allowedTaskIds
-              taskIds
-          }
       }
   }
 `;
@@ -84,14 +79,7 @@ export const AutoMentorSettings: React.FC = () => {
     if (state && hasChanges) {
       updateSettings({
         variables: {
-          settings: {
-            ...state,
-            completeTasks: {
-              ...state.completeTasks,
-              allowedTaskIds: (state.completeTasks.allowedTaskIds as Array<string>),
-              taskIds: (state.completeTasks.taskIds as Array<string>),
-            },
-          },
+          settings: state,
         },
         updater: (store) => {
           const newRecord = store.getRootField('updateAutoMentorSettings');
@@ -100,10 +88,6 @@ export const AutoMentorSettings: React.FC = () => {
       });
     }
   }, [state, hasChanges, updateSettings]);
-
-  if (!state) {
-    return null;
-  }
 
   const onCheckBoxChange = async (
     e: React.FormEvent<HTMLInputElement>,
@@ -163,58 +147,6 @@ export const AutoMentorSettings: React.FC = () => {
             type="checkbox"
           />
         </div>
-      </div>
-      <div>
-        <label htmlFor="completeTasks.allow">Complete tasks</label>
-        <input
-          checked={state.completeTasks.allow}
-          id="completeTasks.allow"
-          onChange={(e) => {
-            const { checked } = e.target;
-
-            setState(
-              (prevState) =>
-                prevState && {
-                  ...prevState,
-                  completeTasks: {
-                    ...prevState.completeTasks,
-                    allow: checked,
-                  },
-                },
-            );
-            setHasChanges(true);
-          }}
-          type="checkbox"
-        />
-        {state.completeTasks.taskIds.map((taskId) => (
-          <div key={taskId}>
-            <label>{taskId}</label>
-            <input
-              type="checkbox"
-              checked={state.completeTasks.allowedTaskIds.includes(taskId)}
-              onChange={(e) => {
-                const allowed = e.target.checked;
-                setState(
-                  (prevState) =>
-                    prevState && {
-                      ...prevState,
-                      completeTasks: {
-                        ...prevState.completeTasks,
-                        allowedTaskIds: allowed
-                          ? prevState.completeTasks.allowedTaskIds.concat([
-                            taskId,
-                          ])
-                          : prevState.completeTasks.allowedTaskIds.filter(
-                            (x) => x !== taskId,
-                          ),
-                      },
-                    },
-                );
-                setHasChanges(true);
-              }}
-            />
-          </div>
-        ))}
       </div>
     </div>
   );

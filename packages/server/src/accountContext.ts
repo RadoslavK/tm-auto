@@ -1,6 +1,5 @@
 import { GameInfo } from './_models/gameInfo.js';
 import { Hero } from './_models/hero/hero.js';
-import type { MentorTask } from './_models/mentor/mentorTask.js';
 import { BuildingQueueService } from './services/buildingQueueService.js';
 import { LogsService } from './services/logsService.js';
 import { MapScanService } from './services/mapScan/mapScanService.js';
@@ -69,8 +68,6 @@ export class AccountContext {
   public gameInfo: GameInfo = new GameInfo();
 
   public hero: Hero = new Hero();
-
-  public mentorTasks: readonly MentorTask[] = [];
 
   constructor(accountId: string) {
     this.villageService = new VillageService();

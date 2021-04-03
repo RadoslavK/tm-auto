@@ -27,11 +27,6 @@ mutation AutoMentorSettingsResetSettingsMutation {
 fragment AutoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
-  completeTasks {
-    allow
-    allowedTaskIds
-    taskIds
-  }
 }
 */
 
@@ -89,38 +84,6 @@ const node: ConcreteRequest = {
             "kind": "ScalarField",
             "name": "acceptTaskRewards",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "CompleteTasksSettings",
-            "kind": "LinkedField",
-            "name": "completeTasks",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allow",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allowedTaskIds",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "taskIds",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -128,12 +91,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "e677c2b870536839317b5142948e1d2f",
+    "cacheID": "fb46e003d4c4cfa3aa546895e37f0254",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n  completeTasks {\n    allow\n    allowedTaskIds\n    taskIds\n  }\n}\n"
+    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 (node as any).hash = '1cc0b00debe150cbbc0dca1e187ad7b9';

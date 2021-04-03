@@ -7,12 +7,6 @@ import { FragmentRefs } from "relay-runtime";
 export type UpdateAutoMentorSettingsInput = {
     acceptDailyRewards: boolean;
     acceptTaskRewards: boolean;
-    completeTasks: CompleteTasksSettingsInput;
-};
-export type CompleteTasksSettingsInput = {
-    allow: boolean;
-    allowedTaskIds: Array<string>;
-    taskIds: Array<string>;
 };
 export type AutoMentorSettingsUpdateSettingsMutationVariables = {
     settings: UpdateAutoMentorSettingsInput;
@@ -41,11 +35,6 @@ mutation AutoMentorSettingsUpdateSettingsMutation(
 fragment AutoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
-  completeTasks {
-    allow
-    allowedTaskIds
-    taskIds
-  }
 }
 */
 
@@ -118,38 +107,6 @@ return {
             "kind": "ScalarField",
             "name": "acceptTaskRewards",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "CompleteTasksSettings",
-            "kind": "LinkedField",
-            "name": "completeTasks",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allow",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allowedTaskIds",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "taskIds",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -157,12 +114,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "dfe8b8266c76467f5023c992c5de7063",
+    "cacheID": "d1a45b13705e45b2a621104a94aa49ac",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoMentorSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoMentorSettingsInput!\n) {\n  updateAutoMentorSettings(settings: $settings) {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n  completeTasks {\n    allow\n    allowedTaskIds\n    taskIds\n  }\n}\n"
+    "text": "mutation AutoMentorSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoMentorSettingsInput!\n) {\n  updateAutoMentorSettings(settings: $settings) {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 })();

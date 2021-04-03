@@ -2,6 +2,7 @@ import { build } from 'esbuild';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
+//  Electron does not support ESM yet // https://github.com/electron/electron/issues/21457
 /** @type(import("esbuild").BuildOptions) */
 const options = {
   platform: 'node',

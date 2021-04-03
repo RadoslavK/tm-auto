@@ -107,7 +107,6 @@
 ## Performance
 
 - First load takes a long time as it needs to scan all villages
-- Enqueuing buildings take longer to update UI
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
 

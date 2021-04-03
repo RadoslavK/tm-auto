@@ -8,11 +8,6 @@ export type AutoMentorSettingsQueryResponse = {
     readonly autoMentorSettings: {
         readonly acceptDailyRewards: boolean;
         readonly acceptTaskRewards: boolean;
-        readonly completeTasks: {
-            readonly allow: boolean;
-            readonly allowedTaskIds: ReadonlyArray<string>;
-            readonly taskIds: ReadonlyArray<string>;
-        };
     };
 };
 export type AutoMentorSettingsQuery = {
@@ -27,11 +22,6 @@ query AutoMentorSettingsQuery {
   autoMentorSettings {
     acceptDailyRewards
     acceptTaskRewards
-    completeTasks {
-      allow
-      allowedTaskIds
-      taskIds
-    }
   }
 }
 */
@@ -59,38 +49,6 @@ var v0 = [
         "kind": "ScalarField",
         "name": "acceptTaskRewards",
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "CompleteTasksSettings",
-        "kind": "LinkedField",
-        "name": "completeTasks",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "allow",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "allowedTaskIds",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "taskIds",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -114,14 +72,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "e25c203cbc51cc8b9d0260065f6d5ae6",
+    "cacheID": "1ab980360e56a20d01342eece24bb33a",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsQuery",
     "operationKind": "query",
-    "text": "query AutoMentorSettingsQuery {\n  autoMentorSettings {\n    acceptDailyRewards\n    acceptTaskRewards\n    completeTasks {\n      allow\n      allowedTaskIds\n      taskIds\n    }\n  }\n}\n"
+    "text": "query AutoMentorSettingsQuery {\n  autoMentorSettings {\n    acceptDailyRewards\n    acceptTaskRewards\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '07ecc73bf9d5e3de31fb804d6fe85444';
+(node as any).hash = '5076a545fa2fd44ddc013d42c8631b91';
 export default node;

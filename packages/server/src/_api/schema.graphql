@@ -53,7 +53,6 @@ type AutoBuildSettings {
 type AutoMentorSettings {
   acceptDailyRewards: Boolean!
   acceptTaskRewards: Boolean!
-  completeTasks: CompleteTasksSettings!
 }
 
 type AutoPartySettings {
@@ -171,18 +170,6 @@ enum ClaimHeroResourcesReason {
 
 input ClearQueueInput {
   villageId: ID!
-}
-
-type CompleteTasksSettings {
-  allow: Boolean!
-  allowedTaskIds: [String!]!
-  taskIds: [String!]!
-}
-
-input CompleteTasksSettingsInput {
-  allow: Boolean!
-  allowedTaskIds: [String!]!
-  taskIds: [String!]!
 }
 
 type CoolDown {
@@ -558,7 +545,6 @@ input UpdateAutoBuildSettingsInput {
 input UpdateAutoMentorSettingsInput {
   acceptDailyRewards: Boolean!
   acceptTaskRewards: Boolean!
-  completeTasks: CompleteTasksSettingsInput!
 }
 
 input UpdateAutoPartySettingsInput {

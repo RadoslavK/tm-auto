@@ -98,6 +98,7 @@ const buildingQueueClearQueueMutation = graphql`
   }
 `;
 
+// ... on Query { __typename } workaround  https://github.com/facebook/relay/issues/2471
 const collapsedBuildingRangesQuery = graphql`
   query BuildingQueueCollapsedBuildingRangesQuery($villageId: ID!) {
       ... on Query { __typename }

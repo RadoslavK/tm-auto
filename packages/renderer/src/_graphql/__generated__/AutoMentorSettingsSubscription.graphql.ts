@@ -27,11 +27,6 @@ subscription AutoMentorSettingsSubscription {
 fragment AutoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
-  completeTasks {
-    allow
-    allowedTaskIds
-    taskIds
-  }
 }
 */
 
@@ -89,38 +84,6 @@ const node: ConcreteRequest = {
             "kind": "ScalarField",
             "name": "acceptTaskRewards",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "CompleteTasksSettings",
-            "kind": "LinkedField",
-            "name": "completeTasks",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allow",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "allowedTaskIds",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "taskIds",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -128,12 +91,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "bcc3a7a945b062e2e2690366b3392028",
+    "cacheID": "2fdd38f5ed55f10b9b532c8088d5704b",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AutoMentorSettingsSubscription {\n  autoMentorSettingsUpdated {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n  completeTasks {\n    allow\n    allowedTaskIds\n    taskIds\n  }\n}\n"
+    "text": "subscription AutoMentorSettingsSubscription {\n  autoMentorSettingsUpdated {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 (node as any).hash = 'ad332749fcadfa767e800c67e6be0a67';

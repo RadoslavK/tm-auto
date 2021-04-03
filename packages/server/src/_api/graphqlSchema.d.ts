@@ -31,11 +31,6 @@ export interface NexusGenInputs {
   ClearQueueInput: { // input type
     villageId: string; // ID!
   }
-  CompleteTasksSettingsInput: { // input type
-    allow: boolean; // Boolean!
-    allowedTaskIds: string[]; // [String!]!
-    taskIds: string[]; // [String!]!
-  }
   CoolDownInput: { // input type
     max: NexusGenInputs['DurationInput']; // DurationInput!
     min: NexusGenInputs['DurationInput']; // DurationInput!
@@ -114,7 +109,6 @@ export interface NexusGenInputs {
   UpdateAutoMentorSettingsInput: { // input type
     acceptDailyRewards: boolean; // Boolean!
     acceptTaskRewards: boolean; // Boolean!
-    completeTasks: NexusGenInputs['CompleteTasksSettingsInput']; // CompleteTasksSettingsInput!
   }
   UpdateAutoPartySettingsInput: { // input type
     allowLarge: boolean; // Boolean!
@@ -214,7 +208,6 @@ export interface NexusGenObjects {
   AutoMentorSettings: { // root type
     acceptDailyRewards: boolean; // Boolean!
     acceptTaskRewards: boolean; // Boolean!
-    completeTasks: NexusGenRootTypes['CompleteTasksSettings']; // CompleteTasksSettings!
   }
   AutoPartySettings: { // root type
     allowLarge: boolean; // Boolean!
@@ -281,10 +274,6 @@ export interface NexusGenObjects {
   BuildingSpots: { // root type
     infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
-  }
-  CompleteTasksSettings: { // root type
-    allow: boolean; // Boolean!
-    allowedTaskIds: string[]; // [String!]!
   }
   CoolDown: { // root type
     max: NexusGenRootTypes['Duration']; // Duration!
@@ -452,7 +441,6 @@ export interface NexusGenFieldTypes {
   AutoMentorSettings: { // field return type
     acceptDailyRewards: boolean; // Boolean!
     acceptTaskRewards: boolean; // Boolean!
-    completeTasks: NexusGenRootTypes['CompleteTasksSettings']; // CompleteTasksSettings!
   }
   AutoPartySettings: { // field return type
     allowLarge: boolean; // Boolean!
@@ -534,11 +522,6 @@ export interface NexusGenFieldTypes {
   BuildingSpots: { // field return type
     infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
-  }
-  CompleteTasksSettings: { // field return type
-    allow: boolean; // Boolean!
-    allowedTaskIds: string[]; // [String!]!
-    taskIds: string[]; // [String!]!
   }
   CoolDown: { // field return type
     max: NexusGenRootTypes['Duration']; // Duration!
@@ -828,7 +811,6 @@ export interface NexusGenFieldTypeNames {
   AutoMentorSettings: { // field return type name
     acceptDailyRewards: 'Boolean'
     acceptTaskRewards: 'Boolean'
-    completeTasks: 'CompleteTasksSettings'
   }
   AutoPartySettings: { // field return type name
     allowLarge: 'Boolean'
@@ -910,11 +892,6 @@ export interface NexusGenFieldTypeNames {
   BuildingSpots: { // field return type name
     infrastructure: 'BuildingSpot'
     resources: 'ResourceFields'
-  }
-  CompleteTasksSettings: { // field return type name
-    allow: 'Boolean'
-    allowedTaskIds: 'String'
-    taskIds: 'String'
   }
   CoolDown: { // field return type name
     max: 'Duration'
