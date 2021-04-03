@@ -28,7 +28,7 @@ const buildingsInProgressFragment = graphql`
 const buildingsInProgressSubscription = graphql`
     subscription BuildingsInProgressSubscription($villageId: ID!) {
         buildingsInProgressUpdated(villageId: $villageId) {
-            ...BuildingInProgress
+            ...BuildingInProgress_buildingInProgress
         }
     }
 `;

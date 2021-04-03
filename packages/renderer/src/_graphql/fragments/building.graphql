@@ -1,12 +1,3 @@
-fragment BuildingInProgress on BuildingInProgress {
-    fieldId
-    finishedAt {
-        ...Timestamp
-    }
-    level
-    type
-}
-
 fragment QueuedBuilding on QueuedBuilding {
     buildingTime {
         ...Duration
