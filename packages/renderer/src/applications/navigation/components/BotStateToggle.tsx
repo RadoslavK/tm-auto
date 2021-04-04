@@ -52,10 +52,16 @@ export const BotStateToggle: React.FC<Props> = React.forwardRef<HTMLButtonElemen
       if (botState === 'Running') {
         stopBot({
           variables: {},
+          optimisticUpdater: (store) => {
+            store.getRoot().setValue('Stopping', 'botState');
+          },
         });
       } else if (botState === 'Paused') {
         startBot({
           variables: {},
+          optimisticUpdater: (store) => {
+            store.getRoot().setValue('Running', 'botState');
+          },
         });
       }
     };

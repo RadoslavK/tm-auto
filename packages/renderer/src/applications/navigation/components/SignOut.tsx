@@ -16,7 +16,12 @@ export const SignOut: React.FC = React.forwardRef<HTMLButtonElement, PropsWithCh
   const history = useHistory();
 
   const onSignOut = async () => {
-    signOut({ variables: {} });
+    signOut({
+      variables: {},
+      optimisticUpdater: (store) => {
+        store.getRoot().setValue('Pending', 'botState');
+      },
+    });
     history.push('/');
   };
 
