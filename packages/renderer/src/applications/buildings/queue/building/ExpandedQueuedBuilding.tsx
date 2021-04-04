@@ -73,7 +73,7 @@ export const ExpandedQueuedBuilding: React.FC<Props> = ({ building }) => {
   const { expandedQueuedBuilding } = useLazyLoadQuery<ExpandedQueuedBuildingQuery>(expandedBuildingQuery, {
     queueId: fragment.id,
     villageId,
-  }, { fetchPolicy: 'network-only', fetchKey });
+  }, { fetchPolicy: 'store-and-network' ,fetchKey });
 
   if (levels === 1) {
     return null;

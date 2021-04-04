@@ -18,10 +18,6 @@ module.exports = {
     '@snowpack/plugin-react-refresh',
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
-    [
-      '@snowpack/plugin-run-script',
-      { cmd: 'yarn relay', watch: '$1 --watch', name: 'relay' },
-    ],
     './relay.snowpack.cjs',
     './fonts.snowpack.cjs',
   ],

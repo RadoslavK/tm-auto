@@ -712,14 +712,6 @@
     "@babel/plugin-syntax-class-properties" "^7.10.0"
     react-refresh "^0.9.0"
 
-"@snowpack/plugin-run-script@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@snowpack/plugin-run-script/-/plugin-run-script-2.3.0.tgz#3775778aca61342e6df47b4198676fafb5cf8c07"
-  integrity sha512-rIbD67uzTPkzemMFbw5seUm/hZFrToTSqN/SGGq5XaU45ftX2sCRzp0lqSH+lZYhC5QTSm5RxXW1HcuPOlbPXQ==
-  dependencies:
-    execa "^5.0.0"
-    npm-run-path "^4.0.1"
-
 "@snowpack/plugin-typescript@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@snowpack/plugin-typescript/-/plugin-typescript-1.2.1.tgz#7170b039d16d41963cc61a714fe7c37f3fdd9d51"
