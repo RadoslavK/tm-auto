@@ -9,10 +9,10 @@ import {
 } from 'nexus';
 import { join } from 'path';
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import { getDirname } from '../../utils/getDirname.js';
 
 export const BuildingSpotLevel = objectType({
   name: 'BuildingSpotLevel',
@@ -24,7 +24,7 @@ export const BuildingSpotLevel = objectType({
       resolve: (level) => level.getTotal(),
     });
   },
-  sourceType: {
+  sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpotLevel.ts'),
     export: 'BuildingSpotLevel',
   },

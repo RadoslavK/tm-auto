@@ -9,6 +9,7 @@ import {
 } from 'nexus';
 import { join } from 'path';
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import type { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
 import { Duration } from '../../_models/duration.js';
@@ -21,7 +22,6 @@ import {
   isResourceField,
 } from '../../utils/buildingUtils.js';
 import { getActualBuildingBuildTime } from '../../utils/buildTimeUtils.js';
-import { getDirname } from '../../utils/getDirname.js';
 import type { ApiContext } from '../apiContext.type.js';
 
 const getTotalQueuedBuildingCost = (qBuilding: QueuedBuilding, ctx: ApiContext): Resources => {
@@ -83,7 +83,7 @@ export const QueuedBuildingObject = objectType({
     t.id('id');
     t.int('fieldId');
   },
-  sourceType: {
+  sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../_models/buildings/queue/queuedBuilding.ts'),
     export: 'QueuedBuilding',
   },
@@ -158,7 +158,7 @@ export const BuildingQueue = objectType({
       },
     });
   },
-  sourceType: {
+  sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../_models/buildings/queue/buildingQueue.ts'),
     export: 'BuildingQueue',
   },
@@ -200,7 +200,7 @@ export const ExpandedQueuedBuildingObject = objectType({
     t.field('buildingTime', { type: 'Duration' });
     t.field('cost', { type: 'Resources' });
   },
-  sourceType: {
+  sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../_models/buildings/queue/expandedBuilding.ts'),
     export: 'ExpandedBuilding',
   },

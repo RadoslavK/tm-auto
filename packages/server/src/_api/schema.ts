@@ -1,8 +1,8 @@
 import { makeSchema } from 'nexus';
 import type { BuilderConfigInput } from 'nexus/dist/builder.js';
 import { join } from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
 
-import { getDirname } from '../utils/getDirname.js';
 import * as types from './graphql/index.js';
 
 const { shouldGenerateArtifacts } = process.env;

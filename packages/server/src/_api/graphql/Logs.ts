@@ -6,6 +6,7 @@ import {
   unionType,
 } from 'nexus';
 import { join } from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import { AutoBuildLogEntryContent } from '../../_models/logs/content/autoBuild.js';
 import { AutoUnitsLogEntryContent } from '../../_models/logs/content/autoUnits.js';
@@ -19,9 +20,8 @@ import {
 } from '../../_models/logs/content/text.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import { getDirname } from '../../utils/getDirname.js';
 
-const __dirname = getDirname(import.meta);
+const __dirname = process.env.shouldGenerateArtifacts && getDirname(import.meta) || '';
 
 export const TextLogEntryTypeEnum = enumType({
   name: "TextLogEntryType",

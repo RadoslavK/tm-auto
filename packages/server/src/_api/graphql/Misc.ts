@@ -4,10 +4,10 @@ import {
   objectType,
 } from 'nexus';
 import { join } from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import { Tribe } from '../../_models/enums/tribe.js';
 import { TaskType } from '../../_models/misc/taskType.js';
-import { getDirname } from '../../utils/getDirname.js';
 
 export const CoolDown = objectType({
   name: 'CoolDown',
@@ -47,7 +47,7 @@ export const Resources = objectType({
       resolve: (res) => res.getTotal(),
     });
   },
-  sourceType: {
+  sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../_models/misc/resources.ts'),
     export: 'Resources',
   },

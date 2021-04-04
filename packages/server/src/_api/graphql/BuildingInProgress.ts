@@ -5,12 +5,12 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
-import { getDirname } from '../../utils/getDirname.js';
 
-const __dirname = getDirname(import.meta);
+const __dirname = process.env.shouldGenerateArtifacts && getDirname(import.meta) || '';
 
 export const BuildingInProgress = objectType({
   name: 'BuildingInProgress',

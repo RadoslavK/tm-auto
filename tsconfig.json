@@ -24,5 +24,6 @@
       "shared/*": ["shared/src/*"],
       "server/*": ["server/src/*"]
     }
-  }
+  },
+  "files": []
 }
