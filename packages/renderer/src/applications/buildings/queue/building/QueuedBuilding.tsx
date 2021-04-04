@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
+import React, {
+  Suspense,
+  useMemo, 
+} from 'react';
 import {
   DragPreviewImage,
   useDrag,
@@ -21,11 +24,13 @@ import {
   BuildingImageSize,
   imageLinks,
 } from '../../../../utils/imageLinks.js';
+import { useIsQueuedBuildingExpanded } from '../../hooks/useIsQueuedBuildingExpanded.js';
 import type { MovedQueuedBuilding } from '../DroppedQueuedBuilding.js';
 import {
   DropPosition,
   QueuedBuildingsDropArea,
 } from '../QueuedBuildingsDropArea.js';
+import { ExpandedQueuedBuilding } from './ExpandedQueuedBuilding.js';
 import { QueuedBuildingComponent } from './QueuedBuildingComponent.js';
 
 type StylesProps = {
@@ -50,6 +55,7 @@ const queuedBuildingQueuedBuildingFragment = graphql`
       id
       type
       ...QueuedBuildingComponent_queuedBuilding
+      ...ExpandedQueuedBuilding_queuedBuilding
   }
 `;
 
@@ -96,6 +102,7 @@ export const QueuedBuilding: React.FC<Props> = ({
 
   const classes = useStyles({ isDragging });
   const tribe = useRecoilValue(tribeState);
+  const isExpanded = useIsQueuedBuildingExpanded(villageId, queuedBuildingFragment.id);
 
   return (
     <QueuedBuildingsDropArea
@@ -116,7 +123,13 @@ export const QueuedBuilding: React.FC<Props> = ({
           building={queuedBuildingFragment}
           onCollapse={onCollapse}
           onExpand={onExpand}
+          showActions
         />
+        {isExpanded && (
+          <Suspense fallback={null}>
+            <ExpandedQueuedBuilding building={queuedBuildingFragment} />
+          </Suspense>
+        )}
       </div>
     </QueuedBuildingsDropArea>
   );

@@ -57,10 +57,7 @@ export const DroppedQueuedBuilding: React.FC<Props> = ({
 
   return (
     <div className={classes.buildingPlaceholder}>
-      <QueuedBuildingComponent
-        building={movedBuilding.buildingFragmentKey}
-        isHighlight
-      />
+      <QueuedBuildingComponent building={movedBuilding.buildingFragmentKey} />
     </div>
   );
 };

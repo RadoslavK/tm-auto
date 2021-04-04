@@ -52,7 +52,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
 
 type Props = {
   readonly building: QueuedBuildingComponent_queuedBuilding$key;
-  readonly isHighlight?: boolean;
+  readonly showActions?: boolean;
   readonly onCollapse?: () => void;
   readonly onExpand?: () => void;
 };
@@ -86,9 +86,9 @@ const getNameLabel = (building: QueuedBuildingComponent_queuedBuilding$data): st
 
 export const QueuedBuildingComponent: React.FC<Props> = ({
   building,
-  isHighlight,
   onCollapse,
   onExpand,
+  showActions,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
   const tribe = useRecoilValue(tribeState);
@@ -99,10 +99,11 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
 
   return (
     <div className={classes.root}>
-      {!isHighlight && (
+      {showActions && (
         <QueuedBuildingActions
           buildingQueueId={queuedBuildingFragment.id}
           className={classes.actions}
+          isExpandable={queuedBuildingFragment.startingLevel !== queuedBuildingFragment.targetLevel}
           onCollapse={onCollapse}
           onExpand={onExpand}
         />

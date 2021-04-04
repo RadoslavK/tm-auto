@@ -1,4 +1,5 @@
 import type { PartialFields } from 'shared/types/fields.type.js';
+import { getTotalSeconds } from 'shared/utils/getTotalSeconds.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
 export class Duration {
@@ -41,8 +42,7 @@ export class Duration {
     });
   };
 
-  public getTotalSeconds = (): number =>
-    ((this.days * 24 + this.hours) * 60 + this.minutes) * 60 + this.seconds;
+  public getTotalSeconds = (): number => getTotalSeconds(this);
 
   public getMin = (other: Duration): Duration =>
     this.getTotalSeconds() <= other.getTotalSeconds() ? this : other;

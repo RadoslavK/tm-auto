@@ -82,7 +82,6 @@ export const QueuedBuildingObject = objectType({
     });
     t.id('id');
     t.int('fieldId');
-    t.id('villageId');
   },
   sourceType: {
     module: join(getDirname(import.meta), '../../_models/buildings/queue/queuedBuilding.ts'),
@@ -190,6 +189,39 @@ export const CanMoveQueuedBuildingQuery = queryField(t => {
       );
 
       return queueService.canMoveBuildingToIndex(queueId, targetQueueId);
+    },
+  });
+});
+
+export const ExpandedQueuedBuildingObject = objectType({
+  name: 'ExpandedQueuedBuilding',
+  definition: t => {
+    t.int('level');
+    t.field('buildingTime', { type: 'Duration' });
+    t.field('cost', { type: 'Resources' });
+  },
+  sourceType: {
+    module: join(getDirname(import.meta), '../../_models/buildings/queue/expandedBuilding.ts'),
+    export: 'ExpandedBuilding',
+  },
+});
+
+export const ExpandedQueuedBuildingQuery = queryField(t => {
+  t.list.field('expandedQueuedBuilding', {
+    type: ExpandedQueuedBuildingObject,
+    args: {
+      villageId: idArg(),
+      queueId: idArg(),
+    },
+    resolve: (_, { villageId, queueId }, ctx) => {
+      const { queue } = ctx.villageService.village(villageId).buildings;
+      const building = queue.buildings().find(b => b.id === queueId);
+
+      if (!building) {
+        throw new Error(`Did not find q building with id: ${queueId}`);
+      }
+
+      return [...ctx.expandedBuildingService.getFor(building)];
     },
   });
 });

@@ -8,6 +8,7 @@ import { ApiContext } from "./apiContext.type"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { BuildingSpotLevel } from "./../_models/buildings/spots/buildingSpotLevel"
+import { ExpandedBuilding } from "./../_models/buildings/queue/expandedBuilding"
 import { Hero } from "./../_models/hero/hero"
 import { QueuedBuilding } from "./../_models/buildings/queue/queuedBuilding"
 import { Resources } from "./../_models/misc/resources"
@@ -291,6 +292,7 @@ export interface NexusGenObjects {
     building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
+  ExpandedQueuedBuilding: ExpandedBuilding;
   GameInfo: { // root type
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
@@ -534,6 +536,11 @@ export interface NexusGenFieldTypes {
     building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
+  ExpandedQueuedBuilding: { // field return type
+    buildingTime: NexusGenRootTypes['Duration']; // Duration!
+    cost: NexusGenRootTypes['Resources']; // Resources!
+    level: number; // Int!
+  }
   GameInfo: { // field return type
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
@@ -641,6 +648,7 @@ export interface NexusGenFieldTypes {
     canMoveQueuedBuilding: boolean; // Boolean!
     crannyCapacity: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
     currentAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
+    expandedQueuedBuilding: NexusGenRootTypes['ExpandedQueuedBuilding'][]; // [ExpandedQueuedBuilding!]!
     gameInfo: NexusGenRootTypes['GameInfo']; // GameInfo!
     generalSettings: NexusGenRootTypes['GeneralSettings']; // GeneralSettings!
     generalVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
@@ -669,7 +677,6 @@ export interface NexusGenFieldTypes {
     startingLevel: number; // Int!
     targetLevel: number; // Int!
     type: number; // Int!
-    villageId: string; // ID!
   }
   ResourceClaimLogEntryContent: { // field return type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
@@ -903,6 +910,11 @@ export interface NexusGenFieldTypeNames {
     building: 'QueuedBuilding'
     queue: 'BuildingQueue'
   }
+  ExpandedQueuedBuilding: { // field return type name
+    buildingTime: 'Duration'
+    cost: 'Resources'
+    level: 'Int'
+  }
   GameInfo: { // field return type name
     tribe: 'Tribe'
   }
@@ -1010,6 +1022,7 @@ export interface NexusGenFieldTypeNames {
     canMoveQueuedBuilding: 'Boolean'
     crannyCapacity: 'VillageCrannyCapacity'
     currentAccount: 'UserAccount'
+    expandedQueuedBuilding: 'ExpandedQueuedBuilding'
     gameInfo: 'GameInfo'
     generalSettings: 'GeneralSettings'
     generalVillageSettings: 'GeneralVillageSettings'
@@ -1038,7 +1051,6 @@ export interface NexusGenFieldTypeNames {
     startingLevel: 'Int'
     targetLevel: 'Int'
     type: 'Int'
-    villageId: 'ID'
   }
   ResourceClaimLogEntryContent: { // field return type name
     reason: 'ClaimHeroResourcesReason'
@@ -1303,6 +1315,10 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     crannyCapacity: { // args
+      villageId: string; // ID!
+    }
+    expandedQueuedBuilding: { // args
+      queueId: string; // ID!
       villageId: string; // ID!
     }
     generalVillageSettings: { // args

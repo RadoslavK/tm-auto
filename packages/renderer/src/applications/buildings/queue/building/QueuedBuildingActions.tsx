@@ -10,10 +10,12 @@ import type { QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation } 
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
+import { useIsQueuedBuildingExpanded } from '../../hooks/useIsQueuedBuildingExpanded.js';
 
 type Props = {
   readonly buildingQueueId: string;
   readonly className?: string;
+  readonly isExpandable: boolean;
   readonly onCollapse?: () => void;
   readonly onExpand?: () => void;
 };
@@ -63,6 +65,7 @@ const moveQueuedBuildingAsHighAsPossibleMutation = graphql`
 export const QueuedBuildingActions: React.FC<Props> = ({
   buildingQueueId,
   className,
+  isExpandable,
   onCollapse,
   onExpand,
 }) => {
@@ -91,6 +94,8 @@ export const QueuedBuildingActions: React.FC<Props> = ({
     });
   };
 
+  const isExpanded = useIsQueuedBuildingExpanded(villageId, buildingQueueId);
+
   return (
     <div className={clsx(className, classes.root)}>
       <button
@@ -101,13 +106,13 @@ export const QueuedBuildingActions: React.FC<Props> = ({
         className={clsx(classes.image, classes.delete)}
         onClick={onDequeue}
       />
-      {onExpand && (
+      {isExpandable && !isExpanded && onExpand && (
         <button
           className={clsx(classes.image, classes.expand)}
           onClick={onExpand}
         />
       )}
-      {onCollapse && (
+      {isExpandable && isExpanded && onCollapse && (
         <button
           className={clsx(classes.image, classes.collapse)}
           onClick={onCollapse}

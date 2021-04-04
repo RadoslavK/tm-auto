@@ -3,6 +3,7 @@ import type { Hero } from '../_models/hero/hero.js';
 import type { GeneralSettings } from '../_models/settings/generalSettings.js';
 import type { AccountService } from '../services/accountService.js';
 import type { AvailableBuildingTypesService } from '../services/availableBuildingTypesService.js';
+import type { ExpandedBuildingService } from '../services/buildingQueue/expandedBuildingService.js';
 import type { BuildingQueueService } from '../services/buildingQueueService.js';
 import type { ControllerService } from '../services/controllerService.js';
 import type { CrannyInfoService } from '../services/crannyInfoService.js';
@@ -27,11 +28,11 @@ export type ApiContext = {
   readonly accountService: AccountService;
   readonly settingsManagementService: SettingsManagementService;
   readonly generalSettingsService: InternalSettingsService<GeneralSettings>;
+  readonly expandedBuildingService: ExpandedBuildingService;
   readonly buildingQueueService: {
     readonly for: (villageId: string) => BuildingQueueService;
   };
 
-  //  from account context
   readonly settingsService: SettingsService;
   readonly gameInfo: GameInfo;
   readonly logsService: LogsService;
