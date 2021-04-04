@@ -8,6 +8,7 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
 import type { EnsureSignedInBotStateSubscription } from '../../../_graphql/__generated__/EnsureSignedInBotStateSubscription.graphql.js';
+import { GraphiQL } from '../../GraphiQL.js';
 import { SettingsManagement } from '../../settings/management/SettingsManagement.js';
 import { SignInForm } from './SignInForm.js';
 
@@ -39,6 +40,7 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
   if (botState === 'None' || botState === 'Pending') {
     return (
       <div>
+        <GraphiQL />
         <SettingsManagement />
         <SignInForm />
       </div>

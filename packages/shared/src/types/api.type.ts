@@ -14,6 +14,7 @@ type IpcApi = {
 };
 export type Api = {
   readonly ipc: IpcApi;
+  readonly openGraphiQL: () => void;
   readonly openSaveFileDialog: (defaultName?: string) => string | undefined;
   readonly openLoadFileDialog: () => string | undefined;
 };

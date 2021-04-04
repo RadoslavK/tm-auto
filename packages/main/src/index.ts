@@ -27,12 +27,46 @@ if (require('electron-squirrel-startup')) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let clientWin: null | BrowserWindowType;
+let clientWin: null | BrowserWindowType = null;
+let graphiqlWin: null | BrowserWindowType = null;
+
+const openGraphiQLWindow = async (): Promise<void> => {
+  if (graphiqlWin) {
+    return;
+  }
+
+  graphiqlWin = new BrowserWindow({
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.cjs'),
+      enableRemoteModule: true,
+    },
+  });
+
+  graphiqlWin.on('closed', () => {
+    graphiqlWin = null;
+  });
+
+  if (isDevelopment) {
+    await graphiqlWin.loadURL('http://localhost:8080/graphiql');
+  } else {
+    await graphiqlWin.loadURL(
+      url.format({
+        pathname: path.join(__dirname, '..', 'renderer', 'graphiql.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
+  }
+};
 
 const createClientWindow = async (socketName: string): Promise<void> => {
   ipcMain.on('request-socket-name', (event) => {
     event.reply('set-socket-name', socketName);
   });
+
+  ipcMain.on('open-graphiql', () => openGraphiQLWindow());
 
   clientWin = new BrowserWindow({
     icon: path.join(__dirname, '..', 'renderer', 'images', 'TMAuto.ico'),
@@ -93,27 +127,6 @@ const createClientWindow = async (socketName: string): Promise<void> => {
       clientWin?.focus();
     });
   });
-
-  const clientWin2 = new BrowserWindow({
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.cjs'),
-      enableRemoteModule: true,
-    },
-  });
-
-  if (isDevelopment) {
-    await clientWin2.loadURL('http://localhost:8080/graphiql');
-  } else {
-    await clientWin2.loadURL(
-      url.format({
-        pathname: path.join(__dirname, '..', 'renderer', 'graphiql.html'),
-        protocol: 'file:',
-        slashes: true,
-      }),
-    );
-  }
 };
 
 const createBackgroundProcess = (socketName: string): void => {

@@ -17,6 +17,7 @@ import { ErrorBoundary } from '../ErrorBoundary.js';
 import { EnsureGlobalState } from './EnsureGlobalState.js';
 import { EnsureGraphQL } from './EnsureGraphQL.js';
 import { EnsureTitle } from './EnsureTitle.js';
+import { GraphiQL } from './GraphiQL.js';
 import { MainRoutes } from './navigation/components/MainRoutes.js';
 import { Navigation } from './navigation/components/Navigation.js';
 import { SettingsManagement } from './settings/management/SettingsManagement.js';
@@ -73,6 +74,7 @@ export const App: React.FC = () => {
                       <Navigation />
                       <main className={classes.content}>
                         <div className={classes.toolbar} />
+                        <GraphiQL />
                         <SettingsManagement />
                         <MainRoutes />
                       </main>

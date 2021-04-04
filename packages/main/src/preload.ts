@@ -54,6 +54,10 @@ const api: Api = {
       }),
   },
 
+  openGraphiQL: () => {
+    ipcRenderer.send('open-graphiql');
+  },
+
   openSaveFileDialog: (defaultName?: string) =>
     remote.dialog.showSaveDialogSync({
       defaultPath: defaultName,
