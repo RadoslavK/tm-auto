@@ -36,6 +36,7 @@ const openGraphiQLWindow = async (): Promise<void> => {
   }
 
   graphiqlWin = new BrowserWindow({
+    autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -43,6 +44,8 @@ const openGraphiQLWindow = async (): Promise<void> => {
       enableRemoteModule: true,
     },
   });
+
+  graphiqlWin.setMenu(null);
 
   graphiqlWin.on('closed', () => {
     graphiqlWin = null;
@@ -69,6 +72,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
   ipcMain.on('open-graphiql', () => openGraphiQLWindow());
 
   clientWin = new BrowserWindow({
+    autoHideMenuBar: true,
     icon: path.join(__dirname, '..', 'renderer', 'images', 'TMAuto.ico'),
     show: false,
     webPreferences: {
@@ -79,8 +83,9 @@ const createClientWindow = async (socketName: string): Promise<void> => {
     },
   });
 
-  // Auto-hide main app menu - show it after pressing 'Alt' key
-  clientWin.setAutoHideMenuBar(true);
+  if (!isDevelopment) {
+    clientWin.setMenu(null);
+  }
 
   let loaded = false;
 
