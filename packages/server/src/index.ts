@@ -19,5 +19,6 @@ const execute = async () => {
   });
 };
 
-//  TODO: top level import not supported by esbuild yet
+//  TODO: top level import not supported by esbuild for CJS files yet
+//  https://github.com/evanw/esbuild/issues/253
 execute();

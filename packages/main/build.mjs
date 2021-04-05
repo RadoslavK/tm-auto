@@ -7,7 +7,7 @@ const isDevelopment = process.argv[2] !== 'production';
 const options = {
   platform: 'node',
   target: 'node14.16',
-  // minify: !isDevelopment,
+  minify: !isDevelopment,
   define: {
     'process.env.NODE_ENV': `"${process.argv[2]}"`,
   },
