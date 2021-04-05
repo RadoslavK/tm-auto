@@ -9,19 +9,22 @@ import { Units } from '../units';
 import { VillageResources } from './villageResources.js';
 
 export class Village {
-  public readonly buildings: Buildings = new Buildings(
-    (buildingSpot) =>
+  public readonly buildings: Buildings = new Buildings({
+    onBuildingSpotUpdated: (buildingSpot) =>
       publishPayloadEvent(BotEvent.BuildingSpotUpdated, {
         villageId: this.id,
         buildingSpot,
       }),
-    () => {
+    onOngoingUpdated: () => {
       publishPayloadEvent(BotEvent.BuildingsInProgressUpdated, {
         villageId: this.id,
       });
     },
-    () => publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
-  );
+    onCrannyCapacityUpdate: () =>
+      publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
+    onMainBuildingLevelsChanged: () =>
+      publishPayloadEvent(BotEvent.BuildingQueueTimesUpdated, { villageId: this.id }),
+  });
 
   public readonly coords: Coords = new Coords();
 

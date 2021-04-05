@@ -19,7 +19,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/**/*"
+    "lint": "eslint --cache src/**/*"
   },
   "peerDependencies": {
     "@typescript-eslint/parser": "^4.19.0",

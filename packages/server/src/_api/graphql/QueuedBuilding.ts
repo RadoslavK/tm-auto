@@ -430,3 +430,16 @@ export const BuildingQueueCorrectedSubscription = subscriptionField(t => {
     }),
   });
 });
+
+export const BuildingQueueTimesUpdated = subscriptionField(t => {
+  t.field('buildingQueueTimesUpdated', {
+    type: BuildingQueue,
+    args: {
+      villageId: idArg(),
+    },
+    ...subscribeToEvent(BotEvent.BuildingQueueTimesUpdated, {
+      filter: (p, variables) => p.villageId === variables.villageId,
+      resolve: (_, args, ctx) => ctx.villageService.village(args.villageId).buildings.queue,
+    }),
+  });
+});

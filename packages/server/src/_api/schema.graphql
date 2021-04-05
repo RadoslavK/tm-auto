@@ -457,6 +457,7 @@ type Subscription {
   botActivityChanged: Boolean!
   botStateChanged: BotState!
   buildingQueueCorrected(villageId: ID!): ModificationPayload!
+  buildingQueueTimesUpdated(villageId: ID!): BuildingQueue!
   buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
   heroInformationUpdated: HeroInformation!
   heroLevelUpSettingsChanged: HeroLevelUpSettings!

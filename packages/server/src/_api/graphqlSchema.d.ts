@@ -706,6 +706,7 @@ export interface NexusGenFieldTypes {
     botActivityChanged: boolean; // Boolean!
     botStateChanged: NexusGenEnums['BotState']; // BotState!
     buildingQueueCorrected: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
+    buildingQueueTimesUpdated: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingsInProgressUpdated: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
     heroInformationUpdated: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettingsChanged: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
@@ -1080,6 +1081,7 @@ export interface NexusGenFieldTypeNames {
     botActivityChanged: 'Boolean'
     botStateChanged: 'BotState'
     buildingQueueCorrected: 'ModificationPayload'
+    buildingQueueTimesUpdated: 'BuildingQueue'
     buildingsInProgressUpdated: 'BuildingInProgress'
     heroInformationUpdated: 'HeroInformation'
     heroLevelUpSettingsChanged: 'HeroLevelUpSettings'
@@ -1346,6 +1348,9 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     buildingQueueCorrected: { // args
+      villageId: string; // ID!
+    }
+    buildingQueueTimesUpdated: { // args
       villageId: string; // ID!
     }
     buildingsInProgressUpdated: { // args

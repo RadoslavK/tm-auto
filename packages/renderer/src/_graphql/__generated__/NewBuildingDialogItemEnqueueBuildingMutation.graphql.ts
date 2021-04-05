@@ -48,6 +48,13 @@ mutation NewBuildingDialogItemEnqueueBuildingMutation(
 }
 
 fragment BuildingQueueDurationAndCost on BuildingQueue {
+  ...BuildingQueueTimes
+  totalCost {
+    ...Resources
+  }
+}
+
+fragment BuildingQueueTimes on BuildingQueue {
   infrastructureBuildingTime {
     ...Duration
   }
@@ -56,9 +63,6 @@ fragment BuildingQueueDurationAndCost on BuildingQueue {
   }
   totalBuildingTime {
     ...Duration
-  }
-  totalCost {
-    ...Resources
   }
 }
 
@@ -437,12 +441,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6293eb8b7be384e5dfdcda08b8c9d7f3",
+    "cacheID": "29c68541bc7bc94d2f2ff3201f714170",
     "id": null,
     "metadata": {},
     "name": "NewBuildingDialogItemEnqueueBuildingMutation",
     "operationKind": "mutation",
-    "text": "mutation NewBuildingDialogItemEnqueueBuildingMutation(\n  $input: EnqueueBuildingInput!\n) {\n  enqueueBuilding(input: $input) {\n    addedNew\n    building {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n    queue {\n      ...BuildingQueueDurationAndCost\n    }\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
+    "text": "mutation NewBuildingDialogItemEnqueueBuildingMutation(\n  $input: EnqueueBuildingInput!\n) {\n  enqueueBuilding(input: $input) {\n    addedNew\n    building {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n    queue {\n      ...BuildingQueueDurationAndCost\n    }\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
   }
 };
 })();

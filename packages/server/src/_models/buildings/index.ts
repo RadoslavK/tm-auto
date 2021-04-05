@@ -9,6 +9,19 @@ import { BuildingQueue } from './queue/buildingQueue.js';
 import type { BuildingSpot } from './spots/buildingSpot.js';
 import { BuildingSpots } from './spots/buildingSpots.js';
 
+type UpdateParams = {
+  readonly actual?: readonly ActualBuilding[];
+  readonly ongoing: readonly BuildingInProgress[];
+  readonly triggerMainBuildingsUpdatedEvent?: boolean;
+};
+
+type Events = {
+  readonly onBuildingSpotUpdated: (buildingSpot: BuildingSpot) => void;
+  readonly onCrannyCapacityUpdate: () => void;
+  readonly onMainBuildingLevelsChanged: () => void;
+  readonly onOngoingUpdated: () => void;
+};
+
 export class Buildings {
   public readonly ongoing: BuildingsInProgress = new BuildingsInProgress();
 
@@ -17,74 +30,76 @@ export class Buildings {
   public readonly queue: BuildingQueue = new BuildingQueue();
 
   constructor(
-    private onBuildingSpotUpdated: (buildingSpot: BuildingSpot) => void,
-    private onOngoingUpdated: () => void,
-    private onCrannyCapacityUpdate: () => void,
+    private events: Events,
   ) {}
 
-  public updateActual = (buildings: readonly ActualBuilding[]): void => {
+  public update = ({
+    actual,
+    ongoing,
+    triggerMainBuildingsUpdatedEvent,
+  }: UpdateParams): void => {
     let updatedAny = false;
-
-    buildings.forEach((b) => {
-      let updated = false;
-
-      const spot = this.spots.at(b.fieldId);
-
-      if (spot.level.actual !== b.level) {
-        spot.level.actual = b.level;
-        updated = true;
-        updatedAny = true;
-      }
-
-      if (b.type !== BuildingType.None || spot.level.getTotal() === 0) {
-        spot.type = b.type;
-        updated = true;
-        updatedAny = true;
-      }
-
-      if (updated) {
-        this.onBuildingSpotUpdated(spot);
-      }
-    });
-
-    if (updatedAny) {
-      this.onCrannyCapacityUpdate();
-    }
-  };
-
-  public updateOngoing = (
-    buildingsInProgress: readonly BuildingInProgress[],
-  ): void => {
-    let updatedAny = false;
+    let mbLevelChanged = false;
 
     this.spots.buildings().forEach((spot) => {
       let updated = false;
+      let ogMbLevel = spot.type === BuildingType.MainBuilding
+        ? spot.level.getActualAndOngoing()
+        : null;
 
-      const ongoingForSpot = buildingsInProgress.filter((bip) => bip.fieldId === spot.fieldId);
+      const setUpdated = () => {
+        updated = true;
+        updatedAny = true;
+      };
+
+      const actualForSpot = actual?.find(a => a.fieldId === spot.fieldId);
+      const ongoingForSpot = ongoing.filter((bip) => bip.fieldId === spot.fieldId);
       const ongoingLevel = getMaximum(ongoingForSpot.map((bip) => bip.level));
+
+      if (actualForSpot) {
+        if (spot.level.actual !== actualForSpot.level) {
+          spot.level.actual = actualForSpot.level;
+          setUpdated();
+        }
+
+        if (actualForSpot.type !== BuildingType.None || spot.level.getTotal() === 0) {
+          spot.type = actualForSpot.type;
+          setUpdated();
+        }
+      }
 
       if (spot.level.ongoing !== ongoingLevel) {
         spot.level.ongoing = ongoingLevel;
-        updated = true;
-        updatedAny = true;
+        setUpdated();
       }
 
       if (spot.type === BuildingType.None && ongoingLevel) {
         spot.type = ongoingForSpot[0].type;
-        updated = true;
-        updatedAny = true;
+        setUpdated();
+      }
+
+      if (ogMbLevel !== null) {
+        const newMbLevel = spot.level.getActualAndOngoing();
+
+        if (ogMbLevel !== newMbLevel) {
+          mbLevelChanged = true;
+        }
       }
 
       if (updated) {
-        this.onBuildingSpotUpdated(spot);
+        this.events.onBuildingSpotUpdated(spot);
       }
     });
 
-    this.ongoing.set(buildingsInProgress);
-    this.onOngoingUpdated();
+    this.ongoing.set(ongoing);
+    this.events.onOngoingUpdated();
 
     if (updatedAny) {
-      this.onCrannyCapacityUpdate();
+      this.events.onCrannyCapacityUpdate();
+    }
+
+    if (triggerMainBuildingsUpdatedEvent && mbLevelChanged) {
+      this.events.onMainBuildingLevelsChanged();
     }
   };
 
@@ -119,12 +134,12 @@ export class Buildings {
       }
 
       if (updated) {
-        this.onBuildingSpotUpdated(spot);
+        this.events.onBuildingSpotUpdated(spot);
       }
     });
 
     if (updatedAny) {
-      this.onCrannyCapacityUpdate();
+      this.events.onCrannyCapacityUpdate();
     }
   };
 

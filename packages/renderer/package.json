@@ -10,7 +10,7 @@
     "build": "snowpack build",
     "build-graphiql": "rollup -c",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/**/*",
+    "lint": "eslint --cache src/**/*",
     "relay": "relay-compiler --src ./src --schema ../server/src/_api/schema.graphql --language typescript --artifactDirectory ./src/_graphql/__generated__ --eagerESModules --noFutureProofEnums"
   },
   "browserslist": [

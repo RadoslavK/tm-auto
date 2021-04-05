@@ -1,4 +1,4 @@
-fragment BuildingQueueDurationAndCost on BuildingQueue {
+fragment BuildingQueueTimes on BuildingQueue {
     infrastructureBuildingTime {
         ...Duration
     }
@@ -8,6 +8,10 @@ fragment BuildingQueueDurationAndCost on BuildingQueue {
     totalBuildingTime {
         ...Duration
     }
+}
+
+fragment BuildingQueueDurationAndCost on BuildingQueue {
+    ...BuildingQueueTimes
     totalCost {
         ...Resources
     }

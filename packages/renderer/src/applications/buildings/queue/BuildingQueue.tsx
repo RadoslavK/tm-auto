@@ -18,6 +18,7 @@ import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__genera
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
+import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
 import { expandedQueuedBuildingsState } from '../../../_recoil/atoms/expandedQueuedBuildings.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
@@ -97,6 +98,14 @@ const correctionSubscription = graphql`
   }
 `;
 
+const timesUpdatedSubscription = graphql`
+  subscription BuildingQueueTimesUpdatedSubscription($villageId: ID!) {
+      buildingQueueTimesUpdated(villageId: $villageId) {
+        ...BuildingQueueTimes   
+      }
+  }
+`;
+
 export const BuildingQueue: React.FC<Props> = ({
   buildingQueueKey,
   className,
@@ -123,6 +132,26 @@ export const BuildingQueue: React.FC<Props> = ({
   }), [villageId]);
 
   useSubscription(correctionSubscriptionConfig);
+
+  const timesUpdatedSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueTimesUpdatedSubscription> => ({
+    subscription: timesUpdatedSubscription,
+    variables: { villageId },
+    updater: (store) => {
+      const root = store.getRoot();
+      const queue = root.getLinkedRecord('buildingQueue', { villageId });
+
+      if (!queue) {
+        return;
+      }
+
+      const updatedTimes = store.getRootField('buildingQueueTimesUpdated');
+
+      queue.copyFieldsFrom(updatedTimes);
+      root.setLinkedRecord(queue, 'buildingQueue', { villageId });
+    },
+  }), [villageId]);
+
+  useSubscription(timesUpdatedSubscriptionConfig);
 
   const onClear = (): void => {
     clearQueue({

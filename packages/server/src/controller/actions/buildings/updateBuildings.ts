@@ -10,15 +10,18 @@ export const updateBuildings = async (): Promise<void> => {
 
   const village = AccountContext.getContext().villageService.currentVillage();
   const fieldSpots = await parseFieldSpots();
-  const buildingsInProgress = await parseBuildingsInProgress();
-
-  village.buildings.updateActual(fieldSpots);
-  village.buildings.updateOngoing(buildingsInProgress);
 
   await ensurePage(TravianPath.InfrastructureOverview);
 
   const infrastructureSpots = await parseInfrastructureSpots();
-  village.buildings.updateActual(infrastructureSpots);
+  const buildingsInProgress = await parseBuildingsInProgress();
+  const actualBuildings = fieldSpots.concat(infrastructureSpots);
+
+  village.buildings.update({
+    actual: actualBuildings,
+    ongoing: buildingsInProgress,
+    triggerMainBuildingsUpdatedEvent: true,
+  });
 
   const queueService = AccountContext.getContext().buildingQueueService.for(village.id);
   queueService.removeAndCorrectQueue({

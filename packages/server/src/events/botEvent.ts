@@ -20,6 +20,7 @@ export enum BotEvent {
   NextVillageTaskExecutionChanged = 'NextVillageTaskExecutionChanged',
   QueuedBuildingUpdated = 'QueuedBuildingUpdated',
   BuildingQueueCorrected = 'BuildingQueueCorrected',
+  BuildingQueueTimesUpdated = 'BuildingQueueTimesUpdated',
   VillageUpdated = 'VillageUpdated',
   CrannyCapacityUpdated = 'CrannyCapacityUpdated',
   VillagesUpdated = 'VillagesUpdated',

@@ -334,7 +334,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     }
 
     const ongoing = await parseBuildingsInProgress();
-    this._buildings.updateOngoing(ongoing);
+    this._buildings.update({ ongoing });
     await updateActualResources();
   };
 }

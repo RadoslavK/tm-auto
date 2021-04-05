@@ -71,6 +71,10 @@ export type BotEventPayloads = {
     readonly removedBuildings: readonly QueuedBuilding[];
   };
 
+  [BotEvent.BuildingQueueTimesUpdated]: {
+    readonly villageId: string;
+  };
+
   [BotEvent.BuildingsInProgressUpdated]: {
     readonly villageId: string;
   };

@@ -12,7 +12,7 @@
   "scripts": {
     "nexus": "set shouldGenerateArtifacts=true&& nodemon --config nodemon.nexus.json",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/**/*"
+    "lint": "eslint --cache src/**/*"
   },
   "peerDependencies": {
     "@typescript-eslint/parser": "^4.19.0",
