@@ -19,7 +19,7 @@ fragment BuildingQueueDurationAndCost on BuildingQueue {
 
 fragment ModificationPayload on ModificationPayload {
     removedBuildings {
-        id @deleteRecord
+        id
     }
     updatedBuildings {
         ...QueuedBuilding_queuedBuilding

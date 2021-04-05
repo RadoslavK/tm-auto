@@ -8,5 +8,6 @@ The server/package.json must include entries .js -> .ts for snowpack HMR. It can
 Development
 * Run nexus command to automatically generate schema and it's typings while developing.
 * run `build-graphiql` script in the renderer workspace to build the GraphiQL app first
+* when changing graphql on FE it is necessary to run relay command to generate proper definitions
 
 Requires gulp-cli global package

@@ -107,15 +107,6 @@ return {
           {
             "alias": null,
             "args": null,
-            "filters": null,
-            "handle": "deleteRecord",
-            "key": "",
-            "kind": "ScalarHandle",
-            "name": "id"
-          },
-          {
-            "alias": null,
-            "args": null,
             "kind": "ScalarField",
             "name": "defBonus",
             "storageKey": null
@@ -163,5 +154,5 @@ return {
   }
 };
 })();
-(node as any).hash = '8c96c96b0faff2f5a447c49818006477';
+(node as any).hash = 'daaa4315278380275a1a24ccf68873b0';
 export default node;

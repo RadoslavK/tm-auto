@@ -38,38 +38,37 @@ var v0 = [
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "id",
+        "variableName": "id"
+      }
+    ],
+    "concreteType": "UserAccount",
+    "kind": "LinkedField",
+    "name": "deleteAccount",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
   }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-};
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "SignInFormDeleteAccountMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "UserAccount",
-        "kind": "LinkedField",
-        "name": "deleteAccount",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/)
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -78,29 +77,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "SignInFormDeleteAccountMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "UserAccount",
-        "kind": "LinkedField",
-        "name": "deleteAccount",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "deleteRecord",
-            "key": "",
-            "kind": "ScalarHandle",
-            "name": "id"
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v1/*: any*/)
   },
   "params": {
     "cacheID": "555c09a4677c6083ae06a215c765f1ad",
@@ -112,5 +89,5 @@ return {
   }
 };
 })();
-(node as any).hash = '7c3e93b40566c7cf4482c7ec94c198c5';
+(node as any).hash = '717631a920db4d7683055c6e17badfbd';
 export default node;

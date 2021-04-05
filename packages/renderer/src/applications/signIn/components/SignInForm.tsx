@@ -127,7 +127,7 @@ const updateAccountMutation = graphql`
 const deleteAccountMutation = graphql`
     mutation SignInFormDeleteAccountMutation($id: ID!) {
         deleteAccount(id: $id) {
-            id @deleteRecord
+            id
         }
     }
 `;
@@ -254,10 +254,11 @@ export const SignInForm: React.FC = () => {
           return;
         }
 
-        //  TODO: @deleteRecords leaves null in the array and is triggered first?
-        const newAccounts = oldAccounts.filter(acc => !!acc && acc.getDataID() !== selectedAccountId);
+        const newAccounts = oldAccounts.filter(acc => acc.getDataID() !== removedRecord.getDataID());
+        const removedRecord = store.getRootField('deleteAccount');
 
         root.setLinkedRecords(newAccounts, 'accounts');
+        store.delete(removedRecord.getDataID());
       },
     });
   };

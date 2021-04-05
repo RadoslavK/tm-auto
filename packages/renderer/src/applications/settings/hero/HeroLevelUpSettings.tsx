@@ -65,7 +65,7 @@ const heroLevelUpSettingsUpdateHeroLevelUpItemMutation = graphql`
 const heroLevelUpSettingsRemoveHeroLevelUpItemMutation = graphql`
     mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation($id: ID!) {
         removeHeroLevelUpItem(id: $id) {
-            id @deleteRecord
+            id
             ...HeroLevelUpItem
         }
     }
@@ -190,10 +190,11 @@ export const HeroLevelUpSettings: React.FC = () => {
 
                             const deletedItem = store.getRootField('removeHeroLevelUpItem');
                             const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
-                            const newRecords = oldRecords?.filter(r => !!r && r.getDataID() !== deletedItem.getDataID());
+                            const newRecords = oldRecords?.filter(r => r.getDataID() !== deletedItem.getDataID());
 
                             oldSettings.setLinkedRecords(newRecords, 'levelUpItems');
                             root.setLinkedRecord(oldSettings, 'heroLevelUpSettings');
+                            store.delete(deletedItem.getDataID());
                           },
                         });
                       }}>

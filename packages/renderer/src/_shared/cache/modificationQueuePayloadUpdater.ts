@@ -24,4 +24,5 @@ export const modificationQueuePayloadUpdater = (store: RecordSourceSelectorProxy
   }
 
   root.setLinkedRecord(queue, 'buildingQueue', { villageId });
+  removedIds.forEach(id => store.delete(id));
 };
