@@ -281,6 +281,7 @@ export const DequeueBuildingInput = inputObjectType({
   definition: t => {
     t.id('queueId');
     t.id('villageId');
+    t.nullable.int('level');
   },
 });
 
@@ -300,17 +301,18 @@ export const DequeueBuildingMutation = mutationField(t => {
       input: arg({ type: DequeueBuildingInput }),
     },
     resolve: async (_, args, ctx) => {
-      const { villageId, queueId } = args.input;
+      const { villageId, queueId, level } = args.input;
 
-      const removedBuildings = await ctx.buildingQueueService.for(villageId).dequeueBuilding({
+      const { updatedBuildings, removedBuildings } = await ctx.buildingQueueService.for(villageId).dequeueBuilding({
         queueId,
         mode: DequeueMode.FromApi,
+        level,
       });
       const { queue } = ctx.villageService.village(villageId).buildings;
 
       return {
         removedBuildings: [...removedBuildings],
-        updatedBuildings: [],
+        updatedBuildings: [...updatedBuildings],
         queue,
       };
     },

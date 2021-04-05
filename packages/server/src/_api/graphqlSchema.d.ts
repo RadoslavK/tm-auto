@@ -41,6 +41,7 @@ export interface NexusGenInputs {
     villageId: string; // ID!
   }
   DequeueBuildingInput: { // input type
+    level?: number | null; // Int
     queueId: string; // ID!
     villageId: string; // ID!
   }

@@ -190,6 +190,7 @@ input DequeueBuildingAtFieldInput {
 }
 
 input DequeueBuildingInput {
+  level: Int
   queueId: ID!
   villageId: ID!
 }

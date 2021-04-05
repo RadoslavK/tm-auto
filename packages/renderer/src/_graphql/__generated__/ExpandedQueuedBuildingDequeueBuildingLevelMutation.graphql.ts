@@ -9,23 +9,23 @@ export type DequeueBuildingInput = {
     queueId: string;
     villageId: string;
 };
-export type QueuedBuildingActionsDequeueBuildingMutationVariables = {
+export type ExpandedQueuedBuildingDequeueBuildingLevelMutationVariables = {
     input: DequeueBuildingInput;
 };
-export type QueuedBuildingActionsDequeueBuildingMutationResponse = {
+export type ExpandedQueuedBuildingDequeueBuildingLevelMutationResponse = {
     readonly dequeueBuilding: {
         readonly " $fragmentRefs": FragmentRefs<"ModificationPayload">;
     };
 };
-export type QueuedBuildingActionsDequeueBuildingMutation = {
-    readonly response: QueuedBuildingActionsDequeueBuildingMutationResponse;
-    readonly variables: QueuedBuildingActionsDequeueBuildingMutationVariables;
+export type ExpandedQueuedBuildingDequeueBuildingLevelMutation = {
+    readonly response: ExpandedQueuedBuildingDequeueBuildingLevelMutationResponse;
+    readonly variables: ExpandedQueuedBuildingDequeueBuildingLevelMutationVariables;
 };
 
 
 
 /*
-mutation QueuedBuildingActionsDequeueBuildingMutation(
+mutation ExpandedQueuedBuildingDequeueBuildingLevelMutation(
   $input: DequeueBuildingInput!
 ) {
   dequeueBuilding(input: $input) {
@@ -238,7 +238,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "QueuedBuildingActionsDequeueBuildingMutation",
+    "name": "ExpandedQueuedBuildingDequeueBuildingLevelMutation",
     "selections": [
       {
         "alias": null,
@@ -264,7 +264,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "QueuedBuildingActionsDequeueBuildingMutation",
+    "name": "ExpandedQueuedBuildingDequeueBuildingLevelMutation",
     "selections": [
       {
         "alias": null,
@@ -424,14 +424,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c105cba5d9079fdb5b94197ccc841496",
+    "cacheID": "9d51f85e13e9bdb4dc586cd6a0811c07",
     "id": null,
     "metadata": {},
-    "name": "QueuedBuildingActionsDequeueBuildingMutation",
+    "name": "ExpandedQueuedBuildingDequeueBuildingLevelMutation",
     "operationKind": "mutation",
-    "text": "mutation QueuedBuildingActionsDequeueBuildingMutation(\n  $input: DequeueBuildingInput!\n) {\n  dequeueBuilding(input: $input) {\n    ...ModificationPayload\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
+    "text": "mutation ExpandedQueuedBuildingDequeueBuildingLevelMutation(\n  $input: DequeueBuildingInput!\n) {\n  dequeueBuilding(input: $input) {\n    ...ModificationPayload\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
   }
 };
 })();
-(node as any).hash = 'fd3b4952d45ac7f61c07a80859b6ee12';
+(node as any).hash = 'b040f63b3a5440332262e66bb31ad982';
 export default node;

@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
+import clsx from 'clsx';
 import React, {
   useEffect,
   useState,
@@ -7,14 +8,18 @@ import React, {
 import {
   useFragment,
   useLazyLoadQuery,
+  useMutation,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import { getTotalSeconds } from 'shared/utils/getTotalSeconds.js';
 
 import type { ExpandedQueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/ExpandedQueuedBuilding_queuedBuilding.graphql.js';
+import type { ExpandedQueuedBuildingDequeueBuildingLevelMutation } from '../../../../_graphql/__generated__/ExpandedQueuedBuildingDequeueBuildingLevelMutation.graphql.js';
 import type { ExpandedQueuedBuildingQuery } from '../../../../_graphql/__generated__/ExpandedQueuedBuildingQuery.graphql.js';
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
+import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { usePrevious } from '../../../../_shared/hooks/usePrevious.js';
+import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
 
 type Props = {
@@ -24,6 +29,15 @@ type Props = {
 const useStyles = makeStyles({
   expandedBuilding: {
     display: 'flex',
+  },
+  image: {
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    height: '2em',
+    width: '2em',
+  },
+  dequeueAction: {
+    backgroundImage: `url("${imageLinks.actions.delete}")`,
   },
   level: {
     flex: 1,
@@ -55,6 +69,14 @@ const expandedBuildingQuery = graphql`
     }
 `;
 
+const dequeueBuildingLevelMutation = graphql`
+  mutation ExpandedQueuedBuildingDequeueBuildingLevelMutation($input: DequeueBuildingInput!) {
+      dequeueBuilding(input: $input) {
+          ...ModificationPayload
+      }
+  }
+`;
+
 export const ExpandedQueuedBuilding: React.FC<Props> = ({ building }) => {
   const classes = useStyles();
   const fragment = useFragment(fragmentDefinition, building);
@@ -75,6 +97,8 @@ export const ExpandedQueuedBuilding: React.FC<Props> = ({ building }) => {
     villageId,
   }, { fetchPolicy: 'store-and-network' ,fetchKey });
 
+  const [dequeue] = useMutation<ExpandedQueuedBuildingDequeueBuildingLevelMutation>(dequeueBuildingLevelMutation);
+
   if (levels === 1) {
     return null;
   }
@@ -86,6 +110,24 @@ export const ExpandedQueuedBuilding: React.FC<Props> = ({ building }) => {
           key={expandedBuilding.level}
           className={classes.expandedBuilding}
         >
+          <button
+            className={clsx(classes.image, classes.dequeueAction)}
+            onClick={() => {
+              dequeue({
+                variables: {
+                  input: {
+                    level: expandedBuilding.level,
+                    queueId: fragment.id,
+                    villageId,
+                  },
+                },
+                updater: (store) => {
+                  const rootField = store.getRootField('dequeueBuilding');
+                  modificationQueuePayloadUpdater(store, rootField, villageId);
+                },
+              });
+            }}
+          />
           <strong className={classes.level}>
             Level {expandedBuilding.level}
           </strong>
