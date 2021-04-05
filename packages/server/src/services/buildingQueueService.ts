@@ -10,6 +10,8 @@ import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 import { accountService } from './accountService.js';
 import { EnqueueBuildingService } from './buildingQueue/enqueueBuildingService.js';
+import { MergeBuildingsService } from './buildingQueue/mergeBuildingsService.js';
+import { SplitBuildingService } from './buildingQueue/splitBuildingService.js';
 import { dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';
 import { buildingInfoService } from './info/buildingInfoService.js';
@@ -53,6 +55,8 @@ class Offsets {
 
 export class BuildingQueueService {
   public readonly enqueue: EnqueueBuildingService;
+  public readonly split: SplitBuildingService;
+  public readonly merge: MergeBuildingsService;
 
   private readonly _village: Village;
 
@@ -72,7 +76,10 @@ export class BuildingQueueService {
     const { id: accountId } = accountService.getCurrentAccount();
     this._village = AccountContext.getContext().villageService.village(villageId);
     this._filePath = dataPathService.villagePath(accountId, villageId).queue;
+
     this.enqueue = new EnqueueBuildingService(villageId, (hasChanges) => this.onUpdate(hasChanges));
+    this.split = new SplitBuildingService(villageId, (hasChanges) => this.onUpdate(hasChanges));
+    this.merge = new MergeBuildingsService(villageId, (hasChanges) => this.onUpdate(hasChanges));
   }
 
   private serializeQueue = async (): Promise<void> =>

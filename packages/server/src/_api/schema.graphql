@@ -305,6 +305,11 @@ enum MapSearchState {
   Searching
 }
 
+type MergeQueueBuildingsPayload {
+  removedBuilding: QueuedBuilding
+  updatedBuilding: QueuedBuilding
+}
+
 type ModificationPayload {
   queue: BuildingQueue!
   removedBuildings: [QueuedBuilding!]!
@@ -325,6 +330,7 @@ type Mutation {
   importAccountSettings(accountId: ID!, path: String!): Boolean
   importAccounts(path: String!): Boolean
   importGeneralSettings(path: String!): Boolean
+  mergeQueuedBuildings(topQueueId: ID!, villageId: ID!): MergeQueueBuildingsPayload!
   moveQueuedBuildingAsHighAsPossible(queueId: ID!, villageId: ID!): ModificationPayload!
   moveQueuedBuildingToIndex(queueId: ID!, targetQueueId: ID!, villageId: ID!): ModificationPayload!
   refreshVillage(villageId: ID!): Boolean
@@ -347,6 +353,7 @@ type Mutation {
   setNextVillageTaskExecution(delay: DurationInput!, task: TaskType!, villageId: ID!): Timestamp!
   signIn(accountId: ID!): Boolean
   signOut: Boolean
+  splitQueuedBuilding(queueId: ID!, startingLevel: Int!, villageId: ID!): SplitQueueBuildingPayload!
   startBot: Boolean
   stopBot: Boolean
   stopMapScan: Boolean
@@ -445,6 +452,11 @@ input SearchMapOriginInput {
   radius: Int!
   x: Int!
   y: Int!
+}
+
+type SplitQueueBuildingPayload {
+  addedBuilding: QueuedBuilding
+  updatedBuilding: QueuedBuilding
 }
 
 type Subscription {

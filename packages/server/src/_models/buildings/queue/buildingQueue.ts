@@ -15,6 +15,18 @@ export class BuildingQueue {
     this._buildings.push(building);
   };
 
+  public insertAfter = (newBuilding: QueuedBuilding, target: QueuedBuilding): boolean => {
+    const index = this._buildings.indexOf(target);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this._buildings.splice(index + 1, 0, newBuilding);
+
+    return true;
+  };
+
   public peek = (type: BuildingSpotType): QueuedBuilding | undefined =>
     type === BuildingSpotType.Any
       ? this._buildings[0]
@@ -38,22 +50,6 @@ export class BuildingQueue {
       .slice()
       .reverse()
       .find((b) => b.fieldId === fieldId && (!predicate || predicate(b)));
-
-  public removeLast = (queueId: string): boolean => {
-    const building = this._buildings.find(b => b.id === queueId);
-
-    if (!building) {
-      return false;
-    }
-
-    if (building.startingLevel === building.targetLevel) {
-      this._buildings = this._buildings.filter((b) => b.id !== queueId);
-    } else {
-      building.targetLevel--;
-    }
-
-    return true;
-  };
 
   public remove = (queueId: string): ReadonlyArray<QueuedBuilding> => this.removeBulk(new Set<string>([queueId]));
 
@@ -80,17 +76,5 @@ export class BuildingQueue {
 
   public moveTo = (oldIndex: number, newIndex: number): void => {
     this._buildings.splice(newIndex, 0, this._buildings.splice(oldIndex, 1)[0]);
-  };
-
-  public moveBlockTo = (
-    oldStartIndex: number,
-    count: number,
-    newIndex: number,
-  ): void => {
-    this._buildings.splice(
-      newIndex,
-      0,
-      ...this._buildings.splice(oldStartIndex, count),
-    );
   };
 }

@@ -7,6 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type BuildingQueue_buildingQueue = {
     readonly buildings: ReadonlyArray<{
         readonly id: string;
+        readonly fieldId: number;
         readonly " $fragmentRefs": FragmentRefs<"QueuedBuilding_queuedBuilding">;
     }>;
     readonly totalCost: {
@@ -58,6 +59,13 @@ return {
           "args": null,
           "kind": "ScalarField",
           "name": "id",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "fieldId",
           "storageKey": null
         },
         {
@@ -119,5 +127,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'dfca37b1c0297732d55c7f215a4d1859';
+(node as any).hash = '5d10fdf9504f4c6693ce73065d59a5cc';
 export default node;

@@ -46,6 +46,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly building: QueuedBuilding_queuedBuilding$key;
   readonly index: number;
+  readonly isMergeable: boolean;
   readonly onCollapse?: () => void;
   readonly onExpand?: () => void;
 };
@@ -70,6 +71,7 @@ const subscription = graphql`
 export const QueuedBuilding: React.FC<Props> = ({
   building,
   index,
+  isMergeable,
   onCollapse,
   onExpand,
 }) => {
@@ -121,6 +123,7 @@ export const QueuedBuilding: React.FC<Props> = ({
       <div ref={drag} className={classes.root}>
         <QueuedBuildingComponent
           building={queuedBuildingFragment}
+          isMergeable={isMergeable}
           onCollapse={onCollapse}
           onExpand={onExpand}
           showActions

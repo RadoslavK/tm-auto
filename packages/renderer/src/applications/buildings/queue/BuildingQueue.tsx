@@ -55,6 +55,7 @@ const buildingQueueFragment = graphql`
   fragment BuildingQueue_buildingQueue on BuildingQueue {
       buildings {
           id
+          fieldId
           ...QueuedBuilding_queuedBuilding
       }
       totalCost {
@@ -217,15 +218,21 @@ export const BuildingQueue: React.FC<Props> = ({
         resources={buildingQueue.totalCost}
       />
       <div className={classes.buildings}>
-        {buildingQueue.buildings.map((building, index) => (
-          <QueuedBuilding
-            key={building.id}
-            building={building}
-            index={index}
-            onExpand={() => expandBuildings([building.id])}
-            onCollapse={() => collapseBuildings(building.id)}
-          />
-        ))}
+        {buildingQueue.buildings.map((building, index) => {
+          const nextBuilding = buildingQueue.buildings[index + 1];
+          const isMergeable = !!nextBuilding && nextBuilding.fieldId === building.fieldId;
+
+          return (
+            <QueuedBuilding
+              key={building.id}
+              building={building}
+              index={index}
+              isMergeable={isMergeable}
+              onExpand={() => expandBuildings([building.id])}
+              onCollapse={() => collapseBuildings(building.id)}
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -143,8 +143,6 @@ export const checkAutoStorage = async (
         fieldId: lowestLevelBuildingInVillage.fieldId,
         startingLevel: lowestLevelBuildingInVillage.level.getTotal() + 1,
         targetLevel: lowestLevelBuildingInVillage.level.getTotal() + 1,
-        //  id is not important is it wont be placed into the queue
-        id: '',
         type: lowestLevelBuildingInVillage.type,
       });
 
@@ -166,8 +164,6 @@ export const checkAutoStorage = async (
         fieldId: freeFieldId,
         startingLevel: 1,
         targetLevel: 1,
-        //  id is not important is it wont be placed into the queue
-        id: '',
         type: neededBuildingType,
       });
 

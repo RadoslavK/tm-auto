@@ -26,7 +26,7 @@ type Props = {
 const queuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = graphql`
   mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation($villageId: ID!, $queueId: ID!, $targetQueueId: ID!) {
       moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId) {
-          ...ModificationPayload @arguments(includeOrderChanges: true)
+          ...ModificationPayloadWithOrderChanges
       }
   }
 `;

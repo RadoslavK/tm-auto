@@ -19,6 +19,8 @@ export const imageLinks = {
     collapse: `${baseUrl}/collapse.png`,
     delete: `${baseUrl}/red_cross.png`,
     expand: `${baseUrl}/expand.png`,
+    merge: `${baseUrl}/merge.png`,
+    split: `${baseUrl}/split.png`,
     queue: {
       moveToTop: `${baseUrl}/double_arrow_up.png`,
     },

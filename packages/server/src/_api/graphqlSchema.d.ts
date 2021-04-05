@@ -321,6 +321,10 @@ export interface NexusGenObjects {
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village?: NexusGenRootTypes['Village'] | null; // Village
   }
+  MergeQueueBuildingsPayload: { // root type
+    removedBuilding?: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+    updatedBuilding?: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+  }
   ModificationPayload: { // root type
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     removedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
@@ -340,6 +344,10 @@ export interface NexusGenObjects {
     wood: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
   }
   Resources: Resources;
+  SplitQueueBuildingPayload: { // root type
+    addedBuilding?: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+    updatedBuilding?: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+  }
   Subscription: {};
   TextLogEntryContent: TextLogEntryContent;
   Timestamp: { // root type
@@ -573,6 +581,10 @@ export interface NexusGenFieldTypes {
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
     village: NexusGenRootTypes['Village'] | null; // Village
   }
+  MergeQueueBuildingsPayload: { // field return type
+    removedBuilding: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+    updatedBuilding: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+  }
   ModificationPayload: { // field return type
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     removedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
@@ -592,6 +604,7 @@ export interface NexusGenFieldTypes {
     importAccountSettings: boolean | null; // Boolean
     importAccounts: boolean | null; // Boolean
     importGeneralSettings: boolean | null; // Boolean
+    mergeQueuedBuildings: NexusGenRootTypes['MergeQueueBuildingsPayload']; // MergeQueueBuildingsPayload!
     moveQueuedBuildingAsHighAsPossible: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     moveQueuedBuildingToIndex: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     refreshVillage: boolean | null; // Boolean
@@ -614,6 +627,7 @@ export interface NexusGenFieldTypes {
     setNextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     signIn: boolean | null; // Boolean
     signOut: boolean | null; // Boolean
+    splitQueuedBuilding: NexusGenRootTypes['SplitQueueBuildingPayload']; // SplitQueueBuildingPayload!
     startBot: boolean | null; // Boolean
     stopBot: boolean | null; // Boolean
     stopMapScan: boolean | null; // Boolean
@@ -695,6 +709,10 @@ export interface NexusGenFieldTypes {
     iron: number; // Int!
     total: number; // Int!
     wood: number; // Int!
+  }
+  SplitQueueBuildingPayload: { // field return type
+    addedBuilding: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
+    updatedBuilding: NexusGenRootTypes['QueuedBuilding'] | null; // QueuedBuilding
   }
   Subscription: { // field return type
     accountSettingsUpdated: NexusGenRootTypes['AccountSettings']; // AccountSettings!
@@ -948,6 +966,10 @@ export interface NexusGenFieldTypeNames {
     timestamp: 'Timestamp'
     village: 'Village'
   }
+  MergeQueueBuildingsPayload: { // field return type name
+    removedBuilding: 'QueuedBuilding'
+    updatedBuilding: 'QueuedBuilding'
+  }
   ModificationPayload: { // field return type name
     queue: 'BuildingQueue'
     removedBuildings: 'QueuedBuilding'
@@ -967,6 +989,7 @@ export interface NexusGenFieldTypeNames {
     importAccountSettings: 'Boolean'
     importAccounts: 'Boolean'
     importGeneralSettings: 'Boolean'
+    mergeQueuedBuildings: 'MergeQueueBuildingsPayload'
     moveQueuedBuildingAsHighAsPossible: 'ModificationPayload'
     moveQueuedBuildingToIndex: 'ModificationPayload'
     refreshVillage: 'Boolean'
@@ -989,6 +1012,7 @@ export interface NexusGenFieldTypeNames {
     setNextVillageTaskExecution: 'Timestamp'
     signIn: 'Boolean'
     signOut: 'Boolean'
+    splitQueuedBuilding: 'SplitQueueBuildingPayload'
     startBot: 'Boolean'
     stopBot: 'Boolean'
     stopMapScan: 'Boolean'
@@ -1070,6 +1094,10 @@ export interface NexusGenFieldTypeNames {
     iron: 'Int'
     total: 'Int'
     wood: 'Int'
+  }
+  SplitQueueBuildingPayload: { // field return type name
+    addedBuilding: 'QueuedBuilding'
+    updatedBuilding: 'QueuedBuilding'
   }
   Subscription: { // field return type name
     accountSettingsUpdated: 'AccountSettings'
@@ -1188,6 +1216,10 @@ export interface NexusGenArgTypes {
     importGeneralSettings: { // args
       path: string; // String!
     }
+    mergeQueuedBuildings: { // args
+      topQueueId: string; // ID!
+      villageId: string; // ID!
+    }
     moveQueuedBuildingAsHighAsPossible: { // args
       queueId: string; // ID!
       villageId: string; // ID!
@@ -1239,6 +1271,11 @@ export interface NexusGenArgTypes {
     }
     signIn: { // args
       accountId: string; // ID!
+    }
+    splitQueuedBuilding: { // args
+      queueId: string; // ID!
+      startingLevel: number; // Int!
+      villageId: string; // ID!
     }
     updateAccount: { // args
       account: NexusGenInputs['AccountInput']; // AccountInput!

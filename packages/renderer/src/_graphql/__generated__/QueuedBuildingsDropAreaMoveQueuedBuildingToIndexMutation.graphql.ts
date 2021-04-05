@@ -11,7 +11,7 @@ export type QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutationVariables = 
 };
 export type QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutationResponse = {
     readonly moveQueuedBuildingToIndex: {
-        readonly " $fragmentRefs": FragmentRefs<"ModificationPayload">;
+        readonly " $fragmentRefs": FragmentRefs<"ModificationPayloadWithOrderChanges">;
     };
 };
 export type QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation = {
@@ -28,7 +28,7 @@ mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation(
   $targetQueueId: ID!
 ) {
   moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId) {
-    ...ModificationPayload_P6Vb1
+    ...ModificationPayloadWithOrderChanges
   }
 }
 
@@ -86,7 +86,7 @@ fragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {
   }
 }
 
-fragment ModificationPayload_P6Vb1 on ModificationPayload {
+fragment ModificationPayload on ModificationPayload {
   removedBuildings {
     id
   }
@@ -95,17 +95,30 @@ fragment ModificationPayload_P6Vb1 on ModificationPayload {
     id
   }
   queue {
+    ...BuildingQueueDurationAndCost
+  }
+}
+
+fragment ModificationPayloadWithOrderChanges on ModificationPayload {
+  ...ModificationPayload
+  queue {
     buildings {
       id
       buildingTime {
         ...Duration
       }
     }
-    ...BuildingQueueDurationAndCost
   }
 }
 
+fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
+  id
+  startingLevel
+  targetLevel
+}
+
 fragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {
+  ...QueuedBuildingActions_queuedBuilding
   id
   name
   type
@@ -279,15 +292,9 @@ return {
         "plural": false,
         "selections": [
           {
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "includeOrderChanges",
-                "value": true
-              }
-            ],
+            "args": null,
             "kind": "FragmentSpread",
-            "name": "ModificationPayload"
+            "name": "ModificationPayloadWithOrderChanges"
           }
         ],
         "storageKey": null
@@ -346,20 +353,6 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "fieldId",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
                 "name": "startingLevel",
                 "storageKey": null
               },
@@ -368,6 +361,20 @@ return {
                 "args": null,
                 "kind": "ScalarField",
                 "name": "targetLevel",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "fieldId",
                 "storageKey": null
               },
               (v6/*: any*/),
@@ -399,19 +406,6 @@ return {
             "name": "queue",
             "plural": false,
             "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "QueuedBuilding",
-                "kind": "LinkedField",
-                "name": "buildings",
-                "plural": true,
-                "selections": [
-                  (v4/*: any*/),
-                  (v6/*: any*/)
-                ],
-                "storageKey": null
-              },
               {
                 "alias": null,
                 "args": null,
@@ -458,6 +452,19 @@ return {
                   (v7/*: any*/)
                 ],
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "QueuedBuilding",
+                "kind": "LinkedField",
+                "name": "buildings",
+                "plural": true,
+                "selections": [
+                  (v4/*: any*/),
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -468,14 +475,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "995d311ff3deefbe7a57723a3a4d41f5",
+    "cacheID": "1e7c5bfc20aa88a954553e7acba8e4d0",
     "id": null,
     "metadata": {},
     "name": "QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation",
     "operationKind": "mutation",
-    "text": "mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation(\n  $villageId: ID!\n  $queueId: ID!\n  $targetQueueId: ID!\n) {\n  moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId) {\n    ...ModificationPayload_P6Vb1\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload_P6Vb1 on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    buildings {\n      id\n      buildingTime {\n        ...Duration\n      }\n    }\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
+    "text": "mutation QueuedBuildingsDropAreaMoveQueuedBuildingToIndexMutation(\n  $villageId: ID!\n  $queueId: ID!\n  $targetQueueId: ID!\n) {\n  moveQueuedBuildingToIndex(villageId: $villageId, queueId: $queueId, targetQueueId: $targetQueueId) {\n    ...ModificationPayloadWithOrderChanges\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment ModificationPayloadWithOrderChanges on ModificationPayload {\n  ...ModificationPayload\n  queue {\n    buildings {\n      id\n      buildingTime {\n        ...Duration\n      }\n    }\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
   }
 };
 })();
-(node as any).hash = 'da67ef0d8f85cbbde52f37eb581c5149';
+(node as any).hash = 'b4483dbbe5ce25e33ac9cf914cb88aa6';
 export default node;

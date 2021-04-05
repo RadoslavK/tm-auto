@@ -1,5 +1,4 @@
 import type { BuildingType } from 'shared/enums/BuildingType.js';
-import { generateId } from 'shared/utils/generateId.js';
 
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
 import { buildingInfoService } from '../info/buildingInfoService.js';
@@ -44,7 +43,7 @@ export class EnqueueBuildingService extends VillageServiceBase {
 
       const qBuilding = new QueuedBuilding({
         fieldId,
-        id: `queuedBuilding:${generateId()}`,
+        id: QueuedBuilding.createId(),
         startingLevel,
         targetLevel,
         type,

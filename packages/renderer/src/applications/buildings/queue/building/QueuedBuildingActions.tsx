@@ -1,26 +1,51 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  Dialog,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React from 'react';
-import { useMutation } from 'react-relay/hooks';
+import React, { useState } from 'react';
+import {
+  useFragment,
+  useMutation,
+} from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
+import type { QueuedBuildingActions_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuildingActions_queuedBuilding.graphql.js';
 import type { QueuedBuildingActionsDequeueBuildingMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsDequeueBuildingMutation.graphql.js';
+import type { QueuedBuildingActionsMergeBuildingsMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsMergeBuildingsMutation.graphql.js';
 import type { QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation.graphql.js';
+import type { QueuedBuildingActionsSplitBuildingMutation } from '../../../../_graphql/__generated__/QueuedBuildingActionsSplitBuildingMutation.graphql.js';
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { useIsQueuedBuildingExpanded } from '../../hooks/useIsQueuedBuildingExpanded.js';
+import { MultiLevelDialog } from '../../multiLevelDialog/MultiLevelDialog.js';
+
+const buildingFragmentDefinition = graphql`
+  fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
+      id
+      startingLevel
+      targetLevel
+  }
+`;
 
 type Props = {
-  readonly buildingQueueId: string;
+  readonly building: QueuedBuildingActions_queuedBuilding$key;
   readonly className?: string;
   readonly isExpandable: boolean;
+  readonly isMergeable: boolean;
   readonly onCollapse?: () => void;
   readonly onExpand?: () => void;
 };
 
 const useStyles = makeStyles({
+  split: {
+    backgroundImage: `url("${imageLinks.actions.split}")`,
+  },
+  merge: {
+    backgroundImage: `url("${imageLinks.actions.merge}")`,
+  },
   expand: {
     backgroundImage: `url("${imageLinks.actions.expand}")`,
   },
@@ -57,26 +82,59 @@ const dequeueBuildingMutation = graphql`
 const moveQueuedBuildingAsHighAsPossibleMutation = graphql`
     mutation QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation($queueId: ID!, $villageId: ID!) {
         moveQueuedBuildingAsHighAsPossible(queueId: $queueId, villageId: $villageId) {
-            ...ModificationPayload @arguments(includeOrderChanges: true)
+            ...ModificationPayloadWithOrderChanges
+        }
+    }
+`;
+
+const splitBuildingMutation = graphql`
+  mutation QueuedBuildingActionsSplitBuildingMutation($villageId: ID!, $queueId: ID!, $startingLevel: Int!) {
+      splitQueuedBuilding(villageId: $villageId, queueId: $queueId, startingLevel: $startingLevel) {
+          addedBuilding {
+              ...QueuedBuilding_queuedBuilding
+          }
+          updatedBuilding {
+              ...QueuedBuilding_queuedBuilding
+          }
+      }
+  }
+`;
+
+const mergeBuildingsMutation = graphql`
+    mutation QueuedBuildingActionsMergeBuildingsMutation($villageId: ID!, $topQueueId: ID!) {
+        mergeQueuedBuildings(villageId: $villageId, topQueueId: $topQueueId) {
+            removedBuilding {
+                id
+            }
+            updatedBuilding {
+                ...QueuedBuilding_queuedBuilding
+            }
         }
     }
 `;
 
 export const QueuedBuildingActions: React.FC<Props> = ({
-  buildingQueueId,
+  building,
   className,
   isExpandable,
+  isMergeable,
   onCollapse,
   onExpand,
 }) => {
-  const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(moveQueuedBuildingAsHighAsPossibleMutation);
-  const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(dequeueBuildingMutation);
+  const buildingFragment = useFragment(buildingFragmentDefinition, building);
   const villageId = useRecoilValue(selectedVillageIdState);
   const classes = useStyles({});
 
+  const [moveToTop] = useMutation<QueuedBuildingActionsMoveQueuedBuildingAsHighAsPossibleMutation>(moveQueuedBuildingAsHighAsPossibleMutation);
+  const [dequeue] = useMutation<QueuedBuildingActionsDequeueBuildingMutation>(dequeueBuildingMutation);
+  const [split] = useMutation<QueuedBuildingActionsSplitBuildingMutation>(splitBuildingMutation);
+  const [merge] = useMutation<QueuedBuildingActionsMergeBuildingsMutation>(mergeBuildingsMutation);
+
+  const [showSplitDialog, setShowSplitDialog] = useState(false);
+
   const onMoveToTop = () => {
     moveToTop({
-      variables: { queueId: buildingQueueId, villageId },
+      variables: { queueId: buildingFragment.id, villageId },
       updater: (store) => {
         const rootField = store.getRootField('moveQueuedBuildingAsHighAsPossible');
         modificationQueuePayloadUpdater(store, rootField, villageId);
@@ -86,7 +144,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
 
   const onDequeue = () => {
     dequeue({
-      variables: { input: { queueId: buildingQueueId, villageId } },
+      variables: { input: { queueId: buildingFragment.id, villageId } },
       updater: (store) => {
         const rootField = store.getRootField('dequeueBuilding');
         modificationQueuePayloadUpdater(store, rootField, villageId);
@@ -94,7 +152,57 @@ export const QueuedBuildingActions: React.FC<Props> = ({
     });
   };
 
-  const isExpanded = useIsQueuedBuildingExpanded(villageId, buildingQueueId);
+  const splitBuilding = (startingLevel: number) => {
+    setShowSplitDialog(false);
+
+    split({
+      variables: { villageId, queueId: buildingFragment.id, startingLevel },
+      updater: (store) => {
+        const result = store.getRootField('splitQueuedBuilding');
+        const newRecord = result.getLinkedRecord('addedBuilding');
+        const updatedRecord = result.getLinkedRecord('updatedBuilding');
+
+        const root = store.getRoot();
+        const queue = root.getLinkedRecord('buildingQueue', { villageId });
+
+        if (!queue) {
+          return;
+        }
+
+        const buildings = queue.getLinkedRecords('buildings') || [];
+        const updatedRecordIndex = buildings.findIndex(b => b.getDataID() === updatedRecord.getDataID());
+
+        buildings.splice(updatedRecordIndex + 1, 0, newRecord);
+        queue.setLinkedRecords(buildings, 'buildings');
+        root.setLinkedRecord(queue, 'buildingQueue', { villageId });
+      },
+    });
+  };
+
+  const mergeBuildings = () => {
+    merge({
+      variables: { villageId, topQueueId: buildingFragment.id },
+      updater: (store) => {
+        const root = store.getRoot();
+        const removedRecord = store.getRootField('mergeQueuedBuildings').getLinkedRecord('removedBuilding');
+        const queue = root.getLinkedRecord('buildingQueue', { villageId });
+
+        if (!queue) {
+          return;
+        }
+
+        let buildings = queue.getLinkedRecords('buildings') || [];
+        buildings = buildings?.filter(b => b.getDataID() !== removedRecord.getDataID());
+
+        queue.setLinkedRecords(buildings, 'buildings');
+        root.setLinkedRecord(queue, 'buildingQueue', { villageId });
+      },
+    });
+  };
+
+  const isExpanded = useIsQueuedBuildingExpanded(villageId, buildingFragment.id);
+
+  const openSplitBuildingDialog = () => setShowSplitDialog(true);
 
   return (
     <div className={clsx(className, classes.root)}>
@@ -116,6 +224,27 @@ export const QueuedBuildingActions: React.FC<Props> = ({
         <button
           className={clsx(classes.image, classes.collapse)}
           onClick={onCollapse}
+        />
+      )}
+      {isExpandable && (
+        <>
+          <button
+            className={clsx(classes.image, classes.split)}
+            onClick={openSplitBuildingDialog}
+          />
+          <Dialog open={showSplitDialog}>
+            <MultiLevelDialog
+              minLevel={buildingFragment.startingLevel + 1}
+              maxLevel={buildingFragment.targetLevel}
+              onSelect={splitBuilding}
+            />
+          </Dialog>
+        </>
+      )}
+      {isMergeable && (
+        <button
+          className={clsx(classes.image, classes.merge)}
+          onClick={mergeBuildings}
         />
       )}
     </div>

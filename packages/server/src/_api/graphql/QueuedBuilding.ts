@@ -2,6 +2,7 @@ import {
   arg,
   idArg,
   inputObjectType,
+  intArg,
   mutationField,
   objectType,
   queryField,
@@ -387,6 +388,49 @@ export const MoveQueuedBuildingAsHighAsPossibleMutation = mutationField(t => {
         removedBuildings: [...removedBuildings],
         updatedBuildings: [...updatedBuildings],
       };
+    },
+  });
+});
+
+export const SplitQueueBuildingPayload = objectType({
+  name: 'SplitQueueBuildingPayload',
+  definition: t => {
+    t.nullable.field('updatedBuilding', { type: QueuedBuildingObject });
+    t.nullable.field('addedBuilding', { type: QueuedBuildingObject });
+  },
+});
+
+export const SplitQueuedBuildingMutation = mutationField(t => {
+  t.field('splitQueuedBuilding', {
+    type: SplitQueueBuildingPayload,
+    args: {
+      villageId: idArg(),
+      queueId: idArg(),
+      startingLevel: intArg(),
+    },
+    resolve: (_, args, ctx) => {
+      return ctx.buildingQueueService.for(args.villageId).split.splitBuilding(args.queueId, args.startingLevel);
+    },
+  });
+});
+
+export const MergeQueueBuildingsPayload = objectType({
+  name: 'MergeQueueBuildingsPayload',
+  definition: t => {
+    t.nullable.field('updatedBuilding', { type: QueuedBuildingObject });
+    t.nullable.field('removedBuilding', { type: QueuedBuildingObject });
+  },
+});
+
+export const MergeQueuedBuildingsMutation = mutationField(t => {
+  t.field('mergeQueuedBuildings', {
+    type: MergeQueueBuildingsPayload,
+    args: {
+      villageId: idArg(),
+      topQueueId: idArg(),
+    },
+    resolve: (_, args, ctx) => {
+      return ctx.buildingQueueService.for(args.villageId).merge.mergeBuildings(args.topQueueId);
     },
   });
 });

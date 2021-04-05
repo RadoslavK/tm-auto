@@ -17,7 +17,7 @@ fragment BuildingQueueDurationAndCost on BuildingQueue {
     }
 }
 
-fragment ModificationPayload on ModificationPayload @argumentDefinitions(includeOrderChanges: { type: "Boolean", defaultValue: false }) {
+fragment ModificationPayload on ModificationPayload {
     removedBuildings {
         id @deleteRecord
     }
@@ -25,12 +25,18 @@ fragment ModificationPayload on ModificationPayload @argumentDefinitions(include
         ...QueuedBuilding_queuedBuilding
     }
     queue {
-        buildings @include(if: $includeOrderChanges) {
+       ...BuildingQueueDurationAndCost
+    }
+}
+
+fragment ModificationPayloadWithOrderChanges on ModificationPayload {
+    ...ModificationPayload
+    queue {
+        buildings {
             id
             buildingTime {
                 ...Duration
             }
         }
-       ...BuildingQueueDurationAndCost
     }
 }

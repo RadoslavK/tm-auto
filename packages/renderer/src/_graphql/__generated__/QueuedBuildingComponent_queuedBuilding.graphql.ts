@@ -17,6 +17,7 @@ export type QueuedBuildingComponent_queuedBuilding = {
     readonly cost: {
         readonly " $fragmentRefs": FragmentRefs<"Cost_resources">;
     };
+    readonly " $fragmentRefs": FragmentRefs<"QueuedBuildingActions_queuedBuilding">;
     readonly " $refType": "QueuedBuildingComponent_queuedBuilding";
 };
 export type QueuedBuildingComponent_queuedBuilding$data = QueuedBuildingComponent_queuedBuilding;
@@ -106,10 +107,15 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "QueuedBuildingActions_queuedBuilding"
     }
   ],
   "type": "QueuedBuilding",
   "abstractKey": null
 };
-(node as any).hash = '2afee133f6ac7ac2ea7ec642f12a80b5';
+(node as any).hash = 'd2ad5ca0d2d5ceff05de1f3c2dd95f1c';
 export default node;
