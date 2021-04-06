@@ -19,7 +19,6 @@ import type { QueuedBuildingActionsSplitBuildingMutation } from '../../../../_gr
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
-import { useIsQueuedBuildingExpanded } from '../../hooks/useIsQueuedBuildingExpanded.js';
 import { MultiLevelDialog } from '../../multiLevelDialog/MultiLevelDialog.js';
 
 const buildingFragmentDefinition = graphql`
@@ -33,10 +32,7 @@ const buildingFragmentDefinition = graphql`
 type Props = {
   readonly building: QueuedBuildingActions_queuedBuilding$key;
   readonly className?: string;
-  readonly isExpandable: boolean;
   readonly isMergeable: boolean;
-  readonly onCollapse?: () => void;
-  readonly onExpand?: () => void;
 };
 
 const useStyles = makeStyles({
@@ -45,12 +41,6 @@ const useStyles = makeStyles({
   },
   merge: {
     backgroundImage: `url("${imageLinks.actions.merge}")`,
-  },
-  expand: {
-    backgroundImage: `url("${imageLinks.actions.expand}")`,
-  },
-  collapse: {
-    backgroundImage: `url("${imageLinks.actions.collapse}")`,
   },
   delete: {
     backgroundImage: `url("${imageLinks.actions.delete}")`,
@@ -116,10 +106,7 @@ const mergeBuildingsMutation = graphql`
 export const QueuedBuildingActions: React.FC<Props> = ({
   building,
   className,
-  isExpandable,
   isMergeable,
-  onCollapse,
-  onExpand,
 }) => {
   const buildingFragment = useFragment(buildingFragmentDefinition, building);
   const villageId = useRecoilValue(selectedVillageIdState);
@@ -200,8 +187,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
     });
   };
 
-  const isExpanded = useIsQueuedBuildingExpanded(villageId, buildingFragment.id);
-
+  const isSplittable = buildingFragment.startingLevel !== buildingFragment.targetLevel;
   const openSplitBuildingDialog = () => setShowSplitDialog(true);
 
   return (
@@ -214,19 +200,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
         className={clsx(classes.image, classes.delete)}
         onClick={onDequeue}
       />
-      {isExpandable && !isExpanded && onExpand && (
-        <button
-          className={clsx(classes.image, classes.expand)}
-          onClick={onExpand}
-        />
-      )}
-      {isExpandable && isExpanded && onCollapse && (
-        <button
-          className={clsx(classes.image, classes.collapse)}
-          onClick={onCollapse}
-        />
-      )}
-      {isExpandable && (
+      {isSplittable && (
         <>
           <button
             className={clsx(classes.image, classes.split)}

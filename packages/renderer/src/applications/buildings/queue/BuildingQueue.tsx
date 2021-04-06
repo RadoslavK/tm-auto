@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import {
   useFragment,
@@ -8,10 +7,7 @@ import {
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
-import {
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
+import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__generated__/BuildingQueue_buildingQueue.graphql.js';
@@ -20,7 +16,6 @@ import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__genera
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
 import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/__generated__/BuildingQueueQueuedBuildingSubscription.graphql.js';
 import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
-import { expandedQueuedBuildingsState } from '../../../_recoil/atoms/expandedQueuedBuildings.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
@@ -36,13 +31,6 @@ const useStyles = makeStyles({
   action: {
     marginBottom: '15px',
     width: '100%',
-  },
-  expandActions: {
-    display: 'flex',
-  },
-  expandedAction: {
-    marginRight: '8px',
-    flex: 1,
   },
   buildings: {
     display: 'flex',
@@ -123,7 +111,6 @@ export const BuildingQueue: React.FC<Props> = ({
   const villageId = useRecoilValue(selectedVillageIdState);
   const { autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId }, { fetchPolicy: 'store-and-network' });
   const tribe = useRecoilValue(tribeState);
-  const setExpandedBuildingsState = useSetRecoilState(expandedQueuedBuildingsState);
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);
@@ -184,52 +171,11 @@ export const BuildingQueue: React.FC<Props> = ({
     });
   };
 
-  const expandBuildings = (ids: readonly string[]): void => {
-    setExpandedBuildingsState(prev => {
-      const newMap = new Map(prev.entries());
-      newMap.set(villageId, new Set<string>(ids));
-      return newMap;
-    });
-  };
-
-  const collapseBuildings = (id?: string): void => {
-    setExpandedBuildingsState(prev => {
-      const newIds = new Set<string>((prev.get(villageId) ?? []));
-      const newMap = new Map(prev.entries());
-
-      if (id) {
-        newIds.delete(id);
-      } else {
-        newIds.clear();
-      }
-
-      newMap.set(villageId, newIds);
-      return newMap;
-    });
-  };
-
-  const expandAll = (): void => {
-    const allQueuedBuildingIds = buildingQueue.buildings.map(b => b.id);
-    expandBuildings(allQueuedBuildingIds);
-  };
-
-  const collapseAll = (): void => {
-    collapseBuildings();
-  };
-
   return (
     <div className={className}>
       <button className={classes.action} onClick={onClear}>
         Clear queue
       </button>
-      <div className={clsx(classes.action, classes.expandActions)}>
-        <button className={classes.expandedAction} onClick={expandAll}>
-          Expand all
-        </button>
-        <button className={classes.expandedAction} onClick={collapseAll}>
-          Collapse all
-        </button>
-      </div>
       <Cost
         buildTime={buildingQueue.totalBuildingTime}
         infrastructureBuildTime={buildingQueue.infrastructureBuildingTime}
@@ -248,8 +194,6 @@ export const BuildingQueue: React.FC<Props> = ({
               building={building}
               index={index}
               isMergeable={isMergeable}
-              onExpand={() => expandBuildings([building.id])}
-              onCollapse={() => collapseBuildings(building.id)}
             />
           );
         })}

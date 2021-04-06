@@ -237,12 +237,6 @@ type EnqueueBuildingPayload {
   queue: BuildingQueue!
 }
 
-type ExpandedQueuedBuilding {
-  buildingTime: Duration!
-  cost: Resources!
-  level: Int!
-}
-
 type GameInfo {
   tribe: Tribe!
 }
@@ -390,7 +384,6 @@ type Query {
   canMoveQueuedBuilding(queueId: ID!, targetQueueId: ID!, villageId: ID!): Boolean!
   crannyCapacity(villageId: ID!): VillageCrannyCapacity!
   currentAccount: UserAccount!
-  expandedQueuedBuilding(queueId: ID!, villageId: ID!): [ExpandedQueuedBuilding!]!
   gameInfo: GameInfo!
   generalSettings: GeneralSettings!
   generalVillageSettings(villageId: ID!): GeneralVillageSettings!

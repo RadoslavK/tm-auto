@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type QueuedBuilding_queuedBuilding = {
     readonly id: string;
     readonly type: number;
-    readonly " $fragmentRefs": FragmentRefs<"QueuedBuildingComponent_queuedBuilding" | "ExpandedQueuedBuilding_queuedBuilding">;
+    readonly " $fragmentRefs": FragmentRefs<"QueuedBuildingComponent_queuedBuilding">;
     readonly " $refType": "QueuedBuilding_queuedBuilding";
 };
 export type QueuedBuilding_queuedBuilding$data = QueuedBuilding_queuedBuilding;
@@ -42,15 +42,10 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "QueuedBuildingComponent_queuedBuilding"
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "ExpandedQueuedBuilding_queuedBuilding"
     }
   ],
   "type": "QueuedBuilding",
   "abstractKey": null
 };
-(node as any).hash = 'f87c623319c8841f98ebbcc69853726b';
+(node as any).hash = '1a4248fba7e8aa0a69173d0008655218';
 export default node;

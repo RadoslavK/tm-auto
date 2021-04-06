@@ -57,18 +57,6 @@ fragment Cost_resources on Resources {
   total
 }
 
-fragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {
-  id
-  startingLevel
-  targetLevel
-  buildingTime {
-    days
-    hours
-    minutes
-    seconds
-  }
-}
-
 fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
   id
   startingLevel
@@ -77,7 +65,6 @@ fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
 
 fragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {
   ...QueuedBuildingActions_queuedBuilding
-  id
   name
   type
   fieldId
@@ -95,7 +82,6 @@ fragment QueuedBuilding_queuedBuilding on QueuedBuilding {
   id
   type
   ...QueuedBuildingComponent_queuedBuilding
-  ...ExpandedQueuedBuilding_queuedBuilding
 }
 */
 
@@ -346,12 +332,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "abcd311a9ae5dae704f7e03815ac6e18",
+    "cacheID": "07ec1bf135371124f87f0898b026e182",
     "id": null,
     "metadata": {},
     "name": "QueuedBuildingActionsMergeBuildingsMutation",
     "operationKind": "mutation",
-    "text": "mutation QueuedBuildingActionsMergeBuildingsMutation(\n  $villageId: ID!\n  $topQueueId: ID!\n) {\n  mergeQueuedBuildings(villageId: $villageId, topQueueId: $topQueueId) {\n    removedBuilding {\n      id\n    }\n    updatedBuilding {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n"
+    "text": "mutation QueuedBuildingActionsMergeBuildingsMutation(\n  $villageId: ID!\n  $topQueueId: ID!\n) {\n  mergeQueuedBuildings(villageId: $villageId, topQueueId: $topQueueId) {\n    removedBuilding {\n      id\n    }\n    updatedBuilding {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n"
   }
 };
 })();

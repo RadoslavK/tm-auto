@@ -53,15 +53,12 @@ const useStyles = makeStyles<unknown, StyleProps>({
 type Props = {
   readonly building: QueuedBuildingComponent_queuedBuilding$key;
   readonly isMergeable?: boolean;
-  readonly onCollapse?: () => void;
-  readonly onExpand?: () => void;
   readonly showActions?: boolean;
 };
 
 const queuedBuildingComponentQueuedBuildingFragment = graphql`
     fragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {
         ...QueuedBuildingActions_queuedBuilding
-        id
         name
         type
         fieldId
@@ -89,8 +86,6 @@ const getNameLabel = (building: QueuedBuildingComponent_queuedBuilding$data): st
 export const QueuedBuildingComponent: React.FC<Props> = ({
   building,
   isMergeable,
-  onCollapse,
-  onExpand,
   showActions,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
@@ -106,10 +101,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
         <QueuedBuildingActions
           building={queuedBuildingFragment}
           className={classes.actions}
-          isExpandable={queuedBuildingFragment.startingLevel !== queuedBuildingFragment.targetLevel}
           isMergeable={!!isMergeable}
-          onCollapse={onCollapse}
-          onExpand={onExpand}
         />
       )}
       <div className={classes.imageWithFieldId}>

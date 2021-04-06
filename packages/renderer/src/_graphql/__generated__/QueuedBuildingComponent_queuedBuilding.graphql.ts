@@ -5,7 +5,6 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type QueuedBuildingComponent_queuedBuilding = {
-    readonly id: string;
     readonly name: string;
     readonly type: number;
     readonly fieldId: number;
@@ -34,13 +33,6 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "QueuedBuildingComponent_queuedBuilding",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
     {
       "alias": null,
       "args": null,
@@ -117,5 +109,5 @@ const node: ReaderFragment = {
   "type": "QueuedBuilding",
   "abstractKey": null
 };
-(node as any).hash = 'd2ad5ca0d2d5ceff05de1f3c2dd95f1c';
+(node as any).hash = '0c945b72861f669ae70db78249ba676c';
 export default node;
