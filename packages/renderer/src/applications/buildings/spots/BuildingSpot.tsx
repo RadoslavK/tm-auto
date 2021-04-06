@@ -4,23 +4,17 @@ import {
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
 import {
   useFragment,
   useMutation,
-  useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
-import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generated__/BuildingSpot_buildingSpot.graphql.js';
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
-import type { BuildingSpotSubscription } from '../../../_graphql/__generated__/BuildingSpotSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
@@ -81,14 +75,6 @@ const buildingSpotEnqueueBuildingMutation = graphql`
     }
 `;
 
-const subscription = graphql`
-  subscription BuildingSpotSubscription($villageId: ID!, $fieldId: Int!) {
-      onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {
-          ...BuildingSpot_buildingSpot
-      }
-  }
-`;
-
 type StyleProps = {
   readonly buildingType: number;
   readonly tribe: string;
@@ -120,15 +106,6 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
   const villageId = useRecoilValue(selectedVillageIdState);
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotSubscription> => ({
-    subscription,
-    variables: {
-      fieldId: buildingSpotFragment.fieldId,
-      villageId,
-    },
-  }), [villageId, buildingSpotFragment.fieldId]);
-
-  useSubscription(subscriptionConfig);
 
   const closeDialog = () => setDialog(DialogType.None);
 

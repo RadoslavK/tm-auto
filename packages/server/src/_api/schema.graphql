@@ -482,9 +482,9 @@ type Subscription {
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
   nextTasksExecutionChanged: Timestamp!
   nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
-  onBuildingSpotUpdated(fieldId: Int!, villageId: ID!): BuildingSpot!
+  onBuildingSpotUpdated(villageId: ID!): BuildingSpot!
   onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
-  queuedBuildingUpdated(id: ID!, villageId: ID!): ModificationPayload!
+  queuedBuildingUpdated(villageId: ID!): ModificationPayload!
   villageUpdated(villageId: ID!): Village!
   villagesUpdated: [Village!]!
 }

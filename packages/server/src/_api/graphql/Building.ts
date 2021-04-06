@@ -2,7 +2,6 @@ import {
   arg,
   idArg,
   inputObjectType,
-  intArg,
   objectType,
   queryField,
   subscriptionField,
@@ -139,12 +138,10 @@ export const BuildingSpotSubscription = subscriptionField(t => {
     type: 'BuildingSpot',
     args: {
       villageId: idArg(),
-      fieldId: intArg(),
     },
     ...subscribeToEvent(BotEvent.BuildingSpotUpdated, {
       filter: (payload, variables) =>
-        payload.villageId === variables.villageId
-        && payload.buildingSpot.fieldId === variables.fieldId,
+        payload.villageId === variables.villageId,
       resolve: ({ buildingSpot }) => buildingSpot,
     }),
   });

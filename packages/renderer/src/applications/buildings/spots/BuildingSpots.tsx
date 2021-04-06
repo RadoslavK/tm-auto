@@ -1,9 +1,19 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { Suspense } from 'react';
-import { useFragment } from 'react-relay/hooks';
+import React, {
+  Suspense,
+  useMemo,
+} from 'react';
+import {
+  useFragment,
+  useSubscription,
+} from 'react-relay/hooks';
+import { useRecoilValue } from 'recoil';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingSpots_buildingSpots$key } from '../../../_graphql/__generated__/BuildingSpots_buildingSpots.graphql.js';
+import type { BuildingSpotsSubscription } from '../../../_graphql/__generated__/BuildingSpotsSubscription.graphql.js';
+import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { BuildingSpot } from './BuildingSpot.js';
 
 const buildingSpotsFragment = graphql`
@@ -33,6 +43,14 @@ const buildingSpotsFragment = graphql`
   }
 `;
 
+const subscription = graphql`
+    subscription BuildingSpotsSubscription($villageId: ID!) {
+        onBuildingSpotUpdated(villageId: $villageId) {
+            ...BuildingSpot_buildingSpot
+        }
+    }
+`;
+
 const useStyles = makeStyles({
   buildingType: {
     display: 'flex',
@@ -52,6 +70,16 @@ export const BuildingSpots: React.FC<Props> = ({
 }) => {
   const classes = useStyles({});
   const buildingSpots = useFragment(buildingSpotsFragment, buildingSpotsKey);
+  const villageId = useRecoilValue(selectedVillageIdState);
+
+  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingSpotsSubscription> => ({
+    subscription,
+    variables: {
+      villageId,
+    },
+  }), [villageId]);
+
+  useSubscription(subscriptionConfig);
 
   return (
     <div className={className}>

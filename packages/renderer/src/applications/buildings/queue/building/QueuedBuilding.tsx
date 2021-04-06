@@ -1,25 +1,16 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  Suspense,
-  useMemo, 
-} from 'react';
+import React, { Suspense } from 'react';
 import {
   DragPreviewImage,
   useDrag,
 } from 'react-dnd';
-import {
-  useFragment,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
-import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
-import type { QueuedBuildingSubscription } from '../../../../_graphql/__generated__/QueuedBuildingSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../../_recoil/atoms/tribe.js';
-import { modificationQueuePayloadUpdater } from '../../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import {
   BuildingImageSize,
   imageLinks,
@@ -60,14 +51,6 @@ const queuedBuildingQueuedBuildingFragment = graphql`
   }
 `;
 
-const subscription = graphql`
-  subscription QueuedBuildingSubscription($villageId: ID!, $id: ID!) {
-      queuedBuildingUpdated(villageId: $villageId, id: $id) {
-          ...ModificationPayload
-      }
-  }
-`;
-
 export const QueuedBuilding: React.FC<Props> = ({
   building,
   index,
@@ -77,16 +60,7 @@ export const QueuedBuilding: React.FC<Props> = ({
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingQueuedBuildingFragment, building);
   const villageId = useRecoilValue(selectedVillageIdState);
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<QueuedBuildingSubscription> => ({
-    subscription,
-    variables: { villageId, id: queuedBuildingFragment.id },
-    updater: (store) => {
-      const rootField = store.getRootField('queuedBuildingUpdated');
-      modificationQueuePayloadUpdater(store, rootField, villageId);
-    },
-  }), [villageId, queuedBuildingFragment.id]);
 
-  useSubscription(subscriptionConfig);
 
   const movedBuilding: MovedQueuedBuilding = {
     buildingFragmentKey: queuedBuildingFragment,

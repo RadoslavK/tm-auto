@@ -442,12 +442,10 @@ export const QueuedBuildingUpdatedSubscription = subscriptionField(t => {
     type: ModificationPayload,
     args: {
       villageId: idArg(),
-      id: idArg(),
     },
     ...subscribeToEvent(BotEvent.QueuedBuildingUpdated, {
       filter: (payload, variables) =>
-        payload.villageId === variables.villageId
-        && payload.queuedBuilding.id === variables.id,
+        payload.villageId === variables.villageId,
       resolve: (p, args, ctx) => {
         const removed = p.type === 'removed';
         return {

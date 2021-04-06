@@ -4,28 +4,26 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type BuildingSpotSubscriptionVariables = {
+export type BuildingSpotsSubscriptionVariables = {
     villageId: string;
-    fieldId: number;
 };
-export type BuildingSpotSubscriptionResponse = {
+export type BuildingSpotsSubscriptionResponse = {
     readonly onBuildingSpotUpdated: {
         readonly " $fragmentRefs": FragmentRefs<"BuildingSpot_buildingSpot">;
     };
 };
-export type BuildingSpotSubscription = {
-    readonly response: BuildingSpotSubscriptionResponse;
-    readonly variables: BuildingSpotSubscriptionVariables;
+export type BuildingSpotsSubscription = {
+    readonly response: BuildingSpotsSubscriptionResponse;
+    readonly variables: BuildingSpotsSubscriptionVariables;
 };
 
 
 
 /*
-subscription BuildingSpotSubscription(
+subscription BuildingSpotsSubscription(
   $villageId: ID!
-  $fieldId: Int!
 ) {
-  onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {
+  onBuildingSpotUpdated(villageId: $villageId) {
     ...BuildingSpot_buildingSpot
     id
   }
@@ -55,22 +53,14 @@ fragment BuildingSpot_buildingSpot on BuildingSpot {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "fieldId"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "villageId"
-},
-v2 = [
+var v0 = [
   {
-    "kind": "Variable",
-    "name": "fieldId",
-    "variableName": "fieldId"
-  },
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "villageId"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "villageId",
@@ -79,17 +69,14 @@ v2 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "BuildingSpotSubscription",
+    "name": "BuildingSpotsSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "BuildingSpot",
         "kind": "LinkedField",
         "name": "onBuildingSpotUpdated",
@@ -109,16 +96,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "BuildingSpotSubscription",
+    "name": "BuildingSpotsSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "BuildingSpot",
         "kind": "LinkedField",
         "name": "onBuildingSpotUpdated",
@@ -204,14 +188,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "31f3ef559a86db39674e7295100a6deb",
+    "cacheID": "b47666b4d28e4362100fa1e6bb0a703a",
     "id": null,
     "metadata": {},
-    "name": "BuildingSpotSubscription",
+    "name": "BuildingSpotsSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotSubscription(\n  $villageId: ID!\n  $fieldId: Int!\n) {\n  onBuildingSpotUpdated(villageId: $villageId, fieldId: $fieldId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
+    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'a4b811062df726d3073a3d3b8857d6a2';
+(node as any).hash = '7665ca73333ad8ecb20176c683067d02';
 export default node;

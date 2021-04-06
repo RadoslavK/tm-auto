@@ -1402,14 +1402,12 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     onBuildingSpotUpdated: { // args
-      fieldId: number; // Int!
       villageId: string; // ID!
     }
     onCrannyCapacityUpdated: { // args
       villageId: string; // ID!
     }
     queuedBuildingUpdated: { // args
-      id: string; // ID!
       villageId: string; // ID!
     }
     villageUpdated: { // args

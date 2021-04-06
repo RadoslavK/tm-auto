@@ -18,6 +18,7 @@ import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__genera
 import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
+import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/__generated__/BuildingQueueQueuedBuildingSubscription.graphql.js';
 import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
 import { expandedQueuedBuildingsState } from '../../../_recoil/atoms/expandedQueuedBuildings.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
@@ -107,6 +108,14 @@ const timesUpdatedSubscription = graphql`
   }
 `;
 
+const queuedBuildingSubscription = graphql`
+    subscription BuildingQueueQueuedBuildingSubscription($villageId: ID!) {
+        queuedBuildingUpdated(villageId: $villageId) {
+            ...ModificationPayload
+        }
+    }
+`;
+
 export const BuildingQueue: React.FC<Props> = ({
   buildingQueueKey,
   className,
@@ -153,6 +162,17 @@ export const BuildingQueue: React.FC<Props> = ({
   }), [villageId]);
 
   useSubscription(timesUpdatedSubscriptionConfig);
+
+  const queuedBuildingSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueQueuedBuildingSubscription> => ({
+    subscription: queuedBuildingSubscription,
+    variables: { villageId },
+    updater: (store) => {
+      const rootField = store.getRootField('queuedBuildingUpdated');
+      modificationQueuePayloadUpdater(store, rootField, villageId);
+    },
+  }), [villageId]);
+
+  useSubscription(queuedBuildingSubscriptionConfig);
 
   const onClear = (): void => {
     clearQueue({

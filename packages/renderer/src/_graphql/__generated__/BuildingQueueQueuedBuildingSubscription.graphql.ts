@@ -4,28 +4,26 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type QueuedBuildingSubscriptionVariables = {
+export type BuildingQueueQueuedBuildingSubscriptionVariables = {
     villageId: string;
-    id: string;
 };
-export type QueuedBuildingSubscriptionResponse = {
+export type BuildingQueueQueuedBuildingSubscriptionResponse = {
     readonly queuedBuildingUpdated: {
         readonly " $fragmentRefs": FragmentRefs<"ModificationPayload">;
     };
 };
-export type QueuedBuildingSubscription = {
-    readonly response: QueuedBuildingSubscriptionResponse;
-    readonly variables: QueuedBuildingSubscriptionVariables;
+export type BuildingQueueQueuedBuildingSubscription = {
+    readonly response: BuildingQueueQueuedBuildingSubscriptionResponse;
+    readonly variables: BuildingQueueQueuedBuildingSubscriptionVariables;
 };
 
 
 
 /*
-subscription QueuedBuildingSubscription(
+subscription BuildingQueueQueuedBuildingSubscription(
   $villageId: ID!
-  $id: ID!
 ) {
-  queuedBuildingUpdated(villageId: $villageId, id: $id) {
+  queuedBuildingUpdated(villageId: $villageId) {
     ...ModificationPayload
   }
 }
@@ -137,36 +135,28 @@ fragment Resources on Resources {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "id"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "villageId"
-},
-v2 = [
+var v0 = [
   {
-    "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
-  },
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "villageId"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "villageId",
     "variableName": "villageId"
   }
 ],
-v3 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v4 = [
+v3 = [
   {
     "alias": null,
     "args": null,
@@ -196,42 +186,42 @@ v4 = [
     "storageKey": null
   }
 ],
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "wood",
   "storageKey": null
 },
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "clay",
   "storageKey": null
 },
-v7 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "iron",
   "storageKey": null
 },
-v8 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "crop",
   "storageKey": null
 },
-v9 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "freeCrop",
   "storageKey": null
 },
-v10 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -240,17 +230,14 @@ v10 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "QueuedBuildingSubscription",
+    "name": "BuildingQueueQueuedBuildingSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "ModificationPayload",
         "kind": "LinkedField",
         "name": "queuedBuildingUpdated",
@@ -270,16 +257,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "QueuedBuildingSubscription",
+    "name": "BuildingQueueQueuedBuildingSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "ModificationPayload",
         "kind": "LinkedField",
         "name": "queuedBuildingUpdated",
@@ -293,7 +277,7 @@ return {
             "name": "removedBuildings",
             "plural": true,
             "selections": [
-              (v3/*: any*/)
+              (v2/*: any*/)
             ],
             "storageKey": null
           },
@@ -305,7 +289,7 @@ return {
             "name": "updatedBuildings",
             "plural": true,
             "selections": [
-              (v3/*: any*/),
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -348,7 +332,7 @@ return {
                 "kind": "LinkedField",
                 "name": "buildingTime",
                 "plural": false,
-                "selections": (v4/*: any*/),
+                "selections": (v3/*: any*/),
                 "storageKey": null
               },
               {
@@ -359,12 +343,12 @@ return {
                 "name": "cost",
                 "plural": false,
                 "selections": [
+                  (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/),
-                  (v9/*: any*/),
-                  (v10/*: any*/)
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -386,7 +370,7 @@ return {
                 "kind": "LinkedField",
                 "name": "infrastructureBuildingTime",
                 "plural": false,
-                "selections": (v4/*: any*/),
+                "selections": (v3/*: any*/),
                 "storageKey": null
               },
               {
@@ -396,7 +380,7 @@ return {
                 "kind": "LinkedField",
                 "name": "resourcesBuildingTime",
                 "plural": false,
-                "selections": (v4/*: any*/),
+                "selections": (v3/*: any*/),
                 "storageKey": null
               },
               {
@@ -406,7 +390,7 @@ return {
                 "kind": "LinkedField",
                 "name": "totalBuildingTime",
                 "plural": false,
-                "selections": (v4/*: any*/),
+                "selections": (v3/*: any*/),
                 "storageKey": null
               },
               {
@@ -417,12 +401,12 @@ return {
                 "name": "totalCost",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
-                  (v8/*: any*/),
-                  (v9/*: any*/),
+                  (v5/*: any*/),
                   (v7/*: any*/),
-                  (v10/*: any*/),
-                  (v5/*: any*/)
+                  (v8/*: any*/),
+                  (v6/*: any*/),
+                  (v9/*: any*/),
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -435,14 +419,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "62f5e3da5e986c34b3af8814c48b1ebb",
+    "cacheID": "01434328bc624e16aaee21d6cfe93cae",
     "id": null,
     "metadata": {},
-    "name": "QueuedBuildingSubscription",
+    "name": "BuildingQueueQueuedBuildingSubscription",
     "operationKind": "subscription",
-    "text": "subscription QueuedBuildingSubscription(\n  $villageId: ID!\n  $id: ID!\n) {\n  queuedBuildingUpdated(villageId: $villageId, id: $id) {\n    ...ModificationPayload\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
+    "text": "subscription BuildingQueueQueuedBuildingSubscription(\n  $villageId: ID!\n) {\n  queuedBuildingUpdated(villageId: $villageId) {\n    ...ModificationPayload\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment ExpandedQueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n  buildingTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment ModificationPayload on ModificationPayload {\n  removedBuildings {\n    id\n  }\n  updatedBuildings {\n    ...QueuedBuilding_queuedBuilding\n    id\n  }\n  queue {\n    ...BuildingQueueDurationAndCost\n  }\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  id\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n  ...ExpandedQueuedBuilding_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n"
   }
 };
 })();
-(node as any).hash = '0cef7613084d4fef83a5e79290aa6bb4';
+(node as any).hash = 'f1e8d4642118e82f2da79edc583da97b';
 export default node;
