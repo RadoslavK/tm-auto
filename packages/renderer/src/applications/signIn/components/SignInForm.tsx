@@ -248,16 +248,11 @@ export const SignInForm: React.FC = () => {
       variables: { id: selectedAccountId },
       updater: (store) => {
         const root = store.getRoot();
-        const oldAccounts = root.getLinkedRecords('accounts');
-
-        if (!oldAccounts) {
-          return;
-        }
-
-        const newAccounts = oldAccounts.filter(acc => acc.getDataID() !== removedRecord.getDataID());
         const removedRecord = store.getRootField('deleteAccount');
+        let accounts = root.getLinkedRecords('accounts') || [];
+        accounts = accounts.filter(acc => acc.getDataID() !== removedRecord.getDataID());
 
-        root.setLinkedRecords(newAccounts, 'accounts');
+        root.setLinkedRecords(accounts, 'accounts');
         store.delete(removedRecord.getDataID());
       },
     });

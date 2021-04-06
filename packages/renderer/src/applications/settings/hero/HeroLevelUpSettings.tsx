@@ -181,19 +181,18 @@ export const HeroLevelUpSettings: React.FC = () => {
                         removeHeroLevelUpItem({
                           variables: { id: item.id },
                           updater: (store) => {
+                            const deletedItem = store.getRootField('removeHeroLevelUpItem');
                             const root = store.getRoot();
-                            const oldSettings = root.getLinkedRecord('heroLevelUpSettings');
+                            const settings = root.getLinkedRecord('heroLevelUpSettings');
 
-                            if (!oldSettings) {
-                              return;
+                            if (settings) {
+                              let records = settings.getLinkedRecords('levelUpItems') || [];
+                              records = records.filter(r => r.getDataID() !== deletedItem.getDataID());
+
+                              settings.setLinkedRecords(records, 'levelUpItems');
+                              root.setLinkedRecord(settings, 'heroLevelUpSettings');
                             }
 
-                            const deletedItem = store.getRootField('removeHeroLevelUpItem');
-                            const oldRecords = oldSettings.getLinkedRecords('levelUpItems');
-                            const newRecords = oldRecords?.filter(r => r.getDataID() !== deletedItem.getDataID());
-
-                            oldSettings.setLinkedRecords(newRecords, 'levelUpItems');
-                            root.setLinkedRecord(oldSettings, 'heroLevelUpSettings');
                             store.delete(deletedItem.getDataID());
                           },
                         });
