@@ -13,11 +13,17 @@ import type { GeneralSettingsFormQuery } from '../../_graphql/__generated__/Gene
 import type { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql.js';
 import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql.js';
 
+graphql`
+  fragment GeneralSettingsForm_generalSettings on GeneralSettings {
+    chromePath
+    headlessChrome
+  }
+`;
+
 const generalSettingsFormQuery = graphql`
   query GeneralSettingsFormQuery {
       generalSettings {
-          chromePath
-          headlessChrome
+          ...GeneralSettingsForm_generalSettings @relay(mask: false)
       }
   }
 `;
@@ -25,7 +31,7 @@ const generalSettingsFormQuery = graphql`
 const generalSettingsFormUpdateSettingsMutation = graphql`
   mutation GeneralSettingsFormUpdateSettingsMutation($settings: UpdateGeneralSettingsInput!) {
       updateGeneralSettings(settings: $settings) {
-          ...GeneralSettings
+          ...GeneralSettingsForm_generalSettings
       }
   }
 `;
@@ -33,7 +39,7 @@ const generalSettingsFormUpdateSettingsMutation = graphql`
 const generalSettingsFormResetSettingsMutation = graphql`
     mutation GeneralSettingsFormResetSettingsMutation {
         resetGeneralSettings {
-            ...GeneralSettings
+            ...GeneralSettingsForm_generalSettings
         }
     }
 `;

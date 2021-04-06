@@ -30,21 +30,27 @@ const useStyles = makeStyles({
   },
 });
 
+graphql`
+    fragment Units_autoUnitsSettings on AutoUnitsSettings {
+        barracks {
+            ...UnitBuildingSection_autoUnitsBuildingSettings
+        }
+        stable {
+            ...UnitBuildingSection_autoUnitsBuildingSettings
+        }
+        workshop {
+            ...UnitBuildingSection_autoUnitsBuildingSettings
+        }
+        residence {
+            ...UnitBuildingSection_autoUnitsBuildingSettings
+        }
+    }
+`;
+
 const unitsAutoUnitsSettingsQuery = graphql`
   query UnitsAutoUnitsSettingsQuery($villageId: ID!) {
       autoUnitsSettings(villageId: $villageId) {
-          barracks {
-              ...UnitBuildingSection_autoUnitsBuildingSettings
-          }
-          stable {
-              ...UnitBuildingSection_autoUnitsBuildingSettings
-          }
-          workshop {
-              ...UnitBuildingSection_autoUnitsBuildingSettings
-          }
-          residence {
-              ...UnitBuildingSection_autoUnitsBuildingSettings
-          }
+         ...Units_autoUnitsSettings @relay(mask: false)
       }
   }
 `;
@@ -52,7 +58,7 @@ const unitsAutoUnitsSettingsQuery = graphql`
 const unitsSubscription = graphql`
     subscription UnitsSubscription($villageId: ID!) {
         autoUnitsSettingsUpdated(villageId: $villageId) {
-            ...AutoUnitsSettings
+            ...Units_autoUnitsSettings
         }
     }
 `;

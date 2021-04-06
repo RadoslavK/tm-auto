@@ -1,7 +1,2 @@
 directive @deleteRecord on FIELD
 directive @raw_response_type on QUERY
-
-extend type Query {
-    collapsedBuildingQueueRanges(villageId: ID!): [String!]!
-    selectedVillageId: String!
-}

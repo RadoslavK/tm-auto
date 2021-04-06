@@ -28,7 +28,7 @@ export type AutoPartySettingsUpdateSettingsMutationVariables = {
 };
 export type AutoPartySettingsUpdateSettingsMutationResponse = {
     readonly updateAutoPartySettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoPartySettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoPartySettings_autoPartySettings">;
     };
 };
 export type AutoPartySettingsUpdateSettingsMutation = {
@@ -44,34 +44,30 @@ mutation AutoPartySettingsUpdateSettingsMutation(
   $settings: UpdateAutoPartySettingsInput!
 ) {
   updateAutoPartySettings(villageId: $villageId, settings: $settings) {
-    ...AutoPartySettings
+    ...AutoPartySettings_autoPartySettings
   }
 }
 
-fragment AutoPartySettings on AutoPartySettings {
+fragment AutoPartySettings_autoPartySettings on AutoPartySettings {
   allowLarge
   allowSmall
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   minCulturePointsLarge
   minCulturePointsSmall
   useHeroResources
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
 }
 */
 
@@ -149,7 +145,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoPartySettings"
+            "name": "AutoPartySettings_autoPartySettings"
           }
         ],
         "storageKey": null
@@ -247,14 +243,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "85f4f17e25e01e6a0c4b6db948398aa4",
+    "cacheID": "24d11c9e89793f6635f07c0348b8070d",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    ...AutoPartySettings\n  }\n}\n\nfragment AutoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    ...CoolDown\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
+    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    ...AutoPartySettings_autoPartySettings\n  }\n}\n\nfragment AutoPartySettings_autoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n"
   }
 };
 })();
-(node as any).hash = '86a9945083de7dc3be9d28f6077d1acc';
+(node as any).hash = '2496f8db3b7b48def94f34d64bdbf055';
 export default node;

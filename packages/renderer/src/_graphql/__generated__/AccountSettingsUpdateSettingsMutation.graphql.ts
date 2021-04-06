@@ -27,7 +27,7 @@ export type AccountSettingsUpdateSettingsMutationVariables = {
 };
 export type AccountSettingsUpdateSettingsMutationResponse = {
     readonly updateAccountSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AccountSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AccountSettings_accountSettings">;
     };
 };
 export type AccountSettingsUpdateSettingsMutation = {
@@ -42,33 +42,29 @@ mutation AccountSettingsUpdateSettingsMutation(
   $settings: UpdateAccountSettingsInput!
 ) {
   updateAccountSettings(settings: $settings) {
-    ...AccountSettings
+    ...AccountSettings_accountSettings
   }
 }
 
-fragment AccountSettings on AccountSettings {
+fragment AccountSettings_accountSettings on AccountSettings {
   allowTasks
   autoBuild
   autoParty
   autoStart
   autoUnits
   tasksCoolDown {
-    ...CoolDown
-  }
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
 }
 */
@@ -136,7 +132,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AccountSettings"
+            "name": "AccountSettings_accountSettings"
           }
         ],
         "storageKey": null
@@ -231,14 +227,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "886b3714d25c2ddeb9164718902223a3",
+    "cacheID": "985170e1bb57cc79be061160ce23598e",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings\n  }\n}\n\nfragment AccountSettings on AccountSettings {\n  allowTasks\n  autoBuild\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    ...CoolDown\n  }\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
+    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e84bf6a6d17e8ca0ecafb7c64fe2c011';
+(node as any).hash = '8611ab7730a783e3ec1dcff3f7568db3';
 export default node;

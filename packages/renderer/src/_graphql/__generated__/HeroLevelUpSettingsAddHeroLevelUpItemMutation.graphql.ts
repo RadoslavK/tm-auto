@@ -16,7 +16,7 @@ export type HeroLevelUpSettingsAddHeroLevelUpItemMutationVariables = {
 };
 export type HeroLevelUpSettingsAddHeroLevelUpItemMutationResponse = {
     readonly addHeroLevelUpItem: {
-        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItem">;
+        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItemForm_heroLevelUpItem">;
     };
 };
 export type HeroLevelUpSettingsAddHeroLevelUpItemMutation = {
@@ -31,12 +31,12 @@ mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(
   $item: HeroLevelUpItemInput!
 ) {
   addHeroLevelUpItem(item: $item) {
-    ...HeroLevelUpItem
+    ...HeroLevelUpItemForm_heroLevelUpItem
     id
   }
 }
 
-fragment HeroLevelUpItem on HeroLevelUpItem {
+fragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {
   defBonus
   name
   offBonus
@@ -78,7 +78,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "HeroLevelUpItem"
+            "name": "HeroLevelUpItemForm_heroLevelUpItem"
           }
         ],
         "storageKey": null
@@ -149,14 +149,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e1e7b84f2ecf3fe2e54008d85ef17ea3",
+    "cacheID": "f22cb979461b2aaa9e4e5c66466f7120",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsAddHeroLevelUpItemMutation",
     "operationKind": "mutation",
-    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    ...HeroLevelUpItem\n    id\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n) {\n  addHeroLevelUpItem(item: $item) {\n    ...HeroLevelUpItemForm_heroLevelUpItem\n    id\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();
-(node as any).hash = 'b124d2608c3b89fa410f2054329a0929';
+(node as any).hash = 'be9264504e6762f9ae44832702e4e73f';
 export default node;

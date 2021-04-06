@@ -13,7 +13,7 @@ export type GeneralSettingsFormUpdateSettingsMutationVariables = {
 };
 export type GeneralSettingsFormUpdateSettingsMutationResponse = {
     readonly updateGeneralSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"GeneralSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralSettingsForm_generalSettings">;
     };
 };
 export type GeneralSettingsFormUpdateSettingsMutation = {
@@ -28,11 +28,11 @@ mutation GeneralSettingsFormUpdateSettingsMutation(
   $settings: UpdateGeneralSettingsInput!
 ) {
   updateGeneralSettings(settings: $settings) {
-    ...GeneralSettings
+    ...GeneralSettingsForm_generalSettings
   }
 }
 
-fragment GeneralSettings on GeneralSettings {
+fragment GeneralSettingsForm_generalSettings on GeneralSettings {
   chromePath
   headlessChrome
 }
@@ -71,7 +71,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "GeneralSettings"
+            "name": "GeneralSettingsForm_generalSettings"
           }
         ],
         "storageKey": null
@@ -114,14 +114,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d6c6da313f92575495ab5fec0193a6a8",
+    "cacheID": "c11c5d9035535416e55fccfbd409cb21",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    ...GeneralSettings\n  }\n}\n\nfragment GeneralSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
+    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
   }
 };
 })();
-(node as any).hash = '762ead6d4f19b1b9e67f3fbefb4ab597';
+(node as any).hash = '26bf8781b6189da6a83b1de3020d1df7';
 export default node;

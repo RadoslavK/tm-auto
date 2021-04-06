@@ -7,15 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type HeroLevelUpSettingsQueryVariables = {};
 export type HeroLevelUpSettingsQueryResponse = {
     readonly heroLevelUpSettings: {
-        readonly levelUpItems: ReadonlyArray<{
-            readonly id: string;
-            readonly defBonus: number;
-            readonly name: string;
-            readonly offBonus: number;
-            readonly offensiveStrength: number;
-            readonly resources: number;
-            readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItemForm_heroLevelUpItem">;
-        }>;
+        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpSettings_heroLevelUpSettings">;
     };
 };
 export type HeroLevelUpSettingsQuery = {
@@ -28,15 +20,7 @@ export type HeroLevelUpSettingsQuery = {
 /*
 query HeroLevelUpSettingsQuery {
   heroLevelUpSettings {
-    levelUpItems {
-      id
-      defBonus
-      name
-      offBonus
-      offensiveStrength
-      resources
-      ...HeroLevelUpItemForm_heroLevelUpItem
-    }
+    ...HeroLevelUpSettings_heroLevelUpSettings
   }
 }
 
@@ -47,52 +31,21 @@ fragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {
   offensiveStrength
   resources
 }
+
+fragment HeroLevelUpSettings_heroLevelUpSettings on HeroLevelUpSettings {
+  levelUpItems {
+    id
+    defBonus
+    name
+    offBonus
+    offensiveStrength
+    resources
+    ...HeroLevelUpItemForm_heroLevelUpItem
+  }
+}
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "defBonus",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "offBonus",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "offensiveStrength",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "resources",
-  "storageKey": null
-};
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
@@ -108,26 +61,9 @@ return {
         "plural": false,
         "selections": [
           {
-            "alias": null,
             "args": null,
-            "concreteType": "HeroLevelUpItem",
-            "kind": "LinkedField",
-            "name": "levelUpItems",
-            "plural": true,
-            "selections": [
-              (v0/*: any*/),
-              (v1/*: any*/),
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/),
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "HeroLevelUpItemForm_heroLevelUpItem"
-              }
-            ],
-            "storageKey": null
+            "kind": "FragmentSpread",
+            "name": "HeroLevelUpSettings_heroLevelUpSettings"
           }
         ],
         "storageKey": null
@@ -158,12 +94,48 @@ return {
             "name": "levelUpItems",
             "plural": true,
             "selections": [
-              (v0/*: any*/),
-              (v1/*: any*/),
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "defBonus",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "offBonus",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "offensiveStrength",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "resources",
+                "storageKey": null
+              }
             ],
             "storageKey": null
           }
@@ -173,14 +145,13 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fd654a6835ea245114b59ba91bf23bc5",
+    "cacheID": "6b13d29f5230bbb25d2396a9d452d2a8",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsQuery",
     "operationKind": "query",
-    "text": "query HeroLevelUpSettingsQuery {\n  heroLevelUpSettings {\n    levelUpItems {\n      id\n      defBonus\n      name\n      offBonus\n      offensiveStrength\n      resources\n      ...HeroLevelUpItemForm_heroLevelUpItem\n    }\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "query HeroLevelUpSettingsQuery {\n  heroLevelUpSettings {\n    ...HeroLevelUpSettings_heroLevelUpSettings\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n\nfragment HeroLevelUpSettings_heroLevelUpSettings on HeroLevelUpSettings {\n  levelUpItems {\n    id\n    defBonus\n    name\n    offBonus\n    offensiveStrength\n    resources\n    ...HeroLevelUpItemForm_heroLevelUpItem\n  }\n}\n"
   }
 };
-})();
-(node as any).hash = 'e3e1ca552f5131094adc8ad23e2881be';
+(node as any).hash = '07842a6d69d6aa875a3706d276b3c6c4';
 export default node;

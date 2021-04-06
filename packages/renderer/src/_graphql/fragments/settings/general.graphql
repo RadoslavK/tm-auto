@@ -1,4 +1,0 @@
-fragment GeneralSettings on GeneralSettings {
-    chromePath
-    headlessChrome
-}

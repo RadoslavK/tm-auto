@@ -15,7 +15,7 @@ export type SignInFormCreateAccountMutationVariables = {
 export type SignInFormCreateAccountMutationResponse = {
     readonly createAccount: {
         readonly id: string;
-        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
+        readonly " $fragmentRefs": FragmentRefs<"Accounts_account">;
     };
 };
 export type SignInFormCreateAccountMutation = {
@@ -31,15 +31,14 @@ mutation SignInFormCreateAccountMutation(
 ) {
   createAccount(account: $account) {
     id
-    ...UserAccount
+    ...Accounts_account
   }
 }
 
-fragment UserAccount on UserAccount {
+fragment Accounts_account on UserAccount {
   id
-  password
-  server
   username
+  server
 }
 */
 
@@ -84,7 +83,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "UserAccount"
+            "name": "Accounts_account"
           }
         ],
         "storageKey": null
@@ -112,7 +111,7 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "password",
+            "name": "username",
             "storageKey": null
           },
           {
@@ -121,13 +120,6 @@ return {
             "kind": "ScalarField",
             "name": "server",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -135,14 +127,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "bd301fcbdeb1f9a2d8fd205ba79df5ec",
+    "cacheID": "13fc3d82c330b6afe86725bf91ffede1",
     "id": null,
     "metadata": {},
     "name": "SignInFormCreateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n    ...UserAccount\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
+    "text": "mutation SignInFormCreateAccountMutation(\n  $account: AccountInput!\n) {\n  createAccount(account: $account) {\n    id\n    ...Accounts_account\n  }\n}\n\nfragment Accounts_account on UserAccount {\n  id\n  username\n  server\n}\n"
   }
 };
 })();
-(node as any).hash = '8f755f7982e8c707c01c414225139709';
+(node as any).hash = '0ab19a5ea9da050635c5f78f33f96df9';
 export default node;

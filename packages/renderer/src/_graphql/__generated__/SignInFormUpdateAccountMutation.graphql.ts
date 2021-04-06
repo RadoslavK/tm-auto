@@ -3,7 +3,6 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-import { FragmentRefs } from "relay-runtime";
 export type AccountInput = {
     password: string;
     server: string;
@@ -15,7 +14,8 @@ export type SignInFormUpdateAccountMutationVariables = {
 };
 export type SignInFormUpdateAccountMutationResponse = {
     readonly updateAccount: {
-        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
+        readonly id: string;
+        readonly password: string;
     };
 };
 export type SignInFormUpdateAccountMutation = {
@@ -31,16 +31,9 @@ mutation SignInFormUpdateAccountMutation(
   $account: AccountInput!
 ) {
   updateAccount(id: $id, account: $account) {
-    ...UserAccount
     id
+    password
   }
-}
-
-fragment UserAccount on UserAccount {
-  id
-  password
-  server
-  username
 }
 */
 
@@ -57,14 +50,40 @@ v1 = {
 },
 v2 = [
   {
-    "kind": "Variable",
-    "name": "account",
-    "variableName": "account"
-  },
-  {
-    "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "account",
+        "variableName": "account"
+      },
+      {
+        "kind": "Variable",
+        "name": "id",
+        "variableName": "id"
+      }
+    ],
+    "concreteType": "UserAccount",
+    "kind": "LinkedField",
+    "name": "updateAccount",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "password",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
   }
 ];
 return {
@@ -76,24 +95,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "SignInFormUpdateAccountMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "UserAccount",
-        "kind": "LinkedField",
-        "name": "updateAccount",
-        "plural": false,
-        "selections": [
-          {
-            "args": null,
-            "kind": "FragmentSpread",
-            "name": "UserAccount"
-          }
-        ],
-        "storageKey": null
-      }
-    ],
+    "selections": (v2/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
@@ -105,57 +107,17 @@ return {
     ],
     "kind": "Operation",
     "name": "SignInFormUpdateAccountMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "UserAccount",
-        "kind": "LinkedField",
-        "name": "updateAccount",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "password",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "server",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "a284f98b5cbf8737de92fabc036cb4d3",
+    "cacheID": "e2f718dba4429a83f9d7df5422396307",
     "id": null,
     "metadata": {},
     "name": "SignInFormUpdateAccountMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
+    "text": "mutation SignInFormUpdateAccountMutation(\n  $id: ID!\n  $account: AccountInput!\n) {\n  updateAccount(id: $id, account: $account) {\n    id\n    password\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '5f6372b75e4de2be5fc48c531917f90d';
+(node as any).hash = '9a4b6b7b62b204b5e4c812bd268ff463';
 export default node;

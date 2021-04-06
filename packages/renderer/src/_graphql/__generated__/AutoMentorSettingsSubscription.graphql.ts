@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AutoMentorSettingsSubscriptionVariables = {};
 export type AutoMentorSettingsSubscriptionResponse = {
     readonly autoMentorSettingsUpdated: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings_autoMentorSettings">;
     };
 };
 export type AutoMentorSettingsSubscription = {
@@ -20,11 +20,11 @@ export type AutoMentorSettingsSubscription = {
 /*
 subscription AutoMentorSettingsSubscription {
   autoMentorSettingsUpdated {
-    ...AutoMentorSettings
+    ...AutoMentorSettings_autoMentorSettings
   }
 }
 
-fragment AutoMentorSettings on AutoMentorSettings {
+fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
 }
@@ -48,7 +48,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoMentorSettings"
+            "name": "AutoMentorSettings_autoMentorSettings"
           }
         ],
         "storageKey": null
@@ -91,13 +91,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "2fdd38f5ed55f10b9b532c8088d5704b",
+    "cacheID": "fdde79f253a9549b79dd1553c55d89e8",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AutoMentorSettingsSubscription {\n  autoMentorSettingsUpdated {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
+    "text": "subscription AutoMentorSettingsSubscription {\n  autoMentorSettingsUpdated {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
-(node as any).hash = 'ad332749fcadfa767e800c67e6be0a67';
+(node as any).hash = '36526cb32893ab1ec2c5b22ec2671e95';
 export default node;

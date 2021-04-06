@@ -22,7 +22,8 @@ const logsQuery = graphql`
 const logsSubscription = graphql`
   subscription LogsSubscription {
       logEntryAdded {
-        ...LogEntry
+          id
+        ...LogEntry_logEntry
       }
   }
 `;

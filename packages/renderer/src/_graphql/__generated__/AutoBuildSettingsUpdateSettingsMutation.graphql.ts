@@ -43,7 +43,7 @@ export type AutoBuildSettingsUpdateSettingsMutationVariables = {
 };
 export type AutoBuildSettingsUpdateSettingsMutationResponse = {
     readonly updateAutoBuildSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoBuildSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoBuildSettings_autoBuildSettings">;
     };
 };
 export type AutoBuildSettingsUpdateSettingsMutation = {
@@ -59,18 +59,37 @@ mutation AutoBuildSettingsUpdateSettingsMutation(
   $settings: UpdateAutoBuildSettingsInput!
 ) {
   updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
-    ...AutoBuildSettings
+    ...AutoBuildSettings_autoBuildSettings
   }
 }
 
-fragment AutoBuildSettings on AutoBuildSettings {
+fragment AutoBuildSettings_autoBuildSettings on AutoBuildSettings {
   allow
   autoCropFields
   autoStorage {
-    ...AutoStorageSettings
+    allowFreeSpots
+    granary {
+      allow
+      overflowLevel
+    }
+    warehouse {
+      allow
+      overflowLevel
+    }
   }
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   dualQueue {
     allow
@@ -78,36 +97,6 @@ fragment AutoBuildSettings on AutoBuildSettings {
   }
   minCrop
   useHeroResources
-}
-
-fragment AutoStorageOptionSettings on AutoStorageOptionSettings {
-  allow
-  overflowLevel
-}
-
-fragment AutoStorageSettings on AutoStorageSettings {
-  allowFreeSpots
-  granary {
-    ...AutoStorageOptionSettings
-  }
-  warehouse {
-    ...AutoStorageOptionSettings
-  }
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
 }
 */
 
@@ -202,7 +191,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoBuildSettings"
+            "name": "AutoBuildSettings_autoBuildSettings"
           }
         ],
         "storageKey": null
@@ -344,14 +333,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c5ece524d6b9f8233aa7fa1b187ae187",
+    "cacheID": "8301ec00d110403b2b1dfe3a8fcb4256",
     "id": null,
     "metadata": {},
     "name": "AutoBuildSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoBuildSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoBuildSettingsInput!\n) {\n  updateAutoBuildSettings(villageId: $villageId, settings: $settings) {\n    ...AutoBuildSettings\n  }\n}\n\nfragment AutoBuildSettings on AutoBuildSettings {\n  allow\n  autoCropFields\n  autoStorage {\n    ...AutoStorageSettings\n  }\n  coolDown {\n    ...CoolDown\n  }\n  dualQueue {\n    allow\n    preference\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment AutoStorageOptionSettings on AutoStorageOptionSettings {\n  allow\n  overflowLevel\n}\n\nfragment AutoStorageSettings on AutoStorageSettings {\n  allowFreeSpots\n  granary {\n    ...AutoStorageOptionSettings\n  }\n  warehouse {\n    ...AutoStorageOptionSettings\n  }\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
+    "text": "mutation AutoBuildSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoBuildSettingsInput!\n) {\n  updateAutoBuildSettings(villageId: $villageId, settings: $settings) {\n    ...AutoBuildSettings_autoBuildSettings\n  }\n}\n\nfragment AutoBuildSettings_autoBuildSettings on AutoBuildSettings {\n  allow\n  autoCropFields\n  autoStorage {\n    allowFreeSpots\n    granary {\n      allow\n      overflowLevel\n    }\n    warehouse {\n      allow\n      overflowLevel\n    }\n  }\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  dualQueue {\n    allow\n    preference\n  }\n  minCrop\n  useHeroResources\n}\n"
   }
 };
 })();
-(node as any).hash = 'e4a9b807adc466fc32d9e7ed6ee8739a';
+(node as any).hash = '154b4733f4f8f0ba9dbcc3da435611e0';
 export default node;

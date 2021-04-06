@@ -13,7 +13,7 @@ export type GeneralVillageSettingsUpdateSettingsMutationVariables = {
 };
 export type GeneralVillageSettingsUpdateSettingsMutationResponse = {
     readonly updateGeneralVillageSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings_generalVillageSettings">;
     };
 };
 export type GeneralVillageSettingsUpdateSettingsMutation = {
@@ -29,11 +29,11 @@ mutation GeneralVillageSettingsUpdateSettingsMutation(
   $settings: UpdateGeneralVillageSettingsInput!
 ) {
   updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
-    ...GeneralVillageSettings
+    ...GeneralVillageSettings_generalVillageSettings
   }
 }
 
-fragment GeneralVillageSettings on GeneralVillageSettings {
+fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
   allowTasks
 }
 */
@@ -82,7 +82,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "GeneralVillageSettings"
+            "name": "GeneralVillageSettings_generalVillageSettings"
           }
         ],
         "storageKey": null
@@ -121,14 +121,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0a853e71285056ec1cd1b9a35c753c6f",
+    "cacheID": "c1dacecfd286a89d0045efa31164a3a5",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    ...GeneralVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
+    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    ...GeneralVillageSettings_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
   }
 };
 })();
-(node as any).hash = 'd5458ce09729948aad6dbd79e21231df';
+(node as any).hash = 'a9530ecc61c0db00c191e644b4d7bda0';
 export default node;

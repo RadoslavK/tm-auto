@@ -17,11 +17,17 @@ import type { AutoMentorSettingsResetSettingsMutation } from '../../_graphql/__g
 import type { AutoMentorSettingsSubscription } from '../../_graphql/__generated__/AutoMentorSettingsSubscription.graphql.js';
 import type { AutoMentorSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsUpdateSettingsMutation.graphql.js';
 
+graphql`
+    fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {
+        acceptDailyRewards
+        acceptTaskRewards
+    }
+`;
+
 const autoMentorSettingsQuery = graphql`
   query AutoMentorSettingsQuery {
       autoMentorSettings {
-          acceptDailyRewards
-          acceptTaskRewards
+          ...AutoMentorSettings_autoMentorSettings @relay(mask: false)
       }
   }
 `;
@@ -29,7 +35,7 @@ const autoMentorSettingsQuery = graphql`
 const autoMentorSettingsUpdateSettingsMutation = graphql`
   mutation AutoMentorSettingsUpdateSettingsMutation($settings: UpdateAutoMentorSettingsInput!) {
       updateAutoMentorSettings(settings: $settings) {
-          ...AutoMentorSettings
+          ...AutoMentorSettings_autoMentorSettings
       }
   }
 `;
@@ -37,7 +43,7 @@ const autoMentorSettingsUpdateSettingsMutation = graphql`
 const autoMentorSettingsResetSettingsMutation = graphql`
     mutation AutoMentorSettingsResetSettingsMutation {
         resetAutoMentorSettings {
-            ...AutoMentorSettings
+            ...AutoMentorSettings_autoMentorSettings
         }
     }
 `;
@@ -45,7 +51,7 @@ const autoMentorSettingsResetSettingsMutation = graphql`
 const subscription = graphql`
   subscription AutoMentorSettingsSubscription {
       autoMentorSettingsUpdated {
-          ...AutoMentorSettings
+          ...AutoMentorSettings_autoMentorSettings
       }
   }
 `;

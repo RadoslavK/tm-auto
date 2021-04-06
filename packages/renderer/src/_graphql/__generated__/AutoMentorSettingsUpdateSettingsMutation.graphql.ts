@@ -13,7 +13,7 @@ export type AutoMentorSettingsUpdateSettingsMutationVariables = {
 };
 export type AutoMentorSettingsUpdateSettingsMutationResponse = {
     readonly updateAutoMentorSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings_autoMentorSettings">;
     };
 };
 export type AutoMentorSettingsUpdateSettingsMutation = {
@@ -28,11 +28,11 @@ mutation AutoMentorSettingsUpdateSettingsMutation(
   $settings: UpdateAutoMentorSettingsInput!
 ) {
   updateAutoMentorSettings(settings: $settings) {
-    ...AutoMentorSettings
+    ...AutoMentorSettings_autoMentorSettings
   }
 }
 
-fragment AutoMentorSettings on AutoMentorSettings {
+fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
 }
@@ -71,7 +71,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoMentorSettings"
+            "name": "AutoMentorSettings_autoMentorSettings"
           }
         ],
         "storageKey": null
@@ -114,14 +114,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d1a45b13705e45b2a621104a94aa49ac",
+    "cacheID": "d3247e146b8fd7a28284223c8fc681f8",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoMentorSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoMentorSettingsInput!\n) {\n  updateAutoMentorSettings(settings: $settings) {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
+    "text": "mutation AutoMentorSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoMentorSettingsInput!\n) {\n  updateAutoMentorSettings(settings: $settings) {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 })();
-(node as any).hash = '5ce052eb551d3ebc51f03844b8bc6c56';
+(node as any).hash = 'ae472c8429cbadbb1b78ddccb708216b';
 export default node;

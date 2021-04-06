@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type HeroLevelUpSettingsSubscriptionVariables = {};
 export type HeroLevelUpSettingsSubscriptionResponse = {
     readonly heroLevelUpSettingsChanged: {
-        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpSettings_heroLevelUpSettings">;
     };
 };
 export type HeroLevelUpSettingsSubscription = {
@@ -20,11 +20,11 @@ export type HeroLevelUpSettingsSubscription = {
 /*
 subscription HeroLevelUpSettingsSubscription {
   heroLevelUpSettingsChanged {
-    ...HeroLevelUpSettings
+    ...HeroLevelUpSettings_heroLevelUpSettings
   }
 }
 
-fragment HeroLevelUpItem on HeroLevelUpItem {
+fragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {
   defBonus
   name
   offBonus
@@ -32,10 +32,15 @@ fragment HeroLevelUpItem on HeroLevelUpItem {
   resources
 }
 
-fragment HeroLevelUpSettings on HeroLevelUpSettings {
+fragment HeroLevelUpSettings_heroLevelUpSettings on HeroLevelUpSettings {
   levelUpItems {
-    ...HeroLevelUpItem
     id
+    defBonus
+    name
+    offBonus
+    offensiveStrength
+    resources
+    ...HeroLevelUpItemForm_heroLevelUpItem
   }
 }
 */
@@ -58,7 +63,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "HeroLevelUpSettings"
+            "name": "HeroLevelUpSettings_heroLevelUpSettings"
           }
         ],
         "storageKey": null
@@ -93,6 +98,13 @@ const node: ConcreteRequest = {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "defBonus",
                 "storageKey": null
               },
@@ -123,13 +135,6 @@ const node: ConcreteRequest = {
                 "kind": "ScalarField",
                 "name": "resources",
                 "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
               }
             ],
             "storageKey": null
@@ -140,13 +145,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "1c4d90658db8391bc759de6161ffae6c",
+    "cacheID": "bc44ebd2e54fcb123ed4154c4ba648fb",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription HeroLevelUpSettingsSubscription {\n  heroLevelUpSettingsChanged {\n    ...HeroLevelUpSettings\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n\nfragment HeroLevelUpSettings on HeroLevelUpSettings {\n  levelUpItems {\n    ...HeroLevelUpItem\n    id\n  }\n}\n"
+    "text": "subscription HeroLevelUpSettingsSubscription {\n  heroLevelUpSettingsChanged {\n    ...HeroLevelUpSettings_heroLevelUpSettings\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n\nfragment HeroLevelUpSettings_heroLevelUpSettings on HeroLevelUpSettings {\n  levelUpItems {\n    id\n    defBonus\n    name\n    offBonus\n    offensiveStrength\n    resources\n    ...HeroLevelUpItemForm_heroLevelUpItem\n  }\n}\n"
   }
 };
-(node as any).hash = '22ee5ce9ec54d116437f00e8f17d011e';
+(node as any).hash = '31c5339768cc19a003c512c9514084f2';
 export default node;

@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AutoAdventureSettingsResetSettingsMutationVariables = {};
 export type AutoAdventureSettingsResetSettingsMutationResponse = {
     readonly resetAutoAdventureSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings_autoAdventureSettings">;
     };
 };
 export type AutoAdventureSettingsResetSettingsMutation = {
@@ -20,44 +20,36 @@ export type AutoAdventureSettingsResetSettingsMutation = {
 /*
 mutation AutoAdventureSettingsResetSettingsMutation {
   resetAutoAdventureSettings {
-    ...AutoAdventureSettings
+    ...AutoAdventureSettings_autoAdventureSettings
   }
 }
 
-fragment AutoAdventureSettings on AutoAdventureSettings {
+fragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {
   adventureCriteria
   allow
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   hardMinHealth
   maxTravelTime {
-    ...Duration
+    days
+    hours
+    minutes
+    seconds
   }
   normalMinHealth
   preferHard
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
-}
-
-fragment Duration on Duration {
-  days
-  hours
-  minutes
-  seconds
 }
 */
 
@@ -110,7 +102,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoAdventureSettings"
+            "name": "AutoAdventureSettings_autoAdventureSettings"
           }
         ],
         "storageKey": null
@@ -215,14 +207,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6abce2fd5b33e9e1566cfbcacfd54fb3",
+    "cacheID": "cd85a5b9c49e2c39fcd3ca4d560b26ad",
     "id": null,
     "metadata": {},
     "name": "AutoAdventureSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoAdventureSettingsResetSettingsMutation {\n  resetAutoAdventureSettings {\n    ...AutoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    ...CoolDown\n  }\n  hardMinHealth\n  maxTravelTime {\n    ...Duration\n  }\n  normalMinHealth\n  preferHard\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n"
+    "text": "mutation AutoAdventureSettingsResetSettingsMutation {\n  resetAutoAdventureSettings {\n    ...AutoAdventureSettings_autoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  hardMinHealth\n  maxTravelTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  normalMinHealth\n  preferHard\n}\n"
   }
 };
 })();
-(node as any).hash = 'ce3afd72b099aee41dd56926261a0ce0';
+(node as any).hash = 'deec365d3a71379be7e25f29459b5d91';
 export default node;

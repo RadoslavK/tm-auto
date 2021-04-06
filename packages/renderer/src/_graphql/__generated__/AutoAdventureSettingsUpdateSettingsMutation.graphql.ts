@@ -29,7 +29,7 @@ export type AutoAdventureSettingsUpdateSettingsMutationVariables = {
 };
 export type AutoAdventureSettingsUpdateSettingsMutationResponse = {
     readonly updateAutoAdventureSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings_autoAdventureSettings">;
     };
 };
 export type AutoAdventureSettingsUpdateSettingsMutation = {
@@ -44,44 +44,36 @@ mutation AutoAdventureSettingsUpdateSettingsMutation(
   $settings: UpdateAutoAdventureSettingsInput!
 ) {
   updateAutoAdventureSettings(settings: $settings) {
-    ...AutoAdventureSettings
+    ...AutoAdventureSettings_autoAdventureSettings
   }
 }
 
-fragment AutoAdventureSettings on AutoAdventureSettings {
+fragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {
   adventureCriteria
   allow
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   hardMinHealth
   maxTravelTime {
-    ...Duration
+    days
+    hours
+    minutes
+    seconds
   }
   normalMinHealth
   preferHard
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
-}
-
-fragment Duration on Duration {
-  days
-  hours
-  minutes
-  seconds
 }
 */
 
@@ -148,7 +140,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoAdventureSettings"
+            "name": "AutoAdventureSettings_autoAdventureSettings"
           }
         ],
         "storageKey": null
@@ -253,14 +245,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5ba4801cfbf369c4172e16920bee660b",
+    "cacheID": "093c8558b28ea029e7bc8c07e729b359",
     "id": null,
     "metadata": {},
     "name": "AutoAdventureSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoAdventureSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoAdventureSettingsInput!\n) {\n  updateAutoAdventureSettings(settings: $settings) {\n    ...AutoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    ...CoolDown\n  }\n  hardMinHealth\n  maxTravelTime {\n    ...Duration\n  }\n  normalMinHealth\n  preferHard\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n"
+    "text": "mutation AutoAdventureSettingsUpdateSettingsMutation(\n  $settings: UpdateAutoAdventureSettingsInput!\n) {\n  updateAutoAdventureSettings(settings: $settings) {\n    ...AutoAdventureSettings_autoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  hardMinHealth\n  maxTravelTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  normalMinHealth\n  preferHard\n}\n"
   }
 };
 })();
-(node as any).hash = 'bef512b6d32294c8dd140f0c12d935c5';
+(node as any).hash = 'ec5bb26500b03434dd28968582879ce6';
 export default node;

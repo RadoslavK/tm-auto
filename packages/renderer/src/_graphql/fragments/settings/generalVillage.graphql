@@ -1,3 +1,0 @@
-fragment GeneralVillageSettings on GeneralVillageSettings {
-    allowTasks
-}

@@ -17,10 +17,16 @@ type Props = {
   readonly villageId: string;
 };
 
+graphql`
+    fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
+        allowTasks
+    }
+`;
+
 const generalVillageSettingsQuery = graphql`
   query GeneralVillageSettingsQuery($villageId: ID!) {
       generalVillageSettings(villageId: $villageId) {
-          allowTasks
+          ...GeneralVillageSettings_generalVillageSettings @relay(mask: false)
       }
   }
 `;
@@ -28,7 +34,7 @@ const generalVillageSettingsQuery = graphql`
 const generalVillageSettingsUpdateSettingsMutation = graphql`
   mutation GeneralVillageSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateGeneralVillageSettingsInput!) {
       updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
-          ...GeneralVillageSettings
+          ...GeneralVillageSettings_generalVillageSettings
       }
   }
 `;
@@ -36,7 +42,7 @@ const generalVillageSettingsUpdateSettingsMutation = graphql`
 const generalVillageSettingsResetSettingsMutation = graphql`
     mutation GeneralVillageSettingsResetSettingsMutation($villageId: ID!) {
         resetGeneralVillageSettings(villageId: $villageId) {
-            ...GeneralVillageSettings
+            ...GeneralVillageSettings_generalVillageSettings
         }
     }
 `;

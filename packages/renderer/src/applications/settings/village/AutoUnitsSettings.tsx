@@ -21,15 +21,21 @@ type Props = {
   readonly villageId: string;
 };
 
+graphql`
+    fragment AutoUnitsSettings_autoUnitsSettings on AutoUnitsSettings {
+        allow
+        coolDown {
+            ...CoolDown @relay(mask: false)
+        }
+        minCrop
+        useHeroResources
+    }
+`;
+
 const autoUnitsSettingsQuery = graphql`
   query AutoUnitsSettingsQuery($villageId: ID!) {
       autoUnitsSettings(villageId: $villageId) {
-          allow
-          coolDown {
-              ...CoolDown @relay(mask: false)
-          }
-          minCrop
-          useHeroResources
+          ...AutoUnitsSettings_autoUnitsSettings @relay(mask: false)
       }
   }
 `;
@@ -37,7 +43,8 @@ const autoUnitsSettingsQuery = graphql`
 const autoUnitsSettingsUpdateSettingsMutation = graphql`
   mutation AutoUnitsSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoUnitsSettingsInput!) {
       updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {
-          ...AutoUnitsSettings
+          ...AutoUnitsSettings_autoUnitsSettings
+          ...Units_autoUnitsSettings
       }
   }
 `;
@@ -45,7 +52,8 @@ const autoUnitsSettingsUpdateSettingsMutation = graphql`
 const autoUnitsSettingsResetSettingsMutation = graphql`
     mutation AutoUnitsSettingsResetSettingsMutation($villageId: ID!) {
         resetAutoUnitsSettings(villageId: $villageId) {
-            ...AutoUnitsSettings
+            ...AutoUnitsSettings_autoUnitsSettings
+            ...Units_autoUnitsSettings
         }
     }
 `;

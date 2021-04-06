@@ -9,7 +9,7 @@ export type AutoUnitsSettingsResetSettingsMutationVariables = {
 };
 export type AutoUnitsSettingsResetSettingsMutationResponse = {
     readonly resetAutoUnitsSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoUnitsSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoUnitsSettings_autoUnitsSettings" | "Units_autoUnitsSettings">;
     };
 };
 export type AutoUnitsSettingsResetSettingsMutation = {
@@ -24,68 +24,65 @@ mutation AutoUnitsSettingsResetSettingsMutation(
   $villageId: ID!
 ) {
   resetAutoUnitsSettings(villageId: $villageId) {
-    ...AutoUnitsSettings
+    ...AutoUnitsSettings_autoUnitsSettings
+    ...Units_autoUnitsSettings
   }
 }
 
-fragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {
+fragment AutoUnitsSettings_autoUnitsSettings on AutoUnitsSettings {
   allow
-  maxBuildTime {
-    ...Duration
-  }
-  units {
-    ...AutoUnitsUnitSettings
-  }
-}
-
-fragment AutoUnitsSettings on AutoUnitsSettings {
-  allow
-  barracks {
-    ...AutoUnitsBuildingSettings
-  }
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   minCrop
-  residence {
-    ...AutoUnitsBuildingSettings
-  }
-  stable {
-    ...AutoUnitsBuildingSettings
-  }
   useHeroResources
-  workshop {
-    ...AutoUnitsBuildingSettings
+}
+
+fragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {
+  allow
+  maxBuildTime {
+    days
+    hours
+    minutes
+    seconds
+  }
+  units {
+    index
+    ...UnitSettings_autoUnitsUnitSettings
   }
 }
 
-fragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {
-  autoBuild
+fragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {
   index
+  autoBuild
   targetAmount
   trainForever
 }
 
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
+fragment Units_autoUnitsSettings on AutoUnitsSettings {
+  barracks {
+    ...UnitBuildingSection_autoUnitsBuildingSettings
   }
-  min {
-    days
-    hours
-    minutes
-    seconds
+  stable {
+    ...UnitBuildingSection_autoUnitsBuildingSettings
   }
-}
-
-fragment Duration on Duration {
-  days
-  hours
-  minutes
-  seconds
+  workshop {
+    ...UnitBuildingSection_autoUnitsBuildingSettings
+  }
+  residence {
+    ...UnitBuildingSection_autoUnitsBuildingSettings
+  }
 }
 */
 
@@ -165,14 +162,14 @@ v4 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "autoBuild",
+        "name": "index",
         "storageKey": null
       },
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "index",
+        "name": "autoBuild",
         "storageKey": null
       },
       {
@@ -211,7 +208,12 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoUnitsSettings"
+            "name": "AutoUnitsSettings_autoUnitsSettings"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Units_autoUnitsSettings"
           }
         ],
         "storageKey": null
@@ -235,16 +237,6 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "AutoUnitsBuildingSettings",
-            "kind": "LinkedField",
-            "name": "barracks",
-            "plural": false,
-            "selections": (v4/*: any*/),
-            "storageKey": null
-          },
           {
             "alias": null,
             "args": null,
@@ -286,9 +278,16 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "AutoUnitsBuildingSettings",
             "kind": "LinkedField",
-            "name": "residence",
+            "name": "barracks",
             "plural": false,
             "selections": (v4/*: any*/),
             "storageKey": null
@@ -306,8 +305,11 @@ return {
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "useHeroResources",
+            "concreteType": "AutoUnitsBuildingSettings",
+            "kind": "LinkedField",
+            "name": "workshop",
+            "plural": false,
+            "selections": (v4/*: any*/),
             "storageKey": null
           },
           {
@@ -315,7 +317,7 @@ return {
             "args": null,
             "concreteType": "AutoUnitsBuildingSettings",
             "kind": "LinkedField",
-            "name": "workshop",
+            "name": "residence",
             "plural": false,
             "selections": (v4/*: any*/),
             "storageKey": null
@@ -326,14 +328,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "308ddb9570661534a9b52ea56de4a1ea",
+    "cacheID": "837b5ff52fd06bb9c04237a3601138c0",
     "id": null,
     "metadata": {},
     "name": "AutoUnitsSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoUnitsSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoUnitsSettings(villageId: $villageId) {\n    ...AutoUnitsSettings\n  }\n}\n\nfragment AutoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    ...Duration\n  }\n  units {\n    ...AutoUnitsUnitSettings\n  }\n}\n\nfragment AutoUnitsSettings on AutoUnitsSettings {\n  allow\n  barracks {\n    ...AutoUnitsBuildingSettings\n  }\n  coolDown {\n    ...CoolDown\n  }\n  minCrop\n  residence {\n    ...AutoUnitsBuildingSettings\n  }\n  stable {\n    ...AutoUnitsBuildingSettings\n  }\n  useHeroResources\n  workshop {\n    ...AutoUnitsBuildingSettings\n  }\n}\n\nfragment AutoUnitsUnitSettings on AutoUnitsUnitSettings {\n  autoBuild\n  index\n  targetAmount\n  trainForever\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n"
+    "text": "mutation AutoUnitsSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoUnitsSettings(villageId: $villageId) {\n    ...AutoUnitsSettings_autoUnitsSettings\n    ...Units_autoUnitsSettings\n  }\n}\n\nfragment AutoUnitsSettings_autoUnitsSettings on AutoUnitsSettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n\nfragment Units_autoUnitsSettings on AutoUnitsSettings {\n  barracks {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  stable {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  workshop {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  residence {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e486775cbbfa2e78ed9c04ea5b706313';
+(node as any).hash = 'ae5ec89d9fda8c8b77727434ca184ea0';
 export default node;

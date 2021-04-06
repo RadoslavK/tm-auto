@@ -77,7 +77,7 @@ const unitSettingsUnitInfoQuery = graphql`
 const unitSettingsUpdateAutoUnitsUnitSettingsMutation = graphql`
   mutation UnitSettingsUpdateAutoUnitsUnitSettingsMutation($villageId: ID!, $settings: UpdateAutoUnitsUnitSettingsInput!) {
       updateAutoUnitsUnitSettings(villageId: $villageId, settings: $settings) {
-          ...AutoUnitsSettings
+          ...Units_autoUnitsSettings
       }
   }
 `;

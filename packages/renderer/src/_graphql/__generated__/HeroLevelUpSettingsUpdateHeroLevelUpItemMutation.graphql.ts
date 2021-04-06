@@ -17,7 +17,7 @@ export type HeroLevelUpSettingsUpdateHeroLevelUpItemMutationVariables = {
 };
 export type HeroLevelUpSettingsUpdateHeroLevelUpItemMutationResponse = {
     readonly updateHeroLevelUpItem: {
-        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItem">;
+        readonly " $fragmentRefs": FragmentRefs<"HeroLevelUpItemForm_heroLevelUpItem">;
     };
 };
 export type HeroLevelUpSettingsUpdateHeroLevelUpItemMutation = {
@@ -33,12 +33,12 @@ mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation(
   $id: ID!
 ) {
   updateHeroLevelUpItem(item: $item, id: $id) {
-    ...HeroLevelUpItem
+    ...HeroLevelUpItemForm_heroLevelUpItem
     id
   }
 }
 
-fragment HeroLevelUpItem on HeroLevelUpItem {
+fragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {
   defBonus
   name
   offBonus
@@ -91,7 +91,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "HeroLevelUpItem"
+            "name": "HeroLevelUpItemForm_heroLevelUpItem"
           }
         ],
         "storageKey": null
@@ -165,14 +165,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5ed74d96acfd8b79334b7fa90cd32595",
+    "cacheID": "7b017e27fd6072f46e385d4851f3fcbc",
     "id": null,
     "metadata": {},
     "name": "HeroLevelUpSettingsUpdateHeroLevelUpItemMutation",
     "operationKind": "mutation",
-    "text": "mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n  $id: ID!\n) {\n  updateHeroLevelUpItem(item: $item, id: $id) {\n    ...HeroLevelUpItem\n    id\n  }\n}\n\nfragment HeroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
+    "text": "mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation(\n  $item: HeroLevelUpItemInput!\n  $id: ID!\n) {\n  updateHeroLevelUpItem(item: $item, id: $id) {\n    ...HeroLevelUpItemForm_heroLevelUpItem\n    id\n  }\n}\n\nfragment HeroLevelUpItemForm_heroLevelUpItem on HeroLevelUpItem {\n  defBonus\n  name\n  offBonus\n  offensiveStrength\n  resources\n}\n"
   }
 };
 })();
-(node as any).hash = '9b66447b82d5c8807e6187196b69174f';
+(node as any).hash = '804d49cec9bce4d9480eda5a9b74267b';
 export default node;

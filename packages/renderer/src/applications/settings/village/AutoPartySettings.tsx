@@ -21,17 +21,24 @@ type Props = {
   readonly villageId: string;
 };
 
+graphql`
+    fragment AutoPartySettings_autoPartySettings on AutoPartySettings {
+        allowLarge
+        allowSmall
+        coolDown {
+            ...CoolDown @relay(mask: false)
+        }
+        minCulturePointsLarge
+        minCulturePointsSmall
+        useHeroResources
+    }
+`;
+
+
 const autoPartySettingsQuery = graphql`
   query AutoPartySettingsQuery($villageId: ID!) {
       autoPartySettings(villageId: $villageId) {
-          allowLarge
-          allowSmall
-          coolDown {
-              ...CoolDown @relay(mask: false)
-          }
-          minCulturePointsLarge
-          minCulturePointsSmall
-          useHeroResources
+          ...AutoPartySettings_autoPartySettings @relay(mask: false)
       }
   }
 `;
@@ -39,7 +46,7 @@ const autoPartySettingsQuery = graphql`
 const autoPartySettingsUpdateSettingsMutation = graphql`
   mutation AutoPartySettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoPartySettingsInput!) {
       updateAutoPartySettings(villageId: $villageId, settings: $settings) {
-          ...AutoPartySettings
+          ...AutoPartySettings_autoPartySettings
       }
   }
 `;
@@ -47,7 +54,7 @@ const autoPartySettingsUpdateSettingsMutation = graphql`
 const autoPartySettingsResetSettingsMutation = graphql`
     mutation AutoPartySettingsResetSettingsMutation($villageId: ID!) {
         resetAutoPartySettings(villageId: $villageId) {
-            ...AutoPartySettings
+            ...AutoPartySettings_autoPartySettings
         }
     }
 `;

@@ -103,31 +103,48 @@ type Props = {
   readonly villageId: string;
 };
 
+graphql`
+    fragment AutoBuildSettings_autoStorageOptionSettings on AutoStorageOptionSettings {
+        allow
+        overflowLevel
+    }
+`;
+
+graphql`
+    fragment AutoBuildSettings_autoStorageSettings on AutoStorageSettings {
+        allowFreeSpots
+        granary {
+            ...AutoBuildSettings_autoStorageOptionSettings @relay (mask: false)
+        }
+        warehouse {
+            ...AutoBuildSettings_autoStorageOptionSettings @relay (mask: false)
+        }
+    }
+`;
+
+graphql`
+    fragment AutoBuildSettings_autoBuildSettings on AutoBuildSettings {
+        allow
+        autoCropFields
+        autoStorage {
+            ...AutoBuildSettings_autoStorageSettings @relay (mask: false)
+        }
+        coolDown {
+            ...CoolDown @relay (mask: false)
+        }
+        dualQueue {
+            allow
+            preference
+        }
+        minCrop
+        useHeroResources
+    }
+`;
+
 const autoBuildSettingsQuery = graphql`
   query AutoBuildSettingsQuery($villageId: ID!) {
       autoBuildSettings(villageId: $villageId) {
-          allow
-          autoCropFields
-          autoStorage {
-              allowFreeSpots
-              granary {
-                  allow
-                  overflowLevel
-              } 
-              warehouse {
-                  allow
-                  overflowLevel
-              }
-          }
-          coolDown {
-              ...CoolDown @relay(mask: false)
-          }
-          dualQueue {
-              allow
-              preference
-          }
-          minCrop
-          useHeroResources
+         ...AutoBuildSettings_autoBuildSettings @relay(mask: false)
       }
   }
 `;
@@ -135,7 +152,7 @@ const autoBuildSettingsQuery = graphql`
 const autoBuildSettingsUpdateSettingsMutation = graphql`
   mutation AutoBuildSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateAutoBuildSettingsInput!) {
       updateAutoBuildSettings(villageId: $villageId, settings: $settings) {
-          ...AutoBuildSettings
+          ...AutoBuildSettings_autoBuildSettings
       }
   }
 `;
@@ -143,7 +160,7 @@ const autoBuildSettingsUpdateSettingsMutation = graphql`
 const autoBuildSettingsResetSettingsMutation = graphql`
     mutation AutoBuildSettingsResetSettingsMutation($villageId: ID!) {
         resetAutoBuildSettings(villageId: $villageId) {
-            ...AutoBuildSettings
+            ...AutoBuildSettings_autoBuildSettings
         }
     }
 `;

@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AutoMentorSettingsResetSettingsMutationVariables = {};
 export type AutoMentorSettingsResetSettingsMutationResponse = {
     readonly resetAutoMentorSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoMentorSettings_autoMentorSettings">;
     };
 };
 export type AutoMentorSettingsResetSettingsMutation = {
@@ -20,11 +20,11 @@ export type AutoMentorSettingsResetSettingsMutation = {
 /*
 mutation AutoMentorSettingsResetSettingsMutation {
   resetAutoMentorSettings {
-    ...AutoMentorSettings
+    ...AutoMentorSettings_autoMentorSettings
   }
 }
 
-fragment AutoMentorSettings on AutoMentorSettings {
+fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {
   acceptDailyRewards
   acceptTaskRewards
 }
@@ -48,7 +48,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoMentorSettings"
+            "name": "AutoMentorSettings_autoMentorSettings"
           }
         ],
         "storageKey": null
@@ -91,13 +91,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "fb46e003d4c4cfa3aa546895e37f0254",
+    "cacheID": "90ae8595ee4799fdcb229b5d0e3d65a5",
     "id": null,
     "metadata": {},
     "name": "AutoMentorSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    ...AutoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
+    "text": "mutation AutoMentorSettingsResetSettingsMutation {\n  resetAutoMentorSettings {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
-(node as any).hash = '1cc0b00debe150cbbc0dca1e187ad7b9';
+(node as any).hash = '22c5ffd87dcaa0d86b4bcb2671c10247';
 export default node;

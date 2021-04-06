@@ -1,4 +1,0 @@
-fragment AutoMentorSettings on AutoMentorSettings {
-    acceptDailyRewards
-    acceptTaskRewards
-}

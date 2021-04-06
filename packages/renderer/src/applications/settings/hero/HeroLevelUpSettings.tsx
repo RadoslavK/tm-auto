@@ -14,12 +14,14 @@ import React, {
   useState,
 } from 'react';
 import {
+  useFragment,
   useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { HeroLevelUpSettings_heroLevelUpSettings$key } from '../../../_graphql/__generated__/HeroLevelUpSettings_heroLevelUpSettings.graphql.js';
 import type {
   HeroLevelUpItemInput,
   HeroLevelUpSettingsAddHeroLevelUpItemMutation,
@@ -30,18 +32,24 @@ import type { HeroLevelUpSettingsSubscription } from '../../../_graphql/__genera
 import type { HeroLevelUpSettingsUpdateHeroLevelUpItemMutation } from '../../../_graphql/__generated__/HeroLevelUpSettingsUpdateHeroLevelUpItemMutation.graphql.js';
 import { HeroLevelUpItemForm } from './HeroLevelUpItemForm.js';
 
+const heroLevelUpSettingsFragmentDefinition = graphql`
+  fragment HeroLevelUpSettings_heroLevelUpSettings on HeroLevelUpSettings {
+      levelUpItems {
+          id
+          defBonus
+          name
+          offBonus
+          offensiveStrength
+          resources
+          ...HeroLevelUpItemForm_heroLevelUpItem
+      }
+  }
+`;
+
 const heroLevelUpSettingsQuery = graphql`
   query HeroLevelUpSettingsQuery {
       heroLevelUpSettings {
-          levelUpItems {
-              id
-              defBonus
-              name
-              offBonus
-              offensiveStrength
-              resources
-              ...HeroLevelUpItemForm_heroLevelUpItem
-          }
+          ...HeroLevelUpSettings_heroLevelUpSettings
       }
   }
 `;
@@ -49,7 +57,7 @@ const heroLevelUpSettingsQuery = graphql`
 const heroLevelUpSettingsAddHeroLevelUpItemMutation = graphql`
   mutation HeroLevelUpSettingsAddHeroLevelUpItemMutation($item: HeroLevelUpItemInput!) {
       addHeroLevelUpItem(item: $item) {
-          ...HeroLevelUpItem
+          ...HeroLevelUpItemForm_heroLevelUpItem
       }
   } 
 `;
@@ -57,7 +65,7 @@ const heroLevelUpSettingsAddHeroLevelUpItemMutation = graphql`
 const heroLevelUpSettingsUpdateHeroLevelUpItemMutation = graphql`
     mutation HeroLevelUpSettingsUpdateHeroLevelUpItemMutation($item: HeroLevelUpItemInput!, $id: ID!) {
         updateHeroLevelUpItem(item: $item, id: $id) {
-            ...HeroLevelUpItem
+            ...HeroLevelUpItemForm_heroLevelUpItem
         }
     }
 `;
@@ -66,7 +74,7 @@ const heroLevelUpSettingsRemoveHeroLevelUpItemMutation = graphql`
     mutation HeroLevelUpSettingsRemoveHeroLevelUpItemMutation($id: ID!) {
         removeHeroLevelUpItem(id: $id) {
             id
-            ...HeroLevelUpItem
+            ...HeroLevelUpItemForm_heroLevelUpItem
         }
     }
 `;
@@ -74,13 +82,14 @@ const heroLevelUpSettingsRemoveHeroLevelUpItemMutation = graphql`
 const heroLevelUpSettingsSubscription = graphql`
   subscription HeroLevelUpSettingsSubscription {
       heroLevelUpSettingsChanged {
-          ...HeroLevelUpSettings
+          ...HeroLevelUpSettings_heroLevelUpSettings
       }
   }
 `;
 
-export const HeroLevelUpSettings: React.FC = () => {
+const HeroLevelUpSettingsContainer: React.FC = () => {
   const { heroLevelUpSettings } = useLazyLoadQuery<HeroLevelUpSettingsQuery>(heroLevelUpSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+
   const [addHeroLevelUpItem] = useMutation<HeroLevelUpSettingsAddHeroLevelUpItemMutation>(heroLevelUpSettingsAddHeroLevelUpItemMutation);
   const [updateHeroLevelUpItem] = useMutation<HeroLevelUpSettingsUpdateHeroLevelUpItemMutation>(heroLevelUpSettingsUpdateHeroLevelUpItemMutation);
   const [removeHeroLevelUpItem] = useMutation<HeroLevelUpSettingsRemoveHeroLevelUpItemMutation>(heroLevelUpSettingsRemoveHeroLevelUpItemMutation);
@@ -96,27 +105,11 @@ export const HeroLevelUpSettings: React.FC = () => {
 
   useSubscription(subscriptionConfig);
 
-  const { levelUpItems } = heroLevelUpSettings;
-
-  const [isItemFormShown, setIsItemFormShown] = useState(false);
-  const [editedItemId, setEditedItemId] = useState<string | undefined>();
-  const itemToEdit = levelUpItems.find(i => i.id === editedItemId);
-
-  const openForm = (id?: string) => {
-    setIsItemFormShown(true);
-    setEditedItemId(id);
-  };
-
-  const closeForm = () => {
-    setIsItemFormShown(false);
-    setEditedItemId(undefined);
-  };
-
-  const submitItem = (item: HeroLevelUpItemInput) => {
-    if (itemToEdit) {
+  const submitItem = (item: HeroLevelUpItemInput, id: string | undefined) => {
+    if (id) {
       updateHeroLevelUpItem({
         variables: {
-          id: itemToEdit.id,
+          id,
           item,
         },
       });
@@ -141,7 +134,73 @@ export const HeroLevelUpSettings: React.FC = () => {
         },
       });
     }
+  };
 
+  const removeItem = (id: string) => {
+    removeHeroLevelUpItem({
+      variables: { id },
+      updater: (store) => {
+        const deletedItem = store.getRootField('removeHeroLevelUpItem');
+        const root = store.getRoot();
+        const settings = root.getLinkedRecord('heroLevelUpSettings');
+
+        if (settings) {
+          let records = settings.getLinkedRecords('levelUpItems') || [];
+          records = records.filter(r => r.getDataID() !== deletedItem.getDataID());
+
+          settings.setLinkedRecords(records, 'levelUpItems');
+          root.setLinkedRecord(settings, 'heroLevelUpSettings');
+        }
+
+        store.delete(deletedItem.getDataID());
+      },
+    });
+  };
+
+  return (
+    <HeroLevelUpSettings
+      onRemove={removeItem}
+      onSubmit={submitItem}
+      settingsKey={heroLevelUpSettings}
+    />
+  );
+};
+
+HeroLevelUpSettingsContainer.displayName = 'HeroLevelUpSettingsContainer';
+
+export { HeroLevelUpSettingsContainer as HeroLevelUpSettings };
+
+type Props = {
+  readonly onRemove: (itemId: string) => void;
+  readonly onSubmit: (item: HeroLevelUpItemInput, id: string | undefined) => void;
+  readonly settingsKey: HeroLevelUpSettings_heroLevelUpSettings$key;
+};
+
+const HeroLevelUpSettings: React.FC<Props> = ({
+  onRemove,
+  onSubmit,
+  settingsKey,
+}) => {
+  const heroLevelUpSettings = useFragment(heroLevelUpSettingsFragmentDefinition, settingsKey);
+
+  const { levelUpItems } = heroLevelUpSettings;
+
+  const [isItemFormShown, setIsItemFormShown] = useState(false);
+  const [editedItemId, setEditedItemId] = useState<string | undefined>();
+  const itemToEdit = levelUpItems.find(i => i.id === editedItemId);
+
+  const openForm = (id?: string) => {
+    setIsItemFormShown(true);
+    setEditedItemId(id);
+  };
+
+  const closeForm = () => {
+    setIsItemFormShown(false);
+    setEditedItemId(undefined);
+  };
+
+  const submitItem = (item: HeroLevelUpItemInput) => {
+    onSubmit(item, editedItemId);
     closeForm();
   };
 
@@ -177,26 +236,9 @@ export const HeroLevelUpSettings: React.FC = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-
-                        removeHeroLevelUpItem({
-                          variables: { id: item.id },
-                          updater: (store) => {
-                            const deletedItem = store.getRootField('removeHeroLevelUpItem');
-                            const root = store.getRoot();
-                            const settings = root.getLinkedRecord('heroLevelUpSettings');
-
-                            if (settings) {
-                              let records = settings.getLinkedRecords('levelUpItems') || [];
-                              records = records.filter(r => r.getDataID() !== deletedItem.getDataID());
-
-                              settings.setLinkedRecords(records, 'levelUpItems');
-                              root.setLinkedRecord(settings, 'heroLevelUpSettings');
-                            }
-
-                            store.delete(deletedItem.getDataID());
-                          },
-                        });
-                      }}>
+                        onRemove(item.id);
+                      }}
+                    >
                       X
                     </button>
                   </TableCell>

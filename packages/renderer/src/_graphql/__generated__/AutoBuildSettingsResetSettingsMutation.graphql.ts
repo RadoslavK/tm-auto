@@ -9,7 +9,7 @@ export type AutoBuildSettingsResetSettingsMutationVariables = {
 };
 export type AutoBuildSettingsResetSettingsMutationResponse = {
     readonly resetAutoBuildSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoBuildSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoBuildSettings_autoBuildSettings">;
     };
 };
 export type AutoBuildSettingsResetSettingsMutation = {
@@ -24,18 +24,37 @@ mutation AutoBuildSettingsResetSettingsMutation(
   $villageId: ID!
 ) {
   resetAutoBuildSettings(villageId: $villageId) {
-    ...AutoBuildSettings
+    ...AutoBuildSettings_autoBuildSettings
   }
 }
 
-fragment AutoBuildSettings on AutoBuildSettings {
+fragment AutoBuildSettings_autoBuildSettings on AutoBuildSettings {
   allow
   autoCropFields
   autoStorage {
-    ...AutoStorageSettings
+    allowFreeSpots
+    granary {
+      allow
+      overflowLevel
+    }
+    warehouse {
+      allow
+      overflowLevel
+    }
   }
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   dualQueue {
     allow
@@ -43,36 +62,6 @@ fragment AutoBuildSettings on AutoBuildSettings {
   }
   minCrop
   useHeroResources
-}
-
-fragment AutoStorageOptionSettings on AutoStorageOptionSettings {
-  allow
-  overflowLevel
-}
-
-fragment AutoStorageSettings on AutoStorageSettings {
-  allowFreeSpots
-  granary {
-    ...AutoStorageOptionSettings
-  }
-  warehouse {
-    ...AutoStorageOptionSettings
-  }
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
 }
 */
 
@@ -156,7 +145,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoBuildSettings"
+            "name": "AutoBuildSettings_autoBuildSettings"
           }
         ],
         "storageKey": null
@@ -295,14 +284,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1e46617813b7d94cd77f0142ab0e79b0",
+    "cacheID": "19590dcd18812f306a0ed3fe96171295",
     "id": null,
     "metadata": {},
     "name": "AutoBuildSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoBuildSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoBuildSettings(villageId: $villageId) {\n    ...AutoBuildSettings\n  }\n}\n\nfragment AutoBuildSettings on AutoBuildSettings {\n  allow\n  autoCropFields\n  autoStorage {\n    ...AutoStorageSettings\n  }\n  coolDown {\n    ...CoolDown\n  }\n  dualQueue {\n    allow\n    preference\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment AutoStorageOptionSettings on AutoStorageOptionSettings {\n  allow\n  overflowLevel\n}\n\nfragment AutoStorageSettings on AutoStorageSettings {\n  allowFreeSpots\n  granary {\n    ...AutoStorageOptionSettings\n  }\n  warehouse {\n    ...AutoStorageOptionSettings\n  }\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
+    "text": "mutation AutoBuildSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoBuildSettings(villageId: $villageId) {\n    ...AutoBuildSettings_autoBuildSettings\n  }\n}\n\nfragment AutoBuildSettings_autoBuildSettings on AutoBuildSettings {\n  allow\n  autoCropFields\n  autoStorage {\n    allowFreeSpots\n    granary {\n      allow\n      overflowLevel\n    }\n    warehouse {\n      allow\n      overflowLevel\n    }\n  }\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  dualQueue {\n    allow\n    preference\n  }\n  minCrop\n  useHeroResources\n}\n"
   }
 };
 })();
-(node as any).hash = '832b06eb1c14da5cde9909e0dda04717';
+(node as any).hash = '5fea2bca0074bd0f01e8b3f447b3e1fd';
 export default node;

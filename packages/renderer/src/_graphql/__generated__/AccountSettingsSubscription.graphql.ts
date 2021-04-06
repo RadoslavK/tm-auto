@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AccountSettingsSubscriptionVariables = {};
 export type AccountSettingsSubscriptionResponse = {
     readonly accountSettingsUpdated: {
-        readonly " $fragmentRefs": FragmentRefs<"AccountSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AccountSettings_accountSettings">;
     };
 };
 export type AccountSettingsSubscription = {
@@ -20,33 +20,29 @@ export type AccountSettingsSubscription = {
 /*
 subscription AccountSettingsSubscription {
   accountSettingsUpdated {
-    ...AccountSettings
+    ...AccountSettings_accountSettings
   }
 }
 
-fragment AccountSettings on AccountSettings {
+fragment AccountSettings_accountSettings on AccountSettings {
   allowTasks
   autoBuild
   autoParty
   autoStart
   autoUnits
   tasksCoolDown {
-    ...CoolDown
-  }
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
 }
 */
@@ -100,7 +96,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AccountSettings"
+            "name": "AccountSettings_accountSettings"
           }
         ],
         "storageKey": null
@@ -195,14 +191,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cb3dcb2c93f8376f28bbe29317b7abd9",
+    "cacheID": "e659c9895dc4168fe31d01e6210985ca",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AccountSettingsSubscription {\n  accountSettingsUpdated {\n    ...AccountSettings\n  }\n}\n\nfragment AccountSettings on AccountSettings {\n  allowTasks\n  autoBuild\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    ...CoolDown\n  }\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n"
+    "text": "subscription AccountSettingsSubscription {\n  accountSettingsUpdated {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '2a8f7ed51b5ab180ee7967dfddf0a955';
+(node as any).hash = 'c469546b19136f9ce38d7b3dbc7f98de';
 export default node;

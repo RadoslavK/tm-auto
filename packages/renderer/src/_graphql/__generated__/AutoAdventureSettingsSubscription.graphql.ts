@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AutoAdventureSettingsSubscriptionVariables = {};
 export type AutoAdventureSettingsSubscriptionResponse = {
     readonly autoAdventureSettingsUpdated: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoAdventureSettings_autoAdventureSettings">;
     };
 };
 export type AutoAdventureSettingsSubscription = {
@@ -20,44 +20,36 @@ export type AutoAdventureSettingsSubscription = {
 /*
 subscription AutoAdventureSettingsSubscription {
   autoAdventureSettingsUpdated {
-    ...AutoAdventureSettings
+    ...AutoAdventureSettings_autoAdventureSettings
   }
 }
 
-fragment AutoAdventureSettings on AutoAdventureSettings {
+fragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {
   adventureCriteria
   allow
   coolDown {
-    ...CoolDown
+    max {
+      days
+      hours
+      minutes
+      seconds
+    }
+    min {
+      days
+      hours
+      minutes
+      seconds
+    }
   }
   hardMinHealth
   maxTravelTime {
-    ...Duration
+    days
+    hours
+    minutes
+    seconds
   }
   normalMinHealth
   preferHard
-}
-
-fragment CoolDown on CoolDown {
-  max {
-    days
-    hours
-    minutes
-    seconds
-  }
-  min {
-    days
-    hours
-    minutes
-    seconds
-  }
-}
-
-fragment Duration on Duration {
-  days
-  hours
-  minutes
-  seconds
 }
 */
 
@@ -110,7 +102,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "AutoAdventureSettings"
+            "name": "AutoAdventureSettings_autoAdventureSettings"
           }
         ],
         "storageKey": null
@@ -215,14 +207,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "df9097ec6968869758d72e2bc9650f22",
+    "cacheID": "1debc6b2d1e4bd7b0412d4448f1adf80",
     "id": null,
     "metadata": {},
     "name": "AutoAdventureSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AutoAdventureSettingsSubscription {\n  autoAdventureSettingsUpdated {\n    ...AutoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    ...CoolDown\n  }\n  hardMinHealth\n  maxTravelTime {\n    ...Duration\n  }\n  normalMinHealth\n  preferHard\n}\n\nfragment CoolDown on CoolDown {\n  max {\n    days\n    hours\n    minutes\n    seconds\n  }\n  min {\n    days\n    hours\n    minutes\n    seconds\n  }\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n"
+    "text": "subscription AutoAdventureSettingsSubscription {\n  autoAdventureSettingsUpdated {\n    ...AutoAdventureSettings_autoAdventureSettings\n  }\n}\n\nfragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {\n  adventureCriteria\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  hardMinHealth\n  maxTravelTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  normalMinHealth\n  preferHard\n}\n"
   }
 };
 })();
-(node as any).hash = 'd8643230c9856574eade958fed73574f';
+(node as any).hash = '95116dd59d01dc18cf7ddae0fd9ef37e';
 export default node;

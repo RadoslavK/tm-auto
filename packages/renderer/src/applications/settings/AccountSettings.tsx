@@ -20,17 +20,23 @@ import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__gen
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 
+graphql`
+    fragment AccountSettings_accountSettings on AccountSettings {
+        allowTasks
+        autoBuild
+        autoParty
+        autoStart
+        autoUnits
+        tasksCoolDown {
+            ...CoolDown @relay(mask: false)
+        }
+    }
+`;
+
 const accountSettingsQuery = graphql`
   query AccountSettingsQuery {
       accountSettings {
-          allowTasks
-          autoBuild
-          autoParty
-          autoStart
-          autoUnits
-          tasksCoolDown {
-              ...CoolDown @relay(mask: false)
-          }
+        ...AccountSettings_accountSettings @relay(mask: false)
       }
   }
 `;
@@ -38,7 +44,7 @@ const accountSettingsQuery = graphql`
 const accountSettingsUpdateSettingsMutation = graphql`
   mutation AccountSettingsUpdateSettingsMutation($settings: UpdateAccountSettingsInput!) {
       updateAccountSettings(settings: $settings) {
-          ...AccountSettings
+          ...AccountSettings_accountSettings
       }
   }
 `;
@@ -46,7 +52,7 @@ const accountSettingsUpdateSettingsMutation = graphql`
 const accountSettingsResetSettingsMutation = graphql`
     mutation AccountSettingsResetSettingsMutation {
         resetAccountSettings {
-            ...AccountSettings
+            ...AccountSettings_accountSettings
         }
     }
 `;
@@ -54,7 +60,7 @@ const accountSettingsResetSettingsMutation = graphql`
 const subscription = graphql`
   subscription AccountSettingsSubscription {
       accountSettingsUpdated {
-          ...AccountSettings
+          ...AccountSettings_accountSettings
       }
   }
 `;

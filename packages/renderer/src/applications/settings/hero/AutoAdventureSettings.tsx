@@ -23,20 +23,26 @@ import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 
+graphql`
+    fragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {
+        adventureCriteria
+        allow
+        coolDown {
+            ...CoolDown @relay(mask: false)
+        }
+        hardMinHealth
+        maxTravelTime {
+            ...Duration @relay(mask: false)
+        }
+        normalMinHealth
+        preferHard
+    }
+`;
+
 const autoAdventureSettingsQuery = graphql`
   query AutoAdventureSettingsQuery {
       autoAdventureSettings {
-          adventureCriteria
-          allow
-          coolDown {
-              ...CoolDown @relay(mask: false)
-          }
-          hardMinHealth
-          maxTravelTime {
-              ...Duration @relay(mask: false)
-          }
-          normalMinHealth
-          preferHard
+          ...AutoAdventureSettings_autoAdventureSettings @relay(mask: false)
       }
   }
 `;
@@ -44,7 +50,7 @@ const autoAdventureSettingsQuery = graphql`
 const autoAdventureSettingsUpdateSettingsMutation = graphql`
   mutation AutoAdventureSettingsUpdateSettingsMutation($settings: UpdateAutoAdventureSettingsInput!) {
       updateAutoAdventureSettings(settings: $settings) {
-          ...AutoAdventureSettings
+          ...AutoAdventureSettings_autoAdventureSettings
       }
   }
 `;
@@ -52,7 +58,7 @@ const autoAdventureSettingsUpdateSettingsMutation = graphql`
 const autoAdventureSettingsResetSettingsMutation = graphql`
     mutation AutoAdventureSettingsResetSettingsMutation {
         resetAutoAdventureSettings {
-            ...AutoAdventureSettings
+            ...AutoAdventureSettings_autoAdventureSettings
         }
     }
 `;
@@ -60,7 +66,7 @@ const autoAdventureSettingsResetSettingsMutation = graphql`
 const subscription = graphql`
   subscription AutoAdventureSettingsSubscription {
       autoAdventureSettingsUpdated {
-          ...AutoAdventureSettings
+          ...AutoAdventureSettings_autoAdventureSettings
       }
   }
 `;
@@ -282,7 +288,7 @@ export const AutoAdventureSettings: React.FC = () => {
 
       <div>
         <h3>Cooldown</h3>
-        <label htmlFor="maxTravelTime">Cooldown</label>
+        <label htmlFor="coolDown">Cooldown</label>
         <CoolDown onChange={onCooldownChange} value={coolDown} />
       </div>
     </div>

@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type AccountsSubscriptionVariables = {};
 export type AccountsSubscriptionResponse = {
     readonly accountsUpdated: ReadonlyArray<{
-        readonly " $fragmentRefs": FragmentRefs<"UserAccount">;
+        readonly " $fragmentRefs": FragmentRefs<"Accounts_accounts">;
     }>;
 };
 export type AccountsSubscription = {
@@ -20,16 +20,15 @@ export type AccountsSubscription = {
 /*
 subscription AccountsSubscription {
   accountsUpdated {
-    ...UserAccount
+    ...Accounts_accounts
     id
   }
 }
 
-fragment UserAccount on UserAccount {
+fragment Accounts_accounts on UserAccount {
   id
-  password
-  server
   username
+  server
 }
 */
 
@@ -51,7 +50,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "UserAccount"
+            "name": "Accounts_accounts"
           }
         ],
         "storageKey": null
@@ -85,7 +84,7 @@ const node: ConcreteRequest = {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "password",
+            "name": "username",
             "storageKey": null
           },
           {
@@ -94,13 +93,6 @@ const node: ConcreteRequest = {
             "kind": "ScalarField",
             "name": "server",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -108,13 +100,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "ca844bcce0746ca0dd146b3c008e686e",
+    "cacheID": "7c90846a50496b1ca8b5ff06b0ed09e6",
     "id": null,
     "metadata": {},
     "name": "AccountsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AccountsSubscription {\n  accountsUpdated {\n    ...UserAccount\n    id\n  }\n}\n\nfragment UserAccount on UserAccount {\n  id\n  password\n  server\n  username\n}\n"
+    "text": "subscription AccountsSubscription {\n  accountsUpdated {\n    ...Accounts_accounts\n    id\n  }\n}\n\nfragment Accounts_accounts on UserAccount {\n  id\n  username\n  server\n}\n"
   }
 };
-(node as any).hash = 'fd6bbc0a2cb72238c980246a7ac3d057';
+(node as any).hash = 'bf9436bff253647676a877006ae96266';
 export default node;

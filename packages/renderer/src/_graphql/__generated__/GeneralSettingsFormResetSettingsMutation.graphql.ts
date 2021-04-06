@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type GeneralSettingsFormResetSettingsMutationVariables = {};
 export type GeneralSettingsFormResetSettingsMutationResponse = {
     readonly resetGeneralSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"GeneralSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralSettingsForm_generalSettings">;
     };
 };
 export type GeneralSettingsFormResetSettingsMutation = {
@@ -20,11 +20,11 @@ export type GeneralSettingsFormResetSettingsMutation = {
 /*
 mutation GeneralSettingsFormResetSettingsMutation {
   resetGeneralSettings {
-    ...GeneralSettings
+    ...GeneralSettingsForm_generalSettings
   }
 }
 
-fragment GeneralSettings on GeneralSettings {
+fragment GeneralSettingsForm_generalSettings on GeneralSettings {
   chromePath
   headlessChrome
 }
@@ -48,7 +48,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "GeneralSettings"
+            "name": "GeneralSettingsForm_generalSettings"
           }
         ],
         "storageKey": null
@@ -91,13 +91,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "9612092bbb3eb30682df7b4ab3396293",
+    "cacheID": "5709c0031a379b332fc455f46fe1f75a",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    ...GeneralSettings\n  }\n}\n\nfragment GeneralSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
+    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
   }
 };
-(node as any).hash = '3ffcdf0e8e1696ca39a7d1c38a12534d';
+(node as any).hash = 'db3d3f299515668bb977bdad584488d9';
 export default node;

@@ -12,6 +12,7 @@ import React, {
   useMemo,
 } from 'react';
 import {
+  useFragment,
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
@@ -20,6 +21,7 @@ import type {
   RecordProxy,
 } from 'relay-runtime';
 
+import type { Accounts_accounts$key } from '../../../_graphql/__generated__/Accounts_accounts.graphql.js';
 import type { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
 import type { AccountsSubscription } from '../../../_graphql/__generated__/AccountsSubscription.graphql.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
@@ -71,35 +73,29 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
-type Props = {
+type BaseProps = {
   readonly disabled?: boolean;
   readonly onAccountChanged: (id: string) => void;
   readonly selectedId: string | null | undefined;
 };
 
 const accountsQuery = graphql`
-  query AccountsQuery {
-      accounts {
-          id
-          username
-          server
-      }
-  }
+    query AccountsQuery {
+        accounts {
+            ...Accounts_accounts
+        }
+    }
 `;
 
 const accountsSubscription = graphql`
-  subscription AccountsSubscription {
-      accountsUpdated {
-          ...UserAccount
-      }
-  }
+    subscription AccountsSubscription {
+        accountsUpdated {
+            ...Accounts_accounts
+        }
+    }
 `;
 
-export const Accounts: React.FC<Props> = ({
-  disabled,
-  onAccountChanged,
-  selectedId,
-}) => {
+const AccountsContainer: React.FC<BaseProps> = (props) => {
   const { accounts } = useLazyLoadQuery<AccountsQuery>(accountsQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig: GraphQLSubscriptionConfig<AccountsSubscription> = useMemo(() => ({
@@ -119,6 +115,44 @@ export const Accounts: React.FC<Props> = ({
   }), []);
 
   useSubscription(subscriptionConfig);
+
+  return (
+    <Accounts
+      {...props}
+      accountsKey={accounts}
+    />
+  );
+};
+
+AccountsContainer.displayName = 'AccountsContainer';
+
+export { AccountsContainer as Accounts };
+
+graphql`
+    fragment Accounts_account on UserAccount {
+        id
+        username
+        server
+    }
+`;
+
+const fragmentDefinition = graphql`
+  fragment Accounts_accounts on UserAccount @relay(plural: true) {
+      ...Accounts_account @relay(mask: false)
+  }
+`;
+
+type Props = BaseProps & {
+  readonly accountsKey: Accounts_accounts$key;
+};
+
+const Accounts: React.FC<Props> = ({
+  accountsKey,
+  disabled,
+  onAccountChanged,
+  selectedId,
+}) => {
+  const accounts = useFragment(fragmentDefinition, accountsKey);
 
   useEffect(() => {
     if (!selectedId && accounts.length > 0) {
