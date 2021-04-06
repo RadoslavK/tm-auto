@@ -11,10 +11,13 @@ export const modificationQueuePayloadUpdater = (store: RecordSourceSelectorProxy
 
   if (queue) {
     const modifiedQueue = modificationPayloadRootField.getLinkedRecord('queue');
-    let buildings = queue.getLinkedRecords('buildings') || [];
-    buildings = buildings.filter(b => !removedIds.includes(b.getDataID()));
 
-    queue.setLinkedRecords(buildings, 'buildings');
+    if (removedIds) {
+      let buildings = queue.getLinkedRecords('buildings') || [];
+      buildings = buildings.filter(b => !removedIds.includes(b.getDataID()));
+
+      queue.setLinkedRecords(buildings, 'buildings');
+    }
 
     if (modifiedQueue) {
       queue.copyFieldsFrom(modifiedQueue);
@@ -23,5 +26,8 @@ export const modificationQueuePayloadUpdater = (store: RecordSourceSelectorProxy
     root.setLinkedRecord(queue, 'buildingQueue', { villageId });
   }
 
-  removedIds.forEach(id => store.delete(id));
+  //  clearing cache does not work for some reason as it makes useFragment returns null instead of the list rendering first without this;
+  window.setTimeout(() => {
+    removedIds.forEach(id => store.delete(id));
+  }, 0);
 };
