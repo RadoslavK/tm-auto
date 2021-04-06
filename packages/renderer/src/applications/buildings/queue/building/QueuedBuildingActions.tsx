@@ -103,6 +103,12 @@ const mergeBuildingsMutation = graphql`
     }
 `;
 
+enum DialogType {
+  None,
+  Split,
+  Dequeue,
+}
+
 export const QueuedBuildingActions: React.FC<Props> = ({
   building,
   className,
@@ -117,7 +123,8 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   const [split] = useMutation<QueuedBuildingActionsSplitBuildingMutation>(splitBuildingMutation);
   const [merge] = useMutation<QueuedBuildingActionsMergeBuildingsMutation>(mergeBuildingsMutation);
 
-  const [showSplitDialog, setShowSplitDialog] = useState(false);
+  const [dialog, setDialog] = useState<DialogType>(DialogType.None);
+  const closeDialog = () => setDialog(DialogType.None);
 
   const onMoveToTop = () => {
     moveToTop({
@@ -129,9 +136,9 @@ export const QueuedBuildingActions: React.FC<Props> = ({
     });
   };
 
-  const onDequeue = () => {
+  const onDequeue = (level?: number) => {
     dequeue({
-      variables: { input: { queueId: buildingFragment.id, villageId } },
+      variables: { input: { queueId: buildingFragment.id, villageId, level } },
       updater: (store) => {
         const rootField = store.getRootField('dequeueBuilding');
         modificationQueuePayloadUpdater(store, rootField, villageId);
@@ -140,7 +147,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   };
 
   const splitBuilding = (startingLevel: number) => {
-    setShowSplitDialog(false);
+    closeDialog();
 
     split({
       variables: { villageId, queueId: buildingFragment.id, startingLevel },
@@ -188,7 +195,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   };
 
   const isSplittable = buildingFragment.startingLevel !== buildingFragment.targetLevel;
-  const openSplitBuildingDialog = () => setShowSplitDialog(true);
+  const openSplitBuildingDialog = () => setDialog(DialogType.Split);
 
   return (
     <div className={clsx(className, classes.root)}>
@@ -198,7 +205,13 @@ export const QueuedBuildingActions: React.FC<Props> = ({
       />
       <button
         className={clsx(classes.image, classes.delete)}
-        onClick={onDequeue}
+        onClick={(e) => {
+          if (e.ctrlKey) {
+            setDialog(DialogType.Dequeue);
+          } else {
+            onDequeue();
+          }
+        }}
       />
       {isSplittable && (
         <>
@@ -206,11 +219,21 @@ export const QueuedBuildingActions: React.FC<Props> = ({
             className={clsx(classes.image, classes.split)}
             onClick={openSplitBuildingDialog}
           />
-          <Dialog open={showSplitDialog}>
+          <Dialog open={dialog === DialogType.Split} onClose={closeDialog}>
             <MultiLevelDialog
               minLevel={buildingFragment.startingLevel + 1}
               maxLevel={buildingFragment.targetLevel}
               onSelect={splitBuilding}
+            />
+          </Dialog>
+          <Dialog open={dialog === DialogType.Dequeue} onClose={closeDialog}>
+            <MultiLevelDialog
+              minLevel={buildingFragment.startingLevel}
+              maxLevel={buildingFragment.targetLevel - 1}
+              onSelect={(level) => {
+                closeDialog();
+                return onDequeue(level + 1);
+              }}
             />
           </Dialog>
         </>
