@@ -27,6 +27,7 @@ module.exports = {
   ],
   devOptions: {
     open: 'none',
+    hmrErrorOverlay: false,
   },
   packageOptions: {
     env: {

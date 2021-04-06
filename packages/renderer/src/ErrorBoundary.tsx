@@ -1,25 +1,43 @@
 import React, { ReactNode } from 'react';
-import { Redirect } from 'react-router-dom';
+import {
+  Redirect,
+  RouteComponentProps,
+  withRouter,
+} from 'react-router-dom';
 
-type Props = {
+type Props = RouteComponentProps & {
   readonly children: ReactNode;
 };
 
 type State = {
-  readonly error?: Error;
+  readonly hasError: boolean;
 };
 
-export class ErrorBoundary extends React.Component<Props, State> {
+class ErrorBoundaryComponent extends React.Component<Props, State> {
   static displayName = 'ErrorBoundary';
 
-  static getDerivedStateFromError = (error?: Error): State => ({ error });
+  static getDerivedStateFromError = (): State => ({ hasError: true });
 
-  readonly state: State = {};
+  readonly state: State = {
+    hasError: false,
+  };
+
+  private unregisterHistoryListener?: () => void = undefined;
+
+  componentDidMount() {
+    this.unregisterHistoryListener = this.props.history.listen(() => {
+      this.setState({ hasError: false });
+    });
+  }
+
+  componentWillUnmount() {
+    this.unregisterHistoryListener?.();
+  }
 
   render() {
-    const { error } = this.state;
+    const { hasError } = this.state;
 
-    if (!error) {
+    if (!hasError) {
       return <>{this.props.children}</>;
     }
 
@@ -28,3 +46,5 @@ export class ErrorBoundary extends React.Component<Props, State> {
     );
   }
 }
+
+export const ErrorBoundary = withRouter(ErrorBoundaryComponent);
