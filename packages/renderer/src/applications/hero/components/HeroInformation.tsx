@@ -1,25 +1,38 @@
+import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
+  useFragment,
   useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
 import { Link } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { HeroInformation_heroInformation$key } from '../../../_graphql/__generated__/HeroInformation_heroInformation.graphql.js';
 import type { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql.js';
 import type { HeroInformationSubscription } from '../../../_graphql/__generated__/HeroInformationSubscription.graphql.js';
+import { Resources } from '../../../_shared/components/Resources.js';
 import { VillageName } from '../../villages/components/VillageName.js';
+
+const HeroInformationFragmentDefinition = graphql`
+  fragment HeroInformation_heroInformation on HeroInformation {
+      health
+      state
+      resources {
+          ...Resources_resources
+      }
+      village {
+          id
+          ...VillageName_village
+      }
+  }
+`;
 
 const heroInformationQuery = graphql`
   query HeroInformationQuery {
       heroInformation {
-          health
-          state
-          village {
-              id
-              ...VillageName_village
-          }
+          ...HeroInformation_heroInformation
       }
   }
 `;
@@ -27,12 +40,18 @@ const heroInformationQuery = graphql`
 const heroInformationSubscription = graphql`
   subscription HeroInformationSubscription {
       heroInformationUpdated {
-          ...HeroInformation
+          ...HeroInformation_heroInformation
       }
   }
 `;
 
-export const HeroInformation: React.FC = () => {
+const useStyles = makeStyles({
+  resources: {
+    display: 'flex',
+  },
+});
+
+const HeroInformationContainer: React.FC = () => {
   const { heroInformation } = useLazyLoadQuery<HeroInformationQuery>(heroInformationQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const heroInformationSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroInformationSubscription> => ({
@@ -47,6 +66,23 @@ export const HeroInformation: React.FC = () => {
   }), []);
 
   useSubscription(heroInformationSubscriptionConfig);
+
+  return (
+    <HeroInformation heroInformationKey={heroInformation} />
+  );
+};
+
+HeroInformationContainer.displayName = 'HeroInformationContainer';
+
+export { HeroInformationContainer as HeroInformation };
+
+type Props = {
+  readonly heroInformationKey: HeroInformation_heroInformation$key;
+};
+
+const HeroInformation: React.FC<Props> = ({ heroInformationKey }) => {
+  const classes = useStyles();
+  const heroInformation = useFragment(HeroInformationFragmentDefinition, heroInformationKey);
 
   return (
     <div>
@@ -70,6 +106,14 @@ export const HeroInformation: React.FC = () => {
         ) : (
           <span>Unknown</span>
         )}
+      </div>
+
+      <div className={classes.resources}>
+        <label htmlFor="resources">Resources:</label>
+        <Resources
+          resourcesKey={heroInformation.resources}
+          showFreeCrop={false}
+        />
       </div>
     </div>
   );

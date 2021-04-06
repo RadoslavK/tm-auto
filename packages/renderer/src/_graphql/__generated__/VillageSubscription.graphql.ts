@@ -11,7 +11,7 @@ export type VillageSubscriptionResponse = {
     readonly villageUpdated: {
         readonly id: string;
         readonly resources: {
-            readonly " $fragmentRefs": FragmentRefs<"Resources_villageResources">;
+            readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
     };
 };
@@ -29,12 +29,12 @@ subscription VillageSubscription(
   villageUpdated(villageId: $villageId) {
     id
     resources {
-      ...Resources_villageResources
+      ...VillageResources_villageResources
     }
   }
 }
 
-fragment Resources_villageResources on VillageResources {
+fragment VillageResources_villageResources on VillageResources {
   amount {
     wood
     clay
@@ -133,7 +133,7 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "Resources_villageResources"
+                "name": "VillageResources_villageResources"
               }
             ],
             "storageKey": null
@@ -246,14 +246,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8e379e904f1550e77dec5207e8586056",
+    "cacheID": "7f8cf726b077d103ed21e1b978d5a65f",
     "id": null,
     "metadata": {},
     "name": "VillageSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillageSubscription(\n  $villageId: ID!\n) {\n  villageUpdated(villageId: $villageId) {\n    id\n    resources {\n      ...Resources_villageResources\n    }\n  }\n}\n\nfragment Resources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "subscription VillageSubscription(\n  $villageId: ID!\n) {\n  villageUpdated(villageId: $villageId) {\n    id\n    resources {\n      ...VillageResources_villageResources\n    }\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e48e8c2de0a7ab450163bfee50dd5887';
+(node as any).hash = '8b4ff10d0c670c9a0ad17d25c98f0336';
 export default node;

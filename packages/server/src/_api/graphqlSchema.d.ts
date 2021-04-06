@@ -555,6 +555,7 @@ export interface NexusGenFieldTypes {
   }
   HeroInformation: { // field return type
     health: number; // Int!
+    resources: NexusGenRootTypes['Resources']; // Resources!
     state: NexusGenEnums['HeroState']; // HeroState!
     village: NexusGenRootTypes['Village'] | null; // Village
   }
@@ -934,6 +935,7 @@ export interface NexusGenFieldTypeNames {
   }
   HeroInformation: { // field return type name
     health: 'Int'
+    resources: 'Resources'
     state: 'HeroState'
     village: 'Village'
   }

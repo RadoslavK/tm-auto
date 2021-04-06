@@ -10,7 +10,6 @@ import { shuffle } from '../utils/shuffle.js';
 import { updateBuildings } from './actions/buildings/updateBuildings.js';
 import { ensurePage } from './actions/ensurePage.js';
 import { ensureVillageSelected } from './actions/ensureVillageSelected.js';
-import { updateHeroResources } from './actions/hero/updateHeroResources.js';
 import { updatePlayerInfo } from './actions/player/updatePlayerInfo.js';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages.js';
 import { updateResources } from './actions/village/updateResources.js';
@@ -76,7 +75,6 @@ export class TaskManager {
     );
     await updateNewOldVillages();
     await updateHeroInformation();
-    await updateHeroResources();
     await updatePlayerInfo();
 
     for (const task of this._generalTasks) {

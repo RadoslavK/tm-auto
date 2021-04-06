@@ -4,6 +4,8 @@ import type { Resources } from '../../../_models/misc/resources.js';
 import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { publishEvent } from '../../../pubSub.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
 import { ensurePage } from '../ensurePage.js';
 import { updateHeroResources } from './updateHeroResources.js';
@@ -68,4 +70,5 @@ export const claimHeroResources = async (
   await claimResource('iron');
   await claimResource('crop');
   await updateHeroResources();
+  publishEvent(BotEvent.HeroInformationUpdated);
 };

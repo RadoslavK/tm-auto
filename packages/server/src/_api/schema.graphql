@@ -252,6 +252,7 @@ type GeneralVillageSettings {
 
 type HeroInformation {
   health: Int!
+  resources: Resources!
   state: HeroState!
   village: Village
 }

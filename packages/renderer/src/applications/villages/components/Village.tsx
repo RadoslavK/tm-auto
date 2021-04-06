@@ -43,7 +43,7 @@ import {
   useUnitsQuery,
 } from '../../units/components/Units.js';
 import { CrannyCapacity } from './CrannyCapacity.js';
-import { Resources } from './Resources.js';
+import { VillageResources } from './VillageResources.js';
 import { VillageTasksActivity } from './VillageTasksActivity.js';
 
 const navigationPaths = ['buildings', 'units', 'parties', 'tasks-activity'] as const;
@@ -67,25 +67,25 @@ const villageRefreshVillageMutation = graphql`
 `;
 
 const villageQuery = graphql`
-  query VillageQuery($villageId: ID!) {
-      village(villageId: $villageId) {
-          id
-          resources {
-              ...Resources_villageResources
-          }
-      }
-  }
+    query VillageQuery($villageId: ID!) {
+        village(villageId: $villageId) {
+            id
+            resources {
+                ...VillageResources_villageResources
+            }
+        }
+    }
 `;
 
 const villageSubscription = graphql`
-  subscription VillageSubscription($villageId: ID!) {
-      villageUpdated(villageId: $villageId) {
-          id
-          resources {
-              ...Resources_villageResources
-          }
-      }
-  }
+    subscription VillageSubscription($villageId: ID!) {
+        villageUpdated(villageId: $villageId) {
+            id
+            resources {
+                ...VillageResources_villageResources
+            }
+        }
+    }
 `;
 
 export const Village: React.FC<Props> = ({ villageId }) => {
@@ -198,7 +198,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   return (
     <div>
       <Suspense fallback={null}>
-        <Resources resources={village.resources} />
+        <VillageResources resources={village.resources} />
         <CrannyCapacity />
       </Suspense>
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}

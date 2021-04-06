@@ -56,12 +56,7 @@ fragment Cost_duration on Duration {
 }
 
 fragment Cost_resources on Resources {
-  wood
-  clay
-  iron
-  crop
-  freeCrop
-  total
+  ...Resources_resources
 }
 
 fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
@@ -89,6 +84,15 @@ fragment QueuedBuilding_queuedBuilding on QueuedBuilding {
   id
   type
   ...QueuedBuildingComponent_queuedBuilding
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 */
 
@@ -341,12 +345,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c02033a98a06d86479846de7479e1a32",
+    "cacheID": "5df11719d4696ef8bf876ecfe6350b6a",
     "id": null,
     "metadata": {},
     "name": "BuildingQueueClearQueueMutation",
     "operationKind": "mutation",
-    "text": "mutation BuildingQueueClearQueueMutation(\n  $villageId: ID!\n) {\n  clearQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n"
+    "text": "mutation BuildingQueueClearQueueMutation(\n  $villageId: ID!\n) {\n  clearQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();

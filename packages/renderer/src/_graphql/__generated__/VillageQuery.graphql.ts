@@ -11,7 +11,7 @@ export type VillageQueryResponse = {
     readonly village: {
         readonly id: string;
         readonly resources: {
-            readonly " $fragmentRefs": FragmentRefs<"Resources_villageResources">;
+            readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
     } | null;
 };
@@ -29,12 +29,12 @@ query VillageQuery(
   village(villageId: $villageId) {
     id
     resources {
-      ...Resources_villageResources
+      ...VillageResources_villageResources
     }
   }
 }
 
-fragment Resources_villageResources on VillageResources {
+fragment VillageResources_villageResources on VillageResources {
   amount {
     wood
     clay
@@ -133,7 +133,7 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "Resources_villageResources"
+                "name": "VillageResources_villageResources"
               }
             ],
             "storageKey": null
@@ -246,14 +246,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7062765b7c0f70d4c8a3df268d0ce6b7",
+    "cacheID": "4bb72b85ec114b219617a186cd11a7a4",
     "id": null,
     "metadata": {},
     "name": "VillageQuery",
     "operationKind": "query",
-    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    id\n    resources {\n      ...Resources_villageResources\n    }\n  }\n}\n\nfragment Resources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    id\n    resources {\n      ...VillageResources_villageResources\n    }\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '1da6cd0f3431d34f512f66840dd67c9d';
+(node as any).hash = '0da774721506109edddcc1bf3b6b6692';
 export default node;

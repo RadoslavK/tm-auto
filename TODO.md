@@ -75,6 +75,9 @@
 - [?] Possible Roman Dual Queue - It can choose building deeper in the hierarchy but it can have requirements.
   - Check requirements are met when peeking
 - Reload window breaks the IPC + GraphQL functionality
+  - probably not that big deal as quitting and starting app again is fast
+  - HMR also refreshes it instantly
+  - Maybe add some shortcut for HTML API refresh instead
 - Packaged app does not work with "asar:true" build
 
 ## Bot Detection
@@ -90,7 +93,9 @@
 - Store logs to file
 
 ## UX
+
 - Add relevant tooltips in UI
+- Remove scrolling from the main app window
 
 ## QoL
 
@@ -102,15 +107,20 @@
 
 ## Code Quality
 
-- subscribeToEvent typings.
-  - Make it have possible versions of configs and results rather than having one with complex types.
+- Split complex components into markup ones and logic ones
+- Break the building queue service into smaller services per 1 action each
+- Export the path for the module from the module itself.. combination dirname and import.meta.url
+  - This can be imported and used for the Nexus type backing and maybe classes that are backing can have static name to be imported as export prop for the sourceType
+- Check some core logic and also from mutations and check missing awaits and remove unnecessary awaits
 - refactor parsers into actions... then validate url will not be needed. maybe for navigation to check if we are really there
 - Rethink bot task engines. Maybe they are not needed at all.
+- Remove all custom mappers from API and replace with the actual resolve function
 
 ## Performance
 
 - Store map search result and filter in GraphQL local cache.
 - First load takes a long time as it needs to scan all villages
+  - Store and reload some context information like villages, tribe, etc...
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
 
@@ -126,6 +136,9 @@
   - Verify all console.error and console.warn, sometimes exception is not thrown there. Is it ok?
 - Better error logging on client/server/main
 - Recover from failed to navigate pages/clicks. Throw custom error instance.
+- Handle and Recover from Service Unavailable that happens rather often
+- If there is some timeout during login then stop the action
+- First login often fails and always on /options exact: false route but its present on the page, wtf?
 
 ## Inspiration / Future
 

@@ -3,7 +3,7 @@ import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
 
-import type { Resources_villageResources$key } from '../../../_graphql/__generated__/Resources_villageResources.graphql.js';
+import type { VillageResources_villageResources$key } from '../../../_graphql/__generated__/VillageResources_villageResources.graphql.js';
 import { createFormatter } from '../../../utils/numberFormatting.js';
 import { Resource } from './Resource.js';
 
@@ -17,33 +17,33 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  readonly resources: Resources_villageResources$key;
+  readonly resources: VillageResources_villageResources$key;
 };
 
 const resourcesVillageResourcesFragment = graphql`
-  fragment Resources_villageResources on VillageResources {
-      amount {
-          wood
-          clay
-          iron
-          crop
-          freeCrop
-          total
-      }
-      capacity {
-          granary
-          warehouse
-      }
-      production {
-          wood
-          clay
-          iron
-          crop
-      }
-  }
+    fragment VillageResources_villageResources on VillageResources {
+        amount {
+            wood
+            clay
+            iron
+            crop
+            freeCrop
+            total
+        }
+        capacity {
+            granary
+            warehouse
+        }
+        production {
+            wood
+            clay
+            iron
+            crop
+        }
+    }
 `;
 
-export const Resources: React.FC<Props> = ({ resources }) => {
+export const VillageResources: React.FC<Props> = ({ resources }) => {
   const resourcesFragment = useFragment(resourcesVillageResourcesFragment, resources);
   const {
     amount,
@@ -106,4 +106,4 @@ export const Resources: React.FC<Props> = ({ resources }) => {
   );
 };
 
-Resources.displayName = 'Resources';
+VillageResources.displayName = 'VillageResources';

@@ -7,8 +7,8 @@ import { formatTime } from 'shared/utils/formatTime.js';
 
 import type { Cost_duration$key } from '../../../_graphql/__generated__/Cost_duration.graphql.js';
 import type { Cost_resources$key } from '../../../_graphql/__generated__/Cost_resources.graphql.js';
+import { Resources } from '../../../_shared/components/Resources.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
-import { createFormatter } from '../../../utils/numberFormatting.js';
 
 type Props = {
   readonly className?: string;
@@ -23,16 +23,6 @@ const useStyles = makeStyles({
   buildTime: {
     backgroundImage: `url("${imageLinks.cost.buildTime}")`,
   },
-  clay: {
-    backgroundImage: `url("${imageLinks.resources.clay}")`,
-  },
-  crop: {
-    backgroundImage: `url("${imageLinks.resources.crop}")`,
-    backgroundSize: 'contain',
-  },
-  freeCrop: {
-    backgroundImage: `url("${imageLinks.resources.freeCrop}")`,
-  },
   image: {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -40,35 +30,20 @@ const useStyles = makeStyles({
     marginLeft: 5,
     width: '2em',
   },
-  iron: {
-    backgroundImage: `url("${imageLinks.resources.iron}")`,
-    backgroundSize: 'contain',
-  },
   root: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
-  total: {
-    backgroundImage: `url("${imageLinks.resources.total}")`,
-  },
   value: {
     marginLeft: 5,
     verticalAlign: 'top',
-  },
-  wood: {
-    backgroundImage: `url("${imageLinks.resources.wood}")`,
   },
 });
 
 const costResourcesFragment = graphql`
   fragment Cost_resources on Resources {
-      wood
-      clay
-      iron
-      crop
-      freeCrop
-      total
+     ...Resources_resources
   }
 `;
 
@@ -94,40 +69,16 @@ export const Cost: React.FC<Props> = ({
   const infrastructureBuildTimeFragment = useFragment(costDurationFragment, infrastructureBuildTime || null);
   const resourcesBuildTimeFragment = useFragment(costDurationFragment, resourcesBuildTime || null);
 
-  const classes = useStyles({});
+  const classes = useStyles();
   const time = formatTime(buildTimeFragment);
   const resourcesTime =
     resourcesBuildTimeFragment && formatTime(resourcesBuildTimeFragment);
   const infrastructureTime =
     infrastructureBuildTimeFragment && formatTime(infrastructureBuildTimeFragment);
 
-  const highestResource = Math.max(
-    resourcesFragment.wood,
-    resourcesFragment.clay,
-    resourcesFragment.iron,
-    resourcesFragment.crop,
-  );
-  const formatResources = createFormatter(highestResource);
-  const formatTotal = createFormatter();
-  const formatFreeCrop = createFormatter();
-  const totalResources = resourcesFragment.total;
-
   return (
     <div className={clsx(className, classes.root)}>
-      <span className={clsx(classes.image, classes.wood)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.wood)}</span>
-      <span className={clsx(classes.image, classes.clay)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.clay)}</span>
-      <span className={clsx(classes.image, classes.iron)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.iron)}</span>
-      <span className={clsx(classes.image, classes.crop)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.crop)}</span>
-      <span className={clsx(classes.image, classes.total)} />
-      <span className={classes.value}>{formatTotal(totalResources)}</span>
-      <span className={clsx(classes.image, classes.freeCrop)} />
-      <span className={classes.value}>
-        {formatFreeCrop(resourcesFragment.freeCrop)}
-      </span>
+      <Resources resourcesKey={resourcesFragment} />
       {!infrastructureTime || !resourcesTime || !split ? (
         <>
           <span className={clsx(classes.image, classes.buildTime)} />

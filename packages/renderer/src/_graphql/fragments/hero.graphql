@@ -1,12 +1,3 @@
-fragment HeroInformation on HeroInformation {
-    health
-    state
-    village {
-        id
-        ...VillageName_village
-    }
-}
-
 fragment HeroLevelUpItem on HeroLevelUpItem {
     defBonus
     name

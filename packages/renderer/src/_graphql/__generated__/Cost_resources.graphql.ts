@@ -5,12 +5,7 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type Cost_resources = {
-    readonly wood: number;
-    readonly clay: number;
-    readonly iron: number;
-    readonly crop: number;
-    readonly freeCrop: number;
-    readonly total: number;
+    readonly " $fragmentRefs": FragmentRefs<"Resources_resources">;
     readonly " $refType": "Cost_resources";
 };
 export type Cost_resources$data = Cost_resources;
@@ -28,50 +23,13 @@ const node: ReaderFragment = {
   "name": "Cost_resources",
   "selections": [
     {
-      "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "wood",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "clay",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "iron",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "crop",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "freeCrop",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "total",
-      "storageKey": null
+      "kind": "FragmentSpread",
+      "name": "Resources_resources"
     }
   ],
   "type": "Resources",
   "abstractKey": null
 };
-(node as any).hash = '3de1ad6eacbb62fd0d40c18d81d80d27';
+(node as any).hash = '401c97af3ad16c11a4082b9fc10fa525';
 export default node;

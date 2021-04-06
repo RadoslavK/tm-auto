@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type HeroInformationSubscriptionVariables = {};
 export type HeroInformationSubscriptionResponse = {
     readonly heroInformationUpdated: {
-        readonly " $fragmentRefs": FragmentRefs<"HeroInformation">;
+        readonly " $fragmentRefs": FragmentRefs<"HeroInformation_heroInformation">;
     };
 };
 export type HeroInformationSubscription = {
@@ -20,17 +20,29 @@ export type HeroInformationSubscription = {
 /*
 subscription HeroInformationSubscription {
   heroInformationUpdated {
-    ...HeroInformation
+    ...HeroInformation_heroInformation
   }
 }
 
-fragment HeroInformation on HeroInformation {
+fragment HeroInformation_heroInformation on HeroInformation {
   health
   state
+  resources {
+    ...Resources_resources
+  }
   village {
     id
     ...VillageName_village
   }
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 
 fragment VillageName_village on Village {
@@ -61,7 +73,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "HeroInformation"
+            "name": "HeroInformation_heroInformation"
           }
         ],
         "storageKey": null
@@ -96,6 +108,59 @@ const node: ConcreteRequest = {
             "args": null,
             "kind": "ScalarField",
             "name": "state",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "resources",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "freeCrop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "total",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           },
           {
@@ -161,13 +226,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "d41a5af35cf6c25f24ca171b3385e1b5",
+    "cacheID": "81d7325b9d5bdafae36a4342fb087cc7",
     "id": null,
     "metadata": {},
     "name": "HeroInformationSubscription",
     "operationKind": "subscription",
-    "text": "subscription HeroInformationSubscription {\n  heroInformationUpdated {\n    ...HeroInformation\n  }\n}\n\nfragment HeroInformation on HeroInformation {\n  health\n  state\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "subscription HeroInformationSubscription {\n  heroInformationUpdated {\n    ...HeroInformation_heroInformation\n  }\n}\n\nfragment HeroInformation_heroInformation on HeroInformation {\n  health\n  state\n  resources {\n    ...Resources_resources\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
-(node as any).hash = 'ed511ca7b33bc465a8560e25763bf10c';
+(node as any).hash = '323a4bcc408b90e1bfd442a0bafa6156';
 export default node;

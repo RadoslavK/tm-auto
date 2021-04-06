@@ -25,6 +25,7 @@ export const HeroInformation = objectType({
     t.field('state', {
       type: HeroStateEnum,
     });
+    t.field('resources', { type: 'Resources' });
     t.nullable.field('village', {
       type: 'Village',
       resolve: (hero, _args, ctx) =>

@@ -131,12 +131,7 @@ fragment Cost_duration on Duration {
 }
 
 fragment Cost_resources on Resources {
-  wood
-  clay
-  iron
-  crop
-  freeCrop
-  total
+  ...Resources_resources
 }
 
 fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
@@ -164,6 +159,15 @@ fragment QueuedBuilding_queuedBuilding on QueuedBuilding {
   id
   type
   ...QueuedBuildingComponent_queuedBuilding
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 */
 
@@ -610,12 +614,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "28a4da5906661c29d9329dce102ec956",
+    "cacheID": "3a490950bf0996c519456646673cccef",
     "id": null,
     "metadata": {},
     "name": "BuildingsQuery",
     "operationKind": "query",
-    "text": "query BuildingsQuery(\n  $villageId: ID!\n) {\n  buildingSpots(villageId: $villageId) {\n    ...BuildingSpots_buildingSpots\n  }\n  buildingQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n  buildingsInProgress(villageId: $villageId) {\n    ...BuildingsInProgress_buildingsInProgress\n  }\n}\n\nfragment BuildingInProgress_buildingInProgress on BuildingInProgress {\n  name\n  fieldId\n  finishedAt {\n    totalSeconds\n  }\n  level\n  type\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingSpots_buildingSpots on BuildingSpots {\n  infrastructure {\n    id\n    ...BuildingSpot_buildingSpot\n  }\n  resources {\n    wood {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    clay {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    iron {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    crop {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n  }\n}\n\nfragment BuildingsInProgress_buildingsInProgress on BuildingInProgress {\n  fieldId\n  level\n  ...BuildingInProgress_buildingInProgress\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n"
+    "text": "query BuildingsQuery(\n  $villageId: ID!\n) {\n  buildingSpots(villageId: $villageId) {\n    ...BuildingSpots_buildingSpots\n  }\n  buildingQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n  buildingsInProgress(villageId: $villageId) {\n    ...BuildingsInProgress_buildingsInProgress\n  }\n}\n\nfragment BuildingInProgress_buildingInProgress on BuildingInProgress {\n  name\n  fieldId\n  finishedAt {\n    totalSeconds\n  }\n  level\n  type\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingSpots_buildingSpots on BuildingSpots {\n  infrastructure {\n    id\n    ...BuildingSpot_buildingSpot\n  }\n  resources {\n    wood {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    clay {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    iron {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    crop {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n  }\n}\n\nfragment BuildingsInProgress_buildingsInProgress on BuildingInProgress {\n  fieldId\n  level\n  ...BuildingInProgress_buildingInProgress\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();

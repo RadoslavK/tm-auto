@@ -2,6 +2,7 @@ import { HeroState } from '../../_models/hero/hero.js';
 import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes.js';
+import { updateHeroResources } from '../../controller/actions/hero/updateHeroResources.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { publishEvent } from '../../pubSub.js';
 
@@ -97,6 +98,8 @@ export const updateHeroInformation = async (): Promise<void> => {
   const adventureCount = await parseAdventureCount();
 
   hero.hasAvailableAdventures = adventureCount > 0;
+
+  await updateHeroResources();
 
   publishEvent(BotEvent.HeroInformationUpdated);
 

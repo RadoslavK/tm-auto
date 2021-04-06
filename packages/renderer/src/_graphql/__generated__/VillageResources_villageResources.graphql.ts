@@ -4,7 +4,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type Resources_villageResources = {
+export type VillageResources_villageResources = {
     readonly amount: {
         readonly wood: number;
         readonly clay: number;
@@ -23,12 +23,12 @@ export type Resources_villageResources = {
         readonly iron: number;
         readonly crop: number;
     };
-    readonly " $refType": "Resources_villageResources";
+    readonly " $refType": "VillageResources_villageResources";
 };
-export type Resources_villageResources$data = Resources_villageResources;
-export type Resources_villageResources$key = {
-    readonly " $data"?: Resources_villageResources$data;
-    readonly " $fragmentRefs": FragmentRefs<"Resources_villageResources">;
+export type VillageResources_villageResources$data = VillageResources_villageResources;
+export type VillageResources_villageResources$key = {
+    readonly " $data"?: VillageResources_villageResources$data;
+    readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
 };
 
 
@@ -66,7 +66,7 @@ return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Resources_villageResources",
+  "name": "VillageResources_villageResources",
   "selections": [
     {
       "alias": null,
@@ -142,5 +142,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '49bbc69709c90ee320bdfb385dea91e7';
+(node as any).hash = '0a098f520eb10fc5f13dab028b92f55d';
 export default node;

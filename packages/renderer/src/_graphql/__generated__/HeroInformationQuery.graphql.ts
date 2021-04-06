@@ -4,16 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type HeroState = "Dead" | "InVillage" | "OnAdventure" | "Reviving" | "Unknown";
 export type HeroInformationQueryVariables = {};
 export type HeroInformationQueryResponse = {
     readonly heroInformation: {
-        readonly health: number;
-        readonly state: HeroState;
-        readonly village: {
-            readonly id: string;
-            readonly " $fragmentRefs": FragmentRefs<"VillageName_village">;
-        } | null;
+        readonly " $fragmentRefs": FragmentRefs<"HeroInformation_heroInformation">;
     };
 };
 export type HeroInformationQuery = {
@@ -26,13 +20,29 @@ export type HeroInformationQuery = {
 /*
 query HeroInformationQuery {
   heroInformation {
-    health
-    state
-    village {
-      id
-      ...VillageName_village
-    }
+    ...HeroInformation_heroInformation
   }
+}
+
+fragment HeroInformation_heroInformation on HeroInformation {
+  health
+  state
+  resources {
+    ...Resources_resources
+  }
+  village {
+    id
+    ...VillageName_village
+  }
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 
 fragment VillageName_village on Village {
@@ -45,29 +55,7 @@ fragment VillageName_village on Village {
 }
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "health",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "state",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-};
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
@@ -82,24 +70,10 @@ return {
         "name": "heroInformation",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
           {
-            "alias": null,
             "args": null,
-            "concreteType": "Village",
-            "kind": "LinkedField",
-            "name": "village",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "VillageName_village"
-              }
-            ],
-            "storageKey": null
+            "kind": "FragmentSpread",
+            "name": "HeroInformation_heroInformation"
           }
         ],
         "storageKey": null
@@ -122,8 +96,73 @@ return {
         "name": "heroInformation",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "health",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "state",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "resources",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "freeCrop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "total",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -132,7 +171,13 @@ return {
             "name": "village",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": null,
@@ -181,14 +226,13 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f75c607e5413329c05a26a3caa4c4437",
+    "cacheID": "c3b72753f125c0da0125f819b881177b",
     "id": null,
     "metadata": {},
     "name": "HeroInformationQuery",
     "operationKind": "query",
-    "text": "query HeroInformationQuery {\n  heroInformation {\n    health\n    state\n    village {\n      id\n      ...VillageName_village\n    }\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "query HeroInformationQuery {\n  heroInformation {\n    ...HeroInformation_heroInformation\n  }\n}\n\nfragment HeroInformation_heroInformation on HeroInformation {\n  health\n  state\n  resources {\n    ...Resources_resources\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
-})();
-(node as any).hash = '0d417742b93bb63041e34472bc6cd375';
+(node as any).hash = '351116a88114a5462ac1dd8070c67a35';
 export default node;
