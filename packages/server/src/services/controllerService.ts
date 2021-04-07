@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { TimeoutError } from 'puppeteer-core/lib/Errors';
+import { TimeoutError } from 'puppeteer-core';
 import { formatTime } from 'shared/utils/formatTime.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
@@ -105,7 +105,7 @@ export class ControllerService {
         // Reset the page so it can be reloaded again after timeout
         await page.goto('about:blank');
 
-        await page.waitFor(nextCoolDownSeconds * 1000);
+        await page.waitForTimeout(nextCoolDownSeconds * 1000);
 
         const account = accountService.getCurrentAccount();
 

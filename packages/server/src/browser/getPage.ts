@@ -4,6 +4,10 @@ import type {
   Page, 
 } from 'puppeteer';
 import type { LaunchOptions } from 'puppeteer-core';
+import type {
+  BrowserConnectOptions,
+  BrowserLaunchArgumentOptions,
+} from 'puppeteer-core';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
@@ -16,9 +20,7 @@ const stealth = pluginStealth();
 // @ts-ignore
 stealth.onBrowser = () => {};
 
-puppeteer.use(stealth);
-
-const getChromeOptions = (): LaunchOptions => ({
+const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => ({
   // bundle chrome or something.. with cookies etc??
   executablePath: GeneralSettingsService.getService().get().chromePath,
   //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
@@ -34,7 +36,9 @@ let page: Page | null;
 
 export const createPage = async (): Promise<Page> => {
   if (!browser) {
-    browser = await puppeteer.launch(getChromeOptions());
+    const options = getChromeOptions();
+    //  TODO: puppeteer v5+ broke a lot of types so it might be fixed in future
+    browser = await puppeteer.launch(options as any);
   }
 
   const lPage = await browser.newPage();
@@ -60,7 +64,8 @@ export const createPage = async (): Promise<Page> => {
 
 export const getPage = async (): Promise<Page> => {
   if (!browser) {
-    browser = await puppeteer.launch(getChromeOptions());
+    const options = getChromeOptions();
+    browser = await puppeteer.launch(options as any);
   }
 
   const pages = await browser.pages();
