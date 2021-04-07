@@ -10,15 +10,47 @@ import {
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
 
+export const VideoFeatureSettings = objectType({
+  name: 'VideoFeatureSettings',
+  definition: t => {
+    t.boolean('allow');
+    t.field('minBuildTime', { type: 'Duration' });
+  },
+});
+
+export const GlobalAutoBuildSettings = objectType({
+  name: 'GlobalAutoBuildSettings',
+  definition: t => {
+    t.boolean('allow');
+    t.field('videoFeature', { type: VideoFeatureSettings });
+  },
+});
+
 export const AccountSettings = objectType({
   name: 'AccountSettings',
   definition: t => {
     t.boolean('allowTasks');
     t.field('tasksCoolDown', { type: 'CoolDown' });
     t.boolean('autoStart');
-    t.boolean('autoBuild');
+    t.field('autoBuild', { type: GlobalAutoBuildSettings });
     t.boolean('autoUnits');
     t.boolean('autoParty');
+  },
+});
+
+export const VideoFeatureSettingsInput = inputObjectType({
+  name: 'VideoFeatureSettingsInput',
+  definition: t => {
+    t.boolean('allow');
+    t.field('minBuildTime', { type: 'DurationInput' });
+  },
+});
+
+export const GlobalAutoBuildSettingsInput = inputObjectType({
+  name: 'GlobalAutoBuildSettingsInput',
+  definition: t => {
+    t.boolean('allow');
+    t.field('videoFeature', { type: VideoFeatureSettingsInput });
   },
 });
 
@@ -27,7 +59,7 @@ export const UpdateAccountSettingsInput = inputObjectType({
   definition: t => {
     t.boolean('allowTasks');
     t.field('tasksCoolDown', { type: 'CoolDownInput' });
-    t.boolean('autoBuild');
+    t.field('autoBuild', { type: GlobalAutoBuildSettingsInput });
     t.boolean('autoUnits');
     t.boolean('autoStart');
     t.boolean('autoParty');

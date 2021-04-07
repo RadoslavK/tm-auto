@@ -31,6 +31,7 @@ import type {
   BotTaskWithCoolDownResult,
 } from '../../../taskEngine/botTaskEngine.js';
 import { checkAutoStorage } from './checkAutoStorage.js';
+import { useVideoFeature } from './useVideoFeature.js';
 
 export class AutoBuildTask implements BotTaskWithCoolDown {
   private readonly _village: Village;
@@ -52,7 +53,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       .autoBuild.get();
 
   public allowExecution = (): boolean =>
-    AccountContext.getContext().settingsService.account.get().autoBuild &&
+    AccountContext.getContext().settingsService.account.get().autoBuild.allow &&
     this.settings().allow;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
@@ -310,16 +311,26 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
       ]);
     } else {
-      const submit = await page.$('.green.build');
+      const buildTimeText = await page.$eval('.duration', (x) => x.textContent?.trim());
+      const buildTime = buildTimeText && Duration.fromText(buildTimeText);
 
-      if (!submit) {
-        return;
+      const videoFeatureSettings = AccountContext.getContext().settingsService.account.get().autoBuild.videoFeature;
+      const usedVideoFeature = videoFeatureSettings.allow && buildTime && buildTime.getTotalSeconds() >= videoFeatureSettings.minBuildTime.getTotalSeconds()
+        ? await useVideoFeature()
+        : false;
+
+      if (!usedVideoFeature) {
+        const submit = await page.$('.green.build');
+
+        if (!submit) {
+          return;
+        }
+
+        await Promise.all([
+          submit.click(),
+          page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        ]);
       }
-
-      await Promise.all([
-        submit.click(),
-        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-      ]);
     }
 
     if (isQueued) {

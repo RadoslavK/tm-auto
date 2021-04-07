@@ -1,7 +1,6 @@
 import { Button } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -18,12 +17,21 @@ import type { AccountSettingsResetSettingsMutation } from '../../_graphql/__gene
 import type { AccountSettingsSubscription } from '../../_graphql/__generated__/AccountSettingsSubscription.graphql.js';
 import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
+import { Duration } from '../../_shared/components/controls/Duration.js';
 import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 
 graphql`
     fragment AccountSettings_accountSettings on AccountSettings {
         allowTasks
-        autoBuild
+        autoBuild {
+            allow
+            videoFeature {
+                allow
+                minBuildTime {
+                    ...Duration @relay(mask: false)
+                }
+            }
+        }
         autoParty
         autoStart
         autoUnits
@@ -85,14 +93,12 @@ export const AccountSettings: React.FC = () => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (accountSettings) {
-      setState(accountSettings);
-      setHasChanges(false);
-    }
+    setState(accountSettings);
+    setHasChanges(false);
   }, [accountSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { settings: state },
         updater: (store) => {
@@ -103,23 +109,13 @@ export const AccountSettings: React.FC = () => {
     }
   }, [hasChanges, state, updateSettings]);
 
-  const onCoolDownChange = useCallback(
-    (updatedCoolDown: CoolDownModel): void => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            tasksCoolDown: updatedCoolDown,
-          },
-      );
-      setHasChanges(true);
-    },
-    [],
-  );
-
-  if (!state) {
-    return null;
-  }
+  const onCoolDownChange = (updatedCoolDown: CoolDownModel): void => {
+    setState((prevState) => ({
+      ...prevState,
+      tasksCoolDown: updatedCoolDown,
+    }));
+    setHasChanges(true);
+  };
 
   const onReset = () => {
     resetSettings({
@@ -131,17 +127,18 @@ export const AccountSettings: React.FC = () => {
     });
   };
 
+  const onUpdate = (stateUpdate: Partial<typeof state>) => {
+    setState((prevState) => ({
+      ...prevState,
+      ...stateUpdate,
+    }));
+    setHasChanges(true);
+  };
+
   const onCheckboxChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
-    setHasChanges(true);
+    onUpdate({ [name]: checked });
   };
 
   const {
@@ -198,11 +195,55 @@ export const AccountSettings: React.FC = () => {
         <div>
           <label htmlFor="autoBuild">Auto Build</label>
           <input
-            checked={autoBuild}
+            checked={autoBuild.allow}
             id="autoBuild"
-            name="autoBuild"
-            onChange={onCheckboxChange}
+            onChange={e => {
+              onUpdate({
+                autoBuild: {
+                  ...state.autoBuild,
+                  allow: e.currentTarget.checked,
+                },
+              });
+            }}
             type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="videoFeatureAllow">Use Video feature</label>
+          <input
+            checked={autoBuild.videoFeature.allow}
+            id="videoFeatureAllow"
+            onChange={e => {
+              onUpdate({
+                autoBuild: {
+                  ...state.autoBuild,
+                  videoFeature: {
+                    ...state.autoBuild.videoFeature,
+                    allow: e.currentTarget.checked,
+                  },
+                },
+              });
+            }}
+            type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="videoFeatureDuration">Min build time for video</label>
+          <Duration
+            onChange={minBuildTime => {
+              onUpdate({
+                autoBuild: {
+                  ...state.autoBuild,
+                  videoFeature: {
+                    ...state.autoBuild.videoFeature,
+                    minBuildTime,
+                  },
+                },
+              });
+            }}
+            value={autoBuild.videoFeature.minBuildTime}
           />
         </div>
 

@@ -1,4 +1,4 @@
-import { AccountSettings } from '../../_models/settings/accountSettings.js';
+import { AccountSettings } from '../../_models/settings/account/accountSettings.js';
 import { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
 import type { HeroSettings } from '../../_models/settings/heroSettings.js';
 import type { VillageSettings } from '../../_models/settings/villageSettings.js';

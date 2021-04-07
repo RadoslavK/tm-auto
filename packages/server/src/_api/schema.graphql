@@ -10,7 +10,7 @@ input AccountInput {
 
 type AccountSettings {
   allowTasks: Boolean!
-  autoBuild: Boolean!
+  autoBuild: GlobalAutoBuildSettings!
   autoParty: Boolean!
   autoStart: Boolean!
   autoUnits: Boolean!
@@ -248,6 +248,16 @@ type GeneralSettings {
 
 type GeneralVillageSettings {
   allowTasks: Boolean!
+}
+
+type GlobalAutoBuildSettings {
+  allow: Boolean!
+  videoFeature: VideoFeatureSettings!
+}
+
+input GlobalAutoBuildSettingsInput {
+  allow: Boolean!
+  videoFeature: VideoFeatureSettingsInput!
 }
 
 type HeroInformation {
@@ -525,7 +535,7 @@ type UnitInfo {
 
 input UpdateAccountSettingsInput {
   allowTasks: Boolean!
-  autoBuild: Boolean!
+  autoBuild: GlobalAutoBuildSettingsInput!
   autoParty: Boolean!
   autoStart: Boolean!
   autoUnits: Boolean!
@@ -610,6 +620,16 @@ type UserAccount {
   password: String!
   server: String!
   username: String!
+}
+
+type VideoFeatureSettings {
+  allow: Boolean!
+  minBuildTime: Duration!
+}
+
+input VideoFeatureSettingsInput {
+  allow: Boolean!
+  minBuildTime: DurationInput!
 }
 
 type Village {

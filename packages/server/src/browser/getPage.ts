@@ -3,6 +3,7 @@ import type {
   Browser,
   Page, 
 } from 'puppeteer';
+import type { LaunchOptions } from 'puppeteer-core';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
@@ -17,7 +18,7 @@ stealth.onBrowser = () => {};
 
 puppeteer.use(stealth);
 
-const getChromeOptions = () => ({
+const getChromeOptions = (): LaunchOptions => ({
   // bundle chrome or something.. with cookies etc??
   executablePath: GeneralSettingsService.getService().get().chromePath,
   //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
@@ -25,6 +26,7 @@ const getChromeOptions = () => ({
   headless: GeneralSettingsService.getService().get().headlessChrome,
   slowMo: 25,
   userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
+  args: ['--mute-audio'],
 });
 
 let browser: Browser | null;

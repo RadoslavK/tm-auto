@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import path from 'path';
 
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
-import { AccountSettings } from '../_models/settings/accountSettings.js';
+import { AccountSettings } from '../_models/settings/account/accountSettings.js';
 import { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
 import { GeneralSettings } from '../_models/settings/generalSettings.js';
 import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';

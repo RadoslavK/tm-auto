@@ -60,6 +60,10 @@ export interface NexusGenInputs {
     type: number; // Int!
     villageId: string; // ID!
   }
+  GlobalAutoBuildSettingsInput: { // input type
+    allow: boolean; // Boolean!
+    videoFeature: NexusGenInputs['VideoFeatureSettingsInput']; // VideoFeatureSettingsInput!
+  }
   HeroLevelUpItemInput: { // input type
     defBonus: number; // Int!
     name: string; // String!
@@ -82,7 +86,7 @@ export interface NexusGenInputs {
   }
   UpdateAccountSettingsInput: { // input type
     allowTasks: boolean; // Boolean!
-    autoBuild: boolean; // Boolean!
+    autoBuild: NexusGenInputs['GlobalAutoBuildSettingsInput']; // GlobalAutoBuildSettingsInput!
     autoParty: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
@@ -150,6 +154,10 @@ export interface NexusGenInputs {
   UpdateGeneralVillageSettingsInput: { // input type
     allowTasks: boolean; // Boolean!
   }
+  VideoFeatureSettingsInput: { // input type
+    allow: boolean; // Boolean!
+    minBuildTime: NexusGenInputs['DurationInput']; // DurationInput!
+  }
 }
 
 export interface NexusGenEnums {
@@ -175,7 +183,7 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   AccountSettings: { // root type
     allowTasks: boolean; // Boolean!
-    autoBuild: boolean; // Boolean!
+    autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
@@ -302,6 +310,10 @@ export interface NexusGenObjects {
   GeneralVillageSettings: { // root type
     allowTasks: boolean; // Boolean!
   }
+  GlobalAutoBuildSettings: { // root type
+    allow: boolean; // Boolean!
+    videoFeature: NexusGenRootTypes['VideoFeatureSettings']; // VideoFeatureSettings!
+  }
   HeroInformation: Hero;
   HeroLevelUpItem: { // root type
     defBonus: number; // Int!
@@ -361,6 +373,10 @@ export interface NexusGenObjects {
     server: string; // String!
     username: string; // String!
   }
+  VideoFeatureSettings: { // root type
+    allow: boolean; // Boolean!
+    minBuildTime: NexusGenRootTypes['Duration']; // Duration!
+  }
   Village: { // root type
     coords: NexusGenRootTypes['Coords']; // Coords!
     id: string; // ID!
@@ -405,7 +421,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   AccountSettings: { // field return type
     allowTasks: boolean; // Boolean!
-    autoBuild: boolean; // Boolean!
+    autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
@@ -552,6 +568,10 @@ export interface NexusGenFieldTypes {
   }
   GeneralVillageSettings: { // field return type
     allowTasks: boolean; // Boolean!
+  }
+  GlobalAutoBuildSettings: { // field return type
+    allow: boolean; // Boolean!
+    videoFeature: NexusGenRootTypes['VideoFeatureSettings']; // VideoFeatureSettings!
   }
   HeroInformation: { // field return type
     health: number; // Int!
@@ -752,6 +772,10 @@ export interface NexusGenFieldTypes {
     server: string; // String!
     username: string; // String!
   }
+  VideoFeatureSettings: { // field return type
+    allow: boolean; // Boolean!
+    minBuildTime: NexusGenRootTypes['Duration']; // Duration!
+  }
   Village: { // field return type
     coords: NexusGenRootTypes['Coords']; // Coords!
     id: string; // ID!
@@ -785,7 +809,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   AccountSettings: { // field return type name
     allowTasks: 'Boolean'
-    autoBuild: 'Boolean'
+    autoBuild: 'GlobalAutoBuildSettings'
     autoParty: 'Boolean'
     autoStart: 'Boolean'
     autoUnits: 'Boolean'
@@ -932,6 +956,10 @@ export interface NexusGenFieldTypeNames {
   }
   GeneralVillageSettings: { // field return type name
     allowTasks: 'Boolean'
+  }
+  GlobalAutoBuildSettings: { // field return type name
+    allow: 'Boolean'
+    videoFeature: 'VideoFeatureSettings'
   }
   HeroInformation: { // field return type name
     health: 'Int'
@@ -1131,6 +1159,10 @@ export interface NexusGenFieldTypeNames {
     password: 'String'
     server: 'String'
     username: 'String'
+  }
+  VideoFeatureSettings: { // field return type name
+    allow: 'Boolean'
+    minBuildTime: 'Duration'
   }
   Village: { // field return type name
     coords: 'Coords'

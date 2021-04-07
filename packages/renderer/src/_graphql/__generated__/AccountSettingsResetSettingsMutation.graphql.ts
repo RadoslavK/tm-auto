@@ -26,7 +26,18 @@ mutation AccountSettingsResetSettingsMutation {
 
 fragment AccountSettings_accountSettings on AccountSettings {
   allowTasks
-  autoBuild
+  autoBuild {
+    allow
+    videoFeature {
+      allow
+      minBuildTime {
+        days
+        hours
+        minutes
+        seconds
+      }
+    }
+  }
   autoParty
   autoStart
   autoUnits
@@ -48,7 +59,14 @@ fragment AccountSettings_accountSettings on AccountSettings {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "allow",
+  "storageKey": null
+},
+v1 = [
   {
     "alias": null,
     "args": null,
@@ -129,8 +147,35 @@ return {
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
+            "concreteType": "GlobalAutoBuildSettings",
+            "kind": "LinkedField",
             "name": "autoBuild",
+            "plural": false,
+            "selections": [
+              (v0/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "VideoFeatureSettings",
+                "kind": "LinkedField",
+                "name": "videoFeature",
+                "plural": false,
+                "selections": [
+                  (v0/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Duration",
+                    "kind": "LinkedField",
+                    "name": "minBuildTime",
+                    "plural": false,
+                    "selections": (v1/*: any*/),
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           },
           {
@@ -169,7 +214,7 @@ return {
                 "kind": "LinkedField",
                 "name": "max",
                 "plural": false,
-                "selections": (v0/*: any*/),
+                "selections": (v1/*: any*/),
                 "storageKey": null
               },
               {
@@ -179,7 +224,7 @@ return {
                 "kind": "LinkedField",
                 "name": "min",
                 "plural": false,
-                "selections": (v0/*: any*/),
+                "selections": (v1/*: any*/),
                 "storageKey": null
               }
             ],
@@ -191,12 +236,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7f0cc8ecfe7b320085e82f2ba5d56d9f",
+    "cacheID": "7de1412a1d07d0fa508e7a0d1cd67a0a",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

@@ -2,8 +2,6 @@
 
 - AutoUnits
   - min troop count to build at the same time. E.g. build at least 5 units or none.
-- AutoBuild
-  - Use video feature to speed up building construction
 - Building Queue
   - Block of queued buildings
     -finish Move to the top for it / move as high as possible

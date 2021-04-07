@@ -6,7 +6,18 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type AccountSettings_accountSettings = {
     readonly allowTasks: boolean;
-    readonly autoBuild: boolean;
+    readonly autoBuild: {
+        readonly allow: boolean;
+        readonly videoFeature: {
+            readonly allow: boolean;
+            readonly minBuildTime: {
+                readonly days: number;
+                readonly hours: number;
+                readonly minutes: number;
+                readonly seconds: number;
+            };
+        };
+    };
     readonly autoParty: boolean;
     readonly autoStart: boolean;
     readonly autoUnits: boolean;
@@ -35,7 +46,14 @@ export type AccountSettings_accountSettings$key = {
 
 
 const node: ReaderFragment = (function(){
-var v0 = [
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "allow",
+  "storageKey": null
+},
+v1 = [
   {
     "alias": null,
     "args": null,
@@ -81,8 +99,35 @@ return {
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
+      "concreteType": "GlobalAutoBuildSettings",
+      "kind": "LinkedField",
       "name": "autoBuild",
+      "plural": false,
+      "selections": [
+        (v0/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "VideoFeatureSettings",
+          "kind": "LinkedField",
+          "name": "videoFeature",
+          "plural": false,
+          "selections": [
+            (v0/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "Duration",
+              "kind": "LinkedField",
+              "name": "minBuildTime",
+              "plural": false,
+              "selections": (v1/*: any*/),
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     },
     {
@@ -121,7 +166,7 @@ return {
           "kind": "LinkedField",
           "name": "max",
           "plural": false,
-          "selections": (v0/*: any*/),
+          "selections": (v1/*: any*/),
           "storageKey": null
         },
         {
@@ -131,7 +176,7 @@ return {
           "kind": "LinkedField",
           "name": "min",
           "plural": false,
-          "selections": (v0/*: any*/),
+          "selections": (v1/*: any*/),
           "storageKey": null
         }
       ],
@@ -142,5 +187,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '3386565d2d5c004a7e85e9a94840c145';
+(node as any).hash = '2ee38e3a71d7e4b32d457f99a611eb7b';
 export default node;

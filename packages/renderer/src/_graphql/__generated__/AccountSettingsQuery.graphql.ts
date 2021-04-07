@@ -7,7 +7,18 @@ export type AccountSettingsQueryVariables = {};
 export type AccountSettingsQueryResponse = {
     readonly accountSettings: {
         readonly allowTasks: boolean;
-        readonly autoBuild: boolean;
+        readonly autoBuild: {
+            readonly allow: boolean;
+            readonly videoFeature: {
+                readonly allow: boolean;
+                readonly minBuildTime: {
+                    readonly days: number;
+                    readonly hours: number;
+                    readonly minutes: number;
+                    readonly seconds: number;
+                };
+            };
+        };
         readonly autoParty: boolean;
         readonly autoStart: boolean;
         readonly autoUnits: boolean;
@@ -38,7 +49,18 @@ export type AccountSettingsQuery = {
 query AccountSettingsQuery {
   accountSettings {
     allowTasks
-    autoBuild
+    autoBuild {
+      allow
+      videoFeature {
+        allow
+        minBuildTime {
+          days
+          hours
+          minutes
+          seconds
+        }
+      }
+    }
     autoParty
     autoStart
     autoUnits
@@ -61,7 +83,14 @@ query AccountSettingsQuery {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "allow",
+  "storageKey": null
+},
+v1 = [
   {
     "alias": null,
     "args": null,
@@ -91,7 +120,7 @@ var v0 = [
     "storageKey": null
   }
 ],
-v1 = [
+v2 = [
   {
     "alias": null,
     "args": null,
@@ -110,8 +139,35 @@ v1 = [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
+        "concreteType": "GlobalAutoBuildSettings",
+        "kind": "LinkedField",
         "name": "autoBuild",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "VideoFeatureSettings",
+            "kind": "LinkedField",
+            "name": "videoFeature",
+            "plural": false,
+            "selections": [
+              (v0/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Duration",
+                "kind": "LinkedField",
+                "name": "minBuildTime",
+                "plural": false,
+                "selections": (v1/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       },
       {
@@ -150,7 +206,7 @@ v1 = [
             "kind": "LinkedField",
             "name": "max",
             "plural": false,
-            "selections": (v0/*: any*/),
+            "selections": (v1/*: any*/),
             "storageKey": null
           },
           {
@@ -160,7 +216,7 @@ v1 = [
             "kind": "LinkedField",
             "name": "min",
             "plural": false,
-            "selections": (v0/*: any*/),
+            "selections": (v1/*: any*/),
             "storageKey": null
           }
         ],
@@ -176,7 +232,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AccountSettingsQuery",
-    "selections": (v1/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -185,15 +241,15 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "AccountSettingsQuery",
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "a0729bcb6a120425d26a4a7424bce4a0",
+    "cacheID": "4cf1b2be11b0c2eadd33c20cdac082e7",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsQuery",
     "operationKind": "query",
-    "text": "query AccountSettingsQuery {\n  accountSettings {\n    allowTasks\n    autoBuild\n    autoParty\n    autoStart\n    autoUnits\n    tasksCoolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n}\n"
+    "text": "query AccountSettingsQuery {\n  accountSettings {\n    allowTasks\n    autoBuild {\n      allow\n      videoFeature {\n        allow\n        minBuildTime {\n          days\n          hours\n          minutes\n          seconds\n        }\n      }\n    }\n    autoParty\n    autoStart\n    autoUnits\n    tasksCoolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n}\n"
   }
 };
 })();
