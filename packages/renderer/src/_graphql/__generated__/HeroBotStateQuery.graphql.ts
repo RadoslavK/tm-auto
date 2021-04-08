@@ -4,19 +4,19 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type BotState = "InitialScanning" | "None" | "Paused" | "Running" | "Stopping";
-export type NavigationQueryVariables = {};
-export type NavigationQueryResponse = {
+export type HeroBotStateQueryVariables = {};
+export type HeroBotStateQueryResponse = {
     readonly botState: BotState;
 };
-export type NavigationQuery = {
-    readonly response: NavigationQueryResponse;
-    readonly variables: NavigationQueryVariables;
+export type HeroBotStateQuery = {
+    readonly response: HeroBotStateQueryResponse;
+    readonly variables: HeroBotStateQueryVariables;
 };
 
 
 
 /*
-query NavigationQuery {
+query HeroBotStateQuery {
   botState
 }
 */
@@ -36,7 +36,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "NavigationQuery",
+    "name": "HeroBotStateQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -45,18 +45,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "NavigationQuery",
+    "name": "HeroBotStateQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "9c313394283bde1f04159f63ebc48214",
+    "cacheID": "23fbc2dbc5f5727467caa55ae47620cd",
     "id": null,
     "metadata": {},
-    "name": "NavigationQuery",
+    "name": "HeroBotStateQuery",
     "operationKind": "query",
-    "text": "query NavigationQuery {\n  botState\n}\n"
+    "text": "query HeroBotStateQuery {\n  botState\n}\n"
   }
 };
 })();
-(node as any).hash = '4f9b7fbc067ea03a026263e5ff42e181';
+(node as any).hash = '810743322757fbffecb534ea35678905';
 export default node;

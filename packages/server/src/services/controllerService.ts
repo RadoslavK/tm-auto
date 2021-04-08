@@ -15,7 +15,7 @@ import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextua
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected.js';
 import { initGameInfo } from '../controller/actions/player/initGameInfo.js';
-import { updatePlayerInfo } from '../controller/actions/player/updatePlayerInfo.js';
+import { initializeCapitalAndAlly } from '../controller/actions/player/initializeCapitalAndAlly.js';
 import { refreshVillage } from '../controller/actions/village/refreshVillage.js';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages.js';
 import { updateResources } from '../controller/actions/village/updateResources.js';
@@ -34,7 +34,7 @@ type HandleErrorResult = {
 
 export enum BotState {
   None = 'None',
-  Pending = 'Pending',
+  InitialScanning = 'InitialScanning',
   Running = 'Running',
   Stopping = 'Stopping',
   Paused = 'Paused'
@@ -57,7 +57,7 @@ export class ControllerService {
     publishPayloadEvent(BotEvent.BotRunningChanged, { state });
   };
 
-  private setActivity = async (activity: boolean): Promise<void> => {
+  private setActivity = (activity: boolean): void => {
     this._isActive = activity;
 
     publishPayloadEvent(BotEvent.BotActivityChanged, {
@@ -203,6 +203,7 @@ export class ControllerService {
   };
 
   public signIn = async (accountId: string): Promise<void> => {
+    this.setActivity(true);
     AccountContext.setContext(accountId);
     accountService.setCurrentAccountId(accountId);
 
@@ -213,28 +214,36 @@ export class ControllerService {
         return;
       }
 
-      this.setState(BotState.Pending);
+      this.setState(BotState.InitialScanning);
 
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();
-      await updateNewOldVillages();
       await initGameInfo();
+      const capitalVillageCoords = await initializeCapitalAndAlly();
       await updateHeroInformation();
 
+      publishPayloadEvent(BotEvent.GameInfoUpdated, { gameInfo: AccountContext.getContext().gameInfo });
+
+      await updateNewOldVillages();
+
       const allVillages = AccountContext.getContext().villageService.allVillages();
+      const scanned = shuffle(allVillages.filter(v => v.scanned));
+      const notScanned = shuffle(allVillages.filter(v => !v.scanned));
 
-      for (const village of shuffle(allVillages)) {
-        const buildingQueueService = AccountContext.getContext().buildingQueueService.for(
-          village.id,
-        );
+      //  Scan not previously scanned first
+      for (const village of notScanned.concat(scanned)) {
+        const buildingQueueService = AccountContext.getContext().buildingQueueService.for(village.id);
         await buildingQueueService.loadQueueAndUpdate();
-        await ensureVillageSelected(village.id);
 
+        await ensureVillageSelected(village.id);
         await updateResources();
         await updateBuildings();
-      }
 
-      await updatePlayerInfo();
+        village.isCapital = village.coords.equalsTo(capitalVillageCoords);
+        village.scanned = true;
+
+        publishPayloadEvent(BotEvent.VillageUpdated, { village });
+      }
     } catch (error) {
       await this.handleError(error);
       allowContinue = false;
@@ -255,10 +264,11 @@ export class ControllerService {
     }
   };
 
-  public signOut = async (): Promise<void> => {
+  public signOut = (): void => {
     this.setState(BotState.None);
     AccountContext.resetContext();
     accountService.setCurrentAccountId(null);
+    this.setActivity(false);
   };
 
   public start = async (): Promise<void> => {

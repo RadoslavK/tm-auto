@@ -7,7 +7,6 @@
     so it refreshes when you get back or something
 * feature snapshots for parsing something important? To easily detect changes
     like screenshot and DOM.
-* eslint complete switch
 * DI in tasks/actions. Have account context and other services available there. Probably extend some class instead of it just being a function
 * when relogging on the same account it says the account context does not exist
     and when relogging on another account it says no response for cranny capacity query

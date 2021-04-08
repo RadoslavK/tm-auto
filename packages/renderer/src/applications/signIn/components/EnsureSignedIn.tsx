@@ -37,7 +37,7 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
 
   useSubscription(subscriptionConfig);
 
-  if (botState === 'None' || botState === 'Pending') {
+  if (botState === 'None') {
     return (
       <div>
         <GraphiQL />

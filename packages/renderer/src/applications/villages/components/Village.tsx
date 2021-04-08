@@ -10,7 +10,6 @@ import React, {
 import {
   useLazyLoadQuery,
   useMutation,
-  useSubscription,
 } from 'react-relay/hooks';
 import {
   Link,
@@ -22,11 +21,9 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
-import type { VillageSubscription } from '../../../_graphql/__generated__/VillageSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
@@ -69,18 +66,6 @@ const villageRefreshVillageMutation = graphql`
 const villageQuery = graphql`
     query VillageQuery($villageId: ID!) {
         village(villageId: $villageId) {
-            id
-            resources {
-                ...VillageResources_villageResources
-            }
-        }
-    }
-`;
-
-const villageSubscription = graphql`
-    subscription VillageSubscription($villageId: ID!) {
-        villageUpdated(villageId: $villageId) {
-            id
             resources {
                 ...VillageResources_villageResources
             }
@@ -156,13 +141,6 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   };
 
   const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId }, { fetchPolicy: 'store-and-network' });
-
-  const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSubscription> => ({
-    subscription: villageSubscription,
-    variables: { villageId },
-  }), [villageId]);
-
-  useSubscription(subscriptionConfig);
 
   useEffect(() => {
     if (village === null) {

@@ -8,9 +8,9 @@ export type VillagesQueryVariables = {};
 export type VillagesQueryResponse = {
     readonly villages: ReadonlyArray<{
         readonly id: string;
+        readonly scanned: boolean;
         readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     }>;
-    readonly activeVillageId: string;
 };
 export type VillagesQuery = {
     readonly response: VillagesQueryResponse;
@@ -23,9 +23,9 @@ export type VillagesQuery = {
 query VillagesQuery {
   villages {
     id
+    scanned
     ...VillageSideItem_village
   }
-  activeVillageId
 }
 
 fragment VillageName_village on Village {
@@ -39,6 +39,7 @@ fragment VillageName_village on Village {
 
 fragment VillageSideItem_village on Village {
   id
+  scanned
   ...VillageName_village
 }
 */
@@ -55,7 +56,7 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "activeVillageId",
+  "name": "scanned",
   "storageKey": null
 };
 return {
@@ -74,6 +75,7 @@ return {
         "plural": true,
         "selections": [
           (v0/*: any*/),
+          (v1/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -81,8 +83,7 @@ return {
           }
         ],
         "storageKey": null
-      },
-      (v1/*: any*/)
+      }
     ],
     "type": "Query",
     "abstractKey": null
@@ -102,6 +103,7 @@ return {
         "plural": true,
         "selections": [
           (v0/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -143,19 +145,18 @@ return {
           }
         ],
         "storageKey": null
-      },
-      (v1/*: any*/)
+      }
     ]
   },
   "params": {
-    "cacheID": "3991cf0cee972ba13ad66ffbfa14e56a",
+    "cacheID": "8b8aadbd44f801594671534d3d12360b",
     "id": null,
     "metadata": {},
     "name": "VillagesQuery",
     "operationKind": "query",
-    "text": "query VillagesQuery {\n  villages {\n    id\n    ...VillageSideItem_village\n  }\n  activeVillageId\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
+    "text": "query VillagesQuery {\n  villages {\n    id\n    scanned\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = '1c6399c802a3aa9a4175795ccaa469e4';
+(node as any).hash = '34146d8327fe082c77cca584aaad7206';
 export default node;

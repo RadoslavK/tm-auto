@@ -14,14 +14,14 @@ const ensureTitleQuery = graphql`
   }
 `;
 
-export const EnsureTitle: React.FC = ({ children }) => {
+export const EnsureTitle: React.FC = () => {
   const { currentAccount } = useLazyLoadQuery<EnsureTitleQuery>(ensureTitleQuery, {});
 
   useEffect(() => {
     document.title = `${currentAccount.username} @ ${getServerShortcut(currentAccount.server)}`;
   }, [currentAccount]);
 
-  return <>{children}</>;
+  return null;
 };
 
 EnsureTitle.displayName = 'EnsureTitle';

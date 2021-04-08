@@ -4,22 +4,21 @@ import { parseAllyId } from '../../../parsers/gameInfo/parseAllyId.js';
 import { parseCapitalVillageCoords } from '../../../parsers/gameInfo/parseCapitalVillageCoords.js';
 import { ensurePage } from '../ensurePage.js';
 
-export const updatePlayerInfo = async (): Promise<void> => {
+export const updateCapitalAndAlly = async (): Promise<void> => {
   await ensurePage(TravianPath.PlayerProfile);
 
-  const capitalCoords = await parseCapitalVillageCoords();
-  const { capitalChanged } = AccountContext.getContext().villageService.setCapital(
-    capitalCoords,
-  );
-
   AccountContext.getContext().gameInfo.allyId = await parseAllyId();
+  const capitalCoords = await parseCapitalVillageCoords();
+  const { capitalChanged } = AccountContext.getContext().villageService.setCapital(capitalCoords);
 
   if (capitalChanged) {
     const { currentVillageId } = AccountContext.getContext().villageService;
+
     const queueService = AccountContext.getContext().buildingQueueService.for(
       currentVillageId,
     );
-    queueService.removeAndCorrectQueue({
+
+    await queueService.removeAndCorrectQueue({
       triggerCorrectionEvent: true,
     });
   }

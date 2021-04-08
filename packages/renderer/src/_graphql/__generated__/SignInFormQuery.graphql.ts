@@ -3,10 +3,8 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type BotState = "None" | "Paused" | "Pending" | "Running" | "Stopping";
 export type SignInFormQueryVariables = {};
 export type SignInFormQueryResponse = {
-    readonly botState: BotState;
     readonly lastSignedAccountId: string | null;
 };
 export type SignInFormQuery = {
@@ -18,20 +16,12 @@ export type SignInFormQuery = {
 
 /*
 query SignInFormQuery {
-  botState
   lastSignedAccountId
 }
 */
 
 const node: ConcreteRequest = (function(){
 var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "botState",
-    "storageKey": null
-  },
   {
     "alias": null,
     "args": null,
@@ -58,14 +48,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "2cddbe56a6d9f2bace645207b9f5d28a",
+    "cacheID": "f685ab3242f67f9829a804b6e46627bc",
     "id": null,
     "metadata": {},
     "name": "SignInFormQuery",
     "operationKind": "query",
-    "text": "query SignInFormQuery {\n  botState\n  lastSignedAccountId\n}\n"
+    "text": "query SignInFormQuery {\n  lastSignedAccountId\n}\n"
   }
 };
 })();
-(node as any).hash = 'bff2abefc272a03b35cbedcc85fe1b5b';
+(node as any).hash = '6c45157309b8bd0a57d2dbbb56473e99';
 export default node;

@@ -10,6 +10,9 @@ const getToggleText = (botState: BotState): string => {
     case 'Paused':
       return 'Start';
 
+    case 'InitialScanning':
+      return 'Scanning initial villages';
+
     case 'Running':
     case 'Stopping':
       return 'Stop';
@@ -42,13 +45,9 @@ export const BotStateToggle: React.FC<Props> = React.forwardRef<HTMLButtonElemen
     const [startBot] = useMutation(startBotMutation);
     const [stopBot] = useMutation(stopBotMutation);
 
-    const isStopping = botState === 'Stopping';
+    const disabled = botState === 'Stopping' || botState === 'InitialScanning';
 
     const toggleBotState = () => {
-      if (botState === 'Stopping') {
-        return;
-      }
-
       if (botState === 'Running') {
         stopBot({
           variables: {},
@@ -70,8 +69,8 @@ export const BotStateToggle: React.FC<Props> = React.forwardRef<HTMLButtonElemen
       <Button
         ref={ref}
         color="primary"
-        disabled={isStopping}
-        onClick={isStopping ? undefined : toggleBotState}
+        disabled={disabled}
+        onClick={disabled ? undefined : toggleBotState}
         variant="contained"
       >
         {getToggleText(botState)}

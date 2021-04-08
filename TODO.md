@@ -118,8 +118,6 @@
 ## Performance
 
 - Store map search result and filter in GraphQL local cache.
-- First load takes a long time as it needs to scan all villages
-  - Store and reload some context information like villages, tribe, etc...
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
 

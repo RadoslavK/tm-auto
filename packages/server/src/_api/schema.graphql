@@ -118,9 +118,9 @@ input AvailableNewBuildingsInput {
 }
 
 enum BotState {
+  InitialScanning
   None
   Paused
-  Pending
   Running
   Stopping
 }
@@ -488,8 +488,9 @@ type Subscription {
   nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
   onBuildingSpotUpdated(villageId: ID!): BuildingSpot!
   onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
+  onGameInfoUpdated: GameInfo!
   queuedBuildingUpdated(villageId: ID!): ModificationPayload!
-  villageUpdated(villageId: ID!): Village!
+  villageUpdated: Village!
   villagesUpdated: [Village!]!
 }
 
@@ -638,6 +639,7 @@ type Village {
   isCapital: Boolean!
   name: String!
   resources: VillageResources!
+  scanned: Boolean!
 }
 
 type VillageCapacity {

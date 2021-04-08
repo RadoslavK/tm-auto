@@ -19,7 +19,7 @@ export const SignOut: React.FC = React.forwardRef<HTMLButtonElement, PropsWithCh
     signOut({
       variables: {},
       optimisticUpdater: (store) => {
-        store.getRoot().setValue('Pending', 'botState');
+        store.getRoot().setValue('None', 'botState');
       },
     });
     history.push('/');

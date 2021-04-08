@@ -8,6 +8,7 @@ export type VillagesSubscriptionVariables = {};
 export type VillagesSubscriptionResponse = {
     readonly villagesUpdated: ReadonlyArray<{
         readonly id: string;
+        readonly scanned: boolean;
         readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     }>;
 };
@@ -22,6 +23,7 @@ export type VillagesSubscription = {
 subscription VillagesSubscription {
   villagesUpdated {
     id
+    scanned
     ...VillageSideItem_village
   }
 }
@@ -37,6 +39,7 @@ fragment VillageName_village on Village {
 
 fragment VillageSideItem_village on Village {
   id
+  scanned
   ...VillageName_village
 }
 */
@@ -47,6 +50,13 @@ var v0 = {
   "args": null,
   "kind": "ScalarField",
   "name": "id",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "scanned",
   "storageKey": null
 };
 return {
@@ -65,6 +75,7 @@ return {
         "plural": true,
         "selections": [
           (v0/*: any*/),
+          (v1/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -92,6 +103,7 @@ return {
         "plural": true,
         "selections": [
           (v0/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -137,14 +149,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c6f7df34ebfc5e3c9e54b1e674c62e22",
+    "cacheID": "08ede45bb40e89465ffd8e5da8298095",
     "id": null,
     "metadata": {},
     "name": "VillagesSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  ...VillageName_village\n}\n"
+    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    scanned\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = 'a962891b7f87cc333ff7f6bebcae4f32';
+(node as any).hash = 'fee063e09b0163d68abf0b5d0a234cb1';
 export default node;

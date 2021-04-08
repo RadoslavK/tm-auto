@@ -70,9 +70,7 @@ export class VillageService {
   };
 
   public villageByCoords = (coords: Coords): Village | undefined =>
-    this._villages.find(
-      (x) => x.coords.x === coords.x && x.coords.y === coords.y,
-    );
+    this._villages.find(v => v.coords.equalsTo(coords));
 
   public capitalVillage = (): Village | undefined =>
     this._villages.find((x) => x.isCapital);

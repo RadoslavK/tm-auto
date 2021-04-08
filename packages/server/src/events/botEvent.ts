@@ -25,6 +25,8 @@ export enum BotEvent {
   CrannyCapacityUpdated = 'CrannyCapacityUpdated',
   VillagesUpdated = 'VillagesUpdated',
 
+  GameInfoUpdated = 'GameInfoUpdated',
+
   MapScanProgressUpdated = 'MapScanProgressUpdated',
   MapSearchStateChanged = 'MapSearchStateChanged',
   MapSearchFinished = 'MapSearchFinished',

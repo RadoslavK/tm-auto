@@ -6,6 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type VillageSideItem_village = {
     readonly id: string;
+    readonly scanned: boolean;
     readonly " $fragmentRefs": FragmentRefs<"VillageName_village">;
     readonly " $refType": "VillageSideItem_village";
 };
@@ -31,6 +32,13 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "scanned",
+      "storageKey": null
+    },
+    {
       "args": null,
       "kind": "FragmentSpread",
       "name": "VillageName_village"
@@ -39,5 +47,5 @@ const node: ReaderFragment = {
   "type": "Village",
   "abstractKey": null
 };
-(node as any).hash = '1a1832017f8c51171947b7bcedff4ae8';
+(node as any).hash = '3a3cc0605557629960d7aeaed367c339';
 export default node;

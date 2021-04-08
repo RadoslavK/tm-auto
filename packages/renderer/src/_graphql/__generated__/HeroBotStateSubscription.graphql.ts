@@ -3,20 +3,20 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type BotState = "None" | "Paused" | "Pending" | "Running" | "Stopping";
-export type SignInFormBotStateSubscriptionVariables = {};
-export type SignInFormBotStateSubscriptionResponse = {
+export type BotState = "InitialScanning" | "None" | "Paused" | "Running" | "Stopping";
+export type HeroBotStateSubscriptionVariables = {};
+export type HeroBotStateSubscriptionResponse = {
     readonly botStateChanged: BotState;
 };
-export type SignInFormBotStateSubscription = {
-    readonly response: SignInFormBotStateSubscriptionResponse;
-    readonly variables: SignInFormBotStateSubscriptionVariables;
+export type HeroBotStateSubscription = {
+    readonly response: HeroBotStateSubscriptionResponse;
+    readonly variables: HeroBotStateSubscriptionVariables;
 };
 
 
 
 /*
-subscription SignInFormBotStateSubscription {
+subscription HeroBotStateSubscription {
   botStateChanged
 }
 */
@@ -36,7 +36,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SignInFormBotStateSubscription",
+    "name": "HeroBotStateSubscription",
     "selections": (v0/*: any*/),
     "type": "Subscription",
     "abstractKey": null
@@ -45,18 +45,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "SignInFormBotStateSubscription",
+    "name": "HeroBotStateSubscription",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "b0c2b3819ad22f0ca71374e6b1e6b42a",
+    "cacheID": "b0ff8385d6a43c65798af393b8ad6ca3",
     "id": null,
     "metadata": {},
-    "name": "SignInFormBotStateSubscription",
+    "name": "HeroBotStateSubscription",
     "operationKind": "subscription",
-    "text": "subscription SignInFormBotStateSubscription {\n  botStateChanged\n}\n"
+    "text": "subscription HeroBotStateSubscription {\n  botStateChanged\n}\n"
   }
 };
 })();
-(node as any).hash = 'eb3a0b71907b3df1d5726edbad1edc47';
+(node as any).hash = '18324b0ea9a0baa73b2968224b4b1b02';
 export default node;

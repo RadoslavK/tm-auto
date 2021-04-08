@@ -38,6 +38,8 @@ export class Village {
 
   public readonly resources: VillageResources = new VillageResources();
 
+  public scanned: boolean = false;
+
   constructor(params: PartialFields<Village> = {}) {
     mergeDefaults(this, params);
   }

@@ -11,4 +11,7 @@ export class Coords implements CoordsModel {
   }
 
   public toString = (): string => `[${this.x}|${this.y}]`;
+
+  public equalsTo = (otherCoords: CoordsModel): boolean =>
+    this.x === otherCoords.x && this.y === otherCoords.y;
 }

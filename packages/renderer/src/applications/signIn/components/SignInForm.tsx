@@ -30,19 +30,14 @@ import {
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { nameOf } from 'shared/utils/nameOf.js';
 
-import type { SignInFormBotStateSubscription } from '../../../_graphql/__generated__/SignInFormBotStateSubscription.graphql.js';
 import type {
   AccountInput,
   SignInFormCreateAccountMutation,
 } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql.js';
 import type { SignInFormLastSignedAccountIdSubscription } from '../../../_graphql/__generated__/SignInFormLastSignedAccountIdSubscription.graphql.js';
-import type {
-  SignInFormQuery,
-  SignInFormQueryResponse,
-} from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
+import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
 import { Accounts } from './Accounts.js';
@@ -96,7 +91,6 @@ export enum SignInFormDialogType {
 
 const signInFormQuery = graphql`
   query SignInFormQuery {
-    botState
     lastSignedAccountId
   }
 `;
@@ -133,12 +127,6 @@ const deleteAccountMutation = graphql`
     }
 `;
 
-const botStateSubscription = graphql`
-  subscription SignInFormBotStateSubscription {
-      botStateChanged
-  }
-`;
-
 const lastSignedAccountIdSubscription = graphql`
   subscription SignInFormLastSignedAccountIdSubscription {
       lastSignedAccountIdUpdated
@@ -146,26 +134,13 @@ const lastSignedAccountIdSubscription = graphql`
 `;
 
 export const SignInForm: React.FC = () => {
-  const {
-    botState,
-    lastSignedAccountId,
-  } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {}, { fetchPolicy: 'store-and-network' });
-
-  const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormBotStateSubscription> => ({
-    subscription: botStateSubscription,
-    variables: {},
-    updater: (store, data) => {
-      store.getRoot().setValue(data.botStateChanged, nameOf<SignInFormQueryResponse>('botState'));
-    },
-  }), []);
-
-  useSubscription(botStateSubscriptionConfig);
+  const { lastSignedAccountId } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const lastSignedAccountIdSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormLastSignedAccountIdSubscription> => ({
     subscription: lastSignedAccountIdSubscription,
     variables: {},
     updater: (store, data) => {
-      store.getRoot().setValue(data.lastSignedAccountIdUpdated, nameOf<SignInFormQueryResponse>('lastSignedAccountId'));
+      store.getRoot().setValue(data.lastSignedAccountIdUpdated, 'lastSignedAccountId');
     },
   }), []);
 
@@ -192,17 +167,20 @@ export const SignInForm: React.FC = () => {
   const [deleteAccount] = useMutation<SignInFormDeleteAccountMutation>(deleteAccountMutation);
   const [signIn] = useMutation<SignInFormSignInMutation>(signInMutation);
 
-  const disabled = botState === 'Pending';
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const disabled = isSigningIn;
 
   const onSignIn = (): void => {
-    if (selectedAccountId) {
-      signIn({
-        variables: { accountId: selectedAccountId },
-        optimisticUpdater: (store) => {
-          store.getRoot().setValue('Pending', 'botState');
-        },
-      });
+    if (!selectedAccountId) {
+      return;
     }
+
+    setIsSigningIn(true);
+
+    signIn({
+      variables: { accountId: selectedAccountId },
+      onCompleted: () => setIsSigningIn(false),
+    });
   };
 
   const onSubmitForm = (account: AccountInput): void => {

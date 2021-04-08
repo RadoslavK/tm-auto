@@ -9,7 +9,6 @@ export type VillageQueryVariables = {
 };
 export type VillageQueryResponse = {
     readonly village: {
-        readonly id: string;
         readonly resources: {
             readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
@@ -27,10 +26,10 @@ query VillageQuery(
   $villageId: ID!
 ) {
   village(villageId: $villageId) {
-    id
     resources {
       ...VillageResources_villageResources
     }
+    id
   }
 }
 
@@ -75,31 +74,24 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "wood",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "wood",
+  "name": "clay",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "clay",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "iron",
   "storageKey": null
 },
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -121,7 +113,6 @@ return {
         "name": "village",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -159,7 +150,6 @@ return {
         "name": "village",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -176,10 +166,10 @@ return {
                 "name": "amount",
                 "plural": false,
                 "selections": [
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
-                  (v6/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -230,14 +220,21 @@ return {
                 "name": "production",
                 "plural": false,
                 "selections": [
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
-                  (v5/*: any*/),
-                  (v6/*: any*/)
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
             ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
             "storageKey": null
           }
         ],
@@ -246,14 +243,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4bb72b85ec114b219617a186cd11a7a4",
+    "cacheID": "739a9ea73308ca93aba343442e4e8ee8",
     "id": null,
     "metadata": {},
     "name": "VillageQuery",
     "operationKind": "query",
-    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    id\n    resources {\n      ...VillageResources_villageResources\n    }\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    resources {\n      ...VillageResources_villageResources\n    }\n    id\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '0da774721506109edddcc1bf3b6b6692';
+(node as any).hash = 'f4309953c994826866f631534f4f8823';
 export default node;

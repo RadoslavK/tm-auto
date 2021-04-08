@@ -4,34 +4,43 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type VillageSubscriptionVariables = {
-    villageId: string;
-};
-export type VillageSubscriptionResponse = {
+export type VillagesVillageSubscriptionVariables = {};
+export type VillagesVillageSubscriptionResponse = {
     readonly villageUpdated: {
         readonly id: string;
+        readonly scanned: boolean;
         readonly resources: {
             readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
+        readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     };
 };
-export type VillageSubscription = {
-    readonly response: VillageSubscriptionResponse;
-    readonly variables: VillageSubscriptionVariables;
+export type VillagesVillageSubscription = {
+    readonly response: VillagesVillageSubscriptionResponse;
+    readonly variables: VillagesVillageSubscriptionVariables;
 };
 
 
 
 /*
-subscription VillageSubscription(
-  $villageId: ID!
-) {
-  villageUpdated(villageId: $villageId) {
+subscription VillagesVillageSubscription {
+  villageUpdated {
     id
+    scanned
     resources {
       ...VillageResources_villageResources
     }
+    ...VillageSideItem_village
   }
+}
+
+fragment VillageName_village on Village {
+  coords {
+    x
+    y
+  }
+  isCapital
+  name
 }
 
 fragment VillageResources_villageResources on VillageResources {
@@ -54,52 +63,51 @@ fragment VillageResources_villageResources on VillageResources {
     crop
   }
 }
+
+fragment VillageSideItem_village on Village {
+  id
+  scanned
+  ...VillageName_village
+}
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "villageId"
-  }
-],
-v1 = [
-  {
-    "kind": "Variable",
-    "name": "villageId",
-    "variableName": "villageId"
-  }
-],
-v2 = {
+var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = {
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "scanned",
+  "storageKey": null
+},
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "wood",
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "clay",
   "storageKey": null
 },
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "iron",
   "storageKey": null
 },
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -108,20 +116,21 @@ v6 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "VillageSubscription",
+    "name": "VillagesVillageSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": null,
         "concreteType": "Village",
         "kind": "LinkedField",
         "name": "villageUpdated",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v0/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -137,6 +146,11 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "VillageSideItem_village"
           }
         ],
         "storageKey": null
@@ -147,19 +161,20 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "VillageSubscription",
+    "name": "VillagesVillageSubscription",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": null,
         "concreteType": "Village",
         "kind": "LinkedField",
         "name": "villageUpdated",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v0/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -176,10 +191,10 @@ return {
                 "name": "amount",
                 "plural": false,
                 "selections": [
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
-                  (v6/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -230,14 +245,53 @@ return {
                 "name": "production",
                 "plural": false,
                 "selections": [
+                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
-                  (v5/*: any*/),
-                  (v6/*: any*/)
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
             ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Coords",
+            "kind": "LinkedField",
+            "name": "coords",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "x",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "y",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "isCapital",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "name",
             "storageKey": null
           }
         ],
@@ -246,14 +300,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7f8cf726b077d103ed21e1b978d5a65f",
+    "cacheID": "658126be063a44e46910a86eba524010",
     "id": null,
     "metadata": {},
-    "name": "VillageSubscription",
+    "name": "VillagesVillageSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillageSubscription(\n  $villageId: ID!\n) {\n  villageUpdated(villageId: $villageId) {\n    id\n    resources {\n      ...VillageResources_villageResources\n    }\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "subscription VillagesVillageSubscription {\n  villageUpdated {\n    id\n    scanned\n    resources {\n      ...VillageResources_villageResources\n    }\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = '8b4ff10d0c670c9a0ad17d25c98f0336';
+(node as any).hash = 'ab6edcbc7e23484d83ddb58a4dea596d';
 export default node;

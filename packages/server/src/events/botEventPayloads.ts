@@ -1,5 +1,6 @@
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
+import type { GameInfo } from '../_models/gameInfo.js';
 import type { LogEntry } from '../_models/logs/logEntry.js';
 import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { TaskType } from '../_models/misc/taskType.js';
@@ -125,4 +126,8 @@ export type BotEventPayloads = {
   [BotEvent.MapSearchFinished]: {
     readonly tiles: readonly MapSearchVillageTile[];
   };
+
+  [BotEvent.GameInfoUpdated]: {
+    readonly gameInfo: GameInfo;
+  }
 };

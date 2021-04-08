@@ -162,7 +162,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   AdventureCriteria: "Closest" | "Furthest" | "Random"
-  BotState: "None" | "Paused" | "Pending" | "Running" | "Stopping"
+  BotState: "InitialScanning" | "None" | "Paused" | "Running" | "Stopping"
   ClaimHeroResourcesReason: "AutoBuild" | "AutoParty" | "AutoUnits"
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "OnAdventure" | "Reviving" | "Unknown"
@@ -383,6 +383,7 @@ export interface NexusGenObjects {
     isCapital: boolean; // Boolean!
     name: string; // String!
     resources: NexusGenRootTypes['VillageResources']; // VillageResources!
+    scanned: boolean; // Boolean!
   }
   VillageCapacity: { // root type
     granary: number; // Int!
@@ -752,6 +753,7 @@ export interface NexusGenFieldTypes {
     nextVillageTaskExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
     onBuildingSpotUpdated: NexusGenRootTypes['BuildingSpot']; // BuildingSpot!
     onCrannyCapacityUpdated: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
+    onGameInfoUpdated: NexusGenRootTypes['GameInfo']; // GameInfo!
     queuedBuildingUpdated: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     villageUpdated: NexusGenRootTypes['Village']; // Village!
     villagesUpdated: NexusGenRootTypes['Village'][]; // [Village!]!
@@ -782,6 +784,7 @@ export interface NexusGenFieldTypes {
     isCapital: boolean; // Boolean!
     name: string; // String!
     resources: NexusGenRootTypes['VillageResources']; // VillageResources!
+    scanned: boolean; // Boolean!
   }
   VillageCapacity: { // field return type
     granary: number; // Int!
@@ -1140,6 +1143,7 @@ export interface NexusGenFieldTypeNames {
     nextVillageTaskExecutionChanged: 'Timestamp'
     onBuildingSpotUpdated: 'BuildingSpot'
     onCrannyCapacityUpdated: 'VillageCrannyCapacity'
+    onGameInfoUpdated: 'GameInfo'
     queuedBuildingUpdated: 'ModificationPayload'
     villageUpdated: 'Village'
     villagesUpdated: 'Village'
@@ -1170,6 +1174,7 @@ export interface NexusGenFieldTypeNames {
     isCapital: 'Boolean'
     name: 'String'
     resources: 'VillageResources'
+    scanned: 'Boolean'
   }
   VillageCapacity: { // field return type name
     granary: 'Int'
@@ -1424,9 +1429,6 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     queuedBuildingUpdated: { // args
-      villageId: string; // ID!
-    }
-    villageUpdated: { // args
       villageId: string; // ID!
     }
   }

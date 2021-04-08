@@ -67,20 +67,18 @@ export const App: React.FC = () => {
           <RecoilRoot>
             <EnsureGraphQL socketName={socketName}>
               <EnsureSignedIn>
-                <EnsureGlobalState>
-                  <EnsureTitle>
-                    <div className={classes.root}>
-                      <CssBaseline />
-                      <Navigation />
-                      <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <GraphiQL />
-                        <SettingsManagement />
-                        <MainRoutes />
-                      </main>
-                    </div>
-                  </EnsureTitle>
-                </EnsureGlobalState>
+                <EnsureGlobalState />
+                <EnsureTitle />
+                <div className={classes.root}>
+                  <CssBaseline />
+                  <Navigation />
+                  <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <GraphiQL />
+                    <SettingsManagement />
+                    <MainRoutes />
+                  </main>
+                </div>
               </EnsureSignedIn>
             </EnsureGraphQL>
           </RecoilRoot>

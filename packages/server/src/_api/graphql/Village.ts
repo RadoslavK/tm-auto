@@ -38,6 +38,7 @@ export const Village = objectType({
     t.string('name');
     t.field('resources', { type: VillageResources });
     t.boolean('isCapital');
+    t.boolean('scanned');
   },
 });
 
@@ -121,11 +122,7 @@ export const RefreshVillageMutation = mutationField(t => {
 export const VillageUpdatedSubscription = subscriptionField(t => {
   t.field('villageUpdated', {
     type: Village,
-    args: {
-      villageId: idArg(),
-    },
     ...subscribeToEvent(BotEvent.VillageUpdated, {
-      filter: (p, args) => p.village.id === args.villageId,
       resolve: (p) => p.village,
     }),
   });

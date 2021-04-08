@@ -12,14 +12,12 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
-import { nameOf } from 'shared/utils/nameOf.js';
 
 import type { VillagesActiveVillageIdChangedSubscription } from '../../../_graphql/__generated__/VillagesActiveVillageIdChangedSubscription.graphql.js';
-import type {
-  VillagesQuery,
-  VillagesQueryResponse,
-} from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
+import type { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql.js';
+import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 import type { VillagesSubscription } from '../../../_graphql/__generated__/VillagesSubscription.graphql.js';
+import type { VillagesVillageSubscription } from '../../../_graphql/__generated__/VillagesVillageSubscription.graphql.js';
 import { Village } from './Village.js';
 import { VillageSideItem } from './VillageSideItem.js';
 
@@ -32,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-type VillageRouteParams = {
+export type VillageRouteParams = {
   readonly id: string;
 };
 
@@ -40,16 +38,23 @@ const villagesQuery = graphql`
     query VillagesQuery {
         villages {
             id
+            scanned
             ...VillageSideItem_village
         }
-        activeVillageId
     }
+`;
+
+const activeVillageIdQuery = graphql`
+  query VillagesActiveVillageIdQuery {
+      activeVillageId
+  }
 `;
 
 const villagesSubscription = graphql`
    subscription VillagesSubscription {
        villagesUpdated {
            id
+           scanned
            ...VillageSideItem_village
        }
    }
@@ -61,18 +66,32 @@ const activeVillageIdChangedSubscription = graphql`
   }
 `;
 
+const villageSubscription = graphql`
+    subscription VillagesVillageSubscription {
+        villageUpdated {
+            id
+            scanned
+            resources {
+                ...VillageResources_villageResources
+            }
+            ...VillageSideItem_village
+        }
+    }
+`;
+
 export const Villages: React.FC = () => {
   const classes = useStyles();
   const match = useRouteMatch();
 
-  const { activeVillageId, villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { activeVillageId } = useLazyLoadQuery<VillagesActiveVillageIdQuery>(activeVillageIdQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesSubscription> => ({
     subscription: villagesSubscription,
     variables: {},
     updater: (store) => {
       const newRecords = store.getPluralRootField('villagesUpdated');
-      store.getRoot().setLinkedRecords(newRecords, nameOf<VillagesQueryResponse>('villages'));
+      store.getRoot().setLinkedRecords(newRecords, 'villages');
     },
   }), []);
 
@@ -82,34 +101,31 @@ export const Villages: React.FC = () => {
     subscription: activeVillageIdChangedSubscription,
     variables: {},
     updater: (store, data) => {
-      store.getRoot().setValue(data.activeVillageIdChanged, nameOf<VillagesQueryResponse>('activeVillageId'));
+      store.getRoot().setValue(data.activeVillageIdChanged, 'activeVillageId');
     },
   }), []);
 
   useSubscription(activeVillageIdChangedSubscriptionConfig);
 
+  const villageSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesVillageSubscription> => ({
+    subscription: villageSubscription,
+    variables: {},
+  }), []);
+
+  useSubscription(villageSubscriptionConfig);
+
+  const scannedVillages = useMemo(() => villages.filter(v => v.scanned), [villages]);
+
   return (
     <div className={classes.root}>
       <div className={classes.sideMenu}>
-        <Route
-          path={`${match.path}/:id`}
-          render={props => {
-            const { id } = (props.match.params as VillageRouteParams);
-
-            return (
-              <>
-                {villages.map((village) => (
-                  <VillageSideItem
-                    key={village.id}
-                    isVillageActive={village.id === activeVillageId}
-                    isVillageSelected={village.id === id}
-                    village={village}
-                  />
-                ))}
-              </>
-            );
-          }}
-        />
+        {villages.map((village) => (
+          <VillageSideItem
+            key={village.id}
+            isVillageActive={village.id === activeVillageId}
+            village={village}
+          />
+        ))}
       </div>
       <Switch>
         <Route
@@ -125,8 +141,11 @@ export const Villages: React.FC = () => {
             );
           }}
         />
-        {villages.length > 0 && (
-          <Redirect to={`${match.url}/${villages[0].id}`} />
+        {scannedVillages.length > 0 && (
+          <Redirect to={`${match.url}/${scannedVillages[0].id}`} />
+        )}
+        {villages.length === 0 && (
+          <div>No village was loaded yet</div>
         )}
       </Switch>
     </div>

@@ -10,7 +10,7 @@ import { shuffle } from '../utils/shuffle.js';
 import { updateBuildings } from './actions/buildings/updateBuildings.js';
 import { ensurePage } from './actions/ensurePage.js';
 import { ensureVillageSelected } from './actions/ensureVillageSelected.js';
-import { updatePlayerInfo } from './actions/player/updatePlayerInfo.js';
+import { updateCapitalAndAlly } from './actions/player/updateCapitalAndAlly.js';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages.js';
 import { updateResources } from './actions/village/updateResources.js';
 import {
@@ -75,7 +75,7 @@ export class TaskManager {
     );
     await updateNewOldVillages();
     await updateHeroInformation();
-    await updatePlayerInfo();
+    await updateCapitalAndAlly();
 
     for (const task of this._generalTasks) {
       await task.execute();
@@ -84,8 +84,11 @@ export class TaskManager {
 
   private doVillageTasks = async (): Promise<void> => {
     const villages = AccountContext.getContext().villageService.allVillages();
+    const scannedVillages = shuffle(villages.filter(v => v.scanned));
+    const notScannedVillages = shuffle(villages.filter(v => !v.scanned));
 
-    for (const village of shuffle(villages)) {
+    //  Scan not scanned villages first
+    for (const village of notScannedVillages.concat(scannedVillages)) {
       if (
         !AccountContext.getContext().settingsService.village(village.id).general.get()
           .allowTasks
@@ -113,12 +116,9 @@ export class TaskManager {
       }
 
       await ensureVillageSelected(village.id);
-
       await updateResources();
       await updateBuildings();
-
       await this._autoAdventureTask.execute();
-
       await taskEngine.execute();
 
       publishPayloadEvent(BotEvent.VillageUpdated, { village });
