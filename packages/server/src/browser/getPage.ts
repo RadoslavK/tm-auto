@@ -20,16 +20,22 @@ const stealth = pluginStealth();
 // @ts-ignore
 stealth.onBrowser = () => {};
 
-const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => ({
-  // bundle chrome or something.. with cookies etc??
-  executablePath: GeneralSettingsService.getService().get().chromePath,
-  //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
-  //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
-  headless: GeneralSettingsService.getService().get().headlessChrome,
-  slowMo: 25,
-  userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
-  args: ['--mute-audio'],
-});
+const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => {
+  const headless = GeneralSettingsService.getService().get().headlessChrome;
+
+  return {
+    // bundle chrome or something.. with cookies etc??
+    executablePath: GeneralSettingsService.getService().get().chromePath,
+    //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
+    //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
+    headless,
+    slowMo: 25,
+    userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
+    args: ['--mute-audio', ...(headless ? [] : ['--start-maximized'])],
+    //  TODO wrong types again, but should disable the default 800x600 one
+    defaultViewport: null as any,
+  };
+};
 
 let browser: Browser | null;
 let page: Page | null;
