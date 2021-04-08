@@ -205,7 +205,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   };
 
   const onDequeue = (e: React.MouseEvent) => {
-    if (e.ctrlKey) {
+    if (e.ctrlKey && buildingFragment.startingLevel !== buildingFragment.targetLevel) {
       if (buildingFragment.startingLevel + 1 === buildingFragment.targetLevel) {
         dequeueBuilding(buildingFragment.targetLevel);
       } else {

@@ -159,6 +159,8 @@ export class BuildingQueueService {
       //  handles updates too
       const removedBuildings = await this.removeAndCorrectQueue({
         queueIds: new Set<string>(shouldRemoveWholeBuilding ? [queueId] : []),
+        //  No building was removed but was updated so trigger update
+        forceUpdate: !shouldRemoveWholeBuilding,
       });
 
       return {
