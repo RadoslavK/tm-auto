@@ -136,7 +136,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
     });
   };
 
-  const onDequeue = (level?: number) => {
+  const dequeueBuilding = (level?: number) => {
     dequeue({
       variables: { input: { queueId: buildingFragment.id, villageId, level } },
       updater: (store) => {
@@ -195,7 +195,26 @@ export const QueuedBuildingActions: React.FC<Props> = ({
   };
 
   const isSplittable = buildingFragment.startingLevel !== buildingFragment.targetLevel;
-  const openSplitBuildingDialog = () => setDialog(DialogType.Split);
+
+  const onSplit = () => {
+    if (buildingFragment.startingLevel + 1 === buildingFragment.targetLevel) {
+      splitBuilding(buildingFragment.targetLevel);
+    } else {
+      setDialog(DialogType.Split);
+    }
+  };
+
+  const onDequeue = (e: React.MouseEvent) => {
+    if (e.ctrlKey) {
+      if (buildingFragment.startingLevel + 1 === buildingFragment.targetLevel) {
+        dequeueBuilding(buildingFragment.targetLevel);
+      } else {
+        setDialog(DialogType.Dequeue);
+      }
+    } else {
+      dequeueBuilding();
+    }
+  };
 
   return (
     <div className={clsx(className, classes.root)}>
@@ -205,19 +224,13 @@ export const QueuedBuildingActions: React.FC<Props> = ({
       />
       <button
         className={clsx(classes.image, classes.delete)}
-        onClick={(e) => {
-          if (e.ctrlKey) {
-            setDialog(DialogType.Dequeue);
-          } else {
-            onDequeue();
-          }
-        }}
+        onClick={onDequeue}
       />
       {isSplittable && (
         <>
           <button
             className={clsx(classes.image, classes.split)}
-            onClick={openSplitBuildingDialog}
+            onClick={onSplit}
           />
           <Dialog open={dialog === DialogType.Split} onClose={closeDialog}>
             <MultiLevelDialog
@@ -232,7 +245,7 @@ export const QueuedBuildingActions: React.FC<Props> = ({
               maxLevel={buildingFragment.targetLevel - 1}
               onSelect={(level) => {
                 closeDialog();
-                return onDequeue(level + 1);
+                return dequeueBuilding(level + 1);
               }}
             />
           </Dialog>
