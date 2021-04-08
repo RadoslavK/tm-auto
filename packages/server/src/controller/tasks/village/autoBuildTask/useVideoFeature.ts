@@ -19,7 +19,12 @@ export const useVideoFeature = async (): Promise<boolean> => {
     upgradeBtn.click(),
   ]);
 
-  await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+  // trigger watching video in headless mode
+  const watchVideoBtn = await page.$('.green[onclick*=showVideo]');
+  await watchVideoBtn?.click();
+
+  //  The ad can be more than the default 30s
+  await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60 * 1000 });
 
   return true;
 };
