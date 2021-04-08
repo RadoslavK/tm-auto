@@ -85,6 +85,7 @@
 - Proxy
 - Cookies - verify it works etc
 - Operation times/hours
+- Add humanize plugin - puppeteer-extra, currently in beta phase
 
 ## Code Control
 

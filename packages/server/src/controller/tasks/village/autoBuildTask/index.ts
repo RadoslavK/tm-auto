@@ -315,7 +315,12 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       const buildTime = buildTimeText && Duration.fromText(buildTimeText);
 
       const videoFeatureSettings = AccountContext.getContext().settingsService.account.get().autoBuild.videoFeature;
-      const usedVideoFeature = videoFeatureSettings.allow && buildTime && buildTime.getTotalSeconds() >= videoFeatureSettings.minBuildTime.getTotalSeconds()
+      const usedVideoFeature = videoFeatureSettings.allow
+        && queuedBuilding.startingLevel !== 1
+        && queuedBuilding.type !== BuildingType.Residence
+        && queuedBuilding.type !== BuildingType.Palace
+        && buildTime
+        && buildTime.getTotalSeconds() >= videoFeatureSettings.minBuildTime.getTotalSeconds()
         ? await useVideoFeature()
         : false;
 
