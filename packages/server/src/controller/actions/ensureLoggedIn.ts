@@ -53,7 +53,10 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   acceptCookies?.click();
 
   //  TODO verify successful login action
-  await page.click('form[name=login] button[type=submit]');
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    page.click('form[name=login] button[type=submit]'),
+  ]);
 
   AccountContext.getContext().logsService.logText('Logged in.');
 

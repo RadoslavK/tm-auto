@@ -136,7 +136,6 @@
 - Recover from failed to navigate pages/clicks. Throw custom error instance.
 - Handle and Recover from Service Unavailable that happens rather often
 - If there is some timeout during login then stop the action
-- First login often fails and always on /options exact: false route but its present on the page, wtf?
 
 ## Inspiration / Future
 
