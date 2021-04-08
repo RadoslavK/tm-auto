@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { TimeoutError } from 'puppeteer-core';
 import { formatTime } from 'shared/utils/formatTime.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
@@ -198,7 +197,9 @@ export class ControllerService {
 
     await killBrowser();
 
-    return { allowContinue: error instanceof TimeoutError };
+    //  TODO check against instanceof TimeoutError but it has broken typings so import does not work
+    //  https://github.com/puppeteer/puppeteer/issues/6979
+    return { allowContinue: error.name === 'TimeoutError' };
   };
 
   public signIn = async (accountId: string): Promise<void> => {

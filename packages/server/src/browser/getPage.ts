@@ -38,6 +38,7 @@ export const createPage = async (): Promise<Page> => {
   if (!browser) {
     const options = getChromeOptions();
     //  TODO: puppeteer v5+ broke a lot of types so it might be fixed in future
+    //https://github.com/puppeteer/puppeteer/issues/6979
     browser = await puppeteer.launch(options as any);
   }
 
