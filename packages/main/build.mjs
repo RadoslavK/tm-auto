@@ -20,7 +20,6 @@ const options = {
   bundle: true,
   external: [
     'electron',
-    'puppeteer-extra',
     'puppeteer-extra-plugin-stealth',
     'jsdom',
   ],
