@@ -13,6 +13,7 @@ import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
@@ -154,6 +155,8 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     if (!ongoingPartyDuration) {
       throw new Error('Did not find any ongoing party after holding it');
     }
+
+    await updateActualResources();
 
     const nextCoolDown = CoolDown.fromDuration(ongoingPartyDuration);
 
