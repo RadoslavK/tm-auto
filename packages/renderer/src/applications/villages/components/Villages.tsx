@@ -6,10 +6,9 @@ import {
   useSubscription,
 } from 'react-relay/hooks';
 import {
-  Redirect,
+  Navigate,
   Route,
-  Switch,
-  useRouteMatch,
+  Routes,
 } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
@@ -81,7 +80,6 @@ const villageSubscription = graphql`
 
 export const Villages: React.FC = () => {
   const classes = useStyles();
-  const match = useRouteMatch();
 
   const { villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
   const { activeVillageId } = useLazyLoadQuery<VillagesActiveVillageIdQuery>(activeVillageIdQuery, {}, { fetchPolicy: 'store-and-network' });
@@ -127,27 +125,15 @@ export const Villages: React.FC = () => {
           />
         ))}
       </div>
-      <Switch>
-        <Route
-          path={`${match.path}/:id`}
-          render={(props) => {
-            const { id } = (props.match.params as VillageRouteParams);
-
-            return (
-              <Village
-                key={id}
-                villageId={id}
-              />
-            );
-          }}
-        />
+      <Routes>
+        <Route path=":id/*" element={<Village />} />
         {scannedVillages.length > 0 && (
-          <Redirect to={`${match.url}/${scannedVillages[0].id}`} />
+          <Route path="*" element={<Navigate to={scannedVillages[0].id} />} />
         )}
-        {villages.length === 0 && (
-          <div>No village was loaded yet</div>
-        )}
-      </Switch>
+      </Routes>
+      {villages.length === 0 && (
+        <div>No village was loaded yet</div>
+      )}
     </div>
   );
 };

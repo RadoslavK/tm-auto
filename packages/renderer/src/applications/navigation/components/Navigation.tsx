@@ -70,9 +70,7 @@ export const Navigation: React.FC = () => {
 
   useSubscription(subscriptionConfig);
 
-  const currentItemIndex = navigationApps.findIndex((app) =>
-    pathname.startsWith(app.path),
-  );
+  const currentItemIndex = navigationApps.findIndex((app) => pathname.startsWith(app.path));
 
   if (currentItemIndex === -1) {
     return null;

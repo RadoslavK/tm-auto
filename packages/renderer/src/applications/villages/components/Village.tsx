@@ -12,13 +12,16 @@ import {
   useMutation,
 } from 'react-relay/hooks';
 import {
+  useMatch,
+  useParams,
+} from 'react-router';
+import {
   Link,
-  Redirect,
+  Navigate,
   Route,
-  Switch,
-  useHistory,
+  Routes,
   useLocation,
-  useRouteMatch,
+  useNavigate,
 } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
@@ -41,6 +44,7 @@ import {
 } from '../../units/components/Units.js';
 import { CrannyCapacity } from './CrannyCapacity.js';
 import { VillageResources } from './VillageResources.js';
+import type { VillageRouteParams } from './Villages.js';
 import { VillageTasksActivity } from './VillageTasksActivity.js';
 
 const navigationPaths = ['buildings', 'units', 'parties', 'tasks-activity'] as const;
@@ -51,10 +55,6 @@ type NavigationItem = {
   readonly path: NavigationPath;
   readonly tabType?: VillageSettingsTabType;
   readonly preloadData?: () => void;
-};
-
-type Props = {
-  readonly villageId: string;
 };
 
 const villageRefreshVillageMutation = graphql`
@@ -73,28 +73,28 @@ const villageQuery = graphql`
     }
 `;
 
-export const Village: React.FC<Props> = ({ villageId }) => {
+export const Village: React.FC = () => {
+  const villageId = (useParams() as VillageRouteParams).id;
+
   const { buildingsQueryRef, reloadBuildingsQuery } = useBuildingsQuery();
   const { unitSettingsQueryRef, reloadUnitSettingsQuery } = useUnitsQuery();
-  const match = useRouteMatch();
   const location = useLocation();
   const prevVillageId = usePrevious(villageId);
+  const currentTab = useMatch('/villages/:id/:tab')?.params.tab;
+  const isTabSelected = !!currentTab;
 
   useEffect(() => {
     if (villageId === prevVillageId) {
       return;
     }
 
-    if (location.pathname.endsWith(match.url)) {
-      reloadBuildingsQuery(villageId);
-    }
-    if (location.pathname.endsWith('buildings' as NavigationPath)) {
+    if (!isTabSelected || location.pathname.endsWith('buildings' as NavigationPath)) {
       reloadBuildingsQuery(villageId);
     }
     if (location.pathname.endsWith('units' as NavigationPath)) {
       reloadUnitSettingsQuery(villageId);
     }
-  }, [reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, location.pathname, match.url]);
+  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, location.pathname]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -130,7 +130,7 @@ export const Village: React.FC<Props> = ({ villageId }) => {
   const openSettings = (): void => setShowSettings(true);
   const closeSettings = (): void => setShowSettings(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [refreshVillage] = useMutation<VillageRefreshVillageMutation>(villageRefreshVillageMutation);
 
@@ -144,9 +144,9 @@ export const Village: React.FC<Props> = ({ villageId }) => {
 
   useEffect(() => {
     if (village === null) {
-      history.push('/villages');
+      navigate('..');
     }
-  }, [village, history]);
+  }, [village, navigate]);
 
   const getTabType = useCallback((tab: string): VillageSettingsTabType => {
     const navPart = navigation.find((n) => n.path === tab);
@@ -162,16 +162,36 @@ export const Village: React.FC<Props> = ({ villageId }) => {
     return navPart.tabType;
   }, [navigation]);
 
+
   if (village === null) {
     return null;
   }
 
-  const currentNavMatch = new RegExp(`${match.url}/(.*)/?`).exec(
-    location.pathname,
-  );
-  const currentNav = currentNavMatch && currentNavMatch[1];
   const showSettingsButton =
-    navigation.find((x) => x.path === currentNav)?.tabType !== undefined;
+    navigation.find((x) => x.path === currentTab)?.tabType !== undefined;
+
+  const getTabElement = (n: NavigationItem) => {
+    switch (n.path) {
+      case 'buildings':
+        return buildingsQueryRef && (
+          <Buildings buildingsQueryRef={buildingsQueryRef} />
+        );
+
+      case 'units':
+        return unitSettingsQueryRef && (
+          <Units unitSettingsQueryRef={unitSettingsQueryRef} />
+        );
+
+      case 'parties':
+        return <Parties />;
+
+      case 'tasks-activity':
+        return <VillageTasksActivity />;
+
+      default:
+        throw new Error(`Did not find component for path ${n.path}`);
+    }
+  };
 
   return (
     <div>
@@ -183,64 +203,29 @@ export const Village: React.FC<Props> = ({ villageId }) => {
       <button onClick={onRefreshVillage}>Refresh</button>
       <div>
         {navigation.map((n) => (
-          <Link key={n.path} to={`${match.url}/${n.path}`}>
+          <Link key={n.path} to={n.path}>
             <span onMouseEnter={n.preloadData}>
               {n.label}
             </span>
           </Link>
         ))}
       </div>
-      <Switch>
+      <Routes>
         {navigation.map((n) => (
           <Route
             key={n.path}
-            path={`${match.path}/${n.path}`}
-            render={() => {
-              switch (n.path) {
-                case 'buildings':
-                  return buildingsQueryRef && (
-                    <Suspense fallback={null}>
-                      <Buildings
-                        buildingsQueryRef={buildingsQueryRef}
-                      />
-                    </Suspense>
-                  );
-
-                case 'units':
-                  return unitSettingsQueryRef && (
-                    <Suspense fallback={null}>
-                      <Units unitSettingsQueryRef={unitSettingsQueryRef} />
-                    </Suspense>
-                  );
-
-                case 'parties':
-                  return <Parties />;
-
-                case 'tasks-activity':
-                  return <VillageTasksActivity />;
-
-                default:
-                  throw new Error(`Did not find component for path ${n.path}`);
-              }
-            }}
+            path={n.path}
+            element={(
+              <Suspense fallback={null}>
+                {getTabElement(n)}
+              </Suspense>
+            )}
           />
         ))}
-        <Redirect to={`${match.path}/${navigation[0].path}`} />
-      </Switch>
+        <Route path="*" element={<Navigate to={navigation[0].path} />} />
+      </Routes>
       <Dialog onClose={closeSettings} open={showSettings}>
-        <Route
-          path={`${match.path}/:tab`}
-          render={(props) => {
-            const { tab } = props.match.params;
-
-            return (
-              <VillageSettings
-                getTabType={getTabType}
-                tab={tab!}
-              />
-            );
-          }}
-        />
+        <VillageSettings getTabType={getTabType} tab={currentTab || navigation[0].path} />
       </Dialog>
     </div>
   );

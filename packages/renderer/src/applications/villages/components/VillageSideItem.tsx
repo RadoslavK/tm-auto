@@ -2,11 +2,8 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useFragment } from 'react-relay/hooks';
-import {
-  Link,
-  useLocation,
-  useRouteMatch,
-} from 'react-router-dom';
+import { useMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import type { VillageSideItem_village$key } from '../../../_graphql/__generated__/VillageSideItem_village.graphql.js';
 import { VillageName } from './VillageName.js';
@@ -57,14 +54,11 @@ export const VillageSideItem: React.FC<Props> = ({
   const villageFragment = useFragment(villageSideItemVillageFragment, village);
   const { id, scanned } = villageFragment;
 
-  const villageMatch = useRouteMatch<VillageRouteParams>({
-    path: '/villages/:id',
-  });
-
-  const isVillageSelected = villageMatch?.params.id === villageFragment.id;
+  const villageMatch = useMatch('/villages/:id');
+  const isVillageSelected = (villageMatch?.params as VillageRouteParams | undefined)?.id === villageFragment.id;
 
   const classes = useStyles({ isVillageSelected });
-  const location = useLocation();
+
   const path = location.pathname.replace(
     /villages\/(\d+)/,
     `villages/${id}`,

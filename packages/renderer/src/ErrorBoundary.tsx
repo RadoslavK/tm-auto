@@ -1,19 +1,16 @@
 import React, { ReactNode } from 'react';
-import {
-  Redirect,
-  RouteComponentProps,
-  withRouter,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-type Props = RouteComponentProps & {
+type Props = {
   readonly children: ReactNode;
+  readonly onReload: () => void;
 };
 
 type State = {
   readonly hasError: boolean;
 };
 
-class ErrorBoundaryComponent extends React.Component<Props, State> {
+class ErrorBoundary extends React.Component<Props, State> {
   static displayName = 'ErrorBoundary';
 
   static getDerivedStateFromError = (): State => ({ hasError: true });
@@ -22,16 +19,11 @@ class ErrorBoundaryComponent extends React.Component<Props, State> {
     hasError: false,
   };
 
-  private unregisterHistoryListener?: () => void = undefined;
-
-  componentDidMount() {
-    this.unregisterHistoryListener = this.props.history.listen(() => {
+  componentDidUpdate() {
+    if (this.state.hasError) {
+      this.props.onReload();
       this.setState({ hasError: false });
-    });
-  }
-
-  componentWillUnmount() {
-    this.unregisterHistoryListener?.();
+    }
   }
 
   render() {
@@ -41,10 +33,20 @@ class ErrorBoundaryComponent extends React.Component<Props, State> {
       return <>{this.props.children}</>;
     }
 
-    return (
-      <Redirect to="/" />
-    );
+    return null;
   }
 }
 
-export const ErrorBoundary = withRouter(ErrorBoundaryComponent);
+export const ErrorBoundaryContainer: React.FC = ({ children }) => {
+  const navigate = useNavigate();
+
+  return (
+    <ErrorBoundary onReload={() => navigate('/')}>
+      {children}
+    </ErrorBoundary>
+  );
+};
+
+ErrorBoundaryContainer.defaultProps = 'ErrorBoundaryContainer';
+
+export { ErrorBoundaryContainer as ErrorBoundary };
