@@ -15,8 +15,11 @@ import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextua
 import { ensureCookiesAreSubmitted } from '../controller/actions/ensureCookiesAreSubmitted.js';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected.js';
-import { initGameInfo } from '../controller/actions/player/initGameInfo.js';
-import { initializeCapitalAndAlly } from '../controller/actions/player/initializeCapitalAndAlly.js';
+import {
+  initGameInfo,
+  loadGameInfo,
+} from '../controller/actions/player/initGameInfo.js';
+import { updateCapitalAndAlly } from '../controller/actions/player/updateCapitalAndAlly.js';
 import { updateToken } from '../controller/actions/player/updateToken.js';
 import { refreshVillage } from '../controller/actions/village/refreshVillage.js';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages.js';
@@ -218,12 +221,14 @@ export class ControllerService {
 
       this.setState(BotState.InitialScanning);
 
+      await loadGameInfo();
+      await AccountContext.getContext().villageService.load();
       await ensureLoggedIn();
       await ensureCookiesAreSubmitted();
       await ensureContextualHelpIsOff();
       await initGameInfo();
       await updateToken();
-      const capitalVillageCoords = await initializeCapitalAndAlly();
+      const capitalVillageCoords = await updateCapitalAndAlly(false);
       await updateHeroInformation();
 
       publishPayloadEvent(BotEvent.GameInfoUpdated, { gameInfo: AccountContext.getContext().gameInfo });
@@ -236,9 +241,6 @@ export class ControllerService {
 
       //  Scan not previously scanned first
       for (const village of notScanned.concat(scanned)) {
-        const buildingQueueService = AccountContext.getContext().buildingQueueService.for(village.id);
-        await buildingQueueService.loadQueueAndUpdate();
-
         await ensureVillageSelected(village.id);
         await updateResources();
         await updateBuildings();

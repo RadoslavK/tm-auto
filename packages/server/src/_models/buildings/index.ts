@@ -20,6 +20,7 @@ type Events = {
   readonly onCrannyCapacityUpdate: () => void;
   readonly onMainBuildingLevelsChanged: () => void;
   readonly onOngoingUpdated: () => void;
+  readonly onActualAndOngoingUpdate: () => void;
 };
 
 export class Buildings {
@@ -95,6 +96,7 @@ export class Buildings {
     this.events.onOngoingUpdated();
 
     if (updatedAny) {
+      this.events.onActualAndOngoingUpdate();
       this.events.onCrannyCapacityUpdate();
     }
 

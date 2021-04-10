@@ -14,14 +14,18 @@ export class BuildingSpots {
         id: `buildingSpot:${generateId()}`,
       });
     }
-
-    Object.freeze(this._buildings);
   }
 
   public buildings = (): readonly BuildingSpot[] =>
     Object.values(this._buildings);
 
   public at = (fieldId: number): BuildingSpot => this._buildings[fieldId];
+
+  public set = (spots: ReadonlyArray<BuildingSpot>): void => {
+    spots.forEach(spot => {
+      this._buildings[spot.fieldId] = new BuildingSpot(spot);
+    });
+  };
 
   public ofType = (type: BuildingType): BuildingSpot | undefined =>
     this.buildings().find((x) => x.type === type);

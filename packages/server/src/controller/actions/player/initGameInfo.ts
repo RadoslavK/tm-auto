@@ -1,5 +1,5 @@
 import { Tribe } from '../../../_models/enums/tribe.js';
-import { GameInfo } from '../../../_models/gameInfo.js';
+import type { GameInfo } from '../../../_models/gameInfo.js';
 import { AccountContext } from '../../../accountContext.js';
 import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize.js';
 import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed.js';
@@ -16,9 +16,11 @@ const serialize = async (gameInfo: SerializableGameInfo, accId: string): Promise
   await fileService.save(path, gameInfo);
 };
 
-const load = async (gameInfo: GameInfo, accId: string): Promise<void> => {
+export const loadGameInfo = async (): Promise<void> => {
+  const accId = accountService.getCurrentAccount().id;
+  const { gameInfo } = AccountContext.getContext();
   const path = dataPathService.accountPath(accId).context.gameInfo;
-  const loadedInfo = await fileService.loadInstanceWithoutDefaultValue(path, GameInfo);
+  const loadedInfo = await fileService.loadWithoutDefaultValue<SerializableGameInfo>(path);
 
   if (!loadedInfo) {
     return;
@@ -33,8 +35,6 @@ const load = async (gameInfo: GameInfo, accId: string): Promise<void> => {
 export const initGameInfo = async (): Promise<void> => {
   const accId = accountService.getCurrentAccount().id;
   const { gameInfo } = AccountContext.getContext();
-
-  await load(gameInfo, accId);
 
   if (gameInfo.parsed) {
     return;

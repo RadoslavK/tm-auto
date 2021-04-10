@@ -60,6 +60,17 @@ class FileService {
     }
   };
 
+  public loadWithoutDefaultValue = <T extends unknown>(targetPath: string): T | null => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
+    try {
+      const file = fs.readFileSync(absolutePath);
+      return JSON.parse(file.toString()) as T;
+    } catch {
+      return null;
+    }
+  };
+
   public delete = async (targetPath: string): Promise<void> =>
     new Promise((resolve) => {
       const absolutePath = path.join(getServerAppDirectory(), targetPath);
@@ -75,6 +86,16 @@ class FileService {
         throw new Error(`Failed to delete account at ${absolutePath}`);
       }
     });
+
+  public getFiles = async (targetPath: string): Promise<ReadonlyArray<string>> => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
+
+    try {
+      return await fs.promises.readdir(absolutePath);
+    } catch {
+      return [];
+    }
+  };
 }
 
 export const fileService = new FileService();

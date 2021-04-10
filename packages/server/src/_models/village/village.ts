@@ -1,6 +1,7 @@
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
+import { AccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { publishPayloadEvent } from '../../pubSub.js';
 import { Buildings } from '../buildings';
@@ -24,6 +25,9 @@ export class Village {
       publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
     onMainBuildingLevelsChanged: () =>
       publishPayloadEvent(BotEvent.BuildingQueueTimesUpdated, { villageId: this.id }),
+    onActualAndOngoingUpdate: () => {
+      AccountContext.getContext().villageService.serialize([this.id]);
+    },
   });
 
   public readonly coords: Coords = new Coords();

@@ -15,7 +15,8 @@ type AccountSettingsPath = {
 
 type AccountContextPath = {
   readonly gameInfo: string;
-  readonly villages: string;
+  readonly villagesFolder: string;
+  readonly village: (id: string) => string;
 };
 
 type AccountPath = {
@@ -112,7 +113,8 @@ export class DataPathService {
 
     return {
       gameInfo: path.join(lPath, 'gameInfo.json'),
-      villages: path.join(lPath, 'villages.json'),
+      villagesFolder: path.join(lPath, 'villages'),
+      village: (villageId: string) => path.join(lPath, 'villages', `${villageId}.json`),
     };
   };
 

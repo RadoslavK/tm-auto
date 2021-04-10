@@ -7,9 +7,6 @@
     -finish Move to the top for it / move as high as possible
   
 ## New features
-- Store context like village ids, speed, tribe
-    - so it can be parsed only once
-    - and can remove old villages on login and faster render UI etc
 - Building pre-conditions
   - For building/block
   - Useful for Roman/free order so the bot would skip certain buildings until the right time
