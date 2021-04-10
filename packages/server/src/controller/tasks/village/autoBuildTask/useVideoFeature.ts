@@ -19,7 +19,10 @@ export const useVideoFeature = async (): Promise<boolean> => {
     upgradeBtn.click(),
   ]);
 
-  // trigger watching video in headless mode
+  // Wait a bit
+  await page.waitForTimeout(3 * 1000);
+
+  // trigger watching video if it was not started due to "ad block"
   const watchVideoBtn = await page.$('.green[onclick*=showVideo]');
   await watchVideoBtn?.click();
 

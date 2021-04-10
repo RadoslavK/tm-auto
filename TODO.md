@@ -90,6 +90,8 @@
 
 ## UX
 
+- Better village tabs (buildings/units) design
+- Show which village tab is highlighted: buildings/units...
 - Add relevant tooltips in UI
 - Remove scrolling from the main app window
 
@@ -113,7 +115,10 @@
 - Remove all custom mappers from API and replace with the actual resolve function
 
 ## Performance
-
+- puppeteer - reuse electron chromium?
+- cacheing queries/mutations at network level?
+- code splitting, load only components used
+  - https://reactrouter.com/web/guides/code-splitting
 - Store map search result and filter in GraphQL local cache.
 - Save 7x7 oases ids for each searched village tile so it does not have to be paired each time
 - Kill page when afk?
