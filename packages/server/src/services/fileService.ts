@@ -71,21 +71,18 @@ class FileService {
     }
   };
 
-  public delete = async (targetPath: string): Promise<void> =>
-    new Promise((resolve) => {
-      const absolutePath = path.join(getServerAppDirectory(), targetPath);
+  public delete = async (targetPath: string): Promise<void> => {
+    const absolutePath = path.join(getServerAppDirectory(), targetPath);
 
-      try {
-        if (fs.existsSync(absolutePath)) {
-          fs.rmdir(absolutePath, { recursive: true }, () => resolve());
-        } else {
-          resolve();
-        }
-      } catch (error) {
-        console.error(error);
-        throw new Error(`Failed to delete account at ${absolutePath}`);
+    try {
+      if (fs.existsSync(absolutePath)) {
+        await fs.promises.rm(absolutePath, { recursive: true });
       }
-    });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to delete account at ${absolutePath}`);
+    }
+  };
 
   public getFiles = async (targetPath: string): Promise<ReadonlyArray<string>> => {
     const absolutePath = path.join(getServerAppDirectory(), targetPath);
