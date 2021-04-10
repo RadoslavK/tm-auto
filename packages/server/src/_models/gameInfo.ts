@@ -1,3 +1,6 @@
+import type { PartialFields } from 'shared/types/fields.type.js';
+import { mergeDefaults } from 'shared/utils/merge.js';
+
 import { Tribe } from './enums/tribe.js';
 
 export enum TokenType {
@@ -25,4 +28,8 @@ export class GameInfo {
   };
 
   public mapSize: number = 200;
+
+  constructor(params: PartialFields<GameInfo> = {}) {
+    mergeDefaults(this, params);
+  }
 }
