@@ -185,7 +185,7 @@ export class SettingsManagementService {
   public exportAccounts = (zipPath: string) =>
     this.saveZip(zipPath, (zip) => {
       zip.file(
-        dataPathService.accountsPath(),
+        DataPathService.accountsPath(),
         JSON.stringify(accountService.getAccountsData()),
       );
     });
@@ -343,7 +343,7 @@ export class SettingsManagementService {
 
   public importAccounts = (zipPath: string) =>
     this.readZip(zipPath, async (zip) => {
-      await updateSettings(zip, dataPathService.accountsPath(), (accounts) => {
+      await updateSettings(zip, DataPathService.accountsPath(), (accounts) => {
         const newAccounts = new AccountsData(accounts);
 
         publishPayloadEvent(BotEvent.AccountsUpdated, {

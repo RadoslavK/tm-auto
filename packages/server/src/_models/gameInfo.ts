@@ -11,6 +11,8 @@ export type Token = {
 };
 
 export class GameInfo {
+  public parsed: boolean = false;
+
   public allyId: number | null = null;
 
   public speed = 0;

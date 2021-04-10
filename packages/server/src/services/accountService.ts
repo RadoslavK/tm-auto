@@ -1,7 +1,10 @@
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
-import { dataPathService } from './dataPathService.js';
+import {
+  DataPathService,
+  dataPathService,
+} from './dataPathService.js';
 import { fileService } from './fileService.js';
 
 export type UserAccount = {
@@ -41,7 +44,7 @@ export class AccountService {
   public currentAccountId: string | null = null;
 
   private saveAccounts = async (): Promise<void> =>
-    fileService.save(dataPathService.accountsPath(), this.accountsData);
+    fileService.save(DataPathService.accountsPath(), this.accountsData);
 
   public setCurrentAccountId = (id: string | null) => {
     this.currentAccountId = id;
@@ -165,7 +168,7 @@ export class AccountService {
 
   public loadAccountsData = (): AccountsData => {
     this.accountsData = fileService.loadInstance<AccountsData>(
-      dataPathService.accountsPath(),
+      DataPathService.accountsPath(),
       AccountsData,
     );
 

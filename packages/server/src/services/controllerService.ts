@@ -16,6 +16,7 @@ import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected.js';
 import { initGameInfo } from '../controller/actions/player/initGameInfo.js';
 import { initializeCapitalAndAlly } from '../controller/actions/player/initializeCapitalAndAlly.js';
+import { updateToken } from '../controller/actions/player/updateToken.js';
 import { refreshVillage } from '../controller/actions/village/refreshVillage.js';
 import { updateNewOldVillages } from '../controller/actions/village/updateNewOldVillages.js';
 import { updateResources } from '../controller/actions/village/updateResources.js';
@@ -219,6 +220,7 @@ export class ControllerService {
       await ensureLoggedIn();
       await ensureContextualHelpIsOff();
       await initGameInfo();
+      await updateToken();
       const capitalVillageCoords = await initializeCapitalAndAlly();
       await updateHeroInformation();
 

@@ -13,9 +13,15 @@ type AccountSettingsPath = {
   readonly hero: HeroSettingsPath;
 };
 
+type AccountContextPath = {
+  readonly gameInfo: string;
+  readonly villages: string;
+};
+
 type AccountPath = {
   readonly root: string;
   readonly settings: AccountSettingsPath;
+  readonly context: AccountContextPath;
 };
 
 type VillageSettingsPath = {
@@ -41,7 +47,7 @@ type ServerPath = {
 export class DataPathService {
   static generalPath = () => 'generalSettings.json';
 
-  public accountsPath = () => 'accounts.json';
+  static accountsPath = () => 'accounts.json';
 
   public serverPath = (accountId: string): ServerPath => {
     const { server } = accountService.getAccount(accountId);
@@ -62,6 +68,7 @@ export class DataPathService {
     return {
       root: lPath,
       settings: this.createAccountSettingsPath(lPath),
+      context: this.createAccountContextPath(lPath),
     };
   };
 
@@ -97,6 +104,15 @@ export class DataPathService {
       autoMentor: path.join(lPath, 'autoMentor.json'),
       account: path.join(lPath, 'general.json'),
       hero: this.createHeroSettingsPath(lPath),
+    };
+  };
+
+  private createAccountContextPath = (basePath: string): AccountContextPath => {
+    const lPath = path.join(basePath, 'context');
+
+    return {
+      gameInfo: path.join(lPath, 'gameInfo.json'),
+      villages: path.join(lPath, 'villages.json'),
     };
   };
 
