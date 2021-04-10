@@ -12,6 +12,7 @@ import {
 } from '../browser/getPage.js';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings.js';
 import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff.js';
+import { ensureCookiesAreSubmitted } from '../controller/actions/ensureCookiesAreSubmitted.js';
 import { ensureLoggedIn } from '../controller/actions/ensureLoggedIn.js';
 import { ensureVillageSelected } from '../controller/actions/ensureVillageSelected.js';
 import { initGameInfo } from '../controller/actions/player/initGameInfo.js';
@@ -218,6 +219,7 @@ export class ControllerService {
       this.setState(BotState.InitialScanning);
 
       await ensureLoggedIn();
+      await ensureCookiesAreSubmitted();
       await ensureContextualHelpIsOff();
       await initGameInfo();
       await updateToken();
