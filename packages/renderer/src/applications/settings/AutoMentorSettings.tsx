@@ -6,30 +6,22 @@ import React, {
   useState,
 } from 'react';
 import {
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { AutoMentorSettingsQuery } from '../../_graphql/__generated__/AutoMentorSettingsQuery.graphql.js';
+import type { AutoMentorSettings_autoMentorSettings$key } from '../../_graphql/__generated__/AutoMentorSettings_autoMentorSettings.graphql.js';
 import type { AutoMentorSettingsResetSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsResetSettingsMutation.graphql.js';
 import type { AutoMentorSettingsSubscription } from '../../_graphql/__generated__/AutoMentorSettingsSubscription.graphql.js';
 import type { AutoMentorSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsUpdateSettingsMutation.graphql.js';
-import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 
-graphql`
+const fragmentDef = graphql`
     fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {
         acceptDailyRewards
         acceptTaskRewards
     }
-`;
-
-const autoMentorSettingsQuery = graphql`
-  query AutoMentorSettingsQuery {
-      autoMentorSettings {
-          ...AutoMentorSettings_autoMentorSettings @relay(mask: false)
-      }
-  }
 `;
 
 const autoMentorSettingsUpdateSettingsMutation = graphql`
@@ -56,8 +48,12 @@ const subscription = graphql`
   }
 `;
 
-export const AutoMentorSettings: React.FC = () => {
-  const { autoMentorSettings } = useLazyLoadQuery<AutoMentorSettingsQuery>(autoMentorSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly settingsKey: AutoMentorSettings_autoMentorSettings$key;
+};
+
+export const AutoMentorSettings: React.FC<Props> = ({ settingsKey }) => {
+  const autoMentorSettings = useFragment(fragmentDef, settingsKey);
   const [updateSettings] = useMutation<AutoMentorSettingsUpdateSettingsMutation>(autoMentorSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoMentorSettingsResetSettingsMutation>(autoMentorSettingsResetSettingsMutation);
 
@@ -76,13 +72,12 @@ export const AutoMentorSettings: React.FC = () => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (autoMentorSettings) {
-      setState(autoMentorSettings);
-    }
+    setState(autoMentorSettings);
+    setHasChanges(false);
   }, [autoMentorSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: {
           settings: state,
@@ -95,18 +90,13 @@ export const AutoMentorSettings: React.FC = () => {
     }
   }, [state, hasChanges, updateSettings]);
 
-  const onCheckBoxChange = async (
-    e: React.FormEvent<HTMLInputElement>,
-  ): Promise<void> => {
+  const onCheckBoxChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
 

@@ -4,19 +4,19 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type BotState = "InitialScanning" | "None" | "Paused" | "Running" | "Stopping";
-export type SettingsManagementFormBotStateQueryVariables = {};
-export type SettingsManagementFormBotStateQueryResponse = {
+export type SettingsManagementBotStateQueryVariables = {};
+export type SettingsManagementBotStateQueryResponse = {
     readonly botState: BotState;
 };
-export type SettingsManagementFormBotStateQuery = {
-    readonly response: SettingsManagementFormBotStateQueryResponse;
-    readonly variables: SettingsManagementFormBotStateQueryVariables;
+export type SettingsManagementBotStateQuery = {
+    readonly response: SettingsManagementBotStateQueryResponse;
+    readonly variables: SettingsManagementBotStateQueryVariables;
 };
 
 
 
 /*
-query SettingsManagementFormBotStateQuery {
+query SettingsManagementBotStateQuery {
   botState
 }
 */
@@ -36,7 +36,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SettingsManagementFormBotStateQuery",
+    "name": "SettingsManagementBotStateQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -45,18 +45,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "SettingsManagementFormBotStateQuery",
+    "name": "SettingsManagementBotStateQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "f655d25b60e7026aa6edab7b9a9b4255",
+    "cacheID": "1efd53a7d5885ecc7b1001da6d16bafe",
     "id": null,
     "metadata": {},
-    "name": "SettingsManagementFormBotStateQuery",
+    "name": "SettingsManagementBotStateQuery",
     "operationKind": "query",
-    "text": "query SettingsManagementFormBotStateQuery {\n  botState\n}\n"
+    "text": "query SettingsManagementBotStateQuery {\n  botState\n}\n"
   }
 };
 })();
-(node as any).hash = '1f326b50d20221805b2b3d2befd0bf9f';
+(node as any).hash = 'a7f8eb273d158bd6faf66c531fa588ab';
 export default node;

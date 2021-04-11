@@ -23,7 +23,7 @@ const query = graphql`
 
 export const MainRoutes: React.FC = () => {
   const redirectElement = <Navigate to={navigationApps[0].path}/>;
-  const { isBotActive, nextTasksExecution } = useLazyLoadQuery<MainRoutesQuery>(query, {});
+  const { isBotActive, nextTasksExecution } = useLazyLoadQuery<MainRoutesQuery>(query, {}, { fetchPolicy: 'store-and-network' });
 
   return (
     <div>

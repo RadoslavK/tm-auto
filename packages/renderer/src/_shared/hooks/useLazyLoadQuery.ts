@@ -12,7 +12,9 @@ const _useLazyLoadQuery: typeof useLazyLoadQuery = (query, variables, options) =
     setFetchKey(new Date().valueOf());
   }, []);
 
-  return useLazyLoadQuery(query, variables, { ...options, fetchKey });
+  const hasOwnFetchKey = !!options?.hasOwnProperty('fetchKey');
+
+  return useLazyLoadQuery(query, variables, hasOwnFetchKey ? options : { ...options, fetchKey });
 };
 
 export { _useLazyLoadQuery as useLazyLoadQuery };

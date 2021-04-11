@@ -4,25 +4,19 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  useFragment,
+  useMutation,
+} from 'react-relay/hooks';
 
-import type { GeneralSettingsFormQuery } from '../../_graphql/__generated__/GeneralSettingsFormQuery.graphql.js';
+import type { GeneralSettingsForm_generalSettings$key } from '../../_graphql/__generated__/GeneralSettingsForm_generalSettings.graphql.js';
 import type { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql.js';
 import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql.js';
-import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 
-graphql`
+const fragmentDef = graphql`
   fragment GeneralSettingsForm_generalSettings on GeneralSettings {
     chromePath
     headlessChrome
-  }
-`;
-
-const generalSettingsFormQuery = graphql`
-  query GeneralSettingsFormQuery {
-      generalSettings {
-          ...GeneralSettingsForm_generalSettings @relay(mask: false)
-      }
   }
 `;
 
@@ -42,8 +36,12 @@ const generalSettingsFormResetSettingsMutation = graphql`
     }
 `;
 
-export const GeneralSettingsForm: React.FunctionComponent = () => {
-  const { generalSettings } = useLazyLoadQuery<GeneralSettingsFormQuery>(generalSettingsFormQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly settingsKey: GeneralSettingsForm_generalSettings$key;
+};
+
+export const GeneralSettingsForm: React.FC<Props> = ({ settingsKey }) => {
+  const generalSettings = useFragment(fragmentDef, settingsKey);
   const [updateSettings] = useMutation<GeneralSettingsFormUpdateSettingsMutation>(generalSettingsFormUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralSettingsFormResetSettingsMutation>(generalSettingsFormResetSettingsMutation);
 
@@ -51,14 +49,12 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (generalSettings) {
-      setState(generalSettings);
-      setHasChanges(false);
-    }
+    setState(generalSettings);
+    setHasChanges(false);
   }, [generalSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { settings: state },
         updater: (store) => {
@@ -72,14 +68,14 @@ export const GeneralSettingsForm: React.FunctionComponent = () => {
   const onTextChanges = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
 
-    setState((prevState) => prevState && { ...prevState, [name]: value });
+    setState((prevState) => ({ ...prevState, [name]: value }));
     setHasChanges(true);
   };
 
   const onBoolChanges = (e: React.FormEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
 
-    setState((prevState) => prevState && { ...prevState, [name]: checked });
+    setState((prevState) => ({ ...prevState, [name]: checked }));
     setHasChanges(true);
   };
 

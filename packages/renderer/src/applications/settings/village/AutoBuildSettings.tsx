@@ -8,10 +8,7 @@ import React, {
 import { useMutation } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
-import type {
-  AutoBuildSettingsQuery,
-  AutoBuildSettingsQueryResponse,
-} from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
+import type { AutoBuildSettingsQuery } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
 import type { AutoBuildSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoBuildSettingsResetSettingsMutation.graphql.js';
 import type {
   AutoBuildSettingsUpdateSettingsMutation,
@@ -23,7 +20,9 @@ import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
-type Settings = Omit<AutoBuildSettingsQueryResponse['autoBuildSettings'], 'autoStorage' | 'dualQueue'> & {
+type SettingsResponse = AutoBuildSettingsQuery['response']['autoBuildSettings'];
+
+type Settings = Omit<SettingsResponse, 'autoStorage' | 'dualQueue'> & {
   readonly allowAutoGranary: boolean;
   readonly allowAutoWarehouse: boolean;
   readonly allowFreeSpots: boolean;
@@ -31,10 +30,10 @@ type Settings = Omit<AutoBuildSettingsQueryResponse['autoBuildSettings'], 'autoS
   readonly autoWarehouseOverflowLevel: number;
 
   readonly allowDualQueue: boolean;
-  readonly dualQueuePreference: AutoBuildSettingsQueryResponse['autoBuildSettings']['dualQueue']['preference'];
+  readonly dualQueuePreference: SettingsResponse['dualQueue']['preference'];
 };
 
-const getStateFromSettings = (settings: AutoBuildSettingsQueryResponse['autoBuildSettings']): Settings => {
+const getStateFromSettings = (settings: SettingsResponse): Settings => {
   const {
     autoStorage: {
       allowFreeSpots,
@@ -139,12 +138,12 @@ graphql`
     }
 `;
 
-const autoBuildSettingsQuery = graphql`
-  query AutoBuildSettingsQuery($villageId: ID!) {
-      autoBuildSettings(villageId: $villageId) {
-         ...AutoBuildSettings_autoBuildSettings @relay(mask: false)
-      }
-  }
+const query = graphql`
+    query AutoBuildSettingsQuery($villageId: ID!) {
+        autoBuildSettings(villageId: $villageId) {
+            ...AutoBuildSettings_autoBuildSettings @relay(mask: false)
+        }
+    }
 `;
 
 const autoBuildSettingsUpdateSettingsMutation = graphql`
@@ -164,7 +163,7 @@ const autoBuildSettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(autoBuildSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoBuildSettingsUpdateSettingsMutation>(autoBuildSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoBuildSettingsResetSettingsMutation>(autoBuildSettingsResetSettingsMutation);
 
@@ -172,14 +171,12 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (autoBuildSettings) {
-      setState(getStateFromSettings(autoBuildSettings));
-      setHasChanges(false);
-    }
+    setState(getStateFromSettings(autoBuildSettings));
+    setHasChanges(false);
   }, [autoBuildSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { villageId, settings: getSettingsFromState(state) },
         updater: (store) => {
@@ -192,13 +189,10 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
 
   const onCoolDownChange = useCallback(
     (updatedCoolDown: CoolDownModel): void => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            coolDown: updatedCoolDown,
-          },
-      );
+      setState((prevState) => ({
+        ...prevState,
+        coolDown: updatedCoolDown,
+      }));
       setHasChanges(true);
     },
     [],
@@ -220,13 +214,10 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
 
@@ -246,13 +237,10 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   } = state;
 
   const updateState = <TValue extends unknown>(name: string, value: TValue) => {
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: value,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
     setHasChanges(true);
   };
 
@@ -270,7 +258,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
   const onPreferenceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
 
-    setState((prevState) => prevState && { ...prevState, [name]: value });
+    setState((prevState) => ({ ...prevState, [name]: value }));
     setHasChanges(true);
   };
 

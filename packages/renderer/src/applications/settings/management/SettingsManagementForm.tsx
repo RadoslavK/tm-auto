@@ -3,37 +3,34 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  useFragment,
+  useMutation,
+} from 'react-relay/hooks';
 
-import type { SettingsManagementFormBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementFormBotStateQuery.graphql.js';
+import type { SettingsManagementForm_currentAccount$key } from '../../../_graphql/__generated__/SettingsManagementForm_currentAccount.graphql.js';
+import type { SettingsManagementForm_userAccounts$key } from '../../../_graphql/__generated__/SettingsManagementForm_userAccounts.graphql.js';
 import type { SettingsManagementFormExportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountSettingsMutation.graphql.js';
 import type { SettingsManagementFormExportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountsMutation.graphql.js';
 import type { SettingsManagementFormExportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportGeneralSettingsMutation.graphql.js';
 import type { SettingsManagementFormImportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountSettingsMutation.graphql.js';
 import type { SettingsManagementFormImportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountsMutation.graphql.js';
 import type { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql.js';
-import type { SettingsManagementFormQuery } from '../../../_graphql/__generated__/SettingsManagementFormQuery.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
-const settingsManagementFormBotStateQuery = graphql`
-  query SettingsManagementFormBotStateQuery {
-      botState
-  }
+const accountsFragmentDef = graphql`
+    fragment SettingsManagementForm_userAccounts on UserAccount @relay(plural: true) {
+        id
+        server
+        username
+    }
 `;
 
-const settingsManagementFormQuery = graphql`
-  query SettingsManagementFormQuery($includeCurrentAccount: Boolean!) {
-      accounts {
-          id
-          server
-          username
-      }
-      currentAccount @include(if: $includeCurrentAccount) {
-          id
-          server
-          username
-      }
+const currentAccountFragmentDef = graphql`
+  fragment SettingsManagementForm_currentAccount on UserAccount {
+      id
+      server
+      username
   }
 `;
 
@@ -71,12 +68,14 @@ const mutations = {
   `,
 };
 
-export const SettingsManagementForm: React.FC = () => {
-  const { botState } = useLazyLoadQuery<SettingsManagementFormBotStateQuery>(settingsManagementFormBotStateQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly accountsKey: SettingsManagementForm_userAccounts$key;
+  readonly currentAccountKey: SettingsManagementForm_currentAccount$key | null;
+};
 
-  const { accounts, currentAccount } = useLazyLoadQuery<SettingsManagementFormQuery>(settingsManagementFormQuery, {
-    includeCurrentAccount: botState === 'Running' || botState === 'Paused',
-  }, { fetchPolicy: 'store-and-network' });
+export const SettingsManagementForm: React.FC<Props> = ({ accountsKey, currentAccountKey }) => {
+  const accounts = useFragment(accountsFragmentDef, accountsKey);
+  const currentAccount = useFragment(currentAccountFragmentDef, currentAccountKey);
 
   const [selectedAccountId, setSelectedAccountId] = useState('');
 

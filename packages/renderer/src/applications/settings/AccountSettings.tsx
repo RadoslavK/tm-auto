@@ -6,21 +6,21 @@ import React, {
   useState,
 } from 'react';
 import {
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { AccountSettingsQuery } from '../../_graphql/__generated__/AccountSettingsQuery.graphql.js';
+import type { AccountSettings_accountSettings$key } from '../../_graphql/__generated__/AccountSettings_accountSettings.graphql.js';
 import type { AccountSettingsResetSettingsMutation } from '../../_graphql/__generated__/AccountSettingsResetSettingsMutation.graphql.js';
 import type { AccountSettingsSubscription } from '../../_graphql/__generated__/AccountSettingsSubscription.graphql.js';
 import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
 import { Duration } from '../../_shared/components/controls/Duration.js';
-import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 
-graphql`
+const fragmentDef = graphql`
     fragment AccountSettings_accountSettings on AccountSettings {
         allowTasks
         autoBuild {
@@ -39,14 +39,6 @@ graphql`
             ...CoolDown @relay(mask: false)
         }
     }
-`;
-
-const accountSettingsQuery = graphql`
-  query AccountSettingsQuery {
-      accountSettings {
-        ...AccountSettings_accountSettings @relay(mask: false)
-      }
-  }
 `;
 
 const accountSettingsUpdateSettingsMutation = graphql`
@@ -73,8 +65,12 @@ const subscription = graphql`
   }
 `;
 
-export const AccountSettings: React.FC = () => {
-  const { accountSettings } = useLazyLoadQuery<AccountSettingsQuery>(accountSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly settingsKey: AccountSettings_accountSettings$key;
+};
+
+export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
+  const accountSettings = useFragment(fragmentDef, settingsKey);
   const [updateSettings] = useMutation<AccountSettingsUpdateSettingsMutation>(accountSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AccountSettingsResetSettingsMutation>(accountSettingsResetSettingsMutation);
 

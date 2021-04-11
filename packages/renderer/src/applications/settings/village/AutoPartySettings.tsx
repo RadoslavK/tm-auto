@@ -32,13 +32,12 @@ graphql`
     }
 `;
 
-
-const autoPartySettingsQuery = graphql`
-  query AutoPartySettingsQuery($villageId: ID!) {
-      autoPartySettings(villageId: $villageId) {
-          ...AutoPartySettings_autoPartySettings @relay(mask: false)
-      }
-  }
+const query = graphql`
+    query AutoPartySettingsQuery($villageId: ID!) {
+        autoPartySettings(villageId: $villageId) {
+            ...AutoPartySettings_autoPartySettings @relay(mask: false)
+        }
+    }
 `;
 
 const autoPartySettingsUpdateSettingsMutation = graphql`
@@ -58,7 +57,7 @@ const autoPartySettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
-  const { autoPartySettings } = useLazyLoadQuery<AutoPartySettingsQuery>(autoPartySettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { autoPartySettings } = useLazyLoadQuery<AutoPartySettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoPartySettingsUpdateSettingsMutation>(autoPartySettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoPartySettingsResetSettingsMutation>(autoPartySettingsResetSettingsMutation);
 
@@ -66,14 +65,12 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (autoPartySettings) {
-      setState(autoPartySettings);
-      setHasChanges(false);
-    }
+    setState(autoPartySettings);
+    setHasChanges(false);
   }, [autoPartySettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { villageId, settings: state },
         updater: (store) => {
@@ -86,21 +83,14 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
 
   const onCoolDownChange = useCallback(
     (updatedCooldown: CoolDownModel): void => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            coolDown: updatedCooldown,
-          },
-      );
+      setState((prevState) => ({
+        ...prevState,
+        coolDown: updatedCooldown,
+      }));
       setHasChanges(true);
     },
     [],
   );
-
-  if (!state) {
-    return null;
-  }
 
   const onReset = () => {
     resetSettings({
@@ -115,25 +105,19 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
 
   const onNumberChange = createOnNumberChanged({
     callback: (name, value) => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            [name]: +value,
-          },
-      );
+      setState((prevState) => ({
+        ...prevState,
+        [name]: +value,
+      }));
       setHasChanges(true);
     },
     minValue: 0,

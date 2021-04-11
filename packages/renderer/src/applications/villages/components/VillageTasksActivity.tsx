@@ -21,7 +21,7 @@ const query = graphql`
 
 export const VillageTasksActivity: React.FC = () => {
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { nextVillageTaskExecutions } = useLazyLoadQuery<VillageTasksActivityQuery>(query, { villageId });
+  const { nextVillageTaskExecutions } = useLazyLoadQuery<VillageTasksActivityQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
 
   return (
     <div>

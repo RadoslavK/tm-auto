@@ -30,12 +30,12 @@ graphql`
     }
 `;
 
-const autoUnitsSettingsQuery = graphql`
-  query AutoUnitsSettingsQuery($villageId: ID!) {
-      autoUnitsSettings(villageId: $villageId) {
-          ...AutoUnitsSettings_autoUnitsSettings @relay(mask: false)
-      }
-  }
+const query = graphql`
+    query AutoUnitsSettingsQuery($villageId: ID!) {
+        autoUnitsSettings(villageId: $villageId) {
+            ...AutoUnitsSettings_autoUnitsSettings @relay(mask: false)
+        }
+    }
 `;
 
 const autoUnitsSettingsUpdateSettingsMutation = graphql`
@@ -57,7 +57,7 @@ const autoUnitsSettingsResetSettingsMutation = graphql`
 `;
 
 export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoUnitsSettings } = useLazyLoadQuery<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { autoUnitsSettings } = useLazyLoadQuery<AutoUnitsSettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<AutoUnitsSettingsUpdateSettingsMutation>(autoUnitsSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoUnitsSettingsResetSettingsMutation>(autoUnitsSettingsResetSettingsMutation);
 
@@ -65,19 +65,17 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (autoUnitsSettings) {
-      setState({
-        allow: autoUnitsSettings.allow,
-        coolDown: autoUnitsSettings.coolDown,
-        minCrop: autoUnitsSettings.minCrop,
-        useHeroResources: autoUnitsSettings.useHeroResources,
-      });
-      setHasChanges(false);
-    }
+    setState({
+      allow: autoUnitsSettings.allow,
+      coolDown: autoUnitsSettings.coolDown,
+      minCrop: autoUnitsSettings.minCrop,
+      useHeroResources: autoUnitsSettings.useHeroResources,
+    });
+    setHasChanges(false);
   }, [autoUnitsSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { villageId, settings: state },
         updater: (store) => {
@@ -91,13 +89,10 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   }, [state, hasChanges, updateSettings, villageId]);
 
   const onCoolDownChange = useCallback((coolDown: CoolDownModel): void => {
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          coolDown,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      coolDown,
+    }));
     setHasChanges(true);
   }, []);
 
@@ -118,25 +113,19 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId }) => {
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
 
   const onNumberChange = createOnNumberChanged({
     callback: (name, value) => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            [name]: +value,
-          },
-      );
+      setState((prevState) => ({
+        ...prevState,
+        [name]: +value,
+      }));
       setHasChanges(true);
     },
     minValue: 0,

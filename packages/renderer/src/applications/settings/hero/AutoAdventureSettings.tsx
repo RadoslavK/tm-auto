@@ -98,10 +98,8 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (autoAdventureSettings) {
-      setState(autoAdventureSettings);
-      setHasChanges(false);
-    }
+    setState(autoAdventureSettings);
+    setHasChanges(false);
   }, [autoAdventureSettings]);
 
   useEffect(() => {

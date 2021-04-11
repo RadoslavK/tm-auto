@@ -83,7 +83,10 @@ const villagesSubscription = graphql`
 `;
 
 export const VillageSettings: React.FC<Props> = ({ getTabType, tab }) => {
-  const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+  const villageId = useRecoilValue(selectedVillageIdState);
+  const [selectedVillageId, setSelectedVillageId] = useState(villageId);
+
+  const { villages } = useLazyLoadQuery<VillageSettingsQuery>(villageSettingsQuery, { villageId: selectedVillageId }, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillageSettingsSubscription> => ({
     subscription: villagesSubscription,
@@ -96,9 +99,6 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab }) => {
   }), []);
 
   useSubscription(subscriptionConfig);
-
-  const villageId = useRecoilValue(selectedVillageIdState);
-  const [selectedVillageId, setSelectedVillageId] = useState(villageId);
 
   useEffect(() => {
     setSelectedVillageId(villageId);

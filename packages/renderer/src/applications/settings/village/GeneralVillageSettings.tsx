@@ -21,12 +21,12 @@ graphql`
     }
 `;
 
-const generalVillageSettingsQuery = graphql`
-  query GeneralVillageSettingsQuery($villageId: ID!) {
-      generalVillageSettings(villageId: $villageId) {
-          ...GeneralVillageSettings_generalVillageSettings @relay(mask: false)
-      }
-  }
+const query = graphql`
+    query GeneralVillageSettingsQuery($villageId: ID!) {
+        generalVillageSettings(villageId: $villageId) {
+            ...GeneralVillageSettings_generalVillageSettings @relay(mask: false)
+        }
+    }
 `;
 
 const generalVillageSettingsUpdateSettingsMutation = graphql`
@@ -46,24 +46,24 @@ const generalVillageSettingsResetSettingsMutation = graphql`
 `;
 
 export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
-  const { generalVillageSettings } = useLazyLoadQuery<GeneralVillageSettingsQuery>(generalVillageSettingsQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { generalVillageSettings } = useLazyLoadQuery<GeneralVillageSettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
   const [updateSettings] = useMutation<GeneralVillageSettingsUpdateSettingsMutation>(generalVillageSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralVillageSettingsResetSettingsMutation>(generalVillageSettingsResetSettingsMutation);
 
-  const [state, setState] = useState(generalVillageSettings);
+  const [state, setState] = useState({
+    allowTasks: generalVillageSettings.allowTasks,
+  });
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    if (generalVillageSettings) {
-      setState({
-        allowTasks: generalVillageSettings.allowTasks,
-      });
-      setHasChanges(false);
-    }
+    setState({
+      allowTasks: generalVillageSettings.allowTasks,
+    });
+    setHasChanges(false);
   }, [generalVillageSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { villageId, settings: state },
         updater: (store) => {
@@ -77,19 +77,12 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
-
-  if (!state) {
-    return null;
-  }
 
   const onReset = () => {
     resetSettings({
