@@ -165,7 +165,7 @@ export interface NexusGenEnums {
   BotState: "InitialScanning" | "None" | "Paused" | "Running" | "Stopping"
   ClaimHeroResourcesReason: "AutoBuild" | "AutoParty" | "AutoUnits"
   DualQueuePreference: "Infrastructure" | "Resources"
-  HeroState: "Dead" | "InVillage" | "OnAdventure" | "Reviving" | "Unknown"
+  HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
   TaskType: "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits"
   TextLogEntryType: "Error" | "Info"

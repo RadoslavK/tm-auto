@@ -291,7 +291,7 @@ type HeroLevelUpSettings {
 enum HeroState {
   Dead
   InVillage
-  OnAdventure
+  Moving
   Reviving
   Unknown
 }

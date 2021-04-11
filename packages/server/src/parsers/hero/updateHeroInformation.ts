@@ -35,7 +35,7 @@ const parseState = async (): Promise<HeroState> => {
     case 'heroHome':
       return HeroState.InVillage;
     case 'heroRunning':
-      return HeroState.OnAdventure;
+      return HeroState.Moving;
     case 'heroReviving':
       return HeroState.Reviving;
     case 'heroDead':

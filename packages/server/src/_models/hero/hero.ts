@@ -8,7 +8,7 @@ export enum HeroState {
   InVillage = 'InVillage',
   Dead = 'Dead',
   Reviving = 'Reviving',
-  OnAdventure = 'OnAdventure'
+  Moving = 'Moving',
 }
 
 export class Hero {
