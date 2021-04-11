@@ -31,10 +31,10 @@ const useStyles = makeStyles<unknown, StylesProps>({
   notScannedVillageName: {
     color: '#494747E2',
   },
-  scannedVillageName: {
-    color: props => props.isVillageSelected ? '#438655' : undefined,
+  scannedVillageName: props => ({
+    color: props.isVillageSelected ? '#438655' : undefined,
     fontWeight: 'bold',
-  },
+  }),
 });
 
 type Props = {
@@ -57,7 +57,7 @@ export const VillageSideItem: React.FC<Props> = ({
   const villageFragment = useFragment(villageSideItemVillageFragment, village);
   const { id, scanned } = villageFragment;
 
-  const villageMatch = useMatch('/villages/:id');
+  const villageMatch = useMatch('/villages/:id/*');
   const isVillageSelected = (villageMatch?.params as VillageRouteParams | undefined)?.id === villageFragment.id;
 
   const classes = useStyles({ isVillageSelected });
