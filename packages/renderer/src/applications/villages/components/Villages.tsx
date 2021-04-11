@@ -1,10 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import {
   Navigate,
   Route,
@@ -16,6 +13,7 @@ import type { VillagesActiveVillageIdChangedSubscription } from '../../../_graph
 import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 import type { VillagesSubscription } from '../../../_graphql/__generated__/VillagesSubscription.graphql.js';
 import type { VillagesVillageSubscription } from '../../../_graphql/__generated__/VillagesVillageSubscription.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { Village } from './Village.js';
 import { VillageSideItem } from './VillageSideItem.js';
 

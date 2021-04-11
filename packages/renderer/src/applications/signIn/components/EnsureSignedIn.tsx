@@ -1,13 +1,11 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
 import type { EnsureSignedInBotStateSubscription } from '../../../_graphql/__generated__/EnsureSignedInBotStateSubscription.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { GraphiQL } from '../../GraphiQL.js';
 import { SettingsManagement } from '../../settings/management/SettingsManagement.js';
 import { SignInForm } from './SignInForm.js';

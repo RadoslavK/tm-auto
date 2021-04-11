@@ -4,14 +4,12 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useMutation,
-} from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 
 import type { GeneralSettingsFormQuery } from '../../_graphql/__generated__/GeneralSettingsFormQuery.graphql.js';
 import type { GeneralSettingsFormResetSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormResetSettingsMutation.graphql.js';
 import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/__generated__/GeneralSettingsFormUpdateSettingsMutation.graphql.js';
+import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 
 graphql`
   fragment GeneralSettingsForm_generalSettings on GeneralSettings {

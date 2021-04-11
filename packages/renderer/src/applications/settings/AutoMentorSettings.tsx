@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -16,6 +15,7 @@ import type { AutoMentorSettingsQuery } from '../../_graphql/__generated__/AutoM
 import type { AutoMentorSettingsResetSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsResetSettingsMutation.graphql.js';
 import type { AutoMentorSettingsSubscription } from '../../_graphql/__generated__/AutoMentorSettingsSubscription.graphql.js';
 import type { AutoMentorSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AutoMentorSettingsUpdateSettingsMutation.graphql.js';
+import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 
 graphql`
     fragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {

@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -18,6 +17,7 @@ import type { AccountSettingsSubscription } from '../../_graphql/__generated__/A
 import type { AccountSettingsUpdateSettingsMutation } from '../../_graphql/__generated__/AccountSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../_shared/components/controls/CoolDown.js';
 import { Duration } from '../../_shared/components/controls/Duration.js';
+import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../models/coolDown.type.js';
 
 graphql`

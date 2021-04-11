@@ -15,13 +15,13 @@ import React, {
 } from 'react';
 import {
   fetchQuery,
-  useLazyLoadQuery,
   useRelayEnvironment,
 } from 'react-relay/hooks';
 
 import type { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql.js';
 import type { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { SignInFormDialogType } from './SignInForm.js';
 
 const useStyles = makeStyles((theme) => ({

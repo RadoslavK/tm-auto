@@ -20,5 +20,12 @@ module.exports = {
     'react-hooks/exhaustive-deps': ['warn', {
       'additionalHooks': 'useRecoilCallback',
     }],
+    'no-restricted-imports': ['error', {
+      paths: [{
+        name: 'react-relay/hooks',
+        importNames: ['useLazyLoadQuery'],
+        message: 'Import custom implementation of `useLazyLoadQuery` instead.',
+      }],
+    }],
   },
 };

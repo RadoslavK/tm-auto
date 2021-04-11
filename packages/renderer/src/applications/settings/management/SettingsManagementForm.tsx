@@ -3,10 +3,7 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useMutation,
-} from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 
 import type { SettingsManagementFormBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementFormBotStateQuery.graphql.js';
 import type { SettingsManagementFormExportAccountSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormExportAccountSettingsMutation.graphql.js';
@@ -16,6 +13,7 @@ import type { SettingsManagementFormImportAccountSettingsMutation } from '../../
 import type { SettingsManagementFormImportAccountsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportAccountsMutation.graphql.js';
 import type { SettingsManagementFormImportGeneralSettingsMutation } from '../../../_graphql/__generated__/SettingsManagementFormImportGeneralSettingsMutation.graphql.js';
 import type { SettingsManagementFormQuery } from '../../../_graphql/__generated__/SettingsManagementFormQuery.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const settingsManagementFormBotStateQuery = graphql`

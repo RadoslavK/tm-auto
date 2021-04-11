@@ -1,11 +1,11 @@
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { PartiesQuery } from '../../_graphql/__generated__/PartiesQuery.graphql.js';
 import { selectedVillageIdState } from '../../_recoil/atoms/selectedVillageId.js';
 import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
+import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 
 const query = graphql`
   query PartiesQuery($villageId: ID!) {

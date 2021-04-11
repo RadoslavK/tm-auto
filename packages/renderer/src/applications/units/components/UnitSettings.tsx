@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   useFragment,
-  useLazyLoadQuery,
   useMutation,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
@@ -16,6 +15,7 @@ import type { UnitSettings_autoUnitsUnitSettings$key } from '../../../_graphql/_
 import type { UnitSettingsUnitInfoQuery } from '../../../_graphql/__generated__/UnitSettingsUnitInfoQuery.graphql.js';
 import type { UnitSettingsUpdateAutoUnitsUnitSettingsMutation } from '../../../_graphql/__generated__/UnitSettingsUpdateAutoUnitsUnitSettingsMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type Props = {

@@ -1,6 +1,5 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { Suspense } from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
 import {
   Navigate,
   Route,
@@ -9,6 +8,7 @@ import {
 
 import type { MainRoutesQuery } from '../../../_graphql/__generated__/MainRoutesQuery.graphql.js';
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NextTasksExecution.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { BotActivity } from '../../BotActivity.js';
 import { navigationApps } from './Navigation.js';
 

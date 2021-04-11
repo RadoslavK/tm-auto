@@ -5,16 +5,14 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import type { VillageSettingsSubscription } from '../../../_graphql/__generated__/VillageSettingsSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { formatVillageName } from '../../villages/components/VillageName.js';
 import { AutoBuildSettings } from './AutoBuildSettings.js';
 import { AutoPartySettings } from './AutoPartySettings.js';

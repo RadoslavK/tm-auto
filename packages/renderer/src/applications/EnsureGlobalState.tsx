@@ -3,16 +3,14 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import { useSetRecoilState } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { EnsureGlobalStateGameInfoQuery } from '../_graphql/__generated__/EnsureGlobalStateGameInfoQuery.graphql.js';
 import type { EnsureGlobalStateGameInfoSubscription } from '../_graphql/__generated__/EnsureGlobalStateGameInfoSubscription.graphql.js';
 import { tribeState } from '../_recoil/atoms/tribe.js';
+import { useLazyLoadQuery } from '../_shared/hooks/useLazyLoadQuery.js';
 
 const gameInfoQuery = graphql`
   query EnsureGlobalStateGameInfoQuery {

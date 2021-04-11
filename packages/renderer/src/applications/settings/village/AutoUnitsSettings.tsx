@@ -5,15 +5,13 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useMutation,
-} from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 
 import type { AutoUnitsSettingsQuery } from '../../../_graphql/__generated__/AutoUnitsSettingsQuery.graphql.js';
 import type { AutoUnitsSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoUnitsSettingsResetSettingsMutation.graphql.js';
 import type { AutoUnitsSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoUnitsSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 

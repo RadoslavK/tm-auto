@@ -25,7 +25,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -40,6 +39,7 @@ import type { SignInFormLastSignedAccountIdSubscription } from '../../../_graphq
 import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { Accounts } from './Accounts.js';
 import { SignInFormDialog } from './SignInFormDialog.js';
 

@@ -7,10 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useMutation,
-} from 'react-relay/hooks';
+import { useMutation } from 'react-relay/hooks';
 import {
   useMatch,
   useParams,
@@ -28,6 +25,7 @@ import { useSetRecoilState } from 'recoil';
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
   Buildings,

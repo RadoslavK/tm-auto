@@ -1,13 +1,11 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { LogsQuery } from '../../../_graphql/__generated__/LogsQuery.graphql.js';
 import type { LogsSubscription } from '../../../_graphql/__generated__/LogsSubscription.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { LogEntry } from './LogEntry.js';
 
 graphql`

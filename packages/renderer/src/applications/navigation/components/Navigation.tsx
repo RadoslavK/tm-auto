@@ -8,10 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import {
   Link,
   useLocation, 
@@ -20,6 +17,7 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { NavigationQuery } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
 import type { NavigationSubscription } from '../../../_graphql/__generated__/NavigationSubscription.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { Hero } from '../../hero/components/Hero.js';
 import { Logs } from '../../logs/components/Logs.js';
 import { MapSearch } from '../../mapSearch/MapSearch.js';

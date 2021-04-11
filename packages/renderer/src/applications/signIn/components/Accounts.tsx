@@ -13,7 +13,6 @@ import React, {
 } from 'react';
 import {
   useFragment,
-  useLazyLoadQuery,
   useSubscription,
 } from 'react-relay/hooks';
 import type {
@@ -24,6 +23,7 @@ import type {
 import type { Accounts_accounts$key } from '../../../_graphql/__generated__/Accounts_accounts.graphql.js';
 import type { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
 import type { AccountsSubscription } from '../../../_graphql/__generated__/AccountsSubscription.graphql.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { NewBuildingDialogItem } from './NewBuildingDialogItem.js';
 
 const useStyles = makeStyles({

@@ -8,7 +8,6 @@ import React, {
   useState, 
 } from 'react';
 import {
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -23,6 +22,7 @@ import type { MapSearchQuery } from '../../_graphql/__generated__/MapSearchQuery
 import type { MapSearchStateSubscription } from '../../_graphql/__generated__/MapSearchStateSubscription.graphql.js';
 import type { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql.js';
 import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
+import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 import { SortOrder } from '../../_shared/SortOrder.js';
 
 enum SearchMapSortBy {
