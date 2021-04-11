@@ -5,10 +5,9 @@
 import { ConcreteRequest } from "relay-runtime";
 export type SignInFormDialogQueryVariables = {
     id: string;
-    skip: boolean;
 };
 export type SignInFormDialogQueryResponse = {
-    readonly account?: {
+    readonly account: {
         readonly password: string;
         readonly server: string;
         readonly username: string;
@@ -24,9 +23,8 @@ export type SignInFormDialogQuery = {
 /*
 query SignInFormDialogQuery(
   $id: ID!
-  $skip: Boolean!
 ) {
-  account(id: $id) @skip(if: $skip) {
+  account(id: $id) {
     password
     server
     username
@@ -41,11 +39,6 @@ var v0 = [
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "id"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "skip"
   }
 ],
 v1 = [
@@ -84,25 +77,18 @@ return {
     "name": "SignInFormDialogQuery",
     "selections": [
       {
-        "condition": "skip",
-        "kind": "Condition",
-        "passingValue": false,
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "account",
+        "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": (v1/*: any*/),
-            "concreteType": "UserAccount",
-            "kind": "LinkedField",
-            "name": "account",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/)
-            ],
-            "storageKey": null
-          }
-        ]
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/)
+        ],
+        "storageKey": null
       }
     ],
     "type": "Query",
@@ -115,44 +101,37 @@ return {
     "name": "SignInFormDialogQuery",
     "selections": [
       {
-        "condition": "skip",
-        "kind": "Condition",
-        "passingValue": false,
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "UserAccount",
+        "kind": "LinkedField",
+        "name": "account",
+        "plural": false,
         "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
           {
             "alias": null,
-            "args": (v1/*: any*/),
-            "concreteType": "UserAccount",
-            "kind": "LinkedField",
-            "name": "account",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              }
-            ],
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
             "storageKey": null
           }
-        ]
+        ],
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "901334fd4e2c903dbadc730b5d20a15b",
+    "cacheID": "d55c0cf0ba3959f10040628ef1d5e3db",
     "id": null,
     "metadata": {},
     "name": "SignInFormDialogQuery",
     "operationKind": "query",
-    "text": "query SignInFormDialogQuery(\n  $id: ID!\n  $skip: Boolean!\n) {\n  account(id: $id) @skip(if: $skip) {\n    password\n    server\n    username\n    id\n  }\n}\n"
+    "text": "query SignInFormDialogQuery(\n  $id: ID!\n) {\n  account(id: $id) {\n    password\n    server\n    username\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '78d5e28ecdebdd0c288bd1bd286b85ba';
+(node as any).hash = '20dd0cbd3a8f4a618f943249d30e2456';
 export default node;

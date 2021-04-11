@@ -5,7 +5,6 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type BuildingSpot_buildingSpot = {
-    readonly id: string;
     readonly name: string;
     readonly maxLevel: number;
     readonly type: number;
@@ -33,13 +32,6 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "BuildingSpot_buildingSpot",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
     {
       "alias": null,
       "args": null,
@@ -116,5 +108,5 @@ const node: ReaderFragment = {
   "type": "BuildingSpot",
   "abstractKey": null
 };
-(node as any).hash = 'd5ed83c8e88f152230d8ff31e256db27';
+(node as any).hash = '3e1426b61868347d34be61b1b44081a4';
 export default node;

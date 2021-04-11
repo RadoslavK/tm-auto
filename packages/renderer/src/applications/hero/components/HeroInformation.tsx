@@ -2,7 +2,9 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
+  PreloadedQuery,
   useFragment,
+  usePreloadedQuery,
   useSubscription,
 } from 'react-relay/hooks';
 import { Link } from 'react-router-dom';
@@ -12,7 +14,6 @@ import type { HeroInformation_heroInformation$key } from '../../../_graphql/__ge
 import type { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql.js';
 import type { HeroInformationSubscription } from '../../../_graphql/__generated__/HeroInformationSubscription.graphql.js';
 import { Resources } from '../../../_shared/components/Resources.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { VillageName } from '../../villages/components/VillageName.js';
 
 const heroInformationFragmentDefinition = graphql`
@@ -29,7 +30,7 @@ const heroInformationFragmentDefinition = graphql`
   }
 `;
 
-const heroInformationQuery = graphql`
+export const heroInformationQuery = graphql`
   query HeroInformationQuery {
       heroInformation {
           ...HeroInformation_heroInformation
@@ -51,8 +52,12 @@ const useStyles = makeStyles({
   },
 });
 
-const HeroInformationContainer: React.FC = () => {
-  const { heroInformation } = useLazyLoadQuery<HeroInformationQuery>(heroInformationQuery, {}, { fetchPolicy: 'store-and-network' });
+type ContainerProps = {
+  readonly queryRef: PreloadedQuery<HeroInformationQuery>;
+};
+
+const HeroInformationContainer: React.FC<ContainerProps> = ({ queryRef }) => {
+  const { heroInformation } = usePreloadedQuery(heroInformationQuery, queryRef);
 
   const heroInformationSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroInformationSubscription> => ({
     subscription: heroInformationSubscription,

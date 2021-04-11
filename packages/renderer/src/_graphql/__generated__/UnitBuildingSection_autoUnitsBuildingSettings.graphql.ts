@@ -105,5 +105,5 @@ const node: ReaderFragment = {
   "type": "AutoUnitsBuildingSettings",
   "abstractKey": null
 };
-(node as any).hash = '79865037c73a571df8c0f5cbe86df394';
+(node as any).hash = '1124792228ddbafb7e40575d4309abf2';
 export default node;

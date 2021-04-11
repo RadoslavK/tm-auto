@@ -1,11 +1,14 @@
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import { useSubscription } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  usePreloadedQuery,
+  useSubscription,
+} from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { LogsQuery } from '../../../_graphql/__generated__/LogsQuery.graphql.js';
 import type { LogsSubscription } from '../../../_graphql/__generated__/LogsSubscription.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { LogEntry } from './LogEntry.js';
 
 graphql`
@@ -15,7 +18,7 @@ graphql`
     }
 `;
 
-const logsQuery = graphql`
+export const logsQuery = graphql`
   query LogsQuery {
       logEntries {
          ...Logs_logEntry @relay (mask: false)
@@ -31,8 +34,12 @@ const logsSubscription = graphql`
   }
 `;
 
-export const Logs: React.FC = () => {
-  const { logEntries } = useLazyLoadQuery<LogsQuery>(logsQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly queryRef: PreloadedQuery<LogsQuery>;
+};
+
+export const Logs: React.FC<Props> = ({ queryRef }) => {
+  const { logEntries } = usePreloadedQuery(logsQuery, queryRef);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<LogsSubscription> => ({
     subscription: logsSubscription,

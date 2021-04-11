@@ -1,16 +1,27 @@
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
-import { useSubscription } from 'react-relay/hooks';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
+import {
+  PreloadedQuery,
+  usePreloadedQuery,
+  useQueryLoader,
+  useSubscription,
+} from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { HeroBotStateSubscription } from '../../../_graphql/__generated__/HeroBotStateSubscription.graphql.js';
+import type { HeroInformationQuery } from '../../../_graphql/__generated__/HeroInformationQuery.graphql.js';
 import type { HeroQuery } from '../../../_graphql/__generated__/HeroQuery.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { AutoAdventureSettings } from '../../settings/hero/AutoAdventureSettings.js';
 import { HeroLevelUpSettings } from '../../settings/hero/HeroLevelUpSettings.js';
-import { HeroInformation } from './HeroInformation.js';
+import {
+  HeroInformation,
+  heroInformationQuery,
+} from './HeroInformation.js';
 
-const query = graphql`
+export const heroQuery = graphql`
   query HeroQuery {
       botState
       autoAdventureSettings {
@@ -31,13 +42,17 @@ const botStateSubscription = graphql`
     }
 `;
 
-export const Hero: React.FC = () => {
+type Props = {
+  readonly queryRef: PreloadedQuery<HeroQuery>;
+};
+
+export const Hero: React.FC<Props> = ({ queryRef }) => {
   const {
     autoAdventureSettings,
     botState,
     nextTaskExecution,
     heroLevelUpSettings,
-  } = useLazyLoadQuery<HeroQuery>(query, {}, { fetchPolicy: 'store-and-network' });
+  } = usePreloadedQuery(heroQuery, queryRef);
 
   const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroBotStateSubscription> => ({
     subscription: botStateSubscription,
@@ -49,10 +64,20 @@ export const Hero: React.FC = () => {
 
   useSubscription(botStateSubscriptionConfig);
 
+  const [heroInformationQueryRef, loadHeroInformationQuery] = useQueryLoader<HeroInformationQuery>(heroInformationQuery);
+
+  useEffect(() => {
+    if (botState === 'InitialScanning') {
+      return;
+    }
+
+    loadHeroInformationQuery({}, { fetchPolicy: 'store-and-network' });
+  }, [botState, loadHeroInformationQuery]);
+
   return (
     <div>
       <h1>Hero settings</h1>
-      {botState !== 'InitialScanning' && <HeroInformation />}
+      {heroInformationQueryRef && <HeroInformation queryRef={heroInformationQueryRef} />}
       <AutoAdventureSettings
         settingsKey={autoAdventureSettings}
         timestampKey={nextTaskExecution}

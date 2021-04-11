@@ -4,15 +4,19 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  useMutation,
+  usePreloadedQuery,
+} from 'react-relay/hooks';
 
 import type { GeneralVillageSettingsQuery } from '../../../_graphql/__generated__/GeneralVillageSettingsQuery.graphql.js';
 import type { GeneralVillageSettingsResetSettingsMutation } from '../../../_graphql/__generated__/GeneralVillageSettingsResetSettingsMutation.graphql.js';
 import type { GeneralVillageSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/GeneralVillageSettingsUpdateSettingsMutation.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 
 type Props = {
   readonly villageId: string;
+  readonly queryRef: PreloadedQuery<GeneralVillageSettingsQuery>;
 };
 
 graphql`
@@ -21,7 +25,7 @@ graphql`
     }
 `;
 
-const query = graphql`
+export const generalVillageSettingsQuery = graphql`
     query GeneralVillageSettingsQuery($villageId: ID!) {
         generalVillageSettings(villageId: $villageId) {
             ...GeneralVillageSettings_generalVillageSettings @relay(mask: false)
@@ -45,8 +49,8 @@ const generalVillageSettingsResetSettingsMutation = graphql`
     }
 `;
 
-export const GeneralVillageSettings: React.FC<Props> = ({ villageId }) => {
-  const { generalVillageSettings } = useLazyLoadQuery<GeneralVillageSettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
+export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef }) => {
+  const { generalVillageSettings } = usePreloadedQuery(generalVillageSettingsQuery, queryRef);
   const [updateSettings] = useMutation<GeneralVillageSettingsUpdateSettingsMutation>(generalVillageSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralVillageSettingsResetSettingsMutation>(generalVillageSettingsResetSettingsMutation);
 

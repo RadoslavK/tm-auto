@@ -1,8 +1,14 @@
 import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useState } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+import { useSubscription } from 'react-relay/hooks';
+import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { SettingsManagementBotStateQuery } from '../../../_graphql/__generated__/SettingsManagementBotStateQuery.graphql.js';
+import type { SettingsManagementBotStateSubscription } from '../../../_graphql/__generated__/SettingsManagementBotStateSubscription.graphql.js';
 import type { SettingsManagementQuery } from '../../../_graphql/__generated__/SettingsManagementQuery.graphql.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { GeneralSettings } from '../GeneralSettings.js';
@@ -28,6 +34,12 @@ const query = graphql`
     }
 `;
 
+const botStateSubscription = graphql`
+  subscription SettingsManagementBotStateSubscription {
+      botStateChanged
+  }
+`;
+
 export const SettingsManagement: React.FunctionComponent = () => {
   const [isFormShown, setIsFormShown] = useState(false);
 
@@ -38,6 +50,16 @@ export const SettingsManagement: React.FunctionComponent = () => {
   const { generalSettings, accounts, currentAccount } = useLazyLoadQuery<SettingsManagementQuery>(query, {
     includeCurrentAccount: botState === 'Running' || botState === 'Paused',
   }, { fetchPolicy: 'store-and-network' });
+
+  const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SettingsManagementBotStateSubscription> => ({
+    subscription: botStateSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.botStateChanged, 'botState');
+    },
+  }), []);
+
+  useSubscription(botStateSubscriptionConfig);
 
   return (
     <>

@@ -15,13 +15,14 @@ import React, {
 } from 'react';
 import {
   fetchQuery,
+  PreloadedQuery,
+  usePreloadedQuery,
   useRelayEnvironment,
 } from 'react-relay/hooks';
 
 import type { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql.js';
 import type { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { SignInFormDialogType } from './SignInForm.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
   readonly onSubmit: (account: SignInFormCreateAccountMutationVariables['account']) => void;
-  readonly selectedAccountId: string | null | undefined;
   readonly type: SignInFormDialogType;
+  readonly queryRef: PreloadedQuery<SignInFormDialogQuery>;
 };
 
 export const signInFormDialogAccountQuery = graphql`
-  query SignInFormDialogQuery($id: ID!, $skip: Boolean!) {
-      account(id: $id) @skip(if: $skip) {
+  query SignInFormDialogQuery($id: ID!) {
+      account(id: $id) {
           password
           server
           username
@@ -65,15 +66,11 @@ const isAccountTakenQuery = graphql`
 
 export const SignInFormDialog: React.FC<Props> = ({
   onSubmit,
-  selectedAccountId,
   type,
+  queryRef,
 }) => {
   const classes = useStyles();
-
-  const { account } = useLazyLoadQuery<SignInFormDialogQuery>(signInFormDialogAccountQuery, {
-    id: selectedAccountId || '',
-    skip: type !== SignInFormDialogType.Update || !selectedAccountId,
-  }, { fetchPolicy: 'network-only' });
+  const { account } = usePreloadedQuery(signInFormDialogAccountQuery, queryRef);
 
   const [username, setUsername] = useState(account?.username ?? '');
   const [password, setPassword] = useState(account?.password ?? '');

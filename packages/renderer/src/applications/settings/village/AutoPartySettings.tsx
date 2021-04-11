@@ -5,18 +5,22 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  useMutation,
+  usePreloadedQuery,
+} from 'react-relay/hooks';
 
 import type { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
 import type { AutoPartySettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsResetSettingsMutation.graphql.js';
 import type { AutoPartySettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
 type Props = {
   readonly villageId: string;
+  readonly queryRef: PreloadedQuery<AutoPartySettingsQuery>;
 };
 
 graphql`
@@ -32,7 +36,7 @@ graphql`
     }
 `;
 
-const query = graphql`
+export const autoPartySettingsQuery = graphql`
     query AutoPartySettingsQuery($villageId: ID!) {
         autoPartySettings(villageId: $villageId) {
             ...AutoPartySettings_autoPartySettings @relay(mask: false)
@@ -56,8 +60,8 @@ const autoPartySettingsResetSettingsMutation = graphql`
     }
 `;
 
-export const AutoPartySettings: React.FC<Props> = ({ villageId }) => {
-  const { autoPartySettings } = useLazyLoadQuery<AutoPartySettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
+export const AutoPartySettings: React.FC<Props> = ({ villageId, queryRef }) => {
+  const { autoPartySettings } = usePreloadedQuery(autoPartySettingsQuery, queryRef);
   const [updateSettings] = useMutation<AutoPartySettingsUpdateSettingsMutation>(autoPartySettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoPartySettingsResetSettingsMutation>(autoPartySettingsResetSettingsMutation);
 

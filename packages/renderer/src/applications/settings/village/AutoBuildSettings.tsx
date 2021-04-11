@@ -5,7 +5,11 @@ import React, {
   useEffect,
   useState, 
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  useMutation,
+  usePreloadedQuery,
+} from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { AutoBuildSettingsQuery } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
@@ -16,7 +20,6 @@ import type {
 } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
@@ -98,6 +101,7 @@ const getSettingsFromState = (
 
 type Props = {
   readonly villageId: string;
+  readonly queryRef: PreloadedQuery<AutoBuildSettingsQuery>;
 };
 
 graphql`
@@ -138,7 +142,7 @@ graphql`
     }
 `;
 
-const query = graphql`
+export const autoBuildSettingsQuery = graphql`
     query AutoBuildSettingsQuery($villageId: ID!) {
         autoBuildSettings(villageId: $villageId) {
             ...AutoBuildSettings_autoBuildSettings @relay(mask: false)
@@ -162,8 +166,8 @@ const autoBuildSettingsResetSettingsMutation = graphql`
     }
 `;
 
-export const AutoBuildSettings: React.FC<Props> = ({ villageId }) => {
-  const { autoBuildSettings } = useLazyLoadQuery<AutoBuildSettingsQuery>(query, { villageId }, { fetchPolicy: 'store-and-network' });
+export const AutoBuildSettings: React.FC<Props> = ({ villageId, queryRef }) => {
+  const { autoBuildSettings } = usePreloadedQuery(autoBuildSettingsQuery, queryRef);
   const [updateSettings] = useMutation<AutoBuildSettingsUpdateSettingsMutation>(autoBuildSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoBuildSettingsResetSettingsMutation>(autoBuildSettingsResetSettingsMutation);
 

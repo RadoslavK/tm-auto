@@ -7,7 +7,12 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useMutation } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  useMutation,
+  usePreloadedQuery,
+  useQueryLoader,
+} from 'react-relay/hooks';
 import {
   useMatch,
   useParams,
@@ -24,16 +29,20 @@ import { useSetRecoilState } from 'recoil';
 
 import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
+import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
   Buildings,
   useBuildingsQuery,
 } from '../../buildings/Buildings.js';
-import { Parties } from '../../party/Parties.js';
+import {
+  Parties,
+  usePartiesQuery,
+} from '../../party/Parties.js';
 import {
   VillageSettings,
+  villageSettingsQuery,
   VillageSettingsTabType,
 } from '../../settings/village/VillageSettings.js';
 import {
@@ -43,7 +52,10 @@ import {
 import { CrannyCapacity } from './CrannyCapacity.js';
 import { VillageResources } from './VillageResources.js';
 import type { VillageRouteParams } from './Villages.js';
-import { VillageTasksActivity } from './VillageTasksActivity.js';
+import {
+  useVillageTasksActivityQuery,
+  VillageTasksActivity,
+} from './VillageTasksActivity.js';
 
 const navigationPaths = ['buildings', 'units', 'parties', 'tasks-activity'] as const;
 type NavigationPath = typeof navigationPaths[number];
@@ -69,7 +81,7 @@ graphql`
     }
 `;
 
-const villageQuery = graphql`
+export const villageQuery = graphql`
     query VillageQuery($villageId: ID!) {
         village(villageId: $villageId) {
            ...Village_village @relay(mask: false)
@@ -80,12 +92,18 @@ const villageQuery = graphql`
     }
 `;
 
-export const Village: React.FC = () => {
+type Props = {
+  readonly queryRef: PreloadedQuery<VillageQuery>;
+};
+
+export const Village: React.FC<Props> = ({ queryRef }) => {
   const villageId = (useParams() as VillageRouteParams).id;
 
   const { buildingsQueryRef, reloadBuildingsQuery } = useBuildingsQuery();
   const { unitSettingsQueryRef, reloadUnitSettingsQuery } = useUnitsQuery();
-  const location = useLocation();
+  const { partiesQueryRef, reloadPartiesQuery } = usePartiesQuery();
+  const { reloadVillageTasksActivityQuery, villageTasksActivityQueryRef } = useVillageTasksActivityQuery();
+  const { pathname } = useLocation();
   const prevVillageId = usePrevious(villageId);
   const currentTab = useMatch('/villages/:id/:tab')?.params.tab;
   const isTabSelected = !!currentTab;
@@ -95,13 +113,19 @@ export const Village: React.FC = () => {
       return;
     }
 
-    if (!isTabSelected || location.pathname.endsWith('buildings' as NavigationPath)) {
+    if (!isTabSelected || pathname.endsWith('buildings' as NavigationPath)) {
       reloadBuildingsQuery(villageId);
     }
-    if (location.pathname.endsWith('units' as NavigationPath)) {
+    if (pathname.endsWith('units' as NavigationPath)) {
       reloadUnitSettingsQuery(villageId);
     }
-  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, location.pathname]);
+    if (pathname.endsWith('parties' as NavigationPath)) {
+      reloadPartiesQuery(villageId);
+    }
+    if (pathname.endsWith('' as NavigationPath)) {
+      reloadVillageTasksActivityQuery(villageId);
+    }
+  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -133,8 +157,13 @@ export const Village: React.FC = () => {
     },
   ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery]);
 
+  const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
+
   const [showSettings, setShowSettings] = useState(false);
-  const openSettings = (): void => setShowSettings(true);
+  const openSettings = (): void => {
+    loadVillageSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+    setShowSettings(true);
+  };
   const closeSettings = (): void => setShowSettings(false);
 
   const navigate = useNavigate();
@@ -147,7 +176,7 @@ export const Village: React.FC = () => {
     });
   };
 
-  const { village, crannyCapacity } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { village, crannyCapacity } = usePreloadedQuery(villageQuery, queryRef);
 
   useEffect(() => {
     if (village === null) {
@@ -169,7 +198,6 @@ export const Village: React.FC = () => {
     return navPart.tabType;
   }, [navigation]);
 
-
   if (village === null) {
     return null;
   }
@@ -190,10 +218,10 @@ export const Village: React.FC = () => {
         );
 
       case 'parties':
-        return <Parties />;
+        return partiesQueryRef && <Parties queryRef={partiesQueryRef} />;
 
       case 'tasks-activity':
-        return <VillageTasksActivity />;
+        return villageTasksActivityQueryRef && <VillageTasksActivity queryRef={villageTasksActivityQueryRef} />;
 
       default:
         throw new Error(`Did not find component for path ${n.path}`);
@@ -211,9 +239,7 @@ export const Village: React.FC = () => {
       <div>
         {navigation.map((n) => (
           <Link key={n.path} to={n.path}>
-            <span onMouseEnter={n.preloadData}>
-              {n.label}
-            </span>
+            <span onMouseEnter={n.preloadData}>{n.label}</span>
           </Link>
         ))}
       </div>
@@ -232,7 +258,7 @@ export const Village: React.FC = () => {
         <Route path="*" element={<Navigate to={navigation[0].path} />} />
       </Routes>
       <Dialog onClose={closeSettings} open={showSettings}>
-        <VillageSettings getTabType={getTabType} tab={currentTab || navigation[0].path} />
+        {villageSettingsQueryRef && <VillageSettings getTabType={getTabType} tab={currentTab || navigation[0].path} queryRef={villageSettingsQueryRef} />}
       </Dialog>
     </div>
   );

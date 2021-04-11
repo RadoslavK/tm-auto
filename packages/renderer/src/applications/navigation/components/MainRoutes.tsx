@@ -10,7 +10,7 @@ import type { MainRoutesQuery } from '../../../_graphql/__generated__/MainRoutes
 import { NextTasksExecution } from '../../../_shared/components/nextTaskExecution/NextTasksExecution.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { BotActivity } from '../../BotActivity.js';
-import { navigationApps } from './Navigation.js';
+import type { NavigationApp } from '../../EnsureMainNavigation.js';
 
 const query = graphql`
   query MainRoutesQuery {
@@ -21,7 +21,11 @@ const query = graphql`
   }
 `;
 
-export const MainRoutes: React.FC = () => {
+type Props = {
+  readonly navigationApps: readonly NavigationApp[];
+};
+
+export const MainRoutes: React.FC<Props> = ({ navigationApps }) => {
   const redirectElement = <Navigate to={navigationApps[0].path}/>;
   const { isBotActive, nextTasksExecution } = useLazyLoadQuery<MainRoutesQuery>(query, {}, { fetchPolicy: 'store-and-network' });
 
@@ -36,7 +40,7 @@ export const MainRoutes: React.FC = () => {
             element={redirectElement}
           />
           {navigationApps.map((app) => (
-            <Route key={app.path} element={<app.component />} path={`${app.path}/*`}/>
+            <Route key={app.path} element={app.element} path={`${app.path}/*`}/>
           ))}
           <Route path="*" element={redirectElement} />
         </Routes>

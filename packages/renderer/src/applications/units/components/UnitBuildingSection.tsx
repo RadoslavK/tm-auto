@@ -63,10 +63,7 @@ const unitBuildingSectionAutoUnitsBuildingSettingsFragment = graphql`
     fragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {
         allow
         maxBuildTime {
-            days
-            hours
-            minutes
-            seconds
+            ...Duration @relay(mask: false)
         }
         units {
             index

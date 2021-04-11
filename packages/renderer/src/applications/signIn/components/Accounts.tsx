@@ -21,9 +21,7 @@ import type {
 } from 'relay-runtime';
 
 import type { Accounts_accounts$key } from '../../../_graphql/__generated__/Accounts_accounts.graphql.js';
-import type { AccountsQuery } from '../../../_graphql/__generated__/AccountsQuery.graphql.js';
 import type { AccountsSubscription } from '../../../_graphql/__generated__/AccountsSubscription.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { getServerShortcut } from '../../../utils/getServerShortcut.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,18 +72,11 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 type BaseProps = {
+  readonly accountsKey: Accounts_accounts$key;
   readonly disabled?: boolean;
   readonly onAccountChanged: (id: string) => void;
   readonly selectedId: string | null | undefined;
 };
-
-const accountsQuery = graphql`
-    query AccountsQuery {
-        accounts {
-            ...Accounts_accounts
-        }
-    }
-`;
 
 const accountsSubscription = graphql`
     subscription AccountsSubscription {
@@ -96,8 +87,6 @@ const accountsSubscription = graphql`
 `;
 
 const AccountsContainer: React.FC<BaseProps> = (props) => {
-  const { accounts } = useLazyLoadQuery<AccountsQuery>(accountsQuery, {}, { fetchPolicy: 'store-and-network' });
-
   const subscriptionConfig: GraphQLSubscriptionConfig<AccountsSubscription> = useMemo(() => ({
     subscription: accountsSubscription,
     variables: {},
@@ -117,10 +106,7 @@ const AccountsContainer: React.FC<BaseProps> = (props) => {
   useSubscription(subscriptionConfig);
 
   return (
-    <Accounts
-      {...props}
-      accountsKey={accounts}
-    />
+    <Accounts {...props} />
   );
 };
 
@@ -142,11 +128,7 @@ const fragmentDefinition = graphql`
   }
 `;
 
-type Props = BaseProps & {
-  readonly accountsKey: Accounts_accounts$key;
-};
-
-const Accounts: React.FC<Props> = ({
+const Accounts: React.FC<BaseProps> = ({
   accountsKey,
   disabled,
   onAccountChanged,

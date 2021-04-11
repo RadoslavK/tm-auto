@@ -25,7 +25,10 @@ import React, {
   useState,
 } from 'react';
 import {
+  PreloadedQuery,
   useMutation,
+  usePreloadedQuery,
+  useQueryLoader,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
@@ -35,13 +38,16 @@ import type {
   SignInFormCreateAccountMutation,
 } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDeleteAccountMutation } from '../../../_graphql/__generated__/SignInFormDeleteAccountMutation.graphql.js';
+import type { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
 import type { SignInFormLastSignedAccountIdSubscription } from '../../../_graphql/__generated__/SignInFormLastSignedAccountIdSubscription.graphql.js';
 import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import type { SignInFormSignInMutation } from '../../../_graphql/__generated__/SignInFormSignInMutation.graphql.js';
 import type { SignInFormUpdateAccountMutation } from '../../../_graphql/__generated__/SignInFormUpdateAccountMutation.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { Accounts } from './Accounts.js';
-import { SignInFormDialog } from './SignInFormDialog.js';
+import {
+  SignInFormDialog,
+  signInFormDialogAccountQuery,
+} from './SignInFormDialog.js';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -89,9 +95,12 @@ export enum SignInFormDialogType {
   Delete = 'delete',
 }
 
-const signInFormQuery = graphql`
+export const signInFormQuery = graphql`
   query SignInFormQuery {
     lastSignedAccountId
+    accounts {
+        ...Accounts_accounts
+    }
   }
 `;
 
@@ -133,8 +142,12 @@ const lastSignedAccountIdSubscription = graphql`
   }
 `;
 
-export const SignInForm: React.FC = () => {
-  const { lastSignedAccountId } = useLazyLoadQuery<SignInFormQuery>(signInFormQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly queryRef: PreloadedQuery<SignInFormQuery>;
+};
+
+export const SignInForm: React.FC<Props> = ({ queryRef }) => {
+  const { accounts, lastSignedAccountId } = usePreloadedQuery(signInFormQuery, queryRef);
 
   const lastSignedAccountIdSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SignInFormLastSignedAccountIdSubscription> => ({
     subscription: lastSignedAccountIdSubscription,
@@ -237,6 +250,12 @@ export const SignInForm: React.FC = () => {
     });
   };
 
+  const [signInFormDialogAccountQueryRef, loadSignInFormDialogAccountQuery] = useQueryLoader<SignInFormDialogQuery>(signInFormDialogAccountQuery);
+
+  const preloadAccountData = (accId: string) => {
+    loadSignInFormDialogAccountQuery({ id: accId }, { fetchPolicy: 'network-only' });
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -248,6 +267,7 @@ export const SignInForm: React.FC = () => {
           <div className={classes.form}>
             <Suspense fallback={null}>
               <Accounts
+                accountsKey={accounts}
                 disabled={disabled}
                 onAccountChanged={setSelectedAccountId}
                 selectedId={selectedAccountId}
@@ -276,7 +296,10 @@ export const SignInForm: React.FC = () => {
               color="secondary"
               disabled={disabled || !selectedAccountId}
               fullWidth
-              onClick={() => setDialogType(SignInFormDialogType.Update)}
+              onClick={() => {
+                setDialogType(SignInFormDialogType.Update);
+                preloadAccountData(selectedAccountId!);
+              }}
               variant="outlined">
               Update account
             </Button>
@@ -330,11 +353,13 @@ export const SignInForm: React.FC = () => {
         }
       >
         <Suspense fallback={null}>
-          <SignInFormDialog
-            onSubmit={onSubmitForm}
-            selectedAccountId={selectedAccountId}
-            type={dialogType}
-          />
+          {signInFormDialogAccountQueryRef && (
+            <SignInFormDialog
+              onSubmit={onSubmitForm}
+              type={dialogType}
+              queryRef={signInFormDialogAccountQueryRef}
+            />
+          )}
         </Suspense>
       </Dialog>
       <Dialog

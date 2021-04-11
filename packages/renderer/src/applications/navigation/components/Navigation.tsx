@@ -18,27 +18,9 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { NavigationQuery } from '../../../_graphql/__generated__/NavigationQuery.graphql.js';
 import type { NavigationSubscription } from '../../../_graphql/__generated__/NavigationSubscription.graphql.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
-import { Hero } from '../../hero/components/Hero.js';
-import { Logs } from '../../logs/components/Logs.js';
-import { MapSearch } from '../../mapSearch/MapSearch.js';
-import { Settings } from '../../settings/Settings.js';
-import { Villages } from '../../villages/components/Villages.js';
+import type { NavigationApp } from '../../EnsureMainNavigation.js';
 import { BotStateToggle } from './BotStateToggle.js';
 import { SignOut } from './SignOut.js';
-
-type NavigationApp = {
-  readonly component: React.ComponentType;
-  readonly label: string;
-  readonly path: string;
-};
-
-export const navigationApps: readonly NavigationApp[] = [
-  { component: Villages, label: 'Villages', path: '/villages' },
-  { component: Hero, label: 'Hero', path: '/hero' },
-  { component: Settings, label: 'Settings', path: '/settings' },
-  { component: MapSearch, label: 'Search map', path: '/map-search' },
-  { component: Logs, label: 'Logs', path: '/logs' },
-];
 
 const navigationQuery = graphql`
   query NavigationQuery {
@@ -52,7 +34,11 @@ const navigationSubscription = graphql`
   }
 `;
 
-export const Navigation: React.FC = () => {
+type Props = {
+  readonly navigationApps: readonly NavigationApp[];
+};
+
+export const Navigation: React.FC<Props> = ({ navigationApps }) => {
   const { pathname } = useLocation();
   const [lastVillagesPath, setLastVillagesPath] = useState<string>();
 
@@ -68,7 +54,7 @@ export const Navigation: React.FC = () => {
 
   useSubscription(subscriptionConfig);
 
-  const currentItemIndex = navigationApps.findIndex((app) => pathname.startsWith(app.path));
+  const currentItemIndex = navigationApps.findIndex((app) => pathname.startsWith(`/${app.path}`));
 
   if (currentItemIndex === -1) {
     return null;
@@ -92,11 +78,12 @@ export const Navigation: React.FC = () => {
             component={Link}
             label={app.label}
             onClick={index === 0 ? undefined : markLastVillagePath}
+            onMouseEnter={app.preload}
             to={getTabPath(
               index,
               index !== 0
-                ? navigationApps[index].path
-                : lastVillagesPath || navigationApps[index].path,
+                ? `/${navigationApps[index].path}`
+                : lastVillagesPath || `/${navigationApps[index].path}`,
             )}
           />
         ))}

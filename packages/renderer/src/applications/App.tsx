@@ -16,6 +16,7 @@ import { RecoilRoot } from 'recoil';
 import { ErrorBoundary } from '../ErrorBoundary.js';
 import { EnsureGlobalState } from './EnsureGlobalState.js';
 import { EnsureGraphQL } from './EnsureGraphQL.js';
+import { EnsureMainNavigation } from './EnsureMainNavigation.js';
 import { EnsureTitle } from './EnsureTitle.js';
 import { GraphiQL } from './GraphiQL.js';
 import { MainRoutes } from './navigation/components/MainRoutes.js';
@@ -69,16 +70,20 @@ export const App: React.FC = () => {
               <EnsureSignedIn>
                 <EnsureGlobalState />
                 <EnsureTitle />
-                <div className={classes.root}>
-                  <CssBaseline />
-                  <Navigation />
-                  <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <GraphiQL />
-                    <SettingsManagement />
-                    <MainRoutes />
-                  </main>
-                </div>
+                <EnsureMainNavigation>
+                  {(navigationApps) => (
+                    <div className={classes.root}>
+                      <CssBaseline />
+                      <Navigation navigationApps={navigationApps} />
+                      <main className={classes.content}>
+                        <div className={classes.toolbar} />
+                        <GraphiQL />
+                        <SettingsManagement />
+                        <MainRoutes navigationApps={navigationApps} />
+                      </main>
+                    </div>
+                  )}
+                </EnsureMainNavigation>
               </EnsureSignedIn>
             </EnsureGraphQL>
           </RecoilRoot>

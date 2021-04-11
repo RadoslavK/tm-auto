@@ -1,14 +1,24 @@
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
-import { useSubscription } from 'react-relay/hooks';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
+import {
+  useQueryLoader,
+  useSubscription,
+} from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { EnsureSignedInBotStateQuery } from '../../../_graphql/__generated__/EnsureSignedInBotStateQuery.graphql.js';
 import type { EnsureSignedInBotStateSubscription } from '../../../_graphql/__generated__/EnsureSignedInBotStateSubscription.graphql.js';
+import type { SignInFormQuery } from '../../../_graphql/__generated__/SignInFormQuery.graphql.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { GraphiQL } from '../../GraphiQL.js';
 import { SettingsManagement } from '../../settings/management/SettingsManagement.js';
-import { SignInForm } from './SignInForm.js';
+import {
+  SignInForm,
+  signInFormQuery,
+} from './SignInForm.js';
 
 const botStateQuery = graphql`
   query EnsureSignedInBotStateQuery {
@@ -35,12 +45,22 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
 
   useSubscription(subscriptionConfig);
 
+  const [signInFormQueryRef, loadSignInFormQuery] = useQueryLoader<SignInFormQuery>(signInFormQuery);
+
+  useEffect(() => {
+    if (botState !== 'None') {
+      return;
+    }
+
+    loadSignInFormQuery({}, { fetchPolicy: 'network-only' });
+  }, [botState, loadSignInFormQuery]);
+
   if (botState === 'None') {
     return (
       <div>
         <GraphiQL />
         <SettingsManagement />
-        <SignInForm />
+        {signInFormQueryRef && <SignInForm queryRef={signInFormQueryRef} />}
       </div>
     );
   }

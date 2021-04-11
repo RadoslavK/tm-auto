@@ -37,7 +37,6 @@ fragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {
 }
 
 fragment BuildingSpot_buildingSpot on BuildingSpot {
-  id
   name
   maxLevel
   type
@@ -112,13 +111,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "name",
             "storageKey": null
           },
@@ -181,6 +173,13 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -188,12 +187,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b47666b4d28e4362100fa1e6bb0a703a",
+    "cacheID": "3d1cabb80cc0419bcad6608971395d59",
     "id": null,
     "metadata": {},
     "name": "BuildingSpotsSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
+    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
   }
 };
 })();

@@ -40,6 +40,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 type Props = {
   readonly isVillageActive: boolean;
   readonly village: VillageSideItem_village$key;
+  readonly onClick: () => void;
 };
 
 const villageSideItemVillageFragment = graphql`
@@ -53,6 +54,7 @@ const villageSideItemVillageFragment = graphql`
 export const VillageSideItem: React.FC<Props> = ({
   isVillageActive,
   village,
+  onClick,
 }) => {
   const villageFragment = useFragment(villageSideItemVillageFragment, village);
   const { id, scanned } = villageFragment;
@@ -69,7 +71,7 @@ export const VillageSideItem: React.FC<Props> = ({
   );
 
   const wrapLink = (children: JSX.Element): JSX.Element => scanned
-    ? <Link className={classes.scannedVillageName} to={path}>{children}</Link>
+    ? <Link className={classes.scannedVillageName} to={path} onClick={onClick}>{children}</Link>
     : <span className={classes.notScannedVillageName} title="Village has not been scanned yet!">{children}</span>;
 
   return (

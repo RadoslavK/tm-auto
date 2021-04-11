@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import {
+  PreloadedQuery,
+  usePreloadedQuery,
+} from 'react-relay/hooks';
 
 import type { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql.js';
-import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { NewBuildingDialogItem } from './NewBuildingDialogItem.js';
 
 const useStyles = makeStyles({
@@ -22,9 +23,10 @@ const useStyles = makeStyles({
 type Props = {
   readonly fieldId: number;
   readonly onSelect: () => void;
+  readonly queryRef: PreloadedQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>;
 };
 
-const newBuildingDialogAvailableNewBuildingsTypes = graphql`
+export const newBuildingDialogQuery = graphql`
   query NewBuildingDialogAvailableNewBuildingsTypesQuery($input: AvailableNewBuildingsInput!) {
       availableNewBuildings(input: $input) {
           type
@@ -35,19 +37,10 @@ const newBuildingDialogAvailableNewBuildingsTypes = graphql`
 
 export const NewBuildingDialog: React.FC<Props> = React.forwardRef(
   (props, ref: any) => {
-    const { fieldId, onSelect } = props;
+    const { fieldId, onSelect, queryRef } = props;
 
     const classes = useStyles({});
-    const villageId = useRecoilValue(selectedVillageIdState);
-    const { availableNewBuildings } = useLazyLoadQuery<NewBuildingDialogAvailableNewBuildingsTypesQuery>(
-      newBuildingDialogAvailableNewBuildingsTypes,
-      {
-        input: { fieldId, villageId },
-      },
-      {
-        fetchPolicy: 'network-only',
-      },
-    );
+    const { availableNewBuildings } = usePreloadedQuery(newBuildingDialogQuery, queryRef);
 
     return (
       <div ref={ref} className={classes.root}>

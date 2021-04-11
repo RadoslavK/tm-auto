@@ -1,7 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import { useSubscription } from 'react-relay/hooks';
+import {
+  PreloadedQuery,
+  usePreloadedQuery,
+  useQueryLoader,
+  useSubscription,
+} from 'react-relay/hooks';
 import {
   Navigate,
   Route,
@@ -9,12 +14,15 @@ import {
 } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.graphql.js';
 import type { VillagesActiveVillageIdChangedSubscription } from '../../../_graphql/__generated__/VillagesActiveVillageIdChangedSubscription.graphql.js';
 import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 import type { VillagesSubscription } from '../../../_graphql/__generated__/VillagesSubscription.graphql.js';
 import type { VillagesVillageSubscription } from '../../../_graphql/__generated__/VillagesVillageSubscription.graphql.js';
-import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
-import { Village } from './Village.js';
+import {
+  Village,
+  villageQuery,
+} from './Village.js';
 import { VillageSideItem } from './VillageSideItem.js';
 
 const useStyles = makeStyles({
@@ -38,7 +46,7 @@ graphql`
     }
 `;
 
-const villagesQuery = graphql`
+export const villagesQuery = graphql`
     query VillagesQuery {
         villages {
             ...Villages_village @relay (mask: false)
@@ -70,10 +78,14 @@ const villageSubscription = graphql`
     }
 `;
 
-export const Villages: React.FC = () => {
+type Props = {
+  readonly queryRef: PreloadedQuery<VillagesQuery>;
+};
+
+export const Villages: React.FC<Props> = ({ queryRef }) => {
   const classes = useStyles();
 
-  const { activeVillageId, villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { activeVillageId, villages } = usePreloadedQuery(villagesQuery, queryRef);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesSubscription> => ({
     subscription: villagesSubscription,
@@ -105,6 +117,8 @@ export const Villages: React.FC = () => {
 
   const scannedVillages = useMemo(() => villages.filter(v => v.scanned), [villages]);
 
+  const [villageQueryRef, loadVillageQuery] = useQueryLoader<VillageQuery>(villageQuery);
+
   return (
     <div className={classes.root}>
       <div className={classes.sideMenu}>
@@ -113,11 +127,14 @@ export const Villages: React.FC = () => {
             key={village.id}
             isVillageActive={village.id === activeVillageId}
             village={village}
+            onClick={() => {
+              loadVillageQuery({ villageId: village.id }, { fetchPolicy: 'store-and-network' });
+            }}
           />
         ))}
       </div>
       <Routes>
-        <Route path=":id/*" element={<Village />} />
+        <Route path=":id/*" element={villageQueryRef && <Village queryRef={villageQueryRef} />} />
         {scannedVillages.length > 0 && (
           <Route path="*" element={<Navigate to={scannedVillages[0].id} />} />
         )}

@@ -8,7 +8,9 @@ import React, {
   useState, 
 } from 'react';
 import {
+  PreloadedQuery,
   useMutation,
+  usePreloadedQuery,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
@@ -58,7 +60,7 @@ const villageTileTypesQuery = graphql`
     }
 `;
 
-const query = graphql`
+export const mapSearchQuery = graphql`
     query MapSearchQuery {
         mapScanProgress
         mapSearchState
@@ -110,7 +112,11 @@ const mapSearchStateSubscription = graphql`
   }
 `;
 
-export const MapSearch: React.FC = () => {
+type Props = {
+  readonly queryRef: PreloadedQuery<MapSearchQuery>;
+};
+
+export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const [sortBy, setSortBy] = useState<SearchMapSortBy>(SearchMapSortBy.Distance);
   const [order, setOrder] = useState<SortOrder>(SortOrder.Asc);
   const [cropBonus, setCropBonus] = useState(0);
@@ -121,7 +127,7 @@ export const MapSearch: React.FC = () => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { mapSearchState, mapScanProgress } = useLazyLoadQuery<MapSearchQuery>(query, {}, { fetchPolicy: 'store-and-network' });
+  const { mapSearchState, mapScanProgress } = usePreloadedQuery(mapSearchQuery, queryRef);
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
   const [stopScan] = useMutation(stopMapScanMutation);
