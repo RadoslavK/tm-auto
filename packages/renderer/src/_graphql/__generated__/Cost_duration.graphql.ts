@@ -57,5 +57,5 @@ const node: ReaderFragment = {
   "type": "Duration",
   "abstractKey": null
 };
-(node as any).hash = '00ee6c7b578c1c53950ba95330775d6d';
+(node as any).hash = '28e1c1d26c9bf2d6011ec69acc175d1e';
 export default node;

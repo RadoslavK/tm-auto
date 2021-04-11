@@ -4,32 +4,31 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits";
-export type NextTaskExecutionResetMutationVariables = {
-    task: TaskType;
+export type PartiesQueryVariables = {
+    villageId: string;
 };
-export type NextTaskExecutionResetMutationResponse = {
-    readonly resetNextTaskExecution: {
-        readonly " $fragmentRefs": FragmentRefs<"NextTaskExecution_timestamp">;
+export type PartiesQueryResponse = {
+    readonly nextVillageTaskExecution: {
+        readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
     };
 };
-export type NextTaskExecutionResetMutation = {
-    readonly response: NextTaskExecutionResetMutationResponse;
-    readonly variables: NextTaskExecutionResetMutationVariables;
+export type PartiesQuery = {
+    readonly response: PartiesQueryResponse;
+    readonly variables: PartiesQueryVariables;
 };
 
 
 
 /*
-mutation NextTaskExecutionResetMutation(
-  $task: TaskType!
+query PartiesQuery(
+  $villageId: ID!
 ) {
-  resetNextTaskExecution(task: $task) {
-    ...NextTaskExecution_timestamp
+  nextVillageTaskExecution(task: AutoParty, villageId: $villageId) {
+    ...NextVillageTaskExecution_timestamp
   }
 }
 
-fragment NextTaskExecution_timestamp on Timestamp {
+fragment NextVillageTaskExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -39,14 +38,19 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "task"
+    "name": "villageId"
   }
 ],
 v1 = [
   {
-    "kind": "Variable",
+    "kind": "Literal",
     "name": "task",
-    "variableName": "task"
+    "value": "AutoParty"
+  },
+  {
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
   }
 ];
 return {
@@ -54,40 +58,40 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "NextTaskExecutionResetMutation",
+    "name": "PartiesQuery",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
-        "name": "resetNextTaskExecution",
+        "name": "nextVillageTaskExecution",
         "plural": false,
         "selections": [
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "NextTaskExecution_timestamp"
+            "name": "NextVillageTaskExecution_timestamp"
           }
         ],
         "storageKey": null
       }
     ],
-    "type": "Mutation",
+    "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "NextTaskExecutionResetMutation",
+    "name": "PartiesQuery",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
-        "name": "resetNextTaskExecution",
+        "name": "nextVillageTaskExecution",
         "plural": false,
         "selections": [
           {
@@ -103,14 +107,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9afdf998081acb31e6f7dbe5626c4271",
+    "cacheID": "0c92afd98b57435b5d5fcd82816ecf7d",
     "id": null,
     "metadata": {},
-    "name": "NextTaskExecutionResetMutation",
-    "operationKind": "mutation",
-    "text": "mutation NextTaskExecutionResetMutation(\n  $task: TaskType!\n) {\n  resetNextTaskExecution(task: $task) {\n    ...NextTaskExecution_timestamp\n  }\n}\n\nfragment NextTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "name": "PartiesQuery",
+    "operationKind": "query",
+    "text": "query PartiesQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecution(task: AutoParty, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'd96d6a420eb7352b798ccd5cf8f1405a';
+(node as any).hash = '8cb653854d7822a05e1f050a7ad205f2';
 export default node;

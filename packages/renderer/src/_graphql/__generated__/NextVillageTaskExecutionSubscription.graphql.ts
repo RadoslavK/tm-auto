@@ -11,7 +11,7 @@ export type NextVillageTaskExecutionSubscriptionVariables = {
 };
 export type NextVillageTaskExecutionSubscriptionResponse = {
     readonly nextVillageTaskExecutionChanged: {
-        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
+        readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
     };
 };
 export type NextVillageTaskExecutionSubscription = {
@@ -27,11 +27,11 @@ subscription NextVillageTaskExecutionSubscription(
   $task: TaskType!
 ) {
   nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {
-    ...Timestamp
+    ...NextVillageTaskExecution_timestamp
   }
 }
 
-fragment Timestamp on Timestamp {
+fragment NextVillageTaskExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -80,7 +80,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "Timestamp"
+            "name": "NextVillageTaskExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -119,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8ab66ef89215e5de504e69716b70fbba",
+    "cacheID": "7c7ad4ec50545e00bcb42222b852e3e1",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionSubscription",
     "operationKind": "subscription",
-    "text": "subscription NextVillageTaskExecutionSubscription(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "subscription NextVillageTaskExecutionSubscription(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '1fb54700bee3799efaca510c43802525';
+(node as any).hash = 'fde44a22df84a2f566916a8b455994c0';
 export default node;

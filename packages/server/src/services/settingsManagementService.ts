@@ -293,6 +293,10 @@ export class SettingsManagementService {
             const newSettings = new AutoBuildSettings(autoBuildSettings);
 
             villageSettingsService.autoBuild.update(newSettings);
+            publishPayloadEvent(BotEvent.AutoBuildSettingsUpdated, {
+              settings: newSettings,
+              villageId,
+            });
           },
         );
 

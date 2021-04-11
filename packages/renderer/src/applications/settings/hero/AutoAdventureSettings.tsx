@@ -7,14 +7,16 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { TaskType } from 'shared/enums/TaskType.js';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
-import type { AutoAdventureSettingsQuery } from '../../../_graphql/__generated__/AutoAdventureSettingsQuery.graphql.js';
+import type { AutoAdventureSettings_autoAdventureSettings$key } from '../../../_graphql/__generated__/AutoAdventureSettings_autoAdventureSettings.graphql.js';
+import type { AutoAdventureSettings_timestamp$key } from '../../../_graphql/__generated__/AutoAdventureSettings_timestamp.graphql.js';
 import type { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql.js';
 import type { AutoAdventureSettingsSubscription } from '../../../_graphql/__generated__/AutoAdventureSettingsSubscription.graphql.js';
 import type { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';
@@ -23,7 +25,7 @@ import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 
-graphql`
+const settingsFragmentDef = graphql`
     fragment AutoAdventureSettings_autoAdventureSettings on AutoAdventureSettings {
         adventureCriteria
         allow
@@ -39,11 +41,9 @@ graphql`
     }
 `;
 
-const autoAdventureSettingsQuery = graphql`
-  query AutoAdventureSettingsQuery {
-      autoAdventureSettings {
-          ...AutoAdventureSettings_autoAdventureSettings @relay(mask: false)
-      }
+const nextTaskExecutionFragmentDef =  graphql`
+  fragment AutoAdventureSettings_timestamp on Timestamp {
+      ...NextTaskExecution_timestamp
   }
 `;
 
@@ -71,8 +71,15 @@ const subscription = graphql`
   }
 `;
 
-export const AutoAdventureSettings: React.FC = () => {
-  const { autoAdventureSettings } = useLazyLoadQuery<AutoAdventureSettingsQuery>(autoAdventureSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly settingsKey: AutoAdventureSettings_autoAdventureSettings$key;
+  readonly timestampKey: AutoAdventureSettings_timestamp$key;
+};
+
+export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampKey }) => {
+  const autoAdventureSettings = useFragment(settingsFragmentDef, settingsKey);
+  const nextTaskExecution = useFragment(nextTaskExecutionFragmentDef, timestampKey);
+
   const [updateSettings] = useMutation<AutoAdventureSettingsUpdateSettingsMutation>(autoAdventureSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoAdventureSettingsResetSettingsMutation>(autoAdventureSettingsResetSettingsMutation);
 
@@ -98,7 +105,7 @@ export const AutoAdventureSettings: React.FC = () => {
   }, [autoAdventureSettings]);
 
   useEffect(() => {
-    if (state && hasChanges) {
+    if (hasChanges) {
       updateSettings({
         variables: { settings: state },
         updater: (store) => {
@@ -111,10 +118,7 @@ export const AutoAdventureSettings: React.FC = () => {
 
   const onMaxTravelTimeChange = useCallback(
     (newMaxTravelTime: DurationModel) => {
-      setState(
-        (prevState) =>
-          prevState && { ...prevState, maxTravelTime: newMaxTravelTime },
-      );
+      setState((prevState) => ({ ...prevState, maxTravelTime: newMaxTravelTime }));
       setHasChanges(true);
     },
     [],
@@ -122,21 +126,14 @@ export const AutoAdventureSettings: React.FC = () => {
 
   const onCooldownChange = useCallback(
     (updatedCooldown: CoolDownModel): void => {
-      setState(
-        (prevState) =>
-          prevState && {
-            ...prevState,
-            coolDown: updatedCooldown,
-          },
-      );
+      setState((prevState) => ({
+        ...prevState,
+        coolDown: updatedCooldown,
+      }));
       setHasChanges(true);
     },
     [],
   );
-
-  if (!state) {
-    return null;
-  }
 
   const onReset = () => {
     resetSettings({
@@ -151,13 +148,10 @@ export const AutoAdventureSettings: React.FC = () => {
   const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { checked, name } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: checked,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
     setHasChanges(true);
   };
 
@@ -168,13 +162,10 @@ export const AutoAdventureSettings: React.FC = () => {
       return;
     }
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: +value,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: +value,
+    }));
     setHasChanges(true);
   };
 
@@ -183,13 +174,10 @@ export const AutoAdventureSettings: React.FC = () => {
   ): void => {
     const { name, value } = e.currentTarget;
 
-    setState(
-      (prevState) =>
-        prevState && {
-          ...prevState,
-          [name]: value,
-        },
-    );
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
     setHasChanges(true);
   };
 
@@ -207,7 +195,10 @@ export const AutoAdventureSettings: React.FC = () => {
     <div>
       <h2>AutoAdventure</h2>
 
-      <NextTaskExecution task={'AutoAdventure'} />
+      <NextTaskExecution
+        task={TaskType.AutoAdventure}
+        timestamp={nextTaskExecution}
+      />
 
       <Button
         color="primary"

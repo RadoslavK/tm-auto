@@ -6,15 +6,24 @@ import {
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { HeroBotStateQuery } from '../../../_graphql/__generated__/HeroBotStateQuery.graphql.js';
 import type { HeroBotStateSubscription } from '../../../_graphql/__generated__/HeroBotStateSubscription.graphql.js';
+import type { HeroQuery } from '../../../_graphql/__generated__/HeroQuery.graphql.js';
 import { AutoAdventureSettings } from '../../settings/hero/AutoAdventureSettings.js';
 import { HeroLevelUpSettings } from '../../settings/hero/HeroLevelUpSettings.js';
 import { HeroInformation } from './HeroInformation.js';
 
-const botStateQuery = graphql`
-  query HeroBotStateQuery {
+const query = graphql`
+  query HeroQuery {
       botState
+      autoAdventureSettings {
+          ...AutoAdventureSettings_autoAdventureSettings
+      }
+      nextTaskExecution(task: AutoAdventure) {
+          ...AutoAdventureSettings_timestamp
+      }
+      heroLevelUpSettings {
+          ...HeroLevelUpSettings_heroLevelUpSettings
+      }
   }
 `;
 
@@ -25,7 +34,12 @@ const botStateSubscription = graphql`
 `;
 
 export const Hero: React.FC = () => {
-  const { botState } = useLazyLoadQuery<HeroBotStateQuery>(botStateQuery, {}, { fetchPolicy: 'store-and-network' });
+  const {
+    autoAdventureSettings,
+    botState,
+    nextTaskExecution,
+    heroLevelUpSettings,
+  } = useLazyLoadQuery<HeroQuery>(query, {}, { fetchPolicy: 'store-and-network' });
 
   const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<HeroBotStateSubscription> => ({
     subscription: botStateSubscription,
@@ -40,9 +54,12 @@ export const Hero: React.FC = () => {
   return (
     <div>
       <h1>Hero settings</h1>
-      {botState !== 'InitialScanning' && <HeroInformation/>}
-      <AutoAdventureSettings/>
-      <HeroLevelUpSettings/>
+      {botState !== 'InitialScanning' && <HeroInformation />}
+      <AutoAdventureSettings
+        settingsKey={autoAdventureSettings}
+        timestampKey={nextTaskExecution}
+      />
+      <HeroLevelUpSettings settingsKey={heroLevelUpSettings} />
     </div>
   );
 };

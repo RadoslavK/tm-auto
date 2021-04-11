@@ -42,6 +42,12 @@ const buildingsQuery = graphql`
       buildingsInProgress(villageId: $villageId) {
           ...BuildingsInProgress_buildingsInProgress
       }
+      nextVillageTaskExecution(villageId: $villageId, task: AutoBuild) {
+          ...NextVillageTaskExecution_timestamp
+      }
+      autoBuildSettings(villageId: $villageId) {
+          ...BuildingQueue_autoBuildSettings
+      }
   }
 `;
 
@@ -67,7 +73,13 @@ export const Buildings: React.FC<Props> = ({
 }) => {
   const classes = useStyles({});
 
-  const { buildingSpots, buildingQueue, buildingsInProgress } = usePreloadedQuery(buildingsQuery, buildingsQueryRef);
+  const {
+    autoBuildSettings,
+    buildingSpots,
+    buildingQueue,
+    buildingsInProgress,
+    nextVillageTaskExecution,
+  } = usePreloadedQuery(buildingsQuery, buildingsQueryRef);
 
   return (
     <div className={classes.buildings}>
@@ -78,13 +90,14 @@ export const Buildings: React.FC<Props> = ({
         />
       </Suspense>
       <div className={classes.ongoingAndNextExecution}>
-        <NextVillageTaskExecution task="AutoBuild" />
+        <NextVillageTaskExecution task="AutoBuild" timestamp={nextVillageTaskExecution} />
         <Suspense fallback={null}>
           <BuildingsInProgress buildingsInProgressKey={buildingsInProgress} />
         </Suspense>
       </div>
       <Suspense fallback={null}>
         <BuildingQueue
+          autoBuildSettingsKey={autoBuildSettings}
           buildingQueueKey={buildingQueue}
           className={classes.queuedBuildings}
         />

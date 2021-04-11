@@ -1,16 +1,25 @@
 import {
+  arg,
+  enumType,
   idArg,
   mutationField,
+  objectType,
   queryField,
   subscriptionField,
 } from 'nexus';
+import { TaskType } from 'shared/enums/TaskType.js';
 
 import { Duration } from '../../_models/duration.js';
-import { TaskType } from '../../_models/misc/taskType.js';
 import { Timestamp } from '../../_models/misc/timestamp.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { convertDelayToDate } from '../../utils/convertDelayToDate.js';
+import type { NexusGenFieldTypes } from '../graphqlSchema.js';
+
+export const TaskTypeEnum = enumType({
+  name: 'TaskType',
+  members: TaskType,
+});
 
 export const NextTasksExecutionQuery = queryField(t => {
   t.field('nextTasksExecution', {
@@ -24,7 +33,7 @@ export const NextTaskExecutionQuery = queryField(t => {
   t.field('nextTaskExecution', {
     type: 'Timestamp',
     args: {
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
@@ -38,7 +47,7 @@ export const NextVillageTaskExecutionQuery = queryField(t => {
     type: 'Timestamp',
     args: {
       villageId: idArg(),
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
@@ -50,11 +59,39 @@ export const NextVillageTaskExecutionQuery = queryField(t => {
   });
 });
 
+export const NextVillageTaskExecutionPayloadField = objectType({
+  name: 'NextVillageTaskExecutionPayloadField',
+  definition: t => {
+    t.string('label');
+    t.field('task', { type: TaskTypeEnum });
+    t.field('timestamp', { type: 'Timestamp' });
+  },
+});
+
+export const NextVillageTaskExecutionsQuery = queryField(t => {
+  t.list.field('nextVillageTaskExecutions', {
+    type: NextVillageTaskExecutionPayloadField,
+    args: {
+      villageId: idArg(),
+    },
+    resolve(_, args, ctx) {
+      const requestedTasks: ReadonlyArray<TaskType> = [TaskType.AutoBuild, TaskType.AutoUnits, TaskType.AutoParty];
+      return ctx.nextExecutionService.getMultipleForVillage(args.villageId, requestedTasks).map(result => {
+        return {
+          label: result.task,
+          task: result.task,
+          timestamp: Timestamp.fromDate(result.date),
+        } as NexusGenFieldTypes['NextVillageTaskExecutionPayloadField'];
+      });
+    },
+  });
+});
+
 export const SetNextTaskExecutionMutation = mutationField(t => {
   t.field('setNextTaskExecution', {
     type: 'Timestamp',
     args: {
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
       delay: 'DurationInput',
     },
     resolve: (_, args, ctx) =>
@@ -87,7 +124,7 @@ export const SetNextVillageTaskExecutionMutation = mutationField(t => {
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
       delay: 'DurationInput',
     },
     resolve: (_, args, ctx) =>
@@ -105,7 +142,7 @@ export const ResetNextTaskExecutionMutation = mutationField(t => {
   t.field('resetNextTaskExecution', {
     type: 'Timestamp',
     args: {
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
@@ -131,7 +168,7 @@ export const ResetNextVillageTaskExecutionMutation = mutationField(t => {
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
@@ -159,7 +196,7 @@ export const NextTaskExecutionChangedSubscription = subscriptionField(t => {
   t.field('nextTaskExecutionChanged', {
     type: 'Timestamp',
     args: {
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     ...subscribeToEvent(
       BotEvent.NextTaskExecutionChanged,
@@ -176,7 +213,7 @@ export const NextVillageTaskExecutionChangedSubscription = subscriptionField(t =
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: 'TaskType',
+      task: arg({ type: TaskTypeEnum }),
     },
     ...subscribeToEvent(
       BotEvent.NextVillageTaskExecutionChanged,

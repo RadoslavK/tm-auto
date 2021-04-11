@@ -13,7 +13,6 @@ import {
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { VillagesActiveVillageIdChangedSubscription } from '../../../_graphql/__generated__/VillagesActiveVillageIdChangedSubscription.graphql.js';
-import type { VillagesActiveVillageIdQuery } from '../../../_graphql/__generated__/VillagesActiveVillageIdQuery.graphql.js';
 import type { VillagesQuery } from '../../../_graphql/__generated__/VillagesQuery.graphql.js';
 import type { VillagesSubscription } from '../../../_graphql/__generated__/VillagesSubscription.graphql.js';
 import type { VillagesVillageSubscription } from '../../../_graphql/__generated__/VillagesVillageSubscription.graphql.js';
@@ -33,28 +32,27 @@ export type VillageRouteParams = {
   readonly id: string;
 };
 
-const villagesQuery = graphql`
-    query VillagesQuery {
-        villages {
-            id
-            scanned
-            ...VillageSideItem_village
-        }
+graphql`
+    fragment Villages_village on Village {
+        id
+        scanned
+        ...VillageSideItem_village
     }
 `;
 
-const activeVillageIdQuery = graphql`
-  query VillagesActiveVillageIdQuery {
-      activeVillageId
-  }
+const villagesQuery = graphql`
+    query VillagesQuery {
+        villages {
+            ...Villages_village @relay (mask: false)
+        }
+        activeVillageId
+    }
 `;
 
 const villagesSubscription = graphql`
    subscription VillagesSubscription {
        villagesUpdated {
-           id
-           scanned
-           ...VillageSideItem_village
+          ...Villages_village
        }
    }
 `;
@@ -68,12 +66,8 @@ const activeVillageIdChangedSubscription = graphql`
 const villageSubscription = graphql`
     subscription VillagesVillageSubscription {
         villageUpdated {
-            id
-            scanned
-            resources {
-                ...VillageResources_villageResources
-            }
-            ...VillageSideItem_village
+            ...Villages_village
+            ...Village_village
         }
     }
 `;
@@ -81,8 +75,7 @@ const villageSubscription = graphql`
 export const Villages: React.FC = () => {
   const classes = useStyles();
 
-  const { villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
-  const { activeVillageId } = useLazyLoadQuery<VillagesActiveVillageIdQuery>(activeVillageIdQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { activeVillageId, villages } = useLazyLoadQuery<VillagesQuery>(villagesQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<VillagesSubscription> => ({
     subscription: villagesSubscription,

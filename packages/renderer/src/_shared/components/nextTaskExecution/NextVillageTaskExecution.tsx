@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -14,12 +14,12 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
-import type {
-  NextVillageTaskExecutionQuery,
-  TaskType, 
-} from '../../../_graphql/__generated__/NextVillageTaskExecutionQuery.graphql.js';
+import type { NextVillageTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextVillageTaskExecution_timestamp.graphql.js';
 import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
-import type { NextVillageTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
+import type {
+  NextVillageTaskExecutionSetMutation,
+  TaskType,
+} from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type { NextVillageTaskExecutionSubscription } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
@@ -28,20 +28,19 @@ import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
   readonly task: TaskType;
+  readonly timestamp: NextVillageTaskExecution_timestamp$key;
 };
 
-const query = graphql`
-  query NextVillageTaskExecutionQuery($task: TaskType!, $villageId: ID!) {
-      nextVillageTaskExecution(task: $task, villageId: $villageId) {
-          totalSeconds
-      }
+const fragmentDef = graphql`
+  fragment NextVillageTaskExecution_timestamp on Timestamp {
+    ...Timestamp @relay(mask: false)
   }
 `;
 
 const setMutation = graphql`
   mutation NextVillageTaskExecutionSetMutation($villageId: ID!, $task: TaskType!, $delay: DurationInput!) {
       setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
-          ...Timestamp
+          ...NextVillageTaskExecution_timestamp
       }
   }
 `;
@@ -49,7 +48,7 @@ const setMutation = graphql`
 const resetMutation = graphql`
     mutation NextVillageTaskExecutionResetMutation($villageId: ID!, $task: TaskType!) {
         resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
-            ...Timestamp
+            ...NextVillageTaskExecution_timestamp
         }
     }
 `;
@@ -57,17 +56,14 @@ const resetMutation = graphql`
 const subscription = graphql`
   subscription NextVillageTaskExecutionSubscription($villageId: ID!, $task: TaskType!) {
       nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {
-          ...Timestamp
+          ...NextVillageTaskExecution_timestamp
       }
   }
 `;
 
-export const NextVillageTaskExecution: React.FC<Props> = ({ task }) => {
+export const NextVillageTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { nextVillageTaskExecution } = useLazyLoadQuery<NextVillageTaskExecutionQuery>(query, {
-    task,
-    villageId,
-  }, { fetchPolicy: 'store-and-network' });
+  const nextVillageTaskExecution = useFragment(fragmentDef, timestamp);
   const [setNextExecution] = useMutation<NextVillageTaskExecutionSetMutation>(setMutation);
   const [resetNextExecution] = useMutation<NextVillageTaskExecutionResetMutation>(resetMutation);
 

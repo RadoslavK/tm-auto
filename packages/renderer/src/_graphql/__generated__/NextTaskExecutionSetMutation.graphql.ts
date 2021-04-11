@@ -17,7 +17,7 @@ export type NextTaskExecutionSetMutationVariables = {
 };
 export type NextTaskExecutionSetMutationResponse = {
     readonly setNextTaskExecution: {
-        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
+        readonly " $fragmentRefs": FragmentRefs<"NextTaskExecution_timestamp">;
     };
 };
 export type NextTaskExecutionSetMutation = {
@@ -33,11 +33,11 @@ mutation NextTaskExecutionSetMutation(
   $delay: DurationInput!
 ) {
   setNextTaskExecution(task: $task, delay: $delay) {
-    ...Timestamp
+    ...NextTaskExecution_timestamp
   }
 }
 
-fragment Timestamp on Timestamp {
+fragment NextTaskExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -86,7 +86,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "Timestamp"
+            "name": "NextTaskExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -125,14 +125,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "923880de62e73bda4e9348b4c8addc83",
+    "cacheID": "b124d30c5b998b48ce054f4b692a5723",
     "id": null,
     "metadata": {},
     "name": "NextTaskExecutionSetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextTaskExecutionSetMutation(\n  $task: TaskType!\n  $delay: DurationInput!\n) {\n  setNextTaskExecution(task: $task, delay: $delay) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "mutation NextTaskExecutionSetMutation(\n  $task: TaskType!\n  $delay: DurationInput!\n) {\n  setNextTaskExecution(task: $task, delay: $delay) {\n    ...NextTaskExecution_timestamp\n  }\n}\n\nfragment NextTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '453d4b8d5421691f0b5e8b76bee07d47';
+(node as any).hash = 'd888250f3f16c29826506462c547adcc';
 export default node;

@@ -22,6 +22,9 @@ export type UnitsAutoUnitsSettingsQueryResponse = {
             readonly " $fragmentRefs": FragmentRefs<"UnitBuildingSection_autoUnitsBuildingSettings">;
         };
     };
+    readonly nextVillageTaskExecution: {
+        readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
+    };
 };
 export type UnitsAutoUnitsSettingsQuery = {
     readonly response: UnitsAutoUnitsSettingsQueryResponse;
@@ -48,6 +51,13 @@ query UnitsAutoUnitsSettingsQuery(
       ...UnitBuildingSection_autoUnitsBuildingSettings
     }
   }
+  nextVillageTaskExecution(task: AutoUnits, villageId: $villageId) {
+    ...NextVillageTaskExecution_timestamp
+  }
+}
+
+fragment NextVillageTaskExecution_timestamp on Timestamp {
+  totalSeconds
 }
 
 fragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {
@@ -80,21 +90,30 @@ var v0 = [
     "name": "villageId"
   }
 ],
-v1 = [
-  {
-    "kind": "Variable",
-    "name": "villageId",
-    "variableName": "villageId"
-  }
-],
+v1 = {
+  "kind": "Variable",
+  "name": "villageId",
+  "variableName": "villageId"
+},
 v2 = [
+  (v1/*: any*/)
+],
+v3 = [
   {
     "args": null,
     "kind": "FragmentSpread",
     "name": "UnitBuildingSection_autoUnitsBuildingSettings"
   }
 ],
-v3 = [
+v4 = [
+  {
+    "kind": "Literal",
+    "name": "task",
+    "value": "AutoUnits"
+  },
+  (v1/*: any*/)
+],
+v5 = [
   {
     "alias": null,
     "args": null,
@@ -190,7 +209,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AutoUnitsSettings",
         "kind": "LinkedField",
         "name": "autoUnitsSettings",
@@ -203,7 +222,7 @@ return {
             "kind": "LinkedField",
             "name": "barracks",
             "plural": false,
-            "selections": (v2/*: any*/),
+            "selections": (v3/*: any*/),
             "storageKey": null
           },
           {
@@ -213,7 +232,7 @@ return {
             "kind": "LinkedField",
             "name": "stable",
             "plural": false,
-            "selections": (v2/*: any*/),
+            "selections": (v3/*: any*/),
             "storageKey": null
           },
           {
@@ -223,7 +242,7 @@ return {
             "kind": "LinkedField",
             "name": "workshop",
             "plural": false,
-            "selections": (v2/*: any*/),
+            "selections": (v3/*: any*/),
             "storageKey": null
           },
           {
@@ -233,8 +252,24 @@ return {
             "kind": "LinkedField",
             "name": "residence",
             "plural": false,
-            "selections": (v2/*: any*/),
+            "selections": (v3/*: any*/),
             "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "nextVillageTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "NextVillageTaskExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -251,7 +286,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AutoUnitsSettings",
         "kind": "LinkedField",
         "name": "autoUnitsSettings",
@@ -264,7 +299,7 @@ return {
             "kind": "LinkedField",
             "name": "barracks",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v5/*: any*/),
             "storageKey": null
           },
           {
@@ -274,7 +309,7 @@ return {
             "kind": "LinkedField",
             "name": "stable",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v5/*: any*/),
             "storageKey": null
           },
           {
@@ -284,7 +319,7 @@ return {
             "kind": "LinkedField",
             "name": "workshop",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v5/*: any*/),
             "storageKey": null
           },
           {
@@ -294,7 +329,25 @@ return {
             "kind": "LinkedField",
             "name": "residence",
             "plural": false,
-            "selections": (v3/*: any*/),
+            "selections": (v5/*: any*/),
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "nextVillageTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "totalSeconds",
             "storageKey": null
           }
         ],
@@ -303,14 +356,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "004e09e183c061c91af009f3220bfa19",
+    "cacheID": "ab20a42619f985ebadbff89ec6463e27",
     "id": null,
     "metadata": {},
     "name": "UnitsAutoUnitsSettingsQuery",
     "operationKind": "query",
-    "text": "query UnitsAutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n"
+    "text": "query UnitsAutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n  nextVillageTaskExecution(task: AutoUnits, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n"
   }
 };
 })();
-(node as any).hash = 'b48fa323886f64f921705e4ee50973a8';
+(node as any).hash = 'ecab613c1946490d89257bddf9805a0d';
 export default node;

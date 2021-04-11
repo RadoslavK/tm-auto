@@ -4,25 +4,34 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type MapSearchState = "None" | "Scanning" | "Searching";
-export type MapSearchMapSearchStateQueryVariables = {};
-export type MapSearchMapSearchStateQueryResponse = {
+export type MapSearchQueryVariables = {};
+export type MapSearchQueryResponse = {
+    readonly mapScanProgress: number;
     readonly mapSearchState: MapSearchState;
 };
-export type MapSearchMapSearchStateQuery = {
-    readonly response: MapSearchMapSearchStateQueryResponse;
-    readonly variables: MapSearchMapSearchStateQueryVariables;
+export type MapSearchQuery = {
+    readonly response: MapSearchQueryResponse;
+    readonly variables: MapSearchQueryVariables;
 };
 
 
 
 /*
-query MapSearchMapSearchStateQuery {
+query MapSearchQuery {
+  mapScanProgress
   mapSearchState
 }
 */
 
 const node: ConcreteRequest = (function(){
 var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "mapScanProgress",
+    "storageKey": null
+  },
   {
     "alias": null,
     "args": null,
@@ -36,7 +45,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "MapSearchMapSearchStateQuery",
+    "name": "MapSearchQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -45,18 +54,18 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "MapSearchMapSearchStateQuery",
+    "name": "MapSearchQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "1694f5ec9903d581038d20f519ca5cb2",
+    "cacheID": "5a887c96c59a1041434b602d6524e477",
     "id": null,
     "metadata": {},
-    "name": "MapSearchMapSearchStateQuery",
+    "name": "MapSearchQuery",
     "operationKind": "query",
-    "text": "query MapSearchMapSearchStateQuery {\n  mapSearchState\n}\n"
+    "text": "query MapSearchQuery {\n  mapScanProgress\n  mapSearchState\n}\n"
   }
 };
 })();
-(node as any).hash = 'c62f3f756f197ae7a7f509f9de10cd3b';
+(node as any).hash = '415ab2bd7b55189d9c035fff8e72d13e';
 export default node;

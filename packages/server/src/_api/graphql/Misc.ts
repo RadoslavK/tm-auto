@@ -7,7 +7,6 @@ import { join } from 'path';
 import { getDirname } from 'shared/utils/getDirname.js';
 
 import { Tribe } from '../../_models/enums/tribe.js';
-import { TaskType } from '../../_models/misc/taskType.js';
 
 export const CoolDown = objectType({
   name: 'CoolDown',
@@ -83,11 +82,6 @@ export const TimestampInput = inputObjectType({
   definition(t) {
     t.int('totalSeconds');
   },
-});
-
-export const TaskTypeEnum = enumType({
-  name: 'TaskType',
-  members: TaskType,
 });
 
 export const TribeEnum = enumType({

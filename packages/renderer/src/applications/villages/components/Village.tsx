@@ -63,12 +63,21 @@ const villageRefreshVillageMutation = graphql`
   }
 `;
 
+graphql`
+    fragment Village_village on Village {
+        resources {
+            ...VillageResources_villageResources
+        }
+    }
+`;
+
 const villageQuery = graphql`
     query VillageQuery($villageId: ID!) {
         village(villageId: $villageId) {
-            resources {
-                ...VillageResources_villageResources
-            }
+           ...Village_village @relay(mask: false)
+        }
+        crannyCapacity(villageId: $villageId) {
+            ...CrannyCapacity_crannyCapacity
         }
     }
 `;
@@ -140,7 +149,7 @@ export const Village: React.FC = () => {
     });
   };
 
-  const { village } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const { village, crannyCapacity } = useLazyLoadQuery<VillageQuery>(villageQuery, { villageId }, { fetchPolicy: 'store-and-network' });
 
   useEffect(() => {
     if (village === null) {
@@ -197,7 +206,7 @@ export const Village: React.FC = () => {
     <div>
       <Suspense fallback={null}>
         <VillageResources resources={village.resources} />
-        <CrannyCapacity />
+        <CrannyCapacity crannyCapacityKey={crannyCapacity} />
       </Suspense>
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}
       <button onClick={onRefreshVillage}>Refresh</button>

@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -13,7 +13,7 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
-import type { NextTasksExecutionQuery } from '../../../_graphql/__generated__/NextTasksExecutionQuery.graphql.js';
+import type { NextTasksExecution_timestamp$key } from '../../../_graphql/__generated__/NextTasksExecution_timestamp.graphql.js';
 import type { NextTasksExecutionResetMutation } from '../../../_graphql/__generated__/NextTasksExecutionResetMutation.graphql.js';
 import type { NextTasksExecutionSetMutation } from '../../../_graphql/__generated__/NextTasksExecutionSetMutation.graphql.js';
 import type { NextTasksExecutionSubscription } from '../../../_graphql/__generated__/NextTasksExecutionSubscription.graphql.js';
@@ -21,18 +21,16 @@ import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
 import { NextExecutionForm } from './NextExecutionForm.js';
 
-const nextTasksExecutionQuery = graphql`
-  query NextTasksExecutionQuery {
-      nextTasksExecution {
-          totalSeconds
-      }
-  }
+const fragmentDef = graphql`
+    fragment NextTasksExecution_timestamp on Timestamp {
+        ...Timestamp @relay(mask: false)
+    }
 `;
 
 const setNextTasksExecutionMutation = graphql`
   mutation NextTasksExecutionSetMutation($delay: DurationInput!) {
       setNextTasksExecution(delay: $delay) {
-          ...Timestamp
+          ...NextTasksExecution_timestamp
       }
   }
 `;
@@ -40,7 +38,7 @@ const setNextTasksExecutionMutation = graphql`
 const resetNextTasksExecutionMutation = graphql`
     mutation NextTasksExecutionResetMutation {
         resetNextTasksExecution {
-            ...Timestamp
+            ...NextTasksExecution_timestamp
         }
     }
 `;
@@ -48,13 +46,17 @@ const resetNextTasksExecutionMutation = graphql`
 const nextTasksExecutionSubscription = graphql`
   subscription NextTasksExecutionSubscription {
       nextTasksExecutionChanged {
-          ...Timestamp
+          ...NextTasksExecution_timestamp
       }
   }
 `;
 
-export const NextTasksExecution: React.FC = () => {
-  const { nextTasksExecution } = useLazyLoadQuery<NextTasksExecutionQuery>(nextTasksExecutionQuery, {}, { fetchPolicy: 'store-and-network' });
+type Props = {
+  readonly timestamp: NextTasksExecution_timestamp$key;
+};
+
+export const NextTasksExecution: React.FC<Props> = ({ timestamp }) => {
+  const nextTasksExecution = useFragment(fragmentDef, timestamp);
   const [setNextTasksExecution] = useMutation<NextTasksExecutionSetMutation>(setNextTasksExecutionMutation);
   const [resetNextTasksExecution] = useMutation<NextTasksExecutionResetMutation>(resetNextTasksExecutionMutation);
 

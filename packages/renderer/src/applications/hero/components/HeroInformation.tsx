@@ -15,7 +15,7 @@ import type { HeroInformationSubscription } from '../../../_graphql/__generated_
 import { Resources } from '../../../_shared/components/Resources.js';
 import { VillageName } from '../../villages/components/VillageName.js';
 
-const HeroInformationFragmentDefinition = graphql`
+const heroInformationFragmentDefinition = graphql`
   fragment HeroInformation_heroInformation on HeroInformation {
       health
       state
@@ -82,7 +82,7 @@ type Props = {
 
 const HeroInformation: React.FC<Props> = ({ heroInformationKey }) => {
   const classes = useStyles();
-  const heroInformation = useFragment(HeroInformationFragmentDefinition, heroInformationKey);
+  const heroInformation = useFragment(heroInformationFragmentDefinition, heroInformationKey);
 
   return (
     <div>

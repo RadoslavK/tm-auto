@@ -52,6 +52,9 @@ const unitsAutoUnitsSettingsQuery = graphql`
       autoUnitsSettings(villageId: $villageId) {
          ...Units_autoUnitsSettings @relay(mask: false)
       }
+      nextVillageTaskExecution(task: AutoUnits, villageId: $villageId) {
+          ...NextVillageTaskExecution_timestamp
+      }
   }
 `;
 
@@ -86,7 +89,7 @@ export const Units: React.FC<Props> = ({
   const classes = useStyles();
 
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { autoUnitsSettings } = usePreloadedQuery(unitsAutoUnitsSettingsQuery, unitSettingsQueryRef);
+  const { autoUnitsSettings, nextVillageTaskExecution } = usePreloadedQuery(unitsAutoUnitsSettingsQuery, unitSettingsQueryRef);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<UnitsSubscription> => ({
     subscription: unitsSubscription,
@@ -103,7 +106,10 @@ export const Units: React.FC<Props> = ({
 
   return (
     <div>
-      <NextVillageTaskExecution task="AutoUnits" />
+      <NextVillageTaskExecution
+        task="AutoUnits"
+        timestamp={nextVillageTaskExecution}
+      />
       <div className={classes.buildings}>
         <UnitBuildingSection
           buildingType={BuildingType.Barracks}

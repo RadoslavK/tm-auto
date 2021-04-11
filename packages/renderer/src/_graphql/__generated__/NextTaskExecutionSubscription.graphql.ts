@@ -10,7 +10,7 @@ export type NextTaskExecutionSubscriptionVariables = {
 };
 export type NextTaskExecutionSubscriptionResponse = {
     readonly nextTaskExecutionChanged: {
-        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
+        readonly " $fragmentRefs": FragmentRefs<"NextTaskExecution_timestamp">;
     };
 };
 export type NextTaskExecutionSubscription = {
@@ -25,11 +25,11 @@ subscription NextTaskExecutionSubscription(
   $task: TaskType!
 ) {
   nextTaskExecutionChanged(task: $task) {
-    ...Timestamp
+    ...NextTaskExecution_timestamp
   }
 }
 
-fragment Timestamp on Timestamp {
+fragment NextTaskExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -67,7 +67,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "Timestamp"
+            "name": "NextTaskExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -103,14 +103,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "376e99deb2df68f3b5946698583916a8",
+    "cacheID": "09c3a3fea497ad2c28fd97047eea76be",
     "id": null,
     "metadata": {},
     "name": "NextTaskExecutionSubscription",
     "operationKind": "subscription",
-    "text": "subscription NextTaskExecutionSubscription(\n  $task: TaskType!\n) {\n  nextTaskExecutionChanged(task: $task) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "subscription NextTaskExecutionSubscription(\n  $task: TaskType!\n) {\n  nextTaskExecutionChanged(task: $task) {\n    ...NextTaskExecution_timestamp\n  }\n}\n\nfragment NextTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '162630ea8fccdccaeb788330285fda27';
+(node as any).hash = 'fd69ef0c35d1d23945452bde393f0bcd';
 export default node;

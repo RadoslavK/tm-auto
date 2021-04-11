@@ -7,9 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type VillagesSubscriptionVariables = {};
 export type VillagesSubscriptionResponse = {
     readonly villagesUpdated: ReadonlyArray<{
-        readonly id: string;
-        readonly scanned: boolean;
-        readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
+        readonly " $fragmentRefs": FragmentRefs<"Villages_village">;
     }>;
 };
 export type VillagesSubscription = {
@@ -22,9 +20,8 @@ export type VillagesSubscription = {
 /*
 subscription VillagesSubscription {
   villagesUpdated {
+    ...Villages_village
     id
-    scanned
-    ...VillageSideItem_village
   }
 }
 
@@ -42,24 +39,15 @@ fragment VillageSideItem_village on Village {
   scanned
   ...VillageName_village
 }
+
+fragment Villages_village on Village {
+  id
+  scanned
+  ...VillageSideItem_village
+}
 */
 
-const node: ConcreteRequest = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "scanned",
-  "storageKey": null
-};
-return {
+const node: ConcreteRequest = {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
@@ -74,12 +62,10 @@ return {
         "name": "villagesUpdated",
         "plural": true,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "VillageSideItem_village"
+            "name": "Villages_village"
           }
         ],
         "storageKey": null
@@ -102,8 +88,20 @@ return {
         "name": "villagesUpdated",
         "plural": true,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "scanned",
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -149,14 +147,13 @@ return {
     ]
   },
   "params": {
-    "cacheID": "08ede45bb40e89465ffd8e5da8298095",
+    "cacheID": "4c204837b41ba3b313e5127d131f7e51",
     "id": null,
     "metadata": {},
     "name": "VillagesSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    id\n    scanned\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
+    "text": "subscription VillagesSubscription {\n  villagesUpdated {\n    ...Villages_village\n    id\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n\nfragment Villages_village on Village {\n  id\n  scanned\n  ...VillageSideItem_village\n}\n"
   }
 };
-})();
-(node as any).hash = 'fee063e09b0163d68abf0b5d0a234cb1';
+(node as any).hash = '03edc5d8e505250b3b4c079b964114f0';
 export default node;

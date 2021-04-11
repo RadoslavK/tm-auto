@@ -3,6 +3,7 @@ export enum BotEvent {
   AccountsUpdated = 'AccountsUpdated',
   LastSignedAccountIdUpdated = 'LastSignedAccountIdUpdated',
   AccountSettingsUpdated = 'AccountSettingsUpdated',
+  AutoBuildSettingsUpdated = 'AutoBuildSettingsUpdated',
   AutoAdventureSettingsUpdated = 'AutoAdventureSettingsUpdated',
   AutoMentorSettingsUpdated = 'AutoMentorSettingsUpdated',
   AutoUnitsSettingsUpdated = 'AutoUnitsSettingsUpdated',

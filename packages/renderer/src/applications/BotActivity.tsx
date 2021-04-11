@@ -1,13 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
-import {
-  useLazyLoadQuery,
-  useSubscription,
-} from 'react-relay/hooks';
+import { useSubscription } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { BotActivityQuery } from '../_graphql/__generated__/BotActivityQuery.graphql.js';
 import type { BotActivitySubscription } from '../_graphql/__generated__/BotActivitySubscription.graphql.js';
 
 type StylesProps = {
@@ -20,21 +16,17 @@ const useStyles = makeStyles<unknown, StylesProps>({
   }),
 });
 
-const botActivityQuery = graphql`
-    query BotActivityQuery {
-        isBotActive
-    }
-`;
-
 const botActivitySubscription = graphql`
   subscription BotActivitySubscription {
       botActivityChanged
   }
 `;
 
-export const BotActivity: React.FC = () => {
-  const { isBotActive } = useLazyLoadQuery<BotActivityQuery>(botActivityQuery, {}, { fetchPolicy: 'store-and-network' });
-  
+type Props = {
+  readonly isBotActive: boolean;
+};
+
+export const BotActivity: React.FC<Props> = ({ isBotActive }) => {
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BotActivitySubscription> => ({
     subscription: botActivitySubscription,
     variables: {},

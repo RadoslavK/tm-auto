@@ -7,8 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type LogsSubscriptionVariables = {};
 export type LogsSubscriptionResponse = {
     readonly logEntryAdded: {
-        readonly id: string;
-        readonly " $fragmentRefs": FragmentRefs<"LogEntry_logEntry">;
+        readonly " $fragmentRefs": FragmentRefs<"Logs_logEntry">;
     };
 };
 export type LogsSubscription = {
@@ -21,8 +20,8 @@ export type LogsSubscription = {
 /*
 subscription LogsSubscription {
   logEntryAdded {
+    ...Logs_logEntry
     id
-    ...LogEntry_logEntry
   }
 }
 
@@ -55,6 +54,11 @@ fragment LogEntry_logEntry on LogEntry {
     id
     ...VillageName_village
   }
+}
+
+fragment Logs_logEntry on LogEntry {
+  id
+  ...LogEntry_logEntry
 }
 
 fragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {
@@ -119,11 +123,10 @@ return {
         "name": "logEntryAdded",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "LogEntry_logEntry"
+            "name": "Logs_logEntry"
           }
         ],
         "storageKey": null
@@ -360,14 +363,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a7a3c4b04501049f04dfbe488a7cace3",
+    "cacheID": "5a874fb93f756525d68067755d81f54d",
     "id": null,
     "metadata": {},
     "name": "LogsSubscription",
     "operationKind": "subscription",
-    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    id\n    ...LogEntry_logEntry\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry_logEntry on LogEntry {\n  __typename\n  content {\n    __typename\n    ...TextLogContent_textLogentryContent\n    ...AutoUnitsLogContent_autoUnitsLogEntryContent\n    ...AutoBuildLogContent_autoBuildLogEntryContent\n    ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  }\n  timestamp {\n    totalSeconds\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...Logs_logEntry\n    id\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry_logEntry on LogEntry {\n  __typename\n  content {\n    __typename\n    ...TextLogContent_textLogentryContent\n    ...AutoUnitsLogContent_autoUnitsLogEntryContent\n    ...AutoBuildLogContent_autoBuildLogEntryContent\n    ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  }\n  timestamp {\n    totalSeconds\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment Logs_logEntry on LogEntry {\n  id\n  ...LogEntry_logEntry\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
 })();
-(node as any).hash = '0625db4de24ab3a1c78aac2194732fb3';
+(node as any).hash = '714f5b9ea97271f4de75d9ea3a24a69b';
 export default node;

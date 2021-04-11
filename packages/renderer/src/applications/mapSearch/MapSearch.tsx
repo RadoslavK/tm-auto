@@ -14,13 +14,12 @@ import {
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
-import type { MapSearchMapScanProgressQuery } from '../../_graphql/__generated__/MapSearchMapScanProgressQuery.graphql.js';
-import type { MapSearchMapSearchStateQuery } from '../../_graphql/__generated__/MapSearchMapSearchStateQuery.graphql.js';
 import type {
   MapSearchOnMapSearchFinishedSubscription,
   MapSearchOnMapSearchFinishedSubscriptionResponse,
 } from '../../_graphql/__generated__/MapSearchOnMapSearchFinishedSubscription.graphql.js';
 import type { MapSearchProgressSubscription } from '../../_graphql/__generated__/MapSearchProgressSubscription.graphql.js';
+import type { MapSearchQuery } from '../../_graphql/__generated__/MapSearchQuery.graphql.js';
 import type { MapSearchStateSubscription } from '../../_graphql/__generated__/MapSearchStateSubscription.graphql.js';
 import type { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated__/MapSearchVillageTileTypesQuery.graphql.js';
 import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
@@ -53,19 +52,17 @@ const getSortedTiles = (
   });
 };
 
-const onMapSearchFinishedSubscription = graphql`
-  subscription MapSearchOnMapSearchFinishedSubscription {
-      mapSearchFinished {
-          claimed
-          cropBonus
-          distance
-          coords {
-              x
-              y
-          }
-          type
-      }
-  }
+const villageTileTypesQuery = graphql`
+    query MapSearchVillageTileTypesQuery {
+        villageTileTypes
+    }
+`;
+
+const query = graphql`
+    query MapSearchQuery {
+        mapScanProgress
+        mapSearchState
+    }
 `;
 
 const searchMapMutation = graphql`
@@ -86,27 +83,24 @@ const stopMapScanMutation = graphql`
   }
 `;
 
-const villageTileTypesQuery = graphql`
-  query MapSearchVillageTileTypesQuery {
-      villageTileTypes
-  }
-`;
-
-const mapScanProgressQuery = graphql`
-  query MapSearchMapScanProgressQuery {
-      mapScanProgress
-  }
+const onMapSearchFinishedSubscription = graphql`
+    subscription MapSearchOnMapSearchFinishedSubscription {
+        mapSearchFinished {
+            claimed
+            cropBonus
+            distance
+            coords {
+                x
+                y
+            }
+            type
+        }
+    }
 `;
 
 const mapScanProgressSubscription = graphql`
   subscription MapSearchProgressSubscription {
       mapScanProgressUpdated
-  }
-`;
-
-const mapSearchStateQuery = graphql`
-  query MapSearchMapSearchStateQuery {
-      mapSearchState
   }
 `;
 
@@ -127,8 +121,7 @@ export const MapSearch: React.FC = () => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { mapScanProgress } = useLazyLoadQuery<MapSearchMapScanProgressQuery>(mapScanProgressQuery, {}, { fetchPolicy: 'store-and-network' });
-  const { mapSearchState } = useLazyLoadQuery<MapSearchMapSearchStateQuery>(mapSearchStateQuery, {}, { fetchPolicy: 'store-and-network' });
+  const { mapSearchState, mapScanProgress } = useLazyLoadQuery<MapSearchQuery>(query, {}, { fetchPolicy: 'store-and-network' });
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
   const [stopScan] = useMutation(stopMapScanMutation);

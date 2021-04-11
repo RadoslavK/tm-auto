@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type NextTasksExecutionResetMutationVariables = {};
 export type NextTasksExecutionResetMutationResponse = {
     readonly resetNextTasksExecution: {
-        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
+        readonly " $fragmentRefs": FragmentRefs<"NextTasksExecution_timestamp">;
     };
 };
 export type NextTasksExecutionResetMutation = {
@@ -20,11 +20,11 @@ export type NextTasksExecutionResetMutation = {
 /*
 mutation NextTasksExecutionResetMutation {
   resetNextTasksExecution {
-    ...Timestamp
+    ...NextTasksExecution_timestamp
   }
 }
 
-fragment Timestamp on Timestamp {
+fragment NextTasksExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -47,7 +47,7 @@ const node: ConcreteRequest = {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "Timestamp"
+            "name": "NextTasksExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -83,13 +83,13 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "51b0bea4cef7cc7b7d81131043415a7b",
+    "cacheID": "a7b2db6cbd9af8257af9525dcd42afc0",
     "id": null,
     "metadata": {},
     "name": "NextTasksExecutionResetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextTasksExecutionResetMutation {\n  resetNextTasksExecution {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "mutation NextTasksExecutionResetMutation {\n  resetNextTasksExecution {\n    ...NextTasksExecution_timestamp\n  }\n}\n\nfragment NextTasksExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
-(node as any).hash = '01d59531611390d9dfc7b4509cee659f';
+(node as any).hash = 'c1c86d8bc975cfbf3bf7f5735dea2587';
 export default node;

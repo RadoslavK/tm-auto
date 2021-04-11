@@ -342,6 +342,11 @@ export interface NexusGenObjects {
     updatedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
   }
   Mutation: {};
+  NextVillageTaskExecutionPayloadField: { // root type
+    label: string; // String!
+    task: NexusGenEnums['TaskType']; // TaskType!
+    timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
+  }
   Query: {};
   QueuedBuilding: QueuedBuilding;
   ResourceClaimLogEntryContent: { // root type
@@ -660,6 +665,11 @@ export interface NexusGenFieldTypes {
     updateGeneralVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
     updateHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
   }
+  NextVillageTaskExecutionPayloadField: { // field return type
+    label: string; // String!
+    task: NexusGenEnums['TaskType']; // TaskType!
+    timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
+  }
   Query: { // field return type
     account: NexusGenRootTypes['UserAccount']; // UserAccount!
     accountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
@@ -692,6 +702,7 @@ export interface NexusGenFieldTypes {
     nextTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextTasksExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
+    nextVillageTaskExecutions: NexusGenRootTypes['NextVillageTaskExecutionPayloadField'][]; // [NextVillageTaskExecutionPayloadField!]!
     unitInfo: NexusGenRootTypes['UnitInfo']; // UnitInfo!
     village: NexusGenRootTypes['Village'] | null; // Village
     villageTileTypes: string[]; // [String!]!
@@ -734,6 +745,7 @@ export interface NexusGenFieldTypes {
     accountsUpdated: NexusGenRootTypes['UserAccount'][]; // [UserAccount!]!
     activeVillageIdChanged: string; // ID!
     autoAdventureSettingsUpdated: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
+    autoBuildSettingsUpdated: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettingsUpdated: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     botActivityChanged: boolean; // Boolean!
@@ -1050,6 +1062,11 @@ export interface NexusGenFieldTypeNames {
     updateGeneralVillageSettings: 'GeneralVillageSettings'
     updateHeroLevelUpItem: 'HeroLevelUpItem'
   }
+  NextVillageTaskExecutionPayloadField: { // field return type name
+    label: 'String'
+    task: 'TaskType'
+    timestamp: 'Timestamp'
+  }
   Query: { // field return type name
     account: 'UserAccount'
     accountSettings: 'AccountSettings'
@@ -1082,6 +1099,7 @@ export interface NexusGenFieldTypeNames {
     nextTaskExecution: 'Timestamp'
     nextTasksExecution: 'Timestamp'
     nextVillageTaskExecution: 'Timestamp'
+    nextVillageTaskExecutions: 'NextVillageTaskExecutionPayloadField'
     unitInfo: 'UnitInfo'
     village: 'Village'
     villageTileTypes: 'String'
@@ -1124,6 +1142,7 @@ export interface NexusGenFieldTypeNames {
     accountsUpdated: 'UserAccount'
     activeVillageIdChanged: 'ID'
     autoAdventureSettingsUpdated: 'AutoAdventureSettings'
+    autoBuildSettingsUpdated: 'AutoBuildSettings'
     autoMentorSettingsUpdated: 'AutoMentorSettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
     botActivityChanged: 'Boolean'
@@ -1395,6 +1414,9 @@ export interface NexusGenArgTypes {
       task: NexusGenEnums['TaskType']; // TaskType!
       villageId: string; // ID!
     }
+    nextVillageTaskExecutions: { // args
+      villageId: string; // ID!
+    }
     unitInfo: { // args
       index: number; // Int!
     }
@@ -1403,6 +1425,9 @@ export interface NexusGenArgTypes {
     }
   }
   Subscription: {
+    autoBuildSettingsUpdated: { // args
+      villageId: string; // ID!
+    }
     autoUnitsSettingsUpdated: { // args
       villageId: string; // ID!
     }

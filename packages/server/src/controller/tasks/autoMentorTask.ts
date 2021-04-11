@@ -1,4 +1,5 @@
-import { TaskType } from '../../_models/misc/taskType.js';
+import { TaskType } from 'shared/enums/TaskType.js';
+
 import type { AutoMentorSettings } from '../../_models/settings/autoMentorSettings.js';
 import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';

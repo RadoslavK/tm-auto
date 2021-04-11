@@ -11,6 +11,7 @@ export type VillagesQueryResponse = {
         readonly scanned: boolean;
         readonly " $fragmentRefs": FragmentRefs<"VillageSideItem_village">;
     }>;
+    readonly activeVillageId: string;
 };
 export type VillagesQuery = {
     readonly response: VillagesQueryResponse;
@@ -26,6 +27,7 @@ query VillagesQuery {
     scanned
     ...VillageSideItem_village
   }
+  activeVillageId
 }
 
 fragment VillageName_village on Village {
@@ -58,6 +60,13 @@ v1 = {
   "kind": "ScalarField",
   "name": "scanned",
   "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "activeVillageId",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -83,7 +92,8 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v2/*: any*/)
     ],
     "type": "Query",
     "abstractKey": null
@@ -145,18 +155,19 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v2/*: any*/)
     ]
   },
   "params": {
-    "cacheID": "8b8aadbd44f801594671534d3d12360b",
+    "cacheID": "e6ad722d691555212508aad69450bab5",
     "id": null,
     "metadata": {},
     "name": "VillagesQuery",
     "operationKind": "query",
-    "text": "query VillagesQuery {\n  villages {\n    id\n    scanned\n    ...VillageSideItem_village\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
+    "text": "query VillagesQuery {\n  villages {\n    id\n    scanned\n    ...VillageSideItem_village\n  }\n  activeVillageId\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n"
   }
 };
 })();
-(node as any).hash = '34146d8327fe082c77cca584aaad7206';
+(node as any).hash = 'b4729ccfbb872bfcece5c41c1ac3c7c6';
 export default node;

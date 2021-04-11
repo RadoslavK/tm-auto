@@ -1,5 +1,6 @@
+import type { TaskType } from 'shared/enums/TaskType.js';
+
 import type { CoolDown } from '../../_models/coolDown.js';
-import type { TaskType } from '../../_models/misc/taskType.js';
 
 export type BotTaskWithCoolDownResult = {
   readonly nextCoolDown?: CoolDown | null;

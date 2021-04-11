@@ -13,6 +13,9 @@ export type VillageQueryResponse = {
             readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
     } | null;
+    readonly crannyCapacity: {
+        readonly " $fragmentRefs": FragmentRefs<"CrannyCapacity_crannyCapacity">;
+    };
 };
 export type VillageQuery = {
     readonly response: VillageQueryResponse;
@@ -31,6 +34,15 @@ query VillageQuery(
     }
     id
   }
+  crannyCapacity(villageId: $villageId) {
+    ...CrannyCapacity_crannyCapacity
+  }
+}
+
+fragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {
+  actual
+  ongoing
+  total
 }
 
 fragment VillageResources_villageResources on VillageResources {
@@ -97,6 +109,13 @@ v5 = {
   "kind": "ScalarField",
   "name": "crop",
   "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "total",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -128,6 +147,22 @@ return {
               }
             ],
             "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "VillageCrannyCapacity",
+        "kind": "LinkedField",
+        "name": "crannyCapacity",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "CrannyCapacity_crannyCapacity"
           }
         ],
         "storageKey": null
@@ -177,13 +212,7 @@ return {
                     "name": "freeCrop",
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "total",
-                    "storageKey": null
-                  }
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -239,18 +268,44 @@ return {
           }
         ],
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "VillageCrannyCapacity",
+        "kind": "LinkedField",
+        "name": "crannyCapacity",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "actual",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "ongoing",
+            "storageKey": null
+          },
+          (v6/*: any*/)
+        ],
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "739a9ea73308ca93aba343442e4e8ee8",
+    "cacheID": "a247e4f5b2aab24d3d5b563ee1ee5492",
     "id": null,
     "metadata": {},
     "name": "VillageQuery",
     "operationKind": "query",
-    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    resources {\n      ...VillageResources_villageResources\n    }\n    id\n  }\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    resources {\n      ...VillageResources_villageResources\n    }\n    id\n  }\n  crannyCapacity(villageId: $villageId) {\n    ...CrannyCapacity_crannyCapacity\n  }\n}\n\nfragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {\n  actual\n  ongoing\n  total\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f4309953c994826866f631534f4f8823';
+(node as any).hash = '95ba0876c17b0cbc233af849e2494ad5';
 export default node;

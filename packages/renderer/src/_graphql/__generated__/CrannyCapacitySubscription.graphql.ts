@@ -3,14 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type CrannyCapacitySubscriptionVariables = {
     villageId: string;
 };
 export type CrannyCapacitySubscriptionResponse = {
     readonly onCrannyCapacityUpdated: {
-        readonly actual: number;
-        readonly ongoing: number;
-        readonly total: number;
+        readonly " $fragmentRefs": FragmentRefs<"CrannyCapacity_crannyCapacity">;
     };
 };
 export type CrannyCapacitySubscription = {
@@ -25,10 +24,14 @@ subscription CrannyCapacitySubscription(
   $villageId: ID!
 ) {
   onCrannyCapacityUpdated(villageId: $villageId) {
-    actual
-    ongoing
-    total
+    ...CrannyCapacity_crannyCapacity
   }
+}
+
+fragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {
+  actual
+  ongoing
+  total
 }
 */
 
@@ -42,42 +45,9 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "villageId",
-        "variableName": "villageId"
-      }
-    ],
-    "concreteType": "VillageCrannyCapacity",
-    "kind": "LinkedField",
-    "name": "onCrannyCapacityUpdated",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "actual",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "ongoing",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "total",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "villageId",
+    "variableName": "villageId"
   }
 ];
 return {
@@ -86,7 +56,24 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "CrannyCapacitySubscription",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "VillageCrannyCapacity",
+        "kind": "LinkedField",
+        "name": "onCrannyCapacityUpdated",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "CrannyCapacity_crannyCapacity"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Subscription",
     "abstractKey": null
   },
@@ -95,17 +82,50 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "CrannyCapacitySubscription",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "VillageCrannyCapacity",
+        "kind": "LinkedField",
+        "name": "onCrannyCapacityUpdated",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "actual",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "ongoing",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "total",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "575aeacb3748eeb8afb8c7ab7e767f8f",
+    "cacheID": "2c93c6694edb30a6ca9fb3e8a5442ed5",
     "id": null,
     "metadata": {},
     "name": "CrannyCapacitySubscription",
     "operationKind": "subscription",
-    "text": "subscription CrannyCapacitySubscription(\n  $villageId: ID!\n) {\n  onCrannyCapacityUpdated(villageId: $villageId) {\n    actual\n    ongoing\n    total\n  }\n}\n"
+    "text": "subscription CrannyCapacitySubscription(\n  $villageId: ID!\n) {\n  onCrannyCapacityUpdated(villageId: $villageId) {\n    ...CrannyCapacity_crannyCapacity\n  }\n}\n\nfragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {\n  actual\n  ongoing\n  total\n}\n"
   }
 };
 })();
-(node as any).hash = '168bb152c4a78b26fba8aa55659f8ee7';
+(node as any).hash = '9ccad39e6f3929d2ff6be29372d46513';
 export default node;

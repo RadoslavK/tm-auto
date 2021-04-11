@@ -3,15 +3,15 @@ import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
   useFragment,
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { BuildingQueue_autoBuildSettings$key } from '../../../_graphql/__generated__/BuildingQueue_autoBuildSettings.graphql.js';
 import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__generated__/BuildingQueue_buildingQueue.graphql.js';
-import type { BuildingQueueBuildingTimesSplitInfoQuery } from '../../../_graphql/__generated__/BuildingQueueBuildingTimesSplitInfoQuery.graphql.js';
+import type { BuildingQueueAutoBuildSettingsSubscription } from '../../../_graphql/__generated__/BuildingQueueAutoBuildSettingsSubscription.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
 import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/__generated__/BuildingQueueQueuedBuildingSubscription.graphql.js';
@@ -23,6 +23,7 @@ import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
 
 type Props = {
+  readonly autoBuildSettingsKey: BuildingQueue_autoBuildSettings$key;
   readonly buildingQueueKey: BuildingQueue_buildingQueue$key;
   readonly className: string;
 };
@@ -62,13 +63,11 @@ const buildingQueueFragment = graphql`
   }
 `;
 
-const buildingQueueBuildingTimesSplitInfoQuery = graphql`
-    query BuildingQueueBuildingTimesSplitInfoQuery($villageId: ID!) {
-        autoBuildSettings(villageId: $villageId) {
-            dualQueue {
-                allow
-            }
-        }
+const autoBuildSettingsFragmentDef = graphql`
+    fragment BuildingQueue_autoBuildSettings on AutoBuildSettings {
+        dualQueue {
+            allow
+        }   
     }
 `;
 
@@ -104,12 +103,21 @@ const queuedBuildingSubscription = graphql`
     }
 `;
 
+const autoBuildSettingsSubscription = graphql`
+  subscription BuildingQueueAutoBuildSettingsSubscription($villageId: ID!) {
+      autoBuildSettingsUpdated(villageId: $villageId) {
+          ...BuildingQueue_autoBuildSettings
+      }
+  }
+`;
+
 export const BuildingQueue: React.FC<Props> = ({
+  autoBuildSettingsKey,
   buildingQueueKey,
   className,
 }) => {
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { autoBuildSettings } = useLazyLoadQuery<BuildingQueueBuildingTimesSplitInfoQuery>(buildingQueueBuildingTimesSplitInfoQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const autoBuildSettings = useFragment(autoBuildSettingsFragmentDef, autoBuildSettingsKey);
   const tribe = useRecoilValue(tribeState);
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
@@ -160,6 +168,17 @@ export const BuildingQueue: React.FC<Props> = ({
   }), [villageId]);
 
   useSubscription(queuedBuildingSubscriptionConfig);
+
+  const autoBuildSettingsSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingQueueAutoBuildSettingsSubscription> => ({
+    subscription: autoBuildSettingsSubscription,
+    variables: { villageId },
+    updater: (store) => {
+      const newRecord = store.getRootField('autoBuildSettingsUpdated');
+      store.getRoot().setLinkedRecord(newRecord, 'autoBuildSettings', { villageId });
+    },
+  }), [villageId]);
+
+  useSubscription(autoBuildSettingsSubscriptionConfig);
 
   const onClear = (): void => {
     clearQueue({

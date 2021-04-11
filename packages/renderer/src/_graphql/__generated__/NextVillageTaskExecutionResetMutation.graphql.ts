@@ -11,7 +11,7 @@ export type NextVillageTaskExecutionResetMutationVariables = {
 };
 export type NextVillageTaskExecutionResetMutationResponse = {
     readonly resetNextVillageTaskExecution: {
-        readonly " $fragmentRefs": FragmentRefs<"Timestamp">;
+        readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
     };
 };
 export type NextVillageTaskExecutionResetMutation = {
@@ -27,11 +27,11 @@ mutation NextVillageTaskExecutionResetMutation(
   $task: TaskType!
 ) {
   resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
-    ...Timestamp
+    ...NextVillageTaskExecution_timestamp
   }
 }
 
-fragment Timestamp on Timestamp {
+fragment NextVillageTaskExecution_timestamp on Timestamp {
   totalSeconds
 }
 */
@@ -80,7 +80,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "Timestamp"
+            "name": "NextVillageTaskExecution_timestamp"
           }
         ],
         "storageKey": null
@@ -119,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2ea42f3f8062efac7ed875df74401482",
+    "cacheID": "b97e4a706222079dd44fbb90ca5a37c4",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionResetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    ...Timestamp\n  }\n}\n\nfragment Timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'a017c012c9ba4dd59c6011dc9ebec007';
+(node as any).hash = '7514da5099e85c4254265c492e9900f0';
 export default node;

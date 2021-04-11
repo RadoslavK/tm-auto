@@ -17,6 +17,12 @@ export type BuildingsQueryResponse = {
     readonly buildingsInProgress: ReadonlyArray<{
         readonly " $fragmentRefs": FragmentRefs<"BuildingsInProgress_buildingsInProgress">;
     }>;
+    readonly nextVillageTaskExecution: {
+        readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
+    };
+    readonly autoBuildSettings: {
+        readonly " $fragmentRefs": FragmentRefs<"BuildingQueue_autoBuildSettings">;
+    };
 };
 export type BuildingsQuery = {
     readonly response: BuildingsQueryResponse;
@@ -38,6 +44,12 @@ query BuildingsQuery(
   buildingsInProgress(villageId: $villageId) {
     ...BuildingsInProgress_buildingsInProgress
   }
+  nextVillageTaskExecution(villageId: $villageId, task: AutoBuild) {
+    ...NextVillageTaskExecution_timestamp
+  }
+  autoBuildSettings(villageId: $villageId) {
+    ...BuildingQueue_autoBuildSettings
+  }
 }
 
 fragment BuildingInProgress_buildingInProgress on BuildingInProgress {
@@ -55,6 +67,12 @@ fragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {
   ongoing
   queued
   total
+}
+
+fragment BuildingQueue_autoBuildSettings on AutoBuildSettings {
+  dualQueue {
+    allow
+  }
 }
 
 fragment BuildingQueue_buildingQueue on BuildingQueue {
@@ -134,6 +152,10 @@ fragment Cost_resources on Resources {
   ...Resources_resources
 }
 
+fragment NextVillageTaskExecution_timestamp on Timestamp {
+  totalSeconds
+}
+
 fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
   id
   startingLevel
@@ -179,51 +201,60 @@ var v0 = [
     "name": "villageId"
   }
 ],
-v1 = [
-  {
-    "kind": "Variable",
-    "name": "villageId",
-    "variableName": "villageId"
-  }
+v1 = {
+  "kind": "Variable",
+  "name": "villageId",
+  "variableName": "villageId"
+},
+v2 = [
+  (v1/*: any*/)
 ],
-v2 = {
+v3 = [
+  {
+    "kind": "Literal",
+    "name": "task",
+    "value": "AutoBuild"
+  },
+  (v1/*: any*/)
+],
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v4 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "type",
   "storageKey": null
 },
-v5 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "fieldId",
   "storageKey": null
 },
-v6 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "total",
   "storageKey": null
 },
-v7 = [
-  (v2/*: any*/),
-  (v3/*: any*/),
+v9 = [
+  (v4/*: any*/),
+  (v5/*: any*/),
   {
     "alias": null,
     "args": null,
@@ -231,8 +262,8 @@ v7 = [
     "name": "maxLevel",
     "storageKey": null
   },
-  (v4/*: any*/),
-  (v5/*: any*/),
+  (v6/*: any*/),
+  (v7/*: any*/),
   {
     "alias": null,
     "args": null,
@@ -262,12 +293,12 @@ v7 = [
         "name": "queued",
         "storageKey": null
       },
-      (v6/*: any*/)
+      (v8/*: any*/)
     ],
     "storageKey": null
   }
 ],
-v8 = [
+v10 = [
   {
     "alias": null,
     "args": null,
@@ -297,7 +328,7 @@ v8 = [
     "storageKey": null
   }
 ],
-v9 = [
+v11 = [
   {
     "alias": null,
     "args": null,
@@ -333,7 +364,16 @@ v9 = [
     "name": "freeCrop",
     "storageKey": null
   },
-  (v6/*: any*/)
+  (v8/*: any*/)
+],
+v12 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "totalSeconds",
+    "storageKey": null
+  }
 ];
 return {
   "fragment": {
@@ -344,7 +384,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingSpots",
         "kind": "LinkedField",
         "name": "buildingSpots",
@@ -360,7 +400,7 @@ return {
       },
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingQueue",
         "kind": "LinkedField",
         "name": "buildingQueue",
@@ -376,7 +416,7 @@ return {
       },
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingInProgress",
         "kind": "LinkedField",
         "name": "buildingsInProgress",
@@ -386,6 +426,38 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "BuildingsInProgress_buildingsInProgress"
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v3/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "nextVillageTaskExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "NextVillageTaskExecution_timestamp"
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoBuildSettings",
+        "kind": "LinkedField",
+        "name": "autoBuildSettings",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "BuildingQueue_autoBuildSettings"
           }
         ],
         "storageKey": null
@@ -402,7 +474,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingSpots",
         "kind": "LinkedField",
         "name": "buildingSpots",
@@ -415,7 +487,7 @@ return {
             "kind": "LinkedField",
             "name": "infrastructure",
             "plural": true,
-            "selections": (v7/*: any*/),
+            "selections": (v9/*: any*/),
             "storageKey": null
           },
           {
@@ -433,7 +505,7 @@ return {
                 "kind": "LinkedField",
                 "name": "wood",
                 "plural": true,
-                "selections": (v7/*: any*/),
+                "selections": (v9/*: any*/),
                 "storageKey": null
               },
               {
@@ -443,7 +515,7 @@ return {
                 "kind": "LinkedField",
                 "name": "clay",
                 "plural": true,
-                "selections": (v7/*: any*/),
+                "selections": (v9/*: any*/),
                 "storageKey": null
               },
               {
@@ -453,7 +525,7 @@ return {
                 "kind": "LinkedField",
                 "name": "iron",
                 "plural": true,
-                "selections": (v7/*: any*/),
+                "selections": (v9/*: any*/),
                 "storageKey": null
               },
               {
@@ -463,7 +535,7 @@ return {
                 "kind": "LinkedField",
                 "name": "crop",
                 "plural": true,
-                "selections": (v7/*: any*/),
+                "selections": (v9/*: any*/),
                 "storageKey": null
               }
             ],
@@ -474,7 +546,7 @@ return {
       },
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingQueue",
         "kind": "LinkedField",
         "name": "buildingQueue",
@@ -488,9 +560,9 @@ return {
             "name": "buildings",
             "plural": true,
             "selections": [
-              (v2/*: any*/),
-              (v5/*: any*/),
               (v4/*: any*/),
+              (v7/*: any*/),
+              (v6/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -505,7 +577,7 @@ return {
                 "name": "targetLevel",
                 "storageKey": null
               },
-              (v3/*: any*/),
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -513,7 +585,7 @@ return {
                 "kind": "LinkedField",
                 "name": "buildingTime",
                 "plural": false,
-                "selections": (v8/*: any*/),
+                "selections": (v10/*: any*/),
                 "storageKey": null
               },
               {
@@ -523,7 +595,7 @@ return {
                 "kind": "LinkedField",
                 "name": "cost",
                 "plural": false,
-                "selections": (v9/*: any*/),
+                "selections": (v11/*: any*/),
                 "storageKey": null
               }
             ],
@@ -536,7 +608,7 @@ return {
             "kind": "LinkedField",
             "name": "totalCost",
             "plural": false,
-            "selections": (v9/*: any*/),
+            "selections": (v11/*: any*/),
             "storageKey": null
           },
           {
@@ -546,7 +618,7 @@ return {
             "kind": "LinkedField",
             "name": "totalBuildingTime",
             "plural": false,
-            "selections": (v8/*: any*/),
+            "selections": (v10/*: any*/),
             "storageKey": null
           },
           {
@@ -556,7 +628,7 @@ return {
             "kind": "LinkedField",
             "name": "infrastructureBuildingTime",
             "plural": false,
-            "selections": (v8/*: any*/),
+            "selections": (v10/*: any*/),
             "storageKey": null
           },
           {
@@ -566,7 +638,7 @@ return {
             "kind": "LinkedField",
             "name": "resourcesBuildingTime",
             "plural": false,
-            "selections": (v8/*: any*/),
+            "selections": (v10/*: any*/),
             "storageKey": null
           }
         ],
@@ -574,13 +646,13 @@ return {
       },
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "BuildingInProgress",
         "kind": "LinkedField",
         "name": "buildingsInProgress",
         "plural": true,
         "selections": [
-          (v5/*: any*/),
+          (v7/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -588,7 +660,7 @@ return {
             "name": "level",
             "storageKey": null
           },
-          (v3/*: any*/),
+          (v5/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -596,32 +668,63 @@ return {
             "kind": "LinkedField",
             "name": "finishedAt",
             "plural": false,
+            "selections": (v12/*: any*/),
+            "storageKey": null
+          },
+          (v6/*: any*/)
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v3/*: any*/),
+        "concreteType": "Timestamp",
+        "kind": "LinkedField",
+        "name": "nextVillageTaskExecution",
+        "plural": false,
+        "selections": (v12/*: any*/),
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "AutoBuildSettings",
+        "kind": "LinkedField",
+        "name": "autoBuildSettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "DualQueueSettings",
+            "kind": "LinkedField",
+            "name": "dualQueue",
+            "plural": false,
             "selections": [
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "totalSeconds",
+                "name": "allow",
                 "storageKey": null
               }
             ],
             "storageKey": null
-          },
-          (v4/*: any*/)
+          }
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "3a490950bf0996c519456646673cccef",
+    "cacheID": "0ac09cc6dd9083e618f2c75f3d6513ee",
     "id": null,
     "metadata": {},
     "name": "BuildingsQuery",
     "operationKind": "query",
-    "text": "query BuildingsQuery(\n  $villageId: ID!\n) {\n  buildingSpots(villageId: $villageId) {\n    ...BuildingSpots_buildingSpots\n  }\n  buildingQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n  buildingsInProgress(villageId: $villageId) {\n    ...BuildingsInProgress_buildingsInProgress\n  }\n}\n\nfragment BuildingInProgress_buildingInProgress on BuildingInProgress {\n  name\n  fieldId\n  finishedAt {\n    totalSeconds\n  }\n  level\n  type\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingSpots_buildingSpots on BuildingSpots {\n  infrastructure {\n    id\n    ...BuildingSpot_buildingSpot\n  }\n  resources {\n    wood {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    clay {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    iron {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    crop {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n  }\n}\n\nfragment BuildingsInProgress_buildingsInProgress on BuildingInProgress {\n  fieldId\n  level\n  ...BuildingInProgress_buildingInProgress\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
+    "text": "query BuildingsQuery(\n  $villageId: ID!\n) {\n  buildingSpots(villageId: $villageId) {\n    ...BuildingSpots_buildingSpots\n  }\n  buildingQueue(villageId: $villageId) {\n    ...BuildingQueue_buildingQueue\n  }\n  buildingsInProgress(villageId: $villageId) {\n    ...BuildingsInProgress_buildingsInProgress\n  }\n  nextVillageTaskExecution(villageId: $villageId, task: AutoBuild) {\n    ...NextVillageTaskExecution_timestamp\n  }\n  autoBuildSettings(villageId: $villageId) {\n    ...BuildingQueue_autoBuildSettings\n  }\n}\n\nfragment BuildingInProgress_buildingInProgress on BuildingInProgress {\n  name\n  fieldId\n  finishedAt {\n    totalSeconds\n  }\n  level\n  type\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingQueue_autoBuildSettings on AutoBuildSettings {\n  dualQueue {\n    allow\n  }\n}\n\nfragment BuildingQueue_buildingQueue on BuildingQueue {\n  buildings {\n    id\n    fieldId\n    ...QueuedBuilding_queuedBuilding\n  }\n  totalCost {\n    ...Cost_resources\n  }\n  totalBuildingTime {\n    ...Cost_duration\n  }\n  infrastructureBuildingTime {\n    ...Cost_duration\n  }\n  resourcesBuildingTime {\n    ...Cost_duration\n  }\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  id\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingSpots_buildingSpots on BuildingSpots {\n  infrastructure {\n    id\n    ...BuildingSpot_buildingSpot\n  }\n  resources {\n    wood {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    clay {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    iron {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n    crop {\n      id\n      ...BuildingSpot_buildingSpot\n    }\n  }\n}\n\nfragment BuildingsInProgress_buildingsInProgress on BuildingInProgress {\n  fieldId\n  level\n  ...BuildingInProgress_buildingInProgress\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();
-(node as any).hash = 'b6d42d9a8a9964d3c0630fcc8b29385b';
+(node as any).hash = 'bd08c825543174c018136ff83b426f8b';
 export default node;

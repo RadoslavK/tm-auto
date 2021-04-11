@@ -57,15 +57,21 @@ type Props = {
   readonly tab: string;
 };
 
+graphql`
+    fragment VillageSettings_village on Village {
+        id
+        name
+        coords {
+            ...Coords @relay(mask: false)
+        }
+        isCapital
+    }
+`;
+
 const villageSettingsQuery = graphql`
   query VillageSettingsQuery {
       villages {
-          id
-          name
-          coords {
-              ...Coords @relay(mask: false)
-          }
-          isCapital
+         ...VillageSettings_village @relay(mask: false)
       }
   }
 `;
@@ -73,12 +79,7 @@ const villageSettingsQuery = graphql`
 const villagesSubscription = graphql`
   subscription VillageSettingsSubscription {
       villagesUpdated {
-          id
-          name
-          coords {
-              ...Coords @relay(mask: false)
-          }
-          isCapital
+         ...VillageSettings_village
       }
   }
 `;

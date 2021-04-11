@@ -5,18 +5,16 @@ import React, {
   useState,
 } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import type { TaskType } from 'shared/enums/TaskType.js';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
-import type {
-  NextTaskExecutionQuery,
-  TaskType,
-} from '../../../_graphql/__generated__/NextTaskExecutionQuery.graphql.js';
+import type { NextTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextTaskExecution_timestamp.graphql.js';
 import type { NextTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextTaskExecutionResetMutation.graphql.js';
 import type { NextTaskExecutionSetMutation } from '../../../_graphql/__generated__/NextTaskExecutionSetMutation.graphql.js';
 import type { NextTaskExecutionSubscription } from '../../../_graphql/__generated__/NextTaskExecutionSubscription.graphql.js';
@@ -25,21 +23,20 @@ import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestam
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
+  readonly timestamp: NextTaskExecution_timestamp$key;
   readonly task: TaskType;
 };
 
-const nextTaskExecutionQuery = graphql`
-    query NextTaskExecutionQuery($task: TaskType!) {
-         nextTaskExecution(task: $task) {
-             totalSeconds
-         }
+const fragmentDef = graphql`
+    fragment NextTaskExecution_timestamp on Timestamp {
+        ...Timestamp @relay(mask: false)
     }
 `;
 
 const nextTaskExecutionSetMutation = graphql`
   mutation NextTaskExecutionSetMutation($task: TaskType!, $delay: DurationInput!) {
       setNextTaskExecution(task: $task, delay: $delay) {
-          ...Timestamp
+          ...NextTaskExecution_timestamp
       }
   }
 `;
@@ -47,7 +44,7 @@ const nextTaskExecutionSetMutation = graphql`
 const nextTaskExecutionResetMutation = graphql`
     mutation NextTaskExecutionResetMutation($task: TaskType!) {
         resetNextTaskExecution(task: $task) {
-            ...Timestamp
+            ...NextTaskExecution_timestamp
         }
     }
 `;
@@ -55,13 +52,13 @@ const nextTaskExecutionResetMutation = graphql`
 const nextTaskExecutionSubscription = graphql`
   subscription NextTaskExecutionSubscription($task: TaskType!) {
       nextTaskExecutionChanged(task: $task) {
-          ...Timestamp
+          ...NextTaskExecution_timestamp
       }
   }
 `;
 
-export const NextTaskExecution: React.FC<Props> = ({ task }) => {
-  const { nextTaskExecution } = useLazyLoadQuery<NextTaskExecutionQuery>(nextTaskExecutionQuery, { task }, { fetchPolicy: 'store-and-network' });
+export const NextTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
+  const nextTaskExecution = useFragment(fragmentDef, timestamp);
   const [setNextTaskExecution] = useMutation<NextTaskExecutionSetMutation>(nextTaskExecutionSetMutation);
   const [resetNextTaskExecution] = useMutation<NextTaskExecutionResetMutation>(nextTaskExecutionResetMutation);
 

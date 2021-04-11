@@ -49,10 +49,7 @@ const costResourcesFragment = graphql`
 
 const costDurationFragment = graphql`
   fragment Cost_duration on Duration {
-      days
-      hours
-      minutes
-      seconds
+      ...Duration @relay(mask: false)
   }
 `;
 

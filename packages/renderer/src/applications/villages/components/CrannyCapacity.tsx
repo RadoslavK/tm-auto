@@ -2,14 +2,14 @@ import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
-  useLazyLoadQuery,
+  useFragment,
   useSubscription,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
-import type { CrannyCapacityQuery } from '../../../_graphql/__generated__/CrannyCapacityQuery.graphql.js';
+import type { CrannyCapacity_crannyCapacity$key } from '../../../_graphql/__generated__/CrannyCapacity_crannyCapacity.graphql.js';
 import type { CrannyCapacitySubscription } from '../../../_graphql/__generated__/CrannyCapacitySubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
@@ -32,31 +32,31 @@ const useStyles = makeStyles<unknown, StylesProps>({
   },
 });
 
-const crannyCapacityQuery = graphql`
-    query CrannyCapacityQuery($villageId: ID!) {
-        crannyCapacity(villageId: $villageId) {
-            actual
-            ongoing
-            total
-        }
+const fragmentDef = graphql`
+    fragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {
+        actual
+        ongoing
+        total
     }
 `;
 
 const subscription = graphql`
     subscription CrannyCapacitySubscription($villageId: ID!) {
         onCrannyCapacityUpdated(villageId: $villageId) {
-            actual
-            ongoing
-            total
+            ...CrannyCapacity_crannyCapacity
         }
     }
 `;
 
-export const CrannyCapacity: React.FC = () => {
+type Props = {
+  readonly crannyCapacityKey: CrannyCapacity_crannyCapacity$key;
+};
+
+export const CrannyCapacity: React.FC<Props> = ({ crannyCapacityKey }) => {
   const tribe = useRecoilValue(tribeState);
   const classes = useStyles({ tribe });
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { crannyCapacity } = useLazyLoadQuery<CrannyCapacityQuery>(crannyCapacityQuery, { villageId }, { fetchPolicy: 'store-and-network' });
+  const crannyCapacity = useFragment(fragmentDef, crannyCapacityKey);
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<CrannyCapacitySubscription> => ({
     subscription,

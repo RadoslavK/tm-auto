@@ -1,9 +1,9 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { TaskType } from 'shared/enums/TaskType.js';
 
 import type { CoolDown } from '../../../_models/coolDown.js';
 import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import { Resources } from '../../../_models/misc/resources.js';
-import { TaskType } from '../../../_models/misc/taskType.js';
 import type { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnitsSettings.js';
 import type { Units } from '../../../_models/units';
 import type { Village } from '../../../_models/village/village.js';

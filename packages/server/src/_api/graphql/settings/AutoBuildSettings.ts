@@ -5,8 +5,12 @@ import {
   mutationField,
   objectType,
   queryField,
+  subscriptionField,
 } from 'nexus';
 import { DualQueuePreferences } from 'server/_models/settings/tasks/autoBuildSettings/index.js';
+
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AutoStorageOptionSettings = objectType({
   name: 'AutoStorageOptionSettings',
@@ -120,5 +124,18 @@ export const ResetAutoBuildSettingsMutation = mutationField(t => {
       villageId: 'ID',
     },
     resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.reset(),
+  });
+});
+
+export const AutoBuildSettingsSubscription = subscriptionField(t => {
+  t.field('autoBuildSettingsUpdated', {
+    type: AutoBuildSettings,
+    args: {
+      villageId: 'ID',
+    },
+    ...subscribeToEvent(BotEvent.AutoBuildSettingsUpdated, {
+      filter: (p, args) => p.villageId === args.villageId,
+      resolve: (p) => p.settings,
+    }),
   });
 });

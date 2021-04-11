@@ -1,4 +1,5 @@
-import type { TaskType } from '../_models/misc/taskType.js';
+import type { TaskType } from 'shared/enums/TaskType.js';
+
 import { BotEvent } from '../events/botEvent.js';
 import { publishPayloadEvent } from '../pubSub.js';
 
@@ -74,6 +75,15 @@ export class NextExecutionService {
     }
 
     return villageTimes.get(task) || getDefaultExecutionTime();
+  };
+
+  public getMultipleForVillage = (villageId: string, tasks: ReadonlyArray<TaskType>): ReadonlyArray<{ readonly task: TaskType; readonly date: Date }> => {
+    const villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
+
+    return tasks.map(task => ({
+      task,
+      date: villageTimes?.get(task) || getDefaultExecutionTime(),
+    }));
   };
 
   public setForVillage = (

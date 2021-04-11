@@ -4,22 +4,24 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type NextTasksExecutionSubscriptionVariables = {};
-export type NextTasksExecutionSubscriptionResponse = {
-    readonly nextTasksExecutionChanged: {
+export type MainRoutesQueryVariables = {};
+export type MainRoutesQueryResponse = {
+    readonly isBotActive: boolean;
+    readonly nextTasksExecution: {
         readonly " $fragmentRefs": FragmentRefs<"NextTasksExecution_timestamp">;
     };
 };
-export type NextTasksExecutionSubscription = {
-    readonly response: NextTasksExecutionSubscriptionResponse;
-    readonly variables: NextTasksExecutionSubscriptionVariables;
+export type MainRoutesQuery = {
+    readonly response: MainRoutesQueryResponse;
+    readonly variables: MainRoutesQueryVariables;
 };
 
 
 
 /*
-subscription NextTasksExecutionSubscription {
-  nextTasksExecutionChanged {
+query MainRoutesQuery {
+  isBotActive
+  nextTasksExecution {
     ...NextTasksExecution_timestamp
   }
 }
@@ -29,19 +31,28 @@ fragment NextTasksExecution_timestamp on Timestamp {
 }
 */
 
-const node: ConcreteRequest = {
+const node: ConcreteRequest = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isBotActive",
+  "storageKey": null
+};
+return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "NextTasksExecutionSubscription",
+    "name": "MainRoutesQuery",
     "selections": [
+      (v0/*: any*/),
       {
         "alias": null,
         "args": null,
         "concreteType": "Timestamp",
         "kind": "LinkedField",
-        "name": "nextTasksExecutionChanged",
+        "name": "nextTasksExecution",
         "plural": false,
         "selections": [
           {
@@ -53,21 +64,22 @@ const node: ConcreteRequest = {
         "storageKey": null
       }
     ],
-    "type": "Subscription",
+    "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "NextTasksExecutionSubscription",
+    "name": "MainRoutesQuery",
     "selections": [
+      (v0/*: any*/),
       {
         "alias": null,
         "args": null,
         "concreteType": "Timestamp",
         "kind": "LinkedField",
-        "name": "nextTasksExecutionChanged",
+        "name": "nextTasksExecution",
         "plural": false,
         "selections": [
           {
@@ -83,13 +95,14 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "2a3e7b038356997711882d6ab3e65191",
+    "cacheID": "9861658b9f6ce00c33df7e8e27db70fb",
     "id": null,
     "metadata": {},
-    "name": "NextTasksExecutionSubscription",
-    "operationKind": "subscription",
-    "text": "subscription NextTasksExecutionSubscription {\n  nextTasksExecutionChanged {\n    ...NextTasksExecution_timestamp\n  }\n}\n\nfragment NextTasksExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "name": "MainRoutesQuery",
+    "operationKind": "query",
+    "text": "query MainRoutesQuery {\n  isBotActive\n  nextTasksExecution {\n    ...NextTasksExecution_timestamp\n  }\n}\n\nfragment NextTasksExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
-(node as any).hash = '79525a13d30647a5ee36fc5b9784643f';
+})();
+(node as any).hash = '65af575be8583106dafce959b051872c';
 export default node;

@@ -15,7 +15,6 @@ import React, {
 } from 'react';
 import {
   useFragment,
-  useLazyLoadQuery,
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
@@ -26,7 +25,6 @@ import type {
   HeroLevelUpItemInput,
   HeroLevelUpSettingsAddHeroLevelUpItemMutation,
 } from '../../../_graphql/__generated__/HeroLevelUpSettingsAddHeroLevelUpItemMutation.graphql.js';
-import type { HeroLevelUpSettingsQuery } from '../../../_graphql/__generated__/HeroLevelUpSettingsQuery.graphql.js';
 import type { HeroLevelUpSettingsRemoveHeroLevelUpItemMutation } from '../../../_graphql/__generated__/HeroLevelUpSettingsRemoveHeroLevelUpItemMutation.graphql.js';
 import type { HeroLevelUpSettingsSubscription } from '../../../_graphql/__generated__/HeroLevelUpSettingsSubscription.graphql.js';
 import type { HeroLevelUpSettingsUpdateHeroLevelUpItemMutation } from '../../../_graphql/__generated__/HeroLevelUpSettingsUpdateHeroLevelUpItemMutation.graphql.js';
@@ -42,14 +40,6 @@ const heroLevelUpSettingsFragmentDefinition = graphql`
           offensiveStrength
           resources
           ...HeroLevelUpItemForm_heroLevelUpItem
-      }
-  }
-`;
-
-const heroLevelUpSettingsQuery = graphql`
-  query HeroLevelUpSettingsQuery {
-      heroLevelUpSettings {
-          ...HeroLevelUpSettings_heroLevelUpSettings
       }
   }
 `;
@@ -87,9 +77,11 @@ const heroLevelUpSettingsSubscription = graphql`
   }
 `;
 
-const HeroLevelUpSettingsContainer: React.FC = () => {
-  const { heroLevelUpSettings } = useLazyLoadQuery<HeroLevelUpSettingsQuery>(heroLevelUpSettingsQuery, {}, { fetchPolicy: 'store-and-network' });
+type ContainerProps = {
+  readonly settingsKey: HeroLevelUpSettings_heroLevelUpSettings$key;
+};
 
+const HeroLevelUpSettingsContainer: React.FC<ContainerProps> = ({ settingsKey }) => {
   const [addHeroLevelUpItem] = useMutation<HeroLevelUpSettingsAddHeroLevelUpItemMutation>(heroLevelUpSettingsAddHeroLevelUpItemMutation);
   const [updateHeroLevelUpItem] = useMutation<HeroLevelUpSettingsUpdateHeroLevelUpItemMutation>(heroLevelUpSettingsUpdateHeroLevelUpItemMutation);
   const [removeHeroLevelUpItem] = useMutation<HeroLevelUpSettingsRemoveHeroLevelUpItemMutation>(heroLevelUpSettingsRemoveHeroLevelUpItemMutation);
@@ -161,7 +153,7 @@ const HeroLevelUpSettingsContainer: React.FC = () => {
     <HeroLevelUpSettings
       onRemove={removeItem}
       onSubmit={submitItem}
-      settingsKey={heroLevelUpSettings}
+      settingsKey={settingsKey}
     />
   );
 };

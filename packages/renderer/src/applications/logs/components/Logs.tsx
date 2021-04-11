@@ -10,11 +10,17 @@ import type { LogsQuery } from '../../../_graphql/__generated__/LogsQuery.graphq
 import type { LogsSubscription } from '../../../_graphql/__generated__/LogsSubscription.graphql.js';
 import { LogEntry } from './LogEntry.js';
 
+graphql`
+    fragment Logs_logEntry on LogEntry {
+        id
+        ...LogEntry_logEntry
+    }
+`;
+
 const logsQuery = graphql`
   query LogsQuery {
       logEntries {
-          id
-          ...LogEntry_logEntry
+         ...Logs_logEntry @relay (mask: false)
       }
   }
 `;
@@ -22,8 +28,7 @@ const logsQuery = graphql`
 const logsSubscription = graphql`
   subscription LogsSubscription {
       logEntryAdded {
-          id
-        ...LogEntry_logEntry
+        ...Logs_logEntry
       }
   }
 `;

@@ -1,8 +1,8 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { TaskType } from 'shared/enums/TaskType.js';
 
 import type { CoolDown } from '../../../_models/coolDown.js';
 import { Duration } from '../../../_models/duration.js';
-import { TaskType } from '../../../_models/misc/taskType.js';
 import type { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings.js';
 import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';

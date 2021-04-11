@@ -377,6 +377,12 @@ type Mutation {
   updateHeroLevelUpItem(id: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
 }
 
+type NextVillageTaskExecutionPayloadField {
+  label: String!
+  task: TaskType!
+  timestamp: Timestamp!
+}
+
 type Query {
   account(id: ID!): UserAccount!
   accountSettings: AccountSettings!
@@ -409,6 +415,7 @@ type Query {
   nextTaskExecution(task: TaskType!): Timestamp!
   nextTasksExecution: Timestamp!
   nextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
+  nextVillageTaskExecutions(villageId: ID!): [NextVillageTaskExecutionPayloadField!]!
   unitInfo(index: Int!): UnitInfo!
   village(villageId: ID!): Village
   villageTileTypes: [String!]!
@@ -469,6 +476,7 @@ type Subscription {
   accountsUpdated: [UserAccount!]!
   activeVillageIdChanged: ID!
   autoAdventureSettingsUpdated: AutoAdventureSettings!
+  autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   botActivityChanged: Boolean!
