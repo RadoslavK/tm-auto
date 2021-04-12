@@ -20,6 +20,8 @@ const stealth = pluginStealth();
 // @ts-ignore
 stealth.onBrowser = () => {};
 
+puppeteer.use(stealth);
+
 const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => {
   const headless = GeneralSettingsService.getService().get().headlessChrome;
 
