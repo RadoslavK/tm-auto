@@ -150,12 +150,13 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       label: 'Parties',
       path: 'parties',
       tabType: VillageSettingsTabType.AutoParty,
+      preloadData: () => reloadPartiesQuery(villageId),
     },
     {
       label: 'Tasks',
       path: 'tasks-activity',
     },
-  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery]);
+  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery]);
 
   const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
 
