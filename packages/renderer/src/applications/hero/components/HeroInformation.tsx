@@ -63,10 +63,8 @@ const HeroInformationContainer: React.FC<ContainerProps> = ({ queryRef }) => {
     subscription: heroInformationSubscription,
     variables: {},
     updater: (store) => {
-      const root = store.getRoot();
-      const oldRecord = root.getLinkedRecord('heroInformation');
       const newRecord = store.getRootField('heroInformationUpdated');
-      oldRecord?.copyFieldsFrom(newRecord);
+      store.getRoot().setLinkedRecord(newRecord, 'heroInformation');
     },
   }), []);
 

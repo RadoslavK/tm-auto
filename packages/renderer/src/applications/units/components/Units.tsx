@@ -96,9 +96,7 @@ export const Units: React.FC<Props> = ({
     variables: { villageId },
     updater: (store) => {
       const newRecord = store.getRootField('autoUnitsSettingsUpdated');
-      const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
-
-      record?.copyFieldsFrom(newRecord);
+      store.getRoot().setLinkedRecord(newRecord, 'autoUnitsSettings', { villageId });
     },
   }), [villageId]);
 

@@ -83,10 +83,8 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId, queryRef }) => {
       updateSettings({
         variables: { villageId, settings: state },
         updater: (store) => {
-          const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
           const newRecord = store.getRootField('updateAutoUnitsSettings');
-
-          record?.copyFieldsFrom(newRecord);
+          store.getRoot().setLinkedRecord(newRecord, 'autoUnitsSettings', { villageId });
         },
       });
     }
@@ -104,10 +102,8 @@ export const AutoUnitsSettings: React.FC<Props> = ({ villageId, queryRef }) => {
     resetSettings({
       variables: { villageId },
       updater: (store) => {
-        const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
         const newRecord = store.getRootField('resetAutoUnitsSettings');
-
-        record?.copyFieldsFrom(newRecord);
+        store.getRoot().setLinkedRecord(newRecord, 'autoUnitsSettings', { villageId });
       },
     });
   };

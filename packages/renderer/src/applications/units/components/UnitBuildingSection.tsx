@@ -131,10 +131,8 @@ export const UnitBuildingSection: React.FC<Props> = ({
           settings: state,
         },
         updater: (store) => {
-          const record = store.getRoot().getLinkedRecord('autoUnitsSettings', { villageId });
           const newRecord = store.getRootField('updateAutoUnitsBuildingSettings');
-
-          record?.copyFieldsFrom(newRecord);
+          store.getRoot().setLinkedRecord(newRecord, 'autoUnitsSettings', { villageId });
         },
       });
     }
