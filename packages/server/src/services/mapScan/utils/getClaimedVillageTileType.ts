@@ -1,10 +1,10 @@
-import { JSDOM } from 'jsdom';
+import parse, { HTMLElement } from 'node-html-parser';
 import type { Page } from 'puppeteer';
 
 import { sendAjaxRequest } from '../../../utils/sendAjaxRequest.js';
 
-const parseRes = (document: Document, index: number): string => {
-  const node = document.querySelector(
+const parseRes = (responseElement: HTMLElement, index: number): string => {
+  const node = responseElement.querySelector(
     `#distribution tbody tr:first-child td:nth-child(${index})`,
   );
 
@@ -15,19 +15,23 @@ const parseRes = (document: Document, index: number): string => {
   return node.textContent.trim();
 };
 
+type AjaxResponse = {
+  readonly html: string;
+};
+
 export const getClaimedVillageTileType = async (
   x: number,
   y: number,
   page: Page,
 ): Promise<string> => {
-  const { html } = await sendAjaxRequest('viewTileDetails', { x, y }, page);
+  const { html } = await sendAjaxRequest<AjaxResponse>('viewTileDetails', { x, y }, page);
 
-  const doc = new JSDOM(html).window.document;
+  const responseElement = parse(html);
 
-  const wood = parseRes(doc, 1);
-  const clay = parseRes(doc, 2);
-  const iron = parseRes(doc, 3);
-  const crop = parseRes(doc, 4);
+  const wood = parseRes(responseElement, 1);
+  const clay = parseRes(responseElement, 2);
+  const iron = parseRes(responseElement, 3);
+  const crop = parseRes(responseElement, 4);
 
   return `${wood}-${clay}-${iron}-${crop}`;
 };

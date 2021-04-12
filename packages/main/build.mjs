@@ -21,7 +21,6 @@ const options = {
   external: [
     'electron',
     'puppeteer-extra-plugin-stealth',
-    'jsdom',
   ],
 };
 
