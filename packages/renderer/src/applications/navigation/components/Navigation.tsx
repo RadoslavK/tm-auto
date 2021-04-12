@@ -1,7 +1,7 @@
 import {
   AppBar,
   Tab,
-  Tabs, 
+  Tabs,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
@@ -11,7 +11,7 @@ import React, {
 import { useSubscription } from 'react-relay/hooks';
 import {
   Link,
-  useLocation, 
+  useLocation,
 } from 'react-router-dom';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
@@ -23,15 +23,15 @@ import { BotStateToggle } from './BotStateToggle.js';
 import { SignOut } from './SignOut.js';
 
 const navigationQuery = graphql`
-  query NavigationQuery {
-      botState
-  }
+    query NavigationQuery {
+        botState
+    }
 `;
 
 const navigationSubscription = graphql`
-  subscription NavigationSubscription {
-      botStateChanged
-  }
+    subscription NavigationSubscription {
+        botStateChanged
+    }
 `;
 
 type Props = {
@@ -43,7 +43,7 @@ export const Navigation: React.FC<Props> = ({ navigationApps }) => {
   const [lastVillagesPath, setLastVillagesPath] = useState<string>();
 
   const { botState } = useLazyLoadQuery<NavigationQuery>(navigationQuery, {}, { fetchPolicy: 'store-and-network' });
-  
+
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NavigationSubscription> => ({
     subscription: navigationSubscription,
     variables: {},
@@ -72,21 +72,28 @@ export const Navigation: React.FC<Props> = ({ navigationApps }) => {
   return (
     <AppBar position="fixed">
       <Tabs centered indicatorColor="primary" value={currentItemIndex}>
-        {navigationApps.map((app, index) => (
-          <Tab
-            key={app.path}
-            component={Link}
-            label={app.label}
-            onClick={index === 0 ? undefined : markLastVillagePath}
-            onMouseEnter={app.preload}
-            to={getTabPath(
-              index,
-              index !== 0
-                ? `/${navigationApps[index].path}`
-                : lastVillagesPath || `/${navigationApps[index].path}`,
-            )}
-          />
-        ))}
+        {navigationApps.map((app, index) => {
+          const isSelected = currentItemIndex === index;
+
+          return (
+            <Tab
+              key={app.path}
+              component={isSelected ? 'span' : Link}
+              label={app.label}
+              onClick={isSelected || index === 0 ? undefined : markLastVillagePath}
+              onMouseEnter={() => {
+                if (!isSelected) {
+                  app.preload();
+                }
+              }}
+              to={getTabPath(index,
+                index !== 0
+                  ? `/${navigationApps[index].path}`
+                  : lastVillagesPath || `/${navigationApps[index].path}`,
+              )}
+            />
+          );
+        })}
         <Tab botState={botState} component={BotStateToggle} />
         {botState === 'Paused' && <Tab component={SignOut} />}
       </Tabs>

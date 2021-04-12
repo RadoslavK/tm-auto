@@ -72,7 +72,9 @@ export const VillageSideItem: React.FC<Props> = ({
 
   const wrapLink = (children: JSX.Element): JSX.Element => scanned
     ? <Link className={classes.scannedVillageName} to={path} onClick={onClick}>{children}</Link>
-    : <span className={classes.notScannedVillageName} title="Village has not been scanned yet!">{children}</span>;
+    : isVillageSelected
+      ? <span className={classes.scannedVillageName}>{children}</span>
+      : <span className={classes.notScannedVillageName} title="Village has not been scanned yet!">{children}</span>;
 
   return (
     <div className={classes.root}>
