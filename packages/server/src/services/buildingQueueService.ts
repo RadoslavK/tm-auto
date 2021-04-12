@@ -608,7 +608,10 @@ export class BuildingQueueService {
       return false;
     }
 
-    // it is level 1
+    // Check that no building is present on the field
+    if (buildingSpots.some(b => b.level.getActualAndOngoing() > 0)) {
+      return true;
+    }
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(
       queuedBuilding.type,
