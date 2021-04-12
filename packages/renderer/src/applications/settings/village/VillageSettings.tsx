@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -21,6 +22,7 @@ import type { GeneralVillageSettingsQuery } from '../../../_graphql/__generated_
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import type { VillageSettingsSubscription } from '../../../_graphql/__generated__/VillageSettingsSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import { formatVillageName } from '../../villages/components/VillageName.js';
 import {
   AutoBuildSettings,
@@ -125,18 +127,56 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
     setSelectedVillageId(villageId);
   }, [villageId]);
 
-  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(
-    getTabType(tab),
-  );
-
-  useEffect(() => {
-    setSelectedTab(getTabType(tab));
-  }, [tab, getTabType]);
+  const [selectedTab, setSelectedTab] = useState<VillageSettingsTabType>(() => getTabType(tab));
 
   const [generalVillageSettingsQueryRef, loadGeneralVillageSettingsQuery] = useQueryLoader<GeneralVillageSettingsQuery>(generalVillageSettingsQuery);
   const [autoBuildSettingsQueryRef, loadAutoBuildSettingsQuery] = useQueryLoader<AutoBuildSettingsQuery>(autoBuildSettingsQuery);
   const [autoUnitsSettingsQueryRef, loadAutoUnitsSettingsQuery] = useQueryLoader<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery);
   const [autoPartySettingsQueryRef, loadAutoPartySettingsQuery] = useQueryLoader<AutoPartySettingsQuery>(autoPartySettingsQuery);
+
+  const reloadGeneralSettings = useCallback((vId: string) => loadGeneralVillageSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadGeneralVillageSettingsQuery]);
+  const reloadAutoBuildSettings = useCallback((vId: string) => loadAutoBuildSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoBuildSettingsQuery]);
+  const reloadAutoUnitsSettings = useCallback((vId: string) => loadAutoUnitsSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoUnitsSettingsQuery]);
+  const reloadAutoPartySettings = useCallback((vId: string) => loadAutoPartySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoPartySettingsQuery]);
+
+  const prevTab = usePrevious(tab);
+
+  useEffect(() => {
+    if (prevTab === tab) {
+      return;
+    }
+
+    const newTab = getTabType(tab);
+
+    switch (newTab) {
+      case VillageSettingsTabType.General: {
+        if (!generalVillageSettingsQueryRef) {
+          reloadGeneralSettings(selectedVillageId);
+        }
+        break;
+      }
+      case VillageSettingsTabType.AutoBuild: {
+        if (!autoBuildSettingsQueryRef) {
+          reloadAutoBuildSettings(selectedVillageId);
+        }
+        break;
+      }
+      case VillageSettingsTabType.AutoUnits: {
+        if (!autoUnitsSettingsQueryRef) {
+          reloadAutoUnitsSettings(selectedVillageId);
+        }
+        break;
+      }
+      case VillageSettingsTabType.AutoParty: {
+        if (!autoPartySettingsQueryRef) {
+          reloadAutoPartySettings(selectedVillageId);
+        }
+        break;
+      }
+    }
+
+    setSelectedTab(getTabType(tab));
+  }, [selectedVillageId, prevTab, tab, getTabType, generalVillageSettingsQueryRef, reloadGeneralSettings, autoBuildSettingsQueryRef, reloadAutoBuildSettings, autoUnitsSettingsQueryRef, reloadAutoUnitsSettings, autoPartySettingsQueryRef, reloadAutoPartySettings]);
 
   const renderSettings = (): JSX.Element | undefined | null => {
     switch (selectedTab) {
@@ -163,16 +203,16 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
 
             switch (selectedTab) {
               case VillageSettingsTabType.General:
-                loadGeneralVillageSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+                reloadGeneralSettings(id);
                 break;
               case VillageSettingsTabType.AutoBuild:
-                loadAutoBuildSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+                reloadAutoBuildSettings(id);
                 break;
               case VillageSettingsTabType.AutoUnits:
-                loadAutoUnitsSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+                reloadAutoUnitsSettings(id);
                 break;
               case VillageSettingsTabType.AutoParty:
-                loadAutoPartySettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+                reloadAutoPartySettings(id);
                 break;
               default:
                 throw new Error(`Invalid selected tab ${selectedTab}`);
@@ -195,32 +235,32 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
           isSelected={selectedTab === VillageSettingsTabType.General}
           label="General"
           onSelect={() => {
+            reloadGeneralSettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.General);
-            loadGeneralVillageSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
           }}
         />
         <TabLink
           isSelected={selectedTab === VillageSettingsTabType.AutoBuild}
           label="Auto Build"
           onSelect={() => {
+            reloadAutoBuildSettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.AutoBuild);
-            loadAutoBuildSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
           }}
         />
         <TabLink
           isSelected={selectedTab === VillageSettingsTabType.AutoUnits}
           label="Auto Units"
           onSelect={() => {
+            reloadAutoUnitsSettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.AutoUnits);
-            loadAutoUnitsSettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
           }}
         />
         <TabLink
           isSelected={selectedTab === VillageSettingsTabType.AutoParty}
           label="Auto Party"
           onSelect={() => {
+            reloadAutoPartySettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.AutoParty);
-            loadAutoPartySettingsQuery({ villageId }, { fetchPolicy: 'store-and-network' });
           }}
         />
       </div>

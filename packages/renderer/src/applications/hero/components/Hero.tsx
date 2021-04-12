@@ -67,12 +67,12 @@ export const Hero: React.FC<Props> = ({ queryRef }) => {
   const [heroInformationQueryRef, loadHeroInformationQuery] = useQueryLoader<HeroInformationQuery>(heroInformationQuery);
 
   useEffect(() => {
-    if (botState === 'InitialScanning') {
+    if (heroInformationQueryRef || botState === 'InitialScanning') {
       return;
     }
 
     loadHeroInformationQuery({}, { fetchPolicy: 'store-and-network' });
-  }, [botState, loadHeroInformationQuery]);
+  }, [botState, loadHeroInformationQuery, heroInformationQueryRef]);
 
   return (
     <div>

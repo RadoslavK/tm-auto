@@ -1,4 +1,7 @@
-import React, { useMemo } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 import { useQueryLoader } from 'react-relay/hooks';
 
 import type { HeroQuery } from '../_graphql/__generated__/HeroQuery.graphql.js';
@@ -46,6 +49,10 @@ export const EnsureMainNavigation: React.FC<Props> = ({ children }) => {
   const [settingsQueryRef, loadSettingsQuery] = useQueryLoader<SettingsQuery>(settingsQuery);
   const [heroQueryRef, loadHeroQuery] = useQueryLoader<HeroQuery>(heroQuery);
   const [villagesQueryRef, loadVillagesQuery] = useQueryLoader<VillagesQuery>(villagesQuery);
+
+  useEffect(() => {
+    loadVillagesQuery({}, { fetchPolicy: 'store-and-network' });
+  }, [loadVillagesQuery]);
 
   const navigationApps = useMemo((): readonly NavigationApp[] => [
     {

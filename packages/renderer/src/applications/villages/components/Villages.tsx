@@ -1,12 +1,16 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 import {
   PreloadedQuery,
   usePreloadedQuery,
   useQueryLoader,
   useSubscription,
 } from 'react-relay/hooks';
+import { useMatch } from 'react-router';
 import {
   Navigate,
   Route,
@@ -119,6 +123,16 @@ export const Villages: React.FC<Props> = ({ queryRef }) => {
 
   const [villageQueryRef, loadVillageQuery] = useQueryLoader<VillageQuery>(villageQuery);
 
+  const selectedVillageId = (useMatch('/villages/:id/*')?.params as VillageRouteParams | undefined)?.id;
+
+  useEffect(() => {
+    if (villageQueryRef || !scannedVillages.length) {
+      return;
+    }
+
+    loadVillageQuery({ villageId: selectedVillageId || scannedVillages[0].id }, { fetchPolicy: 'store-and-network' });
+  }, [scannedVillages, villageQueryRef, loadVillageQuery, selectedVillageId]);
+
   return (
     <div className={classes.root}>
       <div className={classes.sideMenu}>
@@ -127,9 +141,7 @@ export const Villages: React.FC<Props> = ({ queryRef }) => {
             key={village.id}
             isVillageActive={village.id === activeVillageId}
             village={village}
-            onClick={() => {
-              loadVillageQuery({ villageId: village.id }, { fetchPolicy: 'store-and-network' });
-            }}
+            onClick={() => loadVillageQuery({ villageId: village.id }, { fetchPolicy: 'store-and-network' })}
           />
         ))}
       </div>
