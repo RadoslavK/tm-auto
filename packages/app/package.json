@@ -4,13 +4,18 @@
   "author": "Buckyx",
   "private": true,
   "license": "MIT",
+  "description": "TM Auto",
+  "main": "build/main/index.cjs",
   "scripts": {
     "build": "gulp",
-    "start": "electron build/main/index.cjs"
+    "start": "electron build/main/index.cjs",
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "electron-builder --config electron-builder.config.js"
   },
   "devDependencies": {
     "del": "^6.0.0",
     "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
     "eslint": "^7.23.0",
     "gulp": "^4.0.2",
     "gulp-run": "^1.7.1"
