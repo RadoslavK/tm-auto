@@ -609,7 +609,8 @@ export class BuildingQueueService {
     }
 
     // Check that no building is present on the field
-    if (buildingSpots.some(b => b.level.getActualAndOngoing() > 0)) {
+    if (buildingSpots.some(b => b.fieldId === queuedBuilding.fieldId
+      && b.level.getActualAndOngoing() > 0)) {
       return true;
     }
 
