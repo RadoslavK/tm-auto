@@ -4,7 +4,10 @@ import {
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, {
+  Suspense,
+  useState, 
+} from 'react';
 import {
   useFragment,
   useMutation,
@@ -238,11 +241,13 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
         {dialog === DialogType.NewBuilding
         && loadNewBuildingDialogQueryRef
         && (
-          <NewBuildingDialog
-            fieldId={buildingSpotFragment.fieldId}
-            onSelect={closeDialog}
-            queryRef={loadNewBuildingDialogQueryRef}
-          />
+          <Suspense fallback={null}>
+            <NewBuildingDialog
+              fieldId={buildingSpotFragment.fieldId}
+              onSelect={closeDialog}
+              queryRef={loadNewBuildingDialogQueryRef}
+            />
+          </Suspense>
         )}
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiEnqueue}>

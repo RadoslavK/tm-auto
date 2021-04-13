@@ -2,11 +2,25 @@
 
 - AutoUnits
   - min troop count to build at the same time. E.g. build at least 5 units or none.
+- AutoBuild
+  - minFreeCrop to add to the building cost.. minimum/default 0
+- AutoParty
+  - queue more parties?
 - Building Queue
   - Block of queued buildings
     -finish Move to the top for it / move as high as possible
   
 ## New features
+- Auto demolish
+- Village resource sending
+  - When other missing res
+  - And specify which villages can send to which or rather receive from
+- Use NPC for missing resources
+  - For specific buildings/units (+ amounts)...
+  - When having at least X resources or overflow etc
+- Smithy upgrades
+- Farming
+  - Overview of unit movements, returning/attacking, amounts and resources they carry
 - Building pre-conditions
   - For building/block
   - Useful for Roman/free order so the bot would skip certain buildings until the right time
@@ -105,6 +119,7 @@
 
 ## Code Quality
 
+- DateTime scalar instead of totalSeconds timestamp or rather a string
 - Split complex components into markup ones and logic ones
 - Break the building queue service into smaller services per 1 action each
 - Export the path for the module from the module itself.. combination dirname and import.meta.url
@@ -137,6 +152,8 @@
 - Recover from failed to navigate pages/clicks. Throw custom error instance.
 - Handle and Recover from Service Unavailable that happens rather often
 - If there is some timeout during login then stop the action
+- Page refresh/Open new page after many crashes instead of increasing maintenance cooldown - force refresh of Dorf1 or something
+- It does not open the page again after closing (Stop action)
 
 ## Inspiration / Future
 
