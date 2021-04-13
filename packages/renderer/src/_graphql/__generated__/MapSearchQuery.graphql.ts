@@ -3,9 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+export type BotState = "InitialScanning" | "None" | "Paused" | "Running" | "Stopping";
 export type MapSearchState = "None" | "Scanning" | "Searching";
 export type MapSearchQueryVariables = {};
 export type MapSearchQueryResponse = {
+    readonly botState: BotState;
     readonly mapScanProgress: number;
     readonly mapSearchState: MapSearchState;
 };
@@ -18,6 +20,7 @@ export type MapSearchQuery = {
 
 /*
 query MapSearchQuery {
+  botState
   mapScanProgress
   mapSearchState
 }
@@ -25,6 +28,13 @@ query MapSearchQuery {
 
 const node: ConcreteRequest = (function(){
 var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "botState",
+    "storageKey": null
+  },
   {
     "alias": null,
     "args": null,
@@ -58,14 +68,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "5a887c96c59a1041434b602d6524e477",
+    "cacheID": "b007d44ab0f05ce6d1e60d4f89ff48bd",
     "id": null,
     "metadata": {},
     "name": "MapSearchQuery",
     "operationKind": "query",
-    "text": "query MapSearchQuery {\n  mapScanProgress\n  mapSearchState\n}\n"
+    "text": "query MapSearchQuery {\n  botState\n  mapScanProgress\n  mapSearchState\n}\n"
   }
 };
 })();
-(node as any).hash = '415ab2bd7b55189d9c035fff8e72d13e';
+(node as any).hash = 'c9962461adc50f142ef35cf0dd33f831';
 export default node;

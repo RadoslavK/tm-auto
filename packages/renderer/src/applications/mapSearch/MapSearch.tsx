@@ -15,6 +15,7 @@ import {
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { MapSearchBotSubscription } from '../../_graphql/__generated__/MapSearchBotSubscription.graphql.js';
 import type {
   MapSearchOnMapSearchFinishedSubscription,
   MapSearchOnMapSearchFinishedSubscriptionResponse,
@@ -62,6 +63,7 @@ const villageTileTypesQuery = graphql`
 
 export const mapSearchQuery = graphql`
     query MapSearchQuery {
+        botState
         mapScanProgress
         mapSearchState
     }
@@ -112,6 +114,12 @@ const mapSearchStateSubscription = graphql`
   }
 `;
 
+const botStateSubscription = graphql`
+    subscription MapSearchBotSubscription {
+        botStateChanged
+    }
+`;
+
 type Props = {
   readonly queryRef: PreloadedQuery<MapSearchQuery>;
 };
@@ -127,7 +135,7 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { mapSearchState, mapScanProgress } = usePreloadedQuery(mapSearchQuery, queryRef);
+  const { botState, mapSearchState, mapScanProgress } = usePreloadedQuery(mapSearchQuery, queryRef);
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
   const [stopScan] = useMutation(stopMapScanMutation);
@@ -136,6 +144,8 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
     () => getSortedTiles(villageTiles, sortBy, order),
     [villageTiles, sortBy, order],
   );
+
+  const isScanningDisabled = botState === 'InitialScanning';
 
   const mapSearchStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<MapSearchStateSubscription> => ({
     subscription: mapSearchStateSubscription,
@@ -168,6 +178,16 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   }), []);
 
   useSubscription<MapSearchOnMapSearchFinishedSubscription>(mapSearchFinishedSubscriptionConfig);
+
+  const botStateSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<MapSearchBotSubscription> => ({
+    subscription: botStateSubscription,
+    variables: {},
+    updater: (store, data) => {
+      store.getRoot().setValue(data.botStateChanged, 'botState');
+    },
+  }), []);
+
+  useSubscription(botStateSubscriptionConfig);
 
   const onSearchMap = () =>
     searchMap({
@@ -265,8 +285,8 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
         <button onClick={onStopScan}>Stop scan</button>
       ) : (
         <>
-          <button onClick={() => onSearchMap()}>Search map</button>
-          <button onClick={() => onScanWholeMap()}>Scan whole map</button>
+          <button disabled={isScanningDisabled} onClick={() => onSearchMap()}>Search map</button>
+          <button disabled={isScanningDisabled} onClick={() => onScanWholeMap()}>Scan whole map</button>
         </>
       )}
 
