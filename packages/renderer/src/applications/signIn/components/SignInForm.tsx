@@ -47,6 +47,7 @@ import { Accounts } from './Accounts.js';
 import {
   SignInFormDialog,
   signInFormDialogAccountQuery,
+  SignInFormDialogUpdate,
 } from './SignInFormDialog.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -347,14 +348,20 @@ export const SignInForm: React.FC<Props> = ({ queryRef }) => {
       </Container>
       <Dialog
         onClose={() => setDialogType(SignInFormDialogType.None)}
-        open={
-          dialogType === SignInFormDialogType.Create ||
-          dialogType === SignInFormDialogType.Update
-        }
+        open={dialogType === SignInFormDialogType.Create}
+      >
+        <SignInFormDialog
+          onSubmit={onSubmitForm}
+          type={dialogType}
+        />
+      </Dialog>
+      <Dialog
+        onClose={() => setDialogType(SignInFormDialogType.None)}
+        open={dialogType === SignInFormDialogType.Update}
       >
         <Suspense fallback={null}>
           {signInFormDialogAccountQueryRef && (
-            <SignInFormDialog
+            <SignInFormDialogUpdate
               onSubmit={onSubmitForm}
               type={dialogType}
               queryRef={signInFormDialogAccountQueryRef}

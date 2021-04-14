@@ -22,7 +22,10 @@ import {
 
 import type { SignInFormCreateAccountMutationVariables } from '../../../_graphql/__generated__/SignInFormCreateAccountMutation.graphql.js';
 import type { SignInFormDialogIsAccountTakenQuery } from '../../../_graphql/__generated__/SignInFormDialogIsAccountTakenQuery.graphql.js';
-import type { SignInFormDialogQuery } from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
+import type {
+  SignInFormDialogQuery,
+  SignInFormDialogQueryResponse,
+} from '../../../_graphql/__generated__/SignInFormDialogQuery.graphql.js';
 import { SignInFormDialogType } from './SignInForm.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,10 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type Props = {
+type SharedProps = {
   readonly onSubmit: (account: SignInFormCreateAccountMutationVariables['account']) => void;
   readonly type: SignInFormDialogType;
-  readonly queryRef: PreloadedQuery<SignInFormDialogQuery>;
 };
 
 export const signInFormDialogAccountQuery = graphql`
@@ -64,13 +66,33 @@ const isAccountTakenQuery = graphql`
   }
 `;
 
+type UpdateProps = SharedProps & {
+  readonly queryRef: PreloadedQuery<SignInFormDialogQuery>;
+};
+
+export const SignInFormDialogUpdate: React.FC<UpdateProps> = ({ queryRef, ...props }) => {
+  const { account } = usePreloadedQuery(signInFormDialogAccountQuery, queryRef);
+
+  return (
+    <SignInFormDialog
+      {...props}
+      account={account}
+    />
+  );
+};
+
+SignInFormDialogUpdate.displayName = 'SignInFormDialogUpdate';
+
+type Props = SharedProps & {
+  readonly account?: SignInFormDialogQueryResponse['account'];
+};
+
 export const SignInFormDialog: React.FC<Props> = ({
+  account,
   onSubmit,
   type,
-  queryRef,
 }) => {
   const classes = useStyles();
-  const { account } = usePreloadedQuery(signInFormDialogAccountQuery, queryRef);
 
   const [username, setUsername] = useState(account?.username ?? '');
   const [password, setPassword] = useState(account?.password ?? '');
