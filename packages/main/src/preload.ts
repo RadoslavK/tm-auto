@@ -1,7 +1,7 @@
+import { dialog } from '@electron/remote';
 import {
   contextBridge,
   ipcRenderer,
-  remote, 
 } from 'electron';
 import type { Socket } from 'net';
 import { IPC } from 'node-ipc';
@@ -59,7 +59,7 @@ const api: Api = {
   },
 
   openSaveFileDialog: (defaultName?: string) =>
-    remote.dialog.showSaveDialogSync({
+    dialog.showSaveDialogSync({
       defaultPath: defaultName,
       filters: [
         {
@@ -70,7 +70,7 @@ const api: Api = {
     }),
 
   openLoadFileDialog: () => {
-    const result = remote.dialog.showOpenDialogSync({
+    const result = dialog.showOpenDialogSync({
       filters: [
         {
           name: 'Zip',

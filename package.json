@@ -24,6 +24,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0"
   },
   "resolutions": {
-    "clone-deep": "0.3.0"
+    "clone-deep": "0.3.0",
+    "shallow-clone": "1.0.0"
   }
 }

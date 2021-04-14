@@ -1,3 +1,4 @@
+import { initialize } from '@electron/remote/main';
 import {
   ChildProcess,
   fork,
@@ -19,6 +20,9 @@ import { findOpenSocket } from './ipc/findOpenSocket.js';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let serverProcess: ChildProcess | null = null;
+
+//  Initialize the remote module
+initialize();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
