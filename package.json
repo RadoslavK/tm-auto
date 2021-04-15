@@ -10,21 +10,40 @@
   },
   "workspaces": ["packages/*"],
   "scripts": {
-    "app": "yarn workspace app",
     "main": "yarn workspace main",
     "server": "yarn workspace server",
     "renderer": "yarn workspace renderer",
     "shared": "yarn workspace shared",
     "nexus": "yarn server nexus",
-    "relay": "yarn renderer relay"
+    "relay": "yarn renderer relay",
+    "build": "gulp",
+    "build-main": "gulp buildMain",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron app/build/main/index.cjs",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "tm.auto",
+    "productName": "TM Auto",
+    "copyright": "Copyright © 2019-2021 ${author}",
+    "files": [
+      "./build/**/*"
+    ],
+    "nodeVersion": "14.16.0",
+    "electronVersion": "12.0.2",
+    "icon": "./packages/renderer/public/images/TMAuto256.png",
+    "win": {
+      "target": "nsis"
+    }
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^4.19.0",
+    "del": "^6.0.0",
+    "electron-builder": "^22.10.5",
+    "eslint": "^7.23.0",
     "eslint-plugin-modules-newline": "^0.0.6",
-    "eslint-plugin-simple-import-sort": "^7.0.0"
-  },
-  "resolutions": {
-    "clone-deep": "0.3.0",
-    "shallow-clone": "1.0.0"
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "gulp": "^4.0.2",
+    "gulp-run": "^1.7.1"
   }
 }

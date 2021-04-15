@@ -1,0 +1,11 @@
+{
+  "name": "tm-auto",
+  "version": "1.0.0",
+  "author": "Buckyx",
+  "license": "MIT",
+  "description": "TM Auto",
+  "main": "build/main/index.cjs",
+  "dependencies": {
+    "puppeteer-extra-plugin-stealth": "^2.7.6"
+  }
+}

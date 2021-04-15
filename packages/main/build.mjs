@@ -19,7 +19,8 @@ const options = {
   },
   bundle: true,
   external: [
-    'electron',
+    'electron', // provided by Electron itself
+    'puppeteer-extra-plugin-stealth', // Puppeteer-extra loads plugins dependencies dynamically
   ],
 };
 

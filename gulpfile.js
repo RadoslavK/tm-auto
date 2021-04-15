@@ -25,12 +25,12 @@ const run = (command) => (callback) => {
 
 const buildMain = series(
   run('yarn workspace main build-prod'),
-  copy('../main/dist-prod/**', 'build/main/'),
+  copy('./packages/main/dist-prod/**', './app/build/main/'),
 );
 
 const buildRenderer = series(
   run('yarn workspace renderer build'),
-  copy('../renderer/build/**', 'build/renderer/'),
+  copy('./packages/renderer/build/**', './app/build/renderer/'),
 );
 
 const build = series(
@@ -39,3 +39,4 @@ const build = series(
 );
 
 exports.default = build;
+exports.buildMain = buildMain;
