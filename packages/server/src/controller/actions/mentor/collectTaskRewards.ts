@@ -41,7 +41,6 @@ export const collectTaskRewards = async (): Promise<void> => {
         throw new Error('Did not find collectible task title');
       }
 
-
       AccountContext.getContext().logsService.logText(`Collecting rewards for task: ${title}`, true);
 
       await Promise.all([
