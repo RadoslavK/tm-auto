@@ -46,6 +46,10 @@ import {
   VillageSettingsTabType,
 } from '../../settings/village/VillageSettings.js';
 import {
+  Smithy,
+  useSmithyQuery,
+} from '../../smithy/Smithy.js';
+import {
   Units,
   useUnitsQuery,
 } from '../../units/components/Units.js';
@@ -57,7 +61,7 @@ import {
   VillageTasksActivity,
 } from './VillageTasksActivity.js';
 
-const navigationPaths = ['buildings', 'units', 'parties', 'tasks-activity'] as const;
+const navigationPaths = ['buildings', 'units', 'parties', 'smithy', 'tasks-activity'] as const;
 type NavigationPath = typeof navigationPaths[number];
 
 type NavigationItem = {
@@ -102,7 +106,9 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   const { buildingsQueryRef, reloadBuildingsQuery } = useBuildingsQuery();
   const { unitSettingsQueryRef, reloadUnitSettingsQuery } = useUnitsQuery();
   const { partiesQueryRef, reloadPartiesQuery } = usePartiesQuery();
+  const { smithyQueryRef, reloadSmithyQuery } = useSmithyQuery();
   const { reloadVillageTasksActivityQuery, villageTasksActivityQueryRef } = useVillageTasksActivityQuery();
+
   const { pathname } = useLocation();
   const prevVillageId = usePrevious(villageId);
   const currentTab = useMatch('/villages/:id/:tab')?.params.tab;
@@ -122,10 +128,13 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
     if (pathname.endsWith('parties' as NavigationPath)) {
       reloadPartiesQuery(villageId);
     }
-    if (pathname.endsWith('' as NavigationPath)) {
+    if (pathname.endsWith('smithy' as NavigationPath)) {
+      reloadSmithyQuery(villageId);
+    }
+    if (pathname.endsWith('tasks-activity' as NavigationPath)) {
       reloadVillageTasksActivityQuery(villageId);
     }
-  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery]);
+  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery, reloadSmithyQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -153,10 +162,16 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       preloadData: () => reloadPartiesQuery(villageId),
     },
     {
+      label: 'Smithy',
+      path: 'smithy',
+      tabType: VillageSettingsTabType.AutoSmithy,
+      preloadData: () => reloadSmithyQuery(villageId),
+    },
+    {
       label: 'Tasks',
       path: 'tasks-activity',
     },
-  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery]);
+  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery]);
 
   const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
 
@@ -220,6 +235,9 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
 
       case 'parties':
         return partiesQueryRef && <Parties queryRef={partiesQueryRef} />;
+
+      case 'smithy':
+        return smithyQueryRef && <Smithy queryRef={smithyQueryRef} />;
 
       case 'tasks-activity':
         return villageTasksActivityQueryRef && <VillageTasksActivity queryRef={villageTasksActivityQueryRef} />;

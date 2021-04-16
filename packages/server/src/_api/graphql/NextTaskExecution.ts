@@ -75,14 +75,13 @@ export const NextVillageTaskExecutionsQuery = queryField(t => {
       villageId: idArg(),
     },
     resolve(_, args, ctx) {
-      const requestedTasks: ReadonlyArray<TaskType> = [TaskType.AutoBuild, TaskType.AutoUnits, TaskType.AutoParty];
-      return ctx.nextExecutionService.getMultipleForVillage(args.villageId, requestedTasks).map(result => {
-        return {
-          label: result.task,
-          task: result.task,
-          timestamp: Timestamp.fromDate(result.date),
-        } as NexusGenFieldTypes['NextVillageTaskExecutionPayloadField'];
-      });
+      const villageTasksWithCoolDown = Object.values(TaskType).filter(t => t !== TaskType.AutoAdventure);
+
+      return ctx.nextExecutionService.getMultipleForVillage(args.villageId, villageTasksWithCoolDown).map(result => ({
+        label: result.task,
+        task: result.task,
+        timestamp: Timestamp.fromDate(result.date),
+      } as NexusGenFieldTypes['NextVillageTaskExecutionPayloadField']));
     },
   });
 });

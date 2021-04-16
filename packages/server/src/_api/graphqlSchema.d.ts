@@ -26,6 +26,20 @@ export interface NexusGenInputs {
     server: string; // String!
     username: string; // String!
   }
+  AutoSmithySettingsInput: { // input type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
+    units: NexusGenInputs['AutoSmithyUnitSettingsInput'][]; // [AutoSmithyUnitSettingsInput!]!
+    useHeroResources: boolean; // Boolean!
+  }
+  AutoSmithyUnitLevelSettingsInput: { // input type
+    minTroops?: number | null; // Int
+    targetLevel: number; // Int!
+  }
+  AutoSmithyUnitSettingsInput: { // input type
+    levels: NexusGenInputs['AutoSmithyUnitLevelSettingsInput'][]; // [AutoSmithyUnitLevelSettingsInput!]!
+    unitIndex: number; // Int!
+  }
   AvailableNewBuildingsInput: { // input type
     fieldId: number; // Int!
     villageId: string; // ID!
@@ -167,7 +181,7 @@ export interface NexusGenEnums {
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
-  TaskType: "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoUnits"
+  TaskType: "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
   TextLogEntryType: "Error" | "Info"
   Tribe: 6 | 3 | 7 | 5 | 4 | 1 | 2
 }
@@ -224,6 +238,20 @@ export interface NexusGenObjects {
     minCulturePointsLarge: number; // Int!
     minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
+  }
+  AutoSmithySettings: { // root type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    units: NexusGenRootTypes['AutoSmithyUnitSettings'][]; // [AutoSmithyUnitSettings!]!
+    useHeroResources: boolean; // Boolean!
+  }
+  AutoSmithyUnitLevelSettings: { // root type
+    minTroops?: number | null; // Int
+    targetLevel: number; // Int!
+  }
+  AutoSmithyUnitSettings: { // root type
+    levels: NexusGenRootTypes['AutoSmithyUnitLevelSettings'][]; // [AutoSmithyUnitLevelSettings!]!
+    unitIndex: number; // Int!
   }
   AutoStorageOptionSettings: { // root type
     allow: boolean; // Boolean!
@@ -469,6 +497,20 @@ export interface NexusGenFieldTypes {
     minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
   }
+  AutoSmithySettings: { // field return type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    units: NexusGenRootTypes['AutoSmithyUnitSettings'][]; // [AutoSmithyUnitSettings!]!
+    useHeroResources: boolean; // Boolean!
+  }
+  AutoSmithyUnitLevelSettings: { // field return type
+    minTroops: number | null; // Int
+    targetLevel: number; // Int!
+  }
+  AutoSmithyUnitSettings: { // field return type
+    levels: NexusGenRootTypes['AutoSmithyUnitLevelSettings'][]; // [AutoSmithyUnitLevelSettings!]!
+    unitIndex: number; // Int!
+  }
   AutoStorageOptionSettings: { // field return type
     allow: boolean; // Boolean!
     overflowLevel: number; // Int!
@@ -635,6 +677,7 @@ export interface NexusGenFieldTypes {
     resetAutoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     resetAutoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     resetAutoPartySettings: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
+    resetAutoSmithySettings: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     resetAutoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     resetGeneralSettings: NexusGenRootTypes['GeneralSettings']; // GeneralSettings!
     resetGeneralVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
@@ -658,6 +701,7 @@ export interface NexusGenFieldTypes {
     updateAutoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     updateAutoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     updateAutoPartySettings: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
+    updateAutoSmithySettings: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     updateAutoUnitsBuildingSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     updateAutoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     updateAutoUnitsUnitSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
@@ -679,6 +723,7 @@ export interface NexusGenFieldTypes {
     autoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     autoPartySettings: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
+    autoSmithySettings: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     autoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     availableNewBuildings: NexusGenRootTypes['AvailableNewBuilding'][]; // [AvailableNewBuilding!]!
     botState: NexusGenEnums['BotState']; // BotState!
@@ -866,6 +911,20 @@ export interface NexusGenFieldTypeNames {
     minCulturePointsSmall: 'Int'
     useHeroResources: 'Boolean'
   }
+  AutoSmithySettings: { // field return type name
+    allow: 'Boolean'
+    coolDown: 'CoolDown'
+    units: 'AutoSmithyUnitSettings'
+    useHeroResources: 'Boolean'
+  }
+  AutoSmithyUnitLevelSettings: { // field return type name
+    minTroops: 'Int'
+    targetLevel: 'Int'
+  }
+  AutoSmithyUnitSettings: { // field return type name
+    levels: 'AutoSmithyUnitLevelSettings'
+    unitIndex: 'Int'
+  }
   AutoStorageOptionSettings: { // field return type name
     allow: 'Boolean'
     overflowLevel: 'Int'
@@ -1032,6 +1091,7 @@ export interface NexusGenFieldTypeNames {
     resetAutoBuildSettings: 'AutoBuildSettings'
     resetAutoMentorSettings: 'AutoMentorSettings'
     resetAutoPartySettings: 'AutoPartySettings'
+    resetAutoSmithySettings: 'AutoSmithySettings'
     resetAutoUnitsSettings: 'AutoUnitsSettings'
     resetGeneralSettings: 'GeneralSettings'
     resetGeneralVillageSettings: 'GeneralVillageSettings'
@@ -1055,6 +1115,7 @@ export interface NexusGenFieldTypeNames {
     updateAutoBuildSettings: 'AutoBuildSettings'
     updateAutoMentorSettings: 'AutoMentorSettings'
     updateAutoPartySettings: 'AutoPartySettings'
+    updateAutoSmithySettings: 'AutoSmithySettings'
     updateAutoUnitsBuildingSettings: 'AutoUnitsSettings'
     updateAutoUnitsSettings: 'AutoUnitsSettings'
     updateAutoUnitsUnitSettings: 'AutoUnitsSettings'
@@ -1076,6 +1137,7 @@ export interface NexusGenFieldTypeNames {
     autoBuildSettings: 'AutoBuildSettings'
     autoMentorSettings: 'AutoMentorSettings'
     autoPartySettings: 'AutoPartySettings'
+    autoSmithySettings: 'AutoSmithySettings'
     autoUnitsSettings: 'AutoUnitsSettings'
     availableNewBuildings: 'AvailableNewBuilding'
     botState: 'BotState'
@@ -1286,6 +1348,9 @@ export interface NexusGenArgTypes {
     resetAutoPartySettings: { // args
       villageId: string; // ID!
     }
+    resetAutoSmithySettings: { // args
+      villageId: string; // ID!
+    }
     resetAutoUnitsSettings: { // args
       villageId: string; // ID!
     }
@@ -1343,6 +1408,10 @@ export interface NexusGenArgTypes {
       settings: NexusGenInputs['UpdateAutoPartySettingsInput']; // UpdateAutoPartySettingsInput!
       villageId: string; // ID!
     }
+    updateAutoSmithySettings: { // args
+      settings: NexusGenInputs['AutoSmithySettingsInput']; // AutoSmithySettingsInput!
+      villageId: string; // ID!
+    }
     updateAutoUnitsBuildingSettings: { // args
       buildingType: number; // Int!
       settings: NexusGenInputs['UpdateAutoUnitsBuildingSettingsInput']; // UpdateAutoUnitsBuildingSettingsInput!
@@ -1376,6 +1445,9 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     autoPartySettings: { // args
+      villageId: string; // ID!
+    }
+    autoSmithySettings: { // args
       villageId: string; // ID!
     }
     autoUnitsSettings: { // args

@@ -23,6 +23,7 @@ import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine.js';
 import { AutoAdventureTask } from './tasks/village/autoAdventureTask.js';
 import { AutoBuildTask } from './tasks/village/autoBuildTask';
 import { AutoPartyTask } from './tasks/village/autoPartyTask.js';
+import { AutoSmithyTask } from './tasks/village/autoSmithyTask.js';
 import { AutoUnitsTask } from './tasks/village/autoUnitsTask.js';
 
 export class TaskManager {
@@ -100,13 +101,12 @@ export class TaskManager {
       let taskEngine = this._villageTasks[village.id];
 
       if (!taskEngine) {
-        taskEngine = new VillageBotTasksEngine(village, [
+        this._villageTasks[village.id] = new VillageBotTasksEngine(village, [
           AutoPartyTask,
           AutoBuildTask,
-          // TODO - Update resources - market
           AutoUnitsTask,
+          AutoSmithyTask,
         ]);
-        this._villageTasks[village.id] = taskEngine;
       }
 
       if (

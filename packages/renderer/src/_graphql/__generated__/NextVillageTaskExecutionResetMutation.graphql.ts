@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoUnits";
+export type TaskType = "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type NextVillageTaskExecutionResetMutationVariables = {
     villageId: string;
     task: TaskType;

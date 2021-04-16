@@ -2,6 +2,7 @@ export * from './AccountSettings.js';
 export * from './AutoBuildSettings.js';
 export * from './AutoMentorSettings.js';
 export * from './AutoPartySettings.js';
+export * from './AutoSmithySettings.js';
 export * from './AutoUnitsSettings.js';
 export * from './GeneralSettings.js';
 export * from './GeneralVillageSettings.js';

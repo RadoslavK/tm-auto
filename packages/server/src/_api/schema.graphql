@@ -64,6 +64,40 @@ type AutoPartySettings {
   useHeroResources: Boolean!
 }
 
+type AutoSmithySettings {
+  allow: Boolean!
+  coolDown: CoolDown!
+  units: [AutoSmithyUnitSettings!]!
+  useHeroResources: Boolean!
+}
+
+input AutoSmithySettingsInput {
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  units: [AutoSmithyUnitSettingsInput!]!
+  useHeroResources: Boolean!
+}
+
+type AutoSmithyUnitLevelSettings {
+  minTroops: Int
+  targetLevel: Int!
+}
+
+input AutoSmithyUnitLevelSettingsInput {
+  minTroops: Int
+  targetLevel: Int!
+}
+
+type AutoSmithyUnitSettings {
+  levels: [AutoSmithyUnitLevelSettings!]!
+  unitIndex: Int!
+}
+
+input AutoSmithyUnitSettingsInput {
+  levels: [AutoSmithyUnitLevelSettingsInput!]!
+  unitIndex: Int!
+}
+
 type AutoStorageOptionSettings {
   allow: Boolean!
   overflowLevel: Int!
@@ -346,6 +380,7 @@ type Mutation {
   resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
   resetAutoMentorSettings: AutoMentorSettings!
   resetAutoPartySettings(villageId: ID!): AutoPartySettings!
+  resetAutoSmithySettings(villageId: ID!): AutoSmithySettings!
   resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   resetGeneralSettings: GeneralSettings!
   resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
@@ -369,6 +404,7 @@ type Mutation {
   updateAutoBuildSettings(settings: UpdateAutoBuildSettingsInput!, villageId: ID!): AutoBuildSettings!
   updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
   updateAutoPartySettings(settings: UpdateAutoPartySettingsInput!, villageId: ID!): AutoPartySettings!
+  updateAutoSmithySettings(settings: AutoSmithySettingsInput!, villageId: ID!): AutoSmithySettings!
   updateAutoUnitsBuildingSettings(buildingType: Int!, settings: UpdateAutoUnitsBuildingSettingsInput!, villageId: ID!): AutoUnitsSettings!
   updateAutoUnitsSettings(settings: UpdateAutoUnitsSettingsInput!, villageId: ID!): AutoUnitsSettings!
   updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!, villageId: ID!): AutoUnitsSettings!
@@ -392,6 +428,7 @@ type Query {
   autoBuildSettings(villageId: ID!): AutoBuildSettings!
   autoMentorSettings: AutoMentorSettings!
   autoPartySettings(villageId: ID!): AutoPartySettings!
+  autoSmithySettings(villageId: ID!): AutoSmithySettings!
   autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
   botState: BotState!
@@ -506,6 +543,7 @@ enum TaskType {
   AutoAdventure
   AutoBuild
   AutoParty
+  AutoSmithy
   AutoUnits
 }
 

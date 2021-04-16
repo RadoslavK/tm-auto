@@ -29,6 +29,7 @@ type VillageSettingsPath = {
   readonly autoBuild: string;
   readonly autoParty: string;
   readonly autoUnits: string;
+  readonly autoSmithy: string;
   readonly general: string;
 };
 
@@ -92,6 +93,7 @@ export class DataPathService {
       autoBuild: path.join(lPath, 'auto-build.json'),
       autoParty: path.join(lPath, 'auto-party.json'),
       autoUnits: path.join(lPath, 'auto-units.json'),
+      autoSmithy: path.join(lPath, 'auto-smithy.json'),
       general: path.join(lPath, 'general.json'),
     };
   };

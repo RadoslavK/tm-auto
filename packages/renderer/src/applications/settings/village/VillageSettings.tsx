@@ -17,6 +17,7 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { AutoBuildSettingsQuery } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
 import type { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
+import type { AutoSmithySettingsQuery } from '../../../_graphql/__generated__/AutoSmithySettingsQuery.graphql.js';
 import type { AutoUnitsSettingsQuery } from '../../../_graphql/__generated__/AutoUnitsSettingsQuery.graphql.js';
 import type { GeneralVillageSettingsQuery } from '../../../_graphql/__generated__/GeneralVillageSettingsQuery.graphql.js';
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
@@ -32,6 +33,10 @@ import {
   AutoPartySettings,
   autoPartySettingsQuery,
 } from './AutoPartySettings.js';
+import {
+  AutoSmithySettings,
+  autoSmithySettingsQuery,
+} from './AutoSmithySettings.js';
 import {
   AutoUnitsSettings,
   autoUnitsSettingsQuery,
@@ -69,6 +74,7 @@ export enum VillageSettingsTabType {
   AutoBuild,
   AutoUnits,
   AutoParty,
+  AutoSmithy,
   General,
 }
 
@@ -133,11 +139,13 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
   const [autoBuildSettingsQueryRef, loadAutoBuildSettingsQuery] = useQueryLoader<AutoBuildSettingsQuery>(autoBuildSettingsQuery);
   const [autoUnitsSettingsQueryRef, loadAutoUnitsSettingsQuery] = useQueryLoader<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery);
   const [autoPartySettingsQueryRef, loadAutoPartySettingsQuery] = useQueryLoader<AutoPartySettingsQuery>(autoPartySettingsQuery);
+  const [autoSmithySettingsQueryRef, loadAutoSmithySettingsQuery] = useQueryLoader<AutoSmithySettingsQuery>(autoSmithySettingsQuery);
 
   const reloadGeneralSettings = useCallback((vId: string) => loadGeneralVillageSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadGeneralVillageSettingsQuery]);
   const reloadAutoBuildSettings = useCallback((vId: string) => loadAutoBuildSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoBuildSettingsQuery]);
   const reloadAutoUnitsSettings = useCallback((vId: string) => loadAutoUnitsSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoUnitsSettingsQuery]);
   const reloadAutoPartySettings = useCallback((vId: string) => loadAutoPartySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoPartySettingsQuery]);
+  const reloadAutoSmithySettings = useCallback((vId: string) => loadAutoSmithySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoSmithySettingsQuery]);
 
   const prevTab = usePrevious(tab);
 
@@ -173,10 +181,16 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
         }
         break;
       }
+      case VillageSettingsTabType.AutoSmithy: {
+        if (!autoSmithySettingsQueryRef) {
+          reloadAutoSmithySettings(selectedVillageId);
+        }
+        break;
+      }
     }
 
     setSelectedTab(getTabType(tab));
-  }, [selectedVillageId, prevTab, tab, getTabType, generalVillageSettingsQueryRef, reloadGeneralSettings, autoBuildSettingsQueryRef, reloadAutoBuildSettings, autoUnitsSettingsQueryRef, reloadAutoUnitsSettings, autoPartySettingsQueryRef, reloadAutoPartySettings]);
+  }, [selectedVillageId, prevTab, tab, getTabType, generalVillageSettingsQueryRef, reloadGeneralSettings, autoBuildSettingsQueryRef, reloadAutoBuildSettings, autoUnitsSettingsQueryRef, reloadAutoUnitsSettings, autoPartySettingsQueryRef, reloadAutoPartySettings, autoSmithySettingsQueryRef, reloadAutoSmithySettings]);
 
   const renderSettings = (): JSX.Element | undefined | null => {
     switch (selectedTab) {
@@ -188,6 +202,8 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
         return autoUnitsSettingsQueryRef && <AutoUnitsSettings villageId={selectedVillageId} queryRef={autoUnitsSettingsQueryRef} />;
       case VillageSettingsTabType.AutoParty:
         return autoPartySettingsQueryRef && <AutoPartySettings villageId={selectedVillageId} queryRef={autoPartySettingsQueryRef} />;
+      case VillageSettingsTabType.AutoSmithy:
+        return autoSmithySettingsQueryRef && <AutoSmithySettings villageId={selectedVillageId} queryRef={autoSmithySettingsQueryRef} />;
       default:
         throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
@@ -213,6 +229,9 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
                 break;
               case VillageSettingsTabType.AutoParty:
                 reloadAutoPartySettings(id);
+                break;
+              case VillageSettingsTabType.AutoSmithy:
+                reloadAutoSmithySettings(id);
                 break;
               default:
                 throw new Error(`Invalid selected tab ${selectedTab}`);
@@ -261,6 +280,14 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
           onSelect={() => {
             reloadAutoPartySettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.AutoParty);
+          }}
+        />
+        <TabLink
+          isSelected={selectedTab === VillageSettingsTabType.AutoSmithy}
+          label="Auto Smithy"
+          onSelect={() => {
+            reloadAutoSmithySettings(selectedVillageId);
+            setSelectedTab(VillageSettingsTabType.AutoSmithy);
           }}
         />
       </div>

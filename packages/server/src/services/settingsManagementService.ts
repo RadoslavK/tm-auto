@@ -10,6 +10,7 @@ import { GeneralVillageSettings } from '../_models/settings/generalVillageSettin
 import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
+import { AutoSmithySettings } from '../_models/settings/tasks/autoSmithySettings.js';
 import { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
 import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
@@ -321,6 +322,16 @@ export class SettingsManagementService {
             const newSettings = new AutoPartySettings(autoPartySettings);
 
             villageSettingsService.autoParty.update(newSettings);
+          },
+        );
+
+        await updateSettings(
+          zip,
+          villageSettingsPath.autoSmithy,
+          (autoSmithySettings) => {
+            const newSettings = new AutoSmithySettings(autoSmithySettings);
+
+            villageSettingsService.autoSmithy.update(newSettings);
           },
         );
 
