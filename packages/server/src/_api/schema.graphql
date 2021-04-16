@@ -505,7 +505,6 @@ type Subscription {
 enum TaskType {
   AutoAdventure
   AutoBuild
-  AutoMentor
   AutoParty
   AutoUnits
 }

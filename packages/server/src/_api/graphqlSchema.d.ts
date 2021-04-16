@@ -167,7 +167,7 @@ export interface NexusGenEnums {
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
-  TaskType: "AutoAdventure" | "AutoBuild" | "AutoMentor" | "AutoParty" | "AutoUnits"
+  TaskType: "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoUnits"
   TextLogEntryType: "Error" | "Info"
   Tribe: 6 | 3 | 7 | 5 | 4 | 1 | 2
 }

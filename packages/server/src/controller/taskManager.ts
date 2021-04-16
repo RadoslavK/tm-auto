@@ -10,17 +10,16 @@ import { shuffle } from '../utils/shuffle.js';
 import { updateBuildings } from './actions/buildings/updateBuildings.js';
 import { ensurePage } from './actions/ensurePage.js';
 import { ensureVillageSelected } from './actions/ensureVillageSelected.js';
+import { collectDailyRewards } from './actions/mentor/collectDailyRewards.js';
 import { collectTaskRewards } from './actions/mentor/collectTaskRewards.js';
 import { updateCapitalAndAlly } from './actions/player/updateCapitalAndAlly.js';
 import { updateNewOldVillages } from './actions/village/updateNewOldVillages.js';
 import { updateResources } from './actions/village/updateResources.js';
 import {
-  BotTaskEngine,
   BotTaskEngineWithCoolDown,
   IBotTaskEngine,
 } from './taskEngine/botTaskEngine.js';
 import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine.js';
-import { DailyRewardsTask } from './tasks/dailyRewardsTask.js';
 import { AutoAdventureTask } from './tasks/village/autoAdventureTask.js';
 import { AutoBuildTask } from './tasks/village/autoBuildTask';
 import { AutoPartyTask } from './tasks/village/autoPartyTask.js';
@@ -37,9 +36,7 @@ export class TaskManager {
   private readonly _autoAdventureTask: BotTaskEngineWithCoolDown;
 
   constructor() {
-    this._generalTasks = [
-      new BotTaskEngine(new DailyRewardsTask()),
-    ];
+    this._generalTasks = [];
     this._finalTasks = [];
     this._villageTasks = {};
 
@@ -79,6 +76,7 @@ export class TaskManager {
     await updateNewOldVillages();
     await updateHeroInformation();
     await updateCapitalAndAlly();
+    await collectDailyRewards();
 
     for (const task of this._generalTasks) {
       await task.execute();

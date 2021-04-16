@@ -3,5 +3,4 @@ export enum TaskType {
   AutoBuild = 'AutoBuild',
   AutoUnits = 'AutoUnits',
   AutoParty = 'AutoParty',
-  AutoMentor = 'AutoMentor'
 }
