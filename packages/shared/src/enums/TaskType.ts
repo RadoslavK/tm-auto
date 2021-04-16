@@ -5,4 +5,5 @@ export enum TaskType {
   AutoUnits = 'AutoUnits',
   AutoParty = 'AutoParty',
   AutoSmithy = 'AutoSmithy',
+  AutoAcademy = 'AutoAcademy',
 }

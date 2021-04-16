@@ -33,6 +33,10 @@ import type { VillageSettingsQuery } from '../../../_graphql/__generated__/Villa
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
+  Academy,
+  useAcademyQuery,
+} from '../../academy/Academy.js';
+import {
   Buildings,
   useBuildingsQuery,
 } from '../../buildings/Buildings.js';
@@ -61,7 +65,7 @@ import {
   VillageTasksActivity,
 } from './VillageTasksActivity.js';
 
-const navigationPaths = ['buildings', 'units', 'parties', 'smithy', 'tasks-activity'] as const;
+const navigationPaths = ['buildings', 'units', 'parties', 'academy', 'smithy', 'tasks-activity'] as const;
 type NavigationPath = typeof navigationPaths[number];
 
 type NavigationItem = {
@@ -107,6 +111,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   const { unitSettingsQueryRef, reloadUnitSettingsQuery } = useUnitsQuery();
   const { partiesQueryRef, reloadPartiesQuery } = usePartiesQuery();
   const { smithyQueryRef, reloadSmithyQuery } = useSmithyQuery();
+  const { academyQueryRef, reloadAcademyQuery } = useAcademyQuery();
   const { reloadVillageTasksActivityQuery, villageTasksActivityQueryRef } = useVillageTasksActivityQuery();
 
   const { pathname } = useLocation();
@@ -131,10 +136,13 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
     if (pathname.endsWith('smithy' as NavigationPath)) {
       reloadSmithyQuery(villageId);
     }
+    if (pathname.endsWith('academy' as NavigationPath)) {
+      reloadAcademyQuery(villageId);
+    }
     if (pathname.endsWith('tasks-activity' as NavigationPath)) {
       reloadVillageTasksActivityQuery(villageId);
     }
-  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery, reloadSmithyQuery]);
+  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery, reloadSmithyQuery, reloadAcademyQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -162,6 +170,12 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       preloadData: () => reloadPartiesQuery(villageId),
     },
     {
+      label: 'Academy',
+      path: 'academy',
+      tabType: VillageSettingsTabType.AutoAcademy,
+      preloadData: () => reloadAcademyQuery(villageId),
+    },
+    {
       label: 'Smithy',
       path: 'smithy',
       tabType: VillageSettingsTabType.AutoSmithy,
@@ -171,7 +185,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       label: 'Tasks',
       path: 'tasks-activity',
     },
-  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery]);
+  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery, reloadAcademyQuery]);
 
   const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
 
@@ -235,6 +249,9 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
 
       case 'parties':
         return partiesQueryRef && <Parties queryRef={partiesQueryRef} />;
+
+      case 'academy':
+        return academyQueryRef && <Academy queryRef={academyQueryRef} />;
 
       case 'smithy':
         return smithyQueryRef && <Smithy queryRef={smithyQueryRef} />;

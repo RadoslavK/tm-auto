@@ -4,17 +4,7 @@ import { mergeDefaults } from 'shared/utils/merge.js';
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
 
-type AutoSmithyUnitLevelSettings = {
-  readonly targetLevel: number;
-  readonly minTroops: number | null;
-};
-
-export type AutoSmithyUnitSettings = {
-  readonly unitIndex: number;
-  readonly levels: ReadonlyArray<AutoSmithyUnitLevelSettings>;
-};
-
-export class AutoSmithySettings {
+export class AutoAcademySettings {
   public readonly allow: boolean = false;
   public readonly useHeroResources: boolean = false;
 
@@ -23,9 +13,9 @@ export class AutoSmithySettings {
     max: new Duration({ minutes: 30 }),
   });
 
-  public readonly units: ReadonlyArray<AutoSmithyUnitSettings> = [];
+  public readonly units: ReadonlyArray<number> = [];
 
-  constructor(params: PartialFields<AutoSmithySettings> = {}) {
+  constructor(params: PartialFields<AutoAcademySettings> = {}) {
     mergeDefaults(this, params);
   }
 }

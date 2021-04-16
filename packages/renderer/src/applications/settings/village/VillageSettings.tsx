@@ -15,6 +15,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
+import type { AutoAcademySettingsQuery } from '../../../_graphql/__generated__/AutoAcademySettingsQuery.graphql.js';
 import type { AutoBuildSettingsQuery } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
 import type { AutoPartySettingsQuery } from '../../../_graphql/__generated__/AutoPartySettingsQuery.graphql.js';
 import type { AutoSmithySettingsQuery } from '../../../_graphql/__generated__/AutoSmithySettingsQuery.graphql.js';
@@ -25,6 +26,10 @@ import type { VillageSettingsSubscription } from '../../../_graphql/__generated_
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import { formatVillageName } from '../../villages/components/VillageName.js';
+import {
+  AutoAcademySettings,
+  autoAcademySettingsQuery,
+} from './AutoAcademySettings.js';
 import {
   AutoBuildSettings,
   autoBuildSettingsQuery,
@@ -75,6 +80,7 @@ export enum VillageSettingsTabType {
   AutoUnits,
   AutoParty,
   AutoSmithy,
+  AutoAcademy,
   General,
 }
 
@@ -140,12 +146,14 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
   const [autoUnitsSettingsQueryRef, loadAutoUnitsSettingsQuery] = useQueryLoader<AutoUnitsSettingsQuery>(autoUnitsSettingsQuery);
   const [autoPartySettingsQueryRef, loadAutoPartySettingsQuery] = useQueryLoader<AutoPartySettingsQuery>(autoPartySettingsQuery);
   const [autoSmithySettingsQueryRef, loadAutoSmithySettingsQuery] = useQueryLoader<AutoSmithySettingsQuery>(autoSmithySettingsQuery);
+  const [autoAcademySettingsQueryRef, loadAutoAcademySettingsQuery] = useQueryLoader<AutoAcademySettingsQuery>(autoAcademySettingsQuery);
 
   const reloadGeneralSettings = useCallback((vId: string) => loadGeneralVillageSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadGeneralVillageSettingsQuery]);
   const reloadAutoBuildSettings = useCallback((vId: string) => loadAutoBuildSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoBuildSettingsQuery]);
   const reloadAutoUnitsSettings = useCallback((vId: string) => loadAutoUnitsSettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoUnitsSettingsQuery]);
   const reloadAutoPartySettings = useCallback((vId: string) => loadAutoPartySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoPartySettingsQuery]);
   const reloadAutoSmithySettings = useCallback((vId: string) => loadAutoSmithySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoSmithySettingsQuery]);
+  const reloadAutoAcademySettingsQuery = useCallback((vId: string) => loadAutoAcademySettingsQuery({ villageId: vId }, { fetchPolicy: 'store-and-network' }), [loadAutoAcademySettingsQuery]);
 
   const prevTab = usePrevious(tab);
 
@@ -187,10 +195,16 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
         }
         break;
       }
+      case VillageSettingsTabType.AutoAcademy: {
+        if (!autoAcademySettingsQueryRef) {
+          reloadAutoAcademySettingsQuery(selectedVillageId);
+        }
+        break;
+      }
     }
 
     setSelectedTab(getTabType(tab));
-  }, [selectedVillageId, prevTab, tab, getTabType, generalVillageSettingsQueryRef, reloadGeneralSettings, autoBuildSettingsQueryRef, reloadAutoBuildSettings, autoUnitsSettingsQueryRef, reloadAutoUnitsSettings, autoPartySettingsQueryRef, reloadAutoPartySettings, autoSmithySettingsQueryRef, reloadAutoSmithySettings]);
+  }, [selectedVillageId, prevTab, tab, getTabType, generalVillageSettingsQueryRef, reloadGeneralSettings, autoBuildSettingsQueryRef, reloadAutoBuildSettings, autoUnitsSettingsQueryRef, reloadAutoUnitsSettings, autoPartySettingsQueryRef, reloadAutoPartySettings, autoSmithySettingsQueryRef, reloadAutoSmithySettings, reloadAutoAcademySettingsQuery, autoAcademySettingsQueryRef]);
 
   const renderSettings = (): JSX.Element | undefined | null => {
     switch (selectedTab) {
@@ -204,6 +218,8 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
         return autoPartySettingsQueryRef && <AutoPartySettings villageId={selectedVillageId} queryRef={autoPartySettingsQueryRef} />;
       case VillageSettingsTabType.AutoSmithy:
         return autoSmithySettingsQueryRef && <AutoSmithySettings villageId={selectedVillageId} queryRef={autoSmithySettingsQueryRef} />;
+      case VillageSettingsTabType.AutoAcademy:
+        return autoAcademySettingsQueryRef && <AutoAcademySettings villageId={selectedVillageId} queryRef={autoAcademySettingsQueryRef} />;
       default:
         throw new Error(`Unknown village settings type: ${selectedTab}`);
     }
@@ -232,6 +248,9 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
                 break;
               case VillageSettingsTabType.AutoSmithy:
                 reloadAutoSmithySettings(id);
+                break;
+              case VillageSettingsTabType.AutoAcademy:
+                reloadAutoAcademySettingsQuery(id);
                 break;
               default:
                 throw new Error(`Invalid selected tab ${selectedTab}`);
@@ -288,6 +307,14 @@ export const VillageSettings: React.FC<Props> = ({ getTabType, tab, queryRef }) 
           onSelect={() => {
             reloadAutoSmithySettings(selectedVillageId);
             setSelectedTab(VillageSettingsTabType.AutoSmithy);
+          }}
+        />
+        <TabLink
+          isSelected={selectedTab === VillageSettingsTabType.AutoAcademy}
+          label="Auto Academy"
+          onSelect={() => {
+            reloadAutoAcademySettingsQuery(selectedVillageId);
+            setSelectedTab(VillageSettingsTabType.AutoAcademy);
           }}
         />
       </div>

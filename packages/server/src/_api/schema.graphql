@@ -23,6 +23,20 @@ enum AdventureCriteria {
   Random
 }
 
+type AutoAcademySettings {
+  allow: Boolean!
+  coolDown: CoolDown!
+  units: [Int!]!
+  useHeroResources: Boolean!
+}
+
+input AutoAcademySettingsInput {
+  allow: Boolean!
+  coolDown: CoolDownInput!
+  units: [Int!]!
+  useHeroResources: Boolean!
+}
+
 type AutoAdventureSettings {
   adventureCriteria: AdventureCriteria!
   allow: Boolean!
@@ -376,6 +390,7 @@ type Mutation {
   refreshVillage(villageId: ID!): Boolean
   removeHeroLevelUpItem(id: ID!): HeroLevelUpItem!
   resetAccountSettings: AccountSettings!
+  resetAutoAcademySettings(villageId: ID!): AutoAcademySettings!
   resetAutoAdventureSettings: AutoAdventureSettings!
   resetAutoBuildSettings(villageId: ID!): AutoBuildSettings!
   resetAutoMentorSettings: AutoMentorSettings!
@@ -400,6 +415,7 @@ type Mutation {
   stopMapScan: Boolean
   updateAccount(account: AccountInput!, id: ID!): UserAccount!
   updateAccountSettings(settings: UpdateAccountSettingsInput!): AccountSettings!
+  updateAutoAcademySettings(settings: AutoAcademySettingsInput!, villageId: ID!): AutoAcademySettings!
   updateAutoAdventureSettings(settings: UpdateAutoAdventureSettingsInput!): AutoAdventureSettings!
   updateAutoBuildSettings(settings: UpdateAutoBuildSettingsInput!, villageId: ID!): AutoBuildSettings!
   updateAutoMentorSettings(settings: UpdateAutoMentorSettingsInput!): AutoMentorSettings!
@@ -424,6 +440,7 @@ type Query {
   accountSettings: AccountSettings!
   accounts: [UserAccount!]!
   activeVillageId: ID!
+  autoAcademySettings(villageId: ID!): AutoAcademySettings!
   autoAdventureSettings: AutoAdventureSettings!
   autoBuildSettings(villageId: ID!): AutoBuildSettings!
   autoMentorSettings: AutoMentorSettings!
@@ -540,6 +557,7 @@ type Subscription {
 }
 
 enum TaskType {
+  AutoAcademy
   AutoAdventure
   AutoBuild
   AutoParty

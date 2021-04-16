@@ -7,6 +7,7 @@ import { AccountSettings } from '../_models/settings/account/accountSettings.js'
 import { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
 import { GeneralSettings } from '../_models/settings/generalSettings.js';
 import { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';
+import { AutoAcademySettings } from '../_models/settings/tasks/autoAcademySettings.js';
 import { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
 import { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../_models/settings/tasks/autoPartySettings.js';
@@ -161,6 +162,24 @@ export class SettingsManagementService {
           zip.file(
             villageSettingsPath.autoParty,
             JSON.stringify(autoPartySettings),
+          );
+        }
+
+        const autoSmithySettings = villageSettingsService.autoSmithy.getWithoutDefaultValue();
+
+        if (autoSmithySettings) {
+          zip.file(
+            villageSettingsPath.autoSmithy,
+            JSON.stringify(autoSmithySettings),
+          );
+        }
+
+        const autoAcademySettings = villageSettingsService.autoAcademy.getWithoutDefaultValue();
+
+        if (autoAcademySettings) {
+          zip.file(
+            villageSettingsPath.autoAcademy,
+            JSON.stringify(autoAcademySettings),
           );
         }
 
@@ -332,6 +351,16 @@ export class SettingsManagementService {
             const newSettings = new AutoSmithySettings(autoSmithySettings);
 
             villageSettingsService.autoSmithy.update(newSettings);
+          },
+        );
+
+        await updateSettings(
+          zip,
+          villageSettingsPath.autoAcademy,
+          (settings) => {
+            const newSettings = new AutoAcademySettings(settings);
+
+            villageSettingsService.autoAcademy.update(newSettings);
           },
         );
 

@@ -20,6 +20,7 @@ import {
   IBotTaskEngine,
 } from './taskEngine/botTaskEngine.js';
 import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine.js';
+import { AutoAcademyTask } from './tasks/village/autoAcademyTask.js';
 import { AutoAdventureTask } from './tasks/village/autoAdventureTask.js';
 import { AutoBuildTask } from './tasks/village/autoBuildTask';
 import { AutoPartyTask } from './tasks/village/autoPartyTask.js';
@@ -105,6 +106,7 @@ export class TaskManager {
           AutoPartyTask,
           AutoBuildTask,
           AutoUnitsTask,
+          AutoAcademyTask,
           AutoSmithyTask,
         ]);
       }

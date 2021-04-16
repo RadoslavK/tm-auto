@@ -1,4 +1,5 @@
 import { GeneralVillageSettings } from '../../_models/settings/generalVillageSettings.js';
+import { AutoAcademySettings } from '../../_models/settings/tasks/autoAcademySettings.js';
 import { AutoBuildSettings } from '../../_models/settings/tasks/autoBuildSettings';
 import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySettings.js';
 import { AutoSmithySettings } from '../../_models/settings/tasks/autoSmithySettings.js';
@@ -13,6 +14,7 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
   public autoUnits: InternalSettingsService<VillageSettings['autoUnits']>;
   public autoParty: InternalSettingsService<VillageSettings['autoParty']>;
   public autoSmithy: InternalSettingsService<VillageSettings['autoSmithy']>;
+  public autoAcademy: InternalSettingsService<VillageSettings['autoAcademy']>;
   public general: InternalSettingsService<VillageSettings['general']>;
 
   constructor(accountId: string, villageId: string) {
@@ -36,6 +38,10 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
     this.autoSmithy = new InternalSettingsService(
       villageSettingsPath.autoSmithy,
       AutoSmithySettings,
+    );
+    this.autoAcademy = new InternalSettingsService(
+      villageSettingsPath.autoAcademy,
+      AutoAcademySettings,
     );
     this.general = new InternalSettingsService(
       villageSettingsPath.general,

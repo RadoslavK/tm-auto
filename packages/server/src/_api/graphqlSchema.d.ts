@@ -26,6 +26,12 @@ export interface NexusGenInputs {
     server: string; // String!
     username: string; // String!
   }
+  AutoAcademySettingsInput: { // input type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
+    units: number[]; // [Int!]!
+    useHeroResources: boolean; // Boolean!
+  }
   AutoSmithySettingsInput: { // input type
     allow: boolean; // Boolean!
     coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
@@ -181,7 +187,7 @@ export interface NexusGenEnums {
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
-  TaskType: "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
+  TaskType: "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
   TextLogEntryType: "Error" | "Info"
   Tribe: 6 | 3 | 7 | 5 | 4 | 1 | 2
 }
@@ -202,6 +208,12 @@ export interface NexusGenObjects {
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+  }
+  AutoAcademySettings: { // root type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    units: number[]; // [Int!]!
+    useHeroResources: boolean; // Boolean!
   }
   AutoAdventureSettings: { // root type
     adventureCriteria: NexusGenEnums['AdventureCriteria']; // AdventureCriteria!
@@ -461,6 +473,12 @@ export interface NexusGenFieldTypes {
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
   }
+  AutoAcademySettings: { // field return type
+    allow: boolean; // Boolean!
+    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    units: number[]; // [Int!]!
+    useHeroResources: boolean; // Boolean!
+  }
   AutoAdventureSettings: { // field return type
     adventureCriteria: NexusGenEnums['AdventureCriteria']; // AdventureCriteria!
     allow: boolean; // Boolean!
@@ -673,6 +691,7 @@ export interface NexusGenFieldTypes {
     refreshVillage: boolean | null; // Boolean
     removeHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
     resetAccountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
+    resetAutoAcademySettings: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
     resetAutoAdventureSettings: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     resetAutoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     resetAutoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
@@ -697,6 +716,7 @@ export interface NexusGenFieldTypes {
     stopMapScan: boolean | null; // Boolean
     updateAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
     updateAccountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
+    updateAutoAcademySettings: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
     updateAutoAdventureSettings: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     updateAutoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     updateAutoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
@@ -719,6 +739,7 @@ export interface NexusGenFieldTypes {
     accountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
     accounts: NexusGenRootTypes['UserAccount'][]; // [UserAccount!]!
     activeVillageId: string; // ID!
+    autoAcademySettings: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
     autoAdventureSettings: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     autoBuildSettings: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
@@ -874,6 +895,12 @@ export interface NexusGenFieldTypeNames {
     autoStart: 'Boolean'
     autoUnits: 'Boolean'
     tasksCoolDown: 'CoolDown'
+  }
+  AutoAcademySettings: { // field return type name
+    allow: 'Boolean'
+    coolDown: 'CoolDown'
+    units: 'Int'
+    useHeroResources: 'Boolean'
   }
   AutoAdventureSettings: { // field return type name
     adventureCriteria: 'AdventureCriteria'
@@ -1087,6 +1114,7 @@ export interface NexusGenFieldTypeNames {
     refreshVillage: 'Boolean'
     removeHeroLevelUpItem: 'HeroLevelUpItem'
     resetAccountSettings: 'AccountSettings'
+    resetAutoAcademySettings: 'AutoAcademySettings'
     resetAutoAdventureSettings: 'AutoAdventureSettings'
     resetAutoBuildSettings: 'AutoBuildSettings'
     resetAutoMentorSettings: 'AutoMentorSettings'
@@ -1111,6 +1139,7 @@ export interface NexusGenFieldTypeNames {
     stopMapScan: 'Boolean'
     updateAccount: 'UserAccount'
     updateAccountSettings: 'AccountSettings'
+    updateAutoAcademySettings: 'AutoAcademySettings'
     updateAutoAdventureSettings: 'AutoAdventureSettings'
     updateAutoBuildSettings: 'AutoBuildSettings'
     updateAutoMentorSettings: 'AutoMentorSettings'
@@ -1133,6 +1162,7 @@ export interface NexusGenFieldTypeNames {
     accountSettings: 'AccountSettings'
     accounts: 'UserAccount'
     activeVillageId: 'ID'
+    autoAcademySettings: 'AutoAcademySettings'
     autoAdventureSettings: 'AutoAdventureSettings'
     autoBuildSettings: 'AutoBuildSettings'
     autoMentorSettings: 'AutoMentorSettings'
@@ -1342,6 +1372,9 @@ export interface NexusGenArgTypes {
     removeHeroLevelUpItem: { // args
       id: string; // ID!
     }
+    resetAutoAcademySettings: { // args
+      villageId: string; // ID!
+    }
     resetAutoBuildSettings: { // args
       villageId: string; // ID!
     }
@@ -1394,6 +1427,10 @@ export interface NexusGenArgTypes {
     updateAccountSettings: { // args
       settings: NexusGenInputs['UpdateAccountSettingsInput']; // UpdateAccountSettingsInput!
     }
+    updateAutoAcademySettings: { // args
+      settings: NexusGenInputs['AutoAcademySettingsInput']; // AutoAcademySettingsInput!
+      villageId: string; // ID!
+    }
     updateAutoAdventureSettings: { // args
       settings: NexusGenInputs['UpdateAutoAdventureSettingsInput']; // UpdateAutoAdventureSettingsInput!
     }
@@ -1440,6 +1477,9 @@ export interface NexusGenArgTypes {
   Query: {
     account: { // args
       id: string; // ID!
+    }
+    autoAcademySettings: { // args
+      villageId: string; // ID!
     }
     autoBuildSettings: { // args
       villageId: string; // ID!

@@ -1,4 +1,5 @@
 export * from './AccountSettings.js';
+export * from './AutoAcademySettings.js';
 export * from './AutoBuildSettings.js';
 export * from './AutoMentorSettings.js';
 export * from './AutoPartySettings.js';
