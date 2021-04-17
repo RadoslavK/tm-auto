@@ -7,6 +7,8 @@ export enum BotEvent {
   AutoAdventureSettingsUpdated = 'AutoAdventureSettingsUpdated',
   AutoMentorSettingsUpdated = 'AutoMentorSettingsUpdated',
   AutoUnitsSettingsUpdated = 'AutoUnitsSettingsUpdated',
+  AutoAcademySettingsUpdated = 'AutoAcademySettingsUpdated',
+  AutoSmithySettingsUpdated = 'AutoSmithySettingsUpdated',
   HeroLevelUpSettingsChanged = 'HeroLevelUpSettingsChanged',
 
   BotActivityChanged = 'BotActivityChanged',

@@ -43,6 +43,7 @@ const updateMutation = graphql`
     mutation AutoAcademySettingsUpdateMutation($villageId: ID!, $settings: AutoAcademySettingsInput!) {
         updateAutoAcademySettings(villageId: $villageId, settings: $settings) {
             ...AutoAcademySettings_autoAcademySettings
+            ...Academy_autoAcademySettings
         }
     }
 `;
@@ -51,6 +52,7 @@ const resetMutation = graphql`
     mutation AutoAcademySettingsResetMutation($villageId: ID!) {
         resetAutoAcademySettings(villageId: $villageId) {
             ...AutoAcademySettings_autoAcademySettings
+            ...Academy_autoAcademySettings
         }
     }
 `;
@@ -74,7 +76,13 @@ export const AutoAcademySettings: React.FC<Props> = ({ villageId, queryRef }) =>
     }
 
     updateSettings({
-      variables: { villageId, settings: state },
+      variables: {
+        villageId,
+        settings: {
+          ...state,
+          units: [...state.units],
+        },
+      },
       updater: (store) => {
         const newRecord = store.getRootField('updateAutoAcademySettings');
         store.getRoot().setLinkedRecord(newRecord, 'autoAcademySettings', { villageId });

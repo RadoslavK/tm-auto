@@ -162,10 +162,6 @@ export const SignInForm: React.FC<Props> = ({ queryRef }) => {
 
   const [selectedAccountId, setSelectedAccountId] = useState(lastSignedAccountId);
 
-  useEffect(() => {
-    setSelectedAccountId(lastSignedAccountId);
-  }, [lastSignedAccountId]);
-
   const classes = useStyles();
 
   const [submitMessage, setSubmitMessage] = useState<string>();

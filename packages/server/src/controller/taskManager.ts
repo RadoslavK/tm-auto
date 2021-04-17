@@ -102,13 +102,15 @@ export class TaskManager {
       let taskEngine = this._villageTasks[village.id];
 
       if (!taskEngine) {
-        this._villageTasks[village.id] = new VillageBotTasksEngine(village, [
+        taskEngine = new VillageBotTasksEngine(village, [
           AutoPartyTask,
           AutoBuildTask,
           AutoUnitsTask,
           AutoAcademyTask,
           AutoSmithyTask,
         ]);
+
+        this._villageTasks[village.id] = taskEngine;
       }
 
       if (

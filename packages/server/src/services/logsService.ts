@@ -11,6 +11,7 @@ import {
   TextLogEntryContent,
   TextLogEntryType,
 } from '../_models/logs/content/text.js';
+import { UnitUpgradeLogEntryContent } from '../_models/logs/content/unitUpgrade.js';
 import type {
   LogEntry,
   LogEntryContent, 
@@ -85,6 +86,15 @@ export class LogsService {
     const content = new ResourceClaimLogEntryContent({
       reason,
       resources,
+    });
+
+    this.log(content, true);
+  };
+
+  public logUnitUpgrade = (params: { readonly unitIndex: number; readonly level: number; }): void => {
+    const content = new UnitUpgradeLogEntryContent({
+      level: params.level,
+      unitIndex: params.unitIndex,
     });
 
     this.log(content, true);

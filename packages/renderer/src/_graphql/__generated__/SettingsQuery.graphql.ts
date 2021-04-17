@@ -47,6 +47,8 @@ fragment AccountSettings_accountSettings on AccountSettings {
   autoParty
   autoStart
   autoUnits
+  autoAcademy
+  autoSmithy
   tasksCoolDown {
     max {
       days
@@ -229,6 +231,20 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "autoAcademy",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "autoSmithy",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "CoolDown",
             "kind": "LinkedField",
             "name": "tasksCoolDown",
@@ -288,12 +304,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "08897cc8d26a5380127b41ce67a2909b",
+    "cacheID": "6c305dfb6480e3ca55233aef7a86b8a3",
     "id": null,
     "metadata": {},
     "name": "SettingsQuery",
     "operationKind": "query",
-    "text": "query SettingsQuery {\n  accountSettings {\n    ...AccountSettings_accountSettings\n  }\n  autoMentorSettings {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
+    "text": "query SettingsQuery {\n  accountSettings {\n    ...AccountSettings_accountSettings\n  }\n  autoMentorSettings {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 })();

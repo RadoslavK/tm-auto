@@ -5,6 +5,8 @@
 
 
 import { ApiContext } from "./apiContext.type"
+import { AutoAcademySettings } from "./../_models/settings/tasks/autoAcademySettings"
+import { AutoSmithySettings } from "./../_models/settings/tasks/autoSmithySettings"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { BuildingSpotLevel } from "./../_models/buildings/spots/buildingSpotLevel"
@@ -106,8 +108,10 @@ export interface NexusGenInputs {
   }
   UpdateAccountSettingsInput: { // input type
     allowTasks: boolean; // Boolean!
+    autoAcademy: boolean; // Boolean!
     autoBuild: NexusGenInputs['GlobalAutoBuildSettingsInput']; // GlobalAutoBuildSettingsInput!
     autoParty: boolean; // Boolean!
+    autoSmithy: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
@@ -183,7 +187,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   AdventureCriteria: "Closest" | "Furthest" | "Random"
   BotState: "InitialScanning" | "None" | "Paused" | "Running" | "Stopping"
-  ClaimHeroResourcesReason: "AutoBuild" | "AutoParty" | "AutoUnits"
+  ClaimHeroResourcesReason: "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
@@ -203,18 +207,15 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   AccountSettings: { // root type
     allowTasks: boolean; // Boolean!
+    autoAcademy: boolean; // Boolean!
     autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
+    autoSmithy: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
   }
-  AutoAcademySettings: { // root type
-    allow: boolean; // Boolean!
-    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
-    units: number[]; // [Int!]!
-    useHeroResources: boolean; // Boolean!
-  }
+  AutoAcademySettings: AutoAcademySettings;
   AutoAdventureSettings: { // root type
     adventureCriteria: NexusGenEnums['AdventureCriteria']; // AdventureCriteria!
     allow: boolean; // Boolean!
@@ -251,12 +252,7 @@ export interface NexusGenObjects {
     minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
   }
-  AutoSmithySettings: { // root type
-    allow: boolean; // Boolean!
-    coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
-    units: NexusGenRootTypes['AutoSmithyUnitSettings'][]; // [AutoSmithyUnitSettings!]!
-    useHeroResources: boolean; // Boolean!
-  }
+  AutoSmithySettings: AutoSmithySettings;
   AutoSmithyUnitLevelSettings: { // root type
     minTroops?: number | null; // Int
     targetLevel: number; // Int!
@@ -412,6 +408,10 @@ export interface NexusGenObjects {
   UnitInfo: { // root type
     name: string; // String!
   }
+  UnitUpgradeLogEntryContent: { // root type
+    level: number; // Int!
+    unitIndex: number; // Int!
+  }
   UserAccount: { // root type
     id: string; // ID!
     password: string; // String!
@@ -457,7 +457,7 @@ export interface NexusGenInterfaces {
 }
 
 export interface NexusGenUnions {
-  LogEntryContent: NexusGenRootTypes['AutoBuildLogEntryContent'] | NexusGenRootTypes['AutoUnitsLogEntryContent'] | NexusGenRootTypes['ResourceClaimLogEntryContent'] | NexusGenRootTypes['TextLogEntryContent'];
+  LogEntryContent: NexusGenRootTypes['AutoBuildLogEntryContent'] | NexusGenRootTypes['AutoUnitsLogEntryContent'] | NexusGenRootTypes['ResourceClaimLogEntryContent'] | NexusGenRootTypes['TextLogEntryContent'] | NexusGenRootTypes['UnitUpgradeLogEntryContent'];
 }
 
 export type NexusGenRootTypes = NexusGenObjects & NexusGenUnions
@@ -467,8 +467,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   AccountSettings: { // field return type
     allowTasks: boolean; // Boolean!
+    autoAcademy: boolean; // Boolean!
     autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
+    autoSmithy: boolean; // Boolean!
     autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
@@ -476,6 +478,7 @@ export interface NexusGenFieldTypes {
   AutoAcademySettings: { // field return type
     allow: boolean; // Boolean!
     coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    totalCost: NexusGenRootTypes['Resources']; // Resources!
     units: number[]; // [Int!]!
     useHeroResources: boolean; // Boolean!
   }
@@ -705,6 +708,7 @@ export interface NexusGenFieldTypes {
     resetNextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     scanWholeMap: boolean | null; // Boolean
     searchMap: boolean | null; // Boolean
+    setAutoAcademySettingsUnits: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
     setNextTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     setNextTasksExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     setNextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
@@ -769,7 +773,9 @@ export interface NexusGenFieldTypes {
     nextTasksExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextVillageTaskExecutions: NexusGenRootTypes['NextVillageTaskExecutionPayloadField'][]; // [NextVillageTaskExecutionPayloadField!]!
+    researcheableUnits: number[]; // [Int!]!
     unitInfo: NexusGenRootTypes['UnitInfo']; // UnitInfo!
+    unitUpgradeCost: NexusGenRootTypes['Resources']; // Resources!
     village: NexusGenRootTypes['Village'] | null; // Village
     villageTileTypes: string[]; // [String!]!
     villages: NexusGenRootTypes['Village'][]; // [Village!]!
@@ -810,9 +816,11 @@ export interface NexusGenFieldTypes {
     accountSettingsUpdated: NexusGenRootTypes['AccountSettings']; // AccountSettings!
     accountsUpdated: NexusGenRootTypes['UserAccount'][]; // [UserAccount!]!
     activeVillageIdChanged: string; // ID!
+    autoAcademySettingsUpdated: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
     autoAdventureSettingsUpdated: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     autoBuildSettingsUpdated: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettingsUpdated: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
+    autoSmithySettingsUpdated: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     botActivityChanged: boolean; // Boolean!
     botStateChanged: NexusGenEnums['BotState']; // BotState!
@@ -845,6 +853,10 @@ export interface NexusGenFieldTypes {
   }
   UnitInfo: { // field return type
     name: string; // String!
+  }
+  UnitUpgradeLogEntryContent: { // field return type
+    level: number; // Int!
+    unitIndex: number; // Int!
   }
   UserAccount: { // field return type
     id: string; // ID!
@@ -890,8 +902,10 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   AccountSettings: { // field return type name
     allowTasks: 'Boolean'
+    autoAcademy: 'Boolean'
     autoBuild: 'GlobalAutoBuildSettings'
     autoParty: 'Boolean'
+    autoSmithy: 'Boolean'
     autoStart: 'Boolean'
     autoUnits: 'Boolean'
     tasksCoolDown: 'CoolDown'
@@ -899,6 +913,7 @@ export interface NexusGenFieldTypeNames {
   AutoAcademySettings: { // field return type name
     allow: 'Boolean'
     coolDown: 'CoolDown'
+    totalCost: 'Resources'
     units: 'Int'
     useHeroResources: 'Boolean'
   }
@@ -1128,6 +1143,7 @@ export interface NexusGenFieldTypeNames {
     resetNextVillageTaskExecution: 'Timestamp'
     scanWholeMap: 'Boolean'
     searchMap: 'Boolean'
+    setAutoAcademySettingsUnits: 'AutoAcademySettings'
     setNextTaskExecution: 'Timestamp'
     setNextTasksExecution: 'Timestamp'
     setNextVillageTaskExecution: 'Timestamp'
@@ -1192,7 +1208,9 @@ export interface NexusGenFieldTypeNames {
     nextTasksExecution: 'Timestamp'
     nextVillageTaskExecution: 'Timestamp'
     nextVillageTaskExecutions: 'NextVillageTaskExecutionPayloadField'
+    researcheableUnits: 'Int'
     unitInfo: 'UnitInfo'
+    unitUpgradeCost: 'Resources'
     village: 'Village'
     villageTileTypes: 'String'
     villages: 'Village'
@@ -1233,9 +1251,11 @@ export interface NexusGenFieldTypeNames {
     accountSettingsUpdated: 'AccountSettings'
     accountsUpdated: 'UserAccount'
     activeVillageIdChanged: 'ID'
+    autoAcademySettingsUpdated: 'AutoAcademySettings'
     autoAdventureSettingsUpdated: 'AutoAdventureSettings'
     autoBuildSettingsUpdated: 'AutoBuildSettings'
     autoMentorSettingsUpdated: 'AutoMentorSettings'
+    autoSmithySettingsUpdated: 'AutoSmithySettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
     botActivityChanged: 'Boolean'
     botStateChanged: 'BotState'
@@ -1268,6 +1288,10 @@ export interface NexusGenFieldTypeNames {
   }
   UnitInfo: { // field return type name
     name: 'String'
+  }
+  UnitUpgradeLogEntryContent: { // field return type name
+    level: 'Int'
+    unitIndex: 'Int'
   }
   UserAccount: { // field return type name
     id: 'ID'
@@ -1399,6 +1423,10 @@ export interface NexusGenArgTypes {
     }
     searchMap: { // args
       input: NexusGenInputs['SearchMapInput']; // SearchMapInput!
+    }
+    setAutoAcademySettingsUnits: { // args
+      units: number[]; // [Int!]!
+      villageId: string; // ID!
     }
     setNextTaskExecution: { // args
       delay: NexusGenInputs['DurationInput']; // DurationInput!
@@ -1532,12 +1560,22 @@ export interface NexusGenArgTypes {
     unitInfo: { // args
       index: number; // Int!
     }
+    unitUpgradeCost: { // args
+      level: number; // Int!
+      unitIndex: number; // Int!
+    }
     village: { // args
       villageId: string; // ID!
     }
   }
   Subscription: {
+    autoAcademySettingsUpdated: { // args
+      villageId: string; // ID!
+    }
     autoBuildSettingsUpdated: { // args
+      villageId: string; // ID!
+    }
+    autoSmithySettingsUpdated: { // args
       villageId: string; // ID!
     }
     autoUnitsSettingsUpdated: { // args
@@ -1572,7 +1610,7 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  LogEntryContent: "AutoBuildLogEntryContent" | "AutoUnitsLogEntryContent" | "ResourceClaimLogEntryContent" | "TextLogEntryContent"
+  LogEntryContent: "AutoBuildLogEntryContent" | "AutoUnitsLogEntryContent" | "ResourceClaimLogEntryContent" | "TextLogEntryContent" | "UnitUpgradeLogEntryContent"
 }
 
 export interface NexusGenTypeInterfaces {

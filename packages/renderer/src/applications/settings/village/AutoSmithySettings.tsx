@@ -92,7 +92,16 @@ export const AutoSmithySettings: React.FC<Props> = ({ villageId, queryRef }) => 
     }
 
     updateSettings({
-      variables: { villageId, settings: state },
+      variables: {
+        villageId,
+        settings: {
+          ...state,
+          units: [...state.units.map(u => ({
+            ...u,
+            levels: [...u.levels],
+          }))],
+        },
+      },
       updater: (store) => {
         const newRecord = store.getRootField('updateAutoSmithySettings');
         store.getRoot().setLinkedRecord(newRecord, 'autoSmithySettings', { villageId });

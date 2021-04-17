@@ -180,7 +180,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         ? mergeVillageAndHeroResources(this._village.id)
         : currentResources;
 
-    if (totalResources.areGreaterOrEqualThan(requiredResources)) {
+    if (totalResources.isGreaterOrEqualThan(requiredResources)) {
       if (settings.useHeroResources) {
         const resourcesNeeded = requiredResources.subtract(currentResources);
 
@@ -249,7 +249,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       ).cost;
 
       if (
-        totalResources.areLowerThan(cropLandResourceCost) ||
+        totalResources.isLowerThan(cropLandResourceCost) ||
         !this._village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)
       ) {
         return;

@@ -8,8 +8,10 @@ import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { AccountSettings } from '../_models/settings/account/accountSettings.js';
 import type { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
 import type { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings.js';
+import type { AutoAcademySettings } from '../_models/settings/tasks/autoAcademySettings.js';
 import type { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
 import type { AutoBuildSettings } from '../_models/settings/tasks/autoBuildSettings';
+import type { AutoSmithySettings } from '../_models/settings/tasks/autoSmithySettings.js';
 import type { AutoUnitsSettings } from '../_models/settings/tasks/autoUnitsSettings.js';
 import type { Village } from '../_models/village/village.js';
 import type { UserAccount } from '../services/accountService.js';
@@ -47,6 +49,16 @@ export type BotEventPayloads = {
 
   [BotEvent.AutoUnitsSettingsUpdated]: {
     readonly settings: AutoUnitsSettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.AutoAcademySettingsUpdated]: {
+    readonly settings: AutoAcademySettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.AutoSmithySettingsUpdated]: {
+    readonly settings: AutoSmithySettings;
     readonly villageId: string;
   };
 

@@ -4,7 +4,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type ClaimHeroResourcesReason = "AutoBuild" | "AutoParty" | "AutoUnits";
+export type ClaimHeroResourcesReason = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type ResourceClaimLogContent_resourceClaimLogEntryContent = {
     readonly reason: ClaimHeroResourcesReason;
     readonly resources: {

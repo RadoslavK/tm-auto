@@ -18,4 +18,5 @@ mozno povolit move a potom validovat queue a oznacovat cervene ktore tam nemozu 
 
 # Shortcoming
 * Nexus needs mutable arrays // https://github.com/graphql-nexus/nexus/issues/455
+* Relay compiler needs mutable arrays too
 * Type backing needs a text reference instead of import

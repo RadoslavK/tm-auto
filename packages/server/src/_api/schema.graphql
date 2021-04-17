@@ -10,8 +10,10 @@ input AccountInput {
 
 type AccountSettings {
   allowTasks: Boolean!
+  autoAcademy: Boolean!
   autoBuild: GlobalAutoBuildSettings!
   autoParty: Boolean!
+  autoSmithy: Boolean!
   autoStart: Boolean!
   autoUnits: Boolean!
   tasksCoolDown: CoolDown!
@@ -26,6 +28,7 @@ enum AdventureCriteria {
 type AutoAcademySettings {
   allow: Boolean!
   coolDown: CoolDown!
+  totalCost: Resources!
   units: [Int!]!
   useHeroResources: Boolean!
 }
@@ -211,8 +214,10 @@ type BuildingSpots {
 }
 
 enum ClaimHeroResourcesReason {
+  AutoAcademy
   AutoBuild
   AutoParty
+  AutoSmithy
   AutoUnits
 }
 
@@ -351,7 +356,7 @@ type LogEntry {
   village: Village
 }
 
-union LogEntryContent = AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent | TextLogEntryContent
+union LogEntryContent = AutoBuildLogEntryContent | AutoUnitsLogEntryContent | ResourceClaimLogEntryContent | TextLogEntryContent | UnitUpgradeLogEntryContent
 
 enum MapSearchState {
   None
@@ -404,6 +409,7 @@ type Mutation {
   resetNextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
   scanWholeMap: Boolean
   searchMap(input: SearchMapInput!): Boolean
+  setAutoAcademySettingsUnits(units: [Int!]!, villageId: ID!): AutoAcademySettings!
   setNextTaskExecution(delay: DurationInput!, task: TaskType!): Timestamp!
   setNextTasksExecution(delay: DurationInput!): Timestamp!
   setNextVillageTaskExecution(delay: DurationInput!, task: TaskType!, villageId: ID!): Timestamp!
@@ -470,7 +476,9 @@ type Query {
   nextTasksExecution: Timestamp!
   nextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
   nextVillageTaskExecutions(villageId: ID!): [NextVillageTaskExecutionPayloadField!]!
+  researcheableUnits: [Int!]!
   unitInfo(index: Int!): UnitInfo!
+  unitUpgradeCost(level: Int!, unitIndex: Int!): Resources!
   village(villageId: ID!): Village
   villageTileTypes: [String!]!
   villages: [Village!]!
@@ -529,9 +537,11 @@ type Subscription {
   accountSettingsUpdated: AccountSettings!
   accountsUpdated: [UserAccount!]!
   activeVillageIdChanged: ID!
+  autoAcademySettingsUpdated(villageId: ID!): AutoAcademySettings!
   autoAdventureSettingsUpdated: AutoAdventureSettings!
   autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
+  autoSmithySettingsUpdated(villageId: ID!): AutoSmithySettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   botActivityChanged: Boolean!
   botStateChanged: BotState!
@@ -597,10 +607,17 @@ type UnitInfo {
   name: String!
 }
 
+type UnitUpgradeLogEntryContent {
+  level: Int!
+  unitIndex: Int!
+}
+
 input UpdateAccountSettingsInput {
   allowTasks: Boolean!
+  autoAcademy: Boolean!
   autoBuild: GlobalAutoBuildSettingsInput!
   autoParty: Boolean!
+  autoSmithy: Boolean!
   autoStart: Boolean!
   autoUnits: Boolean!
   tasksCoolDown: CoolDownInput!

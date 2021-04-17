@@ -13,6 +13,7 @@ import { AutoBuildLogContent } from './entries/AutoBuildLogContent.js';
 import { AutoUnitsLogContent } from './entries/AutoUnitsLogContent.js';
 import { ResourceClaimLogContent } from './entries/ResourceClaimLogContent.js';
 import { TextLogContent } from './entries/TextLogContent.js';
+import { UnitUpgradeLogContent } from './entries/UnitUpgradeLogContent.js';
 
 type Props = {
   readonly logEntry: LogEntry_logEntry$key;
@@ -32,6 +33,8 @@ const getContentNode = (
     case 'AutoBuildLogEntryContent': return <AutoBuildLogContent className={className} content={content} />;
     case 'AutoUnitsLogEntryContent': return <AutoUnitsLogContent className={className} content={content} />;
     case 'ResourceClaimLogEntryContent': return <ResourceClaimLogContent className={className} content={content} />;
+    case 'UnitUpgradeLogEntryContent': return <UnitUpgradeLogContent className={className} content={content} />;
+
     default: throw new Error(`Invalid typename: ${typename}`);
   }
 };
@@ -77,6 +80,7 @@ const logEntryFragment = graphql`
           ...AutoUnitsLogContent_autoUnitsLogEntryContent
           ...AutoBuildLogContent_autoBuildLogEntryContent
           ...ResourceClaimLogContent_resourceClaimLogEntryContent
+          ...UnitUpgradeLogContent_unitUpgradeLogEntryContent
       }
       timestamp {
           totalSeconds

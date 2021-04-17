@@ -2,10 +2,19 @@ import {
   arg,
   idArg,
   inputObjectType,
+  intArg,
+  list,
   mutationField,
   objectType,
   queryField,
+  subscriptionField,
 } from 'nexus';
+import path from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
+
+import { Resources } from '../../../_models/misc/resources.js';
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AutoAcademySettingsObject = objectType({
   name: 'AutoAcademySettings',
@@ -14,6 +23,24 @@ export const AutoAcademySettingsObject = objectType({
     t.boolean('useHeroResources');
     t.field('coolDown', { type: 'CoolDown' });
     t.list.int('units');
+    t.field('totalCost', {
+      type: 'Resources',
+      resolve: (settings, _, ctx) => {
+        let cost = new Resources();
+
+        for (const uIndex of settings.units) {
+          const additionalCost = ctx.unitUpgradeCostService.getUpgradeCost(uIndex, 0);
+
+          cost = cost.add(additionalCost);
+        }
+
+        return cost;
+      },
+    });
+  },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: path.join(getDirname(import.meta), '../../../_models/settings/tasks/autoAcademySettings.ts'),
+    export: 'AutoAcademySettings',
   },
 });
 
@@ -48,9 +75,7 @@ export const UpdateAutoAcademySettingsMutation = mutationField(t => {
     resolve: (_, { villageId, settings }, ctx) => {
       const service = ctx.settingsService.village(villageId).autoAcademy;
 
-      service.update(settings);
-
-      return settings;
+      return service.merge(settings);
     },
   });
 });
@@ -68,5 +93,34 @@ export const ResetAutoAcademySettingsMutation = mutationField(t => {
 
       return service.get();
     },
+  });
+});
+
+export const SetAutoAcademySettingsUnitsMutation = mutationField(t => {
+  t.field('setAutoAcademySettingsUnits', {
+    type: AutoAcademySettingsObject,
+    args: {
+      villageId: idArg(),
+      units: list(intArg()),
+    },
+    resolve: (_, { villageId, units }, ctx) => {
+      const service = ctx.settingsService.village(villageId).autoAcademy;
+      const uniqueUnits = new Set(units);
+
+      return service.merge({ units: Array.from(uniqueUnits) });
+    },
+  });
+});
+
+export const AutoAcademySettingsSubscription = subscriptionField(t => {
+  t.field('autoAcademySettingsUpdated', {
+    type: AutoAcademySettingsObject,
+    args: {
+      villageId: idArg(),
+    },
+    ...subscribeToEvent(BotEvent.AutoAcademySettingsUpdated, {
+      filter: (p, args) => p.villageId === args.villageId,
+      resolve: (p) => p.settings,
+    }),
   });
 });

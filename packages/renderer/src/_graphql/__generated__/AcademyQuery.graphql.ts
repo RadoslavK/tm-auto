@@ -8,6 +8,12 @@ export type AcademyQueryVariables = {
     villageId: string;
 };
 export type AcademyQueryResponse = {
+    readonly autoAcademySettings: {
+        readonly totalCost: {
+            readonly " $fragmentRefs": FragmentRefs<"Resources_resources">;
+        };
+        readonly " $fragmentRefs": FragmentRefs<"ResearchList_autoAcademySettings">;
+    };
     readonly nextVillageTaskExecution: {
         readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
     };
@@ -23,6 +29,12 @@ export type AcademyQuery = {
 query AcademyQuery(
   $villageId: ID!
 ) {
+  autoAcademySettings(villageId: $villageId) {
+    totalCost {
+      ...Resources_resources
+    }
+    ...ResearchList_autoAcademySettings
+  }
   nextVillageTaskExecution(task: AutoAcademy, villageId: $villageId) {
     ...NextVillageTaskExecution_timestamp
   }
@@ -30,6 +42,19 @@ query AcademyQuery(
 
 fragment NextVillageTaskExecution_timestamp on Timestamp {
   totalSeconds
+}
+
+fragment ResearchList_autoAcademySettings on AutoAcademySettings {
+  units
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 */
 
@@ -41,17 +66,21 @@ var v0 = [
     "name": "villageId"
   }
 ],
-v1 = [
+v1 = {
+  "kind": "Variable",
+  "name": "villageId",
+  "variableName": "villageId"
+},
+v2 = [
+  (v1/*: any*/)
+],
+v3 = [
   {
     "kind": "Literal",
     "name": "task",
     "value": "AutoAcademy"
   },
-  {
-    "kind": "Variable",
-    "name": "villageId",
-    "variableName": "villageId"
-  }
+  (v1/*: any*/)
 ];
 return {
   "fragment": {
@@ -62,7 +91,39 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
+        "concreteType": "AutoAcademySettings",
+        "kind": "LinkedField",
+        "name": "autoAcademySettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "totalCost",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "Resources_resources"
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "ResearchList_autoAcademySettings"
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v3/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
         "name": "nextVillageTaskExecution",
@@ -88,7 +149,78 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
+        "concreteType": "AutoAcademySettings",
+        "kind": "LinkedField",
+        "name": "autoAcademySettings",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "totalCost",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "freeCrop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "total",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "units",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v3/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
         "name": "nextVillageTaskExecution",
@@ -107,14 +239,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "983874e123636854c5829a7e21e29fdc",
+    "cacheID": "ec3c76dfcb3f92312a594ff69d1cb87a",
     "id": null,
     "metadata": {},
     "name": "AcademyQuery",
     "operationKind": "query",
-    "text": "query AcademyQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecution(task: AutoAcademy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "query AcademyQuery(\n  $villageId: ID!\n) {\n  autoAcademySettings(villageId: $villageId) {\n    totalCost {\n      ...Resources_resources\n    }\n    ...ResearchList_autoAcademySettings\n  }\n  nextVillageTaskExecution(task: AutoAcademy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment ResearchList_autoAcademySettings on AutoAcademySettings {\n  units\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();
-(node as any).hash = '2cfe33bb9a4c7cb53f75b6589de0926a';
+(node as any).hash = '7fdcbcaa08bfa0b283ad45f26a832fdc';
 export default node;

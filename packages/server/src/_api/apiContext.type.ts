@@ -9,6 +9,7 @@ import type { ControllerService } from '../services/controllerService.js';
 import type { CrannyInfoService } from '../services/crannyInfoService.js';
 import type { BuildingInfoService } from '../services/info/buildingInfoService.js';
 import type { UnitInfoService } from '../services/info/unitInfoService.js';
+import type { UnitUpgradeCostService } from '../services/info/unitUpgradeCostService.js';
 import type { LogsService } from '../services/logsService.js';
 import type { MapScanService } from '../services/mapScan/mapScanService.js';
 import type { MapSearchService } from '../services/mapSearchService/mapSearchService.js';
@@ -25,6 +26,7 @@ export type ApiContext = {
   readonly hero: Hero;
   readonly availableBuildingTypesService: AvailableBuildingTypesService;
   readonly buildingInfoService: BuildingInfoService;
+  readonly unitUpgradeCostService: UnitUpgradeCostService;
   readonly accountService: AccountService;
   readonly settingsManagementService: SettingsManagementService;
   readonly generalSettingsService: InternalSettingsService<GeneralSettings>;

@@ -55,15 +55,15 @@ export class Resources {
   public getRequiredWarehouseSize = (): number =>
     Math.max(this.wood, this.clay, this.iron);
 
-  public areGreaterOrEqualThan = (other: Resources): boolean =>
+  public isGreaterOrEqualThan = (other: Resources): boolean =>
     this.wood >= other.wood &&
     this.clay >= other.clay &&
     this.iron >= other.iron &&
     this.crop >= other.crop &&
     this.freeCrop >= other.freeCrop;
 
-  public areLowerThan = (other: Resources): boolean =>
-    !this.areGreaterOrEqualThan(other);
+  public isLowerThan = (other: Resources): boolean =>
+    !this.isGreaterOrEqualThan(other);
 
   public getTotal = (): number => this.wood + this.clay + this.iron + this.crop;
 }

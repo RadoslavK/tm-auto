@@ -4,12 +4,14 @@ import type { AutoBuildLogEntryContent } from './content/autoBuild.js';
 import type { AutoUnitsLogEntryContent } from './content/autoUnits.js';
 import type { ResourceClaimLogEntryContent } from './content/resourceClaim.js';
 import type { TextLogEntryContent } from './content/text.js';
+import type { UnitUpgradeLogEntryContent } from './content/unitUpgrade.js';
 
 export type LogEntryContent =
   | TextLogEntryContent
   | AutoBuildLogEntryContent
   | AutoUnitsLogEntryContent
-  | ResourceClaimLogEntryContent;
+  | ResourceClaimLogEntryContent
+  | UnitUpgradeLogEntryContent;
 
 export type LogEntry = {
   readonly id: string;

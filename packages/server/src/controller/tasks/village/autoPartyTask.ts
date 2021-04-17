@@ -67,11 +67,11 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     let canDoSmallParty =
       allowSmall &&
       townHall.level.actual >= smallPartyInfo.townHallLevel &&
-      totalRes.areGreaterOrEqualThan(smallPartyInfo.cost);
+      totalRes.isGreaterOrEqualThan(smallPartyInfo.cost);
     let canDoLargeParty =
       allowLarge &&
       townHall.level.actual >= largePartyInfo.townHallLevel &&
-      totalRes.areGreaterOrEqualThan(largePartyInfo.cost);
+      totalRes.isGreaterOrEqualThan(largePartyInfo.cost);
 
     if (!canDoSmallParty && !canDoLargeParty) {
       return;

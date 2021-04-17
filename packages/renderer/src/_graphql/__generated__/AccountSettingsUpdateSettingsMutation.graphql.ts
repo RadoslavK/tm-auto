@@ -6,8 +6,10 @@ import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UpdateAccountSettingsInput = {
     allowTasks: boolean;
+    autoAcademy: boolean;
     autoBuild: GlobalAutoBuildSettingsInput;
     autoParty: boolean;
+    autoSmithy: boolean;
     autoStart: boolean;
     autoUnits: boolean;
     tasksCoolDown: CoolDownInput;
@@ -71,6 +73,8 @@ fragment AccountSettings_accountSettings on AccountSettings {
   autoParty
   autoStart
   autoUnits
+  autoAcademy
+  autoSmithy
   tasksCoolDown {
     max {
       days
@@ -246,6 +250,20 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "autoAcademy",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "autoSmithy",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "CoolDown",
             "kind": "LinkedField",
             "name": "tasksCoolDown",
@@ -280,12 +298,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "89dc85b3ac4e0bc88d94de856cc66bf4",
+    "cacheID": "9091ad2a6bb699c7458793e7d3dc5eff",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

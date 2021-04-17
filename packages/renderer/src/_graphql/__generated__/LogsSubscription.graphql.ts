@@ -46,6 +46,7 @@ fragment LogEntry_logEntry on LogEntry {
     ...AutoUnitsLogContent_autoUnitsLogEntryContent
     ...AutoBuildLogContent_autoBuildLogEntryContent
     ...ResourceClaimLogContent_resourceClaimLogEntryContent
+    ...UnitUpgradeLogContent_unitUpgradeLogEntryContent
   }
   timestamp {
     totalSeconds
@@ -76,6 +77,11 @@ fragment TextLogContent_textLogentryContent on TextLogEntryContent {
   messageType
 }
 
+fragment UnitUpgradeLogContent_unitUpgradeLogEntryContent on UnitUpgradeLogEntryContent {
+  unitIndex
+  level
+}
+
 fragment VillageName_village on Village {
   coords {
     x
@@ -102,6 +108,13 @@ v1 = {
   "storageKey": null
 },
 v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "level",
+  "storageKey": null
+},
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -219,14 +232,8 @@ return {
                     "name": "fieldId",
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "level",
-                    "storageKey": null
-                  },
                   (v2/*: any*/),
+                  (v3/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -289,6 +296,21 @@ return {
                   }
                 ],
                 "type": "ResourceClaimLogEntryContent",
+                "abstractKey": null
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "unitIndex",
+                    "storageKey": null
+                  },
+                  (v2/*: any*/)
+                ],
+                "type": "UnitUpgradeLogEntryContent",
                 "abstractKey": null
               }
             ],
@@ -353,7 +375,7 @@ return {
                 "name": "isCapital",
                 "storageKey": null
               },
-              (v2/*: any*/)
+              (v3/*: any*/)
             ],
             "storageKey": null
           }
@@ -363,12 +385,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5a874fb93f756525d68067755d81f54d",
+    "cacheID": "a73cd99382a3af124e25c4459e10edda",
     "id": null,
     "metadata": {},
     "name": "LogsSubscription",
     "operationKind": "subscription",
-    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...Logs_logEntry\n    id\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry_logEntry on LogEntry {\n  __typename\n  content {\n    __typename\n    ...TextLogContent_textLogentryContent\n    ...AutoUnitsLogContent_autoUnitsLogEntryContent\n    ...AutoBuildLogContent_autoBuildLogEntryContent\n    ...ResourceClaimLogContent_resourceClaimLogEntryContent\n  }\n  timestamp {\n    totalSeconds\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment Logs_logEntry on LogEntry {\n  id\n  ...LogEntry_logEntry\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
+    "text": "subscription LogsSubscription {\n  logEntryAdded {\n    ...Logs_logEntry\n    id\n  }\n}\n\nfragment AutoBuildLogContent_autoBuildLogEntryContent on AutoBuildLogEntryContent {\n  fieldId\n  level\n  name\n  type\n}\n\nfragment AutoUnitsLogContent_autoUnitsLogEntryContent on AutoUnitsLogEntryContent {\n  amount\n  index\n  unitName\n}\n\nfragment LogEntry_logEntry on LogEntry {\n  __typename\n  content {\n    __typename\n    ...TextLogContent_textLogentryContent\n    ...AutoUnitsLogContent_autoUnitsLogEntryContent\n    ...AutoBuildLogContent_autoBuildLogEntryContent\n    ...ResourceClaimLogContent_resourceClaimLogEntryContent\n    ...UnitUpgradeLogContent_unitUpgradeLogEntryContent\n  }\n  timestamp {\n    totalSeconds\n  }\n  village {\n    id\n    ...VillageName_village\n  }\n}\n\nfragment Logs_logEntry on LogEntry {\n  id\n  ...LogEntry_logEntry\n}\n\nfragment ResourceClaimLogContent_resourceClaimLogEntryContent on ResourceClaimLogEntryContent {\n  reason\n  resources {\n    clay\n    crop\n    iron\n    wood\n  }\n}\n\nfragment TextLogContent_textLogentryContent on TextLogEntryContent {\n  message\n  messageType\n}\n\nfragment UnitUpgradeLogContent_unitUpgradeLogEntryContent on UnitUpgradeLogEntryContent {\n  unitIndex\n  level\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n"
   }
 };
 })();

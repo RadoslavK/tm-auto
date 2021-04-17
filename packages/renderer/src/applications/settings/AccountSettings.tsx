@@ -35,6 +35,8 @@ const fragmentDef = graphql`
         autoParty
         autoStart
         autoUnits
+        autoAcademy
+        autoSmithy
         tasksCoolDown {
             ...CoolDown @relay(mask: false)
         }
@@ -143,6 +145,8 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
     autoParty,
     autoStart,
     autoUnits,
+    autoAcademy,
+    autoSmithy,
     tasksCoolDown,
   } = state;
 
@@ -260,6 +264,28 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
             checked={autoParty}
             id="autoParty"
             name="autoParty"
+            onChange={onCheckboxChange}
+            type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="autoAcademy">Auto Academy</label>
+          <input
+            checked={autoAcademy}
+            id="autoAcademy"
+            name="autoAcademy"
+            onChange={onCheckboxChange}
+            type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="autoSmithy">Auto Smithy</label>
+          <input
+            checked={autoSmithy}
+            id="autoSmithy"
+            name="autoSmithy"
             onChange={onCheckboxChange}
             type="checkbox"
           />

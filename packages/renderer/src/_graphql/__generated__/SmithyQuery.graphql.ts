@@ -8,6 +8,11 @@ export type SmithyQueryVariables = {
     villageId: string;
 };
 export type SmithyQueryResponse = {
+    readonly autoSmithySettings: {
+        readonly units: ReadonlyArray<{
+            readonly unitIndex: number;
+        }>;
+    };
     readonly nextVillageTaskExecution: {
         readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
     };
@@ -23,6 +28,11 @@ export type SmithyQuery = {
 query SmithyQuery(
   $villageId: ID!
 ) {
+  autoSmithySettings(villageId: $villageId) {
+    units {
+      unitIndex
+    }
+  }
   nextVillageTaskExecution(task: AutoSmithy, villageId: $villageId) {
     ...NextVillageTaskExecution_timestamp
   }
@@ -41,17 +51,49 @@ var v0 = [
     "name": "villageId"
   }
 ],
-v1 = [
+v1 = {
+  "kind": "Variable",
+  "name": "villageId",
+  "variableName": "villageId"
+},
+v2 = {
+  "alias": null,
+  "args": [
+    (v1/*: any*/)
+  ],
+  "concreteType": "AutoSmithySettings",
+  "kind": "LinkedField",
+  "name": "autoSmithySettings",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "AutoSmithyUnitSettings",
+      "kind": "LinkedField",
+      "name": "units",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "unitIndex",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v3 = [
   {
     "kind": "Literal",
     "name": "task",
     "value": "AutoSmithy"
   },
-  {
-    "kind": "Variable",
-    "name": "villageId",
-    "variableName": "villageId"
-  }
+  (v1/*: any*/)
 ];
 return {
   "fragment": {
@@ -60,9 +102,10 @@ return {
     "metadata": null,
     "name": "SmithyQuery",
     "selections": [
+      (v2/*: any*/),
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
         "name": "nextVillageTaskExecution",
@@ -86,9 +129,10 @@ return {
     "kind": "Operation",
     "name": "SmithyQuery",
     "selections": [
+      (v2/*: any*/),
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": "Timestamp",
         "kind": "LinkedField",
         "name": "nextVillageTaskExecution",
@@ -107,14 +151,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "40971331251dc4a6cf9dd3aa97852039",
+    "cacheID": "cb5f085d5c837879bd12cefa2b38e47d",
     "id": null,
     "metadata": {},
     "name": "SmithyQuery",
     "operationKind": "query",
-    "text": "query SmithyQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecution(task: AutoSmithy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "query SmithyQuery(\n  $villageId: ID!\n) {\n  autoSmithySettings(villageId: $villageId) {\n    units {\n      unitIndex\n    }\n  }\n  nextVillageTaskExecution(task: AutoSmithy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'dd643ddab580838719f08c2fd32cab1e';
+(node as any).hash = '8f87aeddf7d8319b3b97d6275e89b64d';
 export default node;

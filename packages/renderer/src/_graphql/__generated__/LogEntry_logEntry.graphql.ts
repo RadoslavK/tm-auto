@@ -7,7 +7,7 @@ import { FragmentRefs } from "relay-runtime";
 export type LogEntry_logEntry = {
     readonly content: {
         readonly __typename: string;
-        readonly " $fragmentRefs": FragmentRefs<"TextLogContent_textLogentryContent" | "AutoUnitsLogContent_autoUnitsLogEntryContent" | "AutoBuildLogContent_autoBuildLogEntryContent" | "ResourceClaimLogContent_resourceClaimLogEntryContent">;
+        readonly " $fragmentRefs": FragmentRefs<"TextLogContent_textLogentryContent" | "AutoUnitsLogContent_autoUnitsLogEntryContent" | "AutoBuildLogContent_autoBuildLogEntryContent" | "ResourceClaimLogContent_resourceClaimLogEntryContent" | "UnitUpgradeLogContent_unitUpgradeLogEntryContent">;
     };
     readonly timestamp: {
         readonly totalSeconds: number;
@@ -70,6 +70,11 @@ return {
           "args": null,
           "kind": "FragmentSpread",
           "name": "ResourceClaimLogContent_resourceClaimLogEntryContent"
+        },
+        {
+          "args": null,
+          "kind": "FragmentSpread",
+          "name": "UnitUpgradeLogContent_unitUpgradeLogEntryContent"
         }
       ],
       "storageKey": null
@@ -120,5 +125,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'cfed8c53a2e5f3848c84a1354061afd0';
+(node as any).hash = '45c1eb9ae1daab5195d6146892754c17';
 export default node;

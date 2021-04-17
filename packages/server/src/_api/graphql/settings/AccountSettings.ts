@@ -35,6 +35,8 @@ export const AccountSettings = objectType({
     t.field('autoBuild', { type: GlobalAutoBuildSettings });
     t.boolean('autoUnits');
     t.boolean('autoParty');
+    t.boolean('autoAcademy');
+    t.boolean('autoSmithy');
   },
 });
 
@@ -63,6 +65,8 @@ export const UpdateAccountSettingsInput = inputObjectType({
     t.boolean('autoUnits');
     t.boolean('autoStart');
     t.boolean('autoParty');
+    t.boolean('autoAcademy');
+    t.boolean('autoSmithy');
   },
 });
 

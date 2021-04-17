@@ -3,7 +3,9 @@ import { Resources } from '../../misc/resources.js';
 export enum ClaimHeroResourcesReason {
   AutoBuild = 'AutoBuild',
   AutoUnits = 'AutoUnits',
-  AutoParty = 'AutoParty'
+  AutoParty = 'AutoParty',
+  AutoSmithy = 'AutoSmithy',
+  AutoAcademy = 'AutoAcademy',
 }
 
 export class ResourceClaimLogEntryContent {

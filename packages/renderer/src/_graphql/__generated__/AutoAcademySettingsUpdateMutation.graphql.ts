@@ -26,7 +26,7 @@ export type AutoAcademySettingsUpdateMutationVariables = {
 };
 export type AutoAcademySettingsUpdateMutationResponse = {
     readonly updateAutoAcademySettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoAcademySettings_autoAcademySettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoAcademySettings_autoAcademySettings" | "Academy_autoAcademySettings">;
     };
 };
 export type AutoAcademySettingsUpdateMutation = {
@@ -43,7 +43,15 @@ mutation AutoAcademySettingsUpdateMutation(
 ) {
   updateAutoAcademySettings(villageId: $villageId, settings: $settings) {
     ...AutoAcademySettings_autoAcademySettings
+    ...Academy_autoAcademySettings
   }
+}
+
+fragment Academy_autoAcademySettings on AutoAcademySettings {
+  totalCost {
+    ...Resources_resources
+  }
+  ...ResearchList_autoAcademySettings
 }
 
 fragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {
@@ -64,6 +72,19 @@ fragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {
   }
   useHeroResources
   units
+}
+
+fragment ResearchList_autoAcademySettings on AutoAcademySettings {
+  units
+}
+
+fragment Resources_resources on Resources {
+  wood
+  clay
+  iron
+  crop
+  freeCrop
+  total
 }
 */
 
@@ -142,6 +163,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "AutoAcademySettings_autoAcademySettings"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Academy_autoAcademySettings"
           }
         ],
         "storageKey": null
@@ -218,6 +244,59 @@ return {
             "kind": "ScalarField",
             "name": "units",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Resources",
+            "kind": "LinkedField",
+            "name": "totalCost",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "freeCrop",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "total",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -225,14 +304,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "24ef4349ced376fb9d69c50ec4595ff1",
+    "cacheID": "6e714de76033c0895d244eaaf70416d7",
     "id": null,
     "metadata": {},
     "name": "AutoAcademySettingsUpdateMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoAcademySettingsUpdateMutation(\n  $villageId: ID!\n  $settings: AutoAcademySettingsInput!\n) {\n  updateAutoAcademySettings(villageId: $villageId, settings: $settings) {\n    ...AutoAcademySettings_autoAcademySettings\n  }\n}\n\nfragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n  units\n}\n"
+    "text": "mutation AutoAcademySettingsUpdateMutation(\n  $villageId: ID!\n  $settings: AutoAcademySettingsInput!\n) {\n  updateAutoAcademySettings(villageId: $villageId, settings: $settings) {\n    ...AutoAcademySettings_autoAcademySettings\n    ...Academy_autoAcademySettings\n  }\n}\n\nfragment Academy_autoAcademySettings on AutoAcademySettings {\n  totalCost {\n    ...Resources_resources\n  }\n  ...ResearchList_autoAcademySettings\n}\n\nfragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n  units\n}\n\nfragment ResearchList_autoAcademySettings on AutoAcademySettings {\n  units\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();
-(node as any).hash = '9b1c2608daa7babb7e7a0554eac234d0';
+(node as any).hash = 'cd53b25e43a0f81aa34e67d9fa332e9e';
 export default node;

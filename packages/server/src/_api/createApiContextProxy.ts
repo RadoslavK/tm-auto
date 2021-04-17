@@ -6,6 +6,7 @@ import { ControllerService } from '../services/controllerService.js';
 import { CrannyInfoService } from '../services/crannyInfoService.js';
 import { buildingInfoService } from '../services/info/buildingInfoService.js';
 import { unitInfoService } from '../services/info/unitInfoService.js';
+import { unitUpgradeCostService } from '../services/info/unitUpgradeCostService.js';
 import { GeneralSettingsService } from '../services/settings/general.js';
 import { SettingsManagementService } from '../services/settingsManagementService.js';
 import type { ApiContext } from './apiContext.type.js';
@@ -24,6 +25,7 @@ export const createApiContextProxy = (): ApiContext => {
     unitInfoService,
     availableBuildingTypesService: new AvailableBuildingTypesService(),
     buildingInfoService,
+    unitUpgradeCostService,
     accountService,
     settingsManagementService: new SettingsManagementService(),
     expandedBuildingService: new ExpandedBuildingService(),

@@ -18,6 +18,7 @@ import {
   TextLogEntryContent,
   TextLogEntryType,
 } from '../../_models/logs/content/text.js';
+import { UnitUpgradeLogEntryContent } from '../../_models/logs/content/unitUpgrade.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 
@@ -82,6 +83,14 @@ export const ResourceClaimLogEntryContentObject = objectType({
   },
 });
 
+export const UnitUpgradeLogEntryContentObject = objectType({
+  name: 'UnitUpgradeLogEntryContent',
+  definition: t => {
+    t.int('unitIndex');
+    t.int('level');
+  },
+});
+
 export const LogEntryContent = unionType({
   name: 'LogEntryContent',
   definition: t => {
@@ -90,6 +99,7 @@ export const LogEntryContent = unionType({
       AutoBuildLogEntryContentObject,
       AutoUnitsLogEntryContentObject,
       ResourceClaimLogEntryContentObject,
+      UnitUpgradeLogEntryContentObject,
     );
   },
   resolveType: (content) => {
@@ -104,6 +114,9 @@ export const LogEntryContent = unionType({
     }
     if (content instanceof ResourceClaimLogEntryContent) {
       return 'ResourceClaimLogEntryContent';
+    }
+    if (content instanceof UnitUpgradeLogEntryContent) {
+      return 'UnitUpgradeLogEntryContent';
     }
     return null;
   },

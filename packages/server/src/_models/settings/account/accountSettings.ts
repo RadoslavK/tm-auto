@@ -21,6 +21,10 @@ export class AccountSettings {
 
   public readonly autoUnits: boolean = true;
 
+  public readonly autoAcademy: boolean = true;
+
+  public readonly autoSmithy: boolean = true;
+
   constructor(params: PartialFields<AccountSettings> = {}) {
     mergeDefaults(this, params);
   }

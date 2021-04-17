@@ -21,6 +21,8 @@ export type AccountSettings_accountSettings = {
     readonly autoParty: boolean;
     readonly autoStart: boolean;
     readonly autoUnits: boolean;
+    readonly autoAcademy: boolean;
+    readonly autoSmithy: boolean;
     readonly tasksCoolDown: {
         readonly max: {
             readonly days: number;
@@ -154,6 +156,20 @@ return {
     {
       "alias": null,
       "args": null,
+      "kind": "ScalarField",
+      "name": "autoAcademy",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "autoSmithy",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "CoolDown",
       "kind": "LinkedField",
       "name": "tasksCoolDown",
@@ -187,5 +203,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '2ee38e3a71d7e4b32d457f99a611eb7b';
+(node as any).hash = 'c86c5c3bd6c5af93516979bb55f7f6a7';
 export default node;

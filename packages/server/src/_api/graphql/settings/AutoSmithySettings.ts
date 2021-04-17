@@ -5,7 +5,13 @@ import {
   mutationField,
   objectType,
   queryField,
+  subscriptionField,
 } from 'nexus';
+import path from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
+
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const AutoSmithyUnitLevelSettingsObject = objectType({
   name: 'AutoSmithyUnitLevelSettings',
@@ -30,6 +36,10 @@ export const AutoSmithySettingsObject = objectType({
     t.boolean('useHeroResources');
     t.field('coolDown', { type: 'CoolDown' });
     t.list.field('units', { type: AutoSmithyUnitSettingsObject });
+  },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: path.join(getDirname(import.meta), '../../../_models/settings/tasks/autoSmithySettings.ts'),
+    export: 'AutoSmithySettings',
   },
 });
 
@@ -80,9 +90,7 @@ export const UpdateAutoSmithySettingsMutation = mutationField(t => {
     resolve: (_, { villageId, settings }, ctx) => {
       const service = ctx.settingsService.village(villageId).autoSmithy;
 
-      service.update(settings);
-
-      return settings;
+      return service.merge(settings);
     },
   });
 });
@@ -100,5 +108,18 @@ export const ResetAutoSmithySettingsMutation = mutationField(t => {
 
       return service.get();
     },
+  });
+});
+
+export const AutoSmithySettingsSubscription = subscriptionField(t => {
+  t.field('autoSmithySettingsUpdated', {
+    type: AutoSmithySettingsObject,
+    args: {
+      villageId: idArg(),
+    },
+    ...subscribeToEvent(BotEvent.AutoSmithySettingsUpdated, {
+      filter: (p, args) => p.villageId === args.villageId,
+      resolve: (p) => p.settings,
+    }),
   });
 });

@@ -7,6 +7,7 @@ import type {
   AutoSmithyUnitSettings,
 } from '../../../_models/settings/tasks/autoSmithySettings.js';
 import type { Village } from '../../../_models/village/village.js';
+import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import type {
@@ -17,9 +18,13 @@ import type {
 export class AutoSmithyTask implements BotTaskWithCoolDown {
   readonly type: TaskType = TaskType.AutoSmithy;
 
-  private settings = (): AutoSmithySettings => null as any;
+  private settings = (): AutoSmithySettings =>
+    AccountContext.getContext().settingsService.village(this.village.id).autoSmithy.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean =>
+    AccountContext.getContext().settingsService.account.get().autoSmithy
+    && this.settings().allow
+    && !!this.settings().units.length;
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
@@ -43,11 +48,16 @@ export class AutoSmithyTask implements BotTaskWithCoolDown {
   };
 
   private ensureUnit = async (unitSettings: AutoSmithyUnitSettings, useHeroResources: boolean): Promise<void> => {
+    console.log(useHeroResources);
+
+    const { unitIndex, levels } = unitSettings;
+    const firstLevel = levels[0];
+
     const page = await getPage();
     const unitNodes = await page.$$('.research');
 
     for (const node of unitNodes) {
-      if (!await node.$(`img[class*="u${unitSettings.unitIndex}"]`)) {
+      if (!await node.$(`img[class*="u${unitIndex}"]`)) {
         continue;
       }
 
@@ -56,6 +66,11 @@ export class AutoSmithyTask implements BotTaskWithCoolDown {
       if (!information) {
         throw new Error('Did not find unit information');
       }
+
+      AccountContext.getContext().logsService.logUnitUpgrade({
+        unitIndex,
+        level: firstLevel.targetLevel,
+      });
     }
   };
 }

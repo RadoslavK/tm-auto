@@ -29,6 +29,9 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+//  Otherwise the app freezes after some time of inactivity a takes a while to restore
+app.disableHardwareAcceleration();
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let clientWin: null | BrowserWindowType = null;

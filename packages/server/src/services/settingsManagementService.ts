@@ -351,6 +351,10 @@ export class SettingsManagementService {
             const newSettings = new AutoSmithySettings(autoSmithySettings);
 
             villageSettingsService.autoSmithy.update(newSettings);
+            publishPayloadEvent(BotEvent.AutoSmithySettingsUpdated, {
+              villageId,
+              settings: newSettings,
+            });
           },
         );
 
@@ -361,6 +365,10 @@ export class SettingsManagementService {
             const newSettings = new AutoAcademySettings(settings);
 
             villageSettingsService.autoAcademy.update(newSettings);
+            publishPayloadEvent(BotEvent.AutoAcademySettingsUpdated, {
+              villageId,
+              settings: newSettings,
+            });
           },
         );
 
