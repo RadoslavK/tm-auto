@@ -100,7 +100,7 @@ export const updateUnitsInformation = async (): Promise<void> => {
     return;
   }
 
-  await ensureBuildingSpotPage(rallyPoint.fieldId, { index: 1, name: 'tt' });
+  await ensureBuildingSpotPage(rallyPoint.fieldId, BuildingType.RallyPoint, { index: 1, name: 'tt' });
 
   const page = await getPage();
   const detailNodes = await page.$$('table.troop_details');

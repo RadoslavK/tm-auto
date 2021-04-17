@@ -105,7 +105,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
         : undefined;
 
     // select appropriate building
-    await ensureBuildingSpotPage(unitBuilding.fieldId, tab);
+    await ensureBuildingSpotPage(unitBuilding.fieldId, unitBuilding.type, tab);
     await updateActualResources();
 
     const unitQueue = await parseUnitQueue();

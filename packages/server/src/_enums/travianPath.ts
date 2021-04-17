@@ -1,3 +1,5 @@
+import type { BuildingType } from 'shared/enums/BuildingType.js';
+
 import type { TabInformation } from '../controller/actions/ensurePage.js';
 
 export enum TravianPath {
@@ -16,8 +18,9 @@ export enum TravianPath {
 
 export const getBuildingSpotPath = (
   fieldId: number,
+  buildingType?: BuildingType,
   tab?: TabInformation,
 ): string =>
   tab === undefined
     ? `build.php?id=${fieldId}`
-    : `build.php?${tab.name}=${tab.index}&id=${fieldId}`;
+    : `build.php?id=${fieldId}&gid=${buildingType}&${tab.name}=${tab.index}`;

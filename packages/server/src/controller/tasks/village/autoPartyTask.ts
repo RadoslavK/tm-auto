@@ -130,11 +130,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       }
     }
 
-    const holdPartyNode = await page.$(
-      `.green[onclick*="${getBuildingSpotPath(
-        townHall.fieldId,
-      )}&a=${partyNumber}"]`,
-    );
+    const holdPartyNode = await page.$(`.green[onclick*="${getBuildingSpotPath(townHall.fieldId)}&a=${partyNumber}"]`);
 
     if (!holdPartyNode) {
       throw new Error('Did not find hold party button');

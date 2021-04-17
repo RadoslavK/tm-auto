@@ -2,6 +2,7 @@ import type {
   ElementHandle,
   Page, 
 } from 'puppeteer';
+import type { BuildingType } from 'shared/enums/BuildingType.js';
 
 import {
   getBuildingSpotPath,
@@ -169,6 +170,7 @@ export type TabInformation = {
 
 export const ensureBuildingSpotPage = async (
   fieldId: number,
+  buildingType?: BuildingType,
   tab?: TabInformation,
 ): Promise<void> => {
   const page = await getPage();
@@ -188,5 +190,5 @@ export const ensureBuildingSpotPage = async (
     return;
   }
 
-  await ensurePage(getBuildingSpotPath(fieldId, tab));
+  await ensurePage(getBuildingSpotPath(fieldId, buildingType, tab));
 };
