@@ -3,10 +3,10 @@ import React from 'react';
 import {
   DragPreviewImage,
   useDrag,
+  useDrop,
 } from 'react-dnd';
 
 import { imageLinks } from '../../utils/imageLinks.js';
-import { ResearchUnitDropArea } from './ResearchUnitDropArea.js';
 import { UnitResearch } from './UnitResearch.js';
 
 type StylesProps = {
@@ -30,28 +30,43 @@ const useStyles = makeStyles<unknown, StylesProps>({
 });
 
 type Props = {
+  readonly listIndex: number;
   readonly onRemove: () => void;
-  readonly onUnitDrop: (originalIndex: number, targetIndex: number) => void;
+  readonly onUnitDrop: (originalListIndex: number, targetListIndex: number) => void;
   readonly unitIndex: number;
 };
 
 export type UnitResearchDrag = {
+  readonly listIndex: number;
   readonly unitIndex: number;
 };
 
-export const ResearchListUnit: React.FC<Props> = ({ onRemove, onUnitDrop, unitIndex }) => {
+export const ResearchListUnit: React.FC<Props> = ({ listIndex, onRemove, onUnitDrop, unitIndex }) => {
   const [{ isDragging }, drag, preview] = useDrag({
-    item: { unitIndex } as UnitResearchDrag,
+    item: { listIndex, unitIndex } as UnitResearchDrag,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
     type: 'UnitResearch',
   });
 
+  const [ { isUnitOver, movedUnit }, drop] = useDrop({
+    accept: 'UnitResearch',
+    canDrop: (droppedItem: UnitResearchDrag) => droppedItem.listIndex !== listIndex,
+    collect: (monitor) => ({
+      movedUnit: monitor.getItem() as UnitResearchDrag | undefined,
+      isUnitOver: monitor.isOver() && monitor.canDrop(),
+    }),
+    drop: (droppedItem) => onUnitDrop(droppedItem.listIndex, listIndex),
+  });
+
   const classes = useStyles({ isDragging });
+  const isAbove = movedUnit && movedUnit.listIndex >= listIndex;
+  const movedElement = movedUnit && <UnitResearch unitIndex={movedUnit.unitIndex} isHighlight />;
 
   return (
-    <>
+    <div ref={drop}>
+      {isUnitOver && isAbove && movedElement}
       <div ref={drag} className={classes.root}>
         <div className={classes.removeImg} onClick={onRemove} />
         <UnitResearch unitIndex={unitIndex} />
@@ -60,11 +75,8 @@ export const ResearchListUnit: React.FC<Props> = ({ onRemove, onUnitDrop, unitIn
           src={imageLinks.getUnit(unitIndex)}
         />
       </div>
-      <ResearchUnitDropArea
-        onDrop={targetIndex => onUnitDrop(unitIndex, targetIndex)}
-        unitIndex={unitIndex}
-      />
-    </>
+      {isUnitOver && !isAbove && movedElement}
+    </div>
   );
 };
 

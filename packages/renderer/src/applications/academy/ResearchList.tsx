@@ -76,9 +76,9 @@ export const ResearchList: React.FC<Props> = ({ settingsKey }) => {
     });
   };
 
-  const dropUnit = (originalIndex: number, targetIndex: number): void => {
+  const dropUnit = (originalListIndex: number, targetListIndex: number): void => {
     const newUnits = [...units];
-    newUnits.splice(targetIndex, 0, units[originalIndex]);
+    newUnits.splice(targetListIndex, 0, newUnits.splice(originalListIndex, 1)[0]);
 
     setUnits({
       variables: { villageId, units: newUnits },
@@ -98,12 +98,13 @@ export const ResearchList: React.FC<Props> = ({ settingsKey }) => {
         Reset
       </button>
       <Suspense fallback={null}>
-        {units.map(uIndex => (
+        {units.map((uIndex, index) => (
           <ResearchListUnit
             key={uIndex}
             onRemove={() => removeUnit(uIndex)}
             onUnitDrop={dropUnit}
             unitIndex={uIndex}
+            listIndex={index}
           />
         ))}
       </Suspense>

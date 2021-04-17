@@ -19,15 +19,20 @@ const query = graphql`
 `;
 
 type StylesProps = {
+  readonly isHighlight: boolean;
   readonly unitIndex: number;
 };
 
 const useStyles = makeStyles<unknown, StylesProps>({
-  root: {
-    '&:not(:last-child)': {
-      borderBottom: 'black solid 3px',
+  root: props => props.isHighlight
+    ? {
+      backgroundColor: 'lightgreen',
+    }
+    : {
+      '&:not(:last-child)': {
+        borderBottom: 'black solid 3px',
+      },
     },
-  },
   iconWithName: {
     display: 'flex',
   },
@@ -46,12 +51,13 @@ const useStyles = makeStyles<unknown, StylesProps>({
 });
 
 type Props = {
+  readonly isHighlight?: boolean;
   readonly onClick?: () => void;
   readonly unitIndex: number;
 };
 
-export const UnitResearch: React.FC<Props> = ({ unitIndex, onClick }) => {
-  const classes = useStyles({ unitIndex });
+export const UnitResearch: React.FC<Props> = ({ isHighlight, unitIndex, onClick }) => {
+  const classes = useStyles({ unitIndex, isHighlight: !!isHighlight });
   const { unitUpgradeCost, unitInfo } = useLazyLoadQuery<UnitResearchUnitQuery>(query, { index: unitIndex });
 
   return (
