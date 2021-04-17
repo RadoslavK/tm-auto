@@ -246,7 +246,11 @@ export class ControllerService {
         await updateBuildings();
 
         village.isCapital = village.coords.equalsTo(capitalVillageCoords);
-        village.scanned = true;
+
+        if (!village.scanned) {
+          village.scanned = true;
+          AccountContext.getContext().villageService.serialize([village.id]);
+        }
 
         publishPayloadEvent(BotEvent.VillageUpdated, { village });
       }

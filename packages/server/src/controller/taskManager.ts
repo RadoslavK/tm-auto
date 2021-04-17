@@ -96,6 +96,19 @@ export class TaskManager {
         !AccountContext.getContext().settingsService.village(village.id).general.get()
           .allowTasks
       ) {
+        if (!village.scanned) {
+          //  New village, should always scan
+          await ensureVillageSelected(village.id);
+          await collectTaskRewards();
+          await updateResources();
+          await updateBuildings();
+
+          village.scanned = true;
+          AccountContext.getContext().villageService.serialize([village.id]);
+
+          publishPayloadEvent(BotEvent.VillageUpdated, { village });
+        }
+
         continue;
       }
 
