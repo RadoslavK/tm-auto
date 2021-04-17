@@ -184,8 +184,9 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
     {
       label: 'Tasks',
       path: 'tasks-activity',
+      preloadData: () => reloadVillageTasksActivityQuery(villageId),
     },
-  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery, reloadAcademyQuery]);
+  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery, reloadAcademyQuery, reloadVillageTasksActivityQuery]);
 
   const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
 
