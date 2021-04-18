@@ -1,5 +1,9 @@
-import { Dialog } from '@material-ui/core';
+import {
+  Dialog,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
+import clsx from 'clsx';
 import React, {
   Suspense,
   useCallback,
@@ -100,11 +104,21 @@ export const villageQuery = graphql`
     }
 `;
 
+const useStyles = makeStyles({
+  tab: {
+    marginRight: 8,
+  },
+  activeTab: {
+    color: 'green',
+  },
+});
+
 type Props = {
   readonly queryRef: PreloadedQuery<VillageQuery>;
 };
 
 export const Village: React.FC<Props> = ({ queryRef }) => {
+  const classes = useStyles();
   const villageId = (useParams() as VillageRouteParams).id;
 
   const { buildingsQueryRef, reloadBuildingsQuery } = useBuildingsQuery();
@@ -274,11 +288,15 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       {showSettingsButton && <button onClick={openSettings}>Settings</button>}
       <button onClick={onRefreshVillage}>Refresh</button>
       <div>
-        {navigation.map((n) => (
-          <Link key={n.path} to={n.path}>
-            <span onMouseEnter={n.preloadData}>{n.label}</span>
-          </Link>
-        ))}
+        {navigation.map((n) => {
+          const isTabActive = pathname.endsWith(n.path);
+
+          return (
+            <Link className={clsx(classes.tab, isTabActive && classes.activeTab)} key={n.path} to={n.path}>
+              <span onMouseEnter={n.preloadData}>{n.label}</span>
+            </Link>
+          );
+        })}
       </div>
       <Routes>
         {navigation.map((n) => (
