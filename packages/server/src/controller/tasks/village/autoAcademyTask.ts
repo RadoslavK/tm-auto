@@ -22,8 +22,13 @@ import type {
   BotTaskWithCoolDownResult,
 } from '../../taskEngine/botTaskEngine.js';
 
-const parseOngoingResearch = async (page: Page): Promise<Duration | null> => {
-  const timer = await page.$('#build .dur .timer');
+type OngoingResearch = {
+  readonly duration: Duration;
+  readonly unit: number;
+}
+
+const parseOngoingResearch = async (page: Page): Promise<OngoingResearch | null> => {
+  const timer = await page.$('.under_progress .dur .timer');
 
   if (!timer) {
     return null;
@@ -35,7 +40,18 @@ const parseOngoingResearch = async (page: Page): Promise<Duration | null> => {
     throw new Error('Did not find duration but found the node');
   }
 
-  return Duration.fromText(textDuration);
+  const unit = await page.$eval('.under_progress .desc img', x => /u(\d+)/.exec(x.className)?.[1]);
+
+  if (!unit) {
+    throw new Error('Failed to parse unit');
+  }
+
+  const duration = Duration.fromText(textDuration);
+
+  return {
+    duration,
+    unit: +unit,
+  };
 };
 
 export class AutoAcademyTask implements BotTaskWithCoolDown {
@@ -58,6 +74,30 @@ export class AutoAcademyTask implements BotTaskWithCoolDown {
 
     if (!academy?.level.actual) {
       return;
+    }
+
+    const page = await getPage();
+
+    await ensureBuildingSpotPage(academy.fieldId);
+
+    const ongoingResearch = await parseOngoingResearch(page);
+
+    if (ongoingResearch) {
+      const oldUnits = this.settings().units;
+      const newUnits = oldUnits.filter(unit => unit !== ongoingResearch.unit);
+
+      if (oldUnits.length !== newUnits.length) {
+        const newSettings = AccountContext.getContext().settingsService.village(this.village.id).autoAcademy.merge({ units: newUnits });
+
+        publishPayloadEvent(BotEvent.AutoAcademySettingsUpdated, {
+          villageId: this.village.id,
+          settings: newSettings,
+        });
+      }
+
+      return {
+        nextCoolDown: CoolDown.fromDuration(ongoingResearch.duration),
+      };
     }
 
     const { units, useHeroResources } = this.settings();
@@ -92,26 +132,6 @@ export class AutoAcademyTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const page = await getPage();
-
-    await ensureBuildingSpotPage(academy.fieldId);
-    let ongoingDuration = await parseOngoingResearch(page);
-
-    if (ongoingDuration) {
-      return {
-        nextCoolDown: CoolDown.fromDuration(ongoingDuration),
-      };
-    }
-
-    const needToClaimHeroResources = useHeroResources
-      && villageResources.isLowerThan(cost);
-
-    if (needToClaimHeroResources) {
-      const resourcesToClaim = cost.subtract(villageResources);
-
-      await claimHeroResources(resourcesToClaim, ClaimHeroResourcesReason.AutoAcademy);
-    }
-
     const unitNodes = await page.$$('.research');
 
     for (const node of unitNodes) {
@@ -129,6 +149,15 @@ export class AutoAcademyTask implements BotTaskWithCoolDown {
 
       if (!confirmBtn) {
         throw new Error('Did not find confirm button');
+      }
+
+      const needToClaimHeroResources = useHeroResources
+        && villageResources.isLowerThan(cost);
+
+      if (needToClaimHeroResources) {
+        const resourcesToClaim = cost.subtract(villageResources);
+
+        await claimHeroResources(resourcesToClaim, ClaimHeroResourcesReason.AutoAcademy);
       }
 
       AccountContext.getContext().logsService.logUnitUpgrade({
@@ -158,7 +187,7 @@ export class AutoAcademyTask implements BotTaskWithCoolDown {
       await updateActualResources();
 
       return {
-        nextCoolDown: CoolDown.fromDuration(ongoingResearch),
+        nextCoolDown: CoolDown.fromDuration(ongoingResearch.duration),
       };
     }
 

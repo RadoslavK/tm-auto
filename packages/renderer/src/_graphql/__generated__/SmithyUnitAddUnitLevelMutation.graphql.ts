@@ -4,26 +4,32 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type SmithySettingsSubscriptionVariables = {
+export type SmithyUnitAddUnitLevelMutationVariables = {
     villageId: string;
+    unitIndex: number;
+    targetLevel: number;
+    minTroops: number;
 };
-export type SmithySettingsSubscriptionResponse = {
-    readonly autoSmithySettingsUpdated: {
+export type SmithyUnitAddUnitLevelMutationResponse = {
+    readonly addAutoSmithyUnitLevel: {
         readonly " $fragmentRefs": FragmentRefs<"Smithy_autoSmithySettings">;
     };
 };
-export type SmithySettingsSubscription = {
-    readonly response: SmithySettingsSubscriptionResponse;
-    readonly variables: SmithySettingsSubscriptionVariables;
+export type SmithyUnitAddUnitLevelMutation = {
+    readonly response: SmithyUnitAddUnitLevelMutationResponse;
+    readonly variables: SmithyUnitAddUnitLevelMutationVariables;
 };
 
 
 
 /*
-subscription SmithySettingsSubscription(
+mutation SmithyUnitAddUnitLevelMutation(
   $villageId: ID!
+  $unitIndex: Int!
+  $targetLevel: Int!
+  $minTroops: Int!
 ) {
-  autoSmithySettingsUpdated(villageId: $villageId) {
+  addAutoSmithyUnitLevel(villageId: $villageId, unitIndex: $unitIndex, targetLevel: $targetLevel, minTroops: $minTroops) {
     ...Smithy_autoSmithySettings
   }
 }
@@ -59,14 +65,42 @@ fragment Smithy_autoSmithySettings on AutoSmithySettings {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "minTroops"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "targetLevel"
+},
+v2 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "unitIndex"
+},
+v3 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "villageId"
+},
+v4 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "villageId"
-  }
-],
-v1 = [
+    "kind": "Variable",
+    "name": "minTroops",
+    "variableName": "minTroops"
+  },
+  {
+    "kind": "Variable",
+    "name": "targetLevel",
+    "variableName": "targetLevel"
+  },
+  {
+    "kind": "Variable",
+    "name": "unitIndex",
+    "variableName": "unitIndex"
+  },
   {
     "kind": "Variable",
     "name": "villageId",
@@ -75,17 +109,22 @@ v1 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/),
+      (v2/*: any*/),
+      (v3/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SmithySettingsSubscription",
+    "name": "SmithyUnitAddUnitLevelMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v4/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
-        "name": "autoSmithySettingsUpdated",
+        "name": "addAutoSmithyUnitLevel",
         "plural": false,
         "selections": [
           {
@@ -97,21 +136,26 @@ return {
         "storageKey": null
       }
     ],
-    "type": "Subscription",
+    "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v3/*: any*/),
+      (v2/*: any*/),
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
-    "name": "SmithySettingsSubscription",
+    "name": "SmithyUnitAddUnitLevelMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v4/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
-        "name": "autoSmithySettingsUpdated",
+        "name": "addAutoSmithyUnitLevel",
         "plural": false,
         "selections": [
           {
@@ -163,14 +207,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c8ca7f4fc07dbb99580677ba36ae883d",
+    "cacheID": "297ad0f42bbfd648512677c146b27c2f",
     "id": null,
     "metadata": {},
-    "name": "SmithySettingsSubscription",
-    "operationKind": "subscription",
-    "text": "subscription SmithySettingsSubscription(\n  $villageId: ID!\n) {\n  autoSmithySettingsUpdated(villageId: $villageId) {\n    ...Smithy_autoSmithySettings\n  }\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n\nfragment Smithy_autoSmithySettings on AutoSmithySettings {\n  units {\n    ...SmithyUnitsList_autoSmithyUnitSettings\n  }\n}\n"
+    "name": "SmithyUnitAddUnitLevelMutation",
+    "operationKind": "mutation",
+    "text": "mutation SmithyUnitAddUnitLevelMutation(\n  $villageId: ID!\n  $unitIndex: Int!\n  $targetLevel: Int!\n  $minTroops: Int!\n) {\n  addAutoSmithyUnitLevel(villageId: $villageId, unitIndex: $unitIndex, targetLevel: $targetLevel, minTroops: $minTroops) {\n    ...Smithy_autoSmithySettings\n  }\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n\nfragment Smithy_autoSmithySettings on AutoSmithySettings {\n  units {\n    ...SmithyUnitsList_autoSmithyUnitSettings\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8fce2560d0eb6f796c16bd847b1a6a93';
+(node as any).hash = '1d7cd431b24dc7c4b1a3248056a6937e';
 export default node;

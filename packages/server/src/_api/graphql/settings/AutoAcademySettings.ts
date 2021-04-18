@@ -61,7 +61,6 @@ export const AutoAcademySettingsInput = inputObjectType({
     t.boolean('allow');
     t.boolean('useHeroResources');
     t.field('coolDown', { type: 'CoolDownInput' });
-    t.list.int('units');
   },
 });
 

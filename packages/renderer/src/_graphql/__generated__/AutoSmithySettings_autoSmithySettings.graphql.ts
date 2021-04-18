@@ -21,13 +21,6 @@ export type AutoSmithySettings_autoSmithySettings = {
         };
     };
     readonly useHeroResources: boolean;
-    readonly units: ReadonlyArray<{
-        readonly unitIndex: number;
-        readonly levels: ReadonlyArray<{
-            readonly targetLevel: number;
-            readonly minTroops: number | null;
-        }>;
-    }>;
     readonly " $refType": "AutoSmithySettings_autoSmithySettings";
 };
 export type AutoSmithySettings_autoSmithySettings$data = AutoSmithySettings_autoSmithySettings;
@@ -119,54 +112,11 @@ return {
       "kind": "ScalarField",
       "name": "useHeroResources",
       "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "AutoSmithyUnitSettings",
-      "kind": "LinkedField",
-      "name": "units",
-      "plural": true,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "unitIndex",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "AutoSmithyUnitLevelSettings",
-          "kind": "LinkedField",
-          "name": "levels",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "targetLevel",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "minTroops",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
     }
   ],
   "type": "AutoSmithySettings",
   "abstractKey": null
 };
 })();
-(node as any).hash = '10c4bbb814be7c3143c1f6000d2bcd0a';
+(node as any).hash = 'd19e4ac7852cff67695c1d54d1f1021a';
 export default node;

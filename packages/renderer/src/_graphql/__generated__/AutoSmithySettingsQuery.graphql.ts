@@ -24,13 +24,6 @@ export type AutoSmithySettingsQueryResponse = {
             };
         };
         readonly useHeroResources: boolean;
-        readonly units: ReadonlyArray<{
-            readonly unitIndex: number;
-            readonly levels: ReadonlyArray<{
-                readonly targetLevel: number;
-                readonly minTroops: number | null;
-            }>;
-        }>;
     };
 };
 export type AutoSmithySettingsQuery = {
@@ -61,13 +54,6 @@ query AutoSmithySettingsQuery(
       }
     }
     useHeroResources
-    units {
-      unitIndex
-      levels {
-        targetLevel
-        minTroops
-      }
-    }
   }
 }
 */
@@ -169,49 +155,6 @@ v2 = [
         "kind": "ScalarField",
         "name": "useHeroResources",
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "AutoSmithyUnitSettings",
-        "kind": "LinkedField",
-        "name": "units",
-        "plural": true,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "unitIndex",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "AutoSmithyUnitLevelSettings",
-            "kind": "LinkedField",
-            "name": "levels",
-            "plural": true,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "targetLevel",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "minTroops",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -235,12 +178,12 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "5dbd4c05986a3d394f6af4d665432361",
+    "cacheID": "3e8049370de0f1f49bc63d0e2c7237b4",
     "id": null,
     "metadata": {},
     "name": "AutoSmithySettingsQuery",
     "operationKind": "query",
-    "text": "query AutoSmithySettingsQuery(\n  $villageId: ID!\n) {\n  autoSmithySettings(villageId: $villageId) {\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    useHeroResources\n    units {\n      unitIndex\n      levels {\n        targetLevel\n        minTroops\n      }\n    }\n  }\n}\n"
+    "text": "query AutoSmithySettingsQuery(\n  $villageId: ID!\n) {\n  autoSmithySettings(villageId: $villageId) {\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    useHeroResources\n  }\n}\n"
   }
 };
 })();

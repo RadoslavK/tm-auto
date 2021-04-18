@@ -9,7 +9,7 @@ export type AutoSmithySettingsResetMutationVariables = {
 };
 export type AutoSmithySettingsResetMutationResponse = {
     readonly resetAutoSmithySettings: {
-        readonly " $fragmentRefs": FragmentRefs<"AutoSmithySettings_autoSmithySettings">;
+        readonly " $fragmentRefs": FragmentRefs<"AutoSmithySettings_autoSmithySettings" | "Smithy_autoSmithySettings">;
     };
 };
 export type AutoSmithySettingsResetMutation = {
@@ -25,6 +25,7 @@ mutation AutoSmithySettingsResetMutation(
 ) {
   resetAutoSmithySettings(villageId: $villageId) {
     ...AutoSmithySettings_autoSmithySettings
+    ...Smithy_autoSmithySettings
   }
 }
 
@@ -45,12 +46,34 @@ fragment AutoSmithySettings_autoSmithySettings on AutoSmithySettings {
     }
   }
   useHeroResources
+}
+
+fragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {
+  minTroops
+  targetLevel
+}
+
+fragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {
+  targetLevel
+  ...SmithyUnitLevel_autoSmithyUnitLevelSettings
+}
+
+fragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {
+  unitIndex
+  levels {
+    targetLevel
+    ...SmithyUnitLevels_autoSmithyUnitLevelSettings
+  }
+}
+
+fragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {
+  unitIndex
+  ...SmithyUnit_autoSmithyUnitSettings
+}
+
+fragment Smithy_autoSmithySettings on AutoSmithySettings {
   units {
-    unitIndex
-    levels {
-      targetLevel
-      minTroops
-    }
+    ...SmithyUnitsList_autoSmithyUnitSettings
   }
 }
 */
@@ -119,6 +142,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "AutoSmithySettings_autoSmithySettings"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "Smithy_autoSmithySettings"
           }
         ],
         "storageKey": null
@@ -235,14 +263,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ec743a41fa71bac4467834929c6d0f2a",
+    "cacheID": "458f1efd4ac5a231e42cd1d5a79d0b0f",
     "id": null,
     "metadata": {},
     "name": "AutoSmithySettingsResetMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoSmithySettingsResetMutation(\n  $villageId: ID!\n) {\n  resetAutoSmithySettings(villageId: $villageId) {\n    ...AutoSmithySettings_autoSmithySettings\n  }\n}\n\nfragment AutoSmithySettings_autoSmithySettings on AutoSmithySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n  units {\n    unitIndex\n    levels {\n      targetLevel\n      minTroops\n    }\n  }\n}\n"
+    "text": "mutation AutoSmithySettingsResetMutation(\n  $villageId: ID!\n) {\n  resetAutoSmithySettings(villageId: $villageId) {\n    ...AutoSmithySettings_autoSmithySettings\n    ...Smithy_autoSmithySettings\n  }\n}\n\nfragment AutoSmithySettings_autoSmithySettings on AutoSmithySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n\nfragment Smithy_autoSmithySettings on AutoSmithySettings {\n  units {\n    ...SmithyUnitsList_autoSmithyUnitSettings\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'c7ae6793784be4b28be5a392cc5e8565';
+(node as any).hash = '580451bb37d36757915e7de2910bf438';
 export default node;

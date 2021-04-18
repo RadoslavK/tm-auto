@@ -4,18 +4,18 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type AutoSmithySettings_autoSmithyUnitSettings = {
+export type SmithyUnit_autoSmithyUnitSettings = {
     readonly unitIndex: number;
     readonly levels: ReadonlyArray<{
         readonly targetLevel: number;
-        readonly minTroops: number | null;
+        readonly " $fragmentRefs": FragmentRefs<"SmithyUnitLevels_autoSmithyUnitLevelSettings">;
     }>;
-    readonly " $refType": "AutoSmithySettings_autoSmithyUnitSettings";
+    readonly " $refType": "SmithyUnit_autoSmithyUnitSettings";
 };
-export type AutoSmithySettings_autoSmithyUnitSettings$data = AutoSmithySettings_autoSmithyUnitSettings;
-export type AutoSmithySettings_autoSmithyUnitSettings$key = {
-    readonly " $data"?: AutoSmithySettings_autoSmithyUnitSettings$data;
-    readonly " $fragmentRefs": FragmentRefs<"AutoSmithySettings_autoSmithyUnitSettings">;
+export type SmithyUnit_autoSmithyUnitSettings$data = SmithyUnit_autoSmithyUnitSettings;
+export type SmithyUnit_autoSmithyUnitSettings$key = {
+    readonly " $data"?: SmithyUnit_autoSmithyUnitSettings$data;
+    readonly " $fragmentRefs": FragmentRefs<"SmithyUnit_autoSmithyUnitSettings">;
 };
 
 
@@ -24,7 +24,7 @@ const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "AutoSmithySettings_autoSmithyUnitSettings",
+  "name": "SmithyUnit_autoSmithyUnitSettings",
   "selections": [
     {
       "alias": null,
@@ -49,11 +49,9 @@ const node: ReaderFragment = {
           "storageKey": null
         },
         {
-          "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "minTroops",
-          "storageKey": null
+          "kind": "FragmentSpread",
+          "name": "SmithyUnitLevels_autoSmithyUnitLevelSettings"
         }
       ],
       "storageKey": null
@@ -62,5 +60,5 @@ const node: ReaderFragment = {
   "type": "AutoSmithyUnitSettings",
   "abstractKey": null
 };
-(node as any).hash = '8f8eaa29ca22d446457c7f315083330e';
+(node as any).hash = '4078405f407c71eae146b48267cfca03';
 export default node;

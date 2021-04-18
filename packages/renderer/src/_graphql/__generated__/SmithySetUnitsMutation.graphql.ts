@@ -4,26 +4,26 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type SmithySettingsSubscriptionVariables = {
+export type SmithySetUnitsMutationVariables = {
     villageId: string;
 };
-export type SmithySettingsSubscriptionResponse = {
-    readonly autoSmithySettingsUpdated: {
+export type SmithySetUnitsMutationResponse = {
+    readonly resetAutoSmithySettingsUnits: {
         readonly " $fragmentRefs": FragmentRefs<"Smithy_autoSmithySettings">;
     };
 };
-export type SmithySettingsSubscription = {
-    readonly response: SmithySettingsSubscriptionResponse;
-    readonly variables: SmithySettingsSubscriptionVariables;
+export type SmithySetUnitsMutation = {
+    readonly response: SmithySetUnitsMutationResponse;
+    readonly variables: SmithySetUnitsMutationVariables;
 };
 
 
 
 /*
-subscription SmithySettingsSubscription(
+mutation SmithySetUnitsMutation(
   $villageId: ID!
 ) {
-  autoSmithySettingsUpdated(villageId: $villageId) {
+  resetAutoSmithySettingsUnits(villageId: $villageId) {
     ...Smithy_autoSmithySettings
   }
 }
@@ -78,14 +78,14 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "SmithySettingsSubscription",
+    "name": "SmithySetUnitsMutation",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
-        "name": "autoSmithySettingsUpdated",
+        "name": "resetAutoSmithySettingsUnits",
         "plural": false,
         "selections": [
           {
@@ -97,21 +97,21 @@ return {
         "storageKey": null
       }
     ],
-    "type": "Subscription",
+    "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "SmithySettingsSubscription",
+    "name": "SmithySetUnitsMutation",
     "selections": [
       {
         "alias": null,
         "args": (v1/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
-        "name": "autoSmithySettingsUpdated",
+        "name": "resetAutoSmithySettingsUnits",
         "plural": false,
         "selections": [
           {
@@ -163,14 +163,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c8ca7f4fc07dbb99580677ba36ae883d",
+    "cacheID": "5437142b29c0671652dc4a7b3eb932a8",
     "id": null,
     "metadata": {},
-    "name": "SmithySettingsSubscription",
-    "operationKind": "subscription",
-    "text": "subscription SmithySettingsSubscription(\n  $villageId: ID!\n) {\n  autoSmithySettingsUpdated(villageId: $villageId) {\n    ...Smithy_autoSmithySettings\n  }\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n\nfragment Smithy_autoSmithySettings on AutoSmithySettings {\n  units {\n    ...SmithyUnitsList_autoSmithyUnitSettings\n  }\n}\n"
+    "name": "SmithySetUnitsMutation",
+    "operationKind": "mutation",
+    "text": "mutation SmithySetUnitsMutation(\n  $villageId: ID!\n) {\n  resetAutoSmithySettingsUnits(villageId: $villageId) {\n    ...Smithy_autoSmithySettings\n  }\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n\nfragment Smithy_autoSmithySettings on AutoSmithySettings {\n  units {\n    ...SmithyUnitsList_autoSmithyUnitSettings\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8fce2560d0eb6f796c16bd847b1a6a93';
+(node as any).hash = 'a5d958dfb8d0edfeac645992920c8dba';
 export default node;

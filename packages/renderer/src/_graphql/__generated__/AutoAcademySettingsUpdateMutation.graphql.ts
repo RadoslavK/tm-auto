@@ -7,7 +7,6 @@ import { FragmentRefs } from "relay-runtime";
 export type AutoAcademySettingsInput = {
     allow: boolean;
     coolDown: CoolDownInput;
-    units: Array<number>;
     useHeroResources: boolean;
 };
 export type CoolDownInput = {
@@ -71,7 +70,6 @@ fragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {
     }
   }
   useHeroResources
-  units
 }
 
 fragment ResearchList_autoAcademySettings on AutoAcademySettings {
@@ -241,13 +239,6 @@ return {
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "units",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
             "concreteType": "Resources",
             "kind": "LinkedField",
             "name": "totalCost",
@@ -297,6 +288,13 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "units",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -304,12 +302,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6e714de76033c0895d244eaaf70416d7",
+    "cacheID": "685329e5ac1162a1466e04964ecfa892",
     "id": null,
     "metadata": {},
     "name": "AutoAcademySettingsUpdateMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoAcademySettingsUpdateMutation(\n  $villageId: ID!\n  $settings: AutoAcademySettingsInput!\n) {\n  updateAutoAcademySettings(villageId: $villageId, settings: $settings) {\n    ...AutoAcademySettings_autoAcademySettings\n    ...Academy_autoAcademySettings\n  }\n}\n\nfragment Academy_autoAcademySettings on AutoAcademySettings {\n  totalCost {\n    ...Resources_resources\n  }\n  ...ResearchList_autoAcademySettings\n}\n\nfragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n  units\n}\n\nfragment ResearchList_autoAcademySettings on AutoAcademySettings {\n  units\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
+    "text": "mutation AutoAcademySettingsUpdateMutation(\n  $villageId: ID!\n  $settings: AutoAcademySettingsInput!\n) {\n  updateAutoAcademySettings(villageId: $villageId, settings: $settings) {\n    ...AutoAcademySettings_autoAcademySettings\n    ...Academy_autoAcademySettings\n  }\n}\n\nfragment Academy_autoAcademySettings on AutoAcademySettings {\n  totalCost {\n    ...Resources_resources\n  }\n  ...ResearchList_autoAcademySettings\n}\n\nfragment AutoAcademySettings_autoAcademySettings on AutoAcademySettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n}\n\nfragment ResearchList_autoAcademySettings on AutoAcademySettings {\n  units\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();

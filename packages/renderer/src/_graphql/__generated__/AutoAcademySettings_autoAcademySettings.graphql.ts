@@ -21,7 +21,6 @@ export type AutoAcademySettings_autoAcademySettings = {
         };
     };
     readonly useHeroResources: boolean;
-    readonly units: ReadonlyArray<number>;
     readonly " $refType": "AutoAcademySettings_autoAcademySettings";
 };
 export type AutoAcademySettings_autoAcademySettings$data = AutoAcademySettings_autoAcademySettings;
@@ -113,18 +112,11 @@ return {
       "kind": "ScalarField",
       "name": "useHeroResources",
       "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "units",
-      "storageKey": null
     }
   ],
   "type": "AutoAcademySettings",
   "abstractKey": null
 };
 })();
-(node as any).hash = '90583c2dfdb195f67974a3df5c7763a4';
+(node as any).hash = '5cf3fa196a963881b2491af2126c812a';
 export default node;

@@ -35,7 +35,6 @@ type AutoAcademySettings {
 input AutoAcademySettingsInput {
   allow: Boolean!
   coolDown: CoolDownInput!
-  units: [Int!]!
   useHeroResources: Boolean!
 }
 
@@ -90,27 +89,16 @@ type AutoSmithySettings {
 input AutoSmithySettingsInput {
   allow: Boolean!
   coolDown: CoolDownInput!
-  units: [AutoSmithyUnitSettingsInput!]!
   useHeroResources: Boolean!
 }
 
 type AutoSmithyUnitLevelSettings {
-  minTroops: Int
-  targetLevel: Int!
-}
-
-input AutoSmithyUnitLevelSettingsInput {
-  minTroops: Int
+  minTroops: Int!
   targetLevel: Int!
 }
 
 type AutoSmithyUnitSettings {
   levels: [AutoSmithyUnitLevelSettings!]!
-  unitIndex: Int!
-}
-
-input AutoSmithyUnitSettingsInput {
-  levels: [AutoSmithyUnitLevelSettingsInput!]!
   unitIndex: Int!
 }
 
@@ -384,7 +372,9 @@ type ModificationPayload {
 }
 
 type Mutation {
+  addAutoSmithyUnitLevel(minTroops: Int!, targetLevel: Int!, unitIndex: Int!, villageId: ID!): AutoSmithySettings!
   addHeroLevelUpItem(item: HeroLevelUpItemInput!): HeroLevelUpItem!
+  clearAutoSmithySettingsUnit(unitIndex: Int!, villageId: ID!): AutoSmithySettings!
   clearQueue(villageId: ID!): BuildingQueue!
   createAccount(account: AccountInput!): UserAccount!
   deleteAccount(id: ID!): UserAccount!
@@ -401,6 +391,7 @@ type Mutation {
   moveQueuedBuildingAsHighAsPossible(queueId: ID!, villageId: ID!): ModificationPayload!
   moveQueuedBuildingToIndex(queueId: ID!, targetQueueId: ID!, villageId: ID!): ModificationPayload!
   refreshVillage(villageId: ID!): Boolean
+  removeAutoSmithyUnitLevel(targetLevel: Int!, unitIndex: Int!, villageId: ID!): AutoSmithySettings!
   removeHeroLevelUpItem(id: ID!): HeroLevelUpItem!
   resetAccountSettings: AccountSettings!
   resetAutoAcademySettings(villageId: ID!): AutoAcademySettings!
@@ -409,6 +400,7 @@ type Mutation {
   resetAutoMentorSettings: AutoMentorSettings!
   resetAutoPartySettings(villageId: ID!): AutoPartySettings!
   resetAutoSmithySettings(villageId: ID!): AutoSmithySettings!
+  resetAutoSmithySettingsUnits(villageId: ID!): AutoSmithySettings!
   resetAutoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   resetGeneralSettings: GeneralSettings!
   resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
@@ -487,6 +479,7 @@ type Query {
   researcheableUnits: [Int!]!
   unitInfo(index: Int!): UnitInfo!
   unitUpgradeCost(level: Int!, unitIndex: Int!): Resources!
+  upgradeableUnits: [Int!]!
   village(villageId: ID!): Village
   villageTileTypes: [String!]!
   villages: [Village!]!
@@ -549,6 +542,8 @@ type Subscription {
   autoAdventureSettingsUpdated: AutoAdventureSettings!
   autoBuildSettingsUpdated(villageId: ID!): AutoBuildSettings!
   autoMentorSettingsUpdated: AutoMentorSettings!
+  autoSmithySettingsUnitRemoved(villageId: ID!): AutoSmithyUnitSettings!
+  autoSmithySettingsUnitUpdated(villageId: ID!): AutoSmithyUnitSettings!
   autoSmithySettingsUpdated(villageId: ID!): AutoSmithySettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
   botActivityChanged: Boolean!

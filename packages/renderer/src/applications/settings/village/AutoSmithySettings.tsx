@@ -21,31 +21,12 @@ type Props = {
 };
 
 graphql`
-    fragment AutoSmithySettings_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {
-        targetLevel
-        minTroops
-    }
-`;
-
-graphql`
-  fragment AutoSmithySettings_autoSmithyUnitSettings on AutoSmithyUnitSettings {
-      unitIndex
-      levels {
-          ...AutoSmithySettings_autoSmithyUnitLevelSettings @relay(mask: false)
-      }
-  }
-`;
-
-graphql`
     fragment AutoSmithySettings_autoSmithySettings on AutoSmithySettings {
         allow
         coolDown {
             ...CoolDown @relay(mask: false)
         }
         useHeroResources
-        units {
-            ...AutoSmithySettings_autoSmithyUnitSettings @relay(mask: false)
-        }
     }
 `;
 
@@ -61,6 +42,7 @@ const updateMutation = graphql`
     mutation AutoSmithySettingsUpdateMutation($villageId: ID!, $settings: AutoSmithySettingsInput!) {
         updateAutoSmithySettings(villageId: $villageId, settings: $settings) {
             ...AutoSmithySettings_autoSmithySettings
+            ...Smithy_autoSmithySettings
         }
     }
 `;
@@ -69,6 +51,7 @@ const resetMutation = graphql`
     mutation AutoSmithySettingsResetMutation($villageId: ID!) {
         resetAutoSmithySettings(villageId: $villageId) {
             ...AutoSmithySettings_autoSmithySettings
+            ...Smithy_autoSmithySettings
         }
     }
 `;
@@ -94,13 +77,7 @@ export const AutoSmithySettings: React.FC<Props> = ({ villageId, queryRef }) => 
     updateSettings({
       variables: {
         villageId,
-        settings: {
-          ...state,
-          units: [...state.units.map(u => ({
-            ...u,
-            levels: [...u.levels],
-          }))],
-        },
+        settings: state,
       },
       updater: (store) => {
         const newRecord = store.getRootField('updateAutoSmithySettings');

@@ -4,9 +4,9 @@ import { mergeDefaults } from 'shared/utils/merge.js';
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
 
-type AutoSmithyUnitLevelSettings = {
+export type AutoSmithyUnitLevelSettings = {
   readonly targetLevel: number;
-  readonly minTroops: number | null;
+  readonly minTroops: number;
 };
 
 export type AutoSmithyUnitSettings = {

@@ -6,7 +6,7 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type Smithy_autoSmithySettings = {
     readonly units: ReadonlyArray<{
-        readonly unitIndex: number;
+        readonly " $fragmentRefs": FragmentRefs<"SmithyUnitsList_autoSmithyUnitSettings">;
     }>;
     readonly " $refType": "Smithy_autoSmithySettings";
 };
@@ -33,11 +33,9 @@ const node: ReaderFragment = {
       "plural": true,
       "selections": [
         {
-          "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "unitIndex",
-          "storageKey": null
+          "kind": "FragmentSpread",
+          "name": "SmithyUnitsList_autoSmithyUnitSettings"
         }
       ],
       "storageKey": null
@@ -46,5 +44,5 @@ const node: ReaderFragment = {
   "type": "AutoSmithySettings",
   "abstractKey": null
 };
-(node as any).hash = '0e810a718ae129a94d7ed3c7c902feb5';
+(node as any).hash = '4da4db7582207d75d1e1ada81f8b435b';
 export default node;

@@ -24,7 +24,6 @@ export type AutoAcademySettingsQueryResponse = {
             };
         };
         readonly useHeroResources: boolean;
-        readonly units: ReadonlyArray<number>;
     };
 };
 export type AutoAcademySettingsQuery = {
@@ -55,7 +54,6 @@ query AutoAcademySettingsQuery(
       }
     }
     useHeroResources
-    units
   }
 }
 */
@@ -157,13 +155,6 @@ v2 = [
         "kind": "ScalarField",
         "name": "useHeroResources",
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "units",
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -187,12 +178,12 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "ea841087e56162bee9c96550efe763d1",
+    "cacheID": "7a80a09e75986d77a831a037d628adbf",
     "id": null,
     "metadata": {},
     "name": "AutoAcademySettingsQuery",
     "operationKind": "query",
-    "text": "query AutoAcademySettingsQuery(\n  $villageId: ID!\n) {\n  autoAcademySettings(villageId: $villageId) {\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    useHeroResources\n    units\n  }\n}\n"
+    "text": "query AutoAcademySettingsQuery(\n  $villageId: ID!\n) {\n  autoAcademySettings(villageId: $villageId) {\n    allow\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    useHeroResources\n  }\n}\n"
   }
 };
 })();

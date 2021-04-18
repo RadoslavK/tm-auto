@@ -31,22 +31,12 @@ export interface NexusGenInputs {
   AutoAcademySettingsInput: { // input type
     allow: boolean; // Boolean!
     coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
-    units: number[]; // [Int!]!
     useHeroResources: boolean; // Boolean!
   }
   AutoSmithySettingsInput: { // input type
     allow: boolean; // Boolean!
     coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
-    units: NexusGenInputs['AutoSmithyUnitSettingsInput'][]; // [AutoSmithyUnitSettingsInput!]!
     useHeroResources: boolean; // Boolean!
-  }
-  AutoSmithyUnitLevelSettingsInput: { // input type
-    minTroops?: number | null; // Int
-    targetLevel: number; // Int!
-  }
-  AutoSmithyUnitSettingsInput: { // input type
-    levels: NexusGenInputs['AutoSmithyUnitLevelSettingsInput'][]; // [AutoSmithyUnitLevelSettingsInput!]!
-    unitIndex: number; // Int!
   }
   AvailableNewBuildingsInput: { // input type
     fieldId: number; // Int!
@@ -254,7 +244,7 @@ export interface NexusGenObjects {
   }
   AutoSmithySettings: AutoSmithySettings;
   AutoSmithyUnitLevelSettings: { // root type
-    minTroops?: number | null; // Int
+    minTroops: number; // Int!
     targetLevel: number; // Int!
   }
   AutoSmithyUnitSettings: { // root type
@@ -526,7 +516,7 @@ export interface NexusGenFieldTypes {
     useHeroResources: boolean; // Boolean!
   }
   AutoSmithyUnitLevelSettings: { // field return type
-    minTroops: number | null; // Int
+    minTroops: number; // Int!
     targetLevel: number; // Int!
   }
   AutoSmithyUnitSettings: { // field return type
@@ -678,7 +668,9 @@ export interface NexusGenFieldTypes {
     updatedBuildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
   }
   Mutation: { // field return type
+    addAutoSmithyUnitLevel: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     addHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
+    clearAutoSmithySettingsUnit: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     clearQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     createAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
     deleteAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
@@ -695,6 +687,7 @@ export interface NexusGenFieldTypes {
     moveQueuedBuildingAsHighAsPossible: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     moveQueuedBuildingToIndex: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     refreshVillage: boolean | null; // Boolean
+    removeAutoSmithyUnitLevel: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     removeHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
     resetAccountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
     resetAutoAcademySettings: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
@@ -703,6 +696,7 @@ export interface NexusGenFieldTypes {
     resetAutoMentorSettings: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
     resetAutoPartySettings: NexusGenRootTypes['AutoPartySettings']; // AutoPartySettings!
     resetAutoSmithySettings: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
+    resetAutoSmithySettingsUnits: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     resetAutoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     resetGeneralSettings: NexusGenRootTypes['GeneralSettings']; // GeneralSettings!
     resetGeneralVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
@@ -779,6 +773,7 @@ export interface NexusGenFieldTypes {
     researcheableUnits: number[]; // [Int!]!
     unitInfo: NexusGenRootTypes['UnitInfo']; // UnitInfo!
     unitUpgradeCost: NexusGenRootTypes['Resources']; // Resources!
+    upgradeableUnits: number[]; // [Int!]!
     village: NexusGenRootTypes['Village'] | null; // Village
     villageTileTypes: string[]; // [String!]!
     villages: NexusGenRootTypes['Village'][]; // [Village!]!
@@ -823,6 +818,8 @@ export interface NexusGenFieldTypes {
     autoAdventureSettingsUpdated: NexusGenRootTypes['AutoAdventureSettings']; // AutoAdventureSettings!
     autoBuildSettingsUpdated: NexusGenRootTypes['AutoBuildSettings']; // AutoBuildSettings!
     autoMentorSettingsUpdated: NexusGenRootTypes['AutoMentorSettings']; // AutoMentorSettings!
+    autoSmithySettingsUnitRemoved: NexusGenRootTypes['AutoSmithyUnitSettings']; // AutoSmithyUnitSettings!
+    autoSmithySettingsUnitUpdated: NexusGenRootTypes['AutoSmithyUnitSettings']; // AutoSmithyUnitSettings!
     autoSmithySettingsUpdated: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     botActivityChanged: boolean; // Boolean!
@@ -1114,7 +1111,9 @@ export interface NexusGenFieldTypeNames {
     updatedBuildings: 'QueuedBuilding'
   }
   Mutation: { // field return type name
+    addAutoSmithyUnitLevel: 'AutoSmithySettings'
     addHeroLevelUpItem: 'HeroLevelUpItem'
+    clearAutoSmithySettingsUnit: 'AutoSmithySettings'
     clearQueue: 'BuildingQueue'
     createAccount: 'UserAccount'
     deleteAccount: 'UserAccount'
@@ -1131,6 +1130,7 @@ export interface NexusGenFieldTypeNames {
     moveQueuedBuildingAsHighAsPossible: 'ModificationPayload'
     moveQueuedBuildingToIndex: 'ModificationPayload'
     refreshVillage: 'Boolean'
+    removeAutoSmithyUnitLevel: 'AutoSmithySettings'
     removeHeroLevelUpItem: 'HeroLevelUpItem'
     resetAccountSettings: 'AccountSettings'
     resetAutoAcademySettings: 'AutoAcademySettings'
@@ -1139,6 +1139,7 @@ export interface NexusGenFieldTypeNames {
     resetAutoMentorSettings: 'AutoMentorSettings'
     resetAutoPartySettings: 'AutoPartySettings'
     resetAutoSmithySettings: 'AutoSmithySettings'
+    resetAutoSmithySettingsUnits: 'AutoSmithySettings'
     resetAutoUnitsSettings: 'AutoUnitsSettings'
     resetGeneralSettings: 'GeneralSettings'
     resetGeneralVillageSettings: 'GeneralVillageSettings'
@@ -1215,6 +1216,7 @@ export interface NexusGenFieldTypeNames {
     researcheableUnits: 'Int'
     unitInfo: 'UnitInfo'
     unitUpgradeCost: 'Resources'
+    upgradeableUnits: 'Int'
     village: 'Village'
     villageTileTypes: 'String'
     villages: 'Village'
@@ -1259,6 +1261,8 @@ export interface NexusGenFieldTypeNames {
     autoAdventureSettingsUpdated: 'AutoAdventureSettings'
     autoBuildSettingsUpdated: 'AutoBuildSettings'
     autoMentorSettingsUpdated: 'AutoMentorSettings'
+    autoSmithySettingsUnitRemoved: 'AutoSmithyUnitSettings'
+    autoSmithySettingsUnitUpdated: 'AutoSmithyUnitSettings'
     autoSmithySettingsUpdated: 'AutoSmithySettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
     botActivityChanged: 'Boolean'
@@ -1340,8 +1344,18 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addAutoSmithyUnitLevel: { // args
+      minTroops: number; // Int!
+      targetLevel: number; // Int!
+      unitIndex: number; // Int!
+      villageId: string; // ID!
+    }
     addHeroLevelUpItem: { // args
       item: NexusGenInputs['HeroLevelUpItemInput']; // HeroLevelUpItemInput!
+    }
+    clearAutoSmithySettingsUnit: { // args
+      unitIndex: number; // Int!
+      villageId: string; // ID!
     }
     clearQueue: { // args
       villageId: string; // ID!
@@ -1397,6 +1411,11 @@ export interface NexusGenArgTypes {
     refreshVillage: { // args
       villageId: string; // ID!
     }
+    removeAutoSmithyUnitLevel: { // args
+      targetLevel: number; // Int!
+      unitIndex: number; // Int!
+      villageId: string; // ID!
+    }
     removeHeroLevelUpItem: { // args
       id: string; // ID!
     }
@@ -1410,6 +1429,9 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     resetAutoSmithySettings: { // args
+      villageId: string; // ID!
+    }
+    resetAutoSmithySettingsUnits: { // args
       villageId: string; // ID!
     }
     resetAutoUnitsSettings: { // args
@@ -1577,6 +1599,12 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     autoBuildSettingsUpdated: { // args
+      villageId: string; // ID!
+    }
+    autoSmithySettingsUnitRemoved: { // args
+      villageId: string; // ID!
+    }
+    autoSmithySettingsUnitUpdated: { // args
       villageId: string; // ID!
     }
     autoSmithySettingsUpdated: { // args

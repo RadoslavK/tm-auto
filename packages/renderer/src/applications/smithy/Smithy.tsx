@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import {
   PreloadedQuery,
+  useMutation,
   usePreloadedQuery,
   useQueryLoader,
   useSubscription,
@@ -14,19 +15,22 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { SmithyQuery } from '../../_graphql/__generated__/SmithyQuery.graphql.js';
 import type { SmithySettingsSubscription } from '../../_graphql/__generated__/SmithySettingsSubscription.graphql.js';
+import type { SmithySetUnitsMutation } from '../../_graphql/__generated__/SmithySetUnitsMutation.graphql.js';
 import { selectedVillageIdState } from '../../_recoil/atoms/selectedVillageId.js';
 import { NextVillageTaskExecution } from '../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
+import { SmithyUnitsList } from './SmithyUnitsList.js';
 
 graphql`
   fragment Smithy_autoSmithySettings on AutoSmithySettings {
       units {
-          unitIndex
+          ...SmithyUnitsList_autoSmithyUnitSettings
       }
   }
 `;
 
 const query = graphql`
     query SmithyQuery($villageId: ID!) {
+        upgradeableUnits
         autoSmithySettings(villageId: $villageId) {
             ...Smithy_autoSmithySettings @relay(mask: false)
         }
@@ -34,6 +38,14 @@ const query = graphql`
             ...NextVillageTaskExecution_timestamp
         }
     }
+`;
+
+const setUnitsMutation = graphql`
+  mutation SmithySetUnitsMutation($villageId: ID!) {
+      resetAutoSmithySettingsUnits(villageId: $villageId) {
+          ...Smithy_autoSmithySettings
+      }
+  }
 `;
 
 const settingsSubscription = graphql`
@@ -60,7 +72,7 @@ type Props = {
 
 export const Smithy: React.FC<Props> = ({ queryRef }) => {
   const villageId = useRecoilValue(selectedVillageIdState);
-  const { autoSmithySettings, nextVillageTaskExecution } = usePreloadedQuery(query, queryRef);
+  const { autoSmithySettings, nextVillageTaskExecution, upgradeableUnits } = usePreloadedQuery(query, queryRef);
 
   const settingsSubscriptionConfig = useMemo((): GraphQLSubscriptionConfig<SmithySettingsSubscription> => ({
     subscription: settingsSubscription,
@@ -73,13 +85,31 @@ export const Smithy: React.FC<Props> = ({ queryRef }) => {
 
   useSubscription(settingsSubscriptionConfig);
 
+  const [setUnits] = useMutation<SmithySetUnitsMutation>(setUnitsMutation);
+
+  const clearUnits = () => {
+    setUnits({
+      variables: { villageId },
+      updater: (store) => {
+        const newRecord = store.getRootField('resetAutoSmithySettingsUnits');
+        store.getRoot().setLinkedRecord(newRecord, 'autoSmithySettings', { villageId });
+      },
+    });
+  };
+
   return (
     <div>
       <NextVillageTaskExecution
         task="AutoSmithy"
         timestamp={nextVillageTaskExecution}
       />
-      {autoSmithySettings.units.length}
+      <button onClick={clearUnits}>
+        Clear all units
+      </button>
+      <SmithyUnitsList
+        unitsKey={autoSmithySettings.units}
+        upgradeableUnits={upgradeableUnits}
+      />
     </div>
   );
 };

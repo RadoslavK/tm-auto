@@ -27,7 +27,6 @@ graphql`
             ...CoolDown @relay(mask: false)
         }
         useHeroResources
-        units
     }
 `;
 
@@ -78,10 +77,7 @@ export const AutoAcademySettings: React.FC<Props> = ({ villageId, queryRef }) =>
     updateSettings({
       variables: {
         villageId,
-        settings: {
-          ...state,
-          units: [...state.units],
-        },
+        settings: state,
       },
       updater: (store) => {
         const newRecord = store.getRootField('updateAutoAcademySettings');
