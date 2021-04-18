@@ -12,8 +12,8 @@ export class AutoPartySettings {
   public readonly allowLarge: boolean = false;
 
   public readonly coolDown: CoolDown = new CoolDown({
-    max: new Duration({ minutes: 55 }),
-    min: new Duration({ minutes: 30 }),
+    max: new Duration({ minutes: 35 }),
+    min: new Duration({ minutes: 22 }),
   });
 
   public readonly minCulturePointsSmall: number = 0;
