@@ -21,9 +21,9 @@ const useStyles = makeStyles<unknown, StylesProps>({
     backgroundColor: '#1c5bbb',
     borderRadius: '50%',
     display: 'inline-block',
-    height: 25,
-    marginRight: 10,
-    width: 25,
+    height: 12,
+    marginLeft: 8,
+    width: 12,
   },
   root: {
     display: 'flex',
@@ -78,8 +78,8 @@ export const VillageSideItem: React.FC<Props> = ({
 
   return (
     <div className={classes.root}>
-      {isVillageActive && <div className={classes.activeDot} />}
       {wrapLink(<VillageName village={villageFragment} />)}
+      {isVillageActive && <div className={classes.activeDot} />}
     </div>
   );
 };
