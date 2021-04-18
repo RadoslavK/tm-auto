@@ -20,8 +20,11 @@ type Props = {
   readonly village: VillageName_village$key;
 };
 
+const padCoord = (coord: number): string =>
+  `${coord < 0 ? '-' : ''}${String(Math.abs(coord)).padStart(3, '0')}`;
+
 export const formatVillageName = (name: string, coords: Coords, isCapital: boolean): string =>
-  `${name} [${coords.x}|${coords.y}] ${isCapital ? ' (Capital)' : ''}`;
+  `[${padCoord(coords.x)}|${padCoord(coords.y)}] ${name} ${isCapital ? ' (Capital)' : ''}`;
 
 export const VillageName: React.FC<Props> = ({ village }) => {
   const {
