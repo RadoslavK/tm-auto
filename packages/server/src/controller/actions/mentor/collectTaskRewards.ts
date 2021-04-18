@@ -22,11 +22,21 @@ export const collectTaskRewards = async (): Promise<void> => {
     }
 
     await Promise.all([
-      page.waitForSelector('#tasks .achieved'),
+      page.waitForSelector('#tasks'),
       questMasterNode.click(),
     ]);
 
-    const tasksToCollect = await page.$$("#tasks .achieved");
+    let tasksToCollect = await page.$$("#tasks .achieved");
+
+    if (!tasksToCollect.length) {
+      //  Collect from general tab
+      await Promise.all([
+        page.click('#tasks .content:nth-child(2) .tabItem'),
+        page.waitForSelector('#tasks .achieved'),
+      ]);
+
+      tasksToCollect = await page.$$("#tasks .achieved");
+    }
 
     for (const task of tasksToCollect) {
       const collectButton = await task.$('button.green');
