@@ -224,7 +224,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
         onContextMenu={onDequeue}
         title={name}>
         {buildingSpotFragment.type !== BuildingType.None && (
-          <BuildingLevelBox level={buildingSpotFragment.level} maxLevel={maxLevel} />
+          <BuildingLevelBox level={buildingSpotFragment.level} />
         )}
         <div className={classes.fieldId}>[{buildingSpotFragment.fieldId}]</div>
       </div>

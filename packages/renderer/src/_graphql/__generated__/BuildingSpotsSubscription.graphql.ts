@@ -33,7 +33,7 @@ fragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {
   actual
   ongoing
   queued
-  total
+  state
 }
 
 fragment BuildingSpot_buildingSpot on BuildingSpot {
@@ -170,6 +170,13 @@ return {
                 "kind": "ScalarField",
                 "name": "total",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "state",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -187,12 +194,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3d1cabb80cc0419bcad6608971395d59",
+    "cacheID": "df20e8d0de0ef99d54c718c855878a28",
     "id": null,
     "metadata": {},
     "name": "BuildingSpotsSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  total\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
+    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  state\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
   }
 };
 })();

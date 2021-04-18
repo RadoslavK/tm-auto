@@ -9,7 +9,7 @@ import { AutoAcademySettings } from "./../_models/settings/tasks/autoAcademySett
 import { AutoSmithySettings } from "./../_models/settings/tasks/autoSmithySettings"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
-import { BuildingSpotLevel } from "./../_models/buildings/spots/buildingSpotLevel"
+import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
 import { Hero } from "./../_models/hero/hero"
 import { QueuedBuilding } from "./../_models/buildings/queue/queuedBuilding"
 import { Resources } from "./../_models/misc/resources"
@@ -187,6 +187,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   AdventureCriteria: "Closest" | "Furthest" | "Random"
   BotState: "InitialScanning" | "None" | "Paused" | "Running" | "Stopping"
+  BuildingState: "Completed" | "None" | "OngoingMaxed" | "QueueMaxed"
   ClaimHeroResourcesReason: "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
@@ -301,13 +302,14 @@ export interface NexusGenObjects {
   }
   BuildingInProgress: BuildingInProgress;
   BuildingQueue: BuildingQueue;
-  BuildingSpot: { // root type
-    fieldId: number; // Int!
-    id: string; // ID!
-    level: NexusGenRootTypes['BuildingSpotLevel']; // BuildingSpotLevel!
-    type: number; // Int!
+  BuildingSpot: BuildingSpot;
+  BuildingSpotLevel: { // root type
+    actual: number; // Int!
+    ongoing?: number | null; // Int
+    queued?: number | null; // Int
+    state: NexusGenEnums['BuildingState']; // BuildingState!
+    total: number; // Int!
   }
-  BuildingSpotLevel: BuildingSpotLevel;
   BuildingSpots: { // root type
     infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
@@ -598,6 +600,7 @@ export interface NexusGenFieldTypes {
     actual: number; // Int!
     ongoing: number | null; // Int
     queued: number | null; // Int
+    state: NexusGenEnums['BuildingState']; // BuildingState!
     total: number; // Int!
   }
   BuildingSpots: { // field return type
@@ -1033,6 +1036,7 @@ export interface NexusGenFieldTypeNames {
     actual: 'Int'
     ongoing: 'Int'
     queued: 'Int'
+    state: 'BuildingState'
     total: 'Int'
   }
   BuildingSpots: { // field return type name

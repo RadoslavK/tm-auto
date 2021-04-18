@@ -204,12 +204,20 @@ type BuildingSpotLevel {
   actual: Int!
   ongoing: Int
   queued: Int
+  state: BuildingState!
   total: Int!
 }
 
 type BuildingSpots {
   infrastructure: [BuildingSpot!]!
   resources: ResourceFields!
+}
+
+enum BuildingState {
+  Completed
+  None
+  OngoingMaxed
+  QueueMaxed
 }
 
 enum ClaimHeroResourcesReason {

@@ -1,5 +1,6 @@
 import {
   arg,
+  enumType,
   idArg,
   inputObjectType,
   objectType,
@@ -7,11 +8,42 @@ import {
   subscriptionField,
 } from 'nexus';
 import { join } from 'path';
+import {
+  BuildingState,
+  buildingStates,
+} from 'shared/enums/BuildingState.js';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { getDirname } from 'shared/utils/getDirname.js';
 
+import type { BuildingSpotLevel as BuildingSpotLevelModel } from '../../_models/buildings/spots/buildingSpotLevel.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
+import type { NexusGenObjects } from '../graphqlSchema.js';
+
+export const BuildingStateEnum = enumType({
+  name: 'BuildingState',
+  members: buildingStates,
+});
+
+const getBuildingSpotState = (level: BuildingSpotLevelModel, maxLevel: number): BuildingState => {
+  const isCompleted = level.actual === maxLevel;
+  const isMaxed = level.getTotal() === maxLevel;
+  const isOngoingMaxed = level.ongoing === maxLevel;
+
+  if (isCompleted) {
+    return 'Completed';
+  }
+
+  if (isOngoingMaxed) {
+    return 'OngoingMaxed';
+  }
+
+  if (isMaxed) {
+    return 'QueueMaxed';
+  }
+
+  return 'None';
+};
 
 export const BuildingSpotLevel = objectType({
   name: 'BuildingSpotLevel',
@@ -19,13 +51,8 @@ export const BuildingSpotLevel = objectType({
     t.int('actual');
     t.nullable.int('ongoing');
     t.nullable.int('queued');
-    t.int('total', {
-      resolve: (level) => level.getTotal(),
-    });
-  },
-  sourceType: process.env.shouldGenerateArtifacts && {
-    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpotLevel.ts'),
-    export: 'BuildingSpotLevel',
+    t.int('total');
+    t.field('state', { type: BuildingStateEnum });
   },
 });
 
@@ -49,6 +76,13 @@ export const BuildingSpot = objectType({
     t.int('fieldId');
     t.field('level', {
       type: BuildingSpotLevel,
+      resolve: ({ level, type }, _, ctx): NexusGenObjects['BuildingSpotLevel'] => ({
+        actual: level.actual,
+        ongoing: level.ongoing,
+        queued: level.queued,
+        total: level.getTotal(),
+        state: getBuildingSpotState(level, ctx.buildingInfoService.getBuildingInfo(type).maxLevel),
+      }),
     });
     t.int('type');
     t.string('name', {
@@ -57,6 +91,10 @@ export const BuildingSpot = objectType({
     t.int('maxLevel', {
       resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).maxLevel,
     });
+  },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpot.ts'),
+    export: 'BuildingSpot',
   },
 });
 
