@@ -103,7 +103,6 @@
 
 ## UX
 
-- Better village tabs (buildings/units) design
 - Show which village tab is highlighted: buildings/units...
 - Add relevant tooltips in UI
 - Remove scrolling from the main app window

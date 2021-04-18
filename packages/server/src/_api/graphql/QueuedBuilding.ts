@@ -112,7 +112,7 @@ export const BuildingQueue = objectType({
         );
       },
     });
-    //  TODO compute these only for Roman
+    //  TODO compute these only for Roman and when the split queue is allowed in settings
     t.field('resourcesBuildingTime', {
       type: 'Duration',
       resolve: (queue, _args, ctx) => {

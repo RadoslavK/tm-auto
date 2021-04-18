@@ -66,7 +66,6 @@ export type BotEventPayloads = {
     readonly settings: HeroLevelUpSettings;
   };
 
-  // TODO when subscribeToEvent is typed properly we can pass values directly rather than this
   [BotEvent.BotActivityChanged]: {
     readonly isActive: boolean;
   };

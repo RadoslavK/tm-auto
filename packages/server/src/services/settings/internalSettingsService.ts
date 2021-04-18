@@ -1,7 +1,4 @@
-import debouncePkg from 'debounce';
-//  TODO: debounce is CommonJS.. some automatic resolution like SnowPack namedExports
-const { debounce } = debouncePkg;
-
+import { debounce } from 'debounce';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
