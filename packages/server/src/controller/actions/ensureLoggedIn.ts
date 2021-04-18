@@ -52,17 +52,10 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   const acceptCookies = await page.$('#cmpbntyestxt');
   acceptCookies?.click();
 
-  //  TODO verify successful login action
   await Promise.all([
-    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    page.waitForSelector('form[name=login] button[type=submit]', { hidden: true }),
     page.click('form[name=login] button[type=submit]'),
   ]);
 
   AccountContext.getContext().logsService.logText('Logged in.');
-
-  const loginFormAfterLogIn = await page.$('form[name=login]');
-
-  if (loginFormAfterLogIn) {
-    throw new Error('Found login form after login');
-  }
 };
