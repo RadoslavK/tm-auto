@@ -7,7 +7,7 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { DualQueuePreferences } from 'server/_models/settings/tasks/autoBuildSettings/index.js';
+import { dualQueuePreferences } from 'shared/enums/DualQueuePreference.js';
 
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
@@ -48,7 +48,7 @@ export const UpdateAutoStorageSettingsInput = inputObjectType({
 
 const DualQueuePreferenceEnum = enumType({
   name: "DualQueuePreference",
-  members: DualQueuePreferences,
+  members: dualQueuePreferences,
 });
 
 export const DualQueueSettings = objectType({

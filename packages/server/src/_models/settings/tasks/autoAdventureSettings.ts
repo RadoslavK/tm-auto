@@ -1,15 +1,12 @@
+import type { AdventureCriteria } from 'shared/enums/AdventureCriteria.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
 
-export const AdventureCriterias = ['Closest', 'Furthest', 'Random'] as const;
-export type AdventureCriteria = typeof AdventureCriterias[number];
-
 export class AutoAdventureSettings {
-  public readonly adventureCriteria: AdventureCriteria =
-    'Closest';
+  public readonly adventureCriteria: AdventureCriteria = 'Closest';
 
   public readonly allow: boolean = true;
 

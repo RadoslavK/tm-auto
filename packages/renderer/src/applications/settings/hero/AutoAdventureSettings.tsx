@@ -12,6 +12,7 @@ import {
   useSubscription,
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import { adventureCriterias } from 'shared/enums/AdventureCriteria.js';
 import { TaskType } from 'shared/enums/TaskType.js';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
@@ -258,8 +259,7 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
       <div>
         <label htmlFor="adventureCriteria">Adventure criteria</label>
         <div id="adventureCriteria">
-          {/*TODO*/}
-          {['Closest', 'Furthest', 'Random'].map((option) => (
+          {adventureCriterias.map((option) => (
             <React.Fragment key={option}>
               <input
                 checked={option === adventureCriteria}

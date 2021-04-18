@@ -7,14 +7,14 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
+import { adventureCriterias } from 'shared/enums/AdventureCriteria.js';
 
-import { AdventureCriterias } from '../../../../_models/settings/tasks/autoAdventureSettings.js';
 import { BotEvent } from '../../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../../pubSub.js';
 
 export const AdventureCriteriaEnum = enumType({
   name: "AdventureCriteria",
-  members: AdventureCriterias,
+  members: adventureCriterias,
 });
 
 export const AutoAdventureSettings = objectType({

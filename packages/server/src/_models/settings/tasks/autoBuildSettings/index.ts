@@ -1,3 +1,4 @@
+import type { DualQueuePreference } from 'shared/enums/DualQueuePreference.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
@@ -9,9 +10,6 @@ type DualQueueSettings = {
   readonly allow: boolean;
   readonly preference: DualQueuePreference;
 };
-
-export const DualQueuePreferences = ['Resources', 'Infrastructure'] as const;
-export type DualQueuePreference = typeof DualQueuePreferences[number];
 
 export class AutoBuildSettings {
   readonly allow: boolean = true;

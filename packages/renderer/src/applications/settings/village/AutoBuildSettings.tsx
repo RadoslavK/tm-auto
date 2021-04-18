@@ -11,6 +11,7 @@ import {
   usePreloadedQuery,
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
+import { dualQueuePreferences } from 'shared/enums/DualQueuePreference.js';
 
 import type { AutoBuildSettingsQuery } from '../../../_graphql/__generated__/AutoBuildSettingsQuery.graphql.js';
 import type { AutoBuildSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoBuildSettingsResetSettingsMutation.graphql.js';
@@ -307,8 +308,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId, queryRef }) => {
               name="dualQueuePreference"
               value={dualQueuePreference}
               onChange={onPreferenceChange}>
-              {/*TODO*/}
-              {['Resources', 'Infrastructure'].map((preference) => (
+              {dualQueuePreferences.map((preference) => (
                 <option
                   key={preference}
                   value={preference}

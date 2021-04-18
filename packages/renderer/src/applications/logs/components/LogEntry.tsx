@@ -21,7 +21,6 @@ type Props = {
 
 type Content = LogEntry_logEntry['content'];
 
-// TODO: refactor this
 const getContentNode = (
   content: Content,
   className: string,

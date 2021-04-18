@@ -18,7 +18,6 @@
 - Use NPC for missing resources
   - For specific buildings/units (+ amounts)...
   - When having at least X resources or overflow etc
-- Smithy upgrades
 - Farming
   - Overview of unit movements, returning/attacking, amounts and resources they carry
 - Building pre-conditions
