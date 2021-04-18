@@ -33,7 +33,6 @@ const fragmentDef = graphql`
             }
         }
         autoParty
-        autoStart
         autoUnits
         autoAcademy
         autoSmithy
@@ -143,7 +142,6 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
     allowTasks,
     autoBuild,
     autoParty,
-    autoStart,
     autoUnits,
     autoAcademy,
     autoSmithy,
@@ -163,17 +161,6 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
         </Button>
       </div>
       <div>
-        <div>
-          <label htmlFor="autoStart">Start after sign in</label>
-          <input
-            checked={autoStart}
-            id="autoStart"
-            name="autoStart"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
-
         <h2>Tasks</h2>
 
         <div>

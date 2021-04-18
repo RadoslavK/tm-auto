@@ -31,7 +31,6 @@ export const AccountSettings = objectType({
   definition: t => {
     t.boolean('allowTasks');
     t.field('tasksCoolDown', { type: 'CoolDown' });
-    t.boolean('autoStart');
     t.field('autoBuild', { type: GlobalAutoBuildSettings });
     t.boolean('autoUnits');
     t.boolean('autoParty');
@@ -63,7 +62,6 @@ export const UpdateAccountSettingsInput = inputObjectType({
     t.field('tasksCoolDown', { type: 'CoolDownInput' });
     t.field('autoBuild', { type: GlobalAutoBuildSettingsInput });
     t.boolean('autoUnits');
-    t.boolean('autoStart');
     t.boolean('autoParty');
     t.boolean('autoAcademy');
     t.boolean('autoSmithy');

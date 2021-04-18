@@ -112,7 +112,6 @@ export interface NexusGenInputs {
     autoBuild: NexusGenInputs['GlobalAutoBuildSettingsInput']; // GlobalAutoBuildSettingsInput!
     autoParty: boolean; // Boolean!
     autoSmithy: boolean; // Boolean!
-    autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
   }
@@ -172,6 +171,7 @@ export interface NexusGenInputs {
     trainForever: boolean; // Boolean!
   }
   UpdateGeneralSettingsInput: { // input type
+    autoStart: boolean; // Boolean!
     chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
@@ -211,7 +211,6 @@ export interface NexusGenObjects {
     autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
     autoSmithy: boolean; // Boolean!
-    autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
   }
@@ -340,6 +339,7 @@ export interface NexusGenObjects {
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // root type
+    autoStart: boolean; // Boolean!
     chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
@@ -471,7 +471,6 @@ export interface NexusGenFieldTypes {
     autoBuild: NexusGenRootTypes['GlobalAutoBuildSettings']; // GlobalAutoBuildSettings!
     autoParty: boolean; // Boolean!
     autoSmithy: boolean; // Boolean!
-    autoStart: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
   }
@@ -632,6 +631,7 @@ export interface NexusGenFieldTypes {
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // field return type
+    autoStart: boolean; // Boolean!
     chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
@@ -906,7 +906,6 @@ export interface NexusGenFieldTypeNames {
     autoBuild: 'GlobalAutoBuildSettings'
     autoParty: 'Boolean'
     autoSmithy: 'Boolean'
-    autoStart: 'Boolean'
     autoUnits: 'Boolean'
     tasksCoolDown: 'CoolDown'
   }
@@ -1067,6 +1066,7 @@ export interface NexusGenFieldTypeNames {
     tribe: 'Tribe'
   }
   GeneralSettings: { // field return type name
+    autoStart: 'Boolean'
     chromePath: 'String'
     headlessChrome: 'Boolean'
   }

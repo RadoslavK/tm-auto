@@ -31,6 +31,7 @@ import { publishPayloadEvent } from '../pubSub.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 import { shuffle } from '../utils/shuffle.js';
 import { accountService } from './accountService.js';
+import { GeneralSettingsService } from './settings/general.js';
 
 type HandleErrorResult = {
   readonly allowContinue: boolean;
@@ -265,7 +266,7 @@ export class ControllerService {
       return;
     }
 
-    const generalSettings = AccountContext.getContext().settingsService.account.get();
+    const generalSettings = GeneralSettingsService.getService().get();
 
     if (generalSettings.autoStart) {
       await this.start();

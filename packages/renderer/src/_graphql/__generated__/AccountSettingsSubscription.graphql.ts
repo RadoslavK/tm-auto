@@ -39,7 +39,6 @@ fragment AccountSettings_accountSettings on AccountSettings {
     }
   }
   autoParty
-  autoStart
   autoUnits
   autoAcademy
   autoSmithy
@@ -191,13 +190,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "autoStart",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "autoUnits",
             "storageKey": null
           },
@@ -252,12 +244,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "26538121e0e5c5183e5cc448b1849d6d",
+    "cacheID": "aeeb847e4f679dabf27a92c19dc07479",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsSubscription",
     "operationKind": "subscription",
-    "text": "subscription AccountSettingsSubscription {\n  accountSettingsUpdated {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "subscription AccountSettingsSubscription {\n  accountSettingsUpdated {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

@@ -9,6 +9,7 @@ import {
 export const GeneralSettings = objectType({
   name: 'GeneralSettings',
   definition: t => {
+    t.boolean('autoStart');
     t.string('chromePath');
     t.boolean('headlessChrome');
   },
@@ -24,6 +25,7 @@ export const GeneralSettingsQuery = queryField(t => {
 export const UpdateGeneralSettingsInput = inputObjectType({
   name: 'UpdateGeneralSettingsInput',
   definition: t => {
+    t.boolean('autoStart');
     t.string('chromePath');
     t.boolean('headlessChrome');
   },

@@ -5,6 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UpdateGeneralSettingsInput = {
+    autoStart: boolean;
     chromePath: string;
     headlessChrome: boolean;
 };
@@ -33,6 +34,7 @@ mutation GeneralSettingsFormUpdateSettingsMutation(
 }
 
 fragment GeneralSettingsForm_generalSettings on GeneralSettings {
+  autoStart
   chromePath
   headlessChrome
 }
@@ -98,6 +100,13 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "autoStart",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "chromePath",
             "storageKey": null
           },
@@ -114,12 +123,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c11c5d9035535416e55fccfbd409cb21",
+    "cacheID": "92f443a3bca8b362c62442c96dbc7b14",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  chromePath\n  headlessChrome\n}\n"
+    "text": "mutation GeneralSettingsFormUpdateSettingsMutation(\n  $settings: UpdateGeneralSettingsInput!\n) {\n  updateGeneralSettings(settings: $settings) {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  autoStart\n  chromePath\n  headlessChrome\n}\n"
   }
 };
 })();

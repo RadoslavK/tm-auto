@@ -10,7 +10,6 @@ export type UpdateAccountSettingsInput = {
     autoBuild: GlobalAutoBuildSettingsInput;
     autoParty: boolean;
     autoSmithy: boolean;
-    autoStart: boolean;
     autoUnits: boolean;
     tasksCoolDown: CoolDownInput;
 };
@@ -71,7 +70,6 @@ fragment AccountSettings_accountSettings on AccountSettings {
     }
   }
   autoParty
-  autoStart
   autoUnits
   autoAcademy
   autoSmithy
@@ -237,13 +235,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "autoStart",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "autoUnits",
             "storageKey": null
           },
@@ -298,12 +289,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9091ad2a6bb699c7458793e7d3dc5eff",
+    "cacheID": "5e8bdccac1c40cdb81b7288d5ffc3680",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

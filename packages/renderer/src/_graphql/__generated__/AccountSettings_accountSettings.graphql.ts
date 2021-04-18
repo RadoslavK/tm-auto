@@ -19,7 +19,6 @@ export type AccountSettings_accountSettings = {
         };
     };
     readonly autoParty: boolean;
-    readonly autoStart: boolean;
     readonly autoUnits: boolean;
     readonly autoAcademy: boolean;
     readonly autoSmithy: boolean;
@@ -143,13 +142,6 @@ return {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "autoStart",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "autoUnits",
       "storageKey": null
     },
@@ -203,5 +195,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'c86c5c3bd6c5af93516979bb55f7f6a7';
+(node as any).hash = 'f16f5a694b355122ee61b77179960ec0';
 export default node;

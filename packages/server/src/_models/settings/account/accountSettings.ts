@@ -17,8 +17,6 @@ export class AccountSettings {
 
   public readonly autoParty: boolean = true;
 
-  public readonly autoStart: boolean = false;
-
   public readonly autoUnits: boolean = true;
 
   public readonly autoAcademy: boolean = true;

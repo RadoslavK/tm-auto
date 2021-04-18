@@ -39,7 +39,6 @@ fragment AccountSettings_accountSettings on AccountSettings {
     }
   }
   autoParty
-  autoStart
   autoUnits
   autoAcademy
   autoSmithy
@@ -191,13 +190,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "autoStart",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "autoUnits",
             "storageKey": null
           },
@@ -252,12 +244,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "29e5720652084a6e294e00c09807c4eb",
+    "cacheID": "1019d775cc62ef4946451bd8d88a392f",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoStart\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

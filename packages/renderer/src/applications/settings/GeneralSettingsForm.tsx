@@ -15,6 +15,7 @@ import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/_
 
 const fragmentDef = graphql`
   fragment GeneralSettingsForm_generalSettings on GeneralSettings {
+    autoStart
     chromePath
     headlessChrome
   }
@@ -92,6 +93,18 @@ export const GeneralSettingsForm: React.FC<Props> = ({ settingsKey }) => {
   return (
     <div>
       <h1>General Settings</h1>
+
+      <div>
+        <label htmlFor="autoStart">Start after sign in</label>
+        <input
+          checked={state.autoStart}
+          id="autoStart"
+          name="autoStart"
+          onChange={onBoolChanges}
+          type="checkbox"
+        />
+      </div>
+
       <div>
         <Button
           color="primary"
