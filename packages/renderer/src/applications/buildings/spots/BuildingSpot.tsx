@@ -153,19 +153,10 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
   const onEnqueue = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ): void => {
-    if (
-      //  TODO handle on server
-      buildingSpotFragment.type !== BuildingType.None &&
-      buildingSpotFragment.level.total >= maxLevel
-    ) {
-      return;
-    }
-
     if (buildingSpotFragment.type !== BuildingType.None) {
       if (event.ctrlKey) {
         setDialog(DialogType.MultiEnqueue);
       } else {
-        //  TODO have max level flag option rather
         enqueue(event.shiftKey ? maxLevel : undefined);
       }
     } else {

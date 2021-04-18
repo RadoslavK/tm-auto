@@ -1,4 +1,4 @@
-import type { BuildingType } from 'shared/enums/BuildingType.js';
+import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
 import { buildingInfoService } from '../info/buildingInfoService.js';
@@ -28,7 +28,7 @@ export class EnqueueBuildingService extends VillageServiceBase {
     const totalLevel = spot.level.getTotal();
     const { maxLevel } = buildingInfoService.getBuildingInfo(type);
 
-    if (totalLevel >= maxLevel || (building.targetLevel && totalLevel >= building.targetLevel)) {
+    if ((spot.type !== BuildingType.None && totalLevel >= maxLevel) || (building.targetLevel && totalLevel >= building.targetLevel)) {
       return null;
     }
 
