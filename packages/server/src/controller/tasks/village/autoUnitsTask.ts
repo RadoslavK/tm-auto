@@ -112,9 +112,8 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     this._units.setQueue(type, unitQueue);
 
     const suitableToBuild: Record<number, number> = {};
-    const { hero } = AccountContext.getContext();
     const totalVillageResources =
-      settings.useHeroResources && hero.villageId === this._village.id
+      settings.useHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : this._village.resources.amount;
     let availableResources = new Resources(totalVillageResources);

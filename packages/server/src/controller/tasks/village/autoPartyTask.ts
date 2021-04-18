@@ -56,10 +56,9 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const { hero } = AccountContext.getContext();
     const villageRes = this._village.resources.amount;
     const totalRes =
-      useHeroResources && hero.villageId === this._village.id
+      useHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : villageRes;
     const smallPartyInfo = partyInfo.small;

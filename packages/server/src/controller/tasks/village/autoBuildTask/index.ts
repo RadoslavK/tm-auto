@@ -174,9 +174,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     await updateActualResources();
 
     const currentResources = this._village.resources.amount;
-    const { hero } = AccountContext.getContext();
     const totalResources =
-      settings.useHeroResources && hero.villageId === this._village.id
+      settings.useHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : currentResources;
 

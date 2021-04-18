@@ -13,6 +13,7 @@ import { unitResearchPrerequisites } from '../../../constants/unitResearchPrereq
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
 import { unitUpgradeCostService } from '../../../services/info/unitUpgradeCostService.js';
+import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
@@ -78,11 +79,9 @@ export class AutoAcademyTask implements BotTaskWithCoolDown {
       }
     }
 
-    const heroResources = AccountContext.getContext().hero.resources;
-
     const villageResources = this.village.resources.amount;
     const totalResources = useHeroResources
-      ? villageResources.add(heroResources)
+      ? mergeVillageAndHeroResources(this.village.id)
       : villageResources;
 
     const cost = unitUpgradeCostService.getUpgradeCost(unitIndex, 0);
