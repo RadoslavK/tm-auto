@@ -92,23 +92,22 @@ export class TaskManager {
 
     //  Scan not scanned villages first
     for (const village of notScannedVillages.concat(scannedVillages)) {
+      if (!village.scanned) {
+        //  New village, should always scan and it will get here because new village allows task by default
+        await ensureVillageSelected(village.id);
+        await collectTaskRewards();
+        await updateResources();
+        await updateBuildings();
+
+        village.scanned = true;
+        AccountContext.getContext().villageService.serialize([village.id]);
+
+        publishPayloadEvent(BotEvent.VillageUpdated, { village });
+      }
+
       if (
-        !AccountContext.getContext().settingsService.village(village.id).general.get()
-          .allowTasks
+        !AccountContext.getContext().settingsService.village(village.id).general.get().allowTasks
       ) {
-        if (!village.scanned) {
-          //  New village, should always scan
-          await ensureVillageSelected(village.id);
-          await collectTaskRewards();
-          await updateResources();
-          await updateBuildings();
-
-          village.scanned = true;
-          AccountContext.getContext().villageService.serialize([village.id]);
-
-          publishPayloadEvent(BotEvent.VillageUpdated, { village });
-        }
-
         continue;
       }
 
