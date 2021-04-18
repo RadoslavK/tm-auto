@@ -20,7 +20,6 @@
     "eslint-plugin-simple-import-sort": "^7.0.0"
   },
   "dependencies": {
-    "debounce": "^1.2.1",
     "graphql": "^15.5.0",
     "graphql-subscriptions": "^1.2.1",
     "iterall": "^1.3.0",
@@ -29,6 +28,7 @@
     "nexus": "^1.0.0",
     "node-html-parser": "^3.1.4",
     "node-ipc": "^9.1.4",
+    "p-debounce": "^3.0.2",
     "pubsub-js": "^1.9.3",
     "puppeteer-core": "^8.0.0",
     "puppeteer-extra": "^3.1.18",

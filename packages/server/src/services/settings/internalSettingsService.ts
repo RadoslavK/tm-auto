@@ -1,4 +1,4 @@
-import { debounce } from 'debounce';
+import debounce from 'p-debounce';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
