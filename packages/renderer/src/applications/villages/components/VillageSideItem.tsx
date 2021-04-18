@@ -21,6 +21,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     backgroundColor: '#1c5bbb',
     borderRadius: '50%',
     display: 'inline-block',
+    alignSelf: 'center',
     height: 12,
     marginLeft: 8,
     width: 12,
