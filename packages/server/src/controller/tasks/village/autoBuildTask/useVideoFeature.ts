@@ -26,18 +26,13 @@ export const useVideoFeature = async (): Promise<boolean> => {
   const watchVideoBtn = await page.$('.green[onclick*=showVideo]');
   await watchVideoBtn?.click();
 
-  try {
-    //  The ad can be more than the default 30s
-    await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60 * 1000 });
-  } catch (error) {
-    //  Maybe it bugged out and shown the modal pop up
-    const checkbox = await page.$('#dontShowThisAgain');
+  //  The ad can be more than the default 30s
+  await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60 * 1000 });
 
-    if (!checkbox) {
-      //  Something else
-      throw error;
-    }
+  //  Maybe it  shown the modal pop up
+  const checkbox = await page.$('#dontShowThisAgain');
 
+  if (checkbox) {
     await checkbox.click();
 
     const submitBtn = await page.$('.dialog form .ok.green.');
