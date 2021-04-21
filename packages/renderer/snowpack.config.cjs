@@ -30,6 +30,9 @@ module.exports = {
     hmrErrorOverlay: false,
   },
   packageOptions: {
+    external: [
+      'graphiql',
+    ],
     env: {
       ENV_NAME: true,
     },

@@ -103,6 +103,7 @@
 
 ## UX
 
+- Building Queue keeps scrolling after moving to top
 - Add DnD indicator icon for moved buildings and research units
 - Show which village tab is highlighted: buildings/units...
 - Add relevant tooltips in UI
