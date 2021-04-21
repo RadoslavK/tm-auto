@@ -26,6 +26,14 @@ import type {
   BotTaskWithCoolDownResult,
 } from '../../taskEngine/botTaskEngine.js';
 
+const parseAvailableUnits = async (): Promise<ReadonlyArray<number>> => {
+  const page = await getPage();
+
+  const units = await page.$$eval('.bigUnitSection .unitSection', nodes => nodes.map(node => /u(\d+)Section/.exec(node.className)?.[1]));
+
+  return units.filter(Boolean).map(Number);
+};
+
 export class AutoUnitsTask implements BotTaskWithCoolDown {
   private readonly _village: Village;
 
@@ -85,7 +93,7 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
 
     const unitsToBuild = buildingSettings.units;
 
-    const possibleUnitsToBuild = unitsToBuild.filter((unit) => unit.autoBuild);
+    let possibleUnitsToBuild = unitsToBuild.filter((unit) => unit.autoBuild);
     const buildingSpots = this._village.buildings.spots;
     const isUnitBuildingBuilt = buildingSpots.isBuilt(type);
 
@@ -107,6 +115,13 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     // select appropriate building
     await ensureBuildingSpotPage(unitBuilding.fieldId, unitBuilding.type, tab);
     await updateActualResources();
+
+    const availableUnits = await parseAvailableUnits();
+    possibleUnitsToBuild = possibleUnitsToBuild.filter(u => availableUnits.includes(u.index));
+
+    if (!possibleUnitsToBuild.length) {
+      return;
+    }
 
     const unitQueue = await parseUnitQueue();
     this._units.setQueue(type, unitQueue);
