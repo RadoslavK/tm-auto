@@ -158,10 +158,13 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     if (queuedBuilding.startingLevel === 1
       && [BuildingType.GrainMill, BuildingType.Bakery, BuildingType.Sawmill, BuildingType.Brickyard, BuildingType.IronFoundry].includes(queuedBuilding.type)) {
       // Used for Roman Dual Queue. If its resource enhancing infrastructure building, then it should meet prerequisites because fields might not have been built yet
-      const meetsRequirements = AccountContext.getContext().buildingQueueService.for(this._village.id).willQueuedBuildingStillMeetItsRequirements(queuedBuilding);
+      const meetsRequirements = AccountContext.getContext().buildingQueueService.for(this._village.id).willQueuedBuildingStillMeetItsRequirements({
+        checkedBuilding: queuedBuilding,
+        ignoreOngoing: true,
+      });
 
       if (!meetsRequirements) {
-        queuedBuilding = this._buildings.queue.peekNextBuilding(queuedBuilding);
+        queuedBuilding = this._buildings.queue.peekNextBuilding(queuedBuilding, type);
 
         if (!queuedBuilding) {
           return;
@@ -288,8 +291,6 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     queuedBuilding: QueuedBuilding,
     isQueued = true,
   ): Promise<void> => {
-    AccountContext.getContext().logsService.logAutoBuild(queuedBuilding);
-
     const page = await getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
     const { category } = buildingInfoService.getBuildingInfo(
@@ -319,6 +320,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         return;
       }
 
+      AccountContext.getContext().logsService.logAutoBuild(queuedBuilding);
+
       await Promise.all([
         submit.click(),
         page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
@@ -344,10 +347,14 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
           return;
         }
 
+        AccountContext.getContext().logsService.logAutoBuild(queuedBuilding);
+
         await Promise.all([
           submit.click(),
           page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
         ]);
+      } else {
+        AccountContext.getContext().logsService.logAutoBuild(queuedBuilding);
       }
     }
 

@@ -43,6 +43,12 @@ type DequeueParams = {
   readonly queueId: string;
 };
 
+type WillMeetRequirementsParams = {
+  readonly checkedBuilding: QueuedBuilding,
+  readonly offsets?: Offsets;
+  readonly ignoreOngoing?: boolean;
+};
+
 // key - fieldId, value - number of queued levels on that field
 class Offsets {
   private _offsets: Map<number, number> = new Map<number, number>();
@@ -322,7 +328,10 @@ export class BuildingQueueService {
     let newIndex: number | undefined;
 
     for (let i = 0; i < queueIndex; i++) {
-      if (this.willQueuedBuildingStillMeetItsRequirements(movedBuilding, offsets)) {
+      if (this.willQueuedBuildingStillMeetItsRequirements({
+        checkedBuilding: movedBuilding,
+        offsets,
+      })) {
         newIndex = i;
         break;
       }
@@ -394,7 +403,10 @@ export class BuildingQueueService {
 
         if (
           isGoingDown &&
-          !this.willQueuedBuildingStillMeetItsRequirements(qBuilding, offsets)
+          !this.willQueuedBuildingStillMeetItsRequirements({
+            checkedBuilding: qBuilding,
+            offsets,
+          })
         ) {
           this.updateCanMoveToIndexFlags(queueId, newIndex, false);
           return false;
@@ -425,10 +437,10 @@ export class BuildingQueueService {
     }
 
     const building = buildings[currentIndex];
-    const result = this.willQueuedBuildingStillMeetItsRequirements(
-      building,
+    const result = this.willQueuedBuildingStillMeetItsRequirements({
+      checkedBuilding: building,
       offsets,
-    );
+    });
     this.updateCanMoveToIndexFlags(queueId, newIndex, result);
     return result;
   };
@@ -466,14 +478,15 @@ export class BuildingQueueService {
     return queue;
   };
 
-  public willQueuedBuildingStillMeetItsRequirements = (
-    checkedBuilding: QueuedBuilding,
+  public willQueuedBuildingStillMeetItsRequirements = ({
+    checkedBuilding,
     offsets = new Offsets(),
-  ): boolean => {
+    ignoreOngoing = false,
+  }: WillMeetRequirementsParams): boolean => {
     const buildingSpots = this._village.buildings.spots.buildings();
 
     const getNewTotalLevel = (building: BuildingSpot): number =>
-      building.level.getActualAndOngoing() + offsets.getFor(building.fieldId);
+      (ignoreOngoing ? building.level.actual : building.level.getActualAndOngoing()) + offsets.getFor(building.fieldId);
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(checkedBuilding.type);
 
