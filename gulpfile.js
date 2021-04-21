@@ -25,18 +25,29 @@ const run = (command) => (callback) => {
 
 const buildMain = series(
   run('yarn workspace main build-prod'),
-  copy('./packages/main/dist-prod/**', './app/build/main/'),
+  copy('./packages/main/dist/**', './app/build/main/'),
 );
 
-const buildRenderer = series(
+const buildMainDev = series(
+  run('yarn workspace main build-dev'),
+  copy('./packages/main/dist-dev/**', './app/build-dev/main/'),
+);
+
+const buildRenderer = (isDev = false) => series(
   run('yarn workspace renderer build'),
-  copy('./packages/renderer/build/**', './app/build/renderer/'),
+  copy('./packages/renderer/build/**', `./app/build${isDev ? '-dev' : ''}/renderer/`),
 );
 
 const build = series(
   clean('build'),
-  parallel(buildRenderer, buildMain),
+  parallel(buildRenderer(), buildMain),
+);
+
+const buildDev = series(
+  clean('build-dev'),
+  parallel(buildRenderer(true), buildMainDev),
 );
 
 exports.default = build;
-exports.buildMain = buildMain;
+exports.buildDev = buildDev;
+exports.buildMainDev = buildMainDev;

@@ -3,8 +3,9 @@ module.exports = {
   ignorePatterns: [
     'node_modules',
     'build',
+    'build-dev',
     'dist',
-    'dist-prod',
+    'dist-dev',
     '*.json',
     '*.graphql',
     '*.json',

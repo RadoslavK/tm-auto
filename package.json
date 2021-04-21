@@ -16,10 +16,11 @@
     "shared": "yarn workspace shared",
     "nexus": "yarn server nexus",
     "relay": "yarn renderer relay",
-    "build": "gulp",
-    "build-main": "gulp buildMain",
     "postinstall": "electron-builder install-app-deps",
-    "start": "electron app/build/main/index.cjs",
+    "build-dev": "gulp buildDev",
+    "build-main-dev": "gulp buildMainDev",
+    "start-dev": "electron app/build-dev/main/index.cjs",
+    "build": "gulp",
     "dist": "electron-builder"
   },
   "build": {

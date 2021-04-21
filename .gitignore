@@ -5,8 +5,9 @@
 .cache
 # produced build
 build
+build-dev
 dist
-dist-prod
+dist-dev
 
 yarn-error.log
 node_modules

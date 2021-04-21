@@ -12,7 +12,7 @@ const options = {
     'process.env.NODE_ENV': `"${process.argv[2]}"`,
   },
   logLevel: 'warning',
-  outdir: isDevelopment ? 'dist' : 'dist-prod',
+  outdir: isDevelopment ? 'dist-dev' : 'dist',
   format: 'cjs',
   outExtension: {
     '.js': '.cjs',
