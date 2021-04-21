@@ -34,3 +34,5 @@ export const createFormatter = (formatAgainst?: number) => (
 
   return formatNumber(amountLeft, 1) + valueUnit;
 };
+
+export const defaultFormatter = createFormatter();

@@ -6,7 +6,10 @@ import { useFragment } from 'react-relay/hooks';
 
 import type { Resources_resources$key } from '../../_graphql/__generated__/Resources_resources.graphql.js';
 import { imageLinks } from '../../utils/imageLinks.js';
-import { createFormatter } from '../../utils/numberFormatting.js';
+import {
+  createFormatter,
+  defaultFormatter,
+} from '../../utils/numberFormatting.js';
 
 const useStyles = makeStyles({
   root: {
@@ -66,36 +69,34 @@ export const Resources: React.FC<Props> = ({
   showFreeCrop,
 }) => {
   const classes = useStyles();
-  const resourcesFragment = useFragment(fragmentDefinition, resourcesKey);
+  const {
+    wood,
+    clay,
+    iron,
+    crop,
+    freeCrop,
+    total,
+  } = useFragment(fragmentDefinition, resourcesKey);
 
-  const highestResource = Math.max(
-    resourcesFragment.wood,
-    resourcesFragment.clay,
-    resourcesFragment.iron,
-    resourcesFragment.crop,
-  );
-  const formatResources = createFormatter(highestResource);
-  const formatTotal = createFormatter();
-  const formatFreeCrop = createFormatter();
+  const highestResource = Math.max(wood, clay, iron, crop);
+  const resourcesFormatter = createFormatter(highestResource);
 
   return (
     <div className={classes.root}>
       <span className={clsx(classes.image, classes.wood)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.wood)}</span>
+      <span className={classes.value} title={String(wood)}>{resourcesFormatter(wood)}</span>
       <span className={clsx(classes.image, classes.clay)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.clay)}</span>
+      <span className={classes.value} title={String(clay)}>{resourcesFormatter(clay)}</span>
       <span className={clsx(classes.image, classes.iron)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.iron)}</span>
+      <span className={classes.value} title={String(iron)}>{resourcesFormatter(iron)}</span>
       <span className={clsx(classes.image, classes.crop)} />
-      <span className={classes.value}>{formatResources(resourcesFragment.crop)}</span>
+      <span className={classes.value} title={String(crop)}>{resourcesFormatter(crop)}</span>
       <span className={clsx(classes.image, classes.total)} />
-      <span className={classes.value}>{formatTotal(resourcesFragment.total)}</span>
+      <span className={classes.value} title={String(total)}>{defaultFormatter(total)}</span>
       {showFreeCrop !== false && (
         <>
           <span className={clsx(classes.image, classes.freeCrop)} />
-          <span className={classes.value}>
-            {formatFreeCrop(resourcesFragment.freeCrop)}
-          </span>
+          <span className={classes.value} title={String(freeCrop)}>{defaultFormatter(freeCrop)}</span>
         </>
       )}
     </div>

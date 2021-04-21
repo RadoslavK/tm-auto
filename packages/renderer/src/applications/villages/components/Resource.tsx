@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import React from 'react';
 
 import { imageLinks } from '../../../utils/imageLinks.js';
-import { createFormatter } from '../../../utils/numberFormatting.js';
+import { defaultFormatter } from '../../../utils/numberFormatting.js';
 
 type ResourceName = keyof typeof imageLinks.resources;
 
@@ -59,23 +59,21 @@ type Props = {
 export const Resource: React.FC<Props> = ({
   amount,
   capacity,
-  capacityFormatter,
+  capacityFormatter = defaultFormatter,
   production,
-  resourceFormatter,
+  resourceFormatter = defaultFormatter,
   resourceName,
 }) => {
   const classes = useStyles({ production, resourceName });
-  const formatResources = resourceFormatter || createFormatter();
-  const formatCapacity = capacityFormatter || createFormatter();
 
   return (
     <span className={classes.root}>
       <span className={classes.image} />
-      <span>{formatResources(amount)}</span>
-      {capacity !== undefined && <span>/{formatCapacity(capacity)}</span>}
+      <span title={String(amount)}>{resourceFormatter(amount)}</span>
+      {capacity !== undefined && <span title={String(capacity)}>/{capacityFormatter(capacity)}</span>}
       {production !== undefined && (
-        <span className={classes.production}>
-          {createFormatter()(production)}
+        <span className={classes.production} title={String(production)}>
+          {defaultFormatter(production)}
         </span>
       )}
     </span>
