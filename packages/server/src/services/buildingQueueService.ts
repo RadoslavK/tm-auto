@@ -466,9 +466,9 @@ export class BuildingQueueService {
     return queue;
   };
 
-  private willQueuedBuildingStillMeetItsRequirements = (
+  public willQueuedBuildingStillMeetItsRequirements = (
     checkedBuilding: QueuedBuilding,
-    offsets: Offsets,
+    offsets = new Offsets(),
   ): boolean => {
     const buildingSpots = this._village.buildings.spots.buildings();
 

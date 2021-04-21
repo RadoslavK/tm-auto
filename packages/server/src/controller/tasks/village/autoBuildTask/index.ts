@@ -149,10 +149,24 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const queuedBuilding = this._buildings.queue.peek(type);
+    let queuedBuilding = this._buildings.queue.peek(type);
 
     if (!queuedBuilding) {
       return;
+    }
+
+    if (queuedBuilding.startingLevel === 1
+      && [BuildingType.GrainMill, BuildingType.Bakery, BuildingType.Sawmill, BuildingType.Brickyard, BuildingType.IronFoundry].includes(queuedBuilding.type)) {
+      // Used for Roman Dual Queue. If its resource enhancing infrastructure building, then it should meet prerequisites because fields might not have been built yet
+      const meetsRequirements = AccountContext.getContext().buildingQueueService.for(this._village.id).willQueuedBuildingStillMeetItsRequirements(queuedBuilding);
+
+      if (!meetsRequirements) {
+        queuedBuilding = this._buildings.queue.peekNextBuilding(queuedBuilding);
+
+        if (!queuedBuilding) {
+          return;
+        }
+      }
     }
 
     await this.startBuildingIfQueueIsFree(queuedBuilding);

@@ -32,6 +32,12 @@ export class BuildingQueue {
       ? this._buildings[0]
       : this._buildings.find((x) => getBuildingSpotType(x.type) === type);
 
+  public peekNextBuilding = (building: QueuedBuilding): QueuedBuilding | undefined => {
+    const index = this._buildings.indexOf(building);
+
+    return this._buildings[index + 1];
+  }
+
   public peekLast = (): QueuedBuilding | undefined => this._buildings.length
     ? this._buildings[this._buildings.length - 1]
     : undefined;
