@@ -35,7 +35,7 @@ export const useVideoFeature = async (): Promise<boolean> => {
   if (checkbox) {
     await checkbox.click();
 
-    const submitBtn = await page.$('.dialog form .ok.green.');
+    const submitBtn = await page.$('.dialog form .ok.green');
 
     if (!submitBtn) {
       throw new Error('Did not find submit button for hiding of video construction use');
