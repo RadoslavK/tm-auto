@@ -68,7 +68,7 @@ export const BuildingSpots: React.FC<Props> = ({
   buildingSpotsKey,
   className,
 }) => {
-  const classes = useStyles({});
+  const classes = useStyles();
   const buildingSpots = useFragment(buildingSpotsFragment, buildingSpotsKey);
   const villageId = useRecoilValue(selectedVillageIdState);
 

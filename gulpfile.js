@@ -30,7 +30,7 @@ const buildMain = series(
 );
 
 const buildMainDev = series(
-  run('yarn workspace main build-dev'),
+  run('yarn workspace main build-dev-app'),
   copy('./packages/main/dist-dev/**', './app/build-dev/main/'),
 );
 

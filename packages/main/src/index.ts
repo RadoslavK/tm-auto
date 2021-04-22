@@ -19,6 +19,7 @@ import { findOpenSocket } from './ipc/findOpenSocket.js';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const preferClientFromUrl = process.env.preferClientFromUrl;
+const serverDebugPort = process.env.serverDebugPort;
 
 let serverProcess: ChildProcess | null = null;
 
@@ -151,7 +152,7 @@ const createBackgroundProcess = (socketName: string): void => {
       socketName,
     },
     execArgv: isDevelopment
-      ? ['--inspect=9220', '--enable-source-maps', '--es-module-specifier-resolution=node']
+      ? [`--inspect=${serverDebugPort}`, '--enable-source-maps', '--es-module-specifier-resolution=node']
       : undefined,
     silent: true,
   };

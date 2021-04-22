@@ -1,7 +1,8 @@
 import { build } from 'esbuild';
 
 const isDevelopment = process.argv[2] !== 'production';
-const preferClientFromUrl = process.argv[3] === 'preferClientFromUrl';
+const preferClientFromUrl = process.argv[3] === 'true';
+const serverDebugPort = process.argv[4] ? Number(process.argv[4]) : 9220;
 
 //  Electron does not support ESM yet // https://github.com/electron/electron/issues/21457
 /** @type(import("esbuild").BuildOptions) */
@@ -12,6 +13,7 @@ const options = {
   define: {
     'process.env.NODE_ENV': `"${process.argv[2]}"`,
     'process.env.preferClientFromUrl': preferClientFromUrl,
+    'process.env.serverDebugPort': serverDebugPort,
   },
   logLevel: 'warning',
   outdir: isDevelopment ? 'dist-dev' : 'dist',

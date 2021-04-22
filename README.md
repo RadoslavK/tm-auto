@@ -1,7 +1,8 @@
 Debugging (Attach to remote process in WS):
 * Renderer port: 9222
 * Main port: 9229
-* Server port: 9220
+* Server port from app folder: 9221
+* Server port from main folder: 9220
 
 The server/package.json must include entries .js -> .ts for snowpack HMR. It cannot resolve them otherwise.
 
