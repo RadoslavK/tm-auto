@@ -17,7 +17,9 @@ import { scanSector } from './utils/scanSector.js';
 
 // 1 - 3
 // zoomLevel - 1 = 11x9, 2 = 21x17, 3 = 31x31
-const zoomLevel = 3;
+export const maxZoomLevel = 3;
+//  On Shadow Empires/Factions map, zoom level 3 shows region names only.
+const factionsZoomLevel = 2;
 
 type CurrentScan = {
   readonly progress: number;
@@ -133,11 +135,12 @@ export class MapScanService {
     });
 
     const {
-      gameInfo: { mapSize },
+      gameInfo: { factions, mapSize },
     } = AccountContext.getContext();
 
     const scannedSectorIds = new Set<string>(await this.getScannedSectorIds());
 
+    const zoomLevel = factions ? factionsZoomLevel : maxZoomLevel;
     const sectorSize = getSectorSize(zoomLevel);
     const allSectors = getAllSectors({ mapSize, sectorSize });
 

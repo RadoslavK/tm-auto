@@ -14,6 +14,8 @@ export type Token = {
 };
 
 export class GameInfo {
+  public factions: boolean = false;
+
   public parsed: boolean = false;
 
   public allyId: number | null = null;

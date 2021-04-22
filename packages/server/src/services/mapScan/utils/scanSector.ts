@@ -4,6 +4,7 @@ import type { Point } from '../../../_models/map/point.js';
 import type { VillageTile } from '../../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../../_models/map/wheatOasis.js';
 import { sendAjaxRequest } from '../../../utils/sendAjaxRequest.js';
+import { maxZoomLevel } from '../mapScanService.js';
 import { getClaimedVillageTileType } from './getClaimedVillageTileType.js';
 import { getPointId } from './getPointId.js';
 import { getSectorSize } from './getSectorSize.js';
@@ -97,7 +98,7 @@ export const scanSector = async ({
         ignorePositions: [],
         x: sector.x,
         y: sector.y,
-        zoomLevel: Math.max(Math.min(zoomLevel, 3), 1),
+        zoomLevel: Math.max(Math.min(zoomLevel, maxZoomLevel), 1),
       },
     },
     page,
