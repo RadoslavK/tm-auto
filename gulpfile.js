@@ -5,6 +5,7 @@ const {
   parallel,
   series,
   src,
+  task,
 } = require('gulp');
 
 const clean = (path) => () => {

@@ -18,6 +18,7 @@ import url from 'url';
 import { findOpenSocket } from './ipc/findOpenSocket.js';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const preferClientFromUrl = process.env.preferClientFromUrl;
 
 let serverProcess: ChildProcess | null = null;
 
@@ -96,7 +97,7 @@ const createClientWindow = async (socketName: string): Promise<void> => {
 
   let loaded = false;
 
-  if (isDevelopment) {
+  if (isDevelopment && preferClientFromUrl) {
     do {
       try {
         await clientWin.loadURL('http://localhost:8080');

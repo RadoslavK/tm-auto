@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "build-prod": "node build.mjs production",
-    "build-dev": "node build.mjs development",
+    "build-dev": "node build.mjs development preferClientFromUrl",
     "start": "electron dist-dev/index.cjs",
     "start-r": "yarn build-dev&& yarn start",
     "typecheck": "tsc --noEmit",

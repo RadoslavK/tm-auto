@@ -8,7 +8,9 @@
   "engines": {
     "node": ">=14.16"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "main": "yarn workspace main",
     "server": "yarn workspace server",
