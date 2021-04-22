@@ -4,6 +4,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
+export type BuildingState = "Completed" | "None" | "OngoingMaxed" | "QueueMaxed";
 export type BuildingSpot_buildingSpot = {
     readonly name: string;
     readonly maxLevel: number;
@@ -14,6 +15,7 @@ export type BuildingSpot_buildingSpot = {
         readonly ongoing: number | null;
         readonly queued: number | null;
         readonly total: number;
+        readonly state: BuildingState;
         readonly " $fragmentRefs": FragmentRefs<"BuildingLevelBox_buildingSpotLevel">;
     };
     readonly " $refType": "BuildingSpot_buildingSpot";
@@ -97,6 +99,13 @@ const node: ReaderFragment = {
           "storageKey": null
         },
         {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "state",
+          "storageKey": null
+        },
+        {
           "args": null,
           "kind": "FragmentSpread",
           "name": "BuildingLevelBox_buildingSpotLevel"
@@ -108,5 +117,5 @@ const node: ReaderFragment = {
   "type": "BuildingSpot",
   "abstractKey": null
 };
-(node as any).hash = '3e1426b61868347d34be61b1b44081a4';
+(node as any).hash = '591f35042166d48df7636c98edc528e5';
 export default node;

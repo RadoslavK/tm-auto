@@ -46,6 +46,7 @@ fragment BuildingSpot_buildingSpot on BuildingSpot {
     ongoing
     queued
     total
+    state
     ...BuildingLevelBox_buildingSpotLevel
   }
 }
@@ -194,12 +195,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "df20e8d0de0ef99d54c718c855878a28",
+    "cacheID": "e66cb25ccd34219293ade9aaf087158e",
     "id": null,
     "metadata": {},
     "name": "BuildingSpotsSubscription",
     "operationKind": "subscription",
-    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  state\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
+    "text": "subscription BuildingSpotsSubscription(\n  $villageId: ID!\n) {\n  onBuildingSpotUpdated(villageId: $villageId) {\n    ...BuildingSpot_buildingSpot\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  state\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    state\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n"
   }
 };
 })();

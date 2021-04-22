@@ -234,6 +234,7 @@ export class BuildingQueueService {
 
       return {
         removedBuildings,
+        updatedBuilding: buildingToCorrect,
       };
     } else {
       // Dequeue 1 level only

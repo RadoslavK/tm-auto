@@ -55,6 +55,7 @@ const buildingSpotBuildingSpotFragment = graphql`
             ongoing
             queued
             total
+            state
             ...BuildingLevelBox_buildingSpotLevel
         }
     }
@@ -153,8 +154,12 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
   const onEnqueue = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ): void => {
+    if (buildingSpotFragment.level.state !== 'None'){
+      return;
+    }
+
     if (buildingSpotFragment.type !== BuildingType.None) {
-      if (event.ctrlKey) {
+      if (event.ctrlKey && buildingSpotFragment.level.total + 1 < maxLevel) {
         setDialog(DialogType.MultiEnqueue);
       } else {
         enqueue(event.shiftKey ? maxLevel : undefined);
@@ -172,7 +177,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
       return;
     }
 
-    if (event.ctrlKey) {
+    if (event.ctrlKey && ((buildingSpotFragment.level.ongoing ?? buildingSpotFragment.level.actual) + 1 !== buildingSpotFragment.level.queued)) {
       setDialog(DialogType.MultiDequeue);
     } else {
       dequeueAtField({
