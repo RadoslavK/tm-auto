@@ -11,16 +11,24 @@ import {
 } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
+import type { SelectorStoreUpdater } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { NextVillageTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextVillageTaskExecution_timestamp.graphql.js';
-import type { NextVillageTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
+import type {
+  NextVillageTaskExecutionResetMutation,
+  NextVillageTaskExecutionResetMutationResponse,
+} from '../../../_graphql/__generated__/NextVillageTaskExecutionResetMutation.graphql.js';
 import type {
   NextVillageTaskExecutionSetMutation,
+  NextVillageTaskExecutionSetMutationResponse,
   TaskType,
 } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
-import type { NextVillageTaskExecutionSubscription } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
+import type {
+  NextVillageTaskExecutionSubscription,
+  NextVillageTaskExecutionSubscriptionResponse,
+} from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
@@ -29,6 +37,9 @@ import { NextExecutionForm } from './NextExecutionForm.js';
 type Props = {
   readonly task: TaskType;
   readonly timestamp: NextVillageTaskExecution_timestamp$key;
+  readonly resetUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionResetMutationResponse>;
+  readonly setUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionSetMutationResponse>;
+  readonly subscriptionUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionSubscriptionResponse>;
 };
 
 const fragmentDef = graphql`
@@ -61,7 +72,13 @@ const subscription = graphql`
   }
 `;
 
-export const NextVillageTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
+export const NextVillageTaskExecution: React.FC<Props> = ({
+  task,
+  timestamp,
+  resetUpdater,
+  setUpdater,
+  subscriptionUpdater,
+}) => {
   const villageId = useRecoilValue(selectedVillageIdState);
   const nextVillageTaskExecution = useFragment(fragmentDef, timestamp);
   const [setNextExecution] = useMutation<NextVillageTaskExecutionSetMutation>(setMutation);
@@ -70,11 +87,11 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, timestamp }) =
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<NextVillageTaskExecutionSubscription> => ({
     subscription,
     variables: { task, villageId },
-    updater: (store) => {
+    updater: subscriptionUpdater || ((store) => {
       const newRecord = store.getRootField('nextVillageTaskExecutionChanged');
       store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
-    },
-  }), [task, villageId]);
+    }),
+  }), [task, villageId, subscriptionUpdater]);
 
   useSubscription(subscriptionConfig);
 
@@ -97,10 +114,10 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, timestamp }) =
         task,
         villageId,
       },
-      updater: (store) => {
+      updater: setUpdater || ((store) => {
         const newRecord = store.getRootField('setNextVillageTaskExecution');
         store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
-      },
+      }),
     });
 
     closeForm();
@@ -112,10 +129,10 @@ export const NextVillageTaskExecution: React.FC<Props> = ({ task, timestamp }) =
         task,
         villageId,
       },
-      updater: (store) => {
+      updater: resetUpdater || ((store) => {
         const newRecord = store.getRootField('resetNextVillageTaskExecution');
         store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
-      },
+      }),
     });
   };
 
