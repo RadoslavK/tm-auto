@@ -154,11 +154,11 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
   const onEnqueue = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ): void => {
-    if (buildingSpotFragment.level.state !== 'None'){
-      return;
-    }
-
     if (buildingSpotFragment.type !== BuildingType.None) {
+      if (buildingSpotFragment.level.state !== 'None'){
+        return;
+      }
+
       if (event.ctrlKey && buildingSpotFragment.level.total + 1 < maxLevel) {
         setDialog(DialogType.MultiEnqueue);
       } else {
