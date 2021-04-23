@@ -273,6 +273,7 @@ input DurationInput {
 }
 
 input EnqueueBuildingInput {
+  addNewToTop: Boolean!
   fieldId: Int!
   targetLevel: Int
   type: Int!

@@ -5,6 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type EnqueueBuildingInput = {
+    addNewToTop: boolean;
     fieldId: number;
     targetLevel?: number | null;
     type: number;

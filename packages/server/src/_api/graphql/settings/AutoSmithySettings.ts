@@ -32,6 +32,10 @@ export const AutoSmithyUnitSettingsObject = objectType({
     t.int('unitIndex');
     t.list.field('levels', { type: AutoSmithyUnitLevelSettingsObject });
   },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: path.join(getDirname(import.meta), '../../../_models/settings/tasks/autoSmithySettings.ts'),
+    export: 'AutoSmithyUnitSettings',
+  },
 });
 
 export const AutoSmithySettingsObject = objectType({

@@ -103,6 +103,8 @@
 
 ## UX
 
+- Get rid of unnecessary import/export settings complexity. it should be enough to import whole folder for account.
+- All settings in a modal window, not a settings menu item
 - Building Queue keeps scrolling after moving to top
 - Add DnD indicator icon for moved buildings and research units
 - Show which village tab is highlighted: buildings/units...

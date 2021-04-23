@@ -12,6 +12,7 @@ import { useRecoilValue } from 'recoil';
 
 import type { NewBuildingDialogItem_availableNewBuildingFragment$key } from '../../../_graphql/__generated__/NewBuildingDialogItem_availableNewBuildingFragment.graphql.js';
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
+import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
@@ -76,6 +77,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
   const { maxLevel, name, type } = availableNewBuildingFragment;
   const tribe = useRecoilValue(tribeState);
   const villageId = useRecoilValue(selectedVillageIdState);
+  const alwaysAddNewToTop = useRecoilValue(alwaysAddNewToTopState);
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
   const classes = useStyles({
     buildingType: type,
@@ -91,6 +93,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
         targetLevel,
         type,
         villageId,
+        addNewToTop: alwaysAddNewToTop,
       },
     },
     updater: (store, data) => {

@@ -1,4 +1,8 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControlLabel,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
@@ -6,7 +10,10 @@ import {
   useMutation,
   useSubscription,
 } from 'react-relay/hooks';
-import { useRecoilValue } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingQueue_autoBuildSettings$key } from '../../../_graphql/__generated__/BuildingQueue_autoBuildSettings.graphql.js';
@@ -16,6 +23,7 @@ import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__genera
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
 import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/__generated__/BuildingQueueQueuedBuildingSubscription.graphql.js';
 import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
+import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
@@ -29,6 +37,11 @@ type Props = {
 };
 
 const useStyles = makeStyles({
+  header: {
+    display: 'flex',
+    marginBottom: 12,
+    borderBottom: 'dimgrey solid 3px',
+  },
   action: {
     marginBottom: '15px',
     width: '100%',
@@ -190,11 +203,24 @@ export const BuildingQueue: React.FC<Props> = ({
     });
   };
 
+  const [alwaysAddNewToTop, setAlwaysAddNewToTop] = useRecoilState(alwaysAddNewToTopState);
+
   return (
     <div className={className}>
-      <button className={classes.action} onClick={onClear}>
-        Clear queue
-      </button>
+      <div className={classes.header}>
+        <FormControlLabel
+          label="Always add new to top"
+          control={(
+            <Checkbox
+              checked={alwaysAddNewToTop}
+              onChange={e => setAlwaysAddNewToTop(e.currentTarget.checked)}
+            />
+          )}
+        />
+        <button className={classes.action} onClick={onClear}>
+          Clear queue
+        </button>
+      </div>
       <Cost
         buildTime={buildingQueue.totalBuildingTime}
         infrastructureBuildTime={buildingQueue.infrastructureBuildingTime}

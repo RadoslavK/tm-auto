@@ -201,6 +201,7 @@ export const EnqueueBuildingInput = inputObjectType({
     t.int('type');
     t.id('villageId');
     t.nullable.int('targetLevel');
+    t.boolean('addNewToTop');
   },
 });
 
@@ -220,9 +221,9 @@ export const EnqueueBuildingMutation = mutationField(t => {
       input: arg({ type: EnqueueBuildingInput }),
     },
     resolve: (_, args ,ctx) => {
-      const { villageId, ...enqueuedBuilding } = args.input;
+      const { villageId, addNewToTop, ...enqueuedBuilding } = args.input;
 
-      const result = ctx.buildingQueueService.for(villageId).enqueue.enqueueBuilding(enqueuedBuilding);
+      const result = ctx.buildingQueueService.for(villageId).enqueue.enqueueBuilding(enqueuedBuilding, addNewToTop);
 
       return result && {
         ...result,

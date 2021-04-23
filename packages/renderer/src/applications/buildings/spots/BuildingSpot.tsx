@@ -20,6 +20,7 @@ import type { BuildingSpot_buildingSpot$key } from '../../../_graphql/__generate
 import type { BuildingSpotDequeueBuildingAtFieldMutation } from '../../../_graphql/__generated__/BuildingSpotDequeueBuildingAtFieldMutation.graphql.js';
 import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__generated__/BuildingSpotEnqueueBuildingMutation.graphql.js';
 import type { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql.js';
+import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
@@ -114,6 +115,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
   const villageId = useRecoilValue(selectedVillageIdState);
+  const alwaysAddNewToTop = useRecoilValue(alwaysAddNewToTopState);
 
   const closeDialog = () => setDialog(DialogType.None);
 
@@ -126,6 +128,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
           fieldId: buildingSpotFragment.fieldId,
           villageId,
           targetLevel,
+          addNewToTop: alwaysAddNewToTop,
         },
       },
       updater: (store, data) => {

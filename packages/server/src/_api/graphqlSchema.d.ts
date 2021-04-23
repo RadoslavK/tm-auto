@@ -6,7 +6,7 @@
 
 import { ApiContext } from "./apiContext.type"
 import { AutoAcademySettings } from "./../_models/settings/tasks/autoAcademySettings"
-import { AutoSmithySettings } from "./../_models/settings/tasks/autoSmithySettings"
+import { AutoSmithySettings, AutoSmithyUnitSettings } from "./../_models/settings/tasks/autoSmithySettings"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
@@ -67,6 +67,7 @@ export interface NexusGenInputs {
     seconds: number; // Int!
   }
   EnqueueBuildingInput: { // input type
+    addNewToTop: boolean; // Boolean!
     fieldId: number; // Int!
     targetLevel?: number | null; // Int
     type: number; // Int!
@@ -247,10 +248,7 @@ export interface NexusGenObjects {
     minTroops: number; // Int!
     targetLevel: number; // Int!
   }
-  AutoSmithyUnitSettings: { // root type
-    levels: NexusGenRootTypes['AutoSmithyUnitLevelSettings'][]; // [AutoSmithyUnitLevelSettings!]!
-    unitIndex: number; // Int!
-  }
+  AutoSmithyUnitSettings: AutoSmithyUnitSettings;
   AutoStorageOptionSettings: { // root type
     allow: boolean; // Boolean!
     overflowLevel: number; // Int!
