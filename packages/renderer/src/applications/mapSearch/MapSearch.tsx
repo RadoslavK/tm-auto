@@ -1,6 +1,9 @@
 import {
+  FormGroup,
   LinearProgress,
-  Paper, 
+  makeStyles,
+  Paper,
+  TextField,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
@@ -66,6 +69,10 @@ export const mapSearchQuery = graphql`
         botState
         mapScanProgress
         mapSearchState
+        gameInfo {
+            factions
+            mapSize
+        }
     }
 `;
 
@@ -98,6 +105,7 @@ const onMapSearchFinishedSubscription = graphql`
                 y
             }
             type
+            region
         }
     }
 `;
@@ -120,11 +128,18 @@ const botStateSubscription = graphql`
     }
 `;
 
+const useStyles = makeStyles({
+  numberInput: {
+    width: 50,
+  },
+});
+
 type Props = {
   readonly queryRef: PreloadedQuery<MapSearchQuery>;
 };
 
 export const MapSearch: React.FC<Props> = ({ queryRef }) => {
+  const classes = useStyles();
   const [sortBy, setSortBy] = useState<SearchMapSortBy>(SearchMapSortBy.Distance);
   const [order, setOrder] = useState<SortOrder>(SortOrder.Asc);
   const [cropBonus, setCropBonus] = useState(0);
@@ -135,7 +150,8 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { botState, mapSearchState, mapScanProgress } = usePreloadedQuery(mapSearchQuery, queryRef);
+  const { botState, mapSearchState, mapScanProgress, gameInfo } = usePreloadedQuery(mapSearchQuery, queryRef);
+  const { factions, mapSize } = gameInfo;
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
   const [stopScan] = useMutation(stopMapScanMutation);
@@ -207,44 +223,37 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const onScanWholeMap = () => scanWholeMap({ variables: {} });
   const onStopScan = () => stopScan({ variables: {} });
 
+  const boxCoord = (coord: number): number =>
+    Math.max(Math.min(coord, mapSize), -mapSize);
+
+  const boxRadius = (radius: number): number =>
+    Math.max(radius, 1);
+
   return (
     <div>
-      <div>
-        <label>X:</label>
-        <input
+      <FormGroup>
+        <TextField
+          className={classes.numberInput}
           type="number"
+          label="X"
           value={x}
-          onChange={(e) => {
-            const { value } = e.target;
-            setX(+value);
-          }}
+          onChange={e => setX(boxCoord(+e.currentTarget.value))}
         />
-      </div>
-
-      <div>
-        <label>Y:</label>
-        <input
+        <TextField
+          className={classes.numberInput}
+          label="Y"
           type="number"
           value={y}
-          onChange={(e) => {
-            const { value } = e.target;
-            setY(+value);
-          }}
+          onChange={e => setY(boxCoord(+e.currentTarget.value))}
         />
-      </div>
-
-      <div>
-        <label>Radius</label>
-        <input
+        <TextField
+          className={classes.numberInput}
+          label="Radius"
           type="number"
           value={radius}
-          onChange={(e) => {
-            const newRadius = +e.target.value;
-            setRadius(newRadius);
-          }}
+          onChange={e => setRadius(boxRadius(+e.currentTarget.value))}
         />
-      </div>
-
+      </FormGroup>
       <div>
         {villageTileTypes.map((villageTileType) => (
           <React.Fragment key={villageTileType}>
@@ -298,10 +307,12 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
             switch (dataKey) {
               case 'distance':
                 return (cellData as VillageTile[typeof dataKey]).toFixed(2);
+
               case 'claimed':
                 return (cellData as VillageTile[typeof dataKey])
                   ? 'true'
                   : 'false';
+
               case 'coords': {
                 const data = cellData as VillageTile[typeof dataKey];
 
@@ -316,18 +327,11 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
             { width: 200, label: 'Coords', dataKey: 'coords' },
             { width: 200, label: 'Type', dataKey: 'type' },
             { width: 200, label: 'Claimed', dataKey: 'claimed' },
-            {
-              width: 200,
-              label: 'Crop bonus',
-              dataKey: 'cropBonus',
-              numeric: true,
-            },
-            {
-              width: 200,
-              label: 'Distance',
-              dataKey: 'distance',
-              numeric: true,
-            },
+            { width: 200, label: 'Crop bonus', dataKey: 'cropBonus', numeric: true },
+            { width: 200, label: 'Distance', dataKey: 'distance', numeric: true },
+            ...factions ? [{
+              width: 200, label: 'Region', dataKey: 'region', numeric: false,
+            }] as const : [],
           ]}
           data={sortedVillageTiles}
           sort={{

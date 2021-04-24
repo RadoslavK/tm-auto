@@ -109,6 +109,7 @@ export const VillageTile = objectType({
     t.nullable.boolean('claimed');
     t.float('distance');
     t.int('cropBonus');
+    t.nullable.string('region');
   },
 });
 

@@ -43,8 +43,10 @@ type VillagePath = {
 type ServerPath = {
   readonly root: string;
   readonly scannedSectors: string;
+  readonly scannedRegionSectors: string;
   readonly scannedOasisTiles: string;
   readonly scannedVillageTiles: string;
+  readonly scannedRegionTiles: string;
 };
 
 export class DataPathService {
@@ -60,8 +62,10 @@ export class DataPathService {
     return {
       root,
       scannedSectors: path.join(root, 'scannedSectors.json'),
+      scannedRegionSectors: path.join(root, 'scannedRegionSectors.json'),
       scannedVillageTiles: path.join(root, 'scannedVillageTiles.json'),
       scannedOasisTiles: path.join(root, 'scannedOasisTiles.json'),
+      scannedRegionTiles: path.join(root, 'scannedRegionTiles.json'),
     };
   };
 

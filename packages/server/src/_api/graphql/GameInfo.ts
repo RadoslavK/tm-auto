@@ -11,6 +11,8 @@ export const GameInfo = objectType({
   name: 'GameInfo',
   definition(t) {
     t.field('tribe', { type: 'Tribe' });
+    t.boolean('factions');
+    t.int('mapSize');
   },
 });
 

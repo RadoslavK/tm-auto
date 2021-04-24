@@ -283,6 +283,8 @@ type EnqueueBuildingPayload {
 }
 
 type GameInfo {
+  factions: Boolean!
+  mapSize: Int!
   tribe: Tribe!
 }
 
@@ -748,5 +750,6 @@ type VillageTile {
   coords: Coords!
   cropBonus: Int!
   distance: Float!
+  region: String
   type: String!
 }

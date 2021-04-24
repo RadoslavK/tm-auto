@@ -324,6 +324,8 @@ export interface NexusGenObjects {
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
   GameInfo: { // root type
+    factions: boolean; // Boolean!
+    mapSize: number; // Int!
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // root type
@@ -435,6 +437,7 @@ export interface NexusGenObjects {
     coords: NexusGenRootTypes['Coords']; // Coords!
     cropBonus: number; // Int!
     distance: number; // Float!
+    region?: string | null; // String
     type: string; // String!
   }
 }
@@ -612,6 +615,8 @@ export interface NexusGenFieldTypes {
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
   GameInfo: { // field return type
+    factions: boolean; // Boolean!
+    mapSize: number; // Int!
     tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // field return type
@@ -890,6 +895,7 @@ export interface NexusGenFieldTypes {
     coords: NexusGenRootTypes['Coords']; // Coords!
     cropBonus: number; // Int!
     distance: number; // Float!
+    region: string | null; // String
     type: string; // String!
   }
 }
@@ -1056,6 +1062,8 @@ export interface NexusGenFieldTypeNames {
     queue: 'BuildingQueue'
   }
   GameInfo: { // field return type name
+    factions: 'Boolean'
+    mapSize: 'Int'
     tribe: 'Tribe'
   }
   GeneralSettings: { // field return type name
@@ -1334,6 +1342,7 @@ export interface NexusGenFieldTypeNames {
     coords: 'Coords'
     cropBonus: 'Int'
     distance: 'Float'
+    region: 'String'
     type: 'String'
   }
 }

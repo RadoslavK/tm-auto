@@ -84,7 +84,8 @@ export class MapSearchService {
     await mapScanService.scanMap({
       ...origin,
       // to scan for oases in 7x7
-      radius: oasisRadius,
+      oasisRadius,
+      regionRadius: origin.radius,
     });
 
     this._state = MapSearchState.Searching;
@@ -93,17 +94,16 @@ export class MapSearchService {
       state: MapSearchState.Searching,
     });
 
+    const { factions, mapSize } = AccountContext.getContext().gameInfo;
     const villageTiles = await mapScanService.getScannedVillages();
     const oases = await mapScanService.getScannedOases();
+    const regions = factions ? await mapScanService.getScannedRegions() : {};
 
-    const {
-      gameInfo: { mapSize },
-    } = AccountContext.getContext();
     const totalAxisLength = getTotalAxisLength(mapSize);
 
     let shouldSave: boolean = false;
 
-    const villageTilesWithAssignedBonus = Object.entries(villageTiles).reduce(
+    const assignedVillageTiles = Object.entries(villageTiles).reduce(
       (reduced, [id, tile]) => {
         if (tile.cropBonus !== undefined) {
           reduced[id] = {
@@ -123,7 +123,9 @@ export class MapSearchService {
         reduced[id] = {
           ...tile,
           cropBonus,
-        };
+          region: factions ? regions[id]?.name : undefined,
+        } as Omit<MapSearchVillageTile, 'distance'>;
+
         shouldSave = true;
 
         return reduced;
@@ -132,10 +134,10 @@ export class MapSearchService {
     );
 
     if (shouldSave) {
-      mapScanService.updateVillageTiles(villageTilesWithAssignedBonus);
+      mapScanService.updateVillageTiles(assignedVillageTiles);
     }
 
-    const result = Object.values(villageTilesWithAssignedBonus)
+    const result = Object.values(assignedVillageTiles)
       .map(
         (tile): MapSearchVillageTile => {
           const distance = getCoordDistance(

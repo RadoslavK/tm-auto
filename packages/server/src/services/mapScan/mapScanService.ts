@@ -1,5 +1,8 @@
 import { TravianPath } from '../../_enums/travianPath.js';
-import type { VillageTile } from '../../_models/map/villageTile.js';
+import type {
+  RegionTile,
+  VillageTile,
+} from '../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../_models/map/wheatOasis.js';
 import { AccountContext } from '../../accountContext.js';
 import { createPage } from '../../browser/getPage.js';
@@ -9,10 +12,12 @@ import { BotEvent } from '../../events/botEvent.js';
 import { publishPayloadEvent } from '../../pubSub.js';
 import { dataPathService } from '../dataPathService.js';
 import { fileService } from '../fileService.js';
+import type { Sector } from './sector.js';
 import { filterSectorsInRadius } from './utils/filterSectorsInRadius.js';
 import { getAllSectors } from './utils/getAllSectors.js';
 import { getPointId } from './utils/getPointId.js';
 import { getSectorSize } from './utils/getSectorSize.js';
+import { scanRegionSector } from './utils/scanRegionSector.js';
 import { scanSector } from './utils/scanSector.js';
 
 // 1 - 3
@@ -20,6 +25,7 @@ import { scanSector } from './utils/scanSector.js';
 export const maxZoomLevel = 3;
 //  On Shadow Empires/Factions map, zoom level 3 shows region names only.
 const factionsZoomLevel = 2;
+const factionsRegionsZoomLevel = 3;
 
 type CurrentScan = {
   readonly progress: number;
@@ -36,19 +42,32 @@ export class MapScanService {
 
   private _villages: Record<string, VillageTile> | undefined;
 
+  private _regions: Record<string, RegionTile> | undefined;
+
   private _oases: Record<string, WheatOasis> | undefined;
 
   private _scannedSectorIds: string[] | undefined;
 
+  private _scannedRegionSectorIds: string[] | undefined;
+
   private _stopRequested: boolean = false;
 
   constructor(private accountId: string) {}
+
+  private hasFactions = (): boolean => AccountContext.getContext().gameInfo.factions;
 
   private loadScannedData = async () => {
     this._villages = fileService.load<Record<string, VillageTile>>(
       dataPathService.serverPath(this.accountId).scannedVillageTiles,
       {},
     );
+
+    if (this.hasFactions()) {
+      this._regions = fileService.load<Record<string, RegionTile>>(
+        dataPathService.serverPath(this.accountId).scannedRegionTiles,
+        {},
+      );
+    }
 
     this._oases = fileService.load<Record<string, WheatOasis>>(
       dataPathService.serverPath(this.accountId).scannedOasisTiles,
@@ -60,10 +79,19 @@ export class MapScanService {
       [],
     );
 
+    if (this.hasFactions()) {
+      this._scannedRegionSectorIds = fileService.load<string []>(
+        dataPathService.serverPath(this.accountId).scannedRegionSectors,
+        [],
+      );
+    }
+
     return {
       villages: this._villages,
       oases: this._oases,
+      regions: this._regions,
       sectors: this._scannedSectorIds,
+      regionSectors: this._scannedRegionSectorIds,
     };
   };
 
@@ -78,10 +106,24 @@ export class MapScanService {
       this._oases,
     );
 
+    if (this.hasFactions()) {
+      await fileService.save(
+        dataPathService.serverPath(this.accountId).scannedRegionTiles,
+        this._regions,
+      );
+    }
+
     await fileService.save(
       dataPathService.serverPath(this.accountId).scannedSectors,
       this._scannedSectorIds,
     );
+
+    if (this.hasFactions()) {
+      await fileService.save(
+        dataPathService.serverPath(this.accountId).scannedRegionSectors,
+        this._scannedRegionSectorIds,
+      );
+    }
   };
 
   public updateVillageTiles = async (tiles: Record<string, VillageTile>) => {
@@ -105,14 +147,28 @@ export class MapScanService {
     return this._scannedSectorIds;
   };
 
-  public getScannedVillages = async (): Promise<
-    Record<string, VillageTile>
-  > => {
+  private getScannedRegionSectorIds = async (): Promise<string[]> => {
+    if (!this._scannedRegionSectorIds) {
+      return (await this.loadScannedData()).regionSectors || [];
+    }
+
+    return this._scannedRegionSectorIds;
+  };
+
+  public getScannedVillages = async (): Promise<Record<string, VillageTile>> => {
     if (!this._villages) {
       return (await this.loadScannedData()).villages;
     }
 
     return this._villages;
+  };
+
+  public getScannedRegions = async (): Promise<Record<string, RegionTile>> => {
+    if (!this._regions) {
+      return (await this.loadScannedData()).regions || {};
+    }
+
+    return this._regions;
   };
 
   public getScannedOases = async (): Promise<Record<string, WheatOasis>> => {
@@ -126,7 +182,8 @@ export class MapScanService {
   public scanMap = async (params?: {
     readonly x: number;
     readonly y: number;
-    readonly radius: number;
+    readonly oasisRadius: number;
+    readonly regionRadius: number;
   }) => {
     this.markProgress(0);
 
@@ -135,12 +192,12 @@ export class MapScanService {
     });
 
     const {
-      gameInfo: { factions, mapSize },
+      gameInfo: { mapSize },
     } = AccountContext.getContext();
 
     const scannedSectorIds = new Set<string>(await this.getScannedSectorIds());
 
-    const zoomLevel = factions ? factionsZoomLevel : maxZoomLevel;
+    const zoomLevel = this.hasFactions() ? factionsZoomLevel : maxZoomLevel;
     const sectorSize = getSectorSize(zoomLevel);
     const allSectors = getAllSectors({ mapSize, sectorSize });
 
@@ -149,10 +206,27 @@ export class MapScanService {
         sectors: allSectors,
         sectorSize,
         mapSize,
-        radius: params.radius,
+        radius: params.oasisRadius,
         origin: { x: params.x, y: params.y },
       })
       : allSectors;
+
+    let relevantRegionSectorPoints: readonly Sector[] = [];
+
+    if (this.hasFactions()) {
+      const regionSectorSize = getSectorSize(factionsRegionsZoomLevel);
+      const allRegionSectors = getAllSectors({ mapSize, sectorSize: regionSectorSize });
+
+      relevantRegionSectorPoints = params
+        ? filterSectorsInRadius({
+          sectors: allRegionSectors,
+          sectorSize: regionSectorSize,
+          mapSize,
+          radius: params.regionRadius,
+          origin: { x: params.x, y: params.y },
+        })
+        : allRegionSectors;
+    }
 
     const sectorsToScan = relevantSectorPoints.filter(
       (s) => !scannedSectorIds.has(getPointId(s)),
@@ -189,36 +263,111 @@ export class MapScanService {
         }
 
         try {
-          ({ oasesTiles, villageTiles } = await scanSector({
-            sector,
-            zoomLevel,
-            mapSize,
-            page,
-          }));
+          (
+            { oasesTiles, villageTiles } = await scanSector({
+              sector,
+              zoomLevel,
+              mapSize,
+              page,
+            })
+          );
         } catch (error) {
-          AccountContext.getContext().logsService.logError(`Failed map scan for sector [${sector.x}|${sector.y}], message: ${error.message}`);
+          AccountContext.getContext()
+            .logsService
+            .logError(`Failed map scan for sector [${sector.x}|${sector.y}], message: ${error.message}`);
         }
       } while (!oasesTiles || !villageTiles);
 
       this._oases = {
-        ...(await this.getScannedOases()),
+        ...(
+          await this.getScannedOases()
+        ),
         ...oasesTiles,
       };
       this._villages = {
-        ...(await this.getScannedVillages()),
+        ...(
+          await this.getScannedVillages()
+        ),
         ...villageTiles,
       };
       const sectors = await this.getScannedSectorIds();
 
       sectors.push(getPointId(sector));
 
-      this.markProgress((sectors.length / relevantSectorPoints.length) * 100);
+      this.markProgress((
+        sectors.length / (relevantSectorPoints.length + relevantRegionSectorPoints.length)
+      ) * 100);
       await this.saveScannedData();
     }
 
-    await page.close();
-    this.markStopped();
-  };
+    if (this.hasFactions()) {
+      const scannedRegionSectorIds = new Set<string>(await this.getScannedRegionSectorIds());
+
+      const regionSectorsToScan = relevantRegionSectorPoints.filter(
+        (s) => !scannedRegionSectorIds.has(getPointId(s)),
+      );
+
+      for (const regionSector of regionSectorsToScan) {
+        if (this._stopRequested) {
+          await page.close();
+          this.markStopped();
+
+          return;
+        }
+
+        let regionTiles: Record<string, RegionTile> | undefined;
+        let attempt = 0;
+
+        do {
+          attempt++;
+
+          if (attempt > 3) {
+            await page.close();
+            this.markStopped();
+            AccountContext.getContext().logsService.logError('Failed to scan the map!');
+
+            return;
+          }
+
+          try {
+            (
+              { regionTiles } = await scanRegionSector({
+                sector: regionSector,
+                zoomLevel: factionsRegionsZoomLevel,
+                mapSize,
+                page,
+              })
+            );
+          } catch (error) {
+            AccountContext.getContext()
+              .logsService
+              .logError(`Failed map scan for region sector [${regionSector.x}|${regionSector.y}], message: ${error.message}`);
+          }
+        } while (!regionTiles);
+
+
+        this._regions = {
+          ...(
+            await this.getScannedRegions()
+          ),
+          ...regionTiles,
+        };
+
+        const regionSectors = await this.getScannedRegionSectorIds();
+
+        regionSectors.push(getPointId(regionSector));
+
+        this.markProgress((
+          //  all regular sectors are already scanned
+          (relevantSectorPoints.length + regionSectors.length) / (relevantSectorPoints.length + relevantRegionSectorPoints.length)
+        ) * 100);
+        await this.saveScannedData();
+      }
+
+      await page.close();
+      this.markStopped();
+    }
+  }
 
   public stopScan = () => {
     this._stopRequested = true;
