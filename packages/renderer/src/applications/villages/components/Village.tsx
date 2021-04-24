@@ -26,7 +26,6 @@ import {
   Navigate,
   Route,
   Routes,
-  useLocation,
   useNavigate,
 } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -128,35 +127,23 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   const { academyQueryRef, reloadAcademyQuery } = useAcademyQuery();
   const { reloadGeneralVillageOverviewQuery, generalVillageOverviewQueryRef } = useGeneralVillageOverviewQuery();
 
-  const { pathname } = useLocation();
   const prevVillageId = usePrevious(villageId);
-  const currentTab = useMatch('/villages/:id/:tab')?.params.tab;
-  const isTabSelected = !!currentTab;
+  const currentTab = useMatch('/villages/:id/:tab/*')?.params.tab as NavigationPath | undefined;
 
   useEffect(() => {
     if (villageId === prevVillageId) {
       return;
     }
 
-    if (!isTabSelected || pathname.endsWith('buildings' as NavigationPath)) {
-      reloadBuildingsQuery(villageId);
+    switch (currentTab) {
+      case 'buildings': reloadBuildingsQuery(villageId); break;
+      case 'units': reloadUnitSettingsQuery(villageId); break;
+      case 'parties': reloadPartiesQuery(villageId); break;
+      case 'smithy': reloadSmithyQuery(villageId); break;
+      case 'academy': reloadAcademyQuery(villageId); break;
+      case 'general': reloadGeneralVillageOverviewQuery(villageId); break;
     }
-    if (pathname.endsWith('units' as NavigationPath)) {
-      reloadUnitSettingsQuery(villageId);
-    }
-    if (pathname.endsWith('parties' as NavigationPath)) {
-      reloadPartiesQuery(villageId);
-    }
-    if (pathname.endsWith('smithy' as NavigationPath)) {
-      reloadSmithyQuery(villageId);
-    }
-    if (pathname.endsWith('academy' as NavigationPath)) {
-      reloadAcademyQuery(villageId);
-    }
-    if (pathname.endsWith('general' as NavigationPath)) {
-      reloadGeneralVillageOverviewQuery(villageId);
-    }
-  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);
+  }, [reloadBuildingsQuery, reloadUnitSettingsQuery, currentTab, villageId, prevVillageId, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -290,7 +277,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       <button onClick={onRefreshVillage}>Refresh</button>
       <div>
         {navigation.map((n) => {
-          const isTabActive = pathname.endsWith(n.path);
+          const isTabActive = n.path === currentTab;
 
           return (
             <Link className={clsx(classes.tab, isTabActive && classes.activeTab)} key={n.path} to={n.path}>
@@ -303,7 +290,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
         {navigation.map((n) => (
           <Route
             key={n.path}
-            path={n.path}
+            path={`${n.path}/*`}
             element={(
               <Suspense fallback={null}>
                 {getTabElement(n)}

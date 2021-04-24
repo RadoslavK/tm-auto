@@ -196,11 +196,6 @@ type BuildingSpotLevel {
   total: Int!
 }
 
-type BuildingSpots {
-  infrastructure: [BuildingSpot!]!
-  resources: ResourceFields!
-}
-
 enum BuildingState {
   Completed
   None
@@ -461,7 +456,6 @@ type Query {
   botActivity: String!
   botState: BotState!
   buildingQueue(villageId: ID!): BuildingQueue!
-  buildingSpots(villageId: ID!): BuildingSpots!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   canMoveQueuedBuilding(queueId: ID!, targetQueueId: ID!, villageId: ID!): Boolean!
   crannyCapacity(villageId: ID!): VillageCrannyCapacity!
@@ -471,6 +465,7 @@ type Query {
   generalVillageSettings(villageId: ID!): GeneralVillageSettings!
   heroInformation: HeroInformation!
   heroLevelUpSettings: HeroLevelUpSettings!
+  infrastructure(villageId: ID!): [BuildingSpot!]!
   isAccountTaken(account: AccountInput!): Boolean!
   lastSignedAccountId: String
   logEntries: [LogEntry!]!
@@ -481,6 +476,7 @@ type Query {
   nextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
   nextVillageTaskExecutions(villageId: ID!): [NextVillageTaskExecutionPayloadField!]!
   researcheableUnits: [Int!]!
+  resourceFields(villageId: ID!): [BuildingSpot!]!
   unitInfo(index: Int!): UnitInfo!
   unitUpgradeCost(level: Int!, unitIndex: Int!): Resources!
   upgradeableUnits: [Int!]!

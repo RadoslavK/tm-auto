@@ -12,12 +12,15 @@ import {
   BuildingState,
   buildingStates,
 } from 'shared/enums/BuildingState.js';
-import { BuildingType } from 'shared/enums/BuildingType.js';
 import { getDirname } from 'shared/utils/getDirname.js';
 
 import type { BuildingSpotLevel as BuildingSpotLevelModel } from '../../_models/buildings/spots/buildingSpotLevel.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
+import {
+  isInfrastructure,
+  isResourceField,
+} from '../../utils/buildingUtils.js';
 import type { NexusGenObjects } from '../graphqlSchema.js';
 
 export const BuildingStateEnum = enumType({
@@ -116,14 +119,6 @@ export const ResourceFields = objectType({
   },
 });
 
-export const BuildingSpots = objectType({
-  name: 'BuildingSpots',
-  definition: t => {
-    t.list.field('infrastructure', { type: BuildingSpot });
-    t.field('resources', { type: ResourceFields });
-  },
-});
-
 export const AvailableNewBuildingsInput = inputObjectType({
   name: 'AvailableNewBuildingsInput',
   definition: t => {
@@ -147,27 +142,31 @@ export const AvailableNewBuildingsTypesQuery = queryField(t => {
   });
 });
 
-export const BuildingSpotsQuery = queryField(t => {
-  t.field('buildingSpots', {
-    type: BuildingSpots,
+export const ResourceFieldsQuery = queryField(t => {
+  t.list.field('resourceFields', {
+    type: BuildingSpot,
     args: {
       villageId: idArg(),
     },
-    resolve(_, args, ctx) {
-      const normalizedSpots = ctx
-        .villageService.village(args.villageId)
-        .buildings.spots.buildings();
+    resolve: (_, { villageId }, ctx) =>
+      ctx
+        .villageService.village(villageId)
+        .buildings.spots.buildings()
+        .filter(b => isResourceField(b.fieldId)),
+  });
+});
 
-      return {
-        infrastructure: normalizedSpots.filter((s) => s.fieldId >= 19),
-        resources: {
-          clay: normalizedSpots.filter((s) => s.type === BuildingType.Clay),
-          crop: normalizedSpots.filter((s) => s.type === BuildingType.Crop),
-          iron: normalizedSpots.filter((s) => s.type === BuildingType.Iron),
-          wood: normalizedSpots.filter((s) => s.type === BuildingType.Wood),
-        },
-      };
+export const InfrastructureQuery = queryField(t => {
+  t.list.field('infrastructure', {
+    type: BuildingSpot,
+    args: {
+      villageId: idArg(),
     },
+    resolve: (_, { villageId }, ctx) =>
+      ctx
+        .villageService.village(villageId)
+        .buildings.spots.buildings()
+        .filter(b => isInfrastructure(b.fieldId)),
   });
 });
 

@@ -299,10 +299,6 @@ export interface NexusGenObjects {
     state: NexusGenEnums['BuildingState']; // BuildingState!
     total: number; // Int!
   }
-  BuildingSpots: { // root type
-    infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
-  }
   CoolDown: { // root type
     max: NexusGenRootTypes['Duration']; // Duration!
     min: NexusGenRootTypes['Duration']; // Duration!
@@ -591,10 +587,6 @@ export interface NexusGenFieldTypes {
     state: NexusGenEnums['BuildingState']; // BuildingState!
     total: number; // Int!
   }
-  BuildingSpots: { // field return type
-    infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    resources: NexusGenRootTypes['ResourceFields']; // ResourceFields!
-  }
   CoolDown: { // field return type
     max: NexusGenRootTypes['Duration']; // Duration!
     min: NexusGenRootTypes['Duration']; // Duration!
@@ -752,7 +744,6 @@ export interface NexusGenFieldTypes {
     botActivity: string; // String!
     botState: NexusGenEnums['BotState']; // BotState!
     buildingQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
-    buildingSpots: NexusGenRootTypes['BuildingSpots']; // BuildingSpots!
     buildingsInProgress: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
     canMoveQueuedBuilding: boolean; // Boolean!
     crannyCapacity: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
@@ -762,6 +753,7 @@ export interface NexusGenFieldTypes {
     generalVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
     heroInformation: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettings: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
+    infrastructure: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     isAccountTaken: boolean; // Boolean!
     lastSignedAccountId: string | null; // String
     logEntries: NexusGenRootTypes['LogEntry'][]; // [LogEntry!]!
@@ -772,6 +764,7 @@ export interface NexusGenFieldTypes {
     nextVillageTaskExecution: NexusGenRootTypes['Timestamp']; // Timestamp!
     nextVillageTaskExecutions: NexusGenRootTypes['NextVillageTaskExecutionPayloadField'][]; // [NextVillageTaskExecutionPayloadField!]!
     researcheableUnits: number[]; // [Int!]!
+    resourceFields: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
     unitInfo: NexusGenRootTypes['UnitInfo']; // UnitInfo!
     unitUpgradeCost: NexusGenRootTypes['Resources']; // Resources!
     upgradeableUnits: number[]; // [Int!]!
@@ -1038,10 +1031,6 @@ export interface NexusGenFieldTypeNames {
     state: 'BuildingState'
     total: 'Int'
   }
-  BuildingSpots: { // field return type name
-    infrastructure: 'BuildingSpot'
-    resources: 'ResourceFields'
-  }
   CoolDown: { // field return type name
     max: 'Duration'
     min: 'Duration'
@@ -1199,7 +1188,6 @@ export interface NexusGenFieldTypeNames {
     botActivity: 'String'
     botState: 'BotState'
     buildingQueue: 'BuildingQueue'
-    buildingSpots: 'BuildingSpots'
     buildingsInProgress: 'BuildingInProgress'
     canMoveQueuedBuilding: 'Boolean'
     crannyCapacity: 'VillageCrannyCapacity'
@@ -1209,6 +1197,7 @@ export interface NexusGenFieldTypeNames {
     generalVillageSettings: 'GeneralVillageSettings'
     heroInformation: 'HeroInformation'
     heroLevelUpSettings: 'HeroLevelUpSettings'
+    infrastructure: 'BuildingSpot'
     isAccountTaken: 'Boolean'
     lastSignedAccountId: 'String'
     logEntries: 'LogEntry'
@@ -1219,6 +1208,7 @@ export interface NexusGenFieldTypeNames {
     nextVillageTaskExecution: 'Timestamp'
     nextVillageTaskExecutions: 'NextVillageTaskExecutionPayloadField'
     researcheableUnits: 'Int'
+    resourceFields: 'BuildingSpot'
     unitInfo: 'UnitInfo'
     unitUpgradeCost: 'Resources'
     upgradeableUnits: 'Int'
@@ -1563,9 +1553,6 @@ export interface NexusGenArgTypes {
     buildingQueue: { // args
       villageId: string; // ID!
     }
-    buildingSpots: { // args
-      villageId: string; // ID!
-    }
     buildingsInProgress: { // args
       villageId: string; // ID!
     }
@@ -1580,6 +1567,9 @@ export interface NexusGenArgTypes {
     generalVillageSettings: { // args
       villageId: string; // ID!
     }
+    infrastructure: { // args
+      villageId: string; // ID!
+    }
     isAccountTaken: { // args
       account: NexusGenInputs['AccountInput']; // AccountInput!
     }
@@ -1591,6 +1581,9 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     nextVillageTaskExecutions: { // args
+      villageId: string; // ID!
+    }
+    resourceFields: { // args
       villageId: string; // ID!
     }
     unitInfo: { // args

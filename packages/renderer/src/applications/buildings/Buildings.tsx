@@ -33,9 +33,6 @@ const useStyles = makeStyles({
 
 const buildingsQuery = graphql`
   query BuildingsQuery($villageId: ID!) {
-      buildingSpots(villageId: $villageId) {
-        ...BuildingSpots_buildingSpots
-      }
       buildingQueue(villageId: $villageId) {
           ...BuildingQueue_buildingQueue
       }
@@ -75,7 +72,6 @@ export const Buildings: React.FC<Props> = ({
 
   const {
     autoBuildSettings,
-    buildingSpots,
     buildingQueue,
     buildingsInProgress,
     nextVillageTaskExecution,
@@ -83,12 +79,7 @@ export const Buildings: React.FC<Props> = ({
 
   return (
     <div className={classes.buildings}>
-      <Suspense fallback={null}>
-        <BuildingSpots
-          buildingSpotsKey={buildingSpots}
-          className={classes.buildingSpots}
-        />
-      </Suspense>
+      <BuildingSpots className={classes.buildingSpots}/>
       <div className={classes.ongoingAndNextExecution}>
         <NextVillageTaskExecution task="AutoBuild" timestamp={nextVillageTaskExecution} />
         <Suspense fallback={null}>
