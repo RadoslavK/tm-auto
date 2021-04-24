@@ -52,9 +52,16 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       .settingsService.village(this._village.id)
       .autoBuild.get();
 
-  public allowExecution = (): boolean =>
-    AccountContext.getContext().settingsService.account.get().autoBuild.allow &&
-    this.settings().allow;
+  public allowExecution = (): boolean => {
+    const { allow, autoStorage } = this.settings();
+    const { queue } = this._village.buildings;
+
+    return AccountContext.getContext().settingsService.account.get().autoBuild.allow
+      && allow
+      //  Allow even if nothing is queued because maybe something is overflowing
+      //  TODO have extra task for overflow and do it before this one
+      && (!!queue.buildings().length || autoStorage.warehouse.allow || autoStorage.granary.allow);
+  };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
@@ -67,16 +74,18 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       autoStorage,
     } = this.settings();
 
-    const { buildingsToBuild } = await checkAutoStorage(
-      this._village,
-      autoStorage,
-    );
-
-    for (const autoStorageBuilding of buildingsToBuild) {
-      await this.startBuildingIfQueueIsFree(
-        autoStorageBuilding,
-        !!autoStorageBuilding.id,
+    if (autoStorage.granary.allow || autoStorage.warehouse.allow) {
+      const { buildingsToBuild } = await checkAutoStorage(
+        this._village,
+        autoStorage,
       );
+
+      for (const autoStorageBuilding of buildingsToBuild) {
+        await this.startBuildingIfQueueIsFree(
+          autoStorageBuilding,
+          !!autoStorageBuilding.id,
+        );
+      }
     }
 
     if (!queue.buildings().length) {
