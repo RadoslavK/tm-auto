@@ -1,4 +1,3 @@
-import { Tribe } from '../../../_models/enums/tribe.js';
 import type { GameInfo } from '../../../_models/gameInfo.js';
 import { AccountContext } from '../../../accountContext.js';
 import { parseFactions } from '../../../parsers/gameInfo/parseFactions.js';
@@ -6,6 +5,7 @@ import { parseMapSize } from '../../../parsers/gameInfo/parseMapSize.js';
 import { parseServerSpeed } from '../../../parsers/gameInfo/parseServerSpeed.js';
 import { parseTribe } from '../../../parsers/gameInfo/parseTribe.js';
 import { accountService } from '../../../services/accountService.js';
+import { activityService } from '../../../services/botActivityService.js';
 import { dataPathService } from '../../../services/dataPathService.js';
 import { fileService } from '../../../services/fileService.js';
 
@@ -35,6 +35,7 @@ export const loadGameInfo = async (): Promise<void> => {
 };
 
 export const initGameInfo = async (): Promise<void> => {
+  activityService.setActivity('Initializing game info');
   const accId = accountService.getCurrentAccount().id;
   const { gameInfo } = AccountContext.getContext();
 
@@ -56,9 +57,5 @@ export const initGameInfo = async (): Promise<void> => {
     factions: gameInfo.factions,
   }, accId);
 
-  AccountContext.getContext().logsService.logText(
-    `Player info initialized, Tribe: ${Tribe[gameInfo.tribe]}, Speed: ${
-      gameInfo.speed
-    }x`,
-  );
+  activityService.setActivity('Player info initialized');
 };

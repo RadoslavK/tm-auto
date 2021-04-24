@@ -1,5 +1,6 @@
 import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
+import { activityService } from '../../../services/botActivityService.js';
 
 export const collectTaskRewards = async (): Promise<void> => {
   if (!AccountContext.getContext().settingsService.autoMentor.get().acceptTaskRewards) {
@@ -51,7 +52,7 @@ export const collectTaskRewards = async (): Promise<void> => {
         throw new Error('Did not find collectible task title');
       }
 
-      AccountContext.getContext().logsService.logText(`Collecting rewards for task: ${title}`, true);
+      activityService.setActivity(`Collecting rewards for task: ${title}`);
 
       await Promise.all([
         collectButton.click(),

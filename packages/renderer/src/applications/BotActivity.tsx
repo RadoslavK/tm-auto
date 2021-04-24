@@ -23,23 +23,23 @@ const botActivitySubscription = graphql`
 `;
 
 type Props = {
-  readonly isBotActive: boolean;
+  readonly botActivity: string;
 };
 
-export const BotActivity: React.FC<Props> = ({ isBotActive }) => {
+export const BotActivity: React.FC<Props> = ({ botActivity }) => {
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BotActivitySubscription> => ({
     subscription: botActivitySubscription,
     variables: {},
     updater: (store, data) => {
-      store.getRoot().setValue(data.botActivityChanged, 'isBotActive');
+      store.getRoot().setValue(data.botActivityChanged, 'botActivity');
     },
   }), []);
 
   useSubscription(subscriptionConfig);
 
-  const classes = useStyles({ isBotActive });
+  const classes = useStyles({ isBotActive: !!botActivity });
 
-  return <div className={classes.root}>{isBotActive ? 'ACTIVE' : 'INACTIVE'}</div>;
+  return <div className={classes.root}>{botActivity}</div>;
 };
 
 BotActivity.displayName = 'BotActivity';

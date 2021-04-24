@@ -14,7 +14,7 @@ import type { NavigationApp } from '../../EnsureMainNavigation.js';
 
 const query = graphql`
   query MainRoutesQuery {
-      isBotActive
+      botActivity
       nextTasksExecution {
           ...NextTasksExecution_timestamp
       }
@@ -27,11 +27,11 @@ type Props = {
 
 export const MainRoutes: React.FC<Props> = ({ navigationApps }) => {
   const redirectElement = <Navigate to={navigationApps[0].path}/>;
-  const { isBotActive, nextTasksExecution } = useLazyLoadQuery<MainRoutesQuery>(query, {}, { fetchPolicy: 'store-and-network' });
+  const { botActivity, nextTasksExecution } = useLazyLoadQuery<MainRoutesQuery>(query, {}, { fetchPolicy: 'store-and-network' });
 
   return (
     <div>
-      <BotActivity isBotActive={isBotActive} />
+      <BotActivity botActivity={botActivity} />
       <NextTasksExecution timestamp={nextTasksExecution} />
       <Suspense fallback={null}>
         <Routes>

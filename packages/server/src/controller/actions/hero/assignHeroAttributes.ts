@@ -4,6 +4,7 @@ import { getPage } from '../../../browser/getPage.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
+import { activityService } from '../../../services/botActivityService.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
 import { ensurePage } from '../ensurePage.js';
 
@@ -51,9 +52,7 @@ const ensureHeroPoint = async ({
 
   const total = actual + toAdd;
 
-  AccountContext.getContext().logsService.logText(
-    `Adding hero attribute ${inputName}: ${actual} -> ${total}`,
-  );
+  activityService.setActivity(`Adding hero attribute ${inputName}: ${actual} -> ${total}`);
 
   const input = await page.$(`[name="${inputName}"]`);
 

@@ -5,6 +5,7 @@ import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAt
 import { updateHeroResources } from '../../controller/actions/hero/updateHeroResources.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { publishEvent } from '../../pubSub.js';
+import { activityService } from '../../services/botActivityService.js';
 
 const parseHealth = async (): Promise<number> => {
   const page = await getPage();
@@ -84,6 +85,7 @@ const parseHeroVillageId = async (): Promise<string> => {
 };
 
 export const updateHeroInformation = async (): Promise<void> => {
+  activityService.setActivity('Updating hero information');
   const { hero } = AccountContext.getContext();
 
   hero.health = await parseHealth();

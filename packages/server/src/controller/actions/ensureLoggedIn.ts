@@ -1,13 +1,14 @@
 import type { Page } from 'puppeteer';
 
 import { TravianPath } from '../../_enums/travianPath.js';
-import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { accountService } from '../../services/accountService.js';
+import { activityService } from '../../services/botActivityService.js';
 import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText.js';
 import { ensurePage } from './ensurePage.js';
 
 export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
+  activityService.setActivity('Logging in');
   const account = accountService.getCurrentAccount();
 
   const page = existingPage || (await getPage());
@@ -34,8 +35,6 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
     return;
   }
 
-  AccountContext.getContext().logsService.logText(`Logging in as ${account.username}`);
-
   await page.waitForSelector('form[name=login] button[type=submit]');
 
   await replaceInputTextBySelector(
@@ -57,5 +56,5 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
     page.click('form[name=login] button[type=submit]'),
   ]);
 
-  AccountContext.getContext().logsService.logText('Logged in.');
+  activityService.setActivity('Logged in');
 };

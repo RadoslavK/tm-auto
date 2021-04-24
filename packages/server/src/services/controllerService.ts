@@ -32,6 +32,7 @@ import { publishPayloadEvent } from '../pubSub.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 import { shuffle } from '../utils/shuffle.js';
 import { accountService } from './accountService.js';
+import { activityService } from './botActivityService.js';
 import { GeneralSettingsService } from './settings/general.js';
 
 type HandleErrorResult = {
@@ -50,11 +51,8 @@ export enum BotState {
 export class ControllerService {
   private _timeout: NodeJS.Timeout | null = null;
   private _taskManager: TaskManager | null = null;
-  private _isActive: boolean = false;
   private _refreshRequests: Set<string> = new Set<string>();
   private _botState: BotState = BotState.None;
-
-  public isActive = (): boolean => this._isActive;
 
   public state = (): BotState => this._botState;
 
@@ -62,14 +60,6 @@ export class ControllerService {
     this._botState = state;
 
     publishPayloadEvent(BotEvent.BotRunningChanged, { state });
-  };
-
-  private setActivity = (activity: boolean): void => {
-    this._isActive = activity;
-
-    publishPayloadEvent(BotEvent.BotActivityChanged, {
-      isActive: activity,
-    });
   };
 
   private handleError = async (error: Error): Promise<HandleErrorResult> => {
@@ -102,7 +92,7 @@ export class ControllerService {
             ? Math.pow(2, maintenanceCount) * 30
             : (Math.random() * (40 - 30) + 30) * 60;
 
-        AccountContext.getContext().logsService.logText(
+        activityService.setActivity(
           `There is a maintenance on the server, waiting ${formatTime(
             Duration.fromSeconds(nextCoolDownSeconds),
           )} minutes...`,
@@ -136,7 +126,7 @@ export class ControllerService {
       );
 
       if (continueButton) {
-        AccountContext.getContext().logsService.logText(
+        activityService.setActivity(
           'Found a dialog about server progress, continuing...',
         );
 
@@ -208,7 +198,7 @@ export class ControllerService {
   };
 
   public signIn = async (accountId: string): Promise<void> => {
-    this.setActivity(true);
+    activityService.setActivity('Loading account context');
     AccountContext.setContext(accountId);
     accountService.setCurrentAccountId(accountId);
 
@@ -219,9 +209,11 @@ export class ControllerService {
         return;
       }
 
+      activityService.setActivity('Preparing');
       this.setState(BotState.InitialScanning);
 
       await loadGameInfo();
+      activityService.setActivity('Loading villages');
       await AccountContext.getContext().villageService.load();
       await ensureLoggedIn();
       await ensureCookiesAreSubmitted();
@@ -278,7 +270,7 @@ export class ControllerService {
     this.setState(BotState.None);
     AccountContext.resetContext();
     accountService.setCurrentAccountId(null);
-    this.setActivity(false);
+    activityService.setActivity('');
   };
 
   public start = async (): Promise<void> => {
@@ -301,7 +293,6 @@ export class ControllerService {
       return;
     }
 
-    this.setActivity(true);
     let allowContinue = true;
     let coolDown: CoolDown | undefined;
 
@@ -319,7 +310,7 @@ export class ControllerService {
     }
 
     if (!allowContinue) {
-      this.setActivity(false);
+      activityService.setActivity('');
       this.setState(BotState.Paused);
 
       return;
@@ -333,7 +324,7 @@ export class ControllerService {
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
     AccountContext.getContext().nextExecutionService.setTasks(nextExecution);
-    this.setActivity(false);
+    activityService.setActivity('');
 
     this._timeout = global.setTimeout(async () => {
       await this.execute();

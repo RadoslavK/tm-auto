@@ -1,5 +1,6 @@
 import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
+import { activityService } from '../../../services/botActivityService.js';
 
 export const collectDailyRewards = async (): Promise<void> => {
   if (!AccountContext.getContext().settingsService.autoMentor.get().acceptDailyRewards) {
@@ -13,6 +14,8 @@ export const collectDailyRewards = async (): Promise<void> => {
   if (!dailyRewards) {
     throw new Error('Did not find daily rewards button');
   }
+
+  activityService.setActivity('Claiming daily reward');
 
   const acceptableDailyRewards = await dailyRewards.$('.indicator');
 
@@ -42,8 +45,6 @@ export const collectDailyRewards = async (): Promise<void> => {
   if (!claimRewardButton) {
     throw new Error('Did not find claim reward button');
   }
-
-  AccountContext.getContext().logsService.logText('Claiming daily reward');
 
   await Promise.all([
     claimRewardButton.click(),

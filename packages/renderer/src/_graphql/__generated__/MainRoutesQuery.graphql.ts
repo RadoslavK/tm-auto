@@ -6,7 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type MainRoutesQueryVariables = {};
 export type MainRoutesQueryResponse = {
-    readonly isBotActive: boolean;
+    readonly botActivity: string;
     readonly nextTasksExecution: {
         readonly " $fragmentRefs": FragmentRefs<"NextTasksExecution_timestamp">;
     };
@@ -20,7 +20,7 @@ export type MainRoutesQuery = {
 
 /*
 query MainRoutesQuery {
-  isBotActive
+  botActivity
   nextTasksExecution {
     ...NextTasksExecution_timestamp
   }
@@ -36,7 +36,7 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isBotActive",
+  "name": "botActivity",
   "storageKey": null
 };
 return {
@@ -95,14 +95,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9861658b9f6ce00c33df7e8e27db70fb",
+    "cacheID": "a854eee95ae8e9ba80a1397e1e41cccb",
     "id": null,
     "metadata": {},
     "name": "MainRoutesQuery",
     "operationKind": "query",
-    "text": "query MainRoutesQuery {\n  isBotActive\n  nextTasksExecution {\n    ...NextTasksExecution_timestamp\n  }\n}\n\nfragment NextTasksExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "query MainRoutesQuery {\n  botActivity\n  nextTasksExecution {\n    ...NextTasksExecution_timestamp\n  }\n}\n\nfragment NextTasksExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '65af575be8583106dafce959b051872c';
+(node as any).hash = '57e99890ba9a86b8f17b2f2e18195cfd';
 export default node;

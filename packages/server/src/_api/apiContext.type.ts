@@ -3,6 +3,7 @@ import type { Hero } from '../_models/hero/hero.js';
 import type { GeneralSettings } from '../_models/settings/generalSettings.js';
 import type { AccountService } from '../services/accountService.js';
 import type { AvailableBuildingTypesService } from '../services/availableBuildingTypesService.js';
+import type { BotActivityService } from '../services/botActivityService.js';
 import type { ExpandedBuildingService } from '../services/buildingQueue/expandedBuildingService.js';
 import type { BuildingQueueService } from '../services/buildingQueueService.js';
 import type { ControllerService } from '../services/controllerService.js';
@@ -20,6 +21,7 @@ import type { SettingsManagementService } from '../services/settingsManagementSe
 import type { VillageService } from '../services/villageService.js';
 
 export type ApiContext = {
+  readonly activityService: BotActivityService;
   readonly controllerService: ControllerService;
   readonly crannyInfoService: CrannyInfoService;
   readonly unitInfoService: UnitInfoService;

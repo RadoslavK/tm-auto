@@ -1,6 +1,7 @@
 import { AccountContext } from '../accountContext.js';
 import { accountService } from '../services/accountService.js';
 import { AvailableBuildingTypesService } from '../services/availableBuildingTypesService.js';
+import { activityService } from '../services/botActivityService.js';
 import { ExpandedBuildingService } from '../services/buildingQueue/expandedBuildingService.js';
 import { ControllerService } from '../services/controllerService.js';
 import { CrannyInfoService } from '../services/crannyInfoService.js';
@@ -20,6 +21,7 @@ type ProxiedType<Provided> = Omit<ApiContext, keyof Provided>;
 
 export const createApiContextProxy = (): ApiContext => {
   const context = {
+    activityService,
     controllerService: new ControllerService(),
     crannyInfoService: new CrannyInfoService(),
     unitInfoService,

@@ -458,6 +458,7 @@ type Query {
   autoSmithySettings(villageId: ID!): AutoSmithySettings!
   autoUnitsSettings(villageId: ID!): AutoUnitsSettings!
   availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
+  botActivity: String!
   botState: BotState!
   buildingQueue(villageId: ID!): BuildingQueue!
   buildingSpots(villageId: ID!): BuildingSpots!
@@ -471,7 +472,6 @@ type Query {
   heroInformation: HeroInformation!
   heroLevelUpSettings: HeroLevelUpSettings!
   isAccountTaken(account: AccountInput!): Boolean!
-  isBotActive: Boolean!
   lastSignedAccountId: String
   logEntries: [LogEntry!]!
   mapScanProgress: Float!
@@ -550,7 +550,7 @@ type Subscription {
   autoSmithySettingsUnitUpdated(villageId: ID!): AutoSmithyUnitSettings!
   autoSmithySettingsUpdated(villageId: ID!): AutoSmithySettings!
   autoUnitsSettingsUpdated(villageId: ID!): AutoUnitsSettings!
-  botActivityChanged: Boolean!
+  botActivityChanged: String!
   botStateChanged: BotState!
   buildingQueueCorrected(villageId: ID!): ModificationPayload!
   buildingQueueTimesUpdated(villageId: ID!): BuildingQueue!

@@ -749,6 +749,7 @@ export interface NexusGenFieldTypes {
     autoSmithySettings: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     autoUnitsSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     availableNewBuildings: NexusGenRootTypes['AvailableNewBuilding'][]; // [AvailableNewBuilding!]!
+    botActivity: string; // String!
     botState: NexusGenEnums['BotState']; // BotState!
     buildingQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingSpots: NexusGenRootTypes['BuildingSpots']; // BuildingSpots!
@@ -762,7 +763,6 @@ export interface NexusGenFieldTypes {
     heroInformation: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettings: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
     isAccountTaken: boolean; // Boolean!
-    isBotActive: boolean; // Boolean!
     lastSignedAccountId: string | null; // String
     logEntries: NexusGenRootTypes['LogEntry'][]; // [LogEntry!]!
     mapScanProgress: number; // Float!
@@ -823,7 +823,7 @@ export interface NexusGenFieldTypes {
     autoSmithySettingsUnitUpdated: NexusGenRootTypes['AutoSmithyUnitSettings']; // AutoSmithyUnitSettings!
     autoSmithySettingsUpdated: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
     autoUnitsSettingsUpdated: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
-    botActivityChanged: boolean; // Boolean!
+    botActivityChanged: string; // String!
     botStateChanged: NexusGenEnums['BotState']; // BotState!
     buildingQueueCorrected: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     buildingQueueTimesUpdated: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
@@ -1196,6 +1196,7 @@ export interface NexusGenFieldTypeNames {
     autoSmithySettings: 'AutoSmithySettings'
     autoUnitsSettings: 'AutoUnitsSettings'
     availableNewBuildings: 'AvailableNewBuilding'
+    botActivity: 'String'
     botState: 'BotState'
     buildingQueue: 'BuildingQueue'
     buildingSpots: 'BuildingSpots'
@@ -1209,7 +1210,6 @@ export interface NexusGenFieldTypeNames {
     heroInformation: 'HeroInformation'
     heroLevelUpSettings: 'HeroLevelUpSettings'
     isAccountTaken: 'Boolean'
-    isBotActive: 'Boolean'
     lastSignedAccountId: 'String'
     logEntries: 'LogEntry'
     mapScanProgress: 'Float'
@@ -1270,7 +1270,7 @@ export interface NexusGenFieldTypeNames {
     autoSmithySettingsUnitUpdated: 'AutoSmithyUnitSettings'
     autoSmithySettingsUpdated: 'AutoSmithySettings'
     autoUnitsSettingsUpdated: 'AutoUnitsSettings'
-    botActivityChanged: 'Boolean'
+    botActivityChanged: 'String'
     botStateChanged: 'BotState'
     buildingQueueCorrected: 'ModificationPayload'
     buildingQueueTimesUpdated: 'BuildingQueue'

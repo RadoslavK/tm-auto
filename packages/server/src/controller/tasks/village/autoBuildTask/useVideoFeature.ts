@@ -1,7 +1,8 @@
-import { AccountContext } from '../../../../accountContext.js';
 import { getPage } from '../../../../browser/getPage.js';
+import { activityService } from '../../../../services/botActivityService.js';
 
 export const useVideoFeature = async (): Promise<boolean> => {
+  activityService.setActivity('Watching video to speed up auto build.');
   const page = await getPage();
 
   const upgradeBtn = await page.$('.green.build.videoFeatureButton');
@@ -11,8 +12,6 @@ export const useVideoFeature = async (): Promise<boolean> => {
 
     return false;
   }
-
-  AccountContext.getContext().logsService.logText('Watching video to speed up auto build.');
 
   await Promise.all([
     page.waitForSelector('.dialog.videoFeature'),

@@ -53,9 +53,9 @@ export const StopBotMutation = mutationField(t => {
   });
 });
 
-export const IsBotActiveQuery = queryField(t => {
-  t.boolean('isBotActive', {
-    resolve: (_p, _args, ctx) => ctx.controllerService.isActive(),
+export const BotActivityQuery = queryField(t => {
+  t.string('botActivity', {
+    resolve: (_p, _args, ctx) => ctx.activityService.getActivity(),
   });
 });
 
@@ -67,9 +67,9 @@ export const BotStateQuery = queryField(t => {
 });
 
 export const BotActivityChangedSubscription = subscriptionField(t => {
-  t.boolean('botActivityChanged', {
+  t.string('botActivityChanged', {
     ...subscribeToEvent(BotEvent.BotActivityChanged, {
-      resolve: (p) => p.isActive,
+      resolve: (p) => p.botActivity,
     }),
   });
 });

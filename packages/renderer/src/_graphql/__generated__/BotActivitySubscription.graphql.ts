@@ -5,7 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 export type BotActivitySubscriptionVariables = {};
 export type BotActivitySubscriptionResponse = {
-    readonly botActivityChanged: boolean;
+    readonly botActivityChanged: string;
 };
 export type BotActivitySubscription = {
     readonly response: BotActivitySubscriptionResponse;

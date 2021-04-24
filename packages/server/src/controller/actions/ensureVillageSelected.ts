@@ -2,6 +2,7 @@ import type { ElementHandle } from 'puppeteer';
 
 import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
+import { activityService } from '../../services/botActivityService.js';
 
 const getVillageSwitch = async (
   switches: readonly ElementHandle[],
@@ -25,6 +26,8 @@ const getVillageSwitch = async (
 export const ensureVillageSelected = async (
   villageId: string,
 ): Promise<void> => {
+  const { name } = AccountContext.getContext().villageService.village(villageId);
+  activityService.setActivity(`Selecting village ${name}`);
   const { currentVillageId } = AccountContext.getContext().villageService;
 
   if (currentVillageId !== villageId) {

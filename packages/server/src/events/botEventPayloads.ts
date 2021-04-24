@@ -86,7 +86,7 @@ export type BotEventPayloads = {
   };
 
   [BotEvent.BotActivityChanged]: {
-    readonly isActive: boolean;
+    readonly botActivity: string;
   };
 
   [BotEvent.BotRunningChanged]: {

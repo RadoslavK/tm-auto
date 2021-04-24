@@ -6,6 +6,7 @@ import { Duration } from '../../../_models/duration.js';
 import type { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings.js';
 import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
+import { activityService } from '../../../services/botActivityService.js';
 import {
   getWithMaximumSafe,
   getWithMinimumSafe,
@@ -57,6 +58,8 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
     if (!adventuresButton) {
       return;
     }
+
+    activityService.setActivity('Sending hero to adventure');
 
     await Promise.all([
       adventuresButton.click(),
@@ -158,8 +161,6 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
     if (!sendLinkElement) {
       throw new Error('Link element for selected adventure was not found');
     }
-
-    AccountContext.getContext().logsService.logText('Sending hero to adventure');
 
     await Promise.all([
       sendLinkElement.click(),
