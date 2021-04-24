@@ -323,6 +323,7 @@ export interface NexusGenObjects {
   EnqueueBuildingPayload: { // root type
     addedNew: boolean; // Boolean!
     building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
+    newIndex?: number | null; // Int
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
   GameInfo: { // root type
@@ -616,6 +617,7 @@ export interface NexusGenFieldTypes {
   EnqueueBuildingPayload: { // field return type
     addedNew: boolean; // Boolean!
     building: NexusGenRootTypes['QueuedBuilding']; // QueuedBuilding!
+    newIndex: number | null; // Int
     queue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
   }
   GameInfo: { // field return type
@@ -1059,6 +1061,7 @@ export interface NexusGenFieldTypeNames {
   EnqueueBuildingPayload: { // field return type name
     addedNew: 'Boolean'
     building: 'QueuedBuilding'
+    newIndex: 'Int'
     queue: 'BuildingQueue'
   }
   GameInfo: { // field return type name

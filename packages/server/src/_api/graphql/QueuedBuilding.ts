@@ -209,6 +209,7 @@ export const EnqueueBuildingPayload = objectType({
   name: 'EnqueueBuildingPayload',
   definition: t => {
     t.boolean('addedNew');
+    t.nullable.int('newIndex');
     t.field('building', { type: QueuedBuildingObject });
     t.field('queue', { type: BuildingQueue });
   },
@@ -220,10 +221,10 @@ export const EnqueueBuildingMutation = mutationField(t => {
     args: {
       input: arg({ type: EnqueueBuildingInput }),
     },
-    resolve: (_, args ,ctx) => {
+    resolve: async (_, args ,ctx) => {
       const { villageId, addNewToTop, ...enqueuedBuilding } = args.input;
 
-      const result = ctx.buildingQueueService.for(villageId).enqueue.enqueueBuilding(enqueuedBuilding, addNewToTop);
+      const result = await ctx.buildingQueueService.for(villageId).enqueue.enqueueBuilding(enqueuedBuilding, addNewToTop);
 
       return result && {
         ...result,

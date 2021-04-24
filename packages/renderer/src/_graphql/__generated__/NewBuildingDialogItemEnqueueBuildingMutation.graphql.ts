@@ -17,6 +17,7 @@ export type NewBuildingDialogItemEnqueueBuildingMutationVariables = {
 export type NewBuildingDialogItemEnqueueBuildingMutationResponse = {
     readonly enqueueBuilding: {
         readonly addedNew: boolean;
+        readonly newIndex: number | null;
         readonly building: {
             readonly " $fragmentRefs": FragmentRefs<"QueuedBuilding_queuedBuilding">;
         };
@@ -38,6 +39,7 @@ mutation NewBuildingDialogItemEnqueueBuildingMutation(
 ) {
   enqueueBuilding(input: $input) {
     addedNew
+    newIndex
     building {
       ...QueuedBuilding_queuedBuilding
       id
@@ -153,7 +155,14 @@ v2 = {
   "name": "addedNew",
   "storageKey": null
 },
-v3 = [
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "newIndex",
+  "storageKey": null
+},
+v4 = [
   {
     "alias": null,
     "args": null,
@@ -183,42 +192,42 @@ v3 = [
     "storageKey": null
   }
 ],
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "wood",
   "storageKey": null
 },
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "clay",
   "storageKey": null
 },
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "iron",
   "storageKey": null
 },
-v7 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "crop",
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "freeCrop",
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -241,6 +250,7 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -295,6 +305,7 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -352,7 +363,7 @@ return {
                 "kind": "LinkedField",
                 "name": "buildingTime",
                 "plural": false,
-                "selections": (v3/*: any*/),
+                "selections": (v4/*: any*/),
                 "storageKey": null
               },
               {
@@ -363,12 +374,12 @@ return {
                 "name": "cost",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/),
-                  (v9/*: any*/)
+                  (v9/*: any*/),
+                  (v10/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -390,7 +401,7 @@ return {
                 "kind": "LinkedField",
                 "name": "infrastructureBuildingTime",
                 "plural": false,
-                "selections": (v3/*: any*/),
+                "selections": (v4/*: any*/),
                 "storageKey": null
               },
               {
@@ -400,7 +411,7 @@ return {
                 "kind": "LinkedField",
                 "name": "resourcesBuildingTime",
                 "plural": false,
-                "selections": (v3/*: any*/),
+                "selections": (v4/*: any*/),
                 "storageKey": null
               },
               {
@@ -410,7 +421,7 @@ return {
                 "kind": "LinkedField",
                 "name": "totalBuildingTime",
                 "plural": false,
-                "selections": (v3/*: any*/),
+                "selections": (v4/*: any*/),
                 "storageKey": null
               },
               {
@@ -421,12 +432,12 @@ return {
                 "name": "totalCost",
                 "plural": false,
                 "selections": [
-                  (v5/*: any*/),
-                  (v7/*: any*/),
-                  (v8/*: any*/),
                   (v6/*: any*/),
+                  (v8/*: any*/),
                   (v9/*: any*/),
-                  (v4/*: any*/)
+                  (v7/*: any*/),
+                  (v10/*: any*/),
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -439,14 +450,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c3c8a81fb8ca19dd8372a82913bf24f8",
+    "cacheID": "c37006b849d2f9cfc11a263c2ad335d0",
     "id": null,
     "metadata": {},
     "name": "NewBuildingDialogItemEnqueueBuildingMutation",
     "operationKind": "mutation",
-    "text": "mutation NewBuildingDialogItemEnqueueBuildingMutation(\n  $input: EnqueueBuildingInput!\n) {\n  enqueueBuilding(input: $input) {\n    addedNew\n    building {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n    queue {\n      ...BuildingQueueDurationAndCost\n    }\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
+    "text": "mutation NewBuildingDialogItemEnqueueBuildingMutation(\n  $input: EnqueueBuildingInput!\n) {\n  enqueueBuilding(input: $input) {\n    addedNew\n    newIndex\n    building {\n      ...QueuedBuilding_queuedBuilding\n      id\n    }\n    queue {\n      ...BuildingQueueDurationAndCost\n    }\n  }\n}\n\nfragment BuildingQueueDurationAndCost on BuildingQueue {\n  ...BuildingQueueTimes\n  totalCost {\n    ...Resources\n  }\n}\n\nfragment BuildingQueueTimes on BuildingQueue {\n  infrastructureBuildingTime {\n    ...Duration\n  }\n  resourcesBuildingTime {\n    ...Duration\n  }\n  totalBuildingTime {\n    ...Duration\n  }\n}\n\nfragment Cost_duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment Cost_resources on Resources {\n  ...Resources_resources\n}\n\nfragment Duration on Duration {\n  days\n  hours\n  minutes\n  seconds\n}\n\nfragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {\n  id\n  startingLevel\n  targetLevel\n}\n\nfragment QueuedBuildingComponent_queuedBuilding on QueuedBuilding {\n  ...QueuedBuildingActions_queuedBuilding\n  name\n  type\n  fieldId\n  startingLevel\n  targetLevel\n  buildingTime {\n    ...Cost_duration\n  }\n  cost {\n    ...Cost_resources\n  }\n}\n\nfragment QueuedBuilding_queuedBuilding on QueuedBuilding {\n  id\n  type\n  ...QueuedBuildingComponent_queuedBuilding\n}\n\nfragment Resources on Resources {\n  clay\n  crop\n  freeCrop\n  iron\n  total\n  wood\n}\n\nfragment Resources_resources on Resources {\n  wood\n  clay\n  iron\n  crop\n  freeCrop\n  total\n}\n"
   }
 };
 })();
-(node as any).hash = 'ce768c3bd41229e97b20e18a1daa9b66';
+(node as any).hash = '11d08541d771d1d1d7af2bdd1731ef0a';
 export default node;

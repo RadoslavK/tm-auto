@@ -74,6 +74,7 @@ const buildingSpotEnqueueBuildingMutation = graphql`
     mutation BuildingSpotEnqueueBuildingMutation($input: EnqueueBuildingInput!) {
         enqueueBuilding(input: $input) {
             addedNew
+            newIndex
             building {
                 ...QueuedBuilding_queuedBuilding
             }
@@ -140,7 +141,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
         const addedBuilding = result.getLinkedRecord('building');
         const queue = result.getLinkedRecord('queue');
 
-        enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, queue, villageId);
+        enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, data.enqueueBuilding.newIndex, queue, villageId);
       },
     });
   };

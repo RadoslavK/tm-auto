@@ -49,6 +49,7 @@ const newBuildingDialogItemEnqueueBuildingMutation = graphql`
   mutation NewBuildingDialogItemEnqueueBuildingMutation($input: EnqueueBuildingInput!) {
       enqueueBuilding(input: $input) {
           addedNew
+          newIndex
           building {
               ...QueuedBuilding_queuedBuilding
           }
@@ -105,7 +106,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
       const addedBuilding = result.getLinkedRecord('building');
       const queue = result.getLinkedRecord('queue');
 
-      enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, queue, villageId);
+      enqueueBuildingUpdater(store, addedBuilding, data.enqueueBuilding.addedNew, data.enqueueBuilding.newIndex, queue, villageId);
     },
   });
 

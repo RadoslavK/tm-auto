@@ -1,6 +1,7 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
+import { AccountContext } from '../../accountContext.js';
 import { buildingInfoService } from '../info/buildingInfoService.js';
 import { VillageServiceBase } from '../villageServiceBase.js';
 import type { SerializeQueue } from './types/serializeQueue.type.js';
@@ -13,6 +14,8 @@ type Input = {
 
 type Payload = {
   readonly addedNew: boolean;
+  //  Null - add to end, number - add to this index
+  readonly newIndex: number | null;
   readonly building: QueuedBuilding;
 }
 
@@ -21,7 +24,7 @@ export class EnqueueBuildingService extends VillageServiceBase {
     super(villageId);
   }
 
-  public enqueueBuilding = (building: Input): Payload | null => {
+  public enqueueBuilding = async (building: Input, addNewToTop: boolean): Promise<Payload | null> => {
     const { fieldId, type } = building;
 
     const spot = this.village.buildings.spots.at(fieldId);
@@ -51,10 +54,33 @@ export class EnqueueBuildingService extends VillageServiceBase {
       });
 
       queue.add(qBuilding);
+
+      if (addNewToTop) {
+        const { removedBuildings, updatedBuildings } = await AccountContext.getContext().buildingQueueService.for(this.village.id).moveAsHighAsPossible(qBuilding.id);
+
+        if (updatedBuildings.length && removedBuildings.length) {
+          return {
+            addedNew: false,
+            newIndex: null,
+            //  The new one should be removed and some previous one updated
+            building: updatedBuildings[0],
+          };
+        } else {
+          const newIndex = queue.buildings().indexOf(qBuilding);
+          return {
+            addedNew: true,
+            newIndex,
+            //  Just the new one was moved
+            building: qBuilding,
+          };
+        }
+      }
+
       this.serializeQueue(true);
 
       return {
         addedNew: true,
+        newIndex: null,
         building: qBuilding,
       };
     } else {
@@ -70,6 +96,7 @@ export class EnqueueBuildingService extends VillageServiceBase {
 
       return {
         addedNew: false,
+        newIndex: null,
         building: lastBuilding,
       };
     }

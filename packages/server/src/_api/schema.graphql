@@ -283,6 +283,7 @@ input EnqueueBuildingInput {
 type EnqueueBuildingPayload {
   addedNew: Boolean!
   building: QueuedBuilding!
+  newIndex: Int
   queue: BuildingQueue!
 }
 
