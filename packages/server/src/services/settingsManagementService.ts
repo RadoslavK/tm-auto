@@ -376,6 +376,10 @@ export class SettingsManagementService {
           const newSettings = new GeneralVillageSettings(settings);
 
           villageSettingsService.general.update(newSettings);
+          publishPayloadEvent(BotEvent.GeneralVillageSettingsUpdated, {
+            generalVillageSettings: newSettings,
+            villageId,
+          });
         });
       }
     });

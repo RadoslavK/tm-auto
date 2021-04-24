@@ -1,15 +1,28 @@
 import {
   arg,
+  idArg,
   inputObjectType,
+  list,
   mutationField,
   objectType,
   queryField,
+  subscriptionField,
 } from 'nexus';
+import { join } from 'path';
+import { getDirname } from 'shared/utils/getDirname.js';
+
+import { BotEvent } from '../../../events/botEvent.js';
+import { subscribeToEvent } from '../../../pubSub.js';
 
 export const GeneralVillageSettings = objectType({
   name: 'GeneralVillageSettings',
   definition: t => {
     t.boolean('allowTasks');
+    t.list.field('tasksOrder', { type: 'TaskType' });
+  },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: join(getDirname(import.meta), '../../../_models/settings/generalVillageSettings.ts'),
+    export: 'GeneralVillageSettings',
   },
 });
 
@@ -24,7 +37,7 @@ export const GeneralVillageSettingsQuery = queryField(t => {
   t.field('generalVillageSettings', {
     type: GeneralVillageSettings,
     args: {
-      villageId: 'ID',
+      villageId: idArg(),
     },
     resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).general.get(),
   });
@@ -34,7 +47,7 @@ export const UpdateGeneralVillageSettingsMutation = mutationField(t => {
   t.field('updateGeneralVillageSettings', {
     type: GeneralVillageSettings,
     args: {
-      villageId: 'ID',
+      villageId: idArg(),
       settings: arg({ type: UpdateGeneralVillageSettingsInput }),
     },
     resolve: (_, args, ctx) =>
@@ -42,13 +55,38 @@ export const UpdateGeneralVillageSettingsMutation = mutationField(t => {
   });
 });
 
+export const UpdateGeneralVillageSettingsOrderMutation = mutationField(t => {
+  t.field('updateGeneralVillageSettingsOrder', {
+    type: GeneralVillageSettings,
+    args: {
+      villageId: idArg(),
+      order: list(arg({ type: 'TaskType' })),
+    },
+    resolve: (_, { villageId, order }, ctx) =>
+      ctx.settingsService.village(villageId).general.merge({ tasksOrder: order }),
+  });
+});
+
 export const ResetGeneralVillageSettingsMutation = mutationField(t => {
   t.field('resetGeneralVillageSettings', {
     type: GeneralVillageSettings,
     args: {
-      villageId: 'ID',
+      villageId: idArg(),
     },
     resolve: (_, args, ctx) =>
       ctx.settingsService.village(args.villageId).general.reset(),
+  });
+});
+
+export const GeneralVillageSettingsUpdatedSubscription = subscriptionField(t => {
+  t.field('generalVillageSettingsUpdated', {
+    type: GeneralVillageSettings,
+    args: {
+      villageId: idArg(),
+    },
+    ...subscribeToEvent(BotEvent.GeneralVillageSettingsUpdated, {
+      filter: (p, { villageId }) => p.villageId === villageId,
+      resolve: (p) => p.generalVillageSettings,
+    }),
   });
 });

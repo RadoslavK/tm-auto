@@ -9,7 +9,7 @@ export type GeneralVillageSettingsResetSettingsMutationVariables = {
 };
 export type GeneralVillageSettingsResetSettingsMutationResponse = {
     readonly resetGeneralVillageSettings: {
-        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings_generalVillageSettings">;
+        readonly " $fragmentRefs": FragmentRefs<"GeneralVillageSettings_generalVillageSettings" | "GeneralVillageOverview_generalVillageSettings">;
     };
 };
 export type GeneralVillageSettingsResetSettingsMutation = {
@@ -25,7 +25,12 @@ mutation GeneralVillageSettingsResetSettingsMutation(
 ) {
   resetGeneralVillageSettings(villageId: $villageId) {
     ...GeneralVillageSettings_generalVillageSettings
+    ...GeneralVillageOverview_generalVillageSettings
   }
+}
+
+fragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {
+  tasksOrder
 }
 
 fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
@@ -67,6 +72,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "GeneralVillageSettings_generalVillageSettings"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "GeneralVillageOverview_generalVillageSettings"
           }
         ],
         "storageKey": null
@@ -95,6 +105,13 @@ return {
             "kind": "ScalarField",
             "name": "allowTasks",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "tasksOrder",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -102,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "94bee3d571a14278c2751486574759d2",
+    "cacheID": "64d06945a029906f5aab63e86cf6ecc9",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    ...GeneralVillageSettings_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
+    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    ...GeneralVillageSettings_generalVillageSettings\n    ...GeneralVillageOverview_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {\n  tasksOrder\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
   }
 };
 })();
-(node as any).hash = 'd7ebe24091749da2d39046820df53970';
+(node as any).hash = '23f9319812ad0ae208773399e0830162';
 export default node;

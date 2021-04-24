@@ -50,7 +50,7 @@ export const ResearchListUnit: React.FC<Props> = ({ listIndex, onRemove, onUnitD
     type: 'UnitResearch',
   });
 
-  const [ { isUnitOver, movedUnit }, drop] = useDrop({
+  const [{ isUnitOver, movedUnit }, drop] = useDrop({
     accept: 'UnitResearch',
     canDrop: (droppedItem: UnitResearchDrag) => droppedItem.listIndex !== listIndex,
     collect: (monitor) => ({

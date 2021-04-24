@@ -9,6 +9,9 @@ export type GeneralVillageOverviewQueryVariables = {
     villageId: string;
 };
 export type GeneralVillageOverviewQueryResponse = {
+    readonly generalVillageSettings: {
+        readonly tasksOrder: ReadonlyArray<TaskType>;
+    };
     readonly nextVillageTaskExecutions: ReadonlyArray<{
         readonly label: string;
         readonly task: TaskType;
@@ -28,6 +31,9 @@ export type GeneralVillageOverviewQuery = {
 query GeneralVillageOverviewQuery(
   $villageId: ID!
 ) {
+  generalVillageSettings(villageId: $villageId) {
+    tasksOrder
+  }
   nextVillageTaskExecutions(villageId: $villageId) {
     label
     task
@@ -59,12 +65,30 @@ v1 = [
 ],
 v2 = {
   "alias": null,
+  "args": (v1/*: any*/),
+  "concreteType": "GeneralVillageSettings",
+  "kind": "LinkedField",
+  "name": "generalVillageSettings",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "tasksOrder",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "label",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -78,6 +102,7 @@ return {
     "metadata": null,
     "name": "GeneralVillageOverviewQuery",
     "selections": [
+      (v2/*: any*/),
       {
         "alias": null,
         "args": (v1/*: any*/),
@@ -86,8 +111,8 @@ return {
         "name": "nextVillageTaskExecutions",
         "plural": true,
         "selections": [
-          (v2/*: any*/),
           (v3/*: any*/),
+          (v4/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -117,6 +142,7 @@ return {
     "kind": "Operation",
     "name": "GeneralVillageOverviewQuery",
     "selections": [
+      (v2/*: any*/),
       {
         "alias": null,
         "args": (v1/*: any*/),
@@ -125,8 +151,8 @@ return {
         "name": "nextVillageTaskExecutions",
         "plural": true,
         "selections": [
-          (v2/*: any*/),
           (v3/*: any*/),
+          (v4/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -151,14 +177,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3765f9f7d830ae756906c67767bd86d6",
+    "cacheID": "69d2f452f86878f94dbd86ef77f2dca0",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageOverviewQuery",
     "operationKind": "query",
-    "text": "query GeneralVillageOverviewQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecutions(villageId: $villageId) {\n    label\n    task\n    timestamp {\n      ...NextVillageTaskExecution_timestamp\n    }\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "query GeneralVillageOverviewQuery(\n  $villageId: ID!\n) {\n  generalVillageSettings(villageId: $villageId) {\n    tasksOrder\n  }\n  nextVillageTaskExecutions(villageId: $villageId) {\n    label\n    task\n    timestamp {\n      ...NextVillageTaskExecution_timestamp\n    }\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '5d8a3468804b55cb726f85164f537296';
+(node as any).hash = '2b62e280a913518bfe833c5c870fff6f';
 export default node;

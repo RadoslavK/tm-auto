@@ -1,8 +1,12 @@
-import { Button } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
-  useState, 
+  useState,
 } from 'react';
 import {
   PreloadedQuery,
@@ -34,17 +38,18 @@ export const generalVillageSettingsQuery = graphql`
 `;
 
 const generalVillageSettingsUpdateSettingsMutation = graphql`
-  mutation GeneralVillageSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateGeneralVillageSettingsInput!) {
-      updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
-          ...GeneralVillageSettings_generalVillageSettings
-      }
-  }
+    mutation GeneralVillageSettingsUpdateSettingsMutation($villageId: ID!, $settings: UpdateGeneralVillageSettingsInput!) {
+        updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {
+            ...GeneralVillageSettings_generalVillageSettings
+        }
+    }
 `;
 
 const generalVillageSettingsResetSettingsMutation = graphql`
     mutation GeneralVillageSettingsResetSettingsMutation($villageId: ID!) {
         resetGeneralVillageSettings(villageId: $villageId) {
             ...GeneralVillageSettings_generalVillageSettings
+            ...GeneralVillageOverview_generalVillageSettings
         }
     }
 `;
@@ -78,13 +83,12 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
     }
   }, [hasChanges, state, updateSettings, villageId]);
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const { checked, name } = e.currentTarget;
-
-    setState((prevState) => ({
+  const onUpdade = <Prop extends keyof typeof state>(prop: Prop, value: typeof state[Prop]) => {
+    setState(prevState => ({
       ...prevState,
-      [name]: checked,
+      [prop]: value,
     }));
+
     setHasChanges(true);
   };
 
@@ -111,13 +115,14 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
       </Button>
 
       <div>
-        <label htmlFor="allowTasks">Allow tasks</label>
-        <input
-          checked={allowTasks}
-          id="allowTasks"
-          name="allowTasks"
-          onChange={onChange}
-          type="checkbox"
+        <FormControlLabel
+          label="Allow tasks"
+          control={(
+            <Checkbox
+              checked={allowTasks}
+              onChange={e => onUpdade('allowTasks', e.currentTarget.checked)}
+            />
+          )}
         />
       </div>
     </div>

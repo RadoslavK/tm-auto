@@ -153,7 +153,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
     if (pathname.endsWith('academy' as NavigationPath)) {
       reloadAcademyQuery(villageId);
     }
-    if (pathname.endsWith('tasks-activity' as NavigationPath)) {
+    if (pathname.endsWith('general' as NavigationPath)) {
       reloadGeneralVillageOverviewQuery(villageId);
     }
   }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);

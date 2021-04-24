@@ -10,6 +10,7 @@ import { AutoSmithySettings, AutoSmithyUnitSettings } from "./../_models/setting
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
+import { GeneralVillageSettings } from "./../_models/settings/generalVillageSettings"
 import { Hero } from "./../_models/hero/hero"
 import { QueuedBuilding } from "./../_models/buildings/queue/queuedBuilding"
 import { Resources } from "./../_models/misc/resources"
@@ -334,9 +335,7 @@ export interface NexusGenObjects {
     chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
-  GeneralVillageSettings: { // root type
-    allowTasks: boolean; // Boolean!
-  }
+  GeneralVillageSettings: GeneralVillageSettings;
   GlobalAutoBuildSettings: { // root type
     allow: boolean; // Boolean!
     videoFeature: NexusGenRootTypes['VideoFeatureSettings']; // VideoFeatureSettings!
@@ -630,6 +629,7 @@ export interface NexusGenFieldTypes {
   }
   GeneralVillageSettings: { // field return type
     allowTasks: boolean; // Boolean!
+    tasksOrder: NexusGenEnums['TaskType'][]; // [TaskType!]!
   }
   GlobalAutoBuildSettings: { // field return type
     allow: boolean; // Boolean!
@@ -728,6 +728,7 @@ export interface NexusGenFieldTypes {
     updateAutoUnitsUnitSettings: NexusGenRootTypes['AutoUnitsSettings']; // AutoUnitsSettings!
     updateGeneralSettings: NexusGenRootTypes['GeneralSettings']; // GeneralSettings!
     updateGeneralVillageSettings: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
+    updateGeneralVillageSettingsOrder: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
     updateHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
   }
   NextVillageTaskExecutionPayloadField: { // field return type
@@ -827,6 +828,7 @@ export interface NexusGenFieldTypes {
     buildingQueueCorrected: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     buildingQueueTimesUpdated: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingsInProgressUpdated: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
+    generalVillageSettingsUpdated: NexusGenRootTypes['GeneralVillageSettings']; // GeneralVillageSettings!
     heroInformationUpdated: NexusGenRootTypes['HeroInformation']; // HeroInformation!
     heroLevelUpSettingsChanged: NexusGenRootTypes['HeroLevelUpSettings']; // HeroLevelUpSettings!
     lastSignedAccountIdUpdated: string | null; // String
@@ -1074,6 +1076,7 @@ export interface NexusGenFieldTypeNames {
   }
   GeneralVillageSettings: { // field return type name
     allowTasks: 'Boolean'
+    tasksOrder: 'TaskType'
   }
   GlobalAutoBuildSettings: { // field return type name
     allow: 'Boolean'
@@ -1172,6 +1175,7 @@ export interface NexusGenFieldTypeNames {
     updateAutoUnitsUnitSettings: 'AutoUnitsSettings'
     updateGeneralSettings: 'GeneralSettings'
     updateGeneralVillageSettings: 'GeneralVillageSettings'
+    updateGeneralVillageSettingsOrder: 'GeneralVillageSettings'
     updateHeroLevelUpItem: 'HeroLevelUpItem'
   }
   NextVillageTaskExecutionPayloadField: { // field return type name
@@ -1271,6 +1275,7 @@ export interface NexusGenFieldTypeNames {
     buildingQueueCorrected: 'ModificationPayload'
     buildingQueueTimesUpdated: 'BuildingQueue'
     buildingsInProgressUpdated: 'BuildingInProgress'
+    generalVillageSettingsUpdated: 'GeneralVillageSettings'
     heroInformationUpdated: 'HeroInformation'
     heroLevelUpSettingsChanged: 'HeroLevelUpSettings'
     lastSignedAccountIdUpdated: 'String'
@@ -1524,6 +1529,10 @@ export interface NexusGenArgTypes {
       settings: NexusGenInputs['UpdateGeneralVillageSettingsInput']; // UpdateGeneralVillageSettingsInput!
       villageId: string; // ID!
     }
+    updateGeneralVillageSettingsOrder: { // args
+      order: NexusGenEnums['TaskType'][]; // [TaskType!]!
+      villageId: string; // ID!
+    }
     updateHeroLevelUpItem: { // args
       id: string; // ID!
       item: NexusGenInputs['HeroLevelUpItemInput']; // HeroLevelUpItemInput!
@@ -1621,6 +1630,9 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     buildingsInProgressUpdated: { // args
+      villageId: string; // ID!
+    }
+    generalVillageSettingsUpdated: { // args
       villageId: string; // ID!
     }
     nextTaskExecutionChanged: { // args

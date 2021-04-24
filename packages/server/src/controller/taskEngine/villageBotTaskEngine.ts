@@ -1,3 +1,5 @@
+import type { TaskType } from 'shared/enums/TaskType.js';
+
 import type { Village } from '../../_models/village/village.js';
 import { AccountContext } from '../../accountContext.js';
 import {
@@ -13,17 +15,20 @@ const isTaskWithCooldown = (task: BotTaskBase): task is BotTaskWithCoolDown =>
   (task as BotTaskWithCoolDown).coolDown !== undefined;
 
 export class VillageBotTasksEngine {
-  private readonly _tasks: readonly IBotTaskEngine[];
+  private readonly _tasks: ReadonlyMap<TaskType, IBotTaskEngine>;
 
   constructor(
-    village: Village,
+    private village: Village,
     tasks: { new (village: Village): BotTask | BotTaskWithCoolDown }[],
   ) {
-    this._tasks = tasks.map((Task) => {
+    this._tasks = tasks.reduce((allTasks, Task) => {
       const task = new Task(village);
+      const type = task.type;
+
+      let engine: IBotTaskEngine;
 
       if (isTaskWithCooldown(task)) {
-        return new BotTaskEngineWithCoolDown(
+        engine = new BotTaskEngineWithCoolDown(
           task,
           () =>
             AccountContext.getContext().nextExecutionService.getForVillage(
@@ -38,18 +43,43 @@ export class VillageBotTasksEngine {
             );
           },
         );
+      } else {
+        engine = new BotTaskEngine(task);
       }
 
-      return new BotTaskEngine(task);
-    });
+      allTasks.set(type, engine);
+
+      return allTasks;
+    }, new Map<TaskType, IBotTaskEngine>());
   }
 
   public isExecutionReady = (): boolean =>
-    this._tasks.some((t) => t.isExecutionReady());
+    [...this._tasks.values()].some((t) => t.isExecutionReady());
 
   public execute = async (): Promise<void> => {
-    for (const task of this._tasks) {
+    for (const task of this.getSortedTasks()) {
       await task.execute();
     }
+  };
+
+  private getSortedTasks = (): ReadonlyArray<IBotTaskEngine> => {
+    const { tasksOrder } = AccountContext.getContext().settingsService.village(this.village.id).general.get();
+
+    const sortedTasks = tasksOrder
+      .map(taskType => {
+        const task = this._tasks.get(taskType);
+
+        if (!task) {
+          throw new Error(`Did not find task for type ${taskType}`);
+        }
+
+        return task;
+      });
+
+    if (sortedTasks.length !== this._tasks.size) {
+      throw new Error('Some tasks are not included in sorted list');
+    }
+
+    return sortedTasks;
   };
 }

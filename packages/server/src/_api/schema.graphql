@@ -299,6 +299,7 @@ type GeneralSettings {
 
 type GeneralVillageSettings {
   allowTasks: Boolean!
+  tasksOrder: [TaskType!]!
 }
 
 type GlobalAutoBuildSettings {
@@ -434,6 +435,7 @@ type Mutation {
   updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!, villageId: ID!): AutoUnitsSettings!
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
   updateGeneralVillageSettings(settings: UpdateGeneralVillageSettingsInput!, villageId: ID!): GeneralVillageSettings!
+  updateGeneralVillageSettingsOrder(order: [TaskType!]!, villageId: ID!): GeneralVillageSettings!
   updateHeroLevelUpItem(id: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
 }
 
@@ -553,6 +555,7 @@ type Subscription {
   buildingQueueCorrected(villageId: ID!): ModificationPayload!
   buildingQueueTimesUpdated(villageId: ID!): BuildingQueue!
   buildingsInProgressUpdated(villageId: ID!): [BuildingInProgress!]!
+  generalVillageSettingsUpdated(villageId: ID!): GeneralVillageSettings!
   heroInformationUpdated: HeroInformation!
   heroLevelUpSettingsChanged: HeroLevelUpSettings!
   lastSignedAccountIdUpdated: String

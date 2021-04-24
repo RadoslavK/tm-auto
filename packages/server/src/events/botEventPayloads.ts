@@ -7,6 +7,7 @@ import type { LogEntry } from '../_models/logs/logEntry.js';
 import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { AccountSettings } from '../_models/settings/account/accountSettings.js';
 import type { AutoMentorSettings } from '../_models/settings/autoMentorSettings.js';
+import type { GeneralVillageSettings } from '../_models/settings/generalVillageSettings.js';
 import type { HeroLevelUpSettings } from '../_models/settings/heroLevelUpSettings.js';
 import type { AutoAcademySettings } from '../_models/settings/tasks/autoAcademySettings.js';
 import type { AutoAdventureSettings } from '../_models/settings/tasks/autoAdventureSettings.js';
@@ -72,6 +73,11 @@ export type BotEventPayloads = {
 
   [BotEvent.AutoSmithySettingsUnitRemoved]: {
     readonly unitSettings: AutoSmithyUnitSettings;
+    readonly villageId: string;
+  };
+
+  [BotEvent.GeneralVillageSettingsUpdated]: {
+    readonly generalVillageSettings: GeneralVillageSettings;
     readonly villageId: string;
   };
 
