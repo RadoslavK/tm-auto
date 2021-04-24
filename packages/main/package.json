@@ -7,8 +7,8 @@
   "type": "module",
   "scripts": {
     "build-prod": "node build.mjs production",
-    "build-dev": "node build.mjs development true",
-    "build-dev-app": "node build.mjs development false 9221",
+    "build-dev": "node build.mjs development main",
+    "build-dev-app": "node build.mjs development app",
     "start": "electron dist-dev/index.cjs",
     "start-r": "yarn build-dev&& yarn start",
     "typecheck": "tsc --noEmit",

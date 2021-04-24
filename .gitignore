@@ -8,6 +8,7 @@ build
 build-dev
 dist
 dist-dev
+dist-dev-app
 
 yarn-error.log
 node_modules

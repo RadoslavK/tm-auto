@@ -6,6 +6,7 @@ module.exports = {
     'build-dev',
     'dist',
     'dist-dev',
+    'dist-dev-app',
     '*.json',
     '*.graphql',
     '*.json',

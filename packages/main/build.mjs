@@ -1,8 +1,8 @@
 import { build } from 'esbuild';
 
 const isDevelopment = process.argv[2] !== 'production';
-const preferClientFromUrl = process.argv[3] === 'true';
-const serverDebugPort = process.argv[4] ? Number(process.argv[4]) : 9220;
+const isLocalMainBuild = process.argv[3] === 'main';
+const serverDebugPort = isLocalMainBuild ? 9220: 9221;
 
 //  Electron does not support ESM yet // https://github.com/electron/electron/issues/21457
 /** @type(import("esbuild").BuildOptions) */
@@ -12,11 +12,11 @@ const options = {
   minify: !isDevelopment,
   define: {
     'process.env.NODE_ENV': `"${process.argv[2]}"`,
-    'process.env.preferClientFromUrl': preferClientFromUrl,
+    'process.env.preferClientFromUrl': isLocalMainBuild,
     'process.env.serverDebugPort': serverDebugPort,
   },
   logLevel: 'warning',
-  outdir: isDevelopment ? 'dist-dev' : 'dist',
+  outdir: isDevelopment ? (isLocalMainBuild ? 'dist-dev' : 'dist-dev-app') : 'dist',
   format: 'cjs',
   outExtension: {
     '.js': '.cjs',
