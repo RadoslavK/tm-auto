@@ -23,18 +23,27 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
   private settings = (): AutoAdventureSettings =>
     AccountContext.getContext().settingsService.hero.autoAdventure.get();
 
-  public allowExecution = (): boolean => this.settings().allow;
+  public allowExecution = (): boolean =>
+    this.settings().allow
+    && AccountContext.getContext().hero.canGoToAdventure();
 
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
-    const village = AccountContext.getContext().villageService.currentVillage();
+    const { villageId } = AccountContext.getContext().hero;
+
+    if (!villageId) {
+      throw new Error('Village id for hero was not parsed');
+    }
+
+    const village = AccountContext.getContext().villageService.village(villageId);
     const settings = this.settings();
 
     const { spots } = village.buildings;
     const { hero } = AccountContext.getContext();
 
-    if (!spots.isBuilt(BuildingType.RallyPoint) || !hero.canGoToAdventure()) {
+    //  TODO: ensure that this would be checked somehow or trust user
+    if (!spots.isBuilt(BuildingType.RallyPoint)) {
       return;
     }
 

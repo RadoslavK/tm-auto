@@ -1,3 +1,4 @@
+import { TaskType } from 'shared/enums/TaskType.js';
 import { getAllEnumValues } from 'shared/utils/enumUtils.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
@@ -34,27 +35,23 @@ export class TaskManager {
 
   private readonly _finalTasks: readonly IBotTaskEngine[];
 
-  //  special handling
-  private readonly _autoAdventureTask: BotTaskEngineWithCoolDown;
-
   constructor() {
-    this._generalTasks = [];
+    this._generalTasks = [
+      new BotTaskEngineWithCoolDown(
+        new AutoAdventureTask(),
+        () =>
+          AccountContext.getContext().nextExecutionService.get(TaskType.AutoAdventure),
+        (nextExecution) => {
+          AccountContext.getContext().nextExecutionService.set(
+            TaskType.AutoAdventure,
+            nextExecution,
+          );
+        },
+      ),
+    ];
+
     this._finalTasks = [];
     this._villageTasks = {};
-
-    const autoAdventureTask = new AutoAdventureTask();
-
-    this._autoAdventureTask = new BotTaskEngineWithCoolDown(
-      autoAdventureTask,
-      () =>
-        AccountContext.getContext().nextExecutionService.get(autoAdventureTask.type),
-      (nextExecution) => {
-        AccountContext.getContext().nextExecutionService.set(
-          autoAdventureTask.type,
-          nextExecution,
-        );
-      },
-    );
   }
 
   public execute = async (): Promise<void> => {
@@ -125,10 +122,7 @@ export class TaskManager {
         this._villageTasks[village.id] = taskEngine;
       }
 
-      if (
-        !this._autoAdventureTask.isExecutionReady() &&
-        !taskEngine.isExecutionReady()
-      ) {
+      if (!taskEngine.isExecutionReady()) {
         continue;
       }
 
@@ -136,7 +130,6 @@ export class TaskManager {
       await collectTaskRewards();
       await updateResources();
       await updateBuildings();
-      await this._autoAdventureTask.execute();
       await taskEngine.execute();
 
       publishPayloadEvent(BotEvent.VillageUpdated, { village });
