@@ -62,14 +62,14 @@ import {
   useUnitsQuery,
 } from '../../units/components/Units.js';
 import { CrannyCapacity } from './CrannyCapacity.js';
+import {
+  GeneralVillageOverview,
+  useGeneralVillageOverviewQuery,
+} from './GeneralVillageOverview.js';
 import { VillageResources } from './VillageResources.js';
 import type { VillageRouteParams } from './Villages.js';
-import {
-  useVillageTasksActivityQuery,
-  VillageTasksActivity,
-} from './VillageTasksActivity.js';
 
-const navigationPaths = ['buildings', 'units', 'parties', 'academy', 'smithy', 'tasks-activity'] as const;
+const navigationPaths = ['buildings', 'units', 'parties', 'academy', 'smithy', 'general'] as const;
 type NavigationPath = typeof navigationPaths[number];
 
 type NavigationItem = {
@@ -126,7 +126,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   const { partiesQueryRef, reloadPartiesQuery } = usePartiesQuery();
   const { smithyQueryRef, reloadSmithyQuery } = useSmithyQuery();
   const { academyQueryRef, reloadAcademyQuery } = useAcademyQuery();
-  const { reloadVillageTasksActivityQuery, villageTasksActivityQueryRef } = useVillageTasksActivityQuery();
+  const { reloadGeneralVillageOverviewQuery, generalVillageOverviewQueryRef } = useGeneralVillageOverviewQuery();
 
   const { pathname } = useLocation();
   const prevVillageId = usePrevious(villageId);
@@ -154,9 +154,9 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       reloadAcademyQuery(villageId);
     }
     if (pathname.endsWith('tasks-activity' as NavigationPath)) {
-      reloadVillageTasksActivityQuery(villageId);
+      reloadGeneralVillageOverviewQuery(villageId);
     }
-  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadVillageTasksActivityQuery, reloadSmithyQuery, reloadAcademyQuery]);
+  }, [isTabSelected, reloadBuildingsQuery, reloadUnitSettingsQuery, villageId, prevVillageId, pathname, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 
@@ -196,11 +196,12 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       preloadData: () => reloadSmithyQuery(villageId),
     },
     {
-      label: 'Tasks',
-      path: 'tasks-activity',
-      preloadData: () => reloadVillageTasksActivityQuery(villageId),
+      label: 'General',
+      path: 'general',
+      tabType: VillageSettingsTabType.General,
+      preloadData: () => reloadGeneralVillageOverviewQuery(villageId),
     },
-  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery, reloadAcademyQuery, reloadVillageTasksActivityQuery]);
+  ], [villageId, reloadBuildingsQuery, reloadUnitSettingsQuery, reloadPartiesQuery, reloadSmithyQuery, reloadAcademyQuery, reloadGeneralVillageOverviewQuery]);
 
   const [villageSettingsQueryRef, loadVillageSettingsQuery] = useQueryLoader<VillageSettingsQuery>(villageSettingsQuery);
 
@@ -271,8 +272,8 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       case 'smithy':
         return smithyQueryRef && <Smithy queryRef={smithyQueryRef} />;
 
-      case 'tasks-activity':
-        return villageTasksActivityQueryRef && <VillageTasksActivity queryRef={villageTasksActivityQueryRef} />;
+      case 'general':
+        return generalVillageOverviewQueryRef && <GeneralVillageOverview queryRef={generalVillageOverviewQueryRef} />;
 
       default:
         throw new Error(`Did not find component for path ${n.path}`);

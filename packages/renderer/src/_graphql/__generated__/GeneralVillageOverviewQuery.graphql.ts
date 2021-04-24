@@ -5,10 +5,10 @@
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
-export type VillageTasksActivityQueryVariables = {
+export type GeneralVillageOverviewQueryVariables = {
     villageId: string;
 };
-export type VillageTasksActivityQueryResponse = {
+export type GeneralVillageOverviewQueryResponse = {
     readonly nextVillageTaskExecutions: ReadonlyArray<{
         readonly label: string;
         readonly task: TaskType;
@@ -17,15 +17,15 @@ export type VillageTasksActivityQueryResponse = {
         };
     }>;
 };
-export type VillageTasksActivityQuery = {
-    readonly response: VillageTasksActivityQueryResponse;
-    readonly variables: VillageTasksActivityQueryVariables;
+export type GeneralVillageOverviewQuery = {
+    readonly response: GeneralVillageOverviewQueryResponse;
+    readonly variables: GeneralVillageOverviewQueryVariables;
 };
 
 
 
 /*
-query VillageTasksActivityQuery(
+query GeneralVillageOverviewQuery(
   $villageId: ID!
 ) {
   nextVillageTaskExecutions(villageId: $villageId) {
@@ -76,7 +76,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "VillageTasksActivityQuery",
+    "name": "GeneralVillageOverviewQuery",
     "selections": [
       {
         "alias": null,
@@ -115,7 +115,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "VillageTasksActivityQuery",
+    "name": "GeneralVillageOverviewQuery",
     "selections": [
       {
         "alias": null,
@@ -151,14 +151,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1d2d364aa9f4cb2c3b52f3f4f7726d73",
+    "cacheID": "3765f9f7d830ae756906c67767bd86d6",
     "id": null,
     "metadata": {},
-    "name": "VillageTasksActivityQuery",
+    "name": "GeneralVillageOverviewQuery",
     "operationKind": "query",
-    "text": "query VillageTasksActivityQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecutions(villageId: $villageId) {\n    label\n    task\n    timestamp {\n      ...NextVillageTaskExecution_timestamp\n    }\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "query GeneralVillageOverviewQuery(\n  $villageId: ID!\n) {\n  nextVillageTaskExecutions(villageId: $villageId) {\n    label\n    task\n    timestamp {\n      ...NextVillageTaskExecution_timestamp\n    }\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'c1ff2fa9116d84341a0c4378427d39d2';
+(node as any).hash = '5d8a3468804b55cb726f85164f537296';
 export default node;

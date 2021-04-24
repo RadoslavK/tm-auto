@@ -15,35 +15,35 @@ import type {
 } from 'relay-runtime';
 import type { SelectorStoreUpdater } from 'relay-runtime';
 
+import type { GeneralVillageOverviewQuery } from '../../../_graphql/__generated__/GeneralVillageOverviewQuery.graphql.js';
 import type { NextVillageTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextVillageTaskExecution_timestamp.graphql.js';
 import type { TaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type { NextVillageTaskExecutionSubscriptionResponse } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
-import type { VillageTasksActivityQuery } from '../../../_graphql/__generated__/VillageTasksActivityQuery.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
 
 const query = graphql`
-  query VillageTasksActivityQuery($villageId: ID!) {
-      nextVillageTaskExecutions(villageId: $villageId) {
-          label
-          task
-          timestamp {
-              ...NextVillageTaskExecution_timestamp
-          }
-      }
-  }
+    query GeneralVillageOverviewQuery($villageId: ID!) {
+        nextVillageTaskExecutions(villageId: $villageId) {
+            label
+            task
+            timestamp {
+                ...NextVillageTaskExecution_timestamp
+            }
+        }
+    }
 `;
 
-export const useVillageTasksActivityQuery = () => {
-  const [villageTasksActivityQueryRef, loadVillageTasksActivityQuery] = useQueryLoader<VillageTasksActivityQuery>(query);
+export const useGeneralVillageOverviewQuery = () => {
+  const [generalVillageOverviewQueryRef, loadGeneralVillageOverviewQuery] = useQueryLoader<GeneralVillageOverviewQuery>(query);
 
-  const reloadVillageTasksActivityQuery = useCallback((villageId: string) => {
-    loadVillageTasksActivityQuery({ villageId }, { fetchPolicy: 'store-and-network' } );
-  }, [loadVillageTasksActivityQuery]);
+  const reloadGeneralVillageOverviewQuery = useCallback((villageId: string) => {
+    loadGeneralVillageOverviewQuery({ villageId }, { fetchPolicy: 'store-and-network' } );
+  }, [loadGeneralVillageOverviewQuery]);
 
   return {
-    villageTasksActivityQueryRef,
-    reloadVillageTasksActivityQuery,
+    generalVillageOverviewQueryRef,
+    reloadGeneralVillageOverviewQuery,
   };
 };
 
@@ -91,10 +91,10 @@ const NextVillageTaskExecutionWrapper: React.FC<NextVillageTaskExecutionWrapperP
 };
 
 type Props = {
-  readonly queryRef: PreloadedQuery<VillageTasksActivityQuery>;
+  readonly queryRef: PreloadedQuery<GeneralVillageOverviewQuery>;
 };
 
-export const VillageTasksActivity: React.FC<Props> = ({ queryRef }) => {
+export const GeneralVillageOverview: React.FC<Props> = ({ queryRef }) => {
   const { nextVillageTaskExecutions } = usePreloadedQuery(query, queryRef);
 
   return (
@@ -106,4 +106,4 @@ export const VillageTasksActivity: React.FC<Props> = ({ queryRef }) => {
   );
 };
 
-VillageTasksActivity.displayName = 'VillageTasksActivity';
+GeneralVillageOverview.displayName = 'GeneralVillageOverview';
