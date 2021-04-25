@@ -83,19 +83,19 @@ export const Resources: React.FC<Props> = ({
 
   return (
     <div className={classes.root}>
-      <span className={clsx(classes.image, classes.wood)} />
+      <span className={clsx(classes.image, classes.wood)} title="Wood" />
       <span className={classes.value} title={String(wood)}>{resourcesFormatter(wood)}</span>
-      <span className={clsx(classes.image, classes.clay)} />
+      <span className={clsx(classes.image, classes.clay)} title="Clay" />
       <span className={classes.value} title={String(clay)}>{resourcesFormatter(clay)}</span>
-      <span className={clsx(classes.image, classes.iron)} />
+      <span className={clsx(classes.image, classes.iron)} title="Iron" />
       <span className={classes.value} title={String(iron)}>{resourcesFormatter(iron)}</span>
-      <span className={clsx(classes.image, classes.crop)} />
+      <span className={clsx(classes.image, classes.crop)} title="Crop" />
       <span className={classes.value} title={String(crop)}>{resourcesFormatter(crop)}</span>
-      <span className={clsx(classes.image, classes.total)} />
+      <span className={clsx(classes.image, classes.total)} title="Total" />
       <span className={classes.value} title={String(total)}>{defaultFormatter(total)}</span>
       {showFreeCrop !== false && (
         <>
-          <span className={clsx(classes.image, classes.freeCrop)} />
+          <span className={clsx(classes.image, classes.freeCrop)} title="Free crop" />
           <span className={classes.value} title={String(freeCrop)}>{defaultFormatter(freeCrop)}</span>
         </>
       )}

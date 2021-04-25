@@ -1,4 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
@@ -71,7 +74,9 @@ export const CrannyCapacity: React.FC<Props> = ({ crannyCapacityKey }) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.image} />
+      <Tooltip title="Cranny capacity">
+        <div className={classes.image} />
+      </Tooltip>
       <div>
         {crannyCapacity.actual} /{crannyCapacity.ongoing} /{crannyCapacity.total}
       </div>

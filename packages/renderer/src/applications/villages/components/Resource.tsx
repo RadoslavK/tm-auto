@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
+import { capitalizeFirstLetter } from 'shared/utils/stringUtils.js';
 
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { defaultFormatter } from '../../../utils/numberFormatting.js';
@@ -56,6 +57,8 @@ type Props = {
   readonly resourceName: ResourceName;
 };
 
+
+
 export const Resource: React.FC<Props> = ({
   amount,
   capacity,
@@ -68,7 +71,7 @@ export const Resource: React.FC<Props> = ({
 
   return (
     <span className={classes.root}>
-      <span className={classes.image} />
+      <span className={classes.image} title={capitalizeFirstLetter(resourceName)} />
       <span title={String(amount)}>{resourceFormatter(amount)}</span>
       {capacity !== undefined && <span title={String(capacity)}>/{capacityFormatter(capacity)}</span>}
       {production !== undefined && (

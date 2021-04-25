@@ -27,7 +27,7 @@ export const SignOut: React.FC = React.forwardRef<HTMLButtonElement, PropsWithCh
   };
 
   return (
-    <Button ref={ref} color="secondary" onClick={onSignOut} variant="contained">
+    <Button ref={ref} color="secondary" onClick={onSignOut} variant="text">
       Sign out
     </Button>
   );

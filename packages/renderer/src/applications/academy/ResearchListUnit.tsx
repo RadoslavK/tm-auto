@@ -1,4 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import React from 'react';
 import {
   DragPreviewImage,
@@ -18,7 +21,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     display: 'flex',
     opacity: props => props.isDragging ? 0.5 : 1,
   },
-  removeImg: {
+  remove: {
     backgroundImage: `url("${imageLinks.actions.delete}")`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -26,6 +29,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     height: 24,
     width: 24,
     alignSelf: 'center',
+    cursor: 'pointer',
   },
 });
 
@@ -68,7 +72,9 @@ export const ResearchListUnit: React.FC<Props> = ({ listIndex, onRemove, onUnitD
     <div ref={drop}>
       {isUnitOver && isAbove && movedElement}
       <div ref={drag} className={classes.root}>
-        <div className={classes.removeImg} onClick={onRemove} />
+        <Tooltip title="Remove">
+          <div className={classes.remove} onClick={onRemove} />
+        </Tooltip>
         <UnitResearch unitIndex={unitIndex} />
         <DragPreviewImage
           connect={preview}

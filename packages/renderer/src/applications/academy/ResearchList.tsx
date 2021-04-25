@@ -1,4 +1,8 @@
-import { Dialog } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   Suspense,
@@ -30,11 +34,22 @@ const setUnitsMutation = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  root: {
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  action: {
+    marginRight: 8,
+  },
+});
+
 type Props = {
   readonly settingsKey: ResearchList_autoAcademySettings$key;
 };
 
 export const ResearchList: React.FC<Props> = ({ settingsKey }) => {
+  const classes = useStyles();
   const villageId = useRecoilValue(selectedVillageIdState);
   const { units } = useFragment(settingsFragmentDef, settingsKey);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -90,13 +105,22 @@ export const ResearchList: React.FC<Props> = ({ settingsKey }) => {
   };
 
   return (
-    <div>
-      <button onClick={openDialog}>
+    <div className={classes.root}>
+      <Button
+        className={classes.action}
+        color="primary"
+        onClick={openDialog}
+        variant="contained"
+      >
         Add unit to research
-      </button>
-      <button onClick={resetResearch}>
+      </Button>
+      <Button
+        color="secondary"
+        onClick={resetResearch}
+        variant="contained"
+      >
         Reset
-      </button>
+      </Button>
       <Suspense fallback={null}>
         {units.map((uIndex, index) => (
           <ResearchListUnit

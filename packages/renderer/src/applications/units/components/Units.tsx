@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
+  Suspense,
   useCallback,
   useMemo,
 } from 'react';
@@ -108,28 +109,30 @@ export const Units: React.FC<Props> = ({
         task="AutoUnits"
         timestamp={nextVillageTaskExecution}
       />
-      <div className={classes.buildings}>
-        <UnitBuildingSection
-          buildingType={BuildingType.Barracks}
-          className={classes.building}
-          settings={autoUnitsSettings.barracks}
-        />
-        <UnitBuildingSection
-          buildingType={BuildingType.Stable}
-          className={classes.building}
-          settings={autoUnitsSettings.stable}
-        />
-        <UnitBuildingSection
-          buildingType={BuildingType.Workshop}
-          className={classes.building}
-          settings={autoUnitsSettings.workshop}
-        />
-        <UnitBuildingSection
-          buildingType={BuildingType.Residence}
-          className={classes.building}
-          settings={autoUnitsSettings.residence}
-        />
-      </div>
+      <Suspense fallback={null}>
+        <div className={classes.buildings}>
+          <UnitBuildingSection
+            buildingType={BuildingType.Barracks}
+            className={classes.building}
+            settings={autoUnitsSettings.barracks}
+          />
+          <UnitBuildingSection
+            buildingType={BuildingType.Stable}
+            className={classes.building}
+            settings={autoUnitsSettings.stable}
+          />
+          <UnitBuildingSection
+            buildingType={BuildingType.Workshop}
+            className={classes.building}
+            settings={autoUnitsSettings.workshop}
+          />
+          <UnitBuildingSection
+            buildingType={BuildingType.Residence}
+            className={classes.building}
+            settings={autoUnitsSettings.residence}
+          />
+        </div>
+      </Suspense>
     </div>
   );
 };

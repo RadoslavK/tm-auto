@@ -171,6 +171,10 @@ type BuildingInProgress {
   type: Int!
 }
 
+type BuildingInfo {
+  name: String!
+}
+
 type BuildingQueue {
   buildings: [QueuedBuilding!]!
   infrastructureBuildingTime: Duration!
@@ -457,6 +461,7 @@ type Query {
   availableNewBuildings(input: AvailableNewBuildingsInput!): [AvailableNewBuilding!]!
   botActivity: String!
   botState: BotState!
+  buildingInfo(type: Int!): BuildingInfo!
   buildingQueue(villageId: ID!): BuildingQueue!
   buildingsInProgress(villageId: ID!): [BuildingInProgress!]!
   canMoveQueuedBuilding(queueId: ID!, targetQueueId: ID!, villageId: ID!): Boolean!

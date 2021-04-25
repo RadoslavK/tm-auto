@@ -1,5 +1,6 @@
 import {
   Button,
+  makeStyles,
   TextField,
 } from '@material-ui/core';
 import React, { useState } from 'react';
@@ -9,12 +10,20 @@ export type SmithyUnitLevelDialogSubmitResult = {
   readonly minTroops: number;
 };
 
+const useStyles = makeStyles({
+  submit: {
+    display: 'block',
+    margin: '0 auto',
+  },
+});
+
 type Props = {
   readonly minTargetLevel: number;
   readonly onSubmit: (result: SmithyUnitLevelDialogSubmitResult) => void;
 };
 
 export const SmithyUnitLevelDialog: React.FC<Props> = ({ minTargetLevel, onSubmit }) => {
+  const classes = useStyles();
   const [targetLevel, setTargetLevel] = useState(minTargetLevel);
   const [minTroops, setMinTroops] = useState(0);
 
@@ -64,9 +73,10 @@ export const SmithyUnitLevelDialog: React.FC<Props> = ({ minTargetLevel, onSubmi
         variant="outlined"
       />
       <Button
+        className={classes.submit}
         color="primary"
         onClick={submit}
-        variant="outlined"
+        variant="contained"
       >
         Submit
       </Button>

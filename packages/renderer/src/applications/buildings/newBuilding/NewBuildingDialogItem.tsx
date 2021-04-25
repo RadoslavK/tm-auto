@@ -1,6 +1,7 @@
 import {
   Dialog,
-  makeStyles, 
+  makeStyles,
+  Tooltip,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
@@ -32,6 +33,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     height: 96,
     margin: '0 auto',
     width: 96,
+    cursor: 'pointer',
   }),
   name: {
     textAlign: 'center',
@@ -123,13 +125,16 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
 
   return (
     <>
-      <div className={className} onClick={onClick}>
-        <div className={classes.image} />
-        <div className={classes.name}>{name}</div>
-      </div>
+      <Tooltip title="Select building">
+        <div className={className} onClick={onClick}>
+          <div className={classes.image} />
+          <div className={classes.name}>{name}</div>
+        </div>
+      </Tooltip>
       <Dialog
         onClose={() => setShowMultiEnqueue(false)}
-        open={showMultiEnqueue}>
+        open={showMultiEnqueue}
+      >
         <MultiLevelDialog
           maxLevel={maxLevel}
           minLevel={1}
@@ -138,6 +143,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
             enqueue(targetLevel);
             onSelect();
           }}
+          itemTitle="Select level"
         />
       </Dialog>
     </>

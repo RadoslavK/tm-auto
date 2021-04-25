@@ -1,6 +1,7 @@
 import {
   Dialog,
   makeStyles,
+  Tooltip,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
@@ -22,11 +23,11 @@ import { imageLinks } from '../../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../../multiLevelDialog/MultiLevelDialog.js';
 
 const buildingFragmentDefinition = graphql`
-  fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
-      id
-      startingLevel
-      targetLevel
-  }
+    fragment QueuedBuildingActions_queuedBuilding on QueuedBuilding {
+        id
+        startingLevel
+        targetLevel
+    }
 `;
 
 type Props = {
@@ -53,6 +54,7 @@ const useStyles = makeStyles({
     backgroundSize: 'contain',
     height: '2em',
     width: '2em',
+    cursor: 'pointer',
   },
   root: {
     display: 'flex',
@@ -62,11 +64,11 @@ const useStyles = makeStyles({
 });
 
 const dequeueBuildingMutation = graphql`
-  mutation QueuedBuildingActionsDequeueBuildingMutation($input: DequeueBuildingInput!) {
-      dequeueBuilding(input: $input) {
-         ...ModificationPayload
-      }
-  }
+    mutation QueuedBuildingActionsDequeueBuildingMutation($input: DequeueBuildingInput!) {
+        dequeueBuilding(input: $input) {
+            ...ModificationPayload
+        }
+    }
 `;
 
 const moveQueuedBuildingAsHighAsPossibleMutation = graphql`
@@ -78,16 +80,16 @@ const moveQueuedBuildingAsHighAsPossibleMutation = graphql`
 `;
 
 const splitBuildingMutation = graphql`
-  mutation QueuedBuildingActionsSplitBuildingMutation($villageId: ID!, $queueId: ID!, $startingLevel: Int!) {
-      splitQueuedBuilding(villageId: $villageId, queueId: $queueId, startingLevel: $startingLevel) {
-          addedBuilding {
-              ...QueuedBuilding_queuedBuilding
-          }
-          updatedBuilding {
-              ...QueuedBuilding_queuedBuilding
-          }
-      }
-  }
+    mutation QueuedBuildingActionsSplitBuildingMutation($villageId: ID!, $queueId: ID!, $startingLevel: Int!) {
+        splitQueuedBuilding(villageId: $villageId, queueId: $queueId, startingLevel: $startingLevel) {
+            addedBuilding {
+                ...QueuedBuilding_queuedBuilding
+            }
+            updatedBuilding {
+                ...QueuedBuilding_queuedBuilding
+            }
+        }
+    }
 `;
 
 const mergeBuildingsMutation = graphql`
@@ -218,25 +220,32 @@ export const QueuedBuildingActions: React.FC<Props> = ({
 
   return (
     <div className={clsx(className, classes.root)}>
-      <button
-        className={clsx(classes.image, classes.moveToTop)}
-        onClick={onMoveToTop}
-      />
-      <button
-        className={clsx(classes.image, classes.delete)}
-        onClick={onDequeue}
-      />
+      <Tooltip title="Move building as high as possible">
+        <button
+          className={clsx(classes.image, classes.moveToTop)}
+          onClick={onMoveToTop}
+        />
+      </Tooltip>
+      <Tooltip title="Remove from queue">
+        <button
+          className={clsx(classes.image, classes.delete)}
+          onClick={onDequeue}
+        />
+      </Tooltip>
       {isSplittable && (
         <>
-          <button
-            className={clsx(classes.image, classes.split)}
-            onClick={onSplit}
-          />
+          <Tooltip title="Split building">
+            <button
+              className={clsx(classes.image, classes.split)}
+              onClick={onSplit}
+            />
+          </Tooltip>
           <Dialog open={dialog === DialogType.Split} onClose={closeDialog}>
             <MultiLevelDialog
               minLevel={buildingFragment.startingLevel + 1}
               maxLevel={buildingFragment.targetLevel}
               onSelect={splitBuilding}
+              itemTitle="Split from level"
             />
           </Dialog>
           <Dialog open={dialog === DialogType.Dequeue} onClose={closeDialog}>
@@ -247,15 +256,18 @@ export const QueuedBuildingActions: React.FC<Props> = ({
                 closeDialog();
                 return dequeueBuilding(level + 1);
               }}
+              itemTitle="Dequeue to level"
             />
           </Dialog>
         </>
       )}
       {isMergeable && (
-        <button
-          className={clsx(classes.image, classes.merge)}
-          onClick={mergeBuildings}
-        />
+        <Tooltip title="Merge building with the one below">
+          <button
+            className={clsx(classes.image, classes.merge)}
+            onClick={mergeBuildings}
+          />
+        </Tooltip>
       )}
     </div>
   );

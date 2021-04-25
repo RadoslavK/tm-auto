@@ -1,4 +1,11 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  makeStyles,
+  TextField,
+  Tooltip,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React, {
@@ -36,10 +43,8 @@ const useStyles = makeStyles<unknown, StyleProps>({
   targetAmount: (props) => ({
     display: 'flex',
     visibility: props.trainForever ? 'hidden' : undefined,
+    maxWidth: 100,
   }),
-  targetAmountInput: {
-    maxWidth: 70,
-  },
   unitImage: (props) => ({
     backgroundImage: `url("${imageLinks.getUnit(props.unitIndex)}")`,
     backgroundPosition: 'center',
@@ -49,6 +54,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
     flex: '1',
     marginRight: 15,
     opacity: props.autoBuild ? undefined : 0.2,
+    cursor: 'pointer',
   }),
   unitInfo: {
     display: 'flex',
@@ -121,27 +127,12 @@ export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
     }
   }, [state, hasChanges, updateSettings, villageId]);
 
-  const onBoolChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    const { checked, name } = e.currentTarget;
-
+  const onUpdate = <Prop extends keyof typeof state>(prop: Prop, value: typeof state[Prop]): void => {
     setState((prevState) => ({
       ...prevState,
-      [name]: checked,
+      [prop]: value,
     }));
-    setHasChanges(true);
-  };
 
-  const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const { name, value } = e.currentTarget;
-
-    if (+value < 0) {
-      return;
-    }
-
-    setState((prevState) => ({
-      ...prevState,
-      [name]: +value,
-    }));
     setHasChanges(true);
   };
 
@@ -150,39 +141,36 @@ export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
       ...prevState,
       autoBuild: !prevState.autoBuild,
     }));
+
     setHasChanges(true);
   };
 
   return (
     <div className={clsx(className, classes.root)}>
-      <div
-        className={classes.unitImage}
-        onClick={toggleAutoBuild}
-        title={unitInfo.name}
-      />
-      <div className={classes.unitInfo}>
-        <div>
-          <label htmlFor="trainForever">Unlimited</label>
-          <input
-            checked={trainForever}
-            id="trainForever"
-            name="trainForever"
-            onChange={onBoolChange}
-            type="checkbox"
-          />
-        </div>
-        <div className={classes.targetAmount}>
-          <label>Target:</label>
-          <input
-            className={classes.targetAmountInput}
-            id="targetAmount"
-            name="targetAmount"
-            onChange={onNumberChange}
-            type="number"
-            value={targetAmount}
-          />
-        </div>
-      </div>
+      <Tooltip title={`Toggle ${unitInfo.name}`}>
+        <div
+          className={classes.unitImage}
+          onClick={toggleAutoBuild}
+        />
+      </Tooltip>
+      <FormGroup className={classes.unitInfo}>
+        <FormControlLabel
+          label="Unlimited"
+          control={(
+            <Checkbox
+              value={trainForever}
+              onChange={e => onUpdate('trainForever', e.currentTarget.checked)}
+            />
+          )}
+        />
+        <TextField
+          className={classes.targetAmount}
+          type="number"
+          value={targetAmount}
+          label="Target"
+          onChange={e => onUpdate('targetAmount', +e.currentTarget.value)}
+        />
+      </FormGroup>
     </div>
   );
 };

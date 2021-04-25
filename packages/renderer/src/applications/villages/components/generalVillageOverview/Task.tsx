@@ -21,6 +21,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
   root: {
     opacity: props => props.isDragging ? 0.5 : 1,
     textAlign: 'center',
+    cursor: 'pointer',
   },
   highlight: {
     backgroundColor: 'lightgreen',

@@ -1,4 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React from 'react';
 
@@ -27,8 +30,10 @@ const useStyles = makeStyles<unknown, StylesProps>({
   root: props => props.isHighlight
     ? {
       backgroundColor: 'lightgreen',
+      cursor: 'pointer',
     }
     : {
+      cursor: 'pointer',
       '&:not(:last-child)': {
         borderBottom: 'black solid 3px',
       },
@@ -61,13 +66,15 @@ export const UnitResearch: React.FC<Props> = ({ isHighlight, unitIndex, onClick 
   const { unitUpgradeCost, unitInfo } = useLazyLoadQuery<UnitResearchUnitQuery>(query, { index: unitIndex });
 
   return (
-    <div className={classes.root} onClick={onClick}>
-      <div className={classes.iconWithName}>
-        <div className={classes.unitImage} />
-        <span className={classes.unitName}>{unitInfo.name}</span>
+    <Tooltip title="Research unit">
+      <div className={classes.root} onClick={onClick}>
+        <div className={classes.iconWithName}>
+          <div className={classes.unitImage} />
+          <span className={classes.unitName}>{unitInfo.name}</span>
+        </div>
+        <Resources resourcesKey={unitUpgradeCost} showFreeCrop={false} />
       </div>
-      <Resources resourcesKey={unitUpgradeCost} showFreeCrop={false} />
-    </div>
+    </Tooltip>
   );
 };
 

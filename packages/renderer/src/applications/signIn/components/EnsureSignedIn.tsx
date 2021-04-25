@@ -1,3 +1,4 @@
+import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
@@ -32,7 +33,14 @@ const botStateSubscription = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  header: {
+    display: 'flex',
+  },
+});
+
 export const EnsureSignedIn: React.FC = ({ children }) => {
+  const classes = useStyles();
   const { botState } = useLazyLoadQuery<EnsureSignedInBotStateQuery>(botStateQuery, {}, { fetchPolicy: 'store-and-network' });
 
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<EnsureSignedInBotStateSubscription> => ({
@@ -57,11 +65,13 @@ export const EnsureSignedIn: React.FC = ({ children }) => {
 
   if (botState === 'None') {
     return (
-      <div>
-        <GraphiQL />
-        <SettingsManagement />
+      <>
+        <div className={classes.header}>
+          <GraphiQL />
+          <SettingsManagement />
+        </div>
         {signInFormQueryRef && <SignInForm queryRef={signInFormQueryRef} />}
-      </div>
+      </>
     );
   }
 

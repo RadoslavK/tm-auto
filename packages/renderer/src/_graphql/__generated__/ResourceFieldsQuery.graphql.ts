@@ -54,6 +54,7 @@ fragment BuildingSpot_buildingSpot on BuildingSpot {
 }
 
 fragment BuildingsSpotsList_buildingSpots on BuildingSpot {
+  id
   ...BuildingSpot_buildingSpot
 }
 */
@@ -127,6 +128,13 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "name",
             "storageKey": null
           },
@@ -189,13 +197,6 @@ return {
               }
             ],
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -203,12 +204,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fad6c7f01d0e0079f2888a4bdcda7e56",
+    "cacheID": "2f77d3236639a0039b52be19003b934a",
     "id": null,
     "metadata": {},
     "name": "ResourceFieldsQuery",
     "operationKind": "query",
-    "text": "query ResourceFieldsQuery(\n  $villageId: ID!\n) {\n  resourceFields(villageId: $villageId) {\n    type\n    ...BuildingsSpotsList_buildingSpots\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  state\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    state\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingsSpotsList_buildingSpots on BuildingSpot {\n  ...BuildingSpot_buildingSpot\n}\n"
+    "text": "query ResourceFieldsQuery(\n  $villageId: ID!\n) {\n  resourceFields(villageId: $villageId) {\n    type\n    ...BuildingsSpotsList_buildingSpots\n    id\n  }\n}\n\nfragment BuildingLevelBox_buildingSpotLevel on BuildingSpotLevel {\n  actual\n  ongoing\n  queued\n  state\n}\n\nfragment BuildingSpot_buildingSpot on BuildingSpot {\n  name\n  maxLevel\n  type\n  fieldId\n  level {\n    actual\n    ongoing\n    queued\n    total\n    state\n    ...BuildingLevelBox_buildingSpotLevel\n  }\n}\n\nfragment BuildingsSpotsList_buildingSpots on BuildingSpot {\n  id\n  ...BuildingSpot_buildingSpot\n}\n"
   }
 };
 })();

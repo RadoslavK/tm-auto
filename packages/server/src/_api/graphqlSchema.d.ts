@@ -290,6 +290,9 @@ export interface NexusGenObjects {
     type: number; // Int!
   }
   BuildingInProgress: BuildingInProgress;
+  BuildingInfo: { // root type
+    name: string; // String!
+  }
   BuildingQueue: BuildingQueue;
   BuildingSpot: BuildingSpot;
   BuildingSpotLevel: { // root type
@@ -569,6 +572,9 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     type: number; // Int!
   }
+  BuildingInfo: { // field return type
+    name: string; // String!
+  }
   BuildingQueue: { // field return type
     buildings: NexusGenRootTypes['QueuedBuilding'][]; // [QueuedBuilding!]!
     infrastructureBuildingTime: NexusGenRootTypes['Duration']; // Duration!
@@ -749,6 +755,7 @@ export interface NexusGenFieldTypes {
     availableNewBuildings: NexusGenRootTypes['AvailableNewBuilding'][]; // [AvailableNewBuilding!]!
     botActivity: string; // String!
     botState: NexusGenEnums['BotState']; // BotState!
+    buildingInfo: NexusGenRootTypes['BuildingInfo']; // BuildingInfo!
     buildingQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     buildingsInProgress: NexusGenRootTypes['BuildingInProgress'][]; // [BuildingInProgress!]!
     canMoveQueuedBuilding: boolean; // Boolean!
@@ -1017,6 +1024,9 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     type: 'Int'
   }
+  BuildingInfo: { // field return type name
+    name: 'String'
+  }
   BuildingQueue: { // field return type name
     buildings: 'QueuedBuilding'
     infrastructureBuildingTime: 'Duration'
@@ -1197,6 +1207,7 @@ export interface NexusGenFieldTypeNames {
     availableNewBuildings: 'AvailableNewBuilding'
     botActivity: 'String'
     botState: 'BotState'
+    buildingInfo: 'BuildingInfo'
     buildingQueue: 'BuildingQueue'
     buildingsInProgress: 'BuildingInProgress'
     canMoveQueuedBuilding: 'Boolean'
@@ -1561,6 +1572,9 @@ export interface NexusGenArgTypes {
     }
     availableNewBuildings: { // args
       input: NexusGenInputs['AvailableNewBuildingsInput']; // AvailableNewBuildingsInput!
+    }
+    buildingInfo: { // args
+      type: number; // Int!
     }
     buildingQueue: { // args
       villageId: string; // ID!

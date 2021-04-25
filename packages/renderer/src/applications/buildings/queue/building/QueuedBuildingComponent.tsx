@@ -105,7 +105,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
         />
       )}
       <div className={classes.imageWithFieldId}>
-        <div className={classes.buildingImage} />
+        <div className={classes.buildingImage} title={queuedBuildingFragment.name} />
         <div>[{queuedBuildingFragment.fieldId}]</div>
       </div>
       <div className={classes.info}>

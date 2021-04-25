@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
@@ -103,13 +104,17 @@ export const Smithy: React.FC<Props> = ({ queryRef }) => {
         task="AutoSmithy"
         timestamp={nextVillageTaskExecution}
       />
-      <button onClick={clearUnits}>
-        Clear all units
-      </button>
       <SmithyUnitsList
         unitsKey={autoSmithySettings.units}
         upgradeableUnits={upgradeableUnits}
       />
+      <Button
+        color="secondary"
+        onClick={clearUnits}
+        variant="contained"
+      >
+        Clear all units
+      </Button>
     </div>
   );
 };

@@ -82,8 +82,11 @@ export const Academy: React.FC<Props> = ({ queryRef }) => {
         task="AutoSmithy"
         timestamp={nextVillageTaskExecution}
       />
-      <Resources resourcesKey={autoAcademySettings.totalCost} />
       <ResearchList settingsKey={autoAcademySettings} />
+      <Resources
+        resourcesKey={autoAcademySettings.totalCost}
+        showFreeCrop={false}
+      />
     </div>
   );
 };

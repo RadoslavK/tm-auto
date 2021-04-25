@@ -3,6 +3,7 @@ import {
   enumType,
   idArg,
   inputObjectType,
+  intArg,
   objectType,
   queryField,
   subscriptionField,
@@ -167,6 +168,24 @@ export const InfrastructureQuery = queryField(t => {
         .villageService.village(villageId)
         .buildings.spots.buildings()
         .filter(b => isInfrastructure(b.fieldId)),
+  });
+});
+
+export const BuildingInfoObject = objectType({
+  name: 'BuildingInfo',
+  definition: t => {
+    t.string('name');
+  },
+});
+
+export const BuildingInfoQuery = queryField(t => {
+  t.field('buildingInfo', {
+    type: BuildingInfoObject,
+    args: {
+      type: intArg(),
+    },
+    resolve: (_, { type }, ctx) =>
+      ctx.buildingInfoService.getBuildingInfo(type),
   });
 });
 

@@ -31,15 +31,19 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 0,
     },
   },
-  'content': {
+  content: {
     backgroundColor: theme.palette.background.default,
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  'root': {
+  root: {
     display: 'flex',
   },
-  'toolbar': theme.mixins.toolbar,
+  toolbar: theme.mixins.toolbar,
+  actionMenu: {
+    display: 'flex',
+    marginBottom: 8,
+  },
 }));
 
 export const App: React.FC = () => {
@@ -77,8 +81,10 @@ export const App: React.FC = () => {
                       <Navigation navigationApps={navigationApps} />
                       <main className={classes.content}>
                         <div className={classes.toolbar} />
-                        <GraphiQL />
-                        <SettingsManagement />
+                        <div className={classes.actionMenu}>
+                          <GraphiQL />
+                          <SettingsManagement />
+                        </div>
                         <MainRoutes navigationApps={navigationApps} />
                       </main>
                     </div>

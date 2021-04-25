@@ -8,6 +8,7 @@ import { BuildingSpot } from './BuildingSpot.js';
 
 const fragmentDef = graphql`
   fragment BuildingsSpotsList_buildingSpots on BuildingSpot @relay(plural: true) {
+      id
       ...BuildingSpot_buildingSpot
   }
 `;
@@ -30,7 +31,7 @@ export const BuildingsSpotsList: React.FC<Props> = ({ buildingsKey }) => {
 
   return (
     <div className={classes.root}>
-      {buildings.map(building => <BuildingSpot building={building} />)}
+      {buildings.map(building => <BuildingSpot key={building.id} building={building} />)}
     </div>
   );
 };

@@ -1,4 +1,7 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import clsx from 'clsx';
 import React, {
@@ -15,10 +18,12 @@ import type { BuildingType } from 'shared/enums/BuildingType.js';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 import type { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../../_graphql/__generated__/UnitBuildingSection_autoUnitsBuildingSettings.graphql.js';
+import type { UnitBuildingSectionBuildingNameQuery } from '../../../_graphql/__generated__/UnitBuildingSectionBuildingNameQuery.graphql.js';
 import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { tribeState } from '../../../_recoil/atoms/tribe.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
+import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { UnitSettings } from './UnitSettings.js';
 
@@ -44,6 +49,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     marginRight: 25,
     opacity: isAllowed ? undefined : 0.2,
     width: 108,
+    cursor: 'pointer',
   }),
   root: {
     marginRight: 35,
@@ -91,11 +97,20 @@ const unitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation = graphql`
     }
 `;
 
+const buildingNameQuery = graphql`
+  query UnitBuildingSectionBuildingNameQuery($type: Int!) {
+      buildingInfo(type: $type) {
+          name
+      }
+  }
+`;
+
 export const UnitBuildingSection: React.FC<Props> = ({
   buildingType,
   className,
   settings,
 }) => {
+  const { buildingInfo } = useLazyLoadQuery<UnitBuildingSectionBuildingNameQuery>(buildingNameQuery, { type: buildingType });
   const buildingSettingsFragment = useFragment(unitBuildingSectionAutoUnitsBuildingSettingsFragment, settings);
 
   const [state, setState] = useState({
@@ -151,7 +166,9 @@ export const UnitBuildingSection: React.FC<Props> = ({
   return (
     <div className={clsx(className, classes.root)}>
       <div className={classes.building}>
-        <div className={classes.buildingImage} onClick={toggleAllow} />
+        <Tooltip title={`Toggle ${buildingInfo.name}`}>
+          <div className={classes.buildingImage} onClick={toggleAllow} />
+        </Tooltip>
         <div className={classes.maxBuildTime}>
           <label htmlFor="maxBuildTime">Max build time:</label>
           <Duration onChange={updateMaxBuildTime} value={state.maxBuildTime} />

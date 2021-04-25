@@ -1,4 +1,8 @@
-import { Dialog } from '@material-ui/core';
+import {
+  Dialog,
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useMemo,
@@ -11,6 +15,7 @@ import type { SettingsManagementBotStateQuery } from '../../../_graphql/__genera
 import type { SettingsManagementBotStateSubscription } from '../../../_graphql/__generated__/SettingsManagementBotStateSubscription.graphql.js';
 import type { SettingsManagementQuery } from '../../../_graphql/__generated__/SettingsManagementQuery.graphql.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
+import { imageLinks } from '../../../utils/imageLinks.js';
 import { GeneralSettings } from '../GeneralSettings.js';
 import { SettingsManagementForm } from './SettingsManagementForm.js';
 
@@ -40,7 +45,23 @@ const botStateSubscription = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+  },
+  export: {
+    backgroundImage: `url("${imageLinks.misc.export}")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    height: '2em',
+    width: '2em',
+    marginRight: 4,
+    cursor: 'pointer',
+  },
+});
+
 export const SettingsManagement: React.FunctionComponent = () => {
+  const classes = useStyles();
   const [isFormShown, setIsFormShown] = useState(false);
 
   const openForm = () => setIsFormShown(true);
@@ -63,8 +84,15 @@ export const SettingsManagement: React.FunctionComponent = () => {
 
   return (
     <>
-      <GeneralSettings settingsKey={generalSettings} />
-      <button onClick={openForm}>Export/Import settings</button>
+      <div className={classes.root}>
+        <Tooltip title="Export/Import settings">
+          <div
+            className={classes.export}
+            onClick={openForm}
+          />
+        </Tooltip>
+        <GeneralSettings settingsKey={generalSettings} />
+      </div>
       <Dialog onClose={closeForm} open={isFormShown}>
         <SettingsManagementForm
           accountsKey={accounts}

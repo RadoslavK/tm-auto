@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   FormControlLabel,
   makeStyles,
@@ -217,9 +218,14 @@ export const BuildingQueue: React.FC<Props> = ({
             />
           )}
         />
-        <button className={classes.action} onClick={onClear}>
+        <Button
+          className={classes.action}
+          onClick={onClear}
+          color="secondary"
+          variant="contained"
+        >
           Clear queue
-        </button>
+        </Button>
       </div>
       <Cost
         buildTime={buildingQueue.totalBuildingTime}

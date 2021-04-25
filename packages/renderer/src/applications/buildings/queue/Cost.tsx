@@ -78,23 +78,23 @@ export const Cost: React.FC<Props> = ({
       <Resources resourcesKey={resourcesFragment} />
       {!infrastructureTime || !resourcesTime || !split ? (
         <>
-          <span className={clsx(classes.image, classes.buildTime)} />
+          <span className={clsx(classes.image, classes.buildTime)} title="Build time" />
           <span className={classes.value}>{time}</span>
         </>
       ) : (
         <>
           <span
             className={clsx(classes.image, classes.buildTime)}
-            title="Resources"
+            title="Resources build time"
           />
-          <span className={classes.value} title="Resources">
+          <span className={classes.value}>
             {resourcesTime}
           </span>
           <span
             className={clsx(classes.image, classes.buildTime)}
-            title="Infrastructure"
+            title="Infrastructure build time"
           />
-          <span className={classes.value} title="Infrastructure">
+          <span className={classes.value}>
             {infrastructureTime}
           </span>
         </>

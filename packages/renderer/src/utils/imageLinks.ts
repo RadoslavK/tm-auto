@@ -15,6 +15,12 @@ const resources = {
 };
 
 export const imageLinks = {
+  misc: {
+    graphql: `${baseUrl}/misc/graphql.png`,
+    export: `${baseUrl}/misc/export.png`,
+    settings: `${baseUrl}/misc/settings.png`,
+  },
+
   actions: {
     collapse: `${baseUrl}/collapse.png`,
     delete: `${baseUrl}/red_cross.png`,

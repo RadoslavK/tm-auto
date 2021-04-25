@@ -107,6 +107,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
     flexFlow: 'column',
     height: '6rem',
     width: '6rem',
+    cursor: 'pointer',
   }),
 });
 
@@ -255,6 +256,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
           maxLevel={maxLevel}
           minLevel={buildingSpotFragment.level.total + 1}
           onSelect={onMultiLevelEnqueue}
+          itemTitle="Select level"
         />
       </Dialog>
       <Dialog onClose={closeDialog} open={dialog === DialogType.MultiDequeue}>
@@ -263,6 +265,7 @@ export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }
             maxLevel={buildingSpotFragment.level.queued - 1}
             minLevel={buildingSpotFragment.level.ongoing || buildingSpotFragment.level.actual}
             onSelect={onMultiLevelDequeue}
+            itemTitle="Dequeue to level"
           />
         )}
       </Dialog>

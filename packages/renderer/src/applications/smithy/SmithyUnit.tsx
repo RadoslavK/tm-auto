@@ -1,4 +1,5 @@
 import {
+  Button,
   Dialog,
   makeStyles,
 } from '@material-ui/core';
@@ -54,6 +55,9 @@ type StylesProps = {
 const useStyles = makeStyles<unknown, StylesProps>({
   root: {
     marginTop: 16,
+  },
+  action: {
+    marginRight: 8,
   },
   header: {
     display: 'flex',
@@ -126,8 +130,22 @@ export const SmithyUnit: React.FC<Props> = ({ unitIndex, unitKey }) => {
     <div className={classes.root}>
       <div className={classes.header}>
         <div className={classes.unitImg} />
-        <button disabled={isAddingDisabled} onClick={openDialog}>Add</button>
-        <button onClick={onClear}>Clear unit</button>
+        <Button
+          className={classes.action}
+          color="primary"
+          variant="outlined"
+          disabled={isAddingDisabled}
+          onClick={openDialog}
+        >
+          Add
+        </Button>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={onClear}
+        >
+          Clear unit
+        </Button>
       </div>
       {unit && <SmithyUnitLevels levelsKey={unit.levels} unitIndex={unitIndex} />}
       <Dialog
