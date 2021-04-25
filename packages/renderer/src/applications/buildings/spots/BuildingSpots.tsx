@@ -92,10 +92,11 @@ export const BuildingSpots: React.FC<Props> = ({ className }) => {
   };
 
   const selectedTab = useMatch('/villages/:id/buildings/:tab')?.params.tab as TabPath | undefined;
+  const prevTab = usePrevious(selectedTab);
   const prevVillageId = usePrevious(villageId);
 
   useEffect(() => {
-    if (prevVillageId === villageId) {
+    if (prevVillageId === villageId && (prevTab || !selectedTab)) {
       return;
     }
 
@@ -103,7 +104,7 @@ export const BuildingSpots: React.FC<Props> = ({ className }) => {
       case 'resources':  loadResourceFieldsQuery({ villageId }); break;
       case 'infrastructure':  loadInfrastructureQuery({ villageId }); break;
     }
-  }, [villageId, prevVillageId, selectedTab, resourceFieldsQueryRef, loadResourceFieldsQuery, infrastructureQueryRef, loadInfrastructureQuery]);
+  }, [villageId, prevVillageId, selectedTab, prevTab, resourceFieldsQueryRef, loadResourceFieldsQuery, infrastructureQueryRef, loadInfrastructureQuery]);
 
   const getTabElement = (path: TabPath) => {
     switch (path) {

@@ -129,9 +129,10 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
 
   const prevVillageId = usePrevious(villageId);
   const currentTab = useMatch('/villages/:id/:tab/*')?.params.tab as NavigationPath | undefined;
+  const prevTab = usePrevious(currentTab);
 
   useEffect(() => {
-    if (villageId === prevVillageId) {
+    if (villageId === prevVillageId && (prevTab || !currentTab)) {
       return;
     }
 
@@ -143,7 +144,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
       case 'academy': reloadAcademyQuery(villageId); break;
       case 'general': reloadGeneralVillageOverviewQuery(villageId); break;
     }
-  }, [reloadBuildingsQuery, reloadUnitSettingsQuery, currentTab, villageId, prevVillageId, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);
+  }, [reloadBuildingsQuery, reloadUnitSettingsQuery, currentTab, prevTab, villageId, prevVillageId, reloadPartiesQuery, reloadGeneralVillageOverviewQuery, reloadSmithyQuery, reloadAcademyQuery]);
 
   const setSelectedVillageId = useSetRecoilState(selectedVillageIdState);
 

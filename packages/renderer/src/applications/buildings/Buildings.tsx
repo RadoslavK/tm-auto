@@ -79,7 +79,9 @@ export const Buildings: React.FC<Props> = ({
 
   return (
     <div className={classes.buildings}>
-      <BuildingSpots className={classes.buildingSpots}/>
+      <Suspense fallback={null}>
+        <BuildingSpots className={classes.buildingSpots}/>
+      </Suspense>
       <div className={classes.ongoingAndNextExecution}>
         <NextVillageTaskExecution task="AutoBuild" timestamp={nextVillageTaskExecution} />
         <Suspense fallback={null}>
