@@ -39,7 +39,7 @@ export const BotActivity: React.FC<Props> = ({ botActivity }) => {
 
   const classes = useStyles({ isBotActive: !!botActivity });
 
-  return <div className={classes.root}>{botActivity}</div>;
+  return <div className={classes.root}>{botActivity || 'Inactive'}</div>;
 };
 
 BotActivity.displayName = 'BotActivity';
