@@ -38,4 +38,9 @@ export const romanUnitResearchPrerequisites: ReadonlyMap<number, ReadonlyArray<U
     { building: BuildingType.Academy, level: 15 },
     { building: BuildingType.Workshop, level: 10 },
   ]],
+  //  Senator
+  [9, [
+    { building: BuildingType.RallyPoint, level: 10 },
+    { building: BuildingType.Academy, level: 20 },
+  ]],
 ]);

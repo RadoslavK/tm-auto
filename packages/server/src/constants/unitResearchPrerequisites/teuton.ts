@@ -38,4 +38,9 @@ export const teutonUnitResearchPrerequisites: ReadonlyMap<number, ReadonlyArray<
     { building: BuildingType.Academy, level: 15 },
     { building: BuildingType.Workshop, level: 10 },
   ]],
+  //  Chief
+  [19, [
+    { building: BuildingType.RallyPoint, level: 5 },
+    { building: BuildingType.Academy, level: 20 },
+  ]],
 ]);

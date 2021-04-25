@@ -38,4 +38,9 @@ export const egyptianUnitResearchPrerequisites: ReadonlyMap<number, ReadonlyArra
     { building: BuildingType.Academy, level: 15 },
     { building: BuildingType.Workshop, level: 10 },
   ]],
+  //  Nomarch
+  [59, [
+    { building: BuildingType.RallyPoint, level: 10 },
+    { building: BuildingType.Academy, level: 20 },
+  ]],
 ]);

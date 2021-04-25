@@ -38,4 +38,9 @@ export const gaulUnitResearchPrerequisites: ReadonlyMap<number, ReadonlyArray<Un
     { building: BuildingType.Academy, level: 15 },
     { building: BuildingType.Workshop, level: 10 },
   ]],
+  //  Chieftain
+  [29, [
+    { building: BuildingType.RallyPoint, level: 10 },
+    { building: BuildingType.Academy, level: 20 },
+  ]],
 ]);
