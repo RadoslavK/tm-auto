@@ -2,13 +2,16 @@ import {
   FormGroup,
   LinearProgress,
   makeStyles,
+  MenuItem,
   Paper,
+  Select,
   TextField,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
+  useEffect,
   useMemo,
-  useState, 
+  useState,
 } from 'react';
 import {
   PreloadedQuery,
@@ -30,6 +33,7 @@ import type { MapSearchVillageTileTypesQuery } from '../../_graphql/__generated_
 import { VirtualizedTable } from '../../_shared/components/VirtualizedTable.js';
 import { useLazyLoadQuery } from '../../_shared/hooks/useLazyLoadQuery.js';
 import { SortOrder } from '../../_shared/SortOrder.js';
+import { VillageName } from '../villages/components/VillageName.js';
 
 enum SearchMapSortBy {
   Distance,
@@ -72,6 +76,14 @@ export const mapSearchQuery = graphql`
         gameInfo {
             factions
             mapSize
+        }
+        villages {
+            id
+            coords {
+                x
+                y
+            }
+            ...VillageName_village
         }
     }
 `;
@@ -133,6 +145,9 @@ const useStyles = makeStyles({
   numberInput: {
     width: 50,
   },
+  villageInput: {
+    width: 200,
+  },
 });
 
 type Props = {
@@ -151,7 +166,7 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const [radius, setRadius] = useState(5);
 
   const { villageTileTypes } = useLazyLoadQuery<MapSearchVillageTileTypesQuery>(villageTileTypesQuery, {});
-  const { botState, mapSearchState, mapScanProgress, gameInfo } = usePreloadedQuery(mapSearchQuery, queryRef);
+  const { botState, mapSearchState, mapScanProgress, gameInfo, villages } = usePreloadedQuery(mapSearchQuery, queryRef);
   const { factions, mapSize } = gameInfo;
   const [searchMap] = useMutation(searchMapMutation);
   const [scanWholeMap] = useMutation(scanWholeMapMutation);
@@ -235,6 +250,19 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const boxRadius = (radius: number): number =>
     Math.max(radius, 1);
 
+  const [selectedVillageId, setSelectedVillageId] = useState<string>('');
+
+  useEffect(() => {
+    const village = villages.find(v => v.id === selectedVillageId);
+
+    if (!village) {
+      return;
+    }
+
+    setX(village.coords.x);
+    setY(village.coords.y);
+  }, [villages, selectedVillageId]);
+
   return (
     <div>
       <FormGroup>
@@ -252,6 +280,18 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
           value={y}
           onChange={e => setY(prevY => boxCoord(+e.currentTarget.value, prevY))}
         />
+        <Select
+          className={classes.villageInput}
+          label="Village coords"
+          value={selectedVillageId}
+          onChange={e => setSelectedVillageId(e.target.value as string)}
+        >
+          {villages.map((village) => (
+            <MenuItem key={village.id} value={village.id}>
+              <VillageName village={village} />
+            </MenuItem>
+          ))}
+        </Select>
         <TextField
           className={classes.numberInput}
           label="Radius"
