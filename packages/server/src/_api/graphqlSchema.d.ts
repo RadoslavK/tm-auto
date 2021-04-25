@@ -437,6 +437,7 @@ export interface NexusGenObjects {
     coords: NexusGenRootTypes['Coords']; // Coords!
     cropBonus: number; // Int!
     distance: number; // Float!
+    oases: number[]; // [Int!]!
     region?: string | null; // String
     type: string; // String!
   }
@@ -895,6 +896,7 @@ export interface NexusGenFieldTypes {
     coords: NexusGenRootTypes['Coords']; // Coords!
     cropBonus: number; // Int!
     distance: number; // Float!
+    oases: number[]; // [Int!]!
     region: string | null; // String
     type: string; // String!
   }
@@ -1342,6 +1344,7 @@ export interface NexusGenFieldTypeNames {
     coords: 'Coords'
     cropBonus: 'Int'
     distance: 'Float'
+    oases: 'Int'
     region: 'String'
     type: 'String'
   }

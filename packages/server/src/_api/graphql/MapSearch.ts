@@ -88,6 +88,7 @@ export const MapSearchFinishedSubscription = subscriptionField(t => {
       resolve: (p) => p.tiles.map(tile => ({
         ...tile,
         coords: { x: tile.x, y: tile.y },
+        oases: [...tile.oases],
       })),
     }),
   });
@@ -109,6 +110,7 @@ export const VillageTile = objectType({
     t.nullable.boolean('claimed');
     t.float('distance');
     t.int('cropBonus');
+    t.list.int('oases');
     t.nullable.string('region');
   },
 });

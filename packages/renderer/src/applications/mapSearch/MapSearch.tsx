@@ -106,6 +106,7 @@ const onMapSearchFinishedSubscription = graphql`
             }
             type
             region
+            oases
         }
     }
 `;
@@ -223,8 +224,13 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
   const onScanWholeMap = () => scanWholeMap({ variables: {} });
   const onStopScan = () => stopScan({ variables: {} });
 
-  const boxCoord = (coord: number): number =>
-    Math.max(Math.min(coord, mapSize), -mapSize);
+  const boxCoord = (coord: number, defaultValue: number): number => {
+    if (isNaN(coord)) {
+      return defaultValue;
+    }
+
+    return Math.max(Math.min(coord, mapSize), -mapSize);
+  };
 
   const boxRadius = (radius: number): number =>
     Math.max(radius, 1);
@@ -237,14 +243,14 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
           type="number"
           label="X"
           value={x}
-          onChange={e => setX(boxCoord(+e.currentTarget.value))}
+          onChange={e => setX(prevX => boxCoord(+e.currentTarget.value, prevX))}
         />
         <TextField
           className={classes.numberInput}
           label="Y"
           type="number"
           value={y}
-          onChange={e => setY(boxCoord(+e.currentTarget.value))}
+          onChange={e => setY(prevY => boxCoord(+e.currentTarget.value, prevY))}
         />
         <TextField
           className={classes.numberInput}
@@ -303,7 +309,7 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
 
       <Paper style={{ height: 400, width: '100%' }}>
         <VirtualizedTable
-          getCellData={(cellData, dataKey: keyof VillageTile) => {
+          getCellData={(cellData, rowData, dataKey: keyof VillageTile) => {
             switch (dataKey) {
               case 'distance':
                 return (cellData as VillageTile[typeof dataKey]).toFixed(2);
@@ -317,6 +323,37 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
                 const data = cellData as VillageTile[typeof dataKey];
 
                 return `${data.x} | ${data.y}`;
+              }
+
+              case 'cropBonus': {
+                const cropBonus = cellData as VillageTile[typeof dataKey];
+                const formattedOases = rowData.oases.length
+                  ? ` (${[...rowData.oases
+                    .reduce((reduced, oasis) => {
+                      let count  = reduced.get(oasis);
+                      
+                      if (!count) {
+                        count = 1;
+                      } else {
+                        count++;
+                      }
+                      
+                      reduced.set(oasis, count);
+                      return reduced;
+                    }, new Map<number, number>())
+                    .entries()]
+                    .reduce((text, [bonus, count]) => {
+                      const formattedOasis = count > 1
+                        ? `${count} x ${bonus}`
+                        : `${bonus}`;
+                      
+                      return text
+                        ? `${text}, ${formattedOasis}`
+                        : formattedOasis;
+                    }, '')})`
+                  : '';
+
+                return `${cropBonus} %${formattedOases}`;
               }
 
               default:

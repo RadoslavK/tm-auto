@@ -750,6 +750,7 @@ type VillageTile {
   coords: Coords!
   cropBonus: Int!
   distance: Float!
+  oases: [Int!]!
   region: String
   type: String!
 }

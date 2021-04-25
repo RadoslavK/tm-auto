@@ -58,6 +58,7 @@ type ColumnData<TDataKey> = {
 
 type CellDataGetter<TData, TKey extends keyof TData> = (
   cellData: TData[TKey],
+  rowData: TData,
   dataKey: TKey,
 ) => React.ReactNode;
 
@@ -96,22 +97,26 @@ export const VirtualizedTable = <TCellData extends {}>({
     });
   };
 
-  const cellRenderer: TableCellRenderer = ({ cellData, columnIndex }) => (
-    <TableCell
-      component="div"
-      className={clsx(classes.tableCell, classes.flexContainer, {
-        [classes.noClick]: onRowClick == null,
-      })}
-      variant="body"
-      style={{ height: rowHeight }}
-      align={
-        (columnIndex != null && columns[columnIndex].numeric) || false
-          ? 'right'
-          : 'left'
-      }>
-      {getCellData(cellData, columns[columnIndex].dataKey)}
-    </TableCell>
-  );
+  const cellRenderer: TableCellRenderer = ({ cellData, columnIndex, rowIndex }) => {
+    return (
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, {
+          [classes.noClick]: onRowClick == null,
+        })}
+        variant="body"
+        style={{ height: rowHeight }}
+        align={
+          (
+            columnIndex != null && columns[columnIndex].numeric
+          ) || false
+            ? 'right'
+            : 'left'
+        }>
+        {getCellData(cellData, data[rowIndex], columns[columnIndex].dataKey)}
+      </TableCell>
+    );
+  };
 
   const headerRenderer = (columnIndex: number): TableHeaderRenderer => ({
     label,

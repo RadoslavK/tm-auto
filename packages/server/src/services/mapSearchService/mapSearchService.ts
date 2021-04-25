@@ -105,24 +105,28 @@ export class MapSearchService {
 
     const assignedVillageTiles = Object.entries(villageTiles).reduce(
       (reduced, [id, tile]) => {
-        if (tile.cropBonus !== undefined) {
+        if (tile.cropBonus !== undefined && tile.oases !== undefined) {
           reduced[id] = {
             ...tile,
             cropBonus: tile.cropBonus,
+            oases: tile.oases,
           };
 
           return reduced;
         }
 
-        const cropBonus = getOasesIn7x7(oases, tile.x, tile.y, totalAxisLength)
+        const bestOasesAround = getOasesIn7x7(oases, tile.x, tile.y, totalAxisLength)
           .map((v) => v.bonus)
           .sort((bonus1, bonus2) => bonus2 - bonus1)
-          .slice(0, 3)
+          .slice(0, 3);
+
+        const cropBonus = bestOasesAround
           .reduce((totalBonus, bonus) => totalBonus + bonus, 0);
 
         reduced[id] = {
           ...tile,
           cropBonus,
+          oases: bestOasesAround,
           region: factions ? regions[id]?.name : undefined,
         } as Omit<MapSearchVillageTile, 'distance'>;
 

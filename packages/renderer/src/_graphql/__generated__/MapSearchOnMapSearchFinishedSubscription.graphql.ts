@@ -15,6 +15,7 @@ export type MapSearchOnMapSearchFinishedSubscriptionResponse = {
         };
         readonly type: string;
         readonly region: string | null;
+        readonly oases: ReadonlyArray<number>;
     }>;
 };
 export type MapSearchOnMapSearchFinishedSubscription = {
@@ -36,6 +37,7 @@ subscription MapSearchOnMapSearchFinishedSubscription {
     }
     type
     region
+    oases
   }
 }
 */
@@ -109,6 +111,13 @@ var v0 = [
         "kind": "ScalarField",
         "name": "region",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "oases",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -132,14 +141,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "8adfd93118100ed5a937bdd0b8129ffa",
+    "cacheID": "a64f90a0a6b6ca3074f534cd0b208959",
     "id": null,
     "metadata": {},
     "name": "MapSearchOnMapSearchFinishedSubscription",
     "operationKind": "subscription",
-    "text": "subscription MapSearchOnMapSearchFinishedSubscription {\n  mapSearchFinished {\n    claimed\n    cropBonus\n    distance\n    coords {\n      x\n      y\n    }\n    type\n    region\n  }\n}\n"
+    "text": "subscription MapSearchOnMapSearchFinishedSubscription {\n  mapSearchFinished {\n    claimed\n    cropBonus\n    distance\n    coords {\n      x\n      y\n    }\n    type\n    region\n    oases\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '13c773d0449e0341b07f70f066c21d51';
+(node as any).hash = '7239bee5907d0c36281f5ff330677120';
 export default node;
