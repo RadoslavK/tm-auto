@@ -15,6 +15,7 @@ import { getDirname } from 'shared/utils/getDirname.js';
 import type { QueuedBuilding } from '../../_models/buildings/queue/queuedBuilding.js';
 import { Duration } from '../../_models/duration.js';
 import { Resources } from '../../_models/misc/resources.js';
+import { AccountContext } from '../../accountContext.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
 import { DequeueMode } from '../../services/buildingQueueService.js';
@@ -61,7 +62,11 @@ const getTotalQueuedBuildingDuration = (qBuilding: QueuedBuilding, ctx: ApiConte
     }
   }
 
-  return buildingTime;
+  const { videoFeature } = AccountContext.getContext().settingsService.account.get().autoBuild;
+
+  return videoFeature.allow && buildingTime.isGreaterOrEqual(videoFeature.minBuildTime)
+    ? buildingTime.multiply(0.75, true)
+    : buildingTime;
 };
 
 export const QueuedBuildingObject = objectType({

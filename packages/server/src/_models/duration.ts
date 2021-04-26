@@ -47,9 +47,19 @@ export class Duration {
   public getMin = (other: Duration): Duration =>
     this.getTotalSeconds() <= other.getTotalSeconds() ? this : other;
 
-  public multiply = (multiplicator: number): Duration =>
-    Duration.fromSeconds(this.getTotalSeconds() * multiplicator);
+  public multiply = (multiplicator: number, shouldCeil = false): Duration => {
+    let newTotalSeconds = this.getTotalSeconds() * multiplicator;
+
+    if (shouldCeil) {
+      newTotalSeconds = Math.ceil(newTotalSeconds);
+    }
+
+    return Duration.fromSeconds(newTotalSeconds);
+  };
 
   public add = (addition: Duration): Duration =>
     Duration.fromSeconds(this.getTotalSeconds() + addition.getTotalSeconds());
+
+  public isGreaterOrEqual = (other: Duration): boolean =>
+    this.getTotalSeconds() >= other.getTotalSeconds();
 }
