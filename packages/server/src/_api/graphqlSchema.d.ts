@@ -9,7 +9,6 @@ import { AutoAcademySettings } from "./../_models/settings/tasks/autoAcademySett
 import { AutoSmithySettings, AutoSmithyUnitSettings } from "./../_models/settings/tasks/autoSmithySettings"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
-import { BuildingSpot } from "./../_models/buildings/spots/buildingSpot"
 import { GeneralVillageSettings } from "./../_models/settings/generalVillageSettings"
 import { Hero } from "./../_models/hero/hero"
 import { QueuedBuilding } from "./../_models/buildings/queue/queuedBuilding"
@@ -294,7 +293,14 @@ export interface NexusGenObjects {
     name: string; // String!
   }
   BuildingQueue: BuildingQueue;
-  BuildingSpot: BuildingSpot;
+  BuildingSpot: { // root type
+    fieldId: number; // Int!
+    id: string; // ID!
+    level: NexusGenRootTypes['BuildingSpotLevel']; // BuildingSpotLevel!
+    maxLevel: number; // Int!
+    name: string; // String!
+    type: number; // Int!
+  }
   BuildingSpotLevel: { // root type
     actual: number; // Int!
     ongoing?: number | null; // Int
@@ -379,12 +385,6 @@ export interface NexusGenObjects {
   ResourceClaimLogEntryContent: { // root type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
     resources: NexusGenRootTypes['Resources']; // Resources!
-  }
-  ResourceFields: { // root type
-    clay: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    crop: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    iron: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    wood: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
   }
   Resources: Resources;
   SplitQueueBuildingPayload: { // root type
@@ -798,12 +798,6 @@ export interface NexusGenFieldTypes {
   ResourceClaimLogEntryContent: { // field return type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
     resources: NexusGenRootTypes['Resources']; // Resources!
-  }
-  ResourceFields: { // field return type
-    clay: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    crop: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    iron: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
-    wood: NexusGenRootTypes['BuildingSpot'][]; // [BuildingSpot!]!
   }
   Resources: { // field return type
     clay: number; // Int!
@@ -1250,12 +1244,6 @@ export interface NexusGenFieldTypeNames {
   ResourceClaimLogEntryContent: { // field return type name
     reason: 'ClaimHeroResourcesReason'
     resources: 'Resources'
-  }
-  ResourceFields: { // field return type name
-    clay: 'BuildingSpot'
-    crop: 'BuildingSpot'
-    iron: 'BuildingSpot'
-    wood: 'BuildingSpot'
   }
   Resources: { // field return type name
     clay: 'Int'

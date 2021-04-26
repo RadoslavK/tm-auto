@@ -29,7 +29,8 @@ export class EnqueueBuildingService extends VillageServiceBase {
 
     const spot = this.village.buildings.spots.at(fieldId);
     const totalLevel = spot.level.getTotal();
-    const { maxLevel } = buildingInfoService.getBuildingInfo(type);
+
+    const { maxLevel } = buildingInfoService.getBuildingInfo(type, this.village.id);
 
     if ((spot.type !== BuildingType.None && totalLevel >= maxLevel) || (building.targetLevel && totalLevel >= building.targetLevel)) {
       return null;

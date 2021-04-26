@@ -508,13 +508,6 @@ type ResourceClaimLogEntryContent {
   resources: Resources!
 }
 
-type ResourceFields {
-  clay: [BuildingSpot!]!
-  crop: [BuildingSpot!]!
-  iron: [BuildingSpot!]!
-  wood: [BuildingSpot!]!
-}
-
 type Resources {
   clay: Int!
   crop: Int!

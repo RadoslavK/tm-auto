@@ -619,6 +619,13 @@ export class BuildingQueueService {
         return true;
       }
 
+      //  Only capital can have resource fields above 10
+      if (queuedBuilding.type <= 4
+        && queuedBuilding.targetLevel >= 11
+        && !this._village.isCapital) {
+        return true;
+      }
+
       return false;
     }
 

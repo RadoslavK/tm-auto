@@ -5,6 +5,7 @@ import buildingInfos from '../../_info/building-infos.json';
 import type { BuildingConditions } from '../../_models/buildings/buildingConditions.js';
 import { Duration } from '../../_models/duration.js';
 import { Resources } from '../../_models/misc/resources.js';
+import { AccountContext } from '../../accountContext.js';
 
 export type BuildingLevelInfo = {
   readonly buildingTime: Duration;
@@ -30,13 +31,25 @@ export type BuildingInfo = {
 export class BuildingInfoService {
   private buildingInfos: Map<BuildingType, BuildingInfo> | undefined;
 
-  public getBuildingInfo = (type: BuildingType): BuildingInfo => {
+  public getBuildingInfo = (type: BuildingType, villageId?: string): BuildingInfo => {
     const info = this.infos().get(type);
 
     if (!info) {
       throw new Error(
         `Building info for type not found: ${BuildingType[type] || type}`,
       );
+    }
+
+    if (villageId && info.type <= BuildingType.Crop) {
+      //  if we need to ensure max level for a village in case of resource fields for non-capital village
+      const { isCapital } = AccountContext.getContext().villageService.village(villageId);
+
+      return isCapital
+        ? info
+        : {
+          ...info,
+          maxLevel: 10,
+        };
     }
 
     return info;

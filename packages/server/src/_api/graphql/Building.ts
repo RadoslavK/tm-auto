@@ -8,13 +8,13 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { join } from 'path';
 import {
   BuildingState,
   buildingStates,
 } from 'shared/enums/BuildingState.js';
-import { getDirname } from 'shared/utils/getDirname.js';
+import { BuildingType } from 'shared/enums/BuildingType.js';
 
+import type { BuildingSpot } from '../../_models/buildings/spots/buildingSpot.js';
 import type { BuildingSpotLevel as BuildingSpotLevelModel } from '../../_models/buildings/spots/buildingSpotLevel.js';
 import { BotEvent } from '../../events/botEvent.js';
 import { subscribeToEvent } from '../../pubSub.js';
@@ -22,6 +22,7 @@ import {
   isInfrastructure,
   isResourceField,
 } from '../../utils/buildingUtils.js';
+import type { ApiContext } from '../apiContext.type.js';
 import type { NexusGenObjects } from '../graphqlSchema.js';
 
 export const BuildingStateEnum = enumType({
@@ -49,6 +50,28 @@ const getBuildingSpotState = (level: BuildingSpotLevelModel, maxLevel: number): 
   return 'None';
 };
 
+//  No local resolvers because we need to pass the village id somehow
+const mapBuildingSpot = (buildingSpot: BuildingSpot, villageId: string, ctx: ApiContext): NexusGenObjects['BuildingSpot'] => {
+  const { level, type } = buildingSpot;
+  const info = ctx.buildingInfoService.getBuildingInfo(type);
+  const { isCapital } = ctx.villageService.village(villageId);
+  const maxLevel = type <= BuildingType.Crop && !isCapital ? 10 : info.maxLevel;
+  const name = info.name;
+
+  return {
+    ...buildingSpot,
+    name,
+    maxLevel,
+    level: {
+      actual: level.actual,
+      ongoing: level.ongoing,
+      queued: level.queued,
+      total: level.getTotal(),
+      state: getBuildingSpotState(level, maxLevel),
+    },
+  };
+};
+
 export const BuildingSpotLevel = objectType({
   name: 'BuildingSpotLevel',
   definition: t => {
@@ -73,50 +96,15 @@ export const AvailableNewBuilding = objectType({
   },
 });
 
-export const BuildingSpot = objectType({
+export const BuildingSpotObject = objectType({
   name: 'BuildingSpot',
   definition: t => {
     t.id('id');
     t.int('fieldId');
-    t.field('level', {
-      type: BuildingSpotLevel,
-      resolve: ({ level, type }, _, ctx): NexusGenObjects['BuildingSpotLevel'] => ({
-        actual: level.actual,
-        ongoing: level.ongoing,
-        queued: level.queued,
-        total: level.getTotal(),
-        state: getBuildingSpotState(level, ctx.buildingInfoService.getBuildingInfo(type).maxLevel),
-      }),
-    });
+    t.field('level', { type: BuildingSpotLevel });
     t.int('type');
-    t.string('name', {
-      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).name,
-    });
-    t.int('maxLevel', {
-      resolve: (building, _args, ctx) => ctx.buildingInfoService.getBuildingInfo(building.type).maxLevel,
-    });
-  },
-  sourceType: process.env.shouldGenerateArtifacts && {
-    module: join(getDirname(import.meta), '../../_models/buildings/spots/buildingSpot.ts'),
-    export: 'BuildingSpot',
-  },
-});
-
-export const ResourceFields = objectType({
-  name: 'ResourceFields',
-  definition: t => {
-    t.list.field('wood', {
-      type: BuildingSpot,
-    });
-    t.list.field('clay', {
-      type: BuildingSpot,
-    });
-    t.list.field('iron', {
-      type: BuildingSpot,
-    });
-    t.list.field('crop', {
-      type: BuildingSpot,
-    });
+    t.string('name');
+    t.int('maxLevel');
   },
 });
 
@@ -145,7 +133,7 @@ export const AvailableNewBuildingsTypesQuery = queryField(t => {
 
 export const ResourceFieldsQuery = queryField(t => {
   t.list.field('resourceFields', {
-    type: BuildingSpot,
+    type: BuildingSpotObject,
     args: {
       villageId: idArg(),
     },
@@ -153,13 +141,14 @@ export const ResourceFieldsQuery = queryField(t => {
       ctx
         .villageService.village(villageId)
         .buildings.spots.buildings()
-        .filter(b => isResourceField(b.fieldId)),
+        .filter(b => isResourceField(b.fieldId))
+        .map(b => mapBuildingSpot(b, villageId, ctx)),
   });
 });
 
 export const InfrastructureQuery = queryField(t => {
   t.list.field('infrastructure', {
-    type: BuildingSpot,
+    type: BuildingSpotObject,
     args: {
       villageId: idArg(),
     },
@@ -167,7 +156,8 @@ export const InfrastructureQuery = queryField(t => {
       ctx
         .villageService.village(villageId)
         .buildings.spots.buildings()
-        .filter(b => isInfrastructure(b.fieldId)),
+        .filter(b => isInfrastructure(b.fieldId))
+        .map(b => mapBuildingSpot(b, villageId, ctx)),
   });
 });
 
@@ -191,14 +181,14 @@ export const BuildingInfoQuery = queryField(t => {
 
 export const BuildingSpotSubscription = subscriptionField(t => {
   t.field('onBuildingSpotUpdated', {
-    type: 'BuildingSpot',
+    type: BuildingSpotObject,
     args: {
       villageId: idArg(),
     },
     ...subscribeToEvent(BotEvent.BuildingSpotUpdated, {
       filter: (payload, variables) =>
         payload.villageId === variables.villageId,
-      resolve: ({ buildingSpot }) => buildingSpot,
+      resolve: ({ buildingSpot }, { villageId }, ctx) => mapBuildingSpot(buildingSpot, villageId, ctx),
     }),
   });
 });
