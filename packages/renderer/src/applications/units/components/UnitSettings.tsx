@@ -158,7 +158,7 @@ export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
           label="Unlimited"
           control={(
             <Checkbox
-              value={trainForever}
+              checked={trainForever}
               onChange={e => onUpdate('trainForever', e.currentTarget.checked)}
             />
           )}
