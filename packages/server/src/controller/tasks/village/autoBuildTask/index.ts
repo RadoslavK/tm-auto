@@ -33,6 +33,18 @@ import type {
 import { checkAutoStorage } from './checkAutoStorage.js';
 import { useVideoFeature } from './useVideoFeature.js';
 
+const pickLowerDate = (date1: Date | undefined | void, date2: Date | undefined | void): Date | undefined | void => {
+  if (!date1) {
+    return date2;
+  } else if (!date2) {
+    return date1;
+  } else {
+    return date1 >= date2
+      ? date2
+      : date1;
+  }
+};
+
 export class AutoBuildTask implements BotTaskWithCoolDown {
   private readonly _village: Village;
 
@@ -94,51 +106,39 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
     const isRoman = AccountContext.getContext().gameInfo.tribe === Tribe.Romans;
 
-    let finishedAt: Date | undefined;
+    let finishedAt: Date | undefined | void;
+    let enoughResourcesAt: Date | void;
+
     if (isRoman && allowDualQueue) {
+      let enoughResourcesForResAt: Date | void;
+      let enoughResourcesForInfAt: Date | void;
+
       if (dualQueuePreference === 'Resources') {
-        await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
-        await this.startBuildingIfQueueIsFreeByType(
-          BuildingSpotType.Infrastructure,
-        );
+        enoughResourcesForResAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
+        enoughResourcesForInfAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Infrastructure);
       } else {
-        await this.startBuildingIfQueueIsFreeByType(
-          BuildingSpotType.Infrastructure,
-        );
-        await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
+        enoughResourcesForInfAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Infrastructure);
+        enoughResourcesForResAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
       }
 
-      const fieldFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(
-        BuildingSpotType.Fields,
-      );
-      const infrastructureFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(
-        BuildingSpotType.Infrastructure,
-      );
+      enoughResourcesAt = pickLowerDate(enoughResourcesForResAt, enoughResourcesForInfAt);
 
-      if (!fieldFinishedAt) {
-        finishedAt = infrastructureFinishedAt;
-      } else if (!infrastructureFinishedAt) {
-        finishedAt = fieldFinishedAt;
-      } else {
-        finishedAt =
-          fieldFinishedAt >= infrastructureFinishedAt
-            ? infrastructureFinishedAt
-            : fieldFinishedAt;
-      }
+      const fieldFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Fields);
+      const infrastructureFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Infrastructure);
+      finishedAt = pickLowerDate(fieldFinishedAt, infrastructureFinishedAt);
     } else {
-      await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Any);
-
-      finishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(
-        BuildingSpotType.Any,
-      );
+      enoughResourcesAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Any);
+      finishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Any);
     }
+
+    const lowestWaiting = pickLowerDate(enoughResourcesAt, finishedAt);
 
     // seconds
     const finishedIn =
-      finishedAt &&
+      lowestWaiting &&
       Math.max(
         0,
-        Math.floor((finishedAt.getTime() - new Date().getTime()) / 1000),
+        Math.floor((lowestWaiting.getTime() - new Date().getTime()) / 1000),
       );
 
     return {
@@ -149,9 +149,10 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     };
   };
 
+  //  Returns date of having enough resources
   private startBuildingIfQueueIsFreeByType = async (
     type: BuildingSpotType,
-  ): Promise<void> => {
+  ): Promise<Date | void> => {
     const isSpotFree = this._buildings.ongoing.isSpotFree(type);
 
     if (!isSpotFree) {
@@ -181,13 +182,14 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       }
     }
 
-    await this.startBuildingIfQueueIsFree(queuedBuilding);
+    return this.startBuildingIfQueueIsFree(queuedBuilding);
   };
 
+  //  Returns date of having enough resources
   private startBuildingIfQueueIsFree = async (
     queuedBuilding: QueuedBuilding,
     isQueued = true,
-  ): Promise<void> => {
+  ): Promise<Date | void> => {
     const settings = this.settings();
     const { cost } = buildingInfoService.getBuildingLevelInfo(
       queuedBuilding.type,
@@ -293,6 +295,27 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
 
       // !!inQueueCropLand === isQueued
       await this.startBuilding(qBuilding, !!inQueueCropLand);
+    } else {
+      const neededResources = requiredResources.subtract(totalResources);
+
+      if (!neededResources.getTotal()) {
+        //  In case crop was problem
+        return;
+      }
+
+      const { production } = this._village.resources;
+      const woodIn = neededResources.wood / production.wood;
+      const clayIn = neededResources.clay / production.clay;
+      const ironIn = neededResources.iron / production.iron;
+      const cropIn = neededResources.crop / production.crop;
+
+      //  hours
+      const availableIn = Math.max(woodIn, clayIn, ironIn, cropIn);
+      const date = new Date();
+
+      date.setSeconds(availableIn * 60 * 60);
+
+      return date;
     }
   };
 
