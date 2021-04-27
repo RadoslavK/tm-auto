@@ -167,10 +167,10 @@ export class AccountService {
   };
 
   public loadAccountsData = (): AccountsData => {
-    this.accountsData = fileService.loadInstance<AccountsData>(
-      DataPathService.accountsPath(),
-      AccountsData,
-    );
+    this.accountsData = fileService.loadInstance<AccountsData>({
+      constructValue: params => new AccountsData(params),
+      targetPath: DataPathService.accountsPath(),
+    });
 
     return this.accountsData;
   };

@@ -1,10 +1,9 @@
 import {
+  idArg,
   intArg,
   objectType,
   queryField,
 } from 'nexus';
-
-import { AccountContext } from '../../accountContext.js';
 
 export const UnitInfo = objectType({
   name: 'UnitInfo',
@@ -25,8 +24,11 @@ export const UnitInfoQuery = queryField(t => {
 
 export const ResearcheableUnitsQuery = queryField(t => {
   t.list.int('researcheableUnits', {
-    resolve: () => {
-      const { tribe } = AccountContext.getContext().gameInfo;
+    args: {
+      villageId: idArg(),
+    },
+    resolve: (_, { villageId }, ctx) => {
+      const { tribe } = ctx.villageService.village(villageId);
       //  1st unit and settlers can not be researched
       const indexes = [2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -37,8 +39,11 @@ export const ResearcheableUnitsQuery = queryField(t => {
 
 export const UpgradeableUnitsQuery = queryField(t => {
   t.list.int('upgradeableUnits', {
-    resolve: () => {
-      const { tribe } = AccountContext.getContext().gameInfo;
+    args: {
+      villageId: idArg(),
+    },
+    resolve: (_, { villageId }, ctx) => {
+      const { tribe } = ctx.villageService.village(villageId);
       //  chiefs and settlers can not be upgraded
       const indexes = [1, 2, 3, 4, 5, 6, 7, 8];
 

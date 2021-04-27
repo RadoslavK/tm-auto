@@ -34,6 +34,7 @@ import type { VillageQuery } from '../../../_graphql/__generated__/VillageQuery.
 import type { VillageRefreshVillageMutation } from '../../../_graphql/__generated__/VillageRefreshVillageMutation.graphql.js';
 import type { VillageSettingsQuery } from '../../../_graphql/__generated__/VillageSettingsQuery.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { usePrevious } from '../../../_shared/hooks/usePrevious.js';
 import {
   Academy,
@@ -86,6 +87,7 @@ const villageRefreshVillageMutation = graphql`
 
 graphql`
     fragment Village_village on Village {
+        tribe
         resources {
             ...VillageResources_villageResources
         }
@@ -211,12 +213,15 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   };
 
   const { village, crannyCapacity } = usePreloadedQuery(villageQuery, queryRef);
+  const setVillageTribe = useSetRecoilState(villageTribeState);
 
   useEffect(() => {
     if (village === null) {
       navigate('..');
+    } else {
+      setVillageTribe(village.tribe);
     }
-  }, [village, navigate]);
+  }, [village, navigate, setVillageTribe]);
 
   const getTabType = useCallback((tab: string): VillageSettingsTabType => {
     const navPart = navigation.find((n) => n.path === tab);

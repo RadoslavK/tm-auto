@@ -19,7 +19,7 @@ import type {
   AutoBuildSettingsUpdateSettingsMutation,
   UpdateAutoBuildSettingsInput, 
 } from '../../../_graphql/__generated__/AutoBuildSettingsUpdateSettingsMutation.graphql.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
 import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
@@ -203,7 +203,7 @@ export const AutoBuildSettings: React.FC<Props> = ({ villageId, queryRef }) => {
     [],
   );
 
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const isRoman = tribe === 'Romans';
 
   const onReset = () => {

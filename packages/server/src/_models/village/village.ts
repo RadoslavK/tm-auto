@@ -1,3 +1,4 @@
+import { Tribe } from 'shared/enums/Tribe.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
@@ -29,6 +30,8 @@ export class Village {
       AccountContext.getContext().villageService.serialize([this.id]);
     },
   });
+
+  public tribe: Tribe = Tribe.Romans;
 
   public readonly coords: Coords = new Coords();
 

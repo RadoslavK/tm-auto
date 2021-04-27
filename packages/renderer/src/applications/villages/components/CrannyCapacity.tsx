@@ -15,7 +15,7 @@ import { BuildingType } from 'shared/enums/BuildingType.js';
 import type { CrannyCapacity_crannyCapacity$key } from '../../../_graphql/__generated__/CrannyCapacity_crannyCapacity.graphql.js';
 import type { CrannyCapacitySubscription } from '../../../_graphql/__generated__/CrannyCapacitySubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type StylesProps = {
@@ -56,7 +56,7 @@ type Props = {
 };
 
 export const CrannyCapacity: React.FC<Props> = ({ crannyCapacityKey }) => {
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const classes = useStyles({ tribe });
   const villageId = useRecoilValue(selectedVillageIdState);
   const crannyCapacity = useFragment(fragmentDef, crannyCapacityKey);

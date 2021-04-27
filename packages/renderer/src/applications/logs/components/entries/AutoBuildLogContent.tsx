@@ -6,7 +6,7 @@ import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { AutoBuildLogContent_autoBuildLogEntryContent$key } from '../../../../_graphql/__generated__/AutoBuildLogContent_autoBuildLogEntryContent.graphql.js';
-import { tribeState } from '../../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 
 type StylesProps = {
@@ -53,7 +53,7 @@ export const AutoBuildLogContent: React.FC<Props> = ({
     type,
   } = useFragment(autoBuildLogContentFragment, content);
 
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
 
   const classes = useStyles({
     buildingType: type,

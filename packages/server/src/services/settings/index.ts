@@ -24,12 +24,12 @@ export class SettingsService {
 
     this.account = new InternalSettingsService(
       accountSettingsPath.account,
-      AccountSettings,
+      params => new AccountSettings(params),
     );
     this.hero = new HeroSettingsService(accountId);
     this.autoMentor = new InternalSettingsService(
       accountSettingsPath.autoMentor,
-      AutoMentorSettings,
+      params => new AutoMentorSettings(params),
     );
   }
 

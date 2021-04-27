@@ -1,5 +1,6 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { TaskType } from 'shared/enums/TaskType.js';
+import { Tribe } from 'shared/enums/Tribe.js';
 
 import { BuildingCategory } from '../../../../_enums/buildingCategory.js';
 import { BuildingSpotType } from '../../../../_enums/buildingSpotType.js';
@@ -7,7 +8,6 @@ import type { Buildings } from '../../../../_models/buildings';
 import { QueuedBuilding } from '../../../../_models/buildings/queue/queuedBuilding.js';
 import { CoolDown } from '../../../../_models/coolDown.js';
 import { Duration } from '../../../../_models/duration.js';
-import { Tribe } from '../../../../_models/enums/tribe.js';
 import { ClaimHeroResourcesReason } from '../../../../_models/logs/content/resourceClaim.js';
 import { Resources } from '../../../../_models/misc/resources.js';
 import type { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
@@ -104,7 +104,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       return;
     }
 
-    const isRoman = AccountContext.getContext().gameInfo.tribe === Tribe.Romans;
+    const isRoman = this._village.tribe === Tribe.Romans;
 
     let finishedAt: Date | undefined | void;
     let enoughResourcesAt: Date | void;

@@ -63,6 +63,7 @@ fragment VillageSideItem_village on Village {
 }
 
 fragment Village_village on Village {
+  tribe
   resources {
     ...VillageResources_villageResources
   }
@@ -206,6 +207,13 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "tribe",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "VillageResources",
             "kind": "LinkedField",
             "name": "resources",
@@ -289,12 +297,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "98a661117a8281ca61543ff053135ade",
+    "cacheID": "dbc2d30a3a6aef01de6ed0ee14b79e8f",
     "id": null,
     "metadata": {},
     "name": "VillagesVillageSubscription",
     "operationKind": "subscription",
-    "text": "subscription VillagesVillageSubscription {\n  villageUpdated {\n    ...Villages_village\n    ...Village_village\n    id\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n\nfragment Village_village on Village {\n  resources {\n    ...VillageResources_villageResources\n  }\n}\n\nfragment Villages_village on Village {\n  id\n  scanned\n  ...VillageSideItem_village\n}\n"
+    "text": "subscription VillagesVillageSubscription {\n  villageUpdated {\n    ...Villages_village\n    ...Village_village\n    id\n  }\n}\n\nfragment VillageName_village on Village {\n  coords {\n    x\n    y\n  }\n  isCapital\n  name\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n\nfragment VillageSideItem_village on Village {\n  id\n  scanned\n  ...VillageName_village\n}\n\nfragment Village_village on Village {\n  tribe\n  resources {\n    ...VillageResources_villageResources\n  }\n}\n\nfragment Villages_village on Village {\n  id\n  scanned\n  ...VillageSideItem_village\n}\n"
   }
 };
 })();

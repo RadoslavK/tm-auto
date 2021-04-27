@@ -22,7 +22,7 @@ import type { BuildingSpotEnqueueBuildingMutation } from '../../../_graphql/__ge
 import type { NewBuildingDialogAvailableNewBuildingsTypesQuery } from '../../../_graphql/__generated__/NewBuildingDialogAvailableNewBuildingsTypesQuery.graphql.js';
 import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
 import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
@@ -113,7 +113,7 @@ const useStyles = makeStyles<unknown, StyleProps>({
 
 export const BuildingSpot: React.FC<Props> = React.memo(({ building, className }) => {
   const buildingSpotFragment = useFragment(buildingSpotBuildingSpotFragment, building);
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const classes = useStyles({ buildingType: buildingSpotFragment.type, tribe });
   const [dialog, setDialog] = useState(DialogType.None);
   const villageId = useRecoilValue(selectedVillageIdState);

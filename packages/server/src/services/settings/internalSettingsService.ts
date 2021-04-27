@@ -9,17 +9,15 @@ export class InternalSettingsService<TSettings extends object> {
 
   constructor(
     private path: string,
-    private SettingsConstructor: {
-      new (params?: PartialFields<TSettings>): TSettings;
-    },
+    private constructValue: (params?: PartialFields<TSettings>) => TSettings,
   ) {}
 
   public get = (): TSettings => {
     if (!this.settings) {
-      this.settings = fileService.loadInstance<TSettings>(
-        this.path,
-        this.SettingsConstructor,
-      );
+      this.settings = fileService.loadInstance<TSettings>({
+        targetPath: this.path,
+        constructValue: this.constructValue,
+      });
     }
 
     return this.settings;
@@ -27,10 +25,10 @@ export class InternalSettingsService<TSettings extends object> {
 
   public getWithoutDefaultValue = (): TSettings | null =>
     this.settings ||
-    fileService.loadInstanceWithoutDefaultValue<TSettings>(
-      this.path,
-      this.SettingsConstructor,
-    );
+    fileService.loadInstanceWithoutDefaultValue<TSettings>({
+      constructValue: this.constructValue,
+      targetPath: this.path,
+    });
 
   public update = (settings: TSettings): void => {
     this.settings = settings;
@@ -48,7 +46,7 @@ export class InternalSettingsService<TSettings extends object> {
   };
 
   public reset = (): TSettings => {
-    this.settings = new this.SettingsConstructor();
+    this.settings = this.constructValue();
 
     this.debouncedSave();
 

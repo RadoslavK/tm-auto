@@ -21,7 +21,7 @@ import type { UnitBuildingSection_autoUnitsBuildingSettings$key } from '../../..
 import type { UnitBuildingSectionBuildingNameQuery } from '../../../_graphql/__generated__/UnitBuildingSectionBuildingNameQuery.graphql.js';
 import type { UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation } from '../../../_graphql/__generated__/UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { useLazyLoadQuery } from '../../../_shared/hooks/useLazyLoadQuery.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
@@ -127,7 +127,7 @@ export const UnitBuildingSection: React.FC<Props> = ({
     setHasChanges(false);
   }, [buildingSettingsFragment]);
 
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const classes = useStyles({
     buildingType: buildingType,
     isAllowed: state.allow,

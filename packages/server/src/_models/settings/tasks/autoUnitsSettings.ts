@@ -1,8 +1,8 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import type { Tribe } from 'shared/enums/Tribe.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
-import { AccountContext } from '../../../accountContext.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
@@ -35,16 +35,12 @@ export class AutoUnitsBuildingSettings {
 
 const unitsMap: Map<BuildingType, AutoUnitsUnitSettings[]> = new Map();
 
-const getUnitsOfType = (
-  buildingType: BuildingType,
-): AutoUnitsUnitSettings[] => {
+const getUnitsOfType = (buildingType: BuildingType, tribe: Tribe): AutoUnitsUnitSettings[] => {
   let units = unitsMap.get(buildingType);
 
   if (units) {
     return units;
   }
-
-  const { tribe } = AccountContext.getContext().gameInfo;
 
   units = unitInfoService
     .getAllInfos()
@@ -61,12 +57,6 @@ export class AutoUnitsSettings {
 
   public readonly useHeroResources: boolean = false;
 
-  public readonly barracks: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
-    {
-      units: getUnitsOfType(BuildingType.Barracks),
-    },
-  );
-
   public readonly coolDown: CoolDown = new CoolDown({
     max: new Duration({ minutes: 12 }),
     min: new Duration({ minutes: 7 }),
@@ -74,26 +64,29 @@ export class AutoUnitsSettings {
 
   public readonly minCrop: number = 0;
 
-  public readonly residence: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
-    {
+  public readonly barracks: AutoUnitsBuildingSettings;
+  public readonly stable: AutoUnitsBuildingSettings;
+  public readonly workshop: AutoUnitsBuildingSettings;
+  public readonly residence: AutoUnitsBuildingSettings
+
+  constructor(params: PartialFields<AutoUnitsSettings> = {}, tribe: Tribe) {
+    this.barracks = new AutoUnitsBuildingSettings({
+      units: getUnitsOfType(BuildingType.Barracks, tribe),
+    });
+
+    this.stable = new AutoUnitsBuildingSettings({
+      units: getUnitsOfType(BuildingType.Stable, tribe),
+    });
+
+    this.workshop = new AutoUnitsBuildingSettings({
+      units: getUnitsOfType(BuildingType.Workshop, tribe),
+    });
+
+    this.residence = new AutoUnitsBuildingSettings({
       maxBuildTime: new Duration({ hours: 12 }),
-      units: getUnitsOfType(BuildingType.Residence),
-    },
-  );
+      units: getUnitsOfType(BuildingType.Residence, tribe),
+    });
 
-  public readonly stable: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
-    {
-      units: getUnitsOfType(BuildingType.Stable),
-    },
-  );
-
-  public readonly workshop: AutoUnitsBuildingSettings = new AutoUnitsBuildingSettings(
-    {
-      units: getUnitsOfType(BuildingType.Workshop),
-    },
-  );
-
-  constructor(params: PartialFields<AutoUnitsSettings> = {}) {
     mergeDefaults(this, params);
   }
 

@@ -8,7 +8,7 @@ import type {
   QueuedBuildingComponent_queuedBuilding$data,
   QueuedBuildingComponent_queuedBuilding$key,
 } from '../../../../_graphql/__generated__/QueuedBuildingComponent_queuedBuilding.graphql.js';
-import { tribeState } from '../../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../../_recoil/atoms/tribe.js';
 import { imageLinks } from '../../../../utils/imageLinks.js';
 import { Cost } from '../Cost.js';
 import { QueuedBuildingActions } from './QueuedBuildingActions.js';
@@ -89,7 +89,7 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
   showActions,
 }) => {
   const queuedBuildingFragment = useFragment(queuedBuildingComponentQueuedBuildingFragment, building);
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const classes = useStyles({
     buildingType: queuedBuildingFragment.type,
     tribe,

@@ -15,12 +15,12 @@ export class HeroSettingsService implements ComplexSettingsServiceType<HeroSetti
 
     this.autoAdventure = new InternalSettingsService<AutoAdventureSettings>(
       heroSettingsPath.autoAdventure,
-      AutoAdventureSettings,
+      params => new AutoAdventureSettings(params),
     );
 
     this.heroLevelUp = new InternalSettingsService<HeroLevelUpSettings>(
       heroSettingsPath.heroLevelUp,
-      HeroLevelUpSettings,
+      params => new HeroLevelUpSettings(params),
     );
   }
 }

@@ -14,7 +14,6 @@ import { MemoryRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import { ErrorBoundary } from '../ErrorBoundary.js';
-import { EnsureGlobalState } from './EnsureGlobalState.js';
 import { EnsureGraphQL } from './EnsureGraphQL.js';
 import { EnsureMainNavigation } from './EnsureMainNavigation.js';
 import { EnsureTitle } from './EnsureTitle.js';
@@ -72,7 +71,6 @@ export const App: React.FC = () => {
           <RecoilRoot>
             <EnsureGraphQL socketName={socketName}>
               <EnsureSignedIn>
-                <EnsureGlobalState />
                 <EnsureTitle />
                 <EnsureMainNavigation>
                   {(navigationApps) => (

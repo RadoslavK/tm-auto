@@ -26,7 +26,7 @@ import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/
 import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
 import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
@@ -132,7 +132,7 @@ export const BuildingQueue: React.FC<Props> = ({
 }) => {
   const villageId = useRecoilValue(selectedVillageIdState);
   const autoBuildSettings = useFragment(autoBuildSettingsFragmentDef, autoBuildSettingsKey);
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const shouldSplitBuildingTimes = tribe === 'Romans' && autoBuildSettings.dualQueue.allow;
 
   const buildingQueue = useFragment(buildingQueueFragment, buildingQueueKey);

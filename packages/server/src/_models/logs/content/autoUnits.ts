@@ -1,4 +1,4 @@
-import { Tribe } from '../../enums/tribe.js';
+import { Tribe } from 'shared/enums/Tribe.js';
 
 export class AutoUnitsLogEntryContent {
   public readonly amount: number = 0;

@@ -289,7 +289,6 @@ type EnqueueBuildingPayload {
 type GameInfo {
   factions: Boolean!
   mapSize: Int!
-  tribe: Tribe!
 }
 
 type GeneralSettings {
@@ -482,11 +481,11 @@ type Query {
   nextTasksExecution: Timestamp!
   nextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
   nextVillageTaskExecutions(villageId: ID!): [NextVillageTaskExecutionPayloadField!]!
-  researcheableUnits: [Int!]!
+  researcheableUnits(villageId: ID!): [Int!]!
   resourceFields(villageId: ID!): [BuildingSpot!]!
   unitInfo(index: Int!): UnitInfo!
   unitUpgradeCost(level: Int!, unitIndex: Int!): Resources!
-  upgradeableUnits: [Int!]!
+  upgradeableUnits(villageId: ID!): [Int!]!
   village(villageId: ID!): Village
   villageTileTypes: [String!]!
   villages: [Village!]!
@@ -564,7 +563,6 @@ type Subscription {
   nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
   onBuildingSpotUpdated(villageId: ID!): BuildingSpot!
   onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
-  onGameInfoUpdated: GameInfo!
   queuedBuildingUpdated(villageId: ID!): ModificationPayload!
   villageUpdated: Village!
   villagesUpdated: [Village!]!
@@ -724,6 +722,7 @@ type Village {
   name: String!
   resources: VillageResources!
   scanned: Boolean!
+  tribe: Tribe!
 }
 
 type VillageCapacity {

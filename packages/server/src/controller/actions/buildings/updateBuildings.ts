@@ -13,7 +13,7 @@ export const updateBuildings = async (): Promise<void> => {
 
   await ensurePage(TravianPath.InfrastructureOverview);
 
-  const infrastructureSpots = await parseInfrastructureSpots();
+  const infrastructureSpots = await parseInfrastructureSpots(village.tribe);
   const buildingsInProgress = await parseBuildingsInProgress();
   const actualBuildings = fieldSpots.concat(infrastructureSpots);
 

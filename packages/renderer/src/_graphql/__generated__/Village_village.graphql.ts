@@ -4,7 +4,9 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
+export type Tribe = "Egyptians" | "Gauls" | "Huns" | "Natars" | "Nature" | "Romans" | "Teutons";
 export type Village_village = {
+    readonly tribe: Tribe;
     readonly resources: {
         readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
     };
@@ -27,6 +29,13 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
+      "kind": "ScalarField",
+      "name": "tribe",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "VillageResources",
       "kind": "LinkedField",
       "name": "resources",
@@ -44,5 +53,5 @@ const node: ReaderFragment = {
   "type": "Village",
   "abstractKey": null
 };
-(node as any).hash = '36cdef50071404c227cf6f9475d9f4f3';
+(node as any).hash = '4888165d2747f4b72d00b2f21cf73906';
 export default node;

@@ -4,6 +4,17 @@ import type { PartialFields } from 'shared/types/fields.type.js';
 
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
+type LoadInstanceParams<T> = {
+  readonly constructValue: (params?: PartialFields<T>) => T;
+  readonly defaultValue?: T | undefined;
+  readonly targetPath: string;
+};
+
+type LoadInstanceWithoutDefaultValueParams<T> = {
+  readonly constructValue: (params?: PartialFields<T>) => T;
+  readonly targetPath: string;
+};
+
 class FileService {
   public save = async (targetPath: string, object: unknown): Promise<void> => {
     const absolutePath = path.join(getServerAppDirectory(), targetPath);
@@ -18,32 +29,32 @@ class FileService {
     return fs.promises.writeFile(absolutePath, serializedObject, { flag: 'w' });
   };
 
-  public loadInstance = <T extends object>(
-    targetPath: string,
-    constructor: { new (params?: PartialFields<T>): T },
-    defaultValue?: T | undefined,
-  ): T => {
+  public loadInstance = <T extends object>({
+    constructValue,
+    defaultValue,
+    targetPath,
+  }: LoadInstanceParams<T>): T => {
     const absolutePath = path.join(getServerAppDirectory(), targetPath);
 
     try {
       const file = fs.readFileSync(absolutePath);
       const params: T = JSON.parse(file.toString());
-      return new constructor(params);
+      return constructValue(params);
     } catch {
-      return defaultValue || new constructor();
+      return defaultValue || constructValue();
     }
   };
 
-  public loadInstanceWithoutDefaultValue = <T extends object>(
-    targetPath: string,
-    constructor: { new (params?: PartialFields<T>): T },
-  ): T | null => {
+  public loadInstanceWithoutDefaultValue = <T extends object>({
+    constructValue,
+    targetPath,
+  }: LoadInstanceWithoutDefaultValueParams<T>): T | null => {
     const absolutePath = path.join(getServerAppDirectory(), targetPath);
 
     try {
       const file = fs.readFileSync(absolutePath);
       const params: T = JSON.parse(file.toString());
-      return new constructor(params);
+      return constructValue(params);
     } catch {
       return null;
     }

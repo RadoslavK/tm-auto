@@ -4,9 +4,8 @@ import {
   objectType,
 } from 'nexus';
 import { join } from 'path';
+import { Tribe } from 'shared/enums/Tribe.js';
 import { getDirname } from 'shared/utils/getDirname.js';
-
-import { Tribe } from '../../_models/enums/tribe.js';
 
 export const CoolDown = objectType({
   name: 'CoolDown',

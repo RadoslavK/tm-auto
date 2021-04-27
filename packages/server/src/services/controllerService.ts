@@ -222,9 +222,6 @@ export class ControllerService {
       await updateToken();
       const capitalVillageCoords = await updateCapitalAndAlly(false);
       await updateHeroInformation();
-
-      publishPayloadEvent(BotEvent.GameInfoUpdated, { gameInfo: AccountContext.getContext().gameInfo });
-
       await updateNewOldVillages();
 
       const allVillages = AccountContext.getContext().villageService.allVillages();

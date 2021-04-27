@@ -5,6 +5,7 @@ import { AutoPartySettings } from '../../_models/settings/tasks/autoPartySetting
 import { AutoSmithySettings } from '../../_models/settings/tasks/autoSmithySettings.js';
 import { AutoUnitsSettings } from '../../_models/settings/tasks/autoUnitsSettings.js';
 import type { VillageSettings } from '../../_models/settings/villageSettings.js';
+import { AccountContext } from '../../accountContext.js';
 import { dataPathService } from '../dataPathService.js';
 import type { ComplexSettingsServiceType } from './_types.js';
 import { InternalSettingsService } from './internalSettingsService.js';
@@ -23,29 +24,31 @@ export class VillageSettingsService implements ComplexSettingsServiceType<Villag
       villageId,
     ).settings;
 
+    const { tribe } = AccountContext.getContext().villageService.village(villageId);
+
     this.autoBuild = new InternalSettingsService(
       villageSettingsPath.autoBuild,
-      AutoBuildSettings,
+      params => new AutoBuildSettings(params),
     );
     this.autoParty = new InternalSettingsService(
       villageSettingsPath.autoParty,
-      AutoPartySettings,
+      params => new AutoPartySettings(params),
     );
     this.autoUnits = new InternalSettingsService(
       villageSettingsPath.autoUnits,
-      AutoUnitsSettings,
+      params => new AutoUnitsSettings(params, tribe),
     );
     this.autoSmithy = new InternalSettingsService(
       villageSettingsPath.autoSmithy,
-      AutoSmithySettings,
+      params => new AutoSmithySettings(params),
     );
     this.autoAcademy = new InternalSettingsService(
       villageSettingsPath.autoAcademy,
-      AutoAcademySettings,
+      params => new AutoAcademySettings(params),
     );
     this.general = new InternalSettingsService(
       villageSettingsPath.general,
-      GeneralVillageSettings,
+      params => new GeneralVillageSettings(params),
     );
   }
 }

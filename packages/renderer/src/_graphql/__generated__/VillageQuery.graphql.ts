@@ -4,11 +4,13 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
+export type Tribe = "Egyptians" | "Gauls" | "Huns" | "Natars" | "Nature" | "Romans" | "Teutons";
 export type VillageQueryVariables = {
     villageId: string;
 };
 export type VillageQueryResponse = {
     readonly village: {
+        readonly tribe: Tribe;
         readonly resources: {
             readonly " $fragmentRefs": FragmentRefs<"VillageResources_villageResources">;
         };
@@ -29,6 +31,7 @@ query VillageQuery(
   $villageId: ID!
 ) {
   village(villageId: $villageId) {
+    tribe
     resources {
       ...VillageResources_villageResources
     }
@@ -86,31 +89,38 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "wood",
+  "name": "tribe",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "clay",
+  "name": "wood",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "iron",
+  "name": "clay",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "crop",
+  "name": "iron",
   "storageKey": null
 },
 v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "crop",
+  "storageKey": null
+},
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -132,6 +142,7 @@ return {
         "name": "village",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -185,6 +196,7 @@ return {
         "name": "village",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -201,10 +213,10 @@ return {
                 "name": "amount",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
+                  (v6/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -212,7 +224,7 @@ return {
                     "name": "freeCrop",
                     "storageKey": null
                   },
-                  (v6/*: any*/)
+                  (v7/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -249,10 +261,10 @@ return {
                 "name": "production",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
-                  (v5/*: any*/)
+                  (v5/*: any*/),
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -291,19 +303,19 @@ return {
             "name": "ongoing",
             "storageKey": null
           },
-          (v6/*: any*/)
+          (v7/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "a247e4f5b2aab24d3d5b563ee1ee5492",
+    "cacheID": "1aa164168a2d03db5d70994279e6176a",
     "id": null,
     "metadata": {},
     "name": "VillageQuery",
     "operationKind": "query",
-    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    resources {\n      ...VillageResources_villageResources\n    }\n    id\n  }\n  crannyCapacity(villageId: $villageId) {\n    ...CrannyCapacity_crannyCapacity\n  }\n}\n\nfragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {\n  actual\n  ongoing\n  total\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
+    "text": "query VillageQuery(\n  $villageId: ID!\n) {\n  village(villageId: $villageId) {\n    tribe\n    resources {\n      ...VillageResources_villageResources\n    }\n    id\n  }\n  crannyCapacity(villageId: $villageId) {\n    ...CrannyCapacity_crannyCapacity\n  }\n}\n\nfragment CrannyCapacity_crannyCapacity on VillageCrannyCapacity {\n  actual\n  ongoing\n  total\n}\n\nfragment VillageResources_villageResources on VillageResources {\n  amount {\n    wood\n    clay\n    iron\n    crop\n    freeCrop\n    total\n  }\n  capacity {\n    granary\n    warehouse\n  }\n  production {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();

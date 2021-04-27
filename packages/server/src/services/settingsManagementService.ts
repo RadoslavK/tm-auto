@@ -324,7 +324,8 @@ export class SettingsManagementService {
           zip,
           villageSettingsPath.autoUnits,
           (autoUnitsSettings) => {
-            const newSettings = new AutoUnitsSettings(autoUnitsSettings);
+            const { tribe } = AccountContext.getContext().villageService.village(villageId);
+            const newSettings = new AutoUnitsSettings(autoUnitsSettings, tribe);
 
             villageSettingsService.autoUnits.update(newSettings);
             publishPayloadEvent(BotEvent.AutoUnitsSettingsUpdated, {

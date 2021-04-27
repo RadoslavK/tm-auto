@@ -9,7 +9,7 @@ import { dataPathService } from './dataPathService.js';
 import { fileService } from './fileService.js';
 
 type SerializableVillage = Pick<Village,
-  'scanned' | 'coords' | 'isCapital' | 'id' | 'name'> & {
+  'scanned' | 'coords' | 'isCapital' | 'id' | 'name' | 'tribe'> & {
   readonly spots: ReadonlyArray<BuildingSpot>;
 };
 
@@ -141,6 +141,7 @@ export class VillageService {
         coords: village.coords,
         scanned: village.scanned,
         spots: village.buildings.spots.buildings(),
+        tribe: village.tribe,
       };
 
       await fileService.save(path, data);
@@ -172,6 +173,7 @@ export class VillageService {
         coords: data.coords,
         isCapital: data.isCapital,
         name: data.name,
+        tribe: data.tribe,
       });
 
       village.buildings.spots.set(data.spots);

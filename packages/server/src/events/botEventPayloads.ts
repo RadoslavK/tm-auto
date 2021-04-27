@@ -2,7 +2,6 @@ import type { TaskType } from 'shared/enums/TaskType.js';
 
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
-import type { GameInfo } from '../_models/gameInfo.js';
 import type { LogEntry } from '../_models/logs/logEntry.js';
 import type { MapSearchVillageTile } from '../_models/map/villageTile.js';
 import type { AccountSettings } from '../_models/settings/account/accountSettings.js';
@@ -163,8 +162,4 @@ export type BotEventPayloads = {
   [BotEvent.MapSearchFinished]: {
     readonly tiles: readonly MapSearchVillageTile[];
   };
-
-  [BotEvent.GameInfoUpdated]: {
-    readonly gameInfo: GameInfo;
-  }
 };

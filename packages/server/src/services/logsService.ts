@@ -1,3 +1,4 @@
+import type { Tribe } from 'shared/enums/Tribe.js';
 import { generateId } from 'shared/utils/generateId.js';
 
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
@@ -27,6 +28,7 @@ import { unitInfoService } from './info/unitInfoService.js';
 type LogAutoUnitsParams = {
   readonly amount: number;
   readonly index: number;
+  readonly tribe: Tribe;
 };
 
 export class LogsService {
@@ -64,9 +66,8 @@ export class LogsService {
   };
 
   public logAutoUnits = (params: LogAutoUnitsParams): void => {
-    const { amount, index } = params;
+    const { amount, index, tribe } = params;
 
-    const { tribe } = AccountContext.getContext().gameInfo;
     const { name } = unitInfoService.getUnitInfo(index);
 
     const content = new AutoUnitsLogEntryContent({

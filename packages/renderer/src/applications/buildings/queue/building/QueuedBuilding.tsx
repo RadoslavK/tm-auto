@@ -9,7 +9,7 @@ import { useFragment } from 'react-relay/hooks';
 import { useRecoilValue } from 'recoil';
 
 import type { QueuedBuilding_queuedBuilding$key } from '../../../../_graphql/__generated__/QueuedBuilding_queuedBuilding.graphql.js';
-import { tribeState } from '../../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../../_recoil/atoms/tribe.js';
 import {
   BuildingImageSize,
   imageLinks,
@@ -68,7 +68,7 @@ export const QueuedBuilding: React.FC<Props> = ({
   });
 
   const classes = useStyles({ isDragging });
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
 
   return (
     <QueuedBuildingsDropArea

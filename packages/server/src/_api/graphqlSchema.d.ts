@@ -335,7 +335,6 @@ export interface NexusGenObjects {
   GameInfo: { // root type
     factions: boolean; // Boolean!
     mapSize: number; // Int!
-    tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // root type
     autoStart: boolean; // Boolean!
@@ -420,6 +419,7 @@ export interface NexusGenObjects {
     name: string; // String!
     resources: NexusGenRootTypes['VillageResources']; // VillageResources!
     scanned: boolean; // Boolean!
+    tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   VillageCapacity: { // root type
     granary: number; // Int!
@@ -624,7 +624,6 @@ export interface NexusGenFieldTypes {
   GameInfo: { // field return type
     factions: boolean; // Boolean!
     mapSize: number; // Int!
-    tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   GeneralSettings: { // field return type
     autoStart: boolean; // Boolean!
@@ -841,7 +840,6 @@ export interface NexusGenFieldTypes {
     nextVillageTaskExecutionChanged: NexusGenRootTypes['Timestamp']; // Timestamp!
     onBuildingSpotUpdated: NexusGenRootTypes['BuildingSpot']; // BuildingSpot!
     onCrannyCapacityUpdated: NexusGenRootTypes['VillageCrannyCapacity']; // VillageCrannyCapacity!
-    onGameInfoUpdated: NexusGenRootTypes['GameInfo']; // GameInfo!
     queuedBuildingUpdated: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     villageUpdated: NexusGenRootTypes['Village']; // Village!
     villagesUpdated: NexusGenRootTypes['Village'][]; // [Village!]!
@@ -877,6 +875,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     resources: NexusGenRootTypes['VillageResources']; // VillageResources!
     scanned: boolean; // Boolean!
+    tribe: NexusGenEnums['Tribe']; // Tribe!
   }
   VillageCapacity: { // field return type
     granary: number; // Int!
@@ -1070,7 +1069,6 @@ export interface NexusGenFieldTypeNames {
   GameInfo: { // field return type name
     factions: 'Boolean'
     mapSize: 'Int'
-    tribe: 'Tribe'
   }
   GeneralSettings: { // field return type name
     autoStart: 'Boolean'
@@ -1287,7 +1285,6 @@ export interface NexusGenFieldTypeNames {
     nextVillageTaskExecutionChanged: 'Timestamp'
     onBuildingSpotUpdated: 'BuildingSpot'
     onCrannyCapacityUpdated: 'VillageCrannyCapacity'
-    onGameInfoUpdated: 'GameInfo'
     queuedBuildingUpdated: 'ModificationPayload'
     villageUpdated: 'Village'
     villagesUpdated: 'Village'
@@ -1323,6 +1320,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     resources: 'VillageResources'
     scanned: 'Boolean'
+    tribe: 'Tribe'
   }
   VillageCapacity: { // field return type name
     granary: 'Int'
@@ -1597,6 +1595,9 @@ export interface NexusGenArgTypes {
     nextVillageTaskExecutions: { // args
       villageId: string; // ID!
     }
+    researcheableUnits: { // args
+      villageId: string; // ID!
+    }
     resourceFields: { // args
       villageId: string; // ID!
     }
@@ -1606,6 +1607,9 @@ export interface NexusGenArgTypes {
     unitUpgradeCost: { // args
       level: number; // Int!
       unitIndex: number; // Int!
+    }
+    upgradeableUnits: { // args
+      villageId: string; // ID!
     }
     village: { // args
       villageId: string; // ID!

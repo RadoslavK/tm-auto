@@ -235,14 +235,15 @@ export class AutoUnitsTask implements BotTaskWithCoolDown {
     }
 
     const page = await getPage();
+    const { tribe } = this._village;
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {
       AccountContext.getContext().logsService.logAutoUnits({
         amount,
         index: +uIndex,
+        tribe,
       });
 
-      const { tribe } = AccountContext.getContext().gameInfo;
       const inputUnitIndex = +uIndex - 10 * (tribe - 1);
       const input = await page.$(`[name=t${inputUnitIndex}]`);
 

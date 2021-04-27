@@ -1,5 +1,5 @@
 export enum RecoilKeys {
-  Tribe = 'tribe',
+  VillageTribe = 'tribe',
   SelectedVillageId = 'selected-village-id',
   AlwaysAddToTop = 'always-add-to-top',
 }

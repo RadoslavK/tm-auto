@@ -3,7 +3,9 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type AddResearchUnitDialogResearcheableUnitsQueryVariables = {};
+export type AddResearchUnitDialogResearcheableUnitsQueryVariables = {
+    villageId: string;
+};
 export type AddResearchUnitDialogResearcheableUnitsQueryResponse = {
     readonly researcheableUnits: ReadonlyArray<number>;
 };
@@ -15,16 +17,31 @@ export type AddResearchUnitDialogResearcheableUnitsQuery = {
 
 
 /*
-query AddResearchUnitDialogResearcheableUnitsQuery {
-  researcheableUnits
+query AddResearchUnitDialogResearcheableUnitsQuery(
+  $villageId: ID!
+) {
+  researcheableUnits(villageId: $villageId)
 }
 */
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "villageId"
+  }
+],
+v1 = [
+  {
     "alias": null,
-    "args": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "villageId",
+        "variableName": "villageId"
+      }
+    ],
     "kind": "ScalarField",
     "name": "researcheableUnits",
     "storageKey": null
@@ -32,30 +49,30 @@ var v0 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "AddResearchUnitDialogResearcheableUnitsQuery",
-    "selections": (v0/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "AddResearchUnitDialogResearcheableUnitsQuery",
-    "selections": (v0/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "498e53ea94f2d1d5b241ed9d2cefb294",
+    "cacheID": "ae83a7c86874bc8e6c74591e9878076b",
     "id": null,
     "metadata": {},
     "name": "AddResearchUnitDialogResearcheableUnitsQuery",
     "operationKind": "query",
-    "text": "query AddResearchUnitDialogResearcheableUnitsQuery {\n  researcheableUnits\n}\n"
+    "text": "query AddResearchUnitDialogResearcheableUnitsQuery(\n  $villageId: ID!\n) {\n  researcheableUnits(villageId: $villageId)\n}\n"
   }
 };
 })();
-(node as any).hash = '2fcef12620b41b56922f800f25fce52a';
+(node as any).hash = '3692827706aee003670f488b146bd879';
 export default node;

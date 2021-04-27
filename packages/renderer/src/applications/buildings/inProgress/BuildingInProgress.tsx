@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { BuildingInProgress_buildingInProgress$key } from '../../../_graphql/__generated__/BuildingInProgress_buildingInProgress.graphql.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import type { Timestamp } from '../../../models/timestamp.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
@@ -67,7 +67,7 @@ const useStyles = makeStyles<unknown, StylesType>({
 
 export const BuildingInProgress: React.FC<Props> = ({ building }) => {
   const buildingFragment = useFragment(buildingInProgress_buildingInProgress, building);
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const classes = useStyles({ buildingType: buildingFragment.type, tribe });
   const timer = useCountDown(getInitialTimer(buildingFragment.finishedAt));
   const time = formatTimeFromSeconds(timer);

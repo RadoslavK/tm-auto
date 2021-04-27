@@ -1,9 +1,8 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
+import { Tribe } from 'shared/enums/Tribe.js';
 
 import { TravianPath } from '../../_enums/travianPath.js';
 import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding.js';
-import { Tribe } from '../../_models/enums/tribe.js';
-import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';
 import { fieldIds } from '../../constants/fieldIds.js';
 import { isInfrastructure } from '../../utils/buildingUtils.js';
@@ -11,9 +10,7 @@ import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls: readonly string[] = [TravianPath.InfrastructureOverview];
 
-const getWallType = (): BuildingType => {
-  const { tribe } = AccountContext.getContext().gameInfo;
-
+const getWallType = (tribe: Tribe): BuildingType => {
   switch (tribe) {
     case Tribe.Egyptians:
       return BuildingType.StoneWall;
@@ -35,7 +32,7 @@ const getWallType = (): BuildingType => {
   }
 };
 
-export const parseInfrastructureSpots = async (): Promise<
+export const parseInfrastructureSpots = async (tribe: Tribe): Promise<
   readonly ActualBuilding[]
 > => {
   await validateUrl(acceptedUrls);
@@ -82,7 +79,7 @@ export const parseInfrastructureSpots = async (): Promise<
         if (fieldId === fieldIds.RallyPoint) {
           type = BuildingType.RallyPoint;
         } else if (fieldId === fieldIds.Wall) {
-          type = getWallType();
+          type = getWallType(tribe);
         }
 
         return new ActualBuilding({

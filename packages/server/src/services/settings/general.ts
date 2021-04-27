@@ -9,7 +9,7 @@ export class GeneralSettingsService {
     if (!GeneralSettingsService._service) {
       GeneralSettingsService._service = new InternalSettingsService<GeneralSettings>(
         DataPathService.generalPath(),
-        GeneralSettings,
+        params => new GeneralSettings(params),
       );
     }
 

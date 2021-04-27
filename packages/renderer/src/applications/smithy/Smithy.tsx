@@ -31,7 +31,7 @@ graphql`
 
 const query = graphql`
     query SmithyQuery($villageId: ID!) {
-        upgradeableUnits
+        upgradeableUnits(villageId: $villageId)
         autoSmithySettings(villageId: $villageId) {
             ...Smithy_autoSmithySettings @relay(mask: false)
         }

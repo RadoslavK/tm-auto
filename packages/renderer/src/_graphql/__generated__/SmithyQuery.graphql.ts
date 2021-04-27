@@ -29,7 +29,7 @@ export type SmithyQuery = {
 query SmithyQuery(
   $villageId: ID!
 ) {
-  upgradeableUnits
+  upgradeableUnits(villageId: $villageId)
   autoSmithySettings(villageId: $villageId) {
     units {
       ...SmithyUnitsList_autoSmithyUnitSettings
@@ -77,27 +77,27 @@ var v0 = [
   }
 ],
 v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "upgradeableUnits",
-  "storageKey": null
-},
-v2 = {
   "kind": "Variable",
   "name": "villageId",
   "variableName": "villageId"
 },
-v3 = [
-  (v2/*: any*/)
+v2 = [
+  (v1/*: any*/)
 ],
+v3 = {
+  "alias": null,
+  "args": (v2/*: any*/),
+  "kind": "ScalarField",
+  "name": "upgradeableUnits",
+  "storageKey": null
+},
 v4 = [
   {
     "kind": "Literal",
     "name": "task",
     "value": "AutoSmithy"
   },
-  (v2/*: any*/)
+  (v1/*: any*/)
 ];
 return {
   "fragment": {
@@ -106,10 +106,10 @@ return {
     "metadata": null,
     "name": "SmithyQuery",
     "selections": [
-      (v1/*: any*/),
+      (v3/*: any*/),
       {
         "alias": null,
-        "args": (v3/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
         "name": "autoSmithySettings",
@@ -160,10 +160,10 @@ return {
     "kind": "Operation",
     "name": "SmithyQuery",
     "selections": [
-      (v1/*: any*/),
+      (v3/*: any*/),
       {
         "alias": null,
-        "args": (v3/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AutoSmithySettings",
         "kind": "LinkedField",
         "name": "autoSmithySettings",
@@ -236,14 +236,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "158269f2521b9fbd6ae4088a843bdb28",
+    "cacheID": "1b7e957a1714e8963f6c40a63858e90b",
     "id": null,
     "metadata": {},
     "name": "SmithyQuery",
     "operationKind": "query",
-    "text": "query SmithyQuery(\n  $villageId: ID!\n) {\n  upgradeableUnits\n  autoSmithySettings(villageId: $villageId) {\n    units {\n      ...SmithyUnitsList_autoSmithyUnitSettings\n    }\n  }\n  nextVillageTaskExecution(task: AutoSmithy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n"
+    "text": "query SmithyQuery(\n  $villageId: ID!\n) {\n  upgradeableUnits(villageId: $villageId)\n  autoSmithySettings(villageId: $villageId) {\n    units {\n      ...SmithyUnitsList_autoSmithyUnitSettings\n    }\n  }\n  nextVillageTaskExecution(task: AutoSmithy, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment SmithyUnitLevel_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  minTroops\n  targetLevel\n}\n\nfragment SmithyUnitLevels_autoSmithyUnitLevelSettings on AutoSmithyUnitLevelSettings {\n  targetLevel\n  ...SmithyUnitLevel_autoSmithyUnitLevelSettings\n}\n\nfragment SmithyUnit_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  levels {\n    targetLevel\n    ...SmithyUnitLevels_autoSmithyUnitLevelSettings\n  }\n}\n\nfragment SmithyUnitsList_autoSmithyUnitSettings on AutoSmithyUnitSettings {\n  unitIndex\n  ...SmithyUnit_autoSmithyUnitSettings\n}\n"
   }
 };
 })();
-(node as any).hash = '7aaffa5d145298fa0832558c31967f87';
+(node as any).hash = '687e93fb6d6a100b300f1af33d1e6a84';
 export default node;

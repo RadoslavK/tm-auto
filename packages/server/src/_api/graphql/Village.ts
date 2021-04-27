@@ -38,6 +38,7 @@ export const Village = objectType({
     t.string('name');
     t.field('resources', { type: VillageResources });
     t.boolean('isCapital');
+    t.field('tribe', { type: 'Tribe' });
     t.boolean('scanned');
   },
 });

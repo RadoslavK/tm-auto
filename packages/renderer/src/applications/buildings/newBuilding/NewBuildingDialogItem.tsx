@@ -15,7 +15,7 @@ import type { NewBuildingDialogItem_availableNewBuildingFragment$key } from '../
 import type { NewBuildingDialogItemEnqueueBuildingMutation } from '../../../_graphql/__generated__/NewBuildingDialogItemEnqueueBuildingMutation.graphql.js';
 import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
-import { tribeState } from '../../../_recoil/atoms/tribe.js';
+import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { enqueueBuildingUpdater } from '../../../_shared/cache/enqueueBuildingUpdater.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 import { MultiLevelDialog } from '../multiLevelDialog/MultiLevelDialog.js';
@@ -78,7 +78,7 @@ export const NewBuildingDialogItem: React.FC<Props> = ({
 }) => {
   const availableNewBuildingFragment = useFragment(availableNewBuildingFragmentDefinition, availableNewBuildingKey);
   const { maxLevel, name, type } = availableNewBuildingFragment;
-  const tribe = useRecoilValue(tribeState);
+  const tribe = useRecoilValue(villageTribeState);
   const villageId = useRecoilValue(selectedVillageIdState);
   const alwaysAddNewToTop = useRecoilValue(alwaysAddNewToTopState);
   const [showMultiEnqueue, setShowMultiEnqueue] = useState(false);
