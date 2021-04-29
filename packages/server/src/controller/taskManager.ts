@@ -97,7 +97,7 @@ export class TaskManager {
         await updateBuildings();
 
         village.scanned = true;
-        AccountContext.getContext().villageService.serialize([village.id]);
+        await AccountContext.getContext().villageService.serialize([village.id]);
 
         publishPayloadEvent(BotEvent.VillageUpdated, { village });
       }

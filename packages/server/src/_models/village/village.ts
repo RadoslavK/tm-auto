@@ -26,9 +26,8 @@ export class Village {
       publishPayloadEvent(BotEvent.CrannyCapacityUpdated, { villageId: this.id }),
     onMainBuildingLevelsChanged: () =>
       publishPayloadEvent(BotEvent.BuildingQueueTimesUpdated, { villageId: this.id }),
-    onActualAndOngoingUpdate: () => {
-      AccountContext.getContext().villageService.serialize([this.id]);
-    },
+    onActualAndOngoingUpdate: () =>
+      AccountContext.getContext().villageService.serialize([this.id]),
   });
 
   public tribe: Tribe = Tribe.Romans;

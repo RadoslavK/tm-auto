@@ -17,7 +17,7 @@ export const updateBuildings = async (): Promise<void> => {
   const buildingsInProgress = await parseBuildingsInProgress();
   const actualBuildings = fieldSpots.concat(infrastructureSpots);
 
-  village.buildings.update({
+  await village.buildings.update({
     actual: actualBuildings,
     ongoing: buildingsInProgress,
     triggerMainBuildingsUpdatedEvent: true,

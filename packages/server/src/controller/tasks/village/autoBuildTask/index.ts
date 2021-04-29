@@ -402,7 +402,7 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     }
 
     const ongoing = await parseBuildingsInProgress();
-    this._buildings.update({ ongoing });
+    await this._buildings.update({ ongoing });
     await updateActualResources();
   };
 }

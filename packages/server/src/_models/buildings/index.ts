@@ -20,7 +20,7 @@ type Events = {
   readonly onCrannyCapacityUpdate: () => void;
   readonly onMainBuildingLevelsChanged: () => void;
   readonly onOngoingUpdated: () => void;
-  readonly onActualAndOngoingUpdate: () => void;
+  readonly onActualAndOngoingUpdate: () => Promise<void>;
 };
 
 export class Buildings {
@@ -34,11 +34,11 @@ export class Buildings {
     private events: Events,
   ) {}
 
-  public update = ({
+  public update = async ({
     actual,
     ongoing,
     triggerMainBuildingsUpdatedEvent,
-  }: UpdateParams): void => {
+  }: UpdateParams): Promise<void> => {
     let updatedAny = false;
     let mbLevelChanged = false;
 
@@ -96,7 +96,7 @@ export class Buildings {
     this.events.onOngoingUpdated();
 
     if (updatedAny) {
-      this.events.onActualAndOngoingUpdate();
+      await this.events.onActualAndOngoingUpdate();
       this.events.onCrannyCapacityUpdate();
     }
 
