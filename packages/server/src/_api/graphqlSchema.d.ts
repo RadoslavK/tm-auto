@@ -7,6 +7,7 @@
 import { ApiContext } from "./apiContext.type"
 import { AutoAcademySettings } from "./../_models/settings/tasks/autoAcademySettings"
 import { AutoSmithySettings, AutoSmithyUnitSettings } from "./../_models/settings/tasks/autoSmithySettings"
+import { BuildingDemolitionSettings } from "./../_models/settings/tasks/autoBuildSettings/index"
 import { BuildingInProgress } from "./../_models/buildings/inProgress/buildingInProgress"
 import { BuildingQueue } from "./../_models/buildings/queue/buildingQueue"
 import { GeneralVillageSettings } from "./../_models/settings/generalVillageSettings"
@@ -45,6 +46,11 @@ export interface NexusGenInputs {
   CoolDownInput: { // input type
     max: NexusGenInputs['DurationInput']; // DurationInput!
     min: NexusGenInputs['DurationInput']; // DurationInput!
+  }
+  DemolitionBuildingInput: { // input type
+    fieldId: number; // Int!
+    targetLevel: number; // Int!
+    type: number; // Int!
   }
   DequeueBuildingAtFieldInput: { // input type
     fieldId: number; // Int!
@@ -226,6 +232,7 @@ export interface NexusGenObjects {
     allow: boolean; // Boolean!
     autoCropFields: boolean; // Boolean!
     autoStorage: NexusGenRootTypes['AutoStorageSettings']; // AutoStorageSettings!
+    buildingsDemolition: NexusGenRootTypes['BuildingDemolitionSettings'][]; // [BuildingDemolitionSettings!]!
     coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
     dualQueue: NexusGenRootTypes['DualQueueSettings']; // DualQueueSettings!
     minCrop: number; // Int!
@@ -288,6 +295,7 @@ export interface NexusGenObjects {
   AvailableNewBuilding: { // root type
     type: number; // Int!
   }
+  BuildingDemolitionSettings: BuildingDemolitionSettings;
   BuildingInProgress: BuildingInProgress;
   BuildingInfo: { // root type
     name: string; // String!
@@ -381,6 +389,9 @@ export interface NexusGenObjects {
   }
   Query: {};
   QueuedBuilding: QueuedBuilding;
+  RemoveDemolitionBuildingPayload: { // root type
+    fieldId: number; // Int!
+  }
   ResourceClaimLogEntryContent: { // root type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
     resources: NexusGenRootTypes['Resources']; // Resources!
@@ -493,6 +504,7 @@ export interface NexusGenFieldTypes {
     allow: boolean; // Boolean!
     autoCropFields: boolean; // Boolean!
     autoStorage: NexusGenRootTypes['AutoStorageSettings']; // AutoStorageSettings!
+    buildingsDemolition: NexusGenRootTypes['BuildingDemolitionSettings'][]; // [BuildingDemolitionSettings!]!
     coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
     dualQueue: NexusGenRootTypes['DualQueueSettings']; // DualQueueSettings!
     minCrop: number; // Int!
@@ -563,6 +575,12 @@ export interface NexusGenFieldTypes {
   AvailableNewBuilding: { // field return type
     maxLevel: number; // Int!
     name: string; // String!
+    type: number; // Int!
+  }
+  BuildingDemolitionSettings: { // field return type
+    fieldId: number; // Int!
+    name: string; // String!
+    targetLevel: number; // Int!
     type: number; // Int!
   }
   BuildingInProgress: { // field return type
@@ -672,8 +690,10 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addAutoSmithyUnitLevel: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
+    addDemolitionBuilding: NexusGenRootTypes['BuildingDemolitionSettings']; // BuildingDemolitionSettings!
     addHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
     clearAutoSmithySettingsUnit: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
+    clearDemolitionBuildings: NexusGenRootTypes['BuildingDemolitionSettings'][]; // [BuildingDemolitionSettings!]!
     clearQueue: NexusGenRootTypes['BuildingQueue']; // BuildingQueue!
     createAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
     deleteAccount: NexusGenRootTypes['UserAccount']; // UserAccount!
@@ -691,6 +711,7 @@ export interface NexusGenFieldTypes {
     moveQueuedBuildingToIndex: NexusGenRootTypes['ModificationPayload']; // ModificationPayload!
     refreshVillage: boolean | null; // Boolean
     removeAutoSmithyUnitLevel: NexusGenRootTypes['AutoSmithySettings']; // AutoSmithySettings!
+    removeDemolitionBuilding: NexusGenRootTypes['RemoveDemolitionBuildingPayload']; // RemoveDemolitionBuildingPayload!
     removeHeroLevelUpItem: NexusGenRootTypes['HeroLevelUpItem']; // HeroLevelUpItem!
     resetAccountSettings: NexusGenRootTypes['AccountSettings']; // AccountSettings!
     resetAutoAcademySettings: NexusGenRootTypes['AutoAcademySettings']; // AutoAcademySettings!
@@ -793,6 +814,9 @@ export interface NexusGenFieldTypes {
     startingLevel: number; // Int!
     targetLevel: number; // Int!
     type: number; // Int!
+  }
+  RemoveDemolitionBuildingPayload: { // field return type
+    fieldId: number; // Int!
   }
   ResourceClaimLogEntryContent: { // field return type
     reason: NexusGenEnums['ClaimHeroResourcesReason']; // ClaimHeroResourcesReason!
@@ -938,6 +962,7 @@ export interface NexusGenFieldTypeNames {
     allow: 'Boolean'
     autoCropFields: 'Boolean'
     autoStorage: 'AutoStorageSettings'
+    buildingsDemolition: 'BuildingDemolitionSettings'
     coolDown: 'CoolDown'
     dualQueue: 'DualQueueSettings'
     minCrop: 'Int'
@@ -1008,6 +1033,12 @@ export interface NexusGenFieldTypeNames {
   AvailableNewBuilding: { // field return type name
     maxLevel: 'Int'
     name: 'String'
+    type: 'Int'
+  }
+  BuildingDemolitionSettings: { // field return type name
+    fieldId: 'Int'
+    name: 'String'
+    targetLevel: 'Int'
     type: 'Int'
   }
   BuildingInProgress: { // field return type name
@@ -1117,8 +1148,10 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addAutoSmithyUnitLevel: 'AutoSmithySettings'
+    addDemolitionBuilding: 'BuildingDemolitionSettings'
     addHeroLevelUpItem: 'HeroLevelUpItem'
     clearAutoSmithySettingsUnit: 'AutoSmithySettings'
+    clearDemolitionBuildings: 'BuildingDemolitionSettings'
     clearQueue: 'BuildingQueue'
     createAccount: 'UserAccount'
     deleteAccount: 'UserAccount'
@@ -1136,6 +1169,7 @@ export interface NexusGenFieldTypeNames {
     moveQueuedBuildingToIndex: 'ModificationPayload'
     refreshVillage: 'Boolean'
     removeAutoSmithyUnitLevel: 'AutoSmithySettings'
+    removeDemolitionBuilding: 'RemoveDemolitionBuildingPayload'
     removeHeroLevelUpItem: 'HeroLevelUpItem'
     resetAccountSettings: 'AccountSettings'
     resetAutoAcademySettings: 'AutoAcademySettings'
@@ -1238,6 +1272,9 @@ export interface NexusGenFieldTypeNames {
     startingLevel: 'Int'
     targetLevel: 'Int'
     type: 'Int'
+  }
+  RemoveDemolitionBuildingPayload: { // field return type name
+    fieldId: 'Int'
   }
   ResourceClaimLogEntryContent: { // field return type name
     reason: 'ClaimHeroResourcesReason'
@@ -1355,11 +1392,18 @@ export interface NexusGenArgTypes {
       unitIndex: number; // Int!
       villageId: string; // ID!
     }
+    addDemolitionBuilding: { // args
+      building: NexusGenInputs['DemolitionBuildingInput']; // DemolitionBuildingInput!
+      villageId: string; // ID!
+    }
     addHeroLevelUpItem: { // args
       item: NexusGenInputs['HeroLevelUpItemInput']; // HeroLevelUpItemInput!
     }
     clearAutoSmithySettingsUnit: { // args
       unitIndex: number; // Int!
+      villageId: string; // ID!
+    }
+    clearDemolitionBuildings: { // args
       villageId: string; // ID!
     }
     clearQueue: { // args
@@ -1419,6 +1463,10 @@ export interface NexusGenArgTypes {
     removeAutoSmithyUnitLevel: { // args
       targetLevel: number; // Int!
       unitIndex: number; // Int!
+      villageId: string; // ID!
+    }
+    removeDemolitionBuilding: { // args
+      fieldId: number; // Int!
       villageId: string; // ID!
     }
     removeHeroLevelUpItem: { // args

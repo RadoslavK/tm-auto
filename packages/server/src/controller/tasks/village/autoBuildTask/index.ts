@@ -33,16 +33,28 @@ import type {
 import { checkAutoStorage } from './checkAutoStorage.js';
 import { useVideoFeature } from './useVideoFeature.js';
 
-const pickLowerDate = (date1: Date | undefined | void, date2: Date | undefined | void): Date | undefined | void => {
-  if (!date1) {
-    return date2;
-  } else if (!date2) {
-    return date1;
-  } else {
-    return date1 >= date2
-      ? date2
-      : date1;
+const pickLowestDate = (...dates: ReadonlyArray<Date | undefined | void>): Date | undefined | void =>
+  dates
+    .filter(date => !!date)
+    .sort((date1, date2) => +date2! - +date1!)
+    .reverse()
+    [0];
+
+const parseDemolitionTimer = async (): Promise<Duration | null> => {
+  const page = await getPage();
+  const timerNode = await page.$('#demolish tbody tr .timer');
+
+  if (!timerNode) {
+    return null;
   }
+
+  const secondsText = await page.evaluate((timer: HTMLElement) => timer.getAttribute('value'), timerNode);
+
+  if (!secondsText) {
+    throw new Error('Failed to parse timer value');
+  }
+
+  return Duration.fromSeconds(+secondsText);
 };
 
 export class AutoBuildTask implements BotTaskWithCoolDown {
@@ -65,17 +77,89 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       .autoBuild.get();
 
   public allowExecution = (): boolean => {
-    const { allow, autoStorage } = this.settings();
+    const { allow, autoStorage, buildingsDemolition } = this.settings();
     const { queue } = this._village.buildings;
 
     return AccountContext.getContext().settingsService.account.get().autoBuild.allow
       && allow
       //  Allow even if nothing is queued because maybe something is overflowing
       //  TODO have extra task for overflow and do it before this one
-      && (!!queue.buildings().length || autoStorage.warehouse.allow || autoStorage.granary.allow);
+      && (!!queue.buildings().length || autoStorage.warehouse.allow || autoStorage.granary.allow || !!buildingsDemolition.length);
   };
 
   public coolDown = (): CoolDown => this.settings().coolDown;
+
+  private demolishBuilding = async (): Promise<Duration | null> => {
+    const { spots } = this._village.buildings;
+    const mb = spots.ofType(BuildingType.MainBuilding);
+
+    //  remove target levels if its already lower
+    const { buildingsDemolition } = this.settings();
+    let buildingsDemolitionUpdated = buildingsDemolition.filter(b => {
+      const building = spots.at(b.fieldId);
+
+      return !(
+        !building || building.type !== b.type || building.level.actual <= b.targetLevel
+      );
+    });
+
+    if (buildingsDemolitionUpdated.length !== buildingsDemolition.length) {
+      AccountContext.getContext().settingsService.village(this._village.id).autoBuild.merge({ buildingsDemolition: buildingsDemolitionUpdated });
+    }
+
+    if (!buildingsDemolitionUpdated.length || !mb || mb.level.actual < 10) {
+      return null;
+    }
+
+    await ensureBuildingSpotPage(mb.fieldId);
+
+    let timer = await parseDemolitionTimer();
+
+    if (timer) {
+      return timer;
+    }
+
+    const page = await getPage();
+
+    const demolishNodes = await page.$$eval('#demolish option', x => x.map(e => {
+      const value = +(e.getAttribute('value') ?? 0);
+      const buildingName = new RegExp(`${value} (.*) \\d+`).exec(e.textContent ?? '')?.[1];
+
+      return {
+        fieldId: value,
+        name: buildingName,
+      };
+    }));
+
+    const buildingToDemolish = buildingsDemolitionUpdated[0];
+    const demolishNode = demolishNodes.find(n => {
+      return n.fieldId === buildingToDemolish.fieldId
+        && n.name === BuildingType[buildingToDemolish.type];
+    });
+
+    if (!demolishNode) {
+      throw new Error('Did not find demolish node');
+    }
+
+    await page.select('#demolish', buildingToDemolish.fieldId.toString());
+
+    const buildingInfo = buildingInfoService.getBuildingInfo(buildingToDemolish.type);
+    const actualBuilding = spots.at(buildingToDemolish.fieldId);
+    AccountContext.getContext().logsService.logText(`Demolishing building ${buildingInfo.name} from level ${actualBuilding.level.actual}`);
+
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      page.click('#btn_demolish'),
+    ]);
+
+    timer = await parseDemolitionTimer();
+
+    if (!timer) {
+      throw new Error('Does not have demolition timer after action');
+    }
+
+    return timer;
+  };
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
     this._addedCroplandInQueue = false;
@@ -85,6 +169,8 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
       dualQueue: { allow: allowDualQueue, preference: dualQueuePreference },
       autoStorage,
     } = this.settings();
+
+    const demolitionTimer = await this.demolishBuilding();
 
     if (autoStorage.granary.allow || autoStorage.warehouse.allow) {
       const { buildingsToBuild } = await checkAutoStorage(
@@ -101,7 +187,9 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
     }
 
     if (!queue.buildings().length) {
-      return;
+      return {
+        nextCoolDown: demolitionTimer && CoolDown.fromDuration(demolitionTimer),
+      };
     }
 
     const isRoman = this._village.tribe === Tribe.Romans;
@@ -121,17 +209,24 @@ export class AutoBuildTask implements BotTaskWithCoolDown {
         enoughResourcesForResAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Fields);
       }
 
-      enoughResourcesAt = pickLowerDate(enoughResourcesForResAt, enoughResourcesForInfAt);
+      enoughResourcesAt = pickLowestDate(enoughResourcesForResAt, enoughResourcesForInfAt);
 
       const fieldFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Fields);
       const infrastructureFinishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Infrastructure);
-      finishedAt = pickLowerDate(fieldFinishedAt, infrastructureFinishedAt);
+      finishedAt = pickLowestDate(fieldFinishedAt, infrastructureFinishedAt);
     } else {
       enoughResourcesAt = await this.startBuildingIfQueueIsFreeByType(BuildingSpotType.Any);
       finishedAt = this._buildings.ongoing.getTimeOfBuildingCompletion(BuildingSpotType.Any);
     }
 
-    const lowestWaiting = pickLowerDate(enoughResourcesAt, finishedAt);
+    let demolitionFinishAt: Date | undefined;
+
+    if (demolitionTimer) {
+      demolitionFinishAt = new Date();
+      demolitionFinishAt.setSeconds(demolitionFinishAt.getSeconds() + demolitionTimer.getTotalSeconds());
+    }
+
+    const lowestWaiting = pickLowestDate(enoughResourcesAt, finishedAt, demolitionFinishAt);
 
     // seconds
     const finishedIn =

@@ -1,13 +1,18 @@
 import {
   arg,
   enumType,
+  idArg,
   inputObjectType,
+  intArg,
+  list,
   mutationField,
   objectType,
   queryField,
   subscriptionField,
 } from 'nexus';
+import path from 'path';
 import { dualQueuePreferences } from 'shared/enums/DualQueuePreference.js';
+import { getDirname } from 'shared/utils/getDirname.js';
 
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
@@ -67,6 +72,23 @@ export const DualQueueSettingsInput = inputObjectType({
   },
 });
 
+export const BuildingDemolitionSettingsObject = objectType({
+  name: 'BuildingDemolitionSettings',
+  definition: t => {
+    t.int('fieldId');
+    t.int('type');
+    t.string('name', {
+      resolve: (b, _args, ctx) =>
+        ctx.buildingInfoService.getBuildingInfo(b.type).name,
+    });
+    t.int('targetLevel');
+  },
+  sourceType: process.env.shouldGenerateArtifacts && {
+    module: path.join(getDirname(import.meta), '../../../_models/settings/tasks/autoBuildSettings/index.ts'),
+    export: 'BuildingDemolitionSettings',
+  },
+});
+
 export const AutoBuildSettings = objectType({
   name: 'AutoBuildSettings',
   definition: t => {
@@ -76,8 +98,8 @@ export const AutoBuildSettings = objectType({
     t.int('minCrop');
     t.boolean('useHeroResources');
     t.field('dualQueue', { type: DualQueueSettings });
-
     t.field('autoStorage', { type: AutoStorageSettings });
+    t.list.field('buildingsDemolition', { type: BuildingDemolitionSettingsObject });
   },
 });
 
@@ -124,6 +146,78 @@ export const ResetAutoBuildSettingsMutation = mutationField(t => {
       villageId: 'ID',
     },
     resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.reset(),
+  });
+});
+
+export const DemolitionBuildingInput = inputObjectType({
+  name: 'DemolitionBuildingInput',
+  definition: t => {
+    t.int('fieldId');
+    t.int('type');
+    t.int('targetLevel');
+  },
+});
+
+export const AddDemolitionBuildingMutation = mutationField(t => {
+  t.field('addDemolitionBuilding', {
+    type: BuildingDemolitionSettingsObject,
+    args: {
+      villageId: idArg(),
+      building: arg({ type: DemolitionBuildingInput }),
+    },
+    resolve: (_, { building, villageId }, ctx) => {
+      const service = ctx.settingsService.village(villageId).autoBuild;
+      const settings = service.get();
+
+      const buildingsDemolition = [...settings.buildingsDemolition, building];
+
+      service.merge({ buildingsDemolition });
+
+      return building;
+    },
+  });
+});
+
+export const RemoveDemolitionBuildingPayload = objectType({
+  name: 'RemoveDemolitionBuildingPayload',
+  definition: t => {
+    t.int('fieldId');
+  },
+});
+
+export const RemoveDemolitionBuildingMutation = mutationField(t => {
+  t.field('removeDemolitionBuilding', {
+    type: RemoveDemolitionBuildingPayload,
+    args: {
+      villageId: idArg(),
+      fieldId: intArg(),
+    },
+    resolve: (_, { fieldId, villageId }, ctx) => {
+      const service = ctx.settingsService.village(villageId).autoBuild;
+      const settings = service.get();
+
+      const buildingsDemolition = settings.buildingsDemolition.filter(b => b.fieldId !== fieldId);
+
+      service.merge({ buildingsDemolition });
+
+      return {
+        fieldId,
+      };
+    },
+  });
+});
+
+export const ClearDemolitionBuildingsMutation = mutationField(t => {
+  t.field('clearDemolitionBuildings', {
+    type: list(BuildingDemolitionSettingsObject),
+    args: {
+      villageId: idArg(),
+    },
+    resolve: (_, { villageId }, ctx) => {
+      const service = ctx.settingsService.village(villageId).autoBuild;
+
+      return service.merge({ buildingsDemolition: [] }).buildingsDemolition;
+    },
   });
 });
 

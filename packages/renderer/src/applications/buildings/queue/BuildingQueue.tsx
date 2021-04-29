@@ -1,14 +1,20 @@
 import {
   Button,
   Checkbox,
+  Dialog,
   FormControlLabel,
   makeStyles,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, { useMemo } from 'react';
+import React, {
+  Suspense,
+  useMemo,
+  useState,
+} from 'react';
 import {
   useFragment,
   useMutation,
+  useQueryLoader,
   useSubscription,
 } from 'react-relay/hooks';
 import {
@@ -19,15 +25,22 @@ import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 
 import type { BuildingQueue_autoBuildSettings$key } from '../../../_graphql/__generated__/BuildingQueue_autoBuildSettings.graphql.js';
 import type { BuildingQueue_buildingQueue$key } from '../../../_graphql/__generated__/BuildingQueue_buildingQueue.graphql.js';
+import type { BuildingQueueAddBuildingMutation } from '../../../_graphql/__generated__/BuildingQueueAddBuildingMutation.graphql.js';
+import type { DemolitionBuildingInput } from '../../../_graphql/__generated__/BuildingQueueAddBuildingMutation.graphql.js';
 import type { BuildingQueueAutoBuildSettingsSubscription } from '../../../_graphql/__generated__/BuildingQueueAutoBuildSettingsSubscription.graphql.js';
 import type { BuildingQueueClearQueueMutation } from '../../../_graphql/__generated__/BuildingQueueClearQueueMutation.graphql.js';
 import type { BuildingQueueCorrectionSubscription } from '../../../_graphql/__generated__/BuildingQueueCorrectionSubscription.graphql.js';
 import type { BuildingQueueQueuedBuildingSubscription } from '../../../_graphql/__generated__/BuildingQueueQueuedBuildingSubscription.graphql.js';
 import type { BuildingQueueTimesUpdatedSubscription } from '../../../_graphql/__generated__/BuildingQueueTimesUpdatedSubscription.graphql.js';
+import type { BuildingsDemolitionDialogQuery } from '../../../_graphql/__generated__/BuildingsDemolitionDialogQuery.graphql.js';
 import { alwaysAddNewToTopState } from '../../../_recoil/atoms/alwaysAddToTop.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { villageTribeState } from '../../../_recoil/atoms/tribe.js';
 import { modificationQueuePayloadUpdater } from '../../../_shared/cache/modificationQueuePayloadUpdater.js';
+import {
+  BuildingsDemolitionDialog,
+  buildingsDemolitionDialogQuery,
+} from '../demolition/BuildingsDemolitionDialog.js';
 import { QueuedBuilding } from './building/QueuedBuilding.js';
 import { Cost } from './Cost.js';
 
@@ -46,6 +59,10 @@ const useStyles = makeStyles({
   action: {
     marginBottom: '15px',
     width: '100%',
+    flex: 1,
+    '&:not(:last-child)': {
+      marginRight: 16,
+    },
   },
   buildings: {
     display: 'flex',
@@ -123,6 +140,14 @@ const autoBuildSettingsSubscription = graphql`
           ...BuildingQueue_autoBuildSettings
       }
   }
+`;
+
+const addDemolitionBuildingMutation = graphql`
+    mutation BuildingQueueAddBuildingMutation($villageId: ID!, $building: DemolitionBuildingInput!) {
+        addDemolitionBuilding(villageId: $villageId, building: $building) {
+            ...BuildingsDemolitionDialog_buildingDemolitionSettings
+        }
+    }
 `;
 
 export const BuildingQueue: React.FC<Props> = ({
@@ -206,6 +231,38 @@ export const BuildingQueue: React.FC<Props> = ({
 
   const [alwaysAddNewToTop, setAlwaysAddNewToTop] = useRecoilState(alwaysAddNewToTopState);
 
+  const [isDemolitionDialogOpen, setIsDemolitionDialogOpen] = useState(false);
+  const openDemolitionDialog = () => {
+    loadBuildingsDemolitionDialogQuery({ villageId }, { fetchPolicy: 'store-and-network' });
+    setIsDemolitionDialogOpen(true);
+  };
+  const closeDemolitionDialog = () => setIsDemolitionDialogOpen(false);
+
+  const [buildingsDemolitionDialogQueryRef, loadBuildingsDemolitionDialogQuery] = useQueryLoader<BuildingsDemolitionDialogQuery>(buildingsDemolitionDialogQuery);
+
+  const [addDemolitionBuilding] = useMutation<BuildingQueueAddBuildingMutation>(addDemolitionBuildingMutation);
+
+  const addDemolitionBuildingToList = (building: DemolitionBuildingInput) => {
+    addDemolitionBuilding({
+      variables: { villageId, building },
+      updater: (store) => {
+        const newRecord = store.getRootField('addDemolitionBuilding');
+        const root = store.getRoot();
+        const settings = root.getLinkedRecord('autoBuildSettings', { villageId });
+
+        if (!settings) {
+          return;
+        }
+
+        const buildings = settings.getLinkedRecords('buildingsDemolition') || [];
+
+        buildings.push(newRecord);
+        settings.setLinkedRecords(buildings, 'buildingsDemolition');
+        root.setLinkedRecord(settings, 'autoBuildSettings', { villageId });
+      },
+    });
+  };
+
   return (
     <div className={className}>
       <div className={classes.header}>
@@ -220,12 +277,33 @@ export const BuildingQueue: React.FC<Props> = ({
         />
         <Button
           className={classes.action}
+          onClick={openDemolitionDialog}
+          color="default"
+          variant="contained"
+        >
+          Demolish
+        </Button>
+        <Button
+          className={classes.action}
           onClick={onClear}
           color="secondary"
           variant="contained"
         >
           Clear queue
         </Button>
+        <Dialog
+          open={isDemolitionDialogOpen}
+          onClose={closeDemolitionDialog}
+        >
+          <Suspense fallback={null}>
+            {buildingsDemolitionDialogQueryRef && (
+              <BuildingsDemolitionDialog
+                onSubmit={addDemolitionBuildingToList}
+                queryRef={buildingsDemolitionDialogQueryRef}
+              />
+            )}
+          </Suspense>
+        </Dialog>
       </div>
       <Cost
         buildTime={buildingQueue.totalBuildingTime}

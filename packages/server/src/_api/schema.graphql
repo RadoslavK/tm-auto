@@ -59,6 +59,7 @@ type AutoBuildSettings {
   allow: Boolean!
   autoCropFields: Boolean!
   autoStorage: AutoStorageSettings!
+  buildingsDemolition: [BuildingDemolitionSettings!]!
   coolDown: CoolDown!
   dualQueue: DualQueueSettings!
   minCrop: Int!
@@ -163,6 +164,13 @@ enum BotState {
   Stopping
 }
 
+type BuildingDemolitionSettings {
+  fieldId: Int!
+  name: String!
+  targetLevel: Int!
+  type: Int!
+}
+
 type BuildingInProgress {
   fieldId: Int!
   finishedAt: Timestamp!
@@ -228,6 +236,12 @@ input CoolDownInput {
 type Coords {
   x: Int!
   y: Int!
+}
+
+input DemolitionBuildingInput {
+  fieldId: Int!
+  targetLevel: Int!
+  type: Int!
 }
 
 input DequeueBuildingAtFieldInput {
@@ -376,8 +390,10 @@ type ModificationPayload {
 
 type Mutation {
   addAutoSmithyUnitLevel(minTroops: Int!, targetLevel: Int!, unitIndex: Int!, villageId: ID!): AutoSmithySettings!
+  addDemolitionBuilding(building: DemolitionBuildingInput!, villageId: ID!): BuildingDemolitionSettings!
   addHeroLevelUpItem(item: HeroLevelUpItemInput!): HeroLevelUpItem!
   clearAutoSmithySettingsUnit(unitIndex: Int!, villageId: ID!): AutoSmithySettings!
+  clearDemolitionBuildings(villageId: ID!): [BuildingDemolitionSettings!]!
   clearQueue(villageId: ID!): BuildingQueue!
   createAccount(account: AccountInput!): UserAccount!
   deleteAccount(id: ID!): UserAccount!
@@ -395,6 +411,7 @@ type Mutation {
   moveQueuedBuildingToIndex(queueId: ID!, targetQueueId: ID!, villageId: ID!): ModificationPayload!
   refreshVillage(villageId: ID!): Boolean
   removeAutoSmithyUnitLevel(targetLevel: Int!, unitIndex: Int!, villageId: ID!): AutoSmithySettings!
+  removeDemolitionBuilding(fieldId: Int!, villageId: ID!): RemoveDemolitionBuildingPayload!
   removeHeroLevelUpItem(id: ID!): HeroLevelUpItem!
   resetAccountSettings: AccountSettings!
   resetAutoAcademySettings(villageId: ID!): AutoAcademySettings!
@@ -500,6 +517,10 @@ type QueuedBuilding {
   startingLevel: Int!
   targetLevel: Int!
   type: Int!
+}
+
+type RemoveDemolitionBuildingPayload {
+  fieldId: Int!
 }
 
 type ResourceClaimLogEntryContent {

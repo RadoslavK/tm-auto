@@ -1,3 +1,4 @@
+import type { BuildingType } from 'shared/enums/BuildingType.js';
 import type { DualQueuePreference } from 'shared/enums/DualQueuePreference.js';
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
@@ -9,6 +10,12 @@ import { AutoStorageSettings } from './autoStorageSettings.js';
 type DualQueueSettings = {
   readonly allow: boolean;
   readonly preference: DualQueuePreference;
+};
+
+export type BuildingDemolitionSettings = {
+  readonly fieldId: number;
+  readonly type: BuildingType;
+  readonly targetLevel: number;
 };
 
 export class AutoBuildSettings {
@@ -31,6 +38,8 @@ export class AutoBuildSettings {
   readonly useHeroResources: boolean = false;
 
   readonly autoStorage: AutoStorageSettings = new AutoStorageSettings();
+
+  readonly buildingsDemolition: ReadonlyArray<BuildingDemolitionSettings> = [];
 
   constructor(params: PartialFields<AutoBuildSettings> = {}) {
     mergeDefaults(this, params);
