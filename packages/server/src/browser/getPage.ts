@@ -22,6 +22,20 @@ stealth.onBrowser = () => {};
 
 puppeteer.use(stealth);
 
+const chromeDriverArgs: ReadonlyArray<string> = [
+  '--mute-audio',
+  //  Performance improvements, when headless it uses too much CPU
+  //  https://stackoverflow.com/a/58589026
+  '--no-sandbox',
+  '--disable-setuid-sandbox',
+  '--disable-dev-shm-usage',
+  '--disable-accelerated-2d-canvas',
+  '--no-first-run',
+  '--no-zygote',
+  '--single-process',
+  '--disable-gpu',
+];
+
 const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => {
   const headless = GeneralSettingsService.getService().get().headlessChrome;
 
@@ -33,9 +47,9 @@ const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & Brow
     headless,
     slowMo: 25,
     userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
-    args: ['--mute-audio', ...(headless ? [] : ['--start-maximized'])],
+    args: [...chromeDriverArgs, ...(headless ? [] : ['--start-maximized'])],
     //  TODO wrong types again, but should disable the default 800x600 one
-    defaultViewport: null as any,
+    defaultViewport: null,
   };
 };
 

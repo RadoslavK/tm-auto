@@ -30,9 +30,9 @@
     "node-ipc": "^9.1.4",
     "p-debounce": "^3.0.2",
     "pubsub-js": "^1.9.3",
-    "puppeteer-core": "^8.0.0",
+    "puppeteer-core": "^9.0.0",
     "puppeteer-extra": "^3.1.18",
-    "puppeteer-extra-plugin-stealth": "^2.7.6"
+    "puppeteer-extra-plugin-stealth": "^2.7.8"
   },
   "devDependencies": {
     "@types/node-ipc": "^9.1.3",
