@@ -1,6 +1,6 @@
 import type { Page } from 'puppeteer';
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { TaskType } from 'shared/enums/TaskType.js';
+import { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import { CoolDown } from '../../../_models/coolDown.js';
 import { Duration } from '../../../_models/duration.js';
@@ -18,8 +18,8 @@ import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
-  BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
+  VillageBotTaskWithCoolDown,
 } from '../../taskEngine/botTaskEngine.js';
 
 type OngoingResearch = {
@@ -54,8 +54,8 @@ const parseOngoingResearch = async (page: Page): Promise<OngoingResearch | null>
   };
 };
 
-export class AutoAcademyTask implements BotTaskWithCoolDown {
-  readonly type: TaskType = TaskType.AutoAcademy;
+export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
+  readonly type: VillageTaskType = VillageTaskType.AutoAcademy;
 
   constructor(private village: Village) {}
 

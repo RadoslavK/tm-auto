@@ -187,9 +187,10 @@ export interface NexusGenEnums {
   DualQueuePreference: "Infrastructure" | "Resources"
   HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
-  TaskType: "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
+  TaskType: "AutoAdventure" | "General"
   TextLogEntryType: "Error" | "Info"
   Tribe: 6 | 3 | 7 | 5 | 4 | 1 | 2
+  VillageTaskType: "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
 }
 
 export interface NexusGenScalars {
@@ -380,7 +381,7 @@ export interface NexusGenObjects {
   Mutation: {};
   NextVillageTaskExecutionPayloadField: { // root type
     label: string; // String!
-    task: NexusGenEnums['TaskType']; // TaskType!
+    task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
   }
   Query: {};
@@ -644,7 +645,7 @@ export interface NexusGenFieldTypes {
   }
   GeneralVillageSettings: { // field return type
     allowTasks: boolean; // Boolean!
-    tasksOrder: NexusGenEnums['TaskType'][]; // [TaskType!]!
+    tasksOrder: NexusGenEnums['VillageTaskType'][]; // [VillageTaskType!]!
   }
   GlobalAutoBuildSettings: { // field return type
     allow: boolean; // Boolean!
@@ -751,7 +752,7 @@ export interface NexusGenFieldTypes {
   }
   NextVillageTaskExecutionPayloadField: { // field return type
     label: string; // String!
-    task: NexusGenEnums['TaskType']; // TaskType!
+    task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
     timestamp: NexusGenRootTypes['Timestamp']; // Timestamp!
   }
   Query: { // field return type
@@ -1100,7 +1101,7 @@ export interface NexusGenFieldTypeNames {
   }
   GeneralVillageSettings: { // field return type name
     allowTasks: 'Boolean'
-    tasksOrder: 'TaskType'
+    tasksOrder: 'VillageTaskType'
   }
   GlobalAutoBuildSettings: { // field return type name
     allow: 'Boolean'
@@ -1207,7 +1208,7 @@ export interface NexusGenFieldTypeNames {
   }
   NextVillageTaskExecutionPayloadField: { // field return type name
     label: 'String'
-    task: 'TaskType'
+    task: 'VillageTaskType'
     timestamp: 'Timestamp'
   }
   Query: { // field return type name
@@ -1489,7 +1490,7 @@ export interface NexusGenArgTypes {
       task: NexusGenEnums['TaskType']; // TaskType!
     }
     resetNextVillageTaskExecution: { // args
-      task: NexusGenEnums['TaskType']; // TaskType!
+      task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
       villageId: string; // ID!
     }
     searchMap: { // args
@@ -1508,7 +1509,7 @@ export interface NexusGenArgTypes {
     }
     setNextVillageTaskExecution: { // args
       delay: NexusGenInputs['DurationInput']; // DurationInput!
-      task: NexusGenEnums['TaskType']; // TaskType!
+      task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
       villageId: string; // ID!
     }
     signIn: { // args
@@ -1569,7 +1570,7 @@ export interface NexusGenArgTypes {
       villageId: string; // ID!
     }
     updateGeneralVillageSettingsOrder: { // args
-      order: NexusGenEnums['TaskType'][]; // [TaskType!]!
+      order: NexusGenEnums['VillageTaskType'][]; // [VillageTaskType!]!
       villageId: string; // ID!
     }
     updateHeroLevelUpItem: { // args
@@ -1629,7 +1630,7 @@ export interface NexusGenArgTypes {
       task: NexusGenEnums['TaskType']; // TaskType!
     }
     nextVillageTaskExecution: { // args
-      task: NexusGenEnums['TaskType']; // TaskType!
+      task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
       villageId: string; // ID!
     }
     nextVillageTaskExecutions: { // args
@@ -1690,7 +1691,7 @@ export interface NexusGenArgTypes {
       task: NexusGenEnums['TaskType']; // TaskType!
     }
     nextVillageTaskExecutionChanged: { // args
-      task: NexusGenEnums['TaskType']; // TaskType!
+      task: NexusGenEnums['VillageTaskType']; // VillageTaskType!
       villageId: string; // ID!
     }
     onBuildingSpotUpdated: { // args

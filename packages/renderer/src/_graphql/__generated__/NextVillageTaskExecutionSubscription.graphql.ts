@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type NextVillageTaskExecutionSubscriptionVariables = {
     villageId: string;
-    task: TaskType;
+    task: VillageTaskType;
 };
 export type NextVillageTaskExecutionSubscriptionResponse = {
     readonly nextVillageTaskExecutionChanged: {
@@ -24,7 +24,7 @@ export type NextVillageTaskExecutionSubscription = {
 /*
 subscription NextVillageTaskExecutionSubscription(
   $villageId: ID!
-  $task: TaskType!
+  $task: VillageTaskType!
 ) {
   nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {
     ...NextVillageTaskExecution_timestamp
@@ -119,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7c7ad4ec50545e00bcb42222b852e3e1",
+    "cacheID": "d0ad2219ff6f1294a62ca6457d2e1906",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionSubscription",
     "operationKind": "subscription",
-    "text": "subscription NextVillageTaskExecutionSubscription(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "subscription NextVillageTaskExecutionSubscription(\n  $villageId: ID!\n  $task: VillageTaskType!\n) {\n  nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = 'fde44a22df84a2f566916a8b455994c0';
+(node as any).hash = '88e7f02f0f6620f80e44fe94c3fbe18f';
 export default node;

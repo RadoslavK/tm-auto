@@ -23,7 +23,7 @@ import type {
 import type {
   NextVillageTaskExecutionSetMutation,
   NextVillageTaskExecutionSetMutationResponse,
-  TaskType,
+  VillageTaskType,
 } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type {
   NextVillageTaskExecutionSubscription,
@@ -35,7 +35,7 @@ import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestam
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
-  readonly task: TaskType;
+  readonly task: VillageTaskType;
   readonly timestamp: NextVillageTaskExecution_timestamp$key;
   readonly resetUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionResetMutationResponse>;
   readonly setUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionSetMutationResponse>;
@@ -49,7 +49,7 @@ const fragmentDef = graphql`
 `;
 
 const setMutation = graphql`
-  mutation NextVillageTaskExecutionSetMutation($villageId: ID!, $task: TaskType!, $delay: DurationInput!) {
+  mutation NextVillageTaskExecutionSetMutation($villageId: ID!, $task: VillageTaskType!, $delay: DurationInput!) {
       setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
           ...NextVillageTaskExecution_timestamp
       }
@@ -57,7 +57,7 @@ const setMutation = graphql`
 `;
 
 const resetMutation = graphql`
-    mutation NextVillageTaskExecutionResetMutation($villageId: ID!, $task: TaskType!) {
+    mutation NextVillageTaskExecutionResetMutation($villageId: ID!, $task: VillageTaskType!) {
         resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
             ...NextVillageTaskExecution_timestamp
         }
@@ -65,7 +65,7 @@ const resetMutation = graphql`
 `;
 
 const subscription = graphql`
-  subscription NextVillageTaskExecutionSubscription($villageId: ID!, $task: TaskType!) {
+  subscription NextVillageTaskExecutionSubscription($villageId: ID!, $task: VillageTaskType!) {
       nextVillageTaskExecutionChanged(task: $task, villageId: $villageId) {
           ...NextVillageTaskExecution_timestamp
       }

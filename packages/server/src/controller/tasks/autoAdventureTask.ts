@@ -1,22 +1,23 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { TaskType } from 'shared/enums/TaskType.js';
 
-import type { CoolDown } from '../../../_models/coolDown.js';
-import { Duration } from '../../../_models/duration.js';
-import type { AutoAdventureSettings } from '../../../_models/settings/tasks/autoAdventureSettings.js';
-import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
-import { activityService } from '../../../services/botActivityService.js';
+import type { CoolDown } from '../../_models/coolDown.js';
+import { Duration } from '../../_models/duration.js';
+import type { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings.js';
+import { AccountContext } from '../../accountContext.js';
+import { getPage } from '../../browser/getPage.js';
+import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation.js';
+import { activityService } from '../../services/botActivityService.js';
 import {
   getWithMaximumSafe,
   getWithMinimumSafe,
-} from '../../../utils/getWithMaximum.js';
-import { randomElement } from '../../../utils/randomElement.js';
-import { equipHeroHorse } from '../../actions/hero/equipHeroHorse.js';
+} from '../../utils/getWithMaximum.js';
+import { randomElement } from '../../utils/randomElement.js';
+import { equipHeroHorse } from '../actions/hero/equipHeroHorse.js';
 import type {
   BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
-} from '../../taskEngine/botTaskEngine.js';
+} from '../taskEngine/botTaskEngine.js';
 
 export class AutoAdventureTask implements BotTaskWithCoolDown {
   public readonly type: TaskType = TaskType.AutoAdventure;
@@ -31,6 +32,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
+    await updateHeroInformation();
     const { villageId } = AccountContext.getContext().hero;
 
     if (!villageId) {

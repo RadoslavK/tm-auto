@@ -18,7 +18,7 @@ export const GeneralVillageSettings = objectType({
   name: 'GeneralVillageSettings',
   definition: t => {
     t.boolean('allowTasks');
-    t.list.field('tasksOrder', { type: 'TaskType' });
+    t.list.field('tasksOrder', { type: 'VillageTaskType' });
   },
   sourceType: process.env.shouldGenerateArtifacts && {
     module: join(getDirname(import.meta), '../../../_models/settings/generalVillageSettings.ts'),
@@ -60,7 +60,7 @@ export const UpdateGeneralVillageSettingsOrderMutation = mutationField(t => {
     type: GeneralVillageSettings,
     args: {
       villageId: idArg(),
-      order: list(arg({ type: 'TaskType' })),
+      order: list(arg({ type: 'VillageTaskType' })),
     },
     resolve: (_, { villageId, order }, ctx) =>
       ctx.settingsService.village(villageId).general.merge({ tasksOrder: order }),

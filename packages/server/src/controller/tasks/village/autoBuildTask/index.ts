@@ -1,5 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { TaskType } from 'shared/enums/TaskType.js';
+import { VillageTaskType } from 'shared/enums/TaskType.js';
 import { Tribe } from 'shared/enums/Tribe.js';
 
 import { BuildingCategory } from '../../../../_enums/buildingCategory.js';
@@ -27,8 +27,8 @@ import {
 import { claimHeroResources } from '../../../actions/hero/claimHeroResources.js';
 import { updateActualResources } from '../../../actions/village/updateResources.js';
 import type {
-  BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
+  VillageBotTaskWithCoolDown,
 } from '../../../taskEngine/botTaskEngine.js';
 import { checkAutoStorage } from './checkAutoStorage.js';
 import { useVideoFeature } from './useVideoFeature.js';
@@ -57,14 +57,14 @@ const parseDemolitionTimer = async (): Promise<Duration | null> => {
   return Duration.fromSeconds(+secondsText);
 };
 
-export class AutoBuildTask implements BotTaskWithCoolDown {
+export class AutoBuildTask implements VillageBotTaskWithCoolDown {
   private readonly _village: Village;
 
   private readonly _buildings: Buildings;
 
   private _addedCroplandInQueue = false;
 
-  public readonly type: TaskType = TaskType.AutoBuild;
+  public readonly type: VillageTaskType = VillageTaskType.AutoBuild;
 
   constructor(village: Village) {
     this._village = village;

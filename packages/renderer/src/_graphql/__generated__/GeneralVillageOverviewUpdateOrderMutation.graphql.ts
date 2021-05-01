@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type GeneralVillageOverviewUpdateOrderMutationVariables = {
     villageId: string;
-    order: Array<TaskType>;
+    order: Array<VillageTaskType>;
 };
 export type GeneralVillageOverviewUpdateOrderMutationResponse = {
     readonly updateGeneralVillageSettingsOrder: {
@@ -24,7 +24,7 @@ export type GeneralVillageOverviewUpdateOrderMutation = {
 /*
 mutation GeneralVillageOverviewUpdateOrderMutation(
   $villageId: ID!
-  $order: [TaskType!]!
+  $order: [VillageTaskType!]!
 ) {
   updateGeneralVillageSettingsOrder(villageId: $villageId, order: $order) {
     ...GeneralVillageOverview_generalVillageSettings
@@ -119,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a0a2ecac5743a8848269b2f3e0b3c9d7",
+    "cacheID": "bcb5e643d1cce6bb8f9b3f77c6f48a2a",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageOverviewUpdateOrderMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageOverviewUpdateOrderMutation(\n  $villageId: ID!\n  $order: [TaskType!]!\n) {\n  updateGeneralVillageSettingsOrder(villageId: $villageId, order: $order) {\n    ...GeneralVillageOverview_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {\n  tasksOrder\n}\n"
+    "text": "mutation GeneralVillageOverviewUpdateOrderMutation(\n  $villageId: ID!\n  $order: [VillageTaskType!]!\n) {\n  updateGeneralVillageSettingsOrder(villageId: $villageId, order: $order) {\n    ...GeneralVillageOverview_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {\n  tasksOrder\n}\n"
   }
 };
 })();
-(node as any).hash = '9c8ef701a0ab0f378c7cd0128897d8ea';
+(node as any).hash = 'e9b8e6c1b31e43376e98b2947bd48565';
 export default node;

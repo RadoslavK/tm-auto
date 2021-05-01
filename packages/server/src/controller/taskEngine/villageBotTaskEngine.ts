@@ -1,25 +1,26 @@
-import type { TaskType } from 'shared/enums/TaskType.js';
+import type { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import type { Village } from '../../_models/village/village.js';
 import { AccountContext } from '../../accountContext.js';
 import {
-  BotTask,
   BotTaskBase,
   BotTaskEngine,
   BotTaskEngineWithCoolDown,
   BotTaskWithCoolDown,
   IBotTaskEngine,
+  VillageBotTask,
+  VillageBotTaskWithCoolDown,
 } from './botTaskEngine.js';
 
-const isTaskWithCooldown = (task: BotTaskBase): task is BotTaskWithCoolDown =>
+const isTaskWithCooldown = (task: BotTaskBase): task is VillageBotTaskWithCoolDown =>
   (task as BotTaskWithCoolDown).coolDown !== undefined;
 
 export class VillageBotTasksEngine {
-  private readonly _tasks: ReadonlyMap<TaskType, IBotTaskEngine>;
+  private readonly _tasks: ReadonlyMap<VillageTaskType, IBotTaskEngine>;
 
   constructor(
     private village: Village,
-    tasks: { new (village: Village): BotTask | BotTaskWithCoolDown }[],
+    tasks: { new (village: Village): VillageBotTask | VillageBotTaskWithCoolDown }[],
   ) {
     this._tasks = tasks.reduce((allTasks, Task) => {
       const task = new Task(village);
@@ -28,21 +29,21 @@ export class VillageBotTasksEngine {
       let engine: IBotTaskEngine;
 
       if (isTaskWithCooldown(task)) {
-        engine = new BotTaskEngineWithCoolDown(
+        engine = new BotTaskEngineWithCoolDown({
           task,
-          () =>
+          getNextExecution: () =>
             AccountContext.getContext().nextExecutionService.getForVillage(
               village.id,
               task.type,
             ),
-          (nextExecution) => {
+          setNextExecution: (nextExecution) => {
             AccountContext.getContext().nextExecutionService.setForVillage(
               village.id,
               task.type,
               nextExecution,
             );
           },
-        );
+        });
       } else {
         engine = new BotTaskEngine(task);
       }
@@ -50,7 +51,7 @@ export class VillageBotTasksEngine {
       allTasks.set(type, engine);
 
       return allTasks;
-    }, new Map<TaskType, IBotTaskEngine>());
+    }, new Map<VillageTaskType, IBotTaskEngine>());
   }
 
   public isExecutionReady = (): boolean =>

@@ -123,7 +123,14 @@ export const AutoBuildSettingQuery = queryField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.get(),
+    resolve(_, args, ctx) {
+      const { buildingsDemolition, ...settings } = ctx.settingsService.village(args.villageId).autoBuild.get();
+
+      return {
+        ...settings,
+        buildingsDemolition: [...buildingsDemolition],
+      };
+    },
   });
 });
 
@@ -134,8 +141,16 @@ export const UpdateAutoBuildSettingsMutation = mutationField(t => {
       villageId: 'ID',
       settings: arg({ type: UpdateAutoBuildSettingsInput }),
     },
-    resolve: (_, args, ctx) =>
-      ctx.settingsService.village(args.villageId).autoBuild.merge(args.settings),
+    resolve: (_, args, ctx) => {
+      const { buildingsDemolition, ...settings } = ctx.settingsService.village(args.villageId)
+        .autoBuild
+        .merge(args.settings);
+
+      return {
+        ...settings,
+        buildingsDemolition: [...buildingsDemolition],
+      };
+    },
   });
 });
 
@@ -145,7 +160,14 @@ export const ResetAutoBuildSettingsMutation = mutationField(t => {
     args: {
       villageId: 'ID',
     },
-    resolve: (_, args, ctx) => ctx.settingsService.village(args.villageId).autoBuild.reset(),
+    resolve(_, args, ctx) {
+      const { buildingsDemolition, ...settings } = ctx.settingsService.village(args.villageId).autoBuild.reset();
+
+      return {
+        ...settings,
+        buildingsDemolition: [...buildingsDemolition],
+      };
+    },
   });
 });
 
@@ -216,7 +238,7 @@ export const ClearDemolitionBuildingsMutation = mutationField(t => {
     resolve: (_, { villageId }, ctx) => {
       const service = ctx.settingsService.village(villageId).autoBuild;
 
-      return service.merge({ buildingsDemolition: [] }).buildingsDemolition;
+      return [...service.merge({ buildingsDemolition: [] }).buildingsDemolition];
     },
   });
 });
@@ -229,7 +251,10 @@ export const AutoBuildSettingsSubscription = subscriptionField(t => {
     },
     ...subscribeToEvent(BotEvent.AutoBuildSettingsUpdated, {
       filter: (p, args) => p.villageId === args.villageId,
-      resolve: (p) => p.settings,
+      resolve: (p) => ({
+        ...p.settings,
+        buildingsDemolition: [...p.settings.buildingsDemolition],
+      }),
     }),
   });
 });

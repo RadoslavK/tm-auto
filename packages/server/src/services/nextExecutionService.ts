@@ -1,3 +1,4 @@
+import type { VillageTaskType } from 'shared/enums/TaskType.js';
 import type { TaskType } from 'shared/enums/TaskType.js';
 
 import { BotEvent } from '../events/botEvent.js';
@@ -10,7 +11,7 @@ export class NextExecutionService {
 
   private nextVillageTaskExecutionTimes: Map<
     string,
-    Map<TaskType, Date>
+    Map<VillageTaskType, Date>
   > = new Map();
 
   private nextTasksExecution: Date | undefined;
@@ -33,7 +34,7 @@ export class NextExecutionService {
 
   public resetNextVillageTaskExecution = (
     villageId: string,
-    task: TaskType,
+    task: VillageTaskType,
   ): Date => {
     const date = new Date();
 
@@ -67,7 +68,7 @@ export class NextExecutionService {
     return nextExecution;
   };
 
-  public getForVillage = (villageId: string, task: TaskType): Date => {
+  public getForVillage = (villageId: string, task: VillageTaskType): Date => {
     const villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
 
     if (!villageTimes) {
@@ -77,7 +78,7 @@ export class NextExecutionService {
     return villageTimes.get(task) || getDefaultExecutionTime();
   };
 
-  public getMultipleForVillage = (villageId: string, tasks: ReadonlyArray<TaskType>): ReadonlyArray<{ readonly task: TaskType; readonly date: Date }> => {
+  public getMultipleForVillage = (villageId: string, tasks: ReadonlyArray<VillageTaskType>): ReadonlyArray<{ readonly task: VillageTaskType; readonly date: Date }> => {
     const villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);
 
     return tasks.map(task => ({
@@ -88,7 +89,7 @@ export class NextExecutionService {
 
   public setForVillage = (
     villageId: string,
-    task: TaskType,
+    task: VillageTaskType,
     nextExecution: Date,
   ): Date => {
     let villageTimes = this.nextVillageTaskExecutionTimes.get(villageId);

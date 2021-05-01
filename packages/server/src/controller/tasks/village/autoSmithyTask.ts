@@ -1,5 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { TaskType } from 'shared/enums/TaskType.js';
+import { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import { CoolDown } from '../../../_models/coolDown.js';
 import { Duration } from '../../../_models/duration.js';
@@ -16,8 +16,8 @@ import { publishPayloadEvent } from '../../../pubSub.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import type {
-  BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
+  VillageBotTaskWithCoolDown,
 } from '../../taskEngine/botTaskEngine.js';
 
 type UnitParams = {
@@ -130,8 +130,8 @@ const parseOngoingDuration = async (): Promise<Duration | null> => {
 };
 
 //  TODO check min troops
-export class AutoSmithyTask implements BotTaskWithCoolDown {
-  readonly type: TaskType = TaskType.AutoSmithy;
+export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
+  readonly type: VillageTaskType = VillageTaskType.AutoSmithy;
 
   private settingsService = () =>
     AccountContext.getContext().settingsService.village(this.village.id).autoSmithy;

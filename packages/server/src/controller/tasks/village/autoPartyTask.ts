@@ -1,5 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { TaskType } from 'shared/enums/TaskType.js';
+import { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import { getBuildingSpotPath } from '../../../_enums/travianPath.js';
 import { CoolDown } from '../../../_models/coolDown.js';
@@ -15,12 +15,12 @@ import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
-  BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
+  VillageBotTaskWithCoolDown,
 } from '../../taskEngine/botTaskEngine.js';
 
-export class AutoPartyTask implements BotTaskWithCoolDown {
-  public readonly type: TaskType = TaskType.AutoParty;
+export class AutoPartyTask implements VillageBotTaskWithCoolDown {
+  public readonly type: VillageTaskType = VillageTaskType.AutoParty;
 
   private readonly _village: Village;
 

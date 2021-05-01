@@ -2,6 +2,8 @@ import { TaskType } from 'shared/enums/TaskType.js';
 import { getAllEnumValues } from 'shared/utils/enumUtils.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
+import { CoolDown } from '../_models/coolDown.js';
+import { Duration } from '../_models/duration.js';
 import { AccountContext } from '../accountContext.js';
 import { BotEvent } from '../events/botEvent.js';
 import { updateHeroInformation } from '../parsers/hero/updateHeroInformation.js';
@@ -21,12 +23,17 @@ import {
   IBotTaskEngine,
 } from './taskEngine/botTaskEngine.js';
 import { VillageBotTasksEngine } from './taskEngine/villageBotTaskEngine.js';
+import { AutoAdventureTask } from './tasks/autoAdventureTask.js';
 import { AutoAcademyTask } from './tasks/village/autoAcademyTask.js';
-import { AutoAdventureTask } from './tasks/village/autoAdventureTask.js';
 import { AutoBuildTask } from './tasks/village/autoBuildTask';
 import { AutoPartyTask } from './tasks/village/autoPartyTask.js';
 import { AutoSmithyTask } from './tasks/village/autoSmithyTask.js';
 import { AutoUnitsTask } from './tasks/village/autoUnitsTask.js';
+
+const generalTasksCoolDown = new CoolDown({
+  min: new Duration({ minutes: 1 }),
+  max: new Duration({ minutes: 10 }),
+});
 
 export class TaskManager {
   private readonly _generalTasks: readonly IBotTaskEngine[];
@@ -37,17 +44,43 @@ export class TaskManager {
 
   constructor() {
     this._generalTasks = [
-      new BotTaskEngineWithCoolDown(
-        new AutoAdventureTask(),
-        () =>
+      new BotTaskEngineWithCoolDown({
+        task: new AutoAdventureTask(),
+        getNextExecution: () =>
           AccountContext.getContext().nextExecutionService.get(TaskType.AutoAdventure),
-        (nextExecution) => {
+        setNextExecution: (nextExecution) =>
           AccountContext.getContext().nextExecutionService.set(
             TaskType.AutoAdventure,
             nextExecution,
-          );
+          ),
+      }),
+      new BotTaskEngineWithCoolDown({
+        task: {
+          allowExecution: () => true,
+          coolDown: () => generalTasksCoolDown,
+          execute: async () => {
+            await ensurePage(
+              randomElement(
+                getAllEnumValues(TravianPath).filter(
+                  (x) => ![TravianPath.Logout, TravianPath.AccountOverview].includes(x),
+                ),
+              ),
+            );
+            await updateNewOldVillages();
+            await updateHeroInformation();
+            await updateCapitalAndAlly();
+            await collectDailyRewards();
+          },
+          type: TaskType.General,
         },
-      ),
+        getNextExecution: () =>
+          AccountContext.getContext().nextExecutionService.get(TaskType.General),
+        setNextExecution: (nextExecution) =>
+          AccountContext.getContext().nextExecutionService.set(
+            TaskType.General,
+            nextExecution,
+          ),
+      }),
     ];
 
     this._finalTasks = [];
@@ -65,20 +98,10 @@ export class TaskManager {
   };
 
   private doGeneralTasks = async (): Promise<void> => {
-    await ensurePage(
-      randomElement(
-        getAllEnumValues(TravianPath).filter(
-          (x) => ![TravianPath.Logout, TravianPath.AccountOverview].includes(x),
-        ),
-      ),
-    );
-    await updateNewOldVillages();
-    await updateHeroInformation();
-    await updateCapitalAndAlly();
-    await collectDailyRewards();
-
     for (const task of this._generalTasks) {
-      await task.execute();
+      if (task.isExecutionReady()) {
+        await task.execute();
+      }
     }
   };
 

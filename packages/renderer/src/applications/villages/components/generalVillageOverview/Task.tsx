@@ -6,10 +6,10 @@ import {
   useDrop,
 } from 'react-dnd';
 
-import type { TaskType } from '../../../../_graphql/__generated__/GeneralVillageOverviewQuery.graphql.js';
+import type { VillageTaskType } from '../../../../_graphql/__generated__/GeneralVillageOverviewQuery.graphql.js';
 
 export type DraggedTask = {
-  readonly task: TaskType;
+  readonly task: VillageTaskType;
   readonly taskIndex: number;
 };
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
 
 type Props = {
   readonly onTaskDrop: (originalIndex: number, targetIndex: number) => void;
-  readonly task: TaskType;
+  readonly task: VillageTaskType;
   readonly taskIndex: number;
 };
 

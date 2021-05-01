@@ -7,7 +7,10 @@ import {
   queryField,
   subscriptionField,
 } from 'nexus';
-import { TaskType } from 'shared/enums/TaskType.js';
+import {
+  TaskType,
+  VillageTaskType,
+} from 'shared/enums/TaskType.js';
 
 import { Duration } from '../../_models/duration.js';
 import { Timestamp } from '../../_models/misc/timestamp.js';
@@ -19,6 +22,11 @@ import type { NexusGenFieldTypes } from '../graphqlSchema.js';
 export const TaskTypeEnum = enumType({
   name: 'TaskType',
   members: TaskType,
+});
+
+export const VillageTaskTypeEnum = enumType({
+  name: 'VillageTaskType',
+  members: VillageTaskType,
 });
 
 export const NextTasksExecutionQuery = queryField(t => {
@@ -47,13 +55,13 @@ export const NextVillageTaskExecutionQuery = queryField(t => {
     type: 'Timestamp',
     args: {
       villageId: idArg(),
-      task: arg({ type: TaskTypeEnum }),
+      task: arg({ type: VillageTaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
         ctx.nextExecutionService.getForVillage(
           args.villageId,
-          TaskType[args.task],
+          VillageTaskType[args.task],
         ),
       ),
   });
@@ -63,7 +71,7 @@ export const NextVillageTaskExecutionPayloadField = objectType({
   name: 'NextVillageTaskExecutionPayloadField',
   definition: t => {
     t.string('label');
-    t.field('task', { type: TaskTypeEnum });
+    t.field('task', { type: VillageTaskTypeEnum });
     t.field('timestamp', { type: 'Timestamp' });
   },
 });
@@ -75,7 +83,7 @@ export const NextVillageTaskExecutionsQuery = queryField(t => {
       villageId: idArg(),
     },
     resolve(_, args, ctx) {
-      const villageTasksWithCoolDown = Object.values(TaskType).filter(t => t !== TaskType.AutoAdventure);
+      const villageTasksWithCoolDown = Object.values(VillageTaskType);
 
       return ctx.nextExecutionService.getMultipleForVillage(args.villageId, villageTasksWithCoolDown).map(result => ({
         label: result.task,
@@ -123,14 +131,14 @@ export const SetNextVillageTaskExecutionMutation = mutationField(t => {
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: arg({ type: TaskTypeEnum }),
+      task: arg({ type: VillageTaskTypeEnum }),
       delay: 'DurationInput',
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
         ctx.nextExecutionService.setForVillage(
           args.villageId,
-          TaskType[args.task],
+          VillageTaskType[args.task],
           convertDelayToDate(new Duration(args.delay)),
         ),
       ),
@@ -167,13 +175,13 @@ export const ResetNextVillageTaskExecutionMutation = mutationField(t => {
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: arg({ type: TaskTypeEnum }),
+      task: arg({ type: VillageTaskTypeEnum }),
     },
     resolve: (_, args, ctx) =>
       Timestamp.fromDate(
         ctx.nextExecutionService.resetNextVillageTaskExecution(
           args.villageId,
-          TaskType[args.task],
+          VillageTaskType[args.task],
         ),
       ),
   });
@@ -212,7 +220,7 @@ export const NextVillageTaskExecutionChangedSubscription = subscriptionField(t =
     type: 'Timestamp',
     args: {
       villageId: 'ID',
-      task: arg({ type: TaskTypeEnum }),
+      task: arg({ type: VillageTaskTypeEnum }),
     },
     ...subscribeToEvent(
       BotEvent.NextVillageTaskExecutionChanged,

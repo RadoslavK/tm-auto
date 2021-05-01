@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type DurationInput = {
     days: number;
     hours: number;
@@ -13,7 +13,7 @@ export type DurationInput = {
 };
 export type NextVillageTaskExecutionSetMutationVariables = {
     villageId: string;
-    task: TaskType;
+    task: VillageTaskType;
     delay: DurationInput;
 };
 export type NextVillageTaskExecutionSetMutationResponse = {
@@ -31,7 +31,7 @@ export type NextVillageTaskExecutionSetMutation = {
 /*
 mutation NextVillageTaskExecutionSetMutation(
   $villageId: ID!
-  $task: TaskType!
+  $task: VillageTaskType!
   $delay: DurationInput!
 ) {
   setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {
@@ -139,14 +139,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "079e701bbbe6f77121dbe0898185d169",
+    "cacheID": "29f37129086e0fa83e71b6703eebdfc5",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionSetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextVillageTaskExecutionSetMutation(\n  $villageId: ID!\n  $task: TaskType!\n  $delay: DurationInput!\n) {\n  setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "mutation NextVillageTaskExecutionSetMutation(\n  $villageId: ID!\n  $task: VillageTaskType!\n  $delay: DurationInput!\n) {\n  setNextVillageTaskExecution(villageId: $villageId, task: $task, delay: $delay) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '07bf94510db5c75ced0780ab184f348e';
+(node as any).hash = '7c9711e7c907fa6a19c99556c3c0882f';
 export default node;

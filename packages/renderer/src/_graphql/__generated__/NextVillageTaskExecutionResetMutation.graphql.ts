@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type NextVillageTaskExecutionResetMutationVariables = {
     villageId: string;
-    task: TaskType;
+    task: VillageTaskType;
 };
 export type NextVillageTaskExecutionResetMutationResponse = {
     readonly resetNextVillageTaskExecution: {
@@ -24,7 +24,7 @@ export type NextVillageTaskExecutionResetMutation = {
 /*
 mutation NextVillageTaskExecutionResetMutation(
   $villageId: ID!
-  $task: TaskType!
+  $task: VillageTaskType!
 ) {
   resetNextVillageTaskExecution(villageId: $villageId, task: $task) {
     ...NextVillageTaskExecution_timestamp
@@ -119,14 +119,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b97e4a706222079dd44fbb90ca5a37c4",
+    "cacheID": "45e00a1ad46b1108ab40e6f50f1f1f81",
     "id": null,
     "metadata": {},
     "name": "NextVillageTaskExecutionResetMutation",
     "operationKind": "mutation",
-    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: TaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
+    "text": "mutation NextVillageTaskExecutionResetMutation(\n  $villageId: ID!\n  $task: VillageTaskType!\n) {\n  resetNextVillageTaskExecution(villageId: $villageId, task: $task) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n"
   }
 };
 })();
-(node as any).hash = '7514da5099e85c4254265c492e9900f0';
+(node as any).hash = '128292b5a55ccfe0b989b80fc45513f0';
 export default node;

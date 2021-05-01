@@ -1,4 +1,5 @@
 import type { TaskType } from 'shared/enums/TaskType.js';
+import type { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import type { QueuedBuilding } from '../_models/buildings/queue/queuedBuilding.js';
 import type { BuildingSpot } from '../_models/buildings/spots/buildingSpot.js';
@@ -135,7 +136,7 @@ export type BotEventPayloads = {
 
   [BotEvent.NextVillageTaskExecutionChanged]: {
     readonly nextExecution: Date;
-    readonly task: TaskType;
+    readonly task: VillageTaskType;
     readonly villageId: string;
   };
 

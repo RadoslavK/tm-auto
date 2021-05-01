@@ -4,9 +4,9 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type GeneralVillageOverview_generalVillageSettings = {
-    readonly tasksOrder: ReadonlyArray<TaskType>;
+    readonly tasksOrder: ReadonlyArray<VillageTaskType>;
     readonly " $refType": "GeneralVillageOverview_generalVillageSettings";
 };
 export type GeneralVillageOverview_generalVillageSettings$data = GeneralVillageOverview_generalVillageSettings;

@@ -23,7 +23,7 @@ import type { GeneralVillageOverviewQuery } from '../../../_graphql/__generated_
 import type { GeneralVillageOverviewSettingsSubscription } from '../../../_graphql/__generated__/GeneralVillageOverviewSettingsSubscription.graphql.js';
 import type { GeneralVillageOverviewUpdateOrderMutation } from '../../../_graphql/__generated__/GeneralVillageOverviewUpdateOrderMutation.graphql.js';
 import type { NextVillageTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextVillageTaskExecution_timestamp.graphql.js';
-import type { TaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
+import type { VillageTaskType } from '../../../_graphql/__generated__/NextVillageTaskExecutionSetMutation.graphql.js';
 import type { NextVillageTaskExecutionSubscriptionResponse } from '../../../_graphql/__generated__/NextVillageTaskExecutionSubscription.graphql.js';
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { NextVillageTaskExecution } from '../../../_shared/components/nextTaskExecution/NextVillageTaskExecution.js';
@@ -51,7 +51,7 @@ const query = graphql`
 `;
 
 const updateOrderMutation = graphql`
-  mutation GeneralVillageOverviewUpdateOrderMutation($villageId: ID!, $order: [TaskType!]!) {
+  mutation GeneralVillageOverviewUpdateOrderMutation($villageId: ID!, $order: [VillageTaskType!]!) {
       updateGeneralVillageSettingsOrder(villageId: $villageId, order: $order) {
           ...GeneralVillageOverview_generalVillageSettings
       }
@@ -81,7 +81,7 @@ export const useGeneralVillageOverviewQuery = () => {
 
 type NextVillageTaskExecutionWrapperProps = {
   readonly label: string;
-  readonly task: TaskType;
+  readonly task: VillageTaskType;
   readonly timestamp: NextVillageTaskExecution_timestamp$key;
 };
 
@@ -153,7 +153,7 @@ export const GeneralVillageOverview: React.FC<Props> = ({ queryRef }) => {
 
   const [updateOrder] = useMutation<GeneralVillageOverviewUpdateOrderMutation>(updateOrderMutation);
 
-  const onOrderUpdate = (order: ReadonlyArray<TaskType>) => {
+  const onOrderUpdate = (order: ReadonlyArray<VillageTaskType>) => {
     updateOrder({
       variables: { villageId, order: [...order] },
       updater: (store) => {

@@ -4,17 +4,17 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type TaskType = "AutoAcademy" | "AutoAdventure" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
+export type VillageTaskType = "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits";
 export type GeneralVillageOverviewQueryVariables = {
     villageId: string;
 };
 export type GeneralVillageOverviewQueryResponse = {
     readonly generalVillageSettings: {
-        readonly tasksOrder: ReadonlyArray<TaskType>;
+        readonly tasksOrder: ReadonlyArray<VillageTaskType>;
     };
     readonly nextVillageTaskExecutions: ReadonlyArray<{
         readonly label: string;
-        readonly task: TaskType;
+        readonly task: VillageTaskType;
         readonly timestamp: {
             readonly " $fragmentRefs": FragmentRefs<"NextVillageTaskExecution_timestamp">;
         };

@@ -311,7 +311,7 @@ type GeneralSettings {
 
 type GeneralVillageSettings {
   allowTasks: Boolean!
-  tasksOrder: [TaskType!]!
+  tasksOrder: [VillageTaskType!]!
 }
 
 type GlobalAutoBuildSettings {
@@ -424,13 +424,13 @@ type Mutation {
   resetGeneralVillageSettings(villageId: ID!): GeneralVillageSettings!
   resetNextTaskExecution(task: TaskType!): Timestamp!
   resetNextTasksExecution: Timestamp!
-  resetNextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
+  resetNextVillageTaskExecution(task: VillageTaskType!, villageId: ID!): Timestamp!
   scanWholeMap: Boolean
   searchMap(input: SearchMapInput!): Boolean
   setAutoAcademySettingsUnits(units: [Int!]!, villageId: ID!): AutoAcademySettings!
   setNextTaskExecution(delay: DurationInput!, task: TaskType!): Timestamp!
   setNextTasksExecution(delay: DurationInput!): Timestamp!
-  setNextVillageTaskExecution(delay: DurationInput!, task: TaskType!, villageId: ID!): Timestamp!
+  setNextVillageTaskExecution(delay: DurationInput!, task: VillageTaskType!, villageId: ID!): Timestamp!
   signIn(accountId: ID!): Boolean
   signOut: Boolean
   splitQueuedBuilding(queueId: ID!, startingLevel: Int!, villageId: ID!): SplitQueueBuildingPayload!
@@ -450,13 +450,13 @@ type Mutation {
   updateAutoUnitsUnitSettings(settings: UpdateAutoUnitsUnitSettingsInput!, villageId: ID!): AutoUnitsSettings!
   updateGeneralSettings(settings: UpdateGeneralSettingsInput!): GeneralSettings!
   updateGeneralVillageSettings(settings: UpdateGeneralVillageSettingsInput!, villageId: ID!): GeneralVillageSettings!
-  updateGeneralVillageSettingsOrder(order: [TaskType!]!, villageId: ID!): GeneralVillageSettings!
+  updateGeneralVillageSettingsOrder(order: [VillageTaskType!]!, villageId: ID!): GeneralVillageSettings!
   updateHeroLevelUpItem(id: ID!, item: HeroLevelUpItemInput!): HeroLevelUpItem!
 }
 
 type NextVillageTaskExecutionPayloadField {
   label: String!
-  task: TaskType!
+  task: VillageTaskType!
   timestamp: Timestamp!
 }
 
@@ -494,7 +494,7 @@ type Query {
   mapSearchState: MapSearchState!
   nextTaskExecution(task: TaskType!): Timestamp!
   nextTasksExecution: Timestamp!
-  nextVillageTaskExecution(task: TaskType!, villageId: ID!): Timestamp!
+  nextVillageTaskExecution(task: VillageTaskType!, villageId: ID!): Timestamp!
   nextVillageTaskExecutions(villageId: ID!): [NextVillageTaskExecutionPayloadField!]!
   researcheableUnits(villageId: ID!): [Int!]!
   resourceFields(villageId: ID!): [BuildingSpot!]!
@@ -579,7 +579,7 @@ type Subscription {
   mapSearchStateChanged: MapSearchState!
   nextTaskExecutionChanged(task: TaskType!): Timestamp!
   nextTasksExecutionChanged: Timestamp!
-  nextVillageTaskExecutionChanged(task: TaskType!, villageId: ID!): Timestamp!
+  nextVillageTaskExecutionChanged(task: VillageTaskType!, villageId: ID!): Timestamp!
   onBuildingSpotUpdated(villageId: ID!): BuildingSpot!
   onCrannyCapacityUpdated(villageId: ID!): VillageCrannyCapacity!
   queuedBuildingUpdated(villageId: ID!): ModificationPayload!
@@ -588,12 +588,8 @@ type Subscription {
 }
 
 enum TaskType {
-  AutoAcademy
   AutoAdventure
-  AutoBuild
-  AutoParty
-  AutoSmithy
-  AutoUnits
+  General
 }
 
 type TextLogEntryContent {
@@ -757,6 +753,14 @@ type VillageResources {
   amount: Resources!
   capacity: VillageCapacity!
   production: Resources!
+}
+
+enum VillageTaskType {
+  AutoAcademy
+  AutoBuild
+  AutoParty
+  AutoSmithy
+  AutoUnits
 }
 
 type VillageTile {

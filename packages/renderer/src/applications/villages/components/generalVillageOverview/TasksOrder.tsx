@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
 
-import type { TaskType } from '../../../../_graphql/__generated__/GeneralVillageOverviewQuery.graphql.js';
+import type { VillageTaskType } from '../../../../_graphql/__generated__/GeneralVillageOverviewQuery.graphql.js';
 import { Task } from './Task.js';
 
 const useStyles = makeStyles({
@@ -12,8 +12,8 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  readonly order: ReadonlyArray<TaskType>;
-  readonly onChange: (newOrder: ReadonlyArray<TaskType>) => void;
+  readonly order: ReadonlyArray<VillageTaskType>;
+  readonly onChange: (newOrder: ReadonlyArray<VillageTaskType>) => void;
 };
 
 export const TasksOrder: React.FC<Props> = ({ order, onChange }) => {

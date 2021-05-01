@@ -1,5 +1,5 @@
 import { BuildingType } from 'shared/enums/BuildingType.js';
-import { TaskType } from 'shared/enums/TaskType.js';
+import { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import type { CoolDown } from '../../../_models/coolDown.js';
 import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
@@ -22,8 +22,8 @@ import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateUnitsInformation } from '../../actions/updateUnitsInformation.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
-  BotTaskWithCoolDown,
   BotTaskWithCoolDownResult,
+  VillageBotTaskWithCoolDown,
 } from '../../taskEngine/botTaskEngine.js';
 
 const parseAvailableUnits = async (): Promise<ReadonlyArray<number>> => {
@@ -34,12 +34,12 @@ const parseAvailableUnits = async (): Promise<ReadonlyArray<number>> => {
   return units.filter(Boolean).map(Number);
 };
 
-export class AutoUnitsTask implements BotTaskWithCoolDown {
+export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
   private readonly _village: Village;
 
   private readonly _units: Units;
 
-  public readonly type: TaskType = TaskType.AutoUnits;
+  public readonly type: VillageTaskType = VillageTaskType.AutoUnits;
 
   constructor(village: Village) {
     this._village = village;
