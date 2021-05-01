@@ -100,6 +100,7 @@ export const signInFormQuery = graphql`
   query SignInFormQuery {
     lastSignedAccountId
     accounts {
+        id
         ...Accounts_accounts
     }
   }
@@ -242,7 +243,8 @@ export const SignInForm: React.FC<Props> = ({ queryRef }) => {
         accounts = accounts.filter(acc => acc.getDataID() !== removedRecord.getDataID());
 
         root.setLinkedRecords(accounts, 'accounts');
-        store.delete(removedRecord.getDataID());
+
+        setTimeout(() => store.delete(removedRecord.getDataID()), 0);
       },
     });
   };

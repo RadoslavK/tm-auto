@@ -8,6 +8,7 @@ export type SignInFormQueryVariables = {};
 export type SignInFormQueryResponse = {
     readonly lastSignedAccountId: string | null;
     readonly accounts: ReadonlyArray<{
+        readonly id: string;
         readonly " $fragmentRefs": FragmentRefs<"Accounts_accounts">;
     }>;
 };
@@ -22,8 +23,8 @@ export type SignInFormQuery = {
 query SignInFormQuery {
   lastSignedAccountId
   accounts {
-    ...Accounts_accounts
     id
+    ...Accounts_accounts
   }
 }
 
@@ -40,6 +41,13 @@ var v0 = {
   "args": null,
   "kind": "ScalarField",
   "name": "lastSignedAccountId",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
   "storageKey": null
 };
 return {
@@ -58,6 +66,7 @@ return {
         "name": "accounts",
         "plural": true,
         "selections": [
+          (v1/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -85,13 +94,7 @@ return {
         "name": "accounts",
         "plural": true,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -112,14 +115,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c2166517e3d581c17909bb01b9d0225a",
+    "cacheID": "8a7aedd25b71602af7f1558f8c9f5048",
     "id": null,
     "metadata": {},
     "name": "SignInFormQuery",
     "operationKind": "query",
-    "text": "query SignInFormQuery {\n  lastSignedAccountId\n  accounts {\n    ...Accounts_accounts\n    id\n  }\n}\n\nfragment Accounts_accounts on UserAccount {\n  id\n  username\n  server\n}\n"
+    "text": "query SignInFormQuery {\n  lastSignedAccountId\n  accounts {\n    id\n    ...Accounts_accounts\n  }\n}\n\nfragment Accounts_accounts on UserAccount {\n  id\n  username\n  server\n}\n"
   }
 };
 })();
-(node as any).hash = '26c99adabda21434feca986a56d80a8a';
+(node as any).hash = 'caa1bdecd89f0005207eccd282e6f5cb';
 export default node;
