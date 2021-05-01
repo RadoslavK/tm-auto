@@ -3,6 +3,7 @@ import type { TaskType } from 'shared/enums/TaskType.js';
 import type { CoolDown } from '../../_models/coolDown.js';
 
 export type BotTaskWithCoolDownResult = {
+  readonly alwaysUseNextCoolDown?: boolean;
   readonly nextCoolDown?: CoolDown | null;
 };
 
@@ -75,7 +76,9 @@ export class BotTaskEngineWithCoolDown implements IBotTaskEngine {
 
     const coolDown =
       result && result.nextCoolDown
-        ? result.nextCoolDown.mergeMin(this._task.coolDown())
+        ? (result.alwaysUseNextCoolDown
+          ? result.nextCoolDown
+          : result.nextCoolDown.mergeMin(this._task.coolDown()))
         : this._task.coolDown();
 
     const delay = coolDown.getRandomDelay();

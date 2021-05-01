@@ -85,6 +85,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
       const nextCoolDown = CoolDown.fromDuration(ongoingPartyDuration);
 
       return {
+        alwaysUseNextCoolDown: true,
         nextCoolDown,
       };
     }
@@ -156,6 +157,7 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     const nextCoolDown = CoolDown.fromDuration(ongoingPartyDuration);
 
     return {
+      alwaysUseNextCoolDown: true,
       nextCoolDown,
     };
   };
