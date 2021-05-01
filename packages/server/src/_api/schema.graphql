@@ -75,8 +75,6 @@ type AutoPartySettings {
   allowLarge: Boolean!
   allowSmall: Boolean!
   coolDown: CoolDown!
-  minCulturePointsLarge: Int!
-  minCulturePointsSmall: Int!
   useHeroResources: Boolean!
 }
 
@@ -674,8 +672,6 @@ input UpdateAutoPartySettingsInput {
   allowLarge: Boolean!
   allowSmall: Boolean!
   coolDown: CoolDownInput!
-  minCulturePointsLarge: Int!
-  minCulturePointsSmall: Int!
   useHeroResources: Boolean!
 }
 

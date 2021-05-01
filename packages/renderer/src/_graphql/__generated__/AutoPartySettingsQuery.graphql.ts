@@ -24,8 +24,6 @@ export type AutoPartySettingsQueryResponse = {
                 readonly seconds: number;
             };
         };
-        readonly minCulturePointsLarge: number;
-        readonly minCulturePointsSmall: number;
         readonly useHeroResources: boolean;
     };
 };
@@ -57,8 +55,6 @@ query AutoPartySettingsQuery(
         seconds
       }
     }
-    minCulturePointsLarge
-    minCulturePointsSmall
     useHeroResources
   }
 }
@@ -166,20 +162,6 @@ v2 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "minCulturePointsLarge",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "minCulturePointsSmall",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
         "name": "useHeroResources",
         "storageKey": null
       }
@@ -205,12 +187,12 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "59b35c061ea61d3f6c23f83796d6c6f6",
+    "cacheID": "5305d146e84e9c63893e6f73d1f0d9be",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsQuery",
     "operationKind": "query",
-    "text": "query AutoPartySettingsQuery(\n  $villageId: ID!\n) {\n  autoPartySettings(villageId: $villageId) {\n    allowLarge\n    allowSmall\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    minCulturePointsLarge\n    minCulturePointsSmall\n    useHeroResources\n  }\n}\n"
+    "text": "query AutoPartySettingsQuery(\n  $villageId: ID!\n) {\n  autoPartySettings(villageId: $villageId) {\n    allowLarge\n    allowSmall\n    coolDown {\n      max {\n        days\n        hours\n        minutes\n        seconds\n      }\n      min {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n    useHeroResources\n  }\n}\n"
   }
 };
 })();

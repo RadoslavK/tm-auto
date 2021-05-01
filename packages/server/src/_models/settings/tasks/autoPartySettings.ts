@@ -16,10 +16,6 @@ export class AutoPartySettings {
     min: new Duration({ minutes: 22 }),
   });
 
-  public readonly minCulturePointsSmall: number = 0;
-
-  public readonly minCulturePointsLarge: number = 0;
-
   constructor(params: PartialFields<AutoPartySettings> = {}) {
     mergeDefaults(this, params);
   }

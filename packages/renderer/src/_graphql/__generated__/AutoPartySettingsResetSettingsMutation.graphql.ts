@@ -45,8 +45,6 @@ fragment AutoPartySettings_autoPartySettings on AutoPartySettings {
       seconds
     }
   }
-  minCulturePointsLarge
-  minCulturePointsSmall
   useHeroResources
 }
 */
@@ -186,20 +184,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "minCulturePointsLarge",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "minCulturePointsSmall",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "useHeroResources",
             "storageKey": null
           }
@@ -209,12 +193,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "163557a07415ff3a690c4d6e1be4c71a",
+    "cacheID": "9d235e19c49176452180169ca567f3ae",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoPartySettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoPartySettings(villageId: $villageId) {\n    ...AutoPartySettings_autoPartySettings\n  }\n}\n\nfragment AutoPartySettings_autoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n"
+    "text": "mutation AutoPartySettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetAutoPartySettings(villageId: $villageId) {\n    ...AutoPartySettings_autoPartySettings\n  }\n}\n\nfragment AutoPartySettings_autoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n}\n"
   }
 };
 })();

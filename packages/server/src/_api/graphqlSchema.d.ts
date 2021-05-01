@@ -138,8 +138,6 @@ export interface NexusGenInputs {
     allowLarge: boolean; // Boolean!
     allowSmall: boolean; // Boolean!
     coolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
-    minCulturePointsLarge: number; // Int!
-    minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
   }
   UpdateAutoStorageOptionSettingsInput: { // input type
@@ -246,8 +244,6 @@ export interface NexusGenObjects {
     allowLarge: boolean; // Boolean!
     allowSmall: boolean; // Boolean!
     coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
-    minCulturePointsLarge: number; // Int!
-    minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
   }
   AutoSmithySettings: AutoSmithySettings;
@@ -518,8 +514,6 @@ export interface NexusGenFieldTypes {
     allowLarge: boolean; // Boolean!
     allowSmall: boolean; // Boolean!
     coolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
-    minCulturePointsLarge: number; // Int!
-    minCulturePointsSmall: number; // Int!
     useHeroResources: boolean; // Boolean!
   }
   AutoSmithySettings: { // field return type
@@ -976,8 +970,6 @@ export interface NexusGenFieldTypeNames {
     allowLarge: 'Boolean'
     allowSmall: 'Boolean'
     coolDown: 'CoolDown'
-    minCulturePointsLarge: 'Int'
-    minCulturePointsSmall: 'Int'
     useHeroResources: 'Boolean'
   }
   AutoSmithySettings: { // field return type name

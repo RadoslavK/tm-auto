@@ -13,9 +13,6 @@ export const AutoPartySettings = objectType({
     t.boolean('allowSmall');
     t.boolean('allowLarge');
     t.boolean('useHeroResources');
-
-    t.int('minCulturePointsSmall');
-    t.int('minCulturePointsLarge');
   },
 });
 
@@ -26,9 +23,6 @@ export const UpdateAutoPartySettingsInput = inputObjectType({
     t.boolean('allowLarge');
     t.field('coolDown', { type: 'CoolDownInput' });
     t.boolean('useHeroResources');
-
-    t.int('minCulturePointsSmall');
-    t.int('minCulturePointsLarge');
   },
 });
 

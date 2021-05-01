@@ -21,8 +21,6 @@ export type AutoPartySettings_autoPartySettings = {
             readonly seconds: number;
         };
     };
-    readonly minCulturePointsLarge: number;
-    readonly minCulturePointsSmall: number;
     readonly useHeroResources: boolean;
     readonly " $refType": "AutoPartySettings_autoPartySettings";
 };
@@ -120,20 +118,6 @@ return {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "minCulturePointsLarge",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "minCulturePointsSmall",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "useHeroResources",
       "storageKey": null
     }
@@ -142,5 +126,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '3b3fd857a6a37be9dd89f975883bd3bf';
+(node as any).hash = '02079849dd65f22f0053b28047483fb0';
 export default node;

@@ -8,8 +8,6 @@ export type UpdateAutoPartySettingsInput = {
     allowLarge: boolean;
     allowSmall: boolean;
     coolDown: CoolDownInput;
-    minCulturePointsLarge: number;
-    minCulturePointsSmall: number;
     useHeroResources: boolean;
 };
 export type CoolDownInput = {
@@ -65,8 +63,6 @@ fragment AutoPartySettings_autoPartySettings on AutoPartySettings {
       seconds
     }
   }
-  minCulturePointsLarge
-  minCulturePointsSmall
   useHeroResources
 }
 */
@@ -220,20 +216,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "minCulturePointsLarge",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "minCulturePointsSmall",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "useHeroResources",
             "storageKey": null
           }
@@ -243,12 +225,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "24d11c9e89793f6635f07c0348b8070d",
+    "cacheID": "1d07a4ed79b295afa9063058a0fc10f3",
     "id": null,
     "metadata": {},
     "name": "AutoPartySettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    ...AutoPartySettings_autoPartySettings\n  }\n}\n\nfragment AutoPartySettings_autoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCulturePointsLarge\n  minCulturePointsSmall\n  useHeroResources\n}\n"
+    "text": "mutation AutoPartySettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoPartySettingsInput!\n) {\n  updateAutoPartySettings(villageId: $villageId, settings: $settings) {\n    ...AutoPartySettings_autoPartySettings\n  }\n}\n\nfragment AutoPartySettings_autoPartySettings on AutoPartySettings {\n  allowLarge\n  allowSmall\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  useHeroResources\n}\n"
   }
 };
 })();

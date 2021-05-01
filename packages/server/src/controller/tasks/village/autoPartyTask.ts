@@ -43,8 +43,6 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
     const {
       allowLarge,
       allowSmall,
-      minCulturePointsLarge,
-      minCulturePointsSmall,
       useHeroResources,
     } = this.settings();
 
@@ -89,25 +87,6 @@ export class AutoPartyTask implements BotTaskWithCoolDown {
         nextCoolDown,
       };
     }
-
-    const cps = await page.$$eval('.points', (xx) =>
-      xx.map((x) => {
-        const cPoints = /(\d+)/.exec((x as HTMLElement).innerText);
-
-        if (!cPoints) {
-          throw new Error('Did not parse culture points');
-        }
-
-        return +cPoints[1];
-      }),
-    );
-
-    if (canDoLargeParty && cps.length !== 2) {
-      throw new Error('No information about large party culture points');
-    }
-
-    canDoSmallParty = canDoSmallParty && cps[0] >= minCulturePointsSmall;
-    canDoLargeParty = canDoLargeParty && cps[1] >= minCulturePointsLarge;
 
     if (!canDoSmallParty && !canDoLargeParty) {
       return;

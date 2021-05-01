@@ -16,7 +16,6 @@ import type { AutoPartySettingsResetSettingsMutation } from '../../../_graphql/_
 import type { AutoPartySettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoPartySettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import type { CoolDown as CoolDownModel } from '../../../models/coolDown.type.js';
-import { createOnNumberChanged } from '../../../utils/createOnNumberChanged.js';
 
 type Props = {
   readonly villageId: string;
@@ -30,8 +29,6 @@ graphql`
         coolDown {
             ...CoolDown @relay(mask: false)
         }
-        minCulturePointsLarge
-        minCulturePointsSmall
         useHeroResources
     }
 `;
@@ -116,23 +113,10 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId, queryRef }) => {
     setHasChanges(true);
   };
 
-  const onNumberChange = createOnNumberChanged({
-    callback: (name, value) => {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: +value,
-      }));
-      setHasChanges(true);
-    },
-    minValue: 0,
-  });
-
   const {
     allowLarge,
     allowSmall,
     coolDown,
-    minCulturePointsLarge,
-    minCulturePointsSmall,
     useHeroResources,
   } = state;
 
@@ -182,28 +166,6 @@ export const AutoPartySettings: React.FC<Props> = ({ villageId, queryRef }) => {
       <div>
         <label>Cooldown</label>
         <CoolDown onChange={onCoolDownChange} value={coolDown} />
-      </div>
-
-      <div>
-        <label htmlFor="minCulturePointsSmall">Min cp for small party</label>
-        <input
-          id="minCulturePointsSmall"
-          name="minCulturePointsSmall"
-          onChange={onNumberChange}
-          type="number"
-          value={minCulturePointsSmall}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="minCulturePointsLarge">Min cp for large party</label>
-        <input
-          id="minCulturePointsLarge"
-          name="minCulturePointsLarge"
-          onChange={onNumberChange}
-          type="number"
-          value={minCulturePointsLarge}
-        />
       </div>
     </div>
   );
