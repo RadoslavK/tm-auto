@@ -10,6 +10,10 @@ export const formatTime = (duration: Duration): string => {
   return `${days}:${correctedHours}:${correctedMinutes}:${correctedSeconds}`;
 };
 export const formatTimeFromSeconds = (totalSeconds: number): string => {
+  if (!totalSeconds) {
+    return '0:00:0?';
+  }
+
   // TODO better shared models
   const days = Math.floor(totalSeconds / 86400);
   const daySeconds = days * 86400;
