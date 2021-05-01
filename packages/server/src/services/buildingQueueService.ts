@@ -49,6 +49,17 @@ type WillMeetRequirementsParams = {
   readonly ignoreOngoing?: boolean;
 };
 
+type CorrectBuildingQueueResult = {
+  readonly removedBuildings: ReadonlyArray<QueuedBuilding>;
+  readonly updatedBuildings: ReadonlyArray<QueuedBuilding>;
+};
+
+enum ShouldRemoveFromQueueResult {
+  Remove,
+  Update,
+  Ignore,
+}
+
 // key - fieldId, value - number of queued levels on that field
 class Offsets {
   private _offsets: Map<number, number> = new Map<number, number>();
@@ -103,28 +114,34 @@ export class BuildingQueueService {
     await this.onUpdate();
   };
 
-  public removeAndCorrectQueue = async (params?: RemoveAndCorrectParams): Promise<ReadonlyArray<QueuedBuilding>> => {
+  public removeAndCorrectQueue = async (params?: RemoveAndCorrectParams): Promise<CorrectBuildingQueueResult> => {
     const {
       forceUpdate,
       queueIds = new Set<string>(),
       triggerCorrectionEvent,
     } = params || {};
 
-    const idsToRemove = this.correctBuildingQueue(queueIds);
-    const removedBuildings = this._village.buildings.queue.removeBulk(idsToRemove);
+    const {
+      removedBuildings,
+      updatedBuildings,
+    } = this.correctBuildingQueue(queueIds);
 
-    if (triggerCorrectionEvent && removedBuildings.length) {
+    if (triggerCorrectionEvent && (removedBuildings.length || updatedBuildings.length)) {
       publishPayloadEvent(BotEvent.BuildingQueueCorrected, {
         removedBuildings,
+        updatedBuildings,
         villageId: this._village.id,
       });
     }
 
-    if (forceUpdate || removedBuildings.length) {
+    if (forceUpdate || removedBuildings.length || updatedBuildings.length) {
       this.onUpdate();
     }
 
-    return removedBuildings;
+    return {
+      removedBuildings,
+      updatedBuildings,
+    };
   };
 
   public dequeueBuilding = async ({
@@ -163,7 +180,10 @@ export class BuildingQueueService {
       }
 
       //  handles updates too
-      const removedBuildings = await this.removeAndCorrectQueue({
+      const {
+        removedBuildings,
+        updatedBuildings,
+      } = await this.removeAndCorrectQueue({
         queueIds: new Set<string>(shouldRemoveWholeBuilding ? [queueId] : []),
         //  No building was removed but was updated so trigger update
         forceUpdate: !shouldRemoveWholeBuilding,
@@ -171,7 +191,11 @@ export class BuildingQueueService {
 
       return {
         removedBuildings,
-        updatedBuildings: shouldRemoveWholeBuilding ? [] : [building],
+        updatedBuildings: shouldRemoveWholeBuilding
+          ? updatedBuildings
+          //  Maybe it updated something during remove...? the API says it can happen
+          //  Prevent having the same building twice
+          : [...new Set([...updatedBuildings, building]).values()],
       };
     } else {
       const villageId = this._village.id;
@@ -201,8 +225,8 @@ export class BuildingQueueService {
         });
 
         return {
-          updatedBuildings: [building],
           removedBuildings: [],
+          updatedBuildings: [building],
         };
       }
     }
@@ -210,7 +234,7 @@ export class BuildingQueueService {
 
   public dequeueBuildingAtField = async ({ fieldId, targetLevel }: DequeueAtFieldInput): Promise<{
     readonly removedBuildings: ReadonlyArray<QueuedBuilding>,
-    readonly updatedBuilding?: QueuedBuilding,
+    readonly updatedBuildings?: ReadonlyArray<QueuedBuilding>,
   }> => {
     const { queue } = this._village.buildings;
 
@@ -227,14 +251,19 @@ export class BuildingQueueService {
 
       const queueIds = new Set<string>(buildingsToRemove.map((b) => b.id));
       const forceUpdate = !!buildingToCorrect;
-      const removedBuildings = await this.removeAndCorrectQueue({
+      const {
+        removedBuildings,
+        updatedBuildings,
+      } = await this.removeAndCorrectQueue({
         queueIds,
         forceUpdate,
       });
 
       return {
         removedBuildings,
-        updatedBuilding: buildingToCorrect,
+        updatedBuildings: buildingToCorrect
+          ? [...new Set([...updatedBuildings, buildingToCorrect]).values()]
+          : updatedBuildings,
       };
     } else {
       // Dequeue 1 level only
@@ -248,23 +277,30 @@ export class BuildingQueueService {
 
       if (building.startingLevel === building.targetLevel) {
         //  Remove whole building
-        const removedBuildings = await this.removeAndCorrectQueue({
+        const {
+          removedBuildings,
+          updatedBuildings,
+        } = await this.removeAndCorrectQueue({
           queueIds: new Set<string>([building.id]),
         });
 
         return {
           removedBuildings,
+          updatedBuildings,
         };
       } else {
         building.targetLevel--;
 
-        const removedBuildings = await this.removeAndCorrectQueue({
+        const {
+          removedBuildings,
+          updatedBuildings,
+        } = await this.removeAndCorrectQueue({
           forceUpdate: true,
         });
 
         return {
           removedBuildings,
-          updatedBuilding: building,
+          updatedBuildings: [...new Set([...updatedBuildings, building]).values()],
         };
       }
     }
@@ -535,28 +571,49 @@ export class BuildingQueueService {
 
   private correctBuildingQueue = (
     queueIdsToBeRemoved: ReadonlySet<string> = new Set<string>(),
-  ): ReadonlySet<string> => {
+  ): CorrectBuildingQueueResult => {
     const offsets = new Offsets();
-    const buildings = this._village.buildings.queue.buildings();
+    const { queue } = this._village.buildings;
+    const buildings = queue.buildings();
     const idsToRemove = new Set<string>();
+    const updatedBuildings: QueuedBuilding[] = [];
 
     for (const qBuilding of buildings) {
       if (queueIdsToBeRemoved.has(qBuilding.id)) {
         idsToRemove.add(qBuilding.id);
       } else {
-        const shouldBeRemoved = this.shouldRemoveBuildingFromQueue(qBuilding, offsets);
+        const shouldRemoveFromQueueResult = this.shouldRemoveBuildingFromQueue(qBuilding, offsets);
 
-        if (shouldBeRemoved) {
-          idsToRemove.add(qBuilding.id);
-        } else {
-          const increment = qBuilding.targetLevel - qBuilding.startingLevel + 1;
+        switch (shouldRemoveFromQueueResult) {
+          case ShouldRemoveFromQueueResult.Remove: {
+            idsToRemove.add(qBuilding.id);
+            break;
+          }
+          case ShouldRemoveFromQueueResult.Update: {
+            updatedBuildings.push(qBuilding);
+            //  Building was updated in the original function for Update so it still matches this logic
+            const increment = qBuilding.targetLevel - qBuilding.startingLevel + 1;
 
-          offsets.increaseFor(qBuilding.fieldId, increment);
+            offsets.increaseFor(qBuilding.fieldId, increment);
+            break;
+          }
+          case ShouldRemoveFromQueueResult.Ignore: {
+            //  Building was updated in the original function for Update so it still matches this logic
+            const increment = qBuilding.targetLevel - qBuilding.startingLevel + 1;
+
+            offsets.increaseFor(qBuilding.fieldId, increment);
+            break;
+          }
         }
       }
     }
 
-    return idsToRemove;
+    const removedBuildings = queue.removeBulk(idsToRemove);
+
+    return {
+      removedBuildings,
+      updatedBuildings,
+    };
   };
 
   public getMainBuildingLevels = (): ReadonlyMap<string, number> => {
@@ -584,7 +641,9 @@ export class BuildingQueueService {
   private shouldRemoveBuildingFromQueue = (
     queuedBuilding: QueuedBuilding,
     providedOffsets: Offsets,
-  ): boolean => {
+  ): ShouldRemoveFromQueueResult => {
+    let nonRemoveResult: ShouldRemoveFromQueueResult = ShouldRemoveFromQueueResult.Ignore;
+
     if (
       queuedBuilding.type === BuildingType.Palace &&
       AccountContext.getContext()
@@ -599,40 +658,49 @@ export class BuildingQueueService {
         )
     ) {
       // iba 1 palac
-      return true;
+      return ShouldRemoveFromQueueResult.Remove;
     }
 
     const buildingSpots = this._village.buildings.spots.buildings();
 
-    // if buildings lvl >= 2, the building with previous level should exist on the same field
+    const actualBuilding = buildingSpots.find(b =>
+      b.type === queuedBuilding.type
+      && b.fieldId === queuedBuilding.fieldId);
+
+    const previousBuildingLevel = actualBuilding
+      ? actualBuilding.level.getActualAndOngoing()
+        + providedOffsets.getFor(queuedBuilding.fieldId)
+      : 0;
+
+    const startingLevelDifference = previousBuildingLevel - queuedBuilding.startingLevel;
+    const targetLevelDifference = previousBuildingLevel - queuedBuilding.targetLevel;
+
+    if (startingLevelDifference < -1 || targetLevelDifference >= 0) {
+      //  TODO: Perhaps fill missing levels between??
+      return ShouldRemoveFromQueueResult.Remove;
+    }
+
+    if (startingLevelDifference >= 0) {
+      //  make corrections, user built part of the range by himself
+      queuedBuilding.startingLevel += (startingLevelDifference + 1);
+      nonRemoveResult = ShouldRemoveFromQueueResult.Update;
+    }
+
     if (queuedBuilding.startingLevel >= 2) {
-      const previousLevelBuildingExists = buildingSpots.some(
-        (b) =>
-          b.type === queuedBuilding.type &&
-          b.fieldId === queuedBuilding.fieldId &&
-          b.level.getActualAndOngoing() +
-            providedOffsets.getFor(queuedBuilding.fieldId) + 1
-            === queuedBuilding.startingLevel,
-      );
-
-      if (!previousLevelBuildingExists) {
-        return true;
-      }
-
       //  Only capital can have resource fields above 10
       if (queuedBuilding.type <= 4
         && queuedBuilding.targetLevel >= 11
         && !this._village.isCapital) {
-        return true;
+        return ShouldRemoveFromQueueResult.Remove;
       }
 
-      return false;
+      return nonRemoveResult;
     }
 
     // Check that no building is present on the field
     if (buildingSpots.some(b => b.fieldId === queuedBuilding.fieldId
       && b.level.getActualAndOngoing() > 0)) {
-      return true;
+      return ShouldRemoveFromQueueResult.Remove;
     }
 
     const { conditions, maxLevel } = buildingInfoService.getBuildingInfo(
@@ -645,7 +713,7 @@ export class BuildingQueueService {
       (conditions.capital === CapitalCondition.Required &&
         !this._village.isCapital)
     ) {
-      return true;
+      return ShouldRemoveFromQueueResult.Remove;
     }
 
     const prohibitedBuildingExists = buildingSpots.some(
@@ -655,7 +723,7 @@ export class BuildingQueueService {
     );
 
     if (prohibitedBuildingExists) {
-      return true;
+      return ShouldRemoveFromQueueResult.Remove;
     }
 
     if (queuedBuilding.type > BuildingType.Crop) {
@@ -673,7 +741,7 @@ export class BuildingQueueService {
         );
 
         if (existingBuilding) {
-          return true;
+          return ShouldRemoveFromQueueResult.Remove;
         }
       } else {
         const existingBuildings = sameTypeBuildings
@@ -697,7 +765,7 @@ export class BuildingQueueService {
             );
 
             if (!anyExists) {
-              return true;
+              return ShouldRemoveFromQueueResult.Remove;
             }
           }
         }
@@ -714,11 +782,11 @@ export class BuildingQueueService {
       );
 
       if (!requiredBuildingExists) {
-        return true;
+        return ShouldRemoveFromQueueResult.Remove;
       }
     }
 
-    return false;
+    return nonRemoveResult;
   };
 
   private onUpdate = async (hasChanges: boolean | undefined = undefined): Promise<void> => {

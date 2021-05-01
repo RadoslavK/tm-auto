@@ -311,12 +311,12 @@ export const DequeueBuildingAtFieldMutation = mutationField(t => {
     resolve: async (_, args, ctx) => {
       const { villageId, ...input } = args.input;
 
-      const { removedBuildings, updatedBuilding } = await ctx.buildingQueueService.for(villageId).dequeueBuildingAtField(input);
+      const { removedBuildings, updatedBuildings } = await ctx.buildingQueueService.for(villageId).dequeueBuildingAtField(input);
       const { queue } = ctx.villageService.village(villageId).buildings;
 
       return {
         removedBuildings: [...removedBuildings],
-        updatedBuildings: updatedBuilding ? [updatedBuilding] : [],
+        updatedBuildings: updatedBuildings ? [...updatedBuildings] : [],
         queue,
       };
     },
@@ -442,7 +442,7 @@ export const BuildingQueueCorrectedSubscription = subscriptionField(t => {
       filter: (p, variables) => variables.villageId === p.villageId,
       resolve: (p, args, ctx) => ({
         removedBuildings: [...p.removedBuildings],
-        updatedBuildings: [],
+        updatedBuildings: [...p.updatedBuildings],
         queue: ctx.villageService.village(args.villageId).buildings.queue,
       }),
     }),

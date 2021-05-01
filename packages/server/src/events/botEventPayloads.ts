@@ -106,6 +106,7 @@ export type BotEventPayloads = {
 
   [BotEvent.BuildingQueueCorrected]: {
     readonly villageId: string;
+    readonly updatedBuildings: readonly QueuedBuilding[];
     readonly removedBuildings: readonly QueuedBuilding[];
   };
 
