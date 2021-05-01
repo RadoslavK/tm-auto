@@ -7,13 +7,40 @@ import { activityService } from '../../services/botActivityService.js';
 import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText.js';
 import { ensurePage } from './ensurePage.js';
 
+
+
 export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   activityService.setActivity('Logging in');
-  const account = accountService.getCurrentAccount();
 
+  const account = accountService.getCurrentAccount();
   const page = existingPage || (await getPage());
 
-  if (page.url().includes(account.server)) {
+  await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
+
+  const loginForm = await page.$('form[name=login]');
+
+  if (loginForm) {
+    await page.waitForSelector('form[name=login] button[type=submit]');
+
+    await replaceInputTextBySelector(
+      page,
+      'form[name=login] input[name=name]',
+      account.username,
+    );
+    await replaceInputTextBySelector(
+      page,
+      'form[name=login] input[name=password]',
+      account.password,
+    );
+
+    const acceptCookies = await page.$('#cmpbntyestxt');
+    acceptCookies?.click();
+
+    await Promise.all([
+      page.waitForSelector('form[name=login] button[type=submit]', { hidden: true }),
+      page.click('form[name=login] button[type=submit]'),
+    ]);
+  } else {
     // is signed in as different account?
     const signedInPlayer = await page.$eval(
       '.playerName',
@@ -24,37 +51,9 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
       await ensurePage(TravianPath.ResourceFieldsOverview);
     } else {
       await ensurePage(TravianPath.Logout);
+      await ensureLoggedIn(page);
     }
-  } else {
-    await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
   }
-
-  const loginForm = await page.$('form[name=login]');
-
-  if (!loginForm) {
-    return;
-  }
-
-  await page.waitForSelector('form[name=login] button[type=submit]');
-
-  await replaceInputTextBySelector(
-    page,
-    'form[name=login] input[name=name]',
-    account.username,
-  );
-  await replaceInputTextBySelector(
-    page,
-    'form[name=login] input[name=password]',
-    account.password,
-  );
-
-  const acceptCookies = await page.$('#cmpbntyestxt');
-  acceptCookies?.click();
-
-  await Promise.all([
-    page.waitForSelector('form[name=login] button[type=submit]', { hidden: true }),
-    page.click('form[name=login] button[type=submit]'),
-  ]);
 
   activityService.setActivity('Logged in');
 };
