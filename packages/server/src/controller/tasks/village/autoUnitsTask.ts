@@ -19,6 +19,7 @@ import {
   TabInformation,
 } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateHeroResources } from '../../actions/hero/updateHeroResources.js';
 import { updateUnitsInformation } from '../../actions/updateUnitsInformation.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
@@ -125,6 +126,10 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
 
     const unitQueue = await parseUnitQueue();
     this._units.setQueue(type, unitQueue);
+
+    if (settings.useHeroResources) {
+      await updateHeroResources();
+    }
 
     const suitableToBuild: Record<number, number> = {};
     const totalVillageResources =

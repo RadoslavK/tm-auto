@@ -25,6 +25,7 @@ import {
   ensurePage,
 } from '../../../actions/ensurePage.js';
 import { claimHeroResources } from '../../../actions/hero/claimHeroResources.js';
+import { updateHeroResources } from '../../../actions/hero/updateHeroResources.js';
 import { updateActualResources } from '../../../actions/village/updateResources.js';
 import type {
   BotTaskWithCoolDownResult,
@@ -296,6 +297,10 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
 
     await updateActualResources();
 
+    if (settings.useHeroResources) {
+      await updateHeroResources();
+    }
+
     const currentResources = this._village.resources.amount;
     const totalResources =
       settings.useHeroResources
@@ -375,6 +380,10 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
         !this._village.buildings.ongoing.isSpotFree(BuildingSpotType.Fields)
       ) {
         return;
+      }
+
+      if (settings.useHeroResources) {
+        await updateHeroResources();
       }
 
       if (settings.useHeroResources) {

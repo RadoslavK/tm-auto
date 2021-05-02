@@ -13,6 +13,7 @@ import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateHeroResources } from '../../actions/hero/updateHeroResources.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
   BotTaskWithCoolDownResult,
@@ -52,6 +53,10 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
 
     if (!townHall) {
       return;
+    }
+
+    if (useHeroResources) {
+      await updateHeroResources();
     }
 
     const villageRes = this._village.resources.amount;

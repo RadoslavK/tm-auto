@@ -16,6 +16,7 @@ import { unitUpgradeCostService } from '../../../services/info/unitUpgradeCostSe
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateHeroResources } from '../../actions/hero/updateHeroResources.js';
 import { updateActualResources } from '../../actions/village/updateResources.js';
 import type {
   BotTaskWithCoolDownResult,
@@ -101,6 +102,12 @@ export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
     }
 
     const { units, useHeroResources } = this.settings();
+
+    if (useHeroResources) {
+      await updateHeroResources();
+    }
+
+
     const unitIndex = units[0];
 
     const prerequisites = unitResearchPrerequisites.get(unitIndex);
