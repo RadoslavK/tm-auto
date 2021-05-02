@@ -41,6 +41,14 @@ type StylesType = {
 };
 
 const useStyles = makeStyles<unknown, StylesType>({
+  buildingName: {
+    fontWeight: 500,
+  },
+  info: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
   image: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
@@ -54,11 +62,6 @@ const useStyles = makeStyles<unknown, StylesType>({
     display: 'flex',
     flexFlow: 'column',
     marginRight: 10,
-  },
-  info: {
-    display: 'flex',
-    flexFlow: 'column',
-    justifyContent: 'center',
   },
   root: {
     display: 'flex',
@@ -79,12 +82,12 @@ export const BuildingInProgress: React.FC<Props> = ({ building }) => {
         <div>[{buildingFragment.fieldId}]</div>
       </div>
       <div className={classes.info}>
-        <div>{buildingFragment.name}</div>
-        <div>
-          Level
-          {buildingFragment.level}
+        <div className={classes.buildingName}>
+          {buildingFragment.name} {buildingFragment.level}
         </div>
-        <div>{time}</div>
+        <div>
+          {time}
+        </div>
       </div>
     </div>
   );

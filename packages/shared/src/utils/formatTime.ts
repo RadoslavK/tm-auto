@@ -11,7 +11,7 @@ export const formatTime = (duration: Duration): string => {
 };
 export const formatTimeFromSeconds = (totalSeconds: number): string => {
   if (!totalSeconds) {
-    return '0:00:0?';
+    return '0:00:00:0?';
   }
 
   // TODO better shared models

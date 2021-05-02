@@ -14,6 +14,8 @@ import {
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   clay: {
     backgroundImage: `url("${imageLinks.resources.clay}")`,
@@ -60,11 +62,13 @@ const fragmentDefinition = graphql`
 `;
 
 type Props = {
+  readonly dontWrap?: boolean;
   readonly resourcesKey: Resources_resources$key;
   readonly showFreeCrop?: boolean;
 };
 
 export const Resources: React.FC<Props> = ({
+  dontWrap,
   resourcesKey,
   showFreeCrop,
 }) => {
@@ -81,8 +85,11 @@ export const Resources: React.FC<Props> = ({
   const highestResource = Math.max(wood, clay, iron, crop);
   const resourcesFormatter = createFormatter(highestResource);
 
-  return (
-    <div className={classes.root}>
+  const Wrapper = (content: JSX.Element): JSX.Element =>
+    dontWrap ? <>{content}</> : <div className={classes.root}>{content}</div>;
+
+  return Wrapper(
+    <>
       <span className={clsx(classes.image, classes.wood)} title="Wood" />
       <span className={classes.value} title={String(wood)}>{resourcesFormatter(wood)}</span>
       <span className={clsx(classes.image, classes.clay)} title="Clay" />
@@ -99,7 +106,7 @@ export const Resources: React.FC<Props> = ({
           <span className={classes.value} title={String(freeCrop)}>{defaultFormatter(freeCrop)}</span>
         </>
       )}
-    </div>
+    </>,
   );
 };
 

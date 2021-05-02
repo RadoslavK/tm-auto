@@ -61,7 +61,7 @@ type Tab = {
 };
 
 type Props = {
-  readonly className: string;
+  readonly className?: string;
 };
 
 export const BuildingSpots: React.FC<Props> = ({ className }) => {

@@ -35,6 +35,7 @@ import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestam
 import { NextExecutionForm } from './NextExecutionForm.js';
 
 type Props = {
+  readonly className?: string;
   readonly task: VillageTaskType;
   readonly timestamp: NextVillageTaskExecution_timestamp$key;
   readonly resetUpdater?: SelectorStoreUpdater<NextVillageTaskExecutionResetMutationResponse>;
@@ -73,6 +74,7 @@ const subscription = graphql`
 `;
 
 export const NextVillageTaskExecution: React.FC<Props> = ({
+  className,
   task,
   timestamp,
   resetUpdater,
@@ -137,7 +139,7 @@ export const NextVillageTaskExecution: React.FC<Props> = ({
   };
 
   return (
-    <div>
+    <div className={className}>
       <div>
         Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
         <button onClick={showForm}>Change</button>

@@ -7,8 +7,6 @@ import { activityService } from '../../services/botActivityService.js';
 import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText.js';
 import { ensurePage } from './ensurePage.js';
 
-
-
 export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   activityService.setActivity('Logging in');
 

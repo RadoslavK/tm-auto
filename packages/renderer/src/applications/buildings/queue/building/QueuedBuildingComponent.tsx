@@ -24,6 +24,9 @@ const useStyles = makeStyles<unknown, StyleProps>({
       display: 'block',
     },
   },
+  buildingName: {
+    fontWeight: 500,
+  },
   buildingImage: (props) => ({
     backgroundImage: `url("${imageLinks.getBuilding(props.buildingType, props.tribe)}")`,
     backgroundRepeat: 'no-repeat',
@@ -109,10 +112,11 @@ export const QueuedBuildingComponent: React.FC<Props> = ({
         <div>[{queuedBuildingFragment.fieldId}]</div>
       </div>
       <div className={classes.info}>
-        <div>
+        <div className={classes.buildingName}>
           {getNameLabel(queuedBuildingFragment)}
         </div>
         <Cost
+          dontWrapResources
           buildTime={queuedBuildingFragment.buildingTime}
           resources={queuedBuildingFragment.cost}
         />

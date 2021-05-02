@@ -106,6 +106,9 @@ export const villageQuery = graphql`
 `;
 
 const useStyles = makeStyles({
+  root: {
+    flex: 1,
+  },
   tab: {
     marginRight: 8,
   },
@@ -274,7 +277,7 @@ export const Village: React.FC<Props> = ({ queryRef }) => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <Suspense fallback={null}>
         <VillageResources resources={village.resources} />
         <CrannyCapacity crannyCapacityKey={crannyCapacity} />

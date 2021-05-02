@@ -17,17 +17,24 @@ import { BuildingQueue } from './queue/BuildingQueue.js';
 import { BuildingSpots } from './spots/BuildingSpots.js';
 
 const useStyles = makeStyles({
-  buildingSpots: {
-    flex: 3,
-  },
   buildings: {
     display: 'flex',
+    justifyContent: 'space-between',
   },
-  ongoingAndNextExecution: {
-    flex: 1,
-  },
-  queuedBuildings: {
+  buildingSpots: {
     flex: 2,
+    maxWidth: '40%',
+  },
+  ongoing: {
+    flex: 1,
+    maxWidth: '20%',
+  },
+  queue: {
+    flex: 2,
+    maxWidth: '40%',
+  },
+  coolDown: {
+    marginBottom: 16,
   },
 });
 
@@ -82,19 +89,20 @@ export const Buildings: React.FC<Props> = ({
       <Suspense fallback={null}>
         <BuildingSpots className={classes.buildingSpots}/>
       </Suspense>
-      <div className={classes.ongoingAndNextExecution}>
-        <NextVillageTaskExecution task="AutoBuild" timestamp={nextVillageTaskExecution} />
+      <div className={classes.ongoing}>
         <Suspense fallback={null}>
           <BuildingsInProgress buildingsInProgressKey={buildingsInProgress} />
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <BuildingQueue
-          autoBuildSettingsKey={autoBuildSettings}
-          buildingQueueKey={buildingQueue}
-          className={classes.queuedBuildings}
-        />
-      </Suspense>
+      <div className={classes.queue}>
+        <NextVillageTaskExecution className={classes.coolDown} task="AutoBuild" timestamp={nextVillageTaskExecution} />
+        <Suspense fallback={null}>
+          <BuildingQueue
+            autoBuildSettingsKey={autoBuildSettings}
+            buildingQueueKey={buildingQueue}
+          />
+        </Suspense>
+      </div>
     </div>
   );
 };

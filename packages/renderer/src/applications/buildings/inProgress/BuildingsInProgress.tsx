@@ -1,3 +1,4 @@
+import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
@@ -33,10 +34,17 @@ const buildingsInProgressSubscription = graphql`
     }
 `;
 
+const useStyles = makeStyles({
+  header: {
+    fontWeight: 700,
+  },
+});
+
 export const BuildingsInProgress: React.FC<Props> = ({
   buildingsInProgressKey,
   className,
 }) => {
+  const classes = useStyles();
   const buildingsInProgress = useFragment(buildingsInProgressFragment, buildingsInProgressKey);
   const villageId = useRecoilValue(selectedVillageIdState);
   const subscriptionConfig = useMemo((): GraphQLSubscriptionConfig<BuildingsInProgressSubscription> => ({
@@ -52,6 +60,9 @@ export const BuildingsInProgress: React.FC<Props> = ({
 
   return (
     <div className={className}>
+      <div className={classes.header}>
+        Buildings in progress
+      </div>
       {buildingsInProgress.map((building) => (
         <BuildingInProgress
           key={`${building.fieldId}|${building.level}`}

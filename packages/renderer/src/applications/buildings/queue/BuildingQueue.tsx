@@ -47,7 +47,7 @@ import { Cost } from './Cost.js';
 type Props = {
   readonly autoBuildSettingsKey: BuildingQueue_autoBuildSettings$key;
   readonly buildingQueueKey: BuildingQueue_buildingQueue$key;
-  readonly className: string;
+  readonly className?: string;
 };
 
 const useStyles = makeStyles({
@@ -55,6 +55,9 @@ const useStyles = makeStyles({
     display: 'flex',
     marginBottom: 12,
     borderBottom: 'dimgrey solid 3px',
+    '& > *': {
+      flex: 1,
+    },
   },
   action: {
     marginBottom: '15px',
@@ -67,8 +70,9 @@ const useStyles = makeStyles({
   buildings: {
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto',
     maxHeight: '80vh',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
   },
 });
 

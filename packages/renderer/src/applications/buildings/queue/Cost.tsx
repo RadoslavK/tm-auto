@@ -11,15 +11,26 @@ import { Resources } from '../../../_shared/components/Resources.js';
 import { imageLinks } from '../../../utils/imageLinks.js';
 
 type Props = {
-  readonly className?: string;
   readonly buildTime: Cost_duration$key;
-  readonly resources: Cost_resources$key;
-  readonly split?: boolean;
-  readonly resourcesBuildTime?: Cost_duration$key;
+  readonly dontWrapResources?: boolean;
   readonly infrastructureBuildTime?: Cost_duration$key;
+  readonly resources: Cost_resources$key;
+  readonly resourcesBuildTime?: Cost_duration$key;
+  readonly split?: boolean;
 };
 
-const useStyles = makeStyles({
+type StylesProps = {
+  readonly dontWrapResources: boolean | undefined;
+};
+
+const useStyles = makeStyles<unknown, StylesProps>({
+  root: ({ dontWrapResources }) => dontWrapResources
+    ? {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+    }
+    : {},
   buildTime: {
     backgroundImage: `url("${imageLinks.cost.buildTime}")`,
   },
@@ -30,9 +41,8 @@ const useStyles = makeStyles({
     marginLeft: 5,
     width: '2em',
   },
-  root: {
+  buildTimeRow: {
     display: 'flex',
-    flexWrap: 'wrap',
     justifyContent: 'center',
   },
   value: {
@@ -55,9 +65,9 @@ const costDurationFragment = graphql`
 
 export const Cost: React.FC<Props> = ({
   buildTime,
-  className,
-  resources,
+  dontWrapResources,
   infrastructureBuildTime,
+  resources,
   resourcesBuildTime,
   split,
 }) => {
@@ -66,7 +76,7 @@ export const Cost: React.FC<Props> = ({
   const infrastructureBuildTimeFragment = useFragment(costDurationFragment, infrastructureBuildTime || null);
   const resourcesBuildTimeFragment = useFragment(costDurationFragment, resourcesBuildTime || null);
 
-  const classes = useStyles();
+  const classes = useStyles({ dontWrapResources });
   const time = formatTime(buildTimeFragment);
   const resourcesTime =
     resourcesBuildTimeFragment && formatTime(resourcesBuildTimeFragment);
@@ -74,30 +84,30 @@ export const Cost: React.FC<Props> = ({
     infrastructureBuildTimeFragment && formatTime(infrastructureBuildTimeFragment);
 
   return (
-    <div className={clsx(className, classes.root)}>
-      <Resources resourcesKey={resourcesFragment} />
+    <div className={classes.root}>
+      <Resources dontWrap={dontWrapResources} resourcesKey={resourcesFragment} />
       {!infrastructureTime || !resourcesTime || !split ? (
-        <>
-          <span className={clsx(classes.image, classes.buildTime)} title="Build time" />
-          <span className={classes.value}>{time}</span>
-        </>
+        <div className={classes.buildTimeRow}>
+          <div className={clsx(classes.image, classes.buildTime)} title="Build time" />
+          <div className={classes.value}>{time}</div>
+        </div>
       ) : (
-        <>
-          <span
+        <div className={classes.buildTimeRow}>
+          <div
             className={clsx(classes.image, classes.buildTime)}
             title="Resources build time"
           />
-          <span className={classes.value}>
+          <div className={classes.value}>
             {resourcesTime}
-          </span>
-          <span
+          </div>
+          <div
             className={clsx(classes.image, classes.buildTime)}
             title="Infrastructure build time"
           />
-          <span className={classes.value}>
+          <div className={classes.value}>
             {infrastructureTime}
-          </span>
-        </>
+          </div>
+        </div>
       )}
     </div>
   );
