@@ -140,6 +140,7 @@ type AutoUnitsSettings {
 type AutoUnitsUnitSettings {
   autoBuild: Boolean!
   index: Int!
+  minimumBatch: Int!
   targetAmount: Int!
   trainForever: Boolean!
 }
@@ -699,6 +700,7 @@ input UpdateAutoUnitsSettingsInput {
 input UpdateAutoUnitsUnitSettingsInput {
   autoBuild: Boolean!
   index: Int!
+  minimumBatch: Int!
   targetAmount: Int!
   trainForever: Boolean!
 }

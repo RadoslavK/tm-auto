@@ -47,6 +47,7 @@ fragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {
   autoBuild
   targetAmount
   trainForever
+  minimumBatch
 }
 
 fragment Units_autoUnitsSettings on AutoUnitsSettings {
@@ -162,6 +163,13 @@ v2 = [
         "kind": "ScalarField",
         "name": "trainForever",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "minimumBatch",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -254,12 +262,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fe5f5beb9f579dc3723a0aa06902a2df",
+    "cacheID": "48a9f80abb2bb7d379ee5148e75d5e5c",
     "id": null,
     "metadata": {},
     "name": "UnitsSubscription",
     "operationKind": "subscription",
-    "text": "subscription UnitsSubscription(\n  $villageId: ID!\n) {\n  autoUnitsSettingsUpdated(villageId: $villageId) {\n    ...Units_autoUnitsSettings\n  }\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n\nfragment Units_autoUnitsSettings on AutoUnitsSettings {\n  barracks {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  stable {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  workshop {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  residence {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n}\n"
+    "text": "subscription UnitsSubscription(\n  $villageId: ID!\n) {\n  autoUnitsSettingsUpdated(villageId: $villageId) {\n    ...Units_autoUnitsSettings\n  }\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n  minimumBatch\n}\n\nfragment Units_autoUnitsSettings on AutoUnitsSettings {\n  barracks {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  stable {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  workshop {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  residence {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n}\n"
   }
 };
 })();

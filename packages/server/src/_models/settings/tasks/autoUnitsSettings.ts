@@ -16,6 +16,8 @@ export class AutoUnitsUnitSettings {
 
   public readonly trainForever: boolean = false;
 
+  public readonly minimumBatch: number = 1;
+
   constructor(params: PartialFields<AutoUnitsUnitSettings> = {}) {
     mergeDefaults(this, params);
   }

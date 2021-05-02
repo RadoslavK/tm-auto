@@ -9,6 +9,7 @@ export type UnitSettings_autoUnitsUnitSettings = {
     readonly autoBuild: boolean;
     readonly targetAmount: number;
     readonly trainForever: boolean;
+    readonly minimumBatch: number;
     readonly " $refType": "UnitSettings_autoUnitsUnitSettings";
 };
 export type UnitSettings_autoUnitsUnitSettings$data = UnitSettings_autoUnitsUnitSettings;
@@ -52,10 +53,17 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "trainForever",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "minimumBatch",
+      "storageKey": null
     }
   ],
   "type": "AutoUnitsUnitSettings",
   "abstractKey": null
 };
-(node as any).hash = '7921148b5b68ebe7275019ffb6e0a4c9';
+(node as any).hash = '9ec9a4959f507cbcdb300ad07b609fdd';
 export default node;

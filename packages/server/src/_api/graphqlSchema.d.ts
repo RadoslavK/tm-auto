@@ -163,6 +163,7 @@ export interface NexusGenInputs {
   UpdateAutoUnitsUnitSettingsInput: { // input type
     autoBuild: boolean; // Boolean!
     index: number; // Int!
+    minimumBatch: number; // Int!
     targetAmount: number; // Int!
     trainForever: boolean; // Boolean!
   }
@@ -294,6 +295,7 @@ export interface NexusGenObjects {
   AutoUnitsUnitSettings: { // root type
     autoBuild: boolean; // Boolean!
     index: number; // Int!
+    minimumBatch: number; // Int!
     targetAmount: number; // Int!
     trainForever: boolean; // Boolean!
   }
@@ -578,6 +580,7 @@ export interface NexusGenFieldTypes {
   AutoUnitsUnitSettings: { // field return type
     autoBuild: boolean; // Boolean!
     index: number; // Int!
+    minimumBatch: number; // Int!
     targetAmount: number; // Int!
     trainForever: boolean; // Boolean!
   }
@@ -1041,6 +1044,7 @@ export interface NexusGenFieldTypeNames {
   AutoUnitsUnitSettings: { // field return type name
     autoBuild: 'Boolean'
     index: 'Int'
+    minimumBatch: 'Int'
     targetAmount: 'Int'
     trainForever: 'Boolean'
   }

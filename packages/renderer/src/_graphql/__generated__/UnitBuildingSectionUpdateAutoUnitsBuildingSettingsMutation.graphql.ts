@@ -83,6 +83,7 @@ fragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {
   autoBuild
   targetAmount
   trainForever
+  minimumBatch
 }
 */
 
@@ -207,6 +208,13 @@ v5 = [
         "args": null,
         "kind": "ScalarField",
         "name": "trainForever",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "minimumBatch",
         "storageKey": null
       }
     ],
@@ -343,12 +351,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f811e0295bce895a8cfc98cde47a9863",
+    "cacheID": "73be622aec91c4438849085fdc30b6e9",
     "id": null,
     "metadata": {},
     "name": "UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation(\n  $settings: UpdateAutoUnitsBuildingSettingsInput!\n  $villageId: ID!\n  $buildingType: Int!\n) {\n  updateAutoUnitsBuildingSettings(settings: $settings, villageId: $villageId, buildingType: $buildingType) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n"
+    "text": "mutation UnitBuildingSectionUpdateAutoUnitsBuildingSettingsMutation(\n  $settings: UpdateAutoUnitsBuildingSettingsInput!\n  $villageId: ID!\n  $buildingType: Int!\n) {\n  updateAutoUnitsBuildingSettings(settings: $settings, villageId: $villageId, buildingType: $buildingType) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n  minimumBatch\n}\n"
   }
 };
 })();

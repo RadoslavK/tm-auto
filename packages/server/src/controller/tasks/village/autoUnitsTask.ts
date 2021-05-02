@@ -159,7 +159,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
         availableResources.crop / cost.crop,
       );
 
-      if (maxPossibleAmountToBuild < 1) {
+      if (maxPossibleAmountToBuild < unitToBuild.minimumBatch) {
         return;
       }
 
@@ -174,7 +174,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
         );
       }
 
-      if (maxPossibleAmountToBuild < 1) {
+      if (maxPossibleAmountToBuild < unitToBuild.minimumBatch) {
         return;
       }
 
@@ -186,8 +186,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
           : 0,
       );
 
-      // have res for at least 1
-      if (maxPossibleAmountToBuild < 1) {
+      if (maxPossibleAmountToBuild < unitToBuild.minimumBatch) {
         return;
       }
 
@@ -207,7 +206,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
         freeBuildingTimeToFill / buildTime.getTotalSeconds(),
       );
 
-      if (maxPossibleAmountToBuild < 1) {
+      if (maxPossibleAmountToBuild < unitToBuild.minimumBatch) {
         return;
       }
 
@@ -221,7 +220,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
       );
     });
 
-    // can build at least 1 with res and fit in queue
+    // can build at least 1 unit kind with res and fit in queue
     if (!Object.keys(suitableToBuild).length) {
       return;
     }

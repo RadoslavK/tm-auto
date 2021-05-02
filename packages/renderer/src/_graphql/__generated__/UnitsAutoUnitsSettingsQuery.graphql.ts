@@ -79,6 +79,7 @@ fragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {
   autoBuild
   targetAmount
   trainForever
+  minimumBatch
 }
 */
 
@@ -194,6 +195,13 @@ v5 = [
         "args": null,
         "kind": "ScalarField",
         "name": "trainForever",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "minimumBatch",
         "storageKey": null
       }
     ],
@@ -356,12 +364,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ab20a42619f985ebadbff89ec6463e27",
+    "cacheID": "446827e0a3ebe03748b4c63d9c50db47",
     "id": null,
     "metadata": {},
     "name": "UnitsAutoUnitsSettingsQuery",
     "operationKind": "query",
-    "text": "query UnitsAutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n  nextVillageTaskExecution(task: AutoUnits, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n"
+    "text": "query UnitsAutoUnitsSettingsQuery(\n  $villageId: ID!\n) {\n  autoUnitsSettings(villageId: $villageId) {\n    barracks {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    stable {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    workshop {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n    residence {\n      ...UnitBuildingSection_autoUnitsBuildingSettings\n    }\n  }\n  nextVillageTaskExecution(task: AutoUnits, villageId: $villageId) {\n    ...NextVillageTaskExecution_timestamp\n  }\n}\n\nfragment NextVillageTaskExecution_timestamp on Timestamp {\n  totalSeconds\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n  minimumBatch\n}\n"
   }
 };
 })();

@@ -18,6 +18,7 @@ export const AutoUnitsUnitSettings = objectType({
     t.boolean('autoBuild');
     t.boolean('trainForever');
     t.int('targetAmount');
+    t.int('minimumBatch');
   },
 });
 
@@ -28,6 +29,7 @@ export const UpdateAutoUnitsUnitSettingsInput = inputObjectType({
     t.boolean('autoBuild');
     t.boolean('trainForever');
     t.int('targetAmount');
+    t.int('minimumBatch');
   },
 });
 

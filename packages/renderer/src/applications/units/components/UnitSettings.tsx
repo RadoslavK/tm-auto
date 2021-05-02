@@ -69,6 +69,7 @@ const unitSettingsAutoUnitsUnitSettings = graphql`
       autoBuild
       targetAmount
       trainForever
+      minimumBatch
   }
 `;
 
@@ -102,7 +103,7 @@ export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
     setHasChanges(false);
   }, [settingsFragment]);
 
-  const { autoBuild, targetAmount, trainForever } = state;
+  const { autoBuild, minimumBatch, targetAmount, trainForever } = state;
 
   const classes = useStyles({
     autoBuild,
@@ -164,11 +165,17 @@ export const UnitSettings: React.FC<Props> = ({ className, settings }) => {
           )}
         />
         <TextField
+          type="number"
+          value={minimumBatch}
+          label="Minimum batch"
+          onChange={e => onUpdate('minimumBatch', Math.max(1, +e.currentTarget.value))}
+        />
+        <TextField
           className={classes.targetAmount}
           type="number"
           value={targetAmount}
           label="Target"
-          onChange={e => onUpdate('targetAmount', +e.currentTarget.value)}
+          onChange={e => onUpdate('targetAmount', Math.max(1, +e.currentTarget.value))}
         />
       </FormGroup>
     </div>

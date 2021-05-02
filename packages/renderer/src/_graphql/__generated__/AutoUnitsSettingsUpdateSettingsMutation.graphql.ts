@@ -86,6 +86,7 @@ fragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {
   autoBuild
   targetAmount
   trainForever
+  minimumBatch
 }
 
 fragment Units_autoUnitsSettings on AutoUnitsSettings {
@@ -210,6 +211,13 @@ v5 = [
         "args": null,
         "kind": "ScalarField",
         "name": "trainForever",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "minimumBatch",
         "storageKey": null
       }
     ],
@@ -360,12 +368,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "399a90d5926f8ff6a68b6488bc1f1381",
+    "cacheID": "292231ac854ecd08999558a4571b5868",
     "id": null,
     "metadata": {},
     "name": "AutoUnitsSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AutoUnitsSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoUnitsSettingsInput!\n) {\n  updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {\n    ...AutoUnitsSettings_autoUnitsSettings\n    ...Units_autoUnitsSettings\n  }\n}\n\nfragment AutoUnitsSettings_autoUnitsSettings on AutoUnitsSettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n}\n\nfragment Units_autoUnitsSettings on AutoUnitsSettings {\n  barracks {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  stable {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  workshop {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  residence {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n}\n"
+    "text": "mutation AutoUnitsSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateAutoUnitsSettingsInput!\n) {\n  updateAutoUnitsSettings(villageId: $villageId, settings: $settings) {\n    ...AutoUnitsSettings_autoUnitsSettings\n    ...Units_autoUnitsSettings\n  }\n}\n\nfragment AutoUnitsSettings_autoUnitsSettings on AutoUnitsSettings {\n  allow\n  coolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n  minCrop\n  useHeroResources\n}\n\nfragment UnitBuildingSection_autoUnitsBuildingSettings on AutoUnitsBuildingSettings {\n  allow\n  maxBuildTime {\n    days\n    hours\n    minutes\n    seconds\n  }\n  units {\n    index\n    ...UnitSettings_autoUnitsUnitSettings\n  }\n}\n\nfragment UnitSettings_autoUnitsUnitSettings on AutoUnitsUnitSettings {\n  index\n  autoBuild\n  targetAmount\n  trainForever\n  minimumBatch\n}\n\nfragment Units_autoUnitsSettings on AutoUnitsSettings {\n  barracks {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  stable {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  workshop {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n  residence {\n    ...UnitBuildingSection_autoUnitsBuildingSettings\n  }\n}\n"
   }
 };
 })();
