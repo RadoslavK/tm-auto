@@ -22,6 +22,7 @@ export type AccountSettings_accountSettings = {
     readonly autoUnits: boolean;
     readonly autoAcademy: boolean;
     readonly autoSmithy: boolean;
+    readonly useHeroResources: boolean;
     readonly tasksCoolDown: {
         readonly max: {
             readonly days: number;
@@ -162,6 +163,13 @@ return {
     {
       "alias": null,
       "args": null,
+      "kind": "ScalarField",
+      "name": "useHeroResources",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "CoolDown",
       "kind": "LinkedField",
       "name": "tasksCoolDown",
@@ -195,5 +203,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'f16f5a694b355122ee61b77179960ec0';
+(node as any).hash = '38cba8874ba0ebd8da6edf5e458f0eab';
 export default node;

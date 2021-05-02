@@ -9,6 +9,12 @@ export type GeneralVillageSettingsQueryVariables = {
 export type GeneralVillageSettingsQueryResponse = {
     readonly generalVillageSettings: {
         readonly allowTasks: boolean;
+        readonly useHeroResources: {
+            readonly wood: boolean;
+            readonly clay: boolean;
+            readonly iron: boolean;
+            readonly crop: boolean;
+        };
     };
 };
 export type GeneralVillageSettingsQuery = {
@@ -24,6 +30,12 @@ query GeneralVillageSettingsQuery(
 ) {
   generalVillageSettings(villageId: $villageId) {
     allowTasks
+    useHeroResources {
+      wood
+      clay
+      iron
+      crop
+    }
   }
 }
 */
@@ -57,6 +69,45 @@ v1 = [
         "kind": "ScalarField",
         "name": "allowTasks",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UseHeroResourcesVillageSettings",
+        "kind": "LinkedField",
+        "name": "useHeroResources",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "wood",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "clay",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "iron",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "crop",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -80,12 +131,12 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "b6e8bba3b307e19775bd2b566bc3427f",
+    "cacheID": "561e7c9f0f5ed9ebdbefda623bf13d24",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsQuery",
     "operationKind": "query",
-    "text": "query GeneralVillageSettingsQuery(\n  $villageId: ID!\n) {\n  generalVillageSettings(villageId: $villageId) {\n    allowTasks\n  }\n}\n"
+    "text": "query GeneralVillageSettingsQuery(\n  $villageId: ID!\n) {\n  generalVillageSettings(villageId: $villageId) {\n    allowTasks\n    useHeroResources {\n      wood\n      clay\n      iron\n      crop\n    }\n  }\n}\n"
   }
 };
 })();

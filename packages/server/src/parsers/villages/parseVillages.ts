@@ -10,8 +10,8 @@ export const parseVillages = async (): Promise<readonly Village[]> => {
     villageNodes.map(async (villageNode) => {
       const link = await villageNode
         .getProperty('href')
-        .then((x) => x.jsonValue());
-      const idMatch = /newdid=(\d+)/.exec(link as string);
+        .then((x) => x?.jsonValue<string>());
+      const idMatch = /newdid=(\d+)/.exec(link || '');
 
       if (!idMatch) {
         throw new Error('Failed to parse village id');

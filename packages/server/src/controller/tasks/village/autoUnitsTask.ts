@@ -13,6 +13,7 @@ import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
 import { getActualUnitBuildTime } from '../../../utils/buildTimeUtils.js';
+import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import {
   ensureBuildingSpotPage,
@@ -127,13 +128,15 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
     const unitQueue = await parseUnitQueue();
     this._units.setQueue(type, unitQueue);
 
-    if (settings.useHeroResources) {
+    const canUseHeroResources = settings.useHeroResources && canUseHeroResourcesInVillage(this._village.id);
+
+    if (canUseHeroResources) {
       await updateHeroResources();
     }
 
     const suitableToBuild: Record<number, number> = {};
     const totalVillageResources =
-      settings.useHeroResources
+      canUseHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : this._village.resources.amount;
     let availableResources = new Resources(totalVillageResources);
@@ -223,7 +226,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
       return;
     }
 
-    if (settings.useHeroResources) {
+    if (canUseHeroResources) {
       const requiredResources = totalVillageResources.subtract(
         availableResources,
       );

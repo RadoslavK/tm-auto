@@ -35,6 +35,12 @@ fragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings
 
 fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
   allowTasks
+  useHeroResources {
+    wood
+    clay
+    iron
+    crop
+  }
 }
 */
 
@@ -109,6 +115,45 @@ return {
           {
             "alias": null,
             "args": null,
+            "concreteType": "UseHeroResourcesVillageSettings",
+            "kind": "LinkedField",
+            "name": "useHeroResources",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "kind": "ScalarField",
             "name": "tasksOrder",
             "storageKey": null
@@ -119,12 +164,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "64d06945a029906f5aab63e86cf6ecc9",
+    "cacheID": "4749ec3e479c322c38de2836e0cd745f",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    ...GeneralVillageSettings_generalVillageSettings\n    ...GeneralVillageOverview_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {\n  tasksOrder\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
+    "text": "mutation GeneralVillageSettingsResetSettingsMutation(\n  $villageId: ID!\n) {\n  resetGeneralVillageSettings(villageId: $villageId) {\n    ...GeneralVillageSettings_generalVillageSettings\n    ...GeneralVillageOverview_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageOverview_generalVillageSettings on GeneralVillageSettings {\n  tasksOrder\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n  useHeroResources {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();

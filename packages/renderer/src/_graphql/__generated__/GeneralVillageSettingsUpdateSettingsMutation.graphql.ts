@@ -6,6 +6,13 @@ import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UpdateGeneralVillageSettingsInput = {
     allowTasks: boolean;
+    useHeroResources: UseHeroResourcesVillageSettingsInput;
+};
+export type UseHeroResourcesVillageSettingsInput = {
+    clay: boolean;
+    crop: boolean;
+    iron: boolean;
+    wood: boolean;
 };
 export type GeneralVillageSettingsUpdateSettingsMutationVariables = {
     villageId: string;
@@ -35,6 +42,12 @@ mutation GeneralVillageSettingsUpdateSettingsMutation(
 
 fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
   allowTasks
+  useHeroResources {
+    wood
+    clay
+    iron
+    crop
+  }
 }
 */
 
@@ -114,6 +127,45 @@ return {
             "kind": "ScalarField",
             "name": "allowTasks",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UseHeroResourcesVillageSettings",
+            "kind": "LinkedField",
+            "name": "useHeroResources",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "wood",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "clay",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "iron",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "crop",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -121,12 +173,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c1dacecfd286a89d0045efa31164a3a5",
+    "cacheID": "64748970b01d5e7a0b1c538ccac7c49d",
     "id": null,
     "metadata": {},
     "name": "GeneralVillageSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    ...GeneralVillageSettings_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n}\n"
+    "text": "mutation GeneralVillageSettingsUpdateSettingsMutation(\n  $villageId: ID!\n  $settings: UpdateGeneralVillageSettingsInput!\n) {\n  updateGeneralVillageSettings(villageId: $villageId, settings: $settings) {\n    ...GeneralVillageSettings_generalVillageSettings\n  }\n}\n\nfragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {\n  allowTasks\n  useHeroResources {\n    wood\n    clay\n    iron\n    crop\n  }\n}\n"
   }
 };
 })();

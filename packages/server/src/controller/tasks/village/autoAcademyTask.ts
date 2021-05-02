@@ -13,6 +13,7 @@ import { unitResearchPrerequisites } from '../../../constants/unitResearchPrereq
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
 import { unitUpgradeCostService } from '../../../services/info/unitUpgradeCostService.js';
+import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
@@ -103,7 +104,9 @@ export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
 
     const { units, useHeroResources } = this.settings();
 
-    if (useHeroResources) {
+    const canUseHeroResources = useHeroResources && canUseHeroResourcesInVillage(this.village.id);
+
+    if (canUseHeroResources) {
       await updateHeroResources();
     }
 
@@ -127,7 +130,7 @@ export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
     }
 
     const villageResources = this.village.resources.amount;
-    const totalResources = useHeroResources
+    const totalResources = canUseHeroResources
       ? mergeVillageAndHeroResources(this.village.id)
       : villageResources;
 
@@ -158,7 +161,7 @@ export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
         throw new Error('Did not find confirm button');
       }
 
-      const needToClaimHeroResources = useHeroResources
+      const needToClaimHeroResources = canUseHeroResources
         && villageResources.isLowerThan(cost);
 
       if (needToClaimHeroResources) {

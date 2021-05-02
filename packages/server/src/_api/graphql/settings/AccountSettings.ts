@@ -36,6 +36,7 @@ export const AccountSettings = objectType({
     t.boolean('autoParty');
     t.boolean('autoAcademy');
     t.boolean('autoSmithy');
+    t.boolean('useHeroResources');
   },
 });
 
@@ -65,6 +66,7 @@ export const UpdateAccountSettingsInput = inputObjectType({
     t.boolean('autoParty');
     t.boolean('autoAcademy');
     t.boolean('autoSmithy');
+    t.boolean('useHeroResources');
   },
 });
 

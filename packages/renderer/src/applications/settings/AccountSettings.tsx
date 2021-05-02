@@ -36,6 +36,7 @@ const fragmentDef = graphql`
         autoUnits
         autoAcademy
         autoSmithy
+        useHeroResources
         tasksCoolDown {
             ...CoolDown @relay(mask: false)
         }
@@ -146,6 +147,7 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
     autoAcademy,
     autoSmithy,
     tasksCoolDown,
+    useHeroResources,
   } = state;
 
   return (
@@ -273,6 +275,17 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
             checked={autoSmithy}
             id="autoSmithy"
             name="autoSmithy"
+            onChange={onCheckboxChange}
+            type="checkbox"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="useHeroResources">Use hero resources</label>
+          <input
+            checked={useHeroResources}
+            id="useHeroResources"
+            name="useHeroResources"
             onChange={onCheckboxChange}
             type="checkbox"
           />

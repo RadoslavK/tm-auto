@@ -19,6 +19,7 @@ import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBui
 import { DequeueMode } from '../../../../services/buildingQueueService.js';
 import { buildingInfoService } from '../../../../services/info/buildingInfoService.js';
 import { isInfrastructure } from '../../../../utils/buildingUtils.js';
+import { canUseHeroResourcesInVillage } from '../../../../utils/getUsableHeroResources.js';
 import { mergeVillageAndHeroResources } from '../../../../utils/mergeVillageAndHeroResources.js';
 import {
   ensureBuildingSpotPage,
@@ -297,18 +298,20 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
 
     await updateActualResources();
 
-    if (settings.useHeroResources) {
+    const canUseHeroResources = settings.useHeroResources && canUseHeroResourcesInVillage(this._village.id);
+
+    if (canUseHeroResources) {
       await updateHeroResources();
     }
 
     const currentResources = this._village.resources.amount;
     const totalResources =
-      settings.useHeroResources
+      canUseHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : currentResources;
 
     if (totalResources.isGreaterOrEqualThan(requiredResources)) {
-      if (settings.useHeroResources) {
+      if (canUseHeroResources) {
         const resourcesNeeded = requiredResources.subtract(currentResources);
 
         if (resourcesNeeded.getTotal() > 0) {
@@ -382,11 +385,11 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
         return;
       }
 
-      if (settings.useHeroResources) {
+      if (canUseHeroResources) {
         await updateHeroResources();
       }
 
-      if (settings.useHeroResources) {
+      if (canUseHeroResources) {
         const resourcesNeeded = cropLandResourceCost.subtract(currentResources);
 
         if (resourcesNeeded.getTotal() > 0) {

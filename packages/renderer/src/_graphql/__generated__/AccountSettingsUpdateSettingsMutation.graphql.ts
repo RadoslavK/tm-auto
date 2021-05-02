@@ -12,6 +12,7 @@ export type UpdateAccountSettingsInput = {
     autoSmithy: boolean;
     autoUnits: boolean;
     tasksCoolDown: CoolDownInput;
+    useHeroResources: boolean;
 };
 export type GlobalAutoBuildSettingsInput = {
     allow: boolean;
@@ -73,6 +74,7 @@ fragment AccountSettings_accountSettings on AccountSettings {
   autoUnits
   autoAcademy
   autoSmithy
+  useHeroResources
   tasksCoolDown {
     max {
       days
@@ -255,6 +257,13 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "CoolDown",
             "kind": "LinkedField",
             "name": "tasksCoolDown",
@@ -289,12 +298,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5e8bdccac1c40cdb81b7288d5ffc3680",
+    "cacheID": "dce4b1079c1e3833c4cd16d848bf6e95",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsUpdateSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsUpdateSettingsMutation(\n  $settings: UpdateAccountSettingsInput!\n) {\n  updateAccountSettings(settings: $settings) {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  useHeroResources\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

@@ -48,6 +48,7 @@ fragment AccountSettings_accountSettings on AccountSettings {
   autoUnits
   autoAcademy
   autoSmithy
+  useHeroResources
   tasksCoolDown {
     max {
       days
@@ -237,6 +238,13 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "CoolDown",
             "kind": "LinkedField",
             "name": "tasksCoolDown",
@@ -296,12 +304,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e67ecec62b19b048a1c697027e4513a5",
+    "cacheID": "daf56acf2f1da5e0e001d3cd1b0eb342",
     "id": null,
     "metadata": {},
     "name": "SettingsQuery",
     "operationKind": "query",
-    "text": "query SettingsQuery {\n  accountSettings {\n    ...AccountSettings_accountSettings\n  }\n  autoMentorSettings {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
+    "text": "query SettingsQuery {\n  accountSettings {\n    ...AccountSettings_accountSettings\n  }\n  autoMentorSettings {\n    ...AutoMentorSettings_autoMentorSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  useHeroResources\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n\nfragment AutoMentorSettings_autoMentorSettings on AutoMentorSettings {\n  acceptDailyRewards\n  acceptTaskRewards\n}\n"
   }
 };
 })();

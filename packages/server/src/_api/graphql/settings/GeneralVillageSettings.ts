@@ -14,10 +14,21 @@ import { getDirname } from 'shared/utils/getDirname.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { subscribeToEvent } from '../../../pubSub.js';
 
+export const UseHeroResourcesVillageSettingsObject = objectType({
+  name: 'UseHeroResourcesVillageSettings',
+  definition: t => {
+    t.boolean('wood');
+    t.boolean('clay');
+    t.boolean('iron');
+    t.boolean('crop');
+  },
+});
+
 export const GeneralVillageSettings = objectType({
   name: 'GeneralVillageSettings',
   definition: t => {
     t.boolean('allowTasks');
+    t.field('useHeroResources', { type: UseHeroResourcesVillageSettingsObject });
     t.list.field('tasksOrder', { type: 'VillageTaskType' });
   },
   sourceType: process.env.shouldGenerateArtifacts && {
@@ -26,10 +37,21 @@ export const GeneralVillageSettings = objectType({
   },
 });
 
+export const UseHeroResourcesVillageSettingsInput = inputObjectType({
+  name: 'UseHeroResourcesVillageSettingsInput',
+  definition: t => {
+    t.boolean('wood');
+    t.boolean('clay');
+    t.boolean('iron');
+    t.boolean('crop');
+  },
+});
+
 export const UpdateGeneralVillageSettingsInput = inputObjectType({
   name: 'UpdateGeneralVillageSettingsInput',
   definition: t => {
     t.boolean('allowTasks');
+    t.field('useHeroResources', { type: UseHeroResourcesVillageSettingsInput });
   },
 });
 

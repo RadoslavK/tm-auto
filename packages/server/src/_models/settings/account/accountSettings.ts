@@ -23,6 +23,8 @@ export class AccountSettings {
 
   public readonly autoSmithy: boolean = true;
 
+  public readonly useHeroResources: boolean = true;
+
   constructor(params: PartialFields<AccountSettings> = {}) {
     mergeDefaults(this, params);
   }

@@ -13,7 +13,11 @@ export const ensureContextualHelpIsOff = async (): Promise<void> => {
     throw new Error('Did not find contextual help checkbox');
   }
 
-  const checkProp = await (await input.getProperty('checked')).jsonValue();
+  const checkProp = await (await input.getProperty('checked'))?.jsonValue();
+
+  if (checkProp === undefined) {
+    throw new Error('Did not find check property');
+  }
 
   if (checkProp === true || checkProp === 'checked') {
     return;

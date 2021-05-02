@@ -47,8 +47,8 @@ export const parseInfrastructureSpots = async (tribe: Tribe): Promise<
       async (node): Promise<ActualBuilding | null> => {
         const className = await node
           .getProperty('className')
-          .then((classNode) => classNode.jsonValue());
-        const fieldIdMatch = /a(\d+)/.exec(className as string);
+          .then((classNode) => classNode?.jsonValue<string>());
+        const fieldIdMatch = /a(\d+)/.exec(className || '');
 
         if (!fieldIdMatch) {
           throw new Error('Failed to parse field id');

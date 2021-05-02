@@ -10,6 +10,7 @@ import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { partyInfo } from '../../../constants/partyInfo.js';
 import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
+import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
@@ -47,6 +48,8 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
       useHeroResources,
     } = this.settings();
 
+    const canUseHeroResources = useHeroResources && canUseHeroResourcesInVillage(this._village.id);
+
     const townHall = this._village.buildings.spots.ofType(
       BuildingType.TownHall,
     );
@@ -55,13 +58,13 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
       return;
     }
 
-    if (useHeroResources) {
+    if (canUseHeroResources) {
       await updateHeroResources();
     }
 
     const villageRes = this._village.resources.amount;
     const totalRes =
-      useHeroResources
+      canUseHeroResources
         ? mergeVillageAndHeroResources(this._village.id)
         : villageRes;
     const smallPartyInfo = partyInfo.small;
@@ -100,7 +103,7 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
     const partyType = canDoLargeParty ? 'large' : 'small';
     const partyNumber = canDoLargeParty ? 2 : 1;
 
-    if (useHeroResources) {
+    if (canUseHeroResources) {
       const requiredRes = canDoLargeParty
         ? largePartyInfo.cost
         : smallPartyInfo.cost;
@@ -109,7 +112,6 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
 
       if (neededRes.getTotal() > 0) {
         await claimHeroResources(neededRes, ClaimHeroResourcesReason.AutoParty);
-
         await ensureBuildingSpotPage(townHall.fieldId);
       }
     }

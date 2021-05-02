@@ -3,6 +3,7 @@ import { VillageTaskType } from 'shared/enums/TaskType.js';
 
 import { CoolDown } from '../../../_models/coolDown.js';
 import { Duration } from '../../../_models/duration.js';
+import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import { Resources } from '../../../_models/misc/resources.js';
 import type {
   AutoSmithySettings,
@@ -13,8 +14,11 @@ import { AccountContext } from '../../../accountContext.js';
 import { getPage } from '../../../browser/getPage.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
+import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
 import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHeroResources.js';
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
+import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
+import { updateHeroResources } from '../../actions/hero/updateHeroResources.js';
 import type {
   BotTaskWithCoolDownResult,
   VillageBotTaskWithCoolDown,
@@ -155,6 +159,13 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
       return;
     }
 
+    const settings = this.settings();
+    const canUseHeroResources = settings.useHeroResources && canUseHeroResourcesInVillage(this.village.id);
+
+    if (canUseHeroResources) {
+      await updateHeroResources();
+    }
+
     await ensureBuildingSpotPage(smithy.fieldId);
 
     const actualUnits = await parseActualUnits();
@@ -168,9 +179,8 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
       };
     }
 
-    const settings = this.settings();
     const villageResources = this.village.resources.amount;
-    const totalResources = settings.useHeroResources
+    const totalResources = canUseHeroResources
       ? mergeVillageAndHeroResources(this.village.id)
       : villageResources;
 
@@ -192,6 +202,15 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
 
       if (!hasEnoughResources) {
         continue;
+      }
+
+      if (canUseHeroResources) {
+        const neededRes = actualUnitParams.nextLevelCost.subtract(villageResources);
+
+        if (neededRes.getTotal() > 0) {
+          await claimHeroResources(neededRes, ClaimHeroResourcesReason.AutoSmithy);
+          await ensureBuildingSpotPage(smithy.fieldId);
+        }
       }
 
       await this.ensureUnit(unitSettings, nextLevel);

@@ -16,6 +16,7 @@ type AccountSettings {
   autoSmithy: Boolean!
   autoUnits: Boolean!
   tasksCoolDown: CoolDown!
+  useHeroResources: Boolean!
 }
 
 enum AdventureCriteria {
@@ -311,6 +312,7 @@ type GeneralSettings {
 type GeneralVillageSettings {
   allowTasks: Boolean!
   tasksOrder: [VillageTaskType!]!
+  useHeroResources: UseHeroResourcesVillageSettings!
 }
 
 type GlobalAutoBuildSettings {
@@ -636,6 +638,7 @@ input UpdateAccountSettingsInput {
   autoSmithy: Boolean!
   autoUnits: Boolean!
   tasksCoolDown: CoolDownInput!
+  useHeroResources: Boolean!
 }
 
 input UpdateAutoAdventureSettingsInput {
@@ -707,6 +710,21 @@ input UpdateGeneralSettingsInput {
 
 input UpdateGeneralVillageSettingsInput {
   allowTasks: Boolean!
+  useHeroResources: UseHeroResourcesVillageSettingsInput!
+}
+
+type UseHeroResourcesVillageSettings {
+  clay: Boolean!
+  crop: Boolean!
+  iron: Boolean!
+  wood: Boolean!
+}
+
+input UseHeroResourcesVillageSettingsInput {
+  clay: Boolean!
+  crop: Boolean!
+  iron: Boolean!
+  wood: Boolean!
 }
 
 type UserAccount {

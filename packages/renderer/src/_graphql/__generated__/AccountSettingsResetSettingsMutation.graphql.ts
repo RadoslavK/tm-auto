@@ -42,6 +42,7 @@ fragment AccountSettings_accountSettings on AccountSettings {
   autoUnits
   autoAcademy
   autoSmithy
+  useHeroResources
   tasksCoolDown {
     max {
       days
@@ -210,6 +211,13 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "useHeroResources",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "CoolDown",
             "kind": "LinkedField",
             "name": "tasksCoolDown",
@@ -244,12 +252,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1019d775cc62ef4946451bd8d88a392f",
+    "cacheID": "8b164fc4493b7eb214bbaa91cef4b0d7",
     "id": null,
     "metadata": {},
     "name": "AccountSettingsResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
+    "text": "mutation AccountSettingsResetSettingsMutation {\n  resetAccountSettings {\n    ...AccountSettings_accountSettings\n  }\n}\n\nfragment AccountSettings_accountSettings on AccountSettings {\n  allowTasks\n  autoBuild {\n    allow\n    videoFeature {\n      allow\n      minBuildTime {\n        days\n        hours\n        minutes\n        seconds\n      }\n    }\n  }\n  autoParty\n  autoUnits\n  autoAcademy\n  autoSmithy\n  useHeroResources\n  tasksCoolDown {\n    max {\n      days\n      hours\n      minutes\n      seconds\n    }\n    min {\n      days\n      hours\n      minutes\n      seconds\n    }\n  }\n}\n"
   }
 };
 })();

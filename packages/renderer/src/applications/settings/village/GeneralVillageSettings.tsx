@@ -26,6 +26,12 @@ type Props = {
 graphql`
     fragment GeneralVillageSettings_generalVillageSettings on GeneralVillageSettings {
         allowTasks
+        useHeroResources {
+            wood
+            clay
+            iron
+            crop
+        }
     }
 `;
 
@@ -59,15 +65,11 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
   const [updateSettings] = useMutation<GeneralVillageSettingsUpdateSettingsMutation>(generalVillageSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<GeneralVillageSettingsResetSettingsMutation>(generalVillageSettingsResetSettingsMutation);
 
-  const [state, setState] = useState({
-    allowTasks: generalVillageSettings.allowTasks,
-  });
+  const [state, setState] = useState(generalVillageSettings);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    setState({
-      allowTasks: generalVillageSettings.allowTasks,
-    });
+    setState(generalVillageSettings);
     setHasChanges(false);
   }, [generalVillageSettings]);
 
@@ -77,7 +79,11 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
         variables: { villageId, settings: state },
         updater: (store) => {
           const newRecord = store.getRootField('updateGeneralVillageSettings');
-          store.getRoot().setLinkedRecord(newRecord, 'generalVillageSettings', { villageId });
+          const originalSettings = store.getRoot().getLinkedRecord('generalVillageSettings', { villageId });
+
+          originalSettings?.copyFieldsFrom(newRecord);
+
+          store.getRoot().setLinkedRecord(originalSettings, 'generalVillageSettings', { villageId });
         },
       });
     }
@@ -87,6 +93,18 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
     setState(prevState => ({
       ...prevState,
       [prop]: value,
+    }));
+
+    setHasChanges(true);
+  };
+
+  const onUpdateHeroRes = <Prop extends keyof typeof state['useHeroResources']>(prop: Prop, value: typeof state['useHeroResources'][Prop]) => {
+    setState(prevState => ({
+      ...prevState,
+      useHeroResources: {
+        ...prevState.useHeroResources,
+        [prop]: value,
+      },
     }));
 
     setHasChanges(true);
@@ -102,7 +120,7 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
     });
   };
 
-  const { allowTasks } = state;
+  const { allowTasks, useHeroResources } = state;
 
   return (
     <div>
@@ -113,7 +131,6 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
         variant="contained">
         Reset to default
       </Button>
-
       <div>
         <FormControlLabel
           label="Allow tasks"
@@ -121,6 +138,45 @@ export const GeneralVillageSettings: React.FC<Props> = ({ villageId, queryRef })
             <Checkbox
               checked={allowTasks}
               onChange={e => onUpdade('allowTasks', e.currentTarget.checked)}
+            />
+          )}
+        />
+      </div>
+      <div>
+        <h3>Use hero resources</h3>
+        <FormControlLabel
+          label="Wood"
+          control={(
+            <Checkbox
+              checked={useHeroResources.wood}
+              onChange={e => onUpdateHeroRes('wood', e.currentTarget.checked)}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Clay"
+          control={(
+            <Checkbox
+              checked={useHeroResources.clay}
+              onChange={e => onUpdateHeroRes('clay', e.currentTarget.checked)}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Iron"
+          control={(
+            <Checkbox
+              checked={useHeroResources.iron}
+              onChange={e => onUpdateHeroRes('iron', e.currentTarget.checked)}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Crop"
+          control={(
+            <Checkbox
+              checked={useHeroResources.crop}
+              onChange={e => onUpdateHeroRes('crop', e.currentTarget.checked)}
             />
           )}
         />

@@ -111,6 +111,7 @@ export interface NexusGenInputs {
     autoSmithy: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenInputs['CoolDownInput']; // CoolDownInput!
+    useHeroResources: boolean; // Boolean!
   }
   UpdateAutoAdventureSettingsInput: { // input type
     adventureCriteria: NexusGenEnums['AdventureCriteria']; // AdventureCriteria!
@@ -171,6 +172,13 @@ export interface NexusGenInputs {
   }
   UpdateGeneralVillageSettingsInput: { // input type
     allowTasks: boolean; // Boolean!
+    useHeroResources: NexusGenInputs['UseHeroResourcesVillageSettingsInput']; // UseHeroResourcesVillageSettingsInput!
+  }
+  UseHeroResourcesVillageSettingsInput: { // input type
+    clay: boolean; // Boolean!
+    crop: boolean; // Boolean!
+    iron: boolean; // Boolean!
+    wood: boolean; // Boolean!
   }
   VideoFeatureSettingsInput: { // input type
     allow: boolean; // Boolean!
@@ -209,6 +217,7 @@ export interface NexusGenObjects {
     autoSmithy: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    useHeroResources: boolean; // Boolean!
   }
   AutoAcademySettings: AutoAcademySettings;
   AutoAdventureSettings: { // root type
@@ -408,6 +417,12 @@ export interface NexusGenObjects {
     level: number; // Int!
     unitIndex: number; // Int!
   }
+  UseHeroResourcesVillageSettings: { // root type
+    clay: boolean; // Boolean!
+    crop: boolean; // Boolean!
+    iron: boolean; // Boolean!
+    wood: boolean; // Boolean!
+  }
   UserAccount: { // root type
     id: string; // ID!
     password: string; // String!
@@ -472,6 +487,7 @@ export interface NexusGenFieldTypes {
     autoSmithy: boolean; // Boolean!
     autoUnits: boolean; // Boolean!
     tasksCoolDown: NexusGenRootTypes['CoolDown']; // CoolDown!
+    useHeroResources: boolean; // Boolean!
   }
   AutoAcademySettings: { // field return type
     allow: boolean; // Boolean!
@@ -643,6 +659,7 @@ export interface NexusGenFieldTypes {
   GeneralVillageSettings: { // field return type
     allowTasks: boolean; // Boolean!
     tasksOrder: NexusGenEnums['VillageTaskType'][]; // [VillageTaskType!]!
+    useHeroResources: NexusGenRootTypes['UseHeroResourcesVillageSettings']; // UseHeroResourcesVillageSettings!
   }
   GlobalAutoBuildSettings: { // field return type
     allow: boolean; // Boolean!
@@ -874,6 +891,12 @@ export interface NexusGenFieldTypes {
     level: number; // Int!
     unitIndex: number; // Int!
   }
+  UseHeroResourcesVillageSettings: { // field return type
+    clay: boolean; // Boolean!
+    crop: boolean; // Boolean!
+    iron: boolean; // Boolean!
+    wood: boolean; // Boolean!
+  }
   UserAccount: { // field return type
     id: string; // ID!
     password: string; // String!
@@ -927,6 +950,7 @@ export interface NexusGenFieldTypeNames {
     autoSmithy: 'Boolean'
     autoUnits: 'Boolean'
     tasksCoolDown: 'CoolDown'
+    useHeroResources: 'Boolean'
   }
   AutoAcademySettings: { // field return type name
     allow: 'Boolean'
@@ -1098,6 +1122,7 @@ export interface NexusGenFieldTypeNames {
   GeneralVillageSettings: { // field return type name
     allowTasks: 'Boolean'
     tasksOrder: 'VillageTaskType'
+    useHeroResources: 'UseHeroResourcesVillageSettings'
   }
   GlobalAutoBuildSettings: { // field return type name
     allow: 'Boolean'
@@ -1328,6 +1353,12 @@ export interface NexusGenFieldTypeNames {
   UnitUpgradeLogEntryContent: { // field return type name
     level: 'Int'
     unitIndex: 'Int'
+  }
+  UseHeroResourcesVillageSettings: { // field return type name
+    clay: 'Boolean'
+    crop: 'Boolean'
+    iron: 'Boolean'
+    wood: 'Boolean'
   }
   UserAccount: { // field return type name
     id: 'ID'
