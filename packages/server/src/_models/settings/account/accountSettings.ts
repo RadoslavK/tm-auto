@@ -3,7 +3,7 @@ import { mergeDefaults } from 'shared/utils/merge.js';
 
 import { CoolDown } from '../../coolDown.js';
 import { Duration } from '../../duration.js';
-import { GlobalAutoBuildSettings } from './globalAutoBuildSettings.js';
+import { GlobalAutoBuildSettings } from '../tasks/autoBuildSettings/globalAutoBuildSettings.js';
 
 export class AccountSettings {
   public readonly allowTasks: boolean = true;

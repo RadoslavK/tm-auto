@@ -26,7 +26,6 @@ mutation GeneralSettingsFormResetSettingsMutation {
 
 fragment GeneralSettingsForm_generalSettings on GeneralSettings {
   autoStart
-  chromePath
   headlessChrome
 }
 */
@@ -83,13 +82,6 @@ const node: ConcreteRequest = {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "chromePath",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "headlessChrome",
             "storageKey": null
           }
@@ -99,12 +91,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "abb351ab7bc2f37f957891f509c13b49",
+    "cacheID": "77d0c7ee8d1adfa4bf0cd19d5c9c974f",
     "id": null,
     "metadata": {},
     "name": "GeneralSettingsFormResetSettingsMutation",
     "operationKind": "mutation",
-    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  autoStart\n  chromePath\n  headlessChrome\n}\n"
+    "text": "mutation GeneralSettingsFormResetSettingsMutation {\n  resetGeneralSettings {\n    ...GeneralSettingsForm_generalSettings\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  autoStart\n  headlessChrome\n}\n"
   }
 };
 (node as any).hash = 'db3d3f299515668bb977bdad584488d9';

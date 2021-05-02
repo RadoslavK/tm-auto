@@ -149,7 +149,7 @@ const createBackgroundProcess = (socketName: string): void => {
       socketName,
     },
     execArgv: isDevelopment
-      ? [`--inspect=${serverDebugPort}`, '--enable-source-maps', '--es-module-specifier-resolution=node']
+      ? [`--inspect=${serverDebugPort}`, '--enable-source-maps']
       : undefined,
     silent: true,
   };

@@ -44,7 +44,6 @@ query SettingsManagementQuery(
 
 fragment GeneralSettingsForm_generalSettings on GeneralSettings {
   autoStart
-  chromePath
   headlessChrome
 }
 
@@ -183,13 +182,6 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "chromePath",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "headlessChrome",
             "storageKey": null
           }
@@ -226,12 +218,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "098caf345ba826494c4e406c366b4dfa",
+    "cacheID": "e9abae7948240562ca237ad434b1e046",
     "id": null,
     "metadata": {},
     "name": "SettingsManagementQuery",
     "operationKind": "query",
-    "text": "query SettingsManagementQuery(\n  $includeCurrentAccount: Boolean!\n) {\n  generalSettings {\n    ...GeneralSettingsForm_generalSettings\n  }\n  accounts {\n    ...SettingsManagementForm_userAccounts\n    id\n  }\n  currentAccount @include(if: $includeCurrentAccount) {\n    ...SettingsManagementForm_currentAccount\n    id\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  autoStart\n  chromePath\n  headlessChrome\n}\n\nfragment SettingsManagementForm_currentAccount on UserAccount {\n  id\n  server\n  username\n}\n\nfragment SettingsManagementForm_userAccounts on UserAccount {\n  id\n  server\n  username\n}\n"
+    "text": "query SettingsManagementQuery(\n  $includeCurrentAccount: Boolean!\n) {\n  generalSettings {\n    ...GeneralSettingsForm_generalSettings\n  }\n  accounts {\n    ...SettingsManagementForm_userAccounts\n    id\n  }\n  currentAccount @include(if: $includeCurrentAccount) {\n    ...SettingsManagementForm_currentAccount\n    id\n  }\n}\n\nfragment GeneralSettingsForm_generalSettings on GeneralSettings {\n  autoStart\n  headlessChrome\n}\n\nfragment SettingsManagementForm_currentAccount on UserAccount {\n  id\n  server\n  username\n}\n\nfragment SettingsManagementForm_userAccounts on UserAccount {\n  id\n  server\n  username\n}\n"
   }
 };
 })();

@@ -10,7 +10,6 @@ export const GeneralSettings = objectType({
   name: 'GeneralSettings',
   definition: t => {
     t.boolean('autoStart');
-    t.string('chromePath');
     t.boolean('headlessChrome');
   },
 });
@@ -26,7 +25,6 @@ export const UpdateGeneralSettingsInput = inputObjectType({
   name: 'UpdateGeneralSettingsInput',
   definition: t => {
     t.boolean('autoStart');
-    t.string('chromePath');
     t.boolean('headlessChrome');
   },
 });
@@ -38,10 +36,7 @@ export const UpdateGeneralSettingsMutation = mutationField(t => {
       settings: arg({ type: UpdateGeneralSettingsInput }),
     },
     resolve: (_, { settings }, ctx) =>
-      ctx.generalSettingsService.merge({
-        ...settings,
-        chromePath: settings.chromePath || undefined,
-      }),
+      ctx.generalSettingsService.merge(settings),
   });
 });
 

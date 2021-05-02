@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { TimeoutError } from 'puppeteer-core/lib/cjs/puppeteer/common/Errors';
+import { TimeoutError } from 'puppeteer/lib/cjs/puppeteer/common/Errors';
 import { formatTime } from 'shared/utils/formatTime.js';
 
 import { TravianPath } from '../_enums/travianPath.js';
@@ -348,5 +348,6 @@ export class ControllerService {
     }
 
     await refreshVillage(villageId);
+    activityService.setActivity('');
   };
 }

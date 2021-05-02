@@ -24,6 +24,7 @@ const options = {
   bundle: true,
   external: [
     'electron', // provided by Electron itself
+    'puppeteer', // can not be bundled because of chromium and it does not work when bundled even when custom chromium is in exec path https://github.com/puppeteer/puppeteer/issues/6902
     'puppeteer-extra-plugin-stealth', // Puppeteer-extra loads plugins dependencies dynamically
   ],
 };

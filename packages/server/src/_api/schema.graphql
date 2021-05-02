@@ -305,7 +305,6 @@ type GameInfo {
 
 type GeneralSettings {
   autoStart: Boolean!
-  chromePath: String!
   headlessChrome: Boolean!
 }
 
@@ -703,7 +702,6 @@ input UpdateAutoUnitsUnitSettingsInput {
 
 input UpdateGeneralSettingsInput {
   autoStart: Boolean!
-  chromePath: String!
   headlessChrome: Boolean!
 }
 

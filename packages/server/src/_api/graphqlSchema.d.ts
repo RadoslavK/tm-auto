@@ -167,7 +167,6 @@ export interface NexusGenInputs {
   }
   UpdateGeneralSettingsInput: { // input type
     autoStart: boolean; // Boolean!
-    chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
   UpdateGeneralVillageSettingsInput: { // input type
@@ -343,7 +342,6 @@ export interface NexusGenObjects {
   }
   GeneralSettings: { // root type
     autoStart: boolean; // Boolean!
-    chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
   GeneralVillageSettings: GeneralVillageSettings;
@@ -640,7 +638,6 @@ export interface NexusGenFieldTypes {
   }
   GeneralSettings: { // field return type
     autoStart: boolean; // Boolean!
-    chromePath: string; // String!
     headlessChrome: boolean; // Boolean!
   }
   GeneralVillageSettings: { // field return type
@@ -1096,7 +1093,6 @@ export interface NexusGenFieldTypeNames {
   }
   GeneralSettings: { // field return type name
     autoStart: 'Boolean'
-    chromePath: 'String'
     headlessChrome: 'Boolean'
   }
   GeneralVillageSettings: { // field return type name

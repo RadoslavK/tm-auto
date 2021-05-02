@@ -6,7 +6,6 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type GeneralSettingsForm_generalSettings = {
     readonly autoStart: boolean;
-    readonly chromePath: string;
     readonly headlessChrome: boolean;
     readonly " $refType": "GeneralSettingsForm_generalSettings";
 };
@@ -35,13 +34,6 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "chromePath",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "headlessChrome",
       "storageKey": null
     }
@@ -49,5 +41,5 @@ const node: ReaderFragment = {
   "type": "GeneralSettings",
   "abstractKey": null
 };
-(node as any).hash = '70d26c39b5d5cb56cb1609e95620ef1c';
+(node as any).hash = '5277d8659265fcea970344ba463fccbe';
 export default node;

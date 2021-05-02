@@ -16,7 +16,6 @@ import type { GeneralSettingsFormUpdateSettingsMutation } from '../../_graphql/_
 const fragmentDef = graphql`
   fragment GeneralSettingsForm_generalSettings on GeneralSettings {
     autoStart
-    chromePath
     headlessChrome
   }
 `;
@@ -65,13 +64,6 @@ export const GeneralSettingsForm: React.FC<Props> = ({ settingsKey }) => {
       });
     }
   }, [state, hasChanges, updateSettings]);
-
-  const onTextChanges = (e: React.FormEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
-
-    setState((prevState) => ({ ...prevState, [name]: value }));
-    setHasChanges(true);
-  };
 
   const onBoolChanges = (e: React.FormEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
@@ -123,16 +115,6 @@ export const GeneralSettingsForm: React.FC<Props> = ({ settingsKey }) => {
           name="headlessChrome"
           onChange={onBoolChanges}
           type="checkbox"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="chromePath">Chrome path</label>
-        <input
-          id="chromePath"
-          name="chromePath"
-          onChange={onTextChanges}
-          value={state.chromePath}
         />
       </div>
     </div>

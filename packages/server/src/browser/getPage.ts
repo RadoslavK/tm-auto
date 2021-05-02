@@ -1,16 +1,15 @@
 import path from 'path';
 import type {
   Browser,
-  Page, 
-} from 'puppeteer';
-import type { LaunchOptions } from 'puppeteer-core';
-import type {
   BrowserConnectOptions,
   BrowserLaunchArgumentOptions,
-} from 'puppeteer-core';
+  LaunchOptions,
+  Page,
+} from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
+import { accountService } from '../services/accountService.js';
 import { GeneralSettingsService } from '../services/settings/general.js';
 import { getServerAppDirectory } from '../utils/getServerAppDirectory.js';
 
@@ -38,17 +37,16 @@ const chromeDriverArgs: ReadonlyArray<string> = [
 
 const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => {
   const headless = GeneralSettingsService.getService().get().headlessChrome;
+  const accountId = accountService.getCurrentAccount().id;
 
   return {
-    // bundle chrome or something.. with cookies etc??
-    executablePath: GeneralSettingsService.getService().get().chromePath,
-    //  TODO: If it is not headless and we are using real Chrome app it probably interferes with the puppeteer/
-    //  https://stackoverflow.com/questions/62149934/navigation-timeout-exceeded-when-headless-false
+    // affects only the final production build
+    executablePath: puppeteer.executablePath().replace('app.asar', 'app.asar.unpacked'),
     headless,
     slowMo: 25,
-    userDataDir: path.join(getServerAppDirectory(), 'browser_data'),
+    userDataDir: path.join(getServerAppDirectory(), 'browser_data', accountId),
     args: [...chromeDriverArgs, ...(headless ? [] : ['--start-maximized'])],
-    //  TODO wrong types again, but should disable the default 800x600 one
+    //  Disable the default 800x600 viewport
     defaultViewport: null,
   };
 };

@@ -1,11 +1,11 @@
 import type { PartialFields } from 'shared/types/fields.type.js';
 import { mergeDefaults } from 'shared/utils/merge.js';
 
-import { Duration } from '../../duration.js';
+import { Duration } from '../../../duration.js';
 
 class VideoFeatureSettings {
   public readonly allow: boolean = false;
-  public readonly minBuildTime: Duration = new Duration({ minutes: 30 });
+  public readonly minBuildTime: Duration = new Duration({ minutes: 10 });
 
   constructor(params: PartialFields<VideoFeatureSettings> = {}) {
     mergeDefaults(this, params);
