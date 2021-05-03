@@ -1,4 +1,4 @@
-import type { ElementHandle } from 'puppeteer';
+import type { ElementHandle } from 'puppeteer-core';
 
 import { AccountContext } from '../../accountContext.js';
 import { getPage } from '../../browser/getPage.js';

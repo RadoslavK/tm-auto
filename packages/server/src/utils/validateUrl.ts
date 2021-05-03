@@ -1,4 +1,4 @@
-import type { Page } from 'puppeteer';
+import type { Page } from 'puppeteer-core';
 
 import { getPage } from '../browser/getPage.js';
 import { accountService } from '../services/accountService.js';

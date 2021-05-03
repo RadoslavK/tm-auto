@@ -1,5 +1,5 @@
 import parse, { HTMLElement } from 'node-html-parser';
-import type { Page } from 'puppeteer';
+import type { Page } from 'puppeteer-core';
 
 import { sendAjaxRequest } from '../../../utils/sendAjaxRequest.js';
 

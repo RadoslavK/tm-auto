@@ -1,4 +1,4 @@
-import type { Page } from 'puppeteer';
+import type { Page } from 'puppeteer-core';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 import { VillageTaskType } from 'shared/enums/TaskType.js';
 

@@ -144,6 +144,7 @@ const createBackgroundProcess = (socketName: string): void => {
   const filePath = path.join(__dirname, 'server.cjs');
   const options: ForkOptions = {
     env: {
+      appPath: app.getAppPath(),
       dirname: app.getPath('userData'),
       NODE_ENV: isDevelopment ? 'development' : 'production',
       socketName,

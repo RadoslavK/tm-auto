@@ -11,4 +11,6 @@ Development
 * run `build-graphiql` script in the renderer workspace to build the GraphiQL app first
 * when changing graphql on FE it is necessary to run relay command to generate proper definitions
 
+Download appropriate chromium with mp4 H.264 support to app/Chrome-bin for the puppeteer from https://chromium.woolyss.com/.
+
 Requires gulp-cli global package

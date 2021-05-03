@@ -1,7 +1,7 @@
 import type {
   ElementHandle,
   Page, 
-} from 'puppeteer';
+} from 'puppeteer-core';
 import type { BuildingType } from 'shared/enums/BuildingType.js';
 
 import {

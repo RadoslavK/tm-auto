@@ -1,4 +1,4 @@
-import type { ElementHandle } from 'puppeteer';
+import type { ElementHandle } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath.js';
 import { Coords } from '../../_models/coords.js';

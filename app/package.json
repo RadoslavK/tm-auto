@@ -6,7 +6,6 @@
   "description": "TM Auto",
   "main": "build/main/index.cjs",
   "dependencies": {
-    "puppeteer": "^9.0.0",
     "puppeteer-extra-plugin-stealth": "^2.7.6"
   }
 }

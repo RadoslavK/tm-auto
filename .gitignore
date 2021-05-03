@@ -10,6 +10,8 @@ dist
 dist-dev
 dist-dev-app
 
+Chrome-bin
+
 yarn-error.log
 node_modules
 debug.log

@@ -5,7 +5,7 @@ import type {
   BrowserLaunchArgumentOptions,
   LaunchOptions,
   Page,
-} from 'puppeteer';
+} from 'puppeteer-core';
 import puppeteer from 'puppeteer-extra';
 import pluginStealth from 'puppeteer-extra-plugin-stealth';
 
@@ -35,13 +35,22 @@ const chromeDriverArgs: ReadonlyArray<string> = [
   '--disable-gpu',
 ];
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions => {
   const headless = GeneralSettingsService.getService().get().headlessChrome;
   const accountId = accountService.getCurrentAccount().id;
 
+  if (!process.env.appPath) {
+    throw new Error('Undefined app path');
+  }
+
+  const executablePath = isDevelopment
+    ? process.env.chromiumPath
+    : path.join(process.env.appPath.replace('app.asar', 'app.asar.unpacked'), 'Chrome-bin/chrome.exe');
+
   return {
-    // affects only the final production build
-    executablePath: puppeteer.executablePath().replace('app.asar', 'app.asar.unpacked'),
+    executablePath,
     headless,
     slowMo: 25,
     userDataDir: path.join(getServerAppDirectory(), 'browser_data', accountId),
@@ -59,7 +68,7 @@ export const createPage = async (): Promise<Page> => {
     const options = getChromeOptions();
     //  TODO: puppeteer v5+ broke a lot of types so it might be fixed in future
     //https://github.com/puppeteer/puppeteer/issues/6979
-    browser = await puppeteer.launch(options as any);
+    browser = await puppeteer.launch(options as any) as any as Browser;
   }
 
   const lPage = await browser.newPage();
@@ -86,7 +95,7 @@ export const createPage = async (): Promise<Page> => {
 export const getPage = async (): Promise<Page> => {
   if (!browser) {
     const options = getChromeOptions();
-    browser = await puppeteer.launch(options as any);
+    browser = await puppeteer.launch(options as any) as any as Browser;
   }
 
   const pages = await browser.pages();

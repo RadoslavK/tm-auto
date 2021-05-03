@@ -1,4 +1,4 @@
-import type { Page } from 'puppeteer';
+import type { Page } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath.js';
 import { getPage } from '../../browser/getPage.js';

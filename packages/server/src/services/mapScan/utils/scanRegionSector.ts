@@ -1,4 +1,4 @@
-import type { Page } from 'puppeteer';
+import type { Page } from 'puppeteer-core';
 
 import type { Point } from '../../../_models/map/point.js';
 import type { RegionTile } from '../../../_models/map/villageTile.js';
