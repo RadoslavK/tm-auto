@@ -83,11 +83,11 @@ export const BuildingSpots: React.FC<Props> = ({ className }) => {
   const tabs: Record<TabPath, Tab> = {
     resources: {
       label: 'Resources',
-      preloadQuery: () => loadResourceFieldsQuery({ villageId }),
+      preloadQuery: () => loadResourceFieldsQuery({ villageId }, { fetchPolicy: 'store-and-network' }),
     },
     infrastructure: {
       label: 'Infrastructure',
-      preloadQuery: () => loadInfrastructureQuery({ villageId }),
+      preloadQuery: () => loadInfrastructureQuery({ villageId }, { fetchPolicy: 'store-and-network' }),
     },
   };
 
