@@ -1,4 +1,5 @@
 import {
+  Button,
   Dialog,
   Paper,
   Table,
@@ -207,7 +208,13 @@ const HeroLevelUpSettings: React.FC<Props> = ({
         />
       </Dialog>
       <h2>Level up</h2>
-      <button onClick={() => openForm()}>Add new item</button>
+      <Button
+        color="primary"
+        onClick={() => openForm()}
+        variant="contained"
+      >
+        Add new item
+      </Button>
       {!!levelUpItems.length && (
         <TableContainer component={Paper}>
           <Table>

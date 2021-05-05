@@ -1,3 +1,9 @@
+import {
+  Button,
+  FormGroup,
+  makeStyles,
+  TextField,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useState } from 'react';
 import { useFragment } from 'react-relay/hooks';
@@ -22,12 +28,33 @@ const heroLevelUpItemFormHeroLevelUpItemFragment = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  root: {
+    padding: 16,
+  },
+  numberInput: {
+    maxWidth: 50,
+  },
+  form: {
+    '& > *': {
+      marginBottom: 16,
+    },
+  },
+  actions: {
+    margin: '0 auto',
+  },
+  action: {
+    marginRight: 16,
+  },
+});
+
 export const HeroLevelUpItemForm: React.FC<Props> = ({
   item,
   lastItem,
   onClose,
   onSubmit,
 }) => {
+  const classes = useStyles();
   const lastItemFragment = useFragment(heroLevelUpItemFormHeroLevelUpItemFragment, lastItem || null);
 
   const [name, setName] = useState(item?.name || '');
@@ -55,72 +82,74 @@ export const HeroLevelUpItemForm: React.FC<Props> = ({
   const isNameValid = !!name;
 
   return (
-    <div>
-      <div>
-        <div>
-          <label>Name</label>
-          <input
-            value={name}
-            onChange={(e) => {
-              const name = e.target.value;
-              setName(name);
-            }}
-          />
-        </div>
-
-        <div>
-          <label>Offensive strength</label>
-          <input
-            type="number"
-            value={offensiveStrength}
-            onChange={(e) => {
-              const { value } = e.target;
-              setOffensiveStrength(+value);
-            }}
-          />
-        </div>
-
-        <div>
-          <label>Off bonus</label>
-          <input
-            type="number"
-            value={offBonus}
-            onChange={(e) => {
-              const { value } = e.target;
-              setOffBonus(+value);
-            }}
-          />
-        </div>
-
-        <div>
-          <label>Def bonus</label>
-          <input
-            type="number"
-            value={defBonus}
-            onChange={(e) => {
-              const { value } = e.target;
-              setDefBonus(+value);
-            }}
-          />
-        </div>
-
-        <div>
-          <label>Resources</label>
-          <input
-            type="number"
-            value={resources}
-            onChange={(e) => {
-              const { value } = e.target;
-              setResources(+value);
-            }}
-          />
-        </div>
-      </div>
-      <div>
-        <button onClick={onClose}>Close</button>
-        <button disabled={!isNameValid} onClick={submitForm}>
+    <div className={classes.root}>
+      <FormGroup className={classes.form}>
+        <TextField
+          label="Name"
+          value={name}
+          onChange={(e) => {
+            const { value } = e.target;
+            setName(value);
+          }}
+        />
+        <TextField
+          className={classes.numberInput}
+          label="Strength"
+          type="number"
+          value={offensiveStrength}
+          onChange={(e) => {
+            const { value } = e.target;
+            setOffensiveStrength(+value);
+          }}
+        />
+        <TextField
+          className={classes.numberInput}
+          label="Off"
+          type="number"
+          value={offBonus}
+          onChange={(e) => {
+            const { value } = e.target;
+            setOffBonus(+value);
+          }}
+        />
+        <TextField
+          className={classes.numberInput}
+          label="Def"
+          type="number"
+          value={defBonus}
+          onChange={(e) => {
+            const { value } = e.target;
+            setDefBonus(+value);
+          }}
+        />
+        <TextField
+          className={classes.numberInput}
+          label="Resources"
+          type="number"
+          value={resources}
+          onChange={(e) => {
+            const { value } = e.target;
+            setResources(+value);
+          }}
+        />
+      </FormGroup>
+      <div className={classes.actions}>
+        <Button
+          className={classes.action}
+          onClick={onClose}
+          variant="contained"
+        >
+          Close
+        </Button>
+        <Button
+          className={classes.action}
+          color="primary"
+          variant="contained"
+          disabled={!isNameValid}
+          onClick={submitForm}
+        >
           Submit
-        </button>
+        </Button>
       </div>
     </div>
   );

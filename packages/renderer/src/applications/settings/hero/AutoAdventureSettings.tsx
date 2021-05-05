@@ -1,4 +1,15 @@
-import { Button } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  makeStyles,
+  Radio,
+  RadioGroup,
+  TextField,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
@@ -20,7 +31,10 @@ import type { AutoAdventureSettings_autoAdventureSettings$key } from '../../../_
 import type { AutoAdventureSettings_timestamp$key } from '../../../_graphql/__generated__/AutoAdventureSettings_timestamp.graphql.js';
 import type { AutoAdventureSettingsResetSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsResetSettingsMutation.graphql.js';
 import type { AutoAdventureSettingsSubscription } from '../../../_graphql/__generated__/AutoAdventureSettingsSubscription.graphql.js';
-import type { AutoAdventureSettingsUpdateSettingsMutation } from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';
+import type {
+  AdventureCriteria,
+  AutoAdventureSettingsUpdateSettingsMutation,
+} from '../../../_graphql/__generated__/AutoAdventureSettingsUpdateSettingsMutation.graphql.js';
 import { CoolDown } from '../../../_shared/components/controls/CoolDown.js';
 import { Duration } from '../../../_shared/components/controls/Duration.js';
 import { NextTaskExecution } from '../../../_shared/components/nextTaskExecution/NextTaskExecution.js';
@@ -72,12 +86,37 @@ const subscription = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  header: {
+    display: 'inline-block',
+    marginRight: 16,
+  },
+  resetAction: {
+    verticalAlign: 'super',
+  },
+  form: {
+    '& > *': {
+      marginBottom: 16,
+    },
+  },
+  healthFields: {
+    display: 'flex',
+    '& > *': {
+      marginRight: 16,
+    },
+  },
+  healthInput: {
+    maxWidth: 50,
+  },
+});
+
 type Props = {
   readonly settingsKey: AutoAdventureSettings_autoAdventureSettings$key;
   readonly timestampKey: AutoAdventureSettings_timestamp$key;
 };
 
 export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampKey }) => {
+  const classes = useStyles();
   const autoAdventureSettings = useFragment(settingsFragmentDef, settingsKey);
   const nextTaskExecution = useFragment(nextTaskExecutionFragmentDef, timestampKey);
 
@@ -169,13 +208,13 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
   };
 
   const onAdventureCriteriaChange = (
-    e: React.FocusEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>,
   ): void => {
-    const { name, value } = e.currentTarget;
+    const { value } = e.target;
 
     setState((prevState) => ({
       ...prevState,
-      [name]: value,
+      adventureCriteria: value as AdventureCriteria,
     }));
     setHasChanges(true);
   };
@@ -192,94 +231,98 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
 
   return (
     <div>
-      <h2>AutoAdventure</h2>
-
+      <h2 className={classes.header}>
+        Auto Adventure settings
+      </h2>
+      <Button
+        className={classes.resetAction}
+        color="secondary"
+        onClick={onReset}
+        type="button"
+        variant="outlined"
+      >
+        Reset to default
+      </Button>
       <NextTaskExecution
         task={TaskType.AutoAdventure}
         timestamp={nextTaskExecution}
       />
-
-      <Button
-        color="primary"
-        onClick={onReset}
-        type="button"
-        variant="contained">
-        Reset to default
-      </Button>
-
-      <div>
-        <label htmlFor="allow">Allow</label>
-        <input
-          checked={allow}
-          id="allow"
-          name="allow"
-          onChange={onBoolChange}
-          type="checkbox"
+      <FormGroup className={classes.form}>
+        <FormControlLabel
+          label="Allow"
+          control={(
+            <Checkbox
+              checked={allow}
+              name="allow"
+              onChange={onBoolChange}
+            />
+          )}
         />
-      </div>
-
-      <div>
-        <label htmlFor="preferHard">Prefer hard</label>
-        <input
-          checked={preferHard}
-          id="preferHard"
-          name="preferHard"
-          onChange={onBoolChange}
-          type="checkbox"
+        <FormControlLabel
+          label="Prefer hard"
+          control={(
+            <Checkbox
+              checked={preferHard}
+              name="preferHard"
+              onChange={onBoolChange}
+            />
+          )}
         />
-      </div>
-
-      <div>
-        <label htmlFor="maxTravelTime">Max travel time</label>
-        <Duration onChange={onMaxTravelTimeChange} value={maxTravelTime} />
-      </div>
-
-      <div>
-        <label htmlFor="normalMinHealth">Normal min health</label>
-        <input
-          id="normalMinHealth"
-          name="normalMinHealth"
-          onChange={onNumberChange}
-          type="number"
-          value={normalMinHealth}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="hardMinHealth">Hard min health</label>
-        <input
-          id="hardMinHealth"
-          name="hardMinHealth"
-          onChange={onNumberChange}
-          type="number"
-          value={hardMinHealth}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="adventureCriteria">Adventure criteria</label>
-        <div id="adventureCriteria">
-          {adventureCriterias.map((option) => (
-            <React.Fragment key={option}>
-              <input
-                checked={option === adventureCriteria}
-                id={option}
-                name="adventureCriteria"
-                onChange={onAdventureCriteriaChange}
-                type="radio"
-                value={option}
-              />
-              <label htmlFor={option}>{option}</label>
-            </React.Fragment>
-          ))}
+        <div>
+          <h4>
+            Max travel time
+          </h4>
+          <Duration
+            onChange={onMaxTravelTimeChange}
+            value={maxTravelTime}
+          />
         </div>
-      </div>
-
-      <div>
-        <h3>Cooldown</h3>
-        <label htmlFor="coolDown">Cooldown</label>
+        <div>
+          <h4>
+            Min health
+          </h4>
+          <div className={classes.healthFields}>
+            <TextField
+              className={classes.healthInput}
+              label="Normal"
+              name="normalMinHealth"
+              onChange={onNumberChange}
+              type="number"
+              value={normalMinHealth}
+            />
+            <TextField
+              className={classes.healthInput}
+              label="Hard"
+              name="hardMinHealth"
+              onChange={onNumberChange}
+              type="number"
+              value={hardMinHealth}
+            />
+          </div>
+        </div>
+        <div>
+          <FormControl>
+            <FormLabel>
+              Adventure criteria
+            </FormLabel>
+            <RadioGroup
+              value={adventureCriteria}
+              onChange={onAdventureCriteriaChange}
+            >
+              {adventureCriterias.map((option) => (
+                <FormControlLabel
+                  id={option}
+                  label={option}
+                  control={<Radio />}
+                  value={option}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <h4>CoolDown</h4>
         <CoolDown onChange={onCooldownChange} value={coolDown} />
-      </div>
+      </FormGroup>
     </div>
   );
 };

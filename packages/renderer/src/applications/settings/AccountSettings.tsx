@@ -1,4 +1,10 @@
-import { Button } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
@@ -67,11 +73,22 @@ const subscription = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  header: {
+    display: 'inline-block',
+    marginRight: 16,
+  },
+  resetAction: {
+    verticalAlign: 'super',
+  },
+});
+
 type Props = {
   readonly settingsKey: AccountSettings_accountSettings$key;
 };
 
 export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
+  const classes = useStyles();
   const accountSettings = useFragment(fragmentDef, settingsKey);
   const [updateSettings] = useMutation<AccountSettingsUpdateSettingsMutation>(accountSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AccountSettingsResetSettingsMutation>(accountSettingsResetSettingsMutation);
@@ -151,75 +168,83 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
   } = state;
 
   return (
-    <div>
-      <h1>Account settings</h1>
+    <FormGroup>
       <div>
+        <h1 className={classes.header}>
+          Account settings
+        </h1>
         <Button
-          color="primary"
+          className={classes.resetAction}
+          color="secondary"
           onClick={onReset}
           type="button"
-          variant="contained">
+          variant="outlined"
+        >
           Reset to default
         </Button>
       </div>
       <div>
         <h2>Tasks</h2>
-
+        <FormControlLabel
+          label="Allow tasks"
+          control={(
+            <Checkbox
+              checked={allowTasks}
+              name="allowTasks"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
         <div>
-          <label htmlFor="allowTasks">Allow tasks</label>
-          <input
-            checked={allowTasks}
-            id="allowTasks"
-            name="allowTasks"
-            onChange={onCheckboxChange}
-            type="checkbox"
+          <h4>
+            Cooldown
+          </h4>
+          <CoolDown
+            onChange={onCoolDownChange}
+            value={tasksCoolDown}
           />
         </div>
-
-        <div>
-          <label>Cooldown</label>
-          <CoolDown onChange={onCoolDownChange} value={tasksCoolDown} />
-        </div>
-
-        <div>
-          <label htmlFor="autoBuild">Auto Build</label>
-          <input
-            checked={autoBuild.allow}
-            id="autoBuild"
-            onChange={e => {
-              onUpdate({
-                autoBuild: {
-                  ...state.autoBuild,
-                  allow: e.currentTarget.checked,
-                },
-              });
-            }}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="videoFeatureAllow">Use Video feature</label>
-          <input
-            checked={autoBuild.videoFeature.allow}
-            id="videoFeatureAllow"
-            onChange={e => {
-              onUpdate({
-                autoBuild: {
-                  ...state.autoBuild,
-                  videoFeature: {
-                    ...state.autoBuild.videoFeature,
+        <FormControlLabel
+          label="Auto Build"
+          control={(
+            <Checkbox
+              checked={autoBuild.allow}
+              name="autoUnits"
+              onChange={e => {
+                onUpdate({
+                  autoBuild: {
+                    ...state.autoBuild,
                     allow: e.currentTarget.checked,
                   },
-                },
-              });
-            }}
-            type="checkbox"
-          />
-        </div>
-
+                });
+              }}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Use video feature"
+          control={(
+            <Checkbox
+              checked={autoBuild.videoFeature.allow}
+              name="autoUnits"
+              onChange={e => {
+                onUpdate({
+                  autoBuild: {
+                    ...state.autoBuild,
+                    videoFeature: {
+                      ...state.autoBuild.videoFeature,
+                      allow: e.currentTarget.checked,
+                    },
+                  },
+                });
+              }}
+            />
+          )}
+        />
         <div>
-          <label htmlFor="videoFeatureDuration">Min build time for video</label>
+          <h4>
+           Min build time for video
+          </h4>
           <Duration
             onChange={minBuildTime => {
               onUpdate({
@@ -235,63 +260,58 @@ export const AccountSettings: React.FC<Props> = ({ settingsKey }) => {
             value={autoBuild.videoFeature.minBuildTime}
           />
         </div>
-
-        <div>
-          <label htmlFor="autoUnits">Auto Units</label>
-          <input
-            checked={autoUnits}
-            id="autoUnits"
-            name="autoUnits"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="autoParty">Auto Party</label>
-          <input
-            checked={autoParty}
-            id="autoParty"
-            name="autoParty"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="autoAcademy">Auto Academy</label>
-          <input
-            checked={autoAcademy}
-            id="autoAcademy"
-            name="autoAcademy"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="autoSmithy">Auto Smithy</label>
-          <input
-            checked={autoSmithy}
-            id="autoSmithy"
-            name="autoSmithy"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="useHeroResources">Use hero resources</label>
-          <input
-            checked={useHeroResources}
-            id="useHeroResources"
-            name="useHeroResources"
-            onChange={onCheckboxChange}
-            type="checkbox"
-          />
-        </div>
+        <FormControlLabel
+          label="Use hero resources"
+          control={(
+            <Checkbox
+              checked={useHeroResources}
+              name="useHeroResources"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Auto Units"
+          control={(
+            <Checkbox
+              checked={autoUnits}
+              name="autoUnits"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Auto Party"
+          control={(
+            <Checkbox
+              checked={autoParty}
+              name="autoParty"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Auto Academy"
+          control={(
+            <Checkbox
+              checked={autoAcademy}
+              name="autoAcademy"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Auto Smithy"
+          control={(
+            <Checkbox
+              checked={autoSmithy}
+              name="autoSmithy"
+              onChange={onCheckboxChange}
+            />
+          )}
+        />
       </div>
-    </div>
+    </FormGroup>
   );
 };
 

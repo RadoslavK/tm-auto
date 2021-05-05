@@ -1,5 +1,9 @@
 import {
-  FormGroup,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
   LinearProgress,
   makeStyles,
   MenuItem,
@@ -8,6 +12,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
+import clsx from 'clsx';
 import React, {
   useEffect,
   useMemo,
@@ -142,11 +147,23 @@ const botStateSubscription = graphql`
 `;
 
 const useStyles = makeStyles({
+  formRow: {
+    marginBottom: 24,
+    '& > :not(:last-child)': {
+      marginRight: 16,
+    },
+  },
   numberInput: {
     width: 50,
   },
   villageInput: {
     width: 200,
+  },
+  action: {
+    marginRight: 16,
+  },
+  actions: {
+    marginBottom: 32,
   },
 });
 
@@ -265,7 +282,7 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
 
   return (
     <div>
-      <FormGroup>
+      <div className={classes.formRow}>
         <TextField
           className={classes.numberInput}
           type="number"
@@ -280,69 +297,104 @@ export const MapSearch: React.FC<Props> = ({ queryRef }) => {
           value={y}
           onChange={e => setY(prevY => boxCoord(+e.currentTarget.value, prevY))}
         />
-        <Select
-          className={classes.villageInput}
-          label="Village coords"
-          value={selectedVillageId}
-          onChange={e => setSelectedVillageId(e.target.value as string)}
-        >
-          {villages.map((village) => (
-            <MenuItem key={village.id} value={village.id}>
-              <VillageName village={village} />
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl>
+          <InputLabel shrink id="village">
+            From village
+          </InputLabel>
+          <Select
+            labelId="village"
+            className={classes.villageInput}
+            value={selectedVillageId}
+            onChange={e => setSelectedVillageId(e.target.value as string)}
+          >
+            {villages.map((village) => (
+              <MenuItem key={village.id} value={village.id}>
+                <VillageName village={village} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <div className={classes.formRow}>
         <TextField
-          className={classes.numberInput}
+          className={clsx(classes.formRow, classes.numberInput)}
           label="Radius"
           type="number"
           value={radius}
           onChange={e => setRadius(boxRadius(+e.currentTarget.value))}
         />
-      </FormGroup>
-      <div>
+        <FormControl>
+          <InputLabel shrink id="cropBonus">
+            Crop
+          </InputLabel>
+          <Select
+            labelId="cropBonus"
+            value={cropBonus}
+            onChange={(e) => setCropBonus(e.target.value as number)}
+          >
+            {bonuses.map((bonus) => (
+              <MenuItem key={bonus} value={bonus}>
+                {bonus} %
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <h4>
+        Village types
+      </h4>
+      <div id="villageTypes">
         {villageTileTypes.map((villageTileType) => (
-          <React.Fragment key={villageTileType}>
-            <input
-              id={villageTileType}
-              type="checkbox"
-              checked={villageTypes.includes(villageTileType)}
-              onChange={(e) => {
-                const { checked } = e.target;
+          <FormControlLabel
+            label={villageTileType}
+            control={(
+              <Checkbox
+                checked={villageTypes.includes(villageTileType)}
+                onChange={(e) => {
+                  const { checked } = e.target;
 
-                setVillageTypes((prevTypes) =>
-                  checked
-                    ? prevTypes.concat([villageTileType])
-                    : prevTypes.filter((t) => t !== villageTileType),
-                );
-              }}
-            />
-            <label htmlFor={villageTileType}>{villageTileType}</label>
-          </React.Fragment>
+                  setVillageTypes((prevTypes) =>
+                    checked
+                      ? prevTypes.concat([villageTileType])
+                      : prevTypes.filter((t) => t !== villageTileType),
+                  );
+                }}
+              />
+            )}
+          />
         ))}
       </div>
 
-      <div>
-        <label>Crop bonus:</label>
-        <select
-          value={cropBonus}
-          onChange={(e) => {
-            const { value } = e.target;
-            setCropBonus(+value);
-          }}>
-          {bonuses.map((bonus) => (
-            <option key={bonus} value={bonus} label={`${bonus} %`} />
-          ))}
-        </select>
-      </div>
-
       {mapSearchState !== 'None' ? (
-        <button onClick={onStopScan}>Stop scan</button>
+        <div className={classes.actions}>
+          <Button
+            onClick={onStopScan}
+            color="secondary"
+            variant="contained"
+          >
+          Stop scan
+          </Button>
+        </div>
       ) : (
-        <>
-          <button disabled={isScanningDisabled} onClick={() => onSearchMap()}>Search map</button>
-          <button disabled={isScanningDisabled} onClick={() => onScanWholeMap()}>Scan whole map</button>
-        </>
+        <div className={classes.actions}>
+          <Button
+            className={classes.action}
+            disabled={isScanningDisabled}
+            onClick={() => onSearchMap()}
+            color="primary"
+            variant="outlined"
+          >
+            Search map
+          </Button>
+          <Button
+            disabled={isScanningDisabled}
+            onClick={() => onScanWholeMap()}
+            color="primary"
+            variant="outlined"
+          >
+            Scan whole map
+          </Button>
+        </div>
       )}
 
       <LinearProgress variant="determinate" value={mapScanProgress} />

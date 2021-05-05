@@ -76,7 +76,6 @@ export const Hero: React.FC<Props> = ({ queryRef }) => {
 
   return (
     <div>
-      <h1>Hero settings</h1>
       {heroInformationQueryRef && <HeroInformation queryRef={heroInformationQueryRef} />}
       <AutoAdventureSettings
         settingsKey={autoAdventureSettings}

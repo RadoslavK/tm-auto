@@ -1,10 +1,16 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  TextField,
+} from '@material-ui/core';
 import React from 'react';
 import type { Duration as DurationModel } from 'shared/types/duration.type.js';
 
 const useStyles = makeStyles({
   input: {
     width: 40,
+    '&:not(:last-child)': {
+      marginRight: 8,
+    },
   },
 });
 
@@ -16,12 +22,10 @@ type Props = {
 export const Duration: React.FC<Props> = ({ onChange, value }) => {
   const classes = useStyles();
 
-  const onNumberChange = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const { name, value: eventValue } = e.currentTarget;
+  const onNumberChange = <Prop extends keyof DurationModel>(prop: Prop) => (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const numValue = +e.currentTarget.value;
 
-    const numValue = +eventValue;
-
-    switch (name) {
+    switch (prop) {
       case 'minutes':
         if (numValue >= 60) {
           onChange({ ...value, minutes: 0 });
@@ -89,37 +93,33 @@ export const Duration: React.FC<Props> = ({ onChange, value }) => {
 
   return (
     <div>
-      <input
+      <TextField
         className={classes.input}
-        id="days"
-        name="days"
-        onChange={onNumberChange}
+        label="Days"
+        onChange={onNumberChange('days')}
         type="number"
         value={value.days}
       />
-      <input
+      <TextField
         className={classes.input}
-        id="hours"
-        name="hours"
-        onChange={onNumberChange}
+        label="Hours"
+        onChange={onNumberChange('hours')}
         type="number"
         value={value.hours}
       />
-      <input
+      <TextField
         className={classes.input}
-        id="minutes"
-        name="minutes"
-        onChange={onNumberChange}
+        label="Minutes"
+        onChange={onNumberChange('minutes')}
         type="number"
         value={value.minutes}
       />
-      <input
+      <TextField
         className={classes.input}
-        id="seconds"
-        name="seconds"
-        onChange={onNumberChange}
+        label="Seconds"
+        onChange={onNumberChange('seconds')}
         type="number"
-        value={value.seconds}
+        value={value.days}
       />
     </div>
   );

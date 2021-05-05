@@ -1,9 +1,5 @@
-import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, { useMemo } from 'react';
 import {
   useFragment,
   useMutation,
@@ -11,7 +7,6 @@ import {
 } from 'react-relay/hooks';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
-import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { NextTasksExecution_timestamp$key } from '../../../_graphql/__generated__/NextTasksExecution_timestamp.graphql.js';
 import type { NextTasksExecutionResetMutation } from '../../../_graphql/__generated__/NextTasksExecutionResetMutation.graphql.js';
@@ -19,7 +14,7 @@ import type { NextTasksExecutionSetMutation } from '../../../_graphql/__generate
 import type { NextTasksExecutionSubscription } from '../../../_graphql/__generated__/NextTasksExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
-import { NextExecutionForm } from './NextExecutionForm.js';
+import { NextExecution } from './NextExecution.js';
 
 const fragmentDef = graphql`
     fragment NextTasksExecution_timestamp on Timestamp {
@@ -73,12 +68,7 @@ export const NextTasksExecution: React.FC<Props> = ({ timestamp }) => {
 
   const timer = useCountDown(getSecondsUntilTimestamp(nextTasksExecution));
 
-  const [isFormShown, setIsFormShown] = useState(false);
-
-  const showForm = () => setIsFormShown(true);
-  const closeForm = () => setIsFormShown(false);
-
-  const submitForm = (duration: Duration): void => {
+  const submit = (duration: Duration): void => {
     setNextTasksExecution({
       variables: {
         delay: duration,
@@ -88,11 +78,9 @@ export const NextTasksExecution: React.FC<Props> = ({ timestamp }) => {
         root.getRoot().setLinkedRecord(newRecord, 'nextTasksExecution');
       },
     });
-
-    closeForm();
   };
 
-  const onReset = () => {
+  const reset = () => {
     resetNextTasksExecution({
       variables: {},
       updater: (root) => {
@@ -103,16 +91,12 @@ export const NextTasksExecution: React.FC<Props> = ({ timestamp }) => {
   };
 
   return (
-    <div>
-      <div>
-        Next bot tasks check in: {formatTimeFromSeconds(timer)}
-        <button onClick={showForm}>Change</button>
-        <button onClick={onReset}>Reset</button>
-      </div>
-      <Dialog onClose={closeForm} open={isFormShown}>
-        <NextExecutionForm onSubmit={submitForm} />
-      </Dialog>
-    </div>
+    <NextExecution
+      getAlternativeTitle={timer => `Next bot tasks check in ${timer}`}
+      onReset={reset}
+      onChange={submit}
+      timer={timer}
+    />
   );
 };
 

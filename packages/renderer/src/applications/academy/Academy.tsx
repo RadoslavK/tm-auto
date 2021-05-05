@@ -1,3 +1,4 @@
+import { makeStyles } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useCallback,
@@ -57,11 +58,21 @@ export const useAcademyQuery = () => {
   return { academyQueryRef, reloadAcademyQuery };
 };
 
+const useStyles = makeStyles({
+  totalCost: {
+    display: 'flex',
+  },
+  totalCostHeader: {
+    fontWeight: 600,
+  },
+});
+
 type Props = {
   readonly queryRef: PreloadedQuery<AcademyQuery>;
 };
 
 export const Academy: React.FC<Props> = ({ queryRef }) => {
+  const classes = useStyles();
   const villageId = useRecoilValue(selectedVillageIdState);
   const { autoAcademySettings, nextVillageTaskExecution } = usePreloadedQuery(query, queryRef);
 
@@ -83,10 +94,15 @@ export const Academy: React.FC<Props> = ({ queryRef }) => {
         timestamp={nextVillageTaskExecution}
       />
       <ResearchList settingsKey={autoAcademySettings} />
-      <Resources
-        resourcesKey={autoAcademySettings.totalCost}
-        showFreeCrop={false}
-      />
+      <div className={classes.totalCost}>
+        <div className={classes.totalCostHeader}>
+          Total cost:
+        </div>
+        <Resources
+          resourcesKey={autoAcademySettings.totalCost}
+          showFreeCrop={false}
+        />
+      </div>
     </div>
   );
 };

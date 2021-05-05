@@ -1,9 +1,5 @@
-import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, { useMemo } from 'react';
 import {
   useFragment,
   useMutation,
@@ -13,7 +9,6 @@ import { useRecoilValue } from 'recoil';
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { SelectorStoreUpdater } from 'relay-runtime';
 import type { Duration } from 'shared/types/duration.type.js';
-import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { NextVillageTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextVillageTaskExecution_timestamp.graphql.js';
 import type {
@@ -32,7 +27,7 @@ import type {
 import { selectedVillageIdState } from '../../../_recoil/atoms/selectedVillageId.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
-import { NextExecutionForm } from './NextExecutionForm.js';
+import { NextExecution } from './NextExecution.js';
 
 type Props = {
   readonly className?: string;
@@ -97,14 +92,9 @@ export const NextVillageTaskExecution: React.FC<Props> = ({
 
   useSubscription(subscriptionConfig);
 
-  const nextExecutionTimer = useCountDown(getSecondsUntilTimestamp(nextVillageTaskExecution));
+  const timer = useCountDown(getSecondsUntilTimestamp(nextVillageTaskExecution));
 
-  const [isFormShown, setIsFormShown] = useState(false);
-
-  const showForm = () => setIsFormShown(true);
-  const closeForm = () => setIsFormShown(false);
-
-  const onSubmit = (duration: Duration): void => {
+  const submit = (duration: Duration): void => {
     setNextExecution({
       variables: {
         delay: {
@@ -121,11 +111,9 @@ export const NextVillageTaskExecution: React.FC<Props> = ({
         store.getRoot().setLinkedRecord(newRecord, 'nextVillageTaskExecution', { task, villageId });
       }),
     });
-
-    closeForm();
   };
 
-  const onReset = () => {
+  const reset = () => {
     resetNextExecution({
       variables: {
         task,
@@ -140,14 +128,11 @@ export const NextVillageTaskExecution: React.FC<Props> = ({
 
   return (
     <div className={className}>
-      <div>
-        Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
-        <button onClick={showForm}>Change</button>
-        <button onClick={onReset}>Reset</button>
-      </div>
-      <Dialog onClose={closeForm} open={isFormShown}>
-        <NextExecutionForm onSubmit={onSubmit} />
-      </Dialog>
+      <NextExecution
+        onReset={reset}
+        onChange={submit}
+        timer={timer}
+      />
     </div>
   );
 };

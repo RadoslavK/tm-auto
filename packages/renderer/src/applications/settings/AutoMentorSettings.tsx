@@ -1,4 +1,10 @@
-import { Button } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  makeStyles,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, {
   useEffect,
@@ -48,11 +54,22 @@ const subscription = graphql`
   }
 `;
 
+const useStyles = makeStyles({
+  header: {
+    display: 'inline-block',
+    marginRight: 16,
+  },
+  resetAction: {
+    verticalAlign: 'super',
+  },
+});
+
 type Props = {
   readonly settingsKey: AutoMentorSettings_autoMentorSettings$key;
 };
 
 export const AutoMentorSettings: React.FC<Props> = ({ settingsKey }) => {
+  const classes = useStyles();
   const autoMentorSettings = useFragment(fragmentDef, settingsKey);
   const [updateSettings] = useMutation<AutoMentorSettingsUpdateSettingsMutation>(autoMentorSettingsUpdateSettingsMutation);
   const [resetSettings] = useMutation<AutoMentorSettingsResetSettingsMutation>(autoMentorSettingsResetSettingsMutation);
@@ -112,38 +129,39 @@ export const AutoMentorSettings: React.FC<Props> = ({ settingsKey }) => {
 
   return (
     <div>
-      <h1>Mentor settings</h1>
-      <div>
-        <Button
-          color="primary"
-          onClick={onReset}
-          type="button"
-          variant="contained">
-          Reset to default
-        </Button>
-      </div>
-      <div>
-        <div>
-          <label htmlFor="acceptTaskRewards">Accept task rewards</label>
-          <input
-            checked={state.acceptTaskRewards}
-            id="acceptTaskRewards"
-            name="acceptTaskRewards"
-            onChange={onCheckBoxChange}
-            type="checkbox"
-          />
-        </div>
-        <div>
-          <label htmlFor="acceptDailyRewards">Accept daily rewards</label>
-          <input
-            checked={state.acceptDailyRewards}
-            id="acceptDailyRewards"
-            name="acceptDailyRewards"
-            onChange={onCheckBoxChange}
-            type="checkbox"
-          />
-        </div>
-      </div>
+      <h1 className={classes.header}>
+        Mentor settings
+      </h1>
+      <Button
+        className={classes.resetAction}
+        color="secondary"
+        onClick={onReset}
+        type="button"
+        variant="outlined">
+        Reset to default
+      </Button>
+      <FormGroup>
+        <FormControlLabel
+          label="Accept task rewards"
+          control={(
+            <Checkbox
+              checked={state.acceptTaskRewards}
+              name="acceptTaskRewards"
+              onChange={onCheckBoxChange}
+            />
+          )}
+        />
+        <FormControlLabel
+          label="Accept daily rewards"
+          control={(
+            <Checkbox
+              checked={state.acceptDailyRewards}
+              name="acceptDailyRewards"
+              onChange={onCheckBoxChange}
+            />
+          )}
+        />
+      </FormGroup>
     </div>
   );
 };

@@ -1,9 +1,5 @@
-import { Dialog } from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import React, { useMemo } from 'react';
 import {
   useFragment,
   useMutation,
@@ -12,7 +8,6 @@ import {
 import type { GraphQLSubscriptionConfig } from 'relay-runtime';
 import type { TaskType } from 'shared/enums/TaskType.js';
 import type { Duration } from 'shared/types/duration.type.js';
-import { formatTimeFromSeconds } from 'shared/utils/formatTime.js';
 
 import type { NextTaskExecution_timestamp$key } from '../../../_graphql/__generated__/NextTaskExecution_timestamp.graphql.js';
 import type { NextTaskExecutionResetMutation } from '../../../_graphql/__generated__/NextTaskExecutionResetMutation.graphql.js';
@@ -20,7 +15,7 @@ import type { NextTaskExecutionSetMutation } from '../../../_graphql/__generated
 import type { NextTaskExecutionSubscription } from '../../../_graphql/__generated__/NextTaskExecutionSubscription.graphql.js';
 import { useCountDown } from '../../../hooks/useCountDown.js';
 import { getSecondsUntilTimestamp } from '../../../utils/getSecondsUntilTimestamp.js';
-import { NextExecutionForm } from './NextExecutionForm.js';
+import { NextExecution } from './NextExecution.js';
 
 type Props = {
   readonly timestamp: NextTaskExecution_timestamp$key;
@@ -73,14 +68,9 @@ export const NextTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
 
   useSubscription(nextTaskExecutionSubscriptionConfig);
 
-  const nextExecutionTimer = useCountDown(getSecondsUntilTimestamp(nextTaskExecution));
+  const timer = useCountDown(getSecondsUntilTimestamp(nextTaskExecution));
 
-  const [isFormShown, setIsFormShown] = useState(false);
-
-  const showForm = () => setIsFormShown(true);
-  const closeForm = () => setIsFormShown(false);
-
-  const submitForm = (duration: Duration): void => {
+  const submit = (duration: Duration): void => {
     setNextTaskExecution({
       variables: { task, delay: duration },
       updater: (store) => {
@@ -88,11 +78,9 @@ export const NextTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
         store.getRoot().setLinkedRecord(newRecord, 'nextTaskExecution', { task });
       },
     });
-
-    closeForm();
   };
 
-  const onReset = () => {
+  const reset = () => {
     resetNextTaskExecution({
       variables: { task },
       updater: (store) => {
@@ -103,16 +91,11 @@ export const NextTaskExecution: React.FC<Props> = ({ task, timestamp }) => {
   };
 
   return (
-    <div>
-      <div>
-        Next execution in: {formatTimeFromSeconds(nextExecutionTimer)}
-        <button onClick={showForm}>Change</button>
-        <button onClick={onReset}>Reset</button>
-      </div>
-      <Dialog onClose={closeForm} open={isFormShown}>
-        <NextExecutionForm onSubmit={submitForm} />
-      </Dialog>
-    </div>
+    <NextExecution
+      onChange={submit}
+      onReset={reset}
+      timer={timer}
+    />
   );
 };
 

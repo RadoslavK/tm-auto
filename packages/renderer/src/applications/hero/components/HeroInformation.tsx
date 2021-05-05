@@ -1,4 +1,9 @@
-import { makeStyles } from '@material-ui/core';
+import {
+  FormGroup,
+  FormLabel,
+  makeStyles,
+  TextField,
+} from '@material-ui/core';
 import graphql from 'babel-plugin-relay/macro';
 import React, { useMemo } from 'react';
 import {
@@ -89,7 +94,15 @@ const HeroInformation: React.FC<Props> = ({ heroInformationKey }) => {
 
   return (
     <div>
-      <h2>Stats</h2>
+      <h2>Hero stats</h2>
+      <FormGroup>
+        <FormLabel>Health</FormLabel>
+        <TextField
+          label="Health"
+          disabled
+          value={heroInformation.health}
+        />
+      </FormGroup>
       <div>
         <label htmlFor="health">Health:</label>
         <span id="heath">{heroInformation.health}</span>
