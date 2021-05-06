@@ -193,7 +193,7 @@ export interface NexusGenEnums {
   BuildingState: "Completed" | "None" | "OngoingMaxed" | "QueueMaxed"
   ClaimHeroResourcesReason: "AutoAcademy" | "AutoBuild" | "AutoParty" | "AutoSmithy" | "AutoUnits"
   DualQueuePreference: "Infrastructure" | "Resources"
-  HeroState: "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown"
+  HeroState: "Dead" | "InVillage" | "Moving" | "Reinforcing" | "Reviving" | "Unknown"
   MapSearchState: "None" | "Scanning" | "Searching"
   TaskType: "AutoAdventure" | "General"
   TextLogEntryType: "Error" | "Info"

@@ -41,6 +41,8 @@ const parseState = async (): Promise<HeroState> => {
       return HeroState.Reviving;
     case 'heroDead':
       return HeroState.Dead;
+    case 'heroReinforcing':
+      return HeroState.Reinforcing;
 
     default:
       throw new Error(`Unknown hero state: ${statusClass}`);
@@ -62,7 +64,11 @@ const parseAdventureCount = async (): Promise<number> => {
   return +countText;
 };
 
-const parseHeroVillageId = async (): Promise<string> => {
+const parseHeroVillageId = async (): Promise<string | null> => {
+  if (AccountContext.getContext().hero.state === HeroState.Reinforcing) {
+    return null;
+  }
+
   const page = await getPage();
 
   const villageId = await page.$eval('.heroStatus a[href*="newdid"]', (x) => {

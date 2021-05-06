@@ -9,6 +9,7 @@ export enum HeroState {
   Dead = 'Dead',
   Reviving = 'Reviving',
   Moving = 'Moving',
+  Reinforcing = 'Reinforcing',
 }
 
 export class Hero {

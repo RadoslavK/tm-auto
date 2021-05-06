@@ -358,6 +358,7 @@ enum HeroState {
   Dead
   InVillage
   Moving
+  Reinforcing
   Reviving
   Unknown
 }

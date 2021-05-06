@@ -4,7 +4,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type HeroState = "Dead" | "InVillage" | "Moving" | "Reviving" | "Unknown";
+export type HeroState = "Dead" | "InVillage" | "Moving" | "Reinforcing" | "Reviving" | "Unknown";
 export type HeroInformation_heroInformation = {
     readonly health: number;
     readonly state: HeroState;
