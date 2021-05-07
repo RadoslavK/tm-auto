@@ -24,7 +24,7 @@ const useStyles = makeStyles<unknown, StylesProps>({
     width: '2em',
   }),
   production: ({ production }) => {
-    if (!production) {
+    if (production === undefined) {
       return {};
     }
 
@@ -32,16 +32,11 @@ const useStyles = makeStyles<unknown, StylesProps>({
       return {
         color: 'red',
       };
-    }
-
-    if (production > 0) {
+    } else {
       return {
-        '&::before': { content: '"+"' },
-        'color': 'green',
+        color: 'green',
       };
     }
-
-    return {};
   },
   root: {
     display: 'inline-flex',
@@ -76,7 +71,7 @@ export const Resource: React.FC<Props> = ({
       {capacity !== undefined && <span title={String(capacity)}>/{capacityFormatter(capacity)}</span>}
       {production !== undefined && (
         <span className={classes.production} title={String(production)}>
-          {defaultFormatter(production)}
+          {production >= 0 ? '+' : ''}{defaultFormatter(production)}
         </span>
       )}
     </span>

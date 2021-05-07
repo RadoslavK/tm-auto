@@ -57,6 +57,7 @@ const getChromeOptions = (): LaunchOptions & BrowserLaunchArgumentOptions & Brow
     args: [...chromeDriverArgs, ...(headless ? [] : ['--start-maximized'])],
     //  Disable the default 800x600 viewport
     defaultViewport: null,
+    devtools: isDevelopment,
   };
 };
 
