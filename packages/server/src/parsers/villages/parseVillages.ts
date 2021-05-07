@@ -1,51 +1,40 @@
 import { Village } from '../../_models/village/village.js';
 import { getPage } from '../../browser/getPage.js';
-import { parseNumber } from '../../utils/numberUtils.js';
+
+type ParsedVillage = {
+  readonly id: string;
+  readonly name: string;
+  readonly x: number;
+  readonly y: number;
+}
 
 export const parseVillages = async (): Promise<readonly Village[]> => {
   const page = await getPage();
-  const villageNodes = await page.$$('#sidebarBoxVillagelist [href*=newdid]');
 
-  return await Promise.all(
-    villageNodes.map(async (villageNode) => {
-      const link = await villageNode
-        .getProperty('href')
-        .then((x) => x?.jsonValue<string>());
-      const idMatch = /newdid=(\d+)/.exec(link || '');
+  const villages = await page.$$eval('.coordinatesGrid', nodes => nodes.map((node): ParsedVillage => {
+    const name = node.getAttribute('data-villagename');
+    const id = node.getAttribute('data-did');
+    const x = node.getAttribute('data-x');
+    const y = node.getAttribute('data-y');
 
-      if (!idMatch) {
-        throw new Error('Failed to parse village id');
-      }
+    if (!name || !id || !x || !y) {
+      throw new Error('Failed to parse village');
+    }
 
-      const [, id] = idMatch;
+    return {
+      id,
+      name,
+      x: +x,
+      y: +y,
+    };
+  }));
 
-      const name = await villageNode.$eval(
-        '[class=name]',
-        (x) => (x as HTMLElement).innerText,
-      );
-
-      const xText = await villageNode.$eval(
-        '[class=coordinateX]',
-        (x) => (x as HTMLElement).innerText,
-      );
-      const yText = await villageNode.$eval(
-        '[class=coordinateY]',
-        (x) => (x as HTMLElement).innerText,
-      );
-
-      //  minus symbol correction
-      const x = parseNumber(xText);
-      const y = parseNumber(yText);
-
-      if (!x || !y) {
-        throw new Error('Failed to parse village coords');
-      }
-
-      return new Village({
-        coords: { x, y },
-        id,
-        name,
-      });
-    }),
-  );
+  return villages.map(village => new Village({
+    id: village.id,
+    name: village.name,
+    coords: {
+      x: village.x,
+      y: village.y,
+    },
+  }));
 };

@@ -13,7 +13,7 @@ export const parseCapitalVillageCoords = async (): Promise<Coords> => {
 
   const page = await getPage();
 
-  const villageElements = await page.$$('table#villages > tbody > tr');
+  const villageElements = await page.$$('#villages > tbody > tr');
   let capitalVillageElement: ElementHandle | null = null;
 
   for (const villageElement of villageElements) {
@@ -29,16 +29,16 @@ export const parseCapitalVillageCoords = async (): Promise<Coords> => {
     throw new Error('No capital village was found');
   }
 
-  const capitalVillageMapUrl = await capitalVillageElement.$eval(
+  const capitalVillageUrl = await capitalVillageElement.$eval(
     '.coords [href*="x"][href*="y"]',
     (x) => x.getAttribute('href'),
   );
 
-  if (!capitalVillageMapUrl) {
+  if (!capitalVillageUrl) {
     throw new Error('No capital village was found');
   }
 
-  const coordsMatch = /x=(.*?)&y=(.*)/.exec(capitalVillageMapUrl);
+  const coordsMatch = /x=(.*?)&y=(.*)/.exec(capitalVillageUrl);
 
   if (!coordsMatch || coordsMatch.length !== 3) {
     throw new Error('Failed to parse capital village coords');
