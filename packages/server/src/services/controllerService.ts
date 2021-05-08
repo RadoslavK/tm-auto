@@ -246,7 +246,7 @@ export class ControllerService {
     }
 
     if (!allowContinue) {
-      this.signOut();
+      await this.signOut();
 
       return;
     }
@@ -257,14 +257,15 @@ export class ControllerService {
       await this.start();
     } else {
       this.setState(BotState.Paused);
+      await this.markActivityStop();
     }
   };
 
-  public signOut = (): void => {
+  public signOut = async (): Promise<void> => {
     this.setState(BotState.None);
     AccountContext.resetContext();
     accountService.setCurrentAccountId(null);
-    activityService.setActivity('');
+    await this.markActivityStop();
   };
 
   public start = async (): Promise<void> => {
@@ -304,7 +305,7 @@ export class ControllerService {
     }
 
     if (!allowContinue) {
-      activityService.setActivity('');
+      await this.markActivityStop();
       this.setState(BotState.Paused);
 
       return;
@@ -318,7 +319,7 @@ export class ControllerService {
     const nextExecution = new Date();
     nextExecution.setSeconds(nextExecution.getSeconds() + nextTimeout);
     AccountContext.getContext().nextExecutionService.setTasks(nextExecution);
-    activityService.setActivity('');
+    await this.markActivityStop();
 
     this._timeout = global.setTimeout(async () => {
       await this.execute();
@@ -333,8 +334,8 @@ export class ControllerService {
     }
 
     this._taskManager = null;
-    await browserManager.kill();
 
+    await this.markActivityStop();
     this.setState(BotState.Paused);
   };
 
@@ -345,6 +346,11 @@ export class ControllerService {
     }
 
     await refreshVillage(villageId);
+    await this.markActivityStop();
+  };
+
+  private markActivityStop = async (): Promise<void> => {
     activityService.setActivity('');
+    await browserManager.killPage();
   };
 }
