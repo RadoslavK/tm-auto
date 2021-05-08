@@ -1,6 +1,6 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseHasHeroLevelUp } from '../../../parsers/hero/parseHasHeroLevelUp.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
@@ -26,7 +26,7 @@ const ensureHeroPoint = async ({
   inputName,
   requested,
 }: EnsurePointParams): Promise<EnsurePointResult> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const actual = await page.evaluate(
     ({ inputName }) => {
@@ -84,7 +84,7 @@ export const assignHeroAttributes = async () => {
 
   await ensurePage(TravianPath.Hero, true);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const initialAvailablePoints = await page.$eval('#availablePoints', (e) => {
     const match = /(\d+)\//.exec((e as HTMLElement).innerText);

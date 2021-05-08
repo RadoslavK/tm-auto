@@ -1,9 +1,9 @@
-import { getPage } from '../../../../browser/getPage.js';
+import { browserManager } from '../../../../browser/browserManager.js';
 import { activityService } from '../../../../services/botActivityService.js';
 
 export const useVideoFeature = async (): Promise<boolean> => {
   activityService.setActivity('Watching video to speed up auto build.');
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const upgradeBtn = await page.$('.green.build.videoFeatureButton');
 

@@ -1,8 +1,8 @@
 import { VillageCapacity } from '../../_models/village/villageCapacity.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseVillageCapacity = async (): Promise<VillageCapacity> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const content = await page.content();
   const match = /maxStorage: {"l1": (.*?),"l2": .*?,"l3": .*?,"l4": (.*?)}/.exec(
     content,

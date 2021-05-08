@@ -5,7 +5,7 @@ import type {
 } from '../../_models/map/villageTile.js';
 import type { WheatOasis } from '../../_models/map/wheatOasis.js';
 import { AccountContext } from '../../accountContext.js';
-import { createPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { ensureLoggedIn } from '../../controller/actions/ensureLoggedIn.js';
 import { ensurePage } from '../../controller/actions/ensurePage.js';
 import { BotEvent } from '../../events/botEvent.js';
@@ -232,7 +232,7 @@ export class MapScanService {
       (s) => !scannedSectorIds.has(getPointId(s)),
     );
 
-    const page = await createPage();
+    const page = await browserManager.getNewPage();
 
     if (sectorsToScan.length) {
       await ensureLoggedIn(page);

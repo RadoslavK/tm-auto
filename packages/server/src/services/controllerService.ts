@@ -7,10 +7,7 @@ import { TravianPath } from '../_enums/travianPath.js';
 import type { CoolDown } from '../_models/coolDown.js';
 import { Duration } from '../_models/duration.js';
 import { AccountContext } from '../accountContext.js';
-import {
-  getPage,
-  killBrowser, 
-} from '../browser/getPage.js';
+import { browserManager } from '../browser/browserManager.js';
 import { updateBuildings } from '../controller/actions/buildings/updateBuildings.js';
 import { ensureContextualHelpIsOff } from '../controller/actions/ensureContextualHelpIsOff.js';
 import { ensureCookiesAreSubmitted } from '../controller/actions/ensureCookiesAreSubmitted.js';
@@ -72,7 +69,7 @@ export class ControllerService {
       let maintenanceCount = 0;
 
       do {
-        const page = await getPage();
+        const page = await browserManager.getPage();
         const content = await page.content();
 
         hasMaintenance = content.toLowerCase().includes('maintenance');
@@ -119,7 +116,7 @@ export class ControllerService {
 
     //  Maybe its some forced dialog about server progress
     try {
-      const page = await getPage();
+      const page = await browserManager.getPage();
 
       const continueButton = await page.$(
         `[href="${TravianPath.ResourceFieldsOverview}?ok=1"]`,
@@ -154,7 +151,7 @@ export class ControllerService {
 
     // try to make screenshot
     try {
-      const page = await getPage();
+      const page = await browserManager.getPage();
 
       if (!fs.existsSync(directory)) {
         fs.mkdirSync(directory);
@@ -192,7 +189,7 @@ export class ControllerService {
       );
     }
 
-    await killBrowser();
+    await browserManager.kill();
 
     return { allowContinue: error instanceof TimeoutError };
   };
@@ -215,8 +212,8 @@ export class ControllerService {
       await loadGameInfo();
       activityService.setActivity('Loading villages');
       await AccountContext.getContext().villageService.load();
-      await ensureLoggedIn();
       await ensureCookiesAreSubmitted();
+      await ensureLoggedIn();
       await ensureContextualHelpIsOff();
       await initGameInfo();
       await updateToken();
@@ -336,7 +333,7 @@ export class ControllerService {
     }
 
     this._taskManager = null;
-    await killBrowser();
+    await browserManager.kill();
 
     this.setState(BotState.Paused);
   };

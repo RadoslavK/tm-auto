@@ -3,7 +3,7 @@ import { BuildingType } from 'shared/enums/BuildingType.js';
 
 import { Coords } from '../../_models/coords.js';
 import { AccountContext } from '../../accountContext.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { parseNumber } from '../../utils/numberUtils.js';
 import { ensureBuildingSpotPage } from './ensurePage.js';
 
@@ -102,7 +102,7 @@ export const updateUnitsInformation = async (): Promise<void> => {
 
   await ensureBuildingSpotPage(rallyPoint.fieldId, BuildingType.RallyPoint, { index: 1, name: 'tt' });
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const detailNodes = await page.$$('table.troop_details');
 
   const details: TroopDetail[] = [];

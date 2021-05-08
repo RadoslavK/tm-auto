@@ -3,7 +3,7 @@ import { Tribe } from 'shared/enums/Tribe.js';
 
 import { TravianPath } from '../../_enums/travianPath.js';
 import { ActualBuilding } from '../../_models/buildings/actual/actualBuilding.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { fieldIds } from '../../constants/fieldIds.js';
 import { isInfrastructure } from '../../utils/buildingUtils.js';
 import { validateUrl } from '../../utils/validateUrl.js';
@@ -37,7 +37,7 @@ export const parseInfrastructureSpots = async (tribe: Tribe): Promise<
 > => {
   await validateUrl(acceptedUrls);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
   await page.waitForSelector('#village_map');
 
   const nodes = await page.$$('#village_map > .buildingSlot');

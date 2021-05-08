@@ -1,5 +1,5 @@
 import { TravianPath } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls = [TravianPath.PlayerProfile];
@@ -7,7 +7,7 @@ const acceptedUrls = [TravianPath.PlayerProfile];
 export const parseAllyId = async (): Promise<number | null> => {
   await validateUrl(acceptedUrls);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const allyLinkElement = await page.$('[href*="allianz.php?aid="]');
 

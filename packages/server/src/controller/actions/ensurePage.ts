@@ -8,7 +8,7 @@ import {
   getBuildingSpotPath,
   TravianPath, 
 } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import {
   isInfrastructure,
   isResourceField, 
@@ -139,7 +139,7 @@ export const ensurePage = async (
   exact = false,
   existingPage?: Page,
 ): Promise<void> => {
-  const page = existingPage || (await getPage());
+  const page = existingPage || (await browserManager.getPage());
   const url = page.url();
 
   const isAtUrl = (exact && url === path) || (!exact && url.includes(path));
@@ -173,7 +173,7 @@ export const ensureBuildingSpotPage = async (
   buildingType?: BuildingType,
   tab?: TabInformation,
 ): Promise<void> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const spotPath = getBuildingSpotPath(fieldId);
 
   if (spotPath !== page.url()) {

@@ -13,7 +13,7 @@ import { Resources } from '../../../../_models/misc/resources.js';
 import type { AutoBuildSettings } from '../../../../_models/settings/tasks/autoBuildSettings';
 import type { Village } from '../../../../_models/village/village.js';
 import { AccountContext } from '../../../../accountContext.js';
-import { getPage } from '../../../../browser/getPage.js';
+import { browserManager } from '../../../../browser/browserManager.js';
 import { fieldIds } from '../../../../constants/fieldIds.js';
 import { parseBuildingsInProgress } from '../../../../parsers/buildings/parseBuildingsInProgress.js';
 import { DequeueMode } from '../../../../services/buildingQueueService.js';
@@ -43,7 +43,7 @@ const pickLowestDate = (...dates: ReadonlyArray<Date | undefined | void>): Date 
     [0];
 
 const parseDemolitionTimer = async (): Promise<Duration | null> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const timerNode = await page.$('#demolish tbody tr .timer');
 
   if (!timerNode) {
@@ -121,7 +121,7 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
       return timer;
     }
 
-    const page = await getPage();
+    const page = await browserManager.getPage();
 
     const demolishNodes = await page.$$eval('#demolish option', x => x.map(e => {
       const value = +(e.getAttribute('value') ?? 0);
@@ -430,7 +430,7 @@ export class AutoBuildTask implements VillageBotTaskWithCoolDown {
     queuedBuilding: QueuedBuilding,
     isQueued = true,
   ): Promise<void> => {
-    const page = await getPage();
+    const page = await browserManager.getPage();
     await ensureBuildingSpotPage(queuedBuilding.fieldId);
     const { category } = buildingInfoService.getBuildingInfo(
       queuedBuilding.type,

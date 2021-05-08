@@ -1,8 +1,8 @@
 import { Resources } from '../../_models/misc/resources.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseVillageResources = async (): Promise<Resources> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const content = await page.content();
 
   const match = / storage: {"l1": (.*?),"l2": (.*?),"l3": (.*?),"l4": (.*?)}/.exec(

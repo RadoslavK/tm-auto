@@ -11,7 +11,7 @@ import type {
 } from '../../../_models/settings/tasks/autoSmithySettings.js';
 import type { Village } from '../../../_models/village/village.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
 import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
@@ -31,7 +31,7 @@ type UnitParams = {
 
 //  key - unitIndex
 const parseActualUnits = async (): Promise<ReadonlyMap<number, UnitParams>> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const researchNodes = await page.$$('.research');
 
@@ -117,7 +117,7 @@ const parseActualUnits = async (): Promise<ReadonlyMap<number, UnitParams>> => {
 };
 
 const parseOngoingDuration = async (): Promise<Duration | null> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const timer = await page.$('.under_progress .dur .timer');
 
   if (!timer) {
@@ -264,7 +264,7 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
     const { unitIndex, levels } = unitSettings;
     const firstLevel = levels[0];
 
-    const page = await getPage();
+    const page = await browserManager.getPage();
     const unitNodes = await page.$$('.research');
 
     for (const node of unitNodes) {

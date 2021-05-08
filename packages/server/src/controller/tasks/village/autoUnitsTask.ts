@@ -8,7 +8,7 @@ import type { AutoUnitsSettings } from '../../../_models/settings/tasks/autoUnit
 import type { Units } from '../../../_models/units';
 import type { Village } from '../../../_models/village/village.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { parseUnitQueue } from '../../../parsers/units/parseUnitQueue.js';
 import { unitInfoService } from '../../../services/info/unitInfoService.js';
 import { replaceInputText } from '../../../utils/browser/replaceInputText.js';
@@ -29,7 +29,7 @@ import type {
 } from '../../taskEngine/botTaskEngine.js';
 
 const parseAvailableUnits = async (): Promise<ReadonlyArray<number>> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const units = await page.$$eval('.bigUnitSection .unitSection', nodes => nodes.map(node => /u(\d+)Section/.exec(node.className)?.[1]));
 
@@ -241,7 +241,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
       }
     }
 
-    const page = await getPage();
+    const page = await browserManager.getPage();
     const { tribe } = this._village;
 
     for (const [uIndex, amount] of Object.entries(suitableToBuild)) {

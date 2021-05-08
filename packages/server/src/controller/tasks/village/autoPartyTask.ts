@@ -7,7 +7,7 @@ import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resource
 import type { AutoPartySettings } from '../../../_models/settings/tasks/autoPartySettings.js';
 import type { Village } from '../../../_models/village/village.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { partyInfo } from '../../../constants/partyInfo.js';
 import { getPartyDuration } from '../../../parsers/getPartyDuration.js';
 import { canUseHeroResourcesInVillage } from '../../../utils/getUsableHeroResources.js';
@@ -83,7 +83,7 @@ export class AutoPartyTask implements VillageBotTaskWithCoolDown {
     }
 
     await ensureBuildingSpotPage(townHall.fieldId);
-    const page = await getPage();
+    const page = await browserManager.getPage();
 
     let ongoingPartyDuration = await getPartyDuration();
 

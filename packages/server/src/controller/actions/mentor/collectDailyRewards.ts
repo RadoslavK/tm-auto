@@ -1,5 +1,5 @@
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { activityService } from '../../../services/botActivityService.js';
 
 export const collectDailyRewards = async (): Promise<void> => {
@@ -7,7 +7,7 @@ export const collectDailyRewards = async (): Promise<void> => {
     return;
   }
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const dailyRewards = await page.$('#navigation .dailyQuests');
 

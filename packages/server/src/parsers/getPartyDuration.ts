@@ -1,8 +1,8 @@
 import { Duration } from '../_models/duration.js';
-import { getPage } from '../browser/getPage.js';
+import { browserManager } from '../browser/browserManager.js';
 
 export const getPartyDuration = async (): Promise<Duration | null> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const durationNode = await page.$('.dur > span');
 

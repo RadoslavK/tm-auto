@@ -2,10 +2,10 @@ import {
   Token,
   TokenType,
 } from '../../_models/gameInfo.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseGameToken = async (): Promise<Token> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const content = await page.content();
 
   const usesAjaxToken = await page.evaluate(() => !!(window as any).ajaxToken);

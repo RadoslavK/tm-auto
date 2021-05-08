@@ -2,7 +2,7 @@ import { TravianPath } from '../../../_enums/travianPath.js';
 import type { ClaimHeroResourcesReason } from '../../../_models/logs/content/resourceClaim.js';
 import type { Resources } from '../../../_models/misc/resources.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishEvent } from '../../../pubSub.js';
@@ -15,7 +15,7 @@ export const claimHeroResources = async (
   reason: ClaimHeroResourcesReason,
 ): Promise<void> => {
   AccountContext.getContext().logsService.logResourceClaim(resources, reason);
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const claimResource = async (
     resource: keyof Pick<Resources, 'wood' | 'clay' | 'iron' | 'crop'>,

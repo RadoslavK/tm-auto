@@ -1,9 +1,9 @@
 import { TravianPath } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { ensurePage } from './ensurePage.js';
 
 export const ensureContextualHelpIsOff = async (): Promise<void> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   await ensurePage(TravianPath.Settings);
 

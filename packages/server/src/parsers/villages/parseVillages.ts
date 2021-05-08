@@ -1,5 +1,5 @@
 import { Village } from '../../_models/village/village.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 type ParsedVillage = {
   readonly id: string;
@@ -9,7 +9,7 @@ type ParsedVillage = {
 }
 
 export const parseVillages = async (): Promise<readonly Village[]> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const villages = await page.$$eval('.coordinatesGrid', nodes => nodes.map((node): ParsedVillage => {
     const name = node.getAttribute('data-villagename');

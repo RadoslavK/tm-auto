@@ -1,7 +1,7 @@
 import type { Page } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { accountService } from '../../services/accountService.js';
 import { activityService } from '../../services/botActivityService.js';
 import { replaceInputTextBySelector } from '../../utils/browser/replaceInputText.js';
@@ -11,7 +11,7 @@ export const ensureLoggedIn = async (existingPage?: Page): Promise<void> => {
   activityService.setActivity('Logging in');
 
   const account = accountService.getCurrentAccount();
-  const page = existingPage || (await getPage());
+  const page = existingPage || (await browserManager.getPage());
 
   await page.goto(`${account.server}/${TravianPath.ResourceFieldsOverview}`);
 

@@ -1,5 +1,5 @@
 import { TravianPath } from '../../../_enums/travianPath.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { heroItemIds } from '../../../constants/heroItemIds.js';
 import { getHeroInventoryItem } from '../../../parsers/hero/getHeroInventoryItem.js';
 import { activityService } from '../../../services/botActivityService.js';
@@ -14,7 +14,7 @@ export const equipHeroHorse = async () => {
     throw new Error('Did not find horse item while equipping');
   }
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   await Promise.all([
     horseItem.click(),

@@ -1,6 +1,6 @@
 import { HeroState } from '../../_models/hero/hero.js';
 import { AccountContext } from '../../accountContext.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { assignHeroAttributes } from '../../controller/actions/hero/assignHeroAttributes.js';
 import { updateHeroResources } from '../../controller/actions/hero/updateHeroResources.js';
 import { BotEvent } from '../../events/botEvent.js';
@@ -8,7 +8,7 @@ import { publishEvent } from '../../pubSub.js';
 import { activityService } from '../../services/botActivityService.js';
 
 const parseHealth = async (): Promise<number> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const healthTooltip = await page.$eval(
     '#topBarHero .health .title',
@@ -25,7 +25,7 @@ const parseHealth = async (): Promise<number> => {
 };
 
 const parseState = async (): Promise<HeroState> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   //  Cant access className on SVG element for some reason
   const statusClass = await page.$eval('.heroStatus svg[class*="hero"]', (x) =>
@@ -50,7 +50,7 @@ const parseState = async (): Promise<HeroState> => {
 };
 
 const parseAdventureCount = async (): Promise<number> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const countTextElement = await page.$('.adventure .content');
 
@@ -69,7 +69,7 @@ const parseHeroVillageId = async (): Promise<string | null> => {
     return null;
   }
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const villageId = await page.$eval('.heroStatus a[href*="newdid"]', (x) => {
     const heroVillageLink = x.getAttribute('href');

@@ -1,6 +1,6 @@
 import { TravianPath } from '../../_enums/travianPath.js';
 import type { ActualBuilding } from '../../_models/buildings/actual/actualBuilding.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls: readonly string[] = [TravianPath.ResourceFieldsOverview];
@@ -8,7 +8,7 @@ const acceptedUrls: readonly string[] = [TravianPath.ResourceFieldsOverview];
 export const parseFieldSpots = async (): Promise<ActualBuilding[]> => {
   await validateUrl(acceptedUrls);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   return page.$$eval(
     '#resourceFieldContainer a.level[class*=buildingSlot][class*=gid]',

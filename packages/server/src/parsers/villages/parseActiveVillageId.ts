@@ -1,7 +1,7 @@
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseActiveVillageId = async (): Promise<string> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const className = await page.$eval(
     '#sidebarBoxVillagelist [href*=newdid][class=active]',
     (x) => x.getAttribute('href'),

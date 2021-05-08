@@ -1,7 +1,7 @@
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseFactions = async (): Promise<boolean> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const text = await page.content();
   const factions = /"factions":(.*?),/.exec(text)?.[1];
 

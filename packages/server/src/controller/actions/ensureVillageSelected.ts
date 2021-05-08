@@ -1,7 +1,7 @@
 import type { ElementHandle } from 'puppeteer-core';
 
 import { AccountContext } from '../../accountContext.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { activityService } from '../../services/botActivityService.js';
 
 const getVillageSwitch = async (
@@ -31,7 +31,7 @@ export const ensureVillageSelected = async (
   const { currentVillageId } = AccountContext.getContext().villageService;
 
   if (currentVillageId !== villageId) {
-    const page = await getPage();
+    const page = await browserManager.getPage();
     const switches = await page.$$('#sidebarBoxVillagelist [href*=newdid]');
     const villageSwitch = await getVillageSwitch(switches, villageId);
 

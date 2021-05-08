@@ -3,7 +3,7 @@ import { Tribe } from 'shared/enums/Tribe.js';
 import { TravianPath } from '../../../_enums/travianPath.js';
 import { Coords } from '../../../_models/coords.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { parseActiveVillageId } from '../../../parsers/villages/parseActiveVillageId.js';
 import { parseVillages } from '../../../parsers/villages/parseVillages.js';
@@ -33,7 +33,7 @@ export const updateNewOldVillages = async (): Promise<void> => {
     } else {
       await ensurePage(TravianPath.PlayerProfile);
 
-      const page = await getPage();
+      const page = await browserManager.getPage();
       const villageRows = await page.$$('#villages tbody tr');
 
       for (const villageRow of villageRows) {

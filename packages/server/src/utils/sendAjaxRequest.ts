@@ -3,7 +3,7 @@ import { isObject } from 'shared/utils/merge.js';
 
 import { TokenType } from '../_models/gameInfo.js';
 import { AccountContext } from '../accountContext.js';
-import { getPage } from '../browser/getPage.js';
+import { browserManager } from '../browser/browserManager.js';
 import { accountService } from '../services/accountService.js';
 
 type OldParams = {
@@ -75,7 +75,7 @@ export const sendAjaxRequest = async <T = any>(
   params: object,
   requestedPage?: Page,
 ): Promise<T> => {
-  const page = requestedPage || (await getPage());
+  const page = requestedPage || (await browserManager.getPage());
   const account = accountService.getCurrentAccount();
   const {
     gameInfo: { token },

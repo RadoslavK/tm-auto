@@ -5,7 +5,7 @@ import type { CoolDown } from '../../_models/coolDown.js';
 import { Duration } from '../../_models/duration.js';
 import type { AutoAdventureSettings } from '../../_models/settings/tasks/autoAdventureSettings.js';
 import { AccountContext } from '../../accountContext.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { updateHeroInformation } from '../../parsers/hero/updateHeroInformation.js';
 import { activityService } from '../../services/botActivityService.js';
 import {
@@ -54,7 +54,7 @@ export class AutoAdventureTask implements BotTaskWithCoolDown {
       await equipHeroHorse();
     }
 
-    const page = await getPage();
+    const page = await browserManager.getPage();
     const adventuresButton = await page.$('.adventure.green');
 
     if (!adventuresButton) {

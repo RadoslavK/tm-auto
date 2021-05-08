@@ -2,7 +2,7 @@ import type { ElementHandle } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath.js';
 import { Coords } from '../../_models/coords.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { parseNumber } from '../../utils/numberUtils.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
@@ -11,7 +11,7 @@ const acceptedUrls = [TravianPath.PlayerProfile];
 export const parseCapitalVillageCoords = async (): Promise<Coords> => {
   await validateUrl(acceptedUrls);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const villageElements = await page.$$('#villages > tbody > tr');
   let capitalVillageElement: ElementHandle | null = null;

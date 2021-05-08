@@ -8,7 +8,7 @@ import { ClaimHeroResourcesReason } from '../../../_models/logs/content/resource
 import type { AutoAcademySettings } from '../../../_models/settings/tasks/autoAcademySettings.js';
 import type { Village } from '../../../_models/village/village.js';
 import { AccountContext } from '../../../accountContext.js';
-import { getPage } from '../../../browser/getPage.js';
+import { browserManager } from '../../../browser/browserManager.js';
 import { unitResearchPrerequisites } from '../../../constants/unitResearchPrerequisites.js';
 import { BotEvent } from '../../../events/botEvent.js';
 import { publishPayloadEvent } from '../../../pubSub.js';
@@ -78,7 +78,7 @@ export class AutoAcademyTask implements VillageBotTaskWithCoolDown {
       return;
     }
 
-    const page = await getPage();
+    const page = await browserManager.getPage();
 
     await ensureBuildingSpotPage(academy.fieldId);
 

@@ -1,9 +1,9 @@
 import { Duration } from '../../_models/duration.js';
 import { UnitsQueue } from '../../_models/units/unitsQueue.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseUnitQueue = async (): Promise<UnitsQueue> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const unitNodes = await page.$x(
     '//tr[.//*[@class="dur"]//*[@class="timer"]]',
   );

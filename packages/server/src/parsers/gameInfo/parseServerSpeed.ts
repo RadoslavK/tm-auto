@@ -1,7 +1,7 @@
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 
 export const parseServerSpeed = async (): Promise<number> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const content = await page.content();
   const match = /Travian\.Game\.speed = (\d+);/.exec(content);
 

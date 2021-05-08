@@ -1,7 +1,7 @@
 import type { ElementHandle } from 'puppeteer-core';
 
 import { TravianPath } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
 type Result = {
@@ -12,7 +12,7 @@ type Result = {
 export const getHeroInventoryItem = async (id: number): Promise<Result> => {
   await validateUrl([TravianPath.Hero], true);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   const itemNode = await page.$(`#itemsToSale .item[class*="item_${id}"]`);
 

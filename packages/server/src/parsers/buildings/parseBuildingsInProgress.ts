@@ -1,6 +1,6 @@
 import { TravianPath } from '../../_enums/travianPath.js';
 import { BuildingInProgress } from '../../_models/buildings/inProgress/buildingInProgress.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { validateUrl } from '../../utils/validateUrl.js';
 
 const acceptedUrls: readonly string[] = [
@@ -13,7 +13,7 @@ export const parseBuildingsInProgress = async (): Promise<
 > => {
   await validateUrl(acceptedUrls);
 
-  const page = await getPage();
+  const page = await browserManager.getPage();
   const content = await page.$eval('#content', (x) => x.innerHTML);
   const buildings: BuildingInProgress[] = [];
 

@@ -1,11 +1,11 @@
 import { Tribe } from 'shared/enums/Tribe.js';
 
 import { TravianPath } from '../../_enums/travianPath.js';
-import { getPage } from '../../browser/getPage.js';
+import { browserManager } from '../../browser/browserManager.js';
 import { ensurePage } from '../../controller/actions/ensurePage.js';
 
 export const parseAccountTribe = async (): Promise<Tribe> => {
-  const page = await getPage();
+  const page = await browserManager.getPage();
 
   await ensurePage(TravianPath.ResourceFieldsOverview);
 
