@@ -355,6 +355,6 @@ export class ControllerService {
 
   private markActivityStop = async (): Promise<void> => {
     activityService.setActivity('');
-    await browserManager.killPage();
+    await browserManager.kill();
   };
 }

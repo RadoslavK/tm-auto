@@ -105,16 +105,12 @@ class BrowserManager {
     return page;
   };
 
-  public killPage = async (): Promise<void> => {
+  public kill = async (): Promise<void> => {
     if (this.page) {
       await this.page.close();
 
       this.page = null;
     }
-  };
-
-  public kill = async (): Promise<void> => {
-    await this.killPage();
 
     if (this.browser) {
       await this.browser.close();
