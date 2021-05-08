@@ -191,7 +191,11 @@ export class ControllerService {
 
     await browserManager.kill();
 
-    return { allowContinue: error instanceof TimeoutError };
+    const allowContinue = error instanceof TimeoutError
+      //  TODO check instanceof
+      || error.message.includes('Execution context was destroyed');
+
+    return { allowContinue };
   };
 
   public signIn = async (accountId: string): Promise<void> => {
