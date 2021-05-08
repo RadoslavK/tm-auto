@@ -99,6 +99,9 @@ const useStyles = makeStyles({
       marginBottom: 16,
     },
   },
+  checkBox: {
+    width: 'fit-content',
+  },
   healthFields: {
     display: 'flex',
     '& > *': {
@@ -249,6 +252,7 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
       />
       <FormGroup className={classes.form}>
         <FormControlLabel
+          className={classes.checkBox}
           label="Allow"
           control={(
             <Checkbox
@@ -259,6 +263,7 @@ export const AutoAdventureSettings: React.FC<Props> = ({ settingsKey, timestampK
           )}
         />
         <FormControlLabel
+          className={classes.checkBox}
           label="Prefer hard"
           control={(
             <Checkbox
