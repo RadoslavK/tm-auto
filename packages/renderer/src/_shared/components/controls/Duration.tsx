@@ -119,7 +119,7 @@ export const Duration: React.FC<Props> = ({ onChange, value }) => {
         label="Seconds"
         onChange={onNumberChange('seconds')}
         type="number"
-        value={value.days}
+        value={value.seconds}
       />
     </div>
   );
