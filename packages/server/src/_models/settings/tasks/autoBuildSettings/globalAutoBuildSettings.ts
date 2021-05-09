@@ -4,7 +4,7 @@ import { mergeDefaults } from 'shared/utils/merge.js';
 import { Duration } from '../../../duration.js';
 
 class VideoFeatureSettings {
-  public readonly allow: boolean = false;
+  public readonly allow: boolean = true;
   public readonly minBuildTime: Duration = new Duration({ minutes: 10 });
 
   constructor(params: PartialFields<VideoFeatureSettings> = {}) {
