@@ -19,6 +19,7 @@ import { mergeVillageAndHeroResources } from '../../../utils/mergeVillageAndHero
 import { ensureBuildingSpotPage } from '../../actions/ensurePage.js';
 import { claimHeroResources } from '../../actions/hero/claimHeroResources.js';
 import { updateHeroResources } from '../../actions/hero/updateHeroResources.js';
+import { updateUnitsInformation } from '../../actions/updateUnitsInformation.js';
 import type {
   BotTaskWithCoolDownResult,
   VillageBotTaskWithCoolDown,
@@ -133,7 +134,6 @@ const parseOngoingDuration = async (): Promise<Duration | null> => {
   return Duration.fromText(textDuration);
 };
 
-//  TODO check min troops
 export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
   readonly type: VillageTaskType = VillageTaskType.AutoSmithy;
 
@@ -166,6 +166,7 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
       await updateHeroResources();
     }
 
+    await updateUnitsInformation(this.village.id);
     await ensureBuildingSpotPage(smithy.fieldId);
 
     const actualUnits = await parseActualUnits();
@@ -195,6 +196,12 @@ export class AutoSmithyTask implements VillageBotTaskWithCoolDown {
       const nextLevel = actualUnitParams.actualLevel + 1;
 
       if (nextLevel > smithy.level.actual) {
+        continue;
+      }
+
+      const firstLevel = unitSettings.levels[0];
+
+      if (this.village.units.getCount(unitSettings.unitIndex) < firstLevel.minTroops) {
         continue;
       }
 

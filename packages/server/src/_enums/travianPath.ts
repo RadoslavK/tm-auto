@@ -3,7 +3,7 @@ import type { BuildingType } from 'shared/enums/BuildingType.js';
 import type { TabInformation } from '../controller/actions/ensurePage.js';
 
 export enum TravianPath {
-  AccountOverview = 'dorf3.php',
+  AccountOverview = 'village/statistics',
   CenterMap = 'karte.php',
   Hero = 'hero',
   InfrastructureOverview = 'dorf2.php',

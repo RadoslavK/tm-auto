@@ -1,11 +1,17 @@
 import type { ElementHandle } from 'puppeteer-core';
 import { BuildingType } from 'shared/enums/BuildingType.js';
 
+import { TravianPath } from '../../_enums/travianPath.js';
 import { Coords } from '../../_models/coords.js';
 import { AccountContext } from '../../accountContext.js';
 import { browserManager } from '../../browser/browserManager.js';
+import { parseActiveVillageId } from '../../parsers/villages/parseActiveVillageId.js';
 import { parseNumber } from '../../utils/numberUtils.js';
-import { ensureBuildingSpotPage } from './ensurePage.js';
+import {
+  ensureBuildingSpotPage,
+  ensurePage,
+} from './ensurePage.js';
+import { ensureVillageSelected } from './ensureVillageSelected.js';
 
 enum MovementType {
   Attack = 'Attack',
@@ -91,8 +97,8 @@ const parseUnitAmounts = async (
   );
 };
 
-export const updateUnitsInformation = async (): Promise<void> => {
-  const village = AccountContext.getContext().villageService.currentVillage();
+export const updateUnitsInformation = async (villageId: string): Promise<void> => {
+  const village = AccountContext.getContext().villageService.village(villageId);
 
   const rallyPoint = village.buildings.spots.ofType(BuildingType.RallyPoint);
 
@@ -100,63 +106,150 @@ export const updateUnitsInformation = async (): Promise<void> => {
     return;
   }
 
-  await ensureBuildingSpotPage(rallyPoint.fieldId, BuildingType.RallyPoint, { index: 1, name: 'tt' });
+  const now = Date.now();
+  const checkCoolDown = 10 * 60 * 1000; //  10 min
 
-  const page = await browserManager.getPage();
-  const detailNodes = await page.$$('table.troop_details');
+  if (!AccountContext.plus
+    || AccountContext.plus.isActive
+    || AccountContext.plus.lastCheckTimestamp + checkCoolDown < now) {
+    //  Plus account check. If we know it was not active then check again with a cooldown
 
-  const details: TroopDetail[] = [];
+    await ensurePage(TravianPath.AccountOverview);
 
-  for (const detailNode of detailNodes) {
-    const firstBodyRow = await detailNode.$('tbody.units tr');
+    const page = await browserManager.getPage();
+    const troopsNode = await page.$(`[href*="${TravianPath.AccountOverview}/troops"]`);
 
-    if (!firstBodyRow) {
-      throw new Error('Table has no rows');
-    }
-
-    const originX = await parseCoordinate(firstBodyRow, '.coordinateX');
-    const originY = await parseCoordinate(firstBodyRow, '.coordinateY');
-
-    if (!originX || !originY) {
-      continue;
-    }
-
-    const originVillage = AccountContext.getContext().villageService.villageByCoords(
-      new Coords({ x: originX, y: originY }),
-    );
-
-    if (!originVillage) {
-      //  not from this account's village
-      continue;
-    }
-
-    const detailClass = await detailNode.evaluate((x) => x.className);
-    const match = /troop_details$|troop_details ([^ ]+)/.exec(detailClass);
-
-    if (!match) {
-      throw new Error('Detail does not have a detail class');
-    }
-
-    const movementType = mapMovementType(match[1]);
-
-    const unitAmounts = await parseUnitAmounts(detailNode);
-
-    const detail: TroopDetail = {
-      movementType,
-      originVillageId: originVillage.id,
-      unitAmounts,
+    AccountContext.plus = {
+      lastCheckTimestamp: now,
+      isActive: !!troopsNode,
     };
 
-    details.push(detail);
+    if (troopsNode) {
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        troopsNode.click(),
+      ]);
+
+      const villageRows = await page.$$('#troops tbody tr');
+
+      let success = false;
+
+      //  Last 2 rows are just sum
+      for (const villageRow of villageRows.slice(0, villageRows.length - 2)) {
+        const nodeVillageId = await villageRow.$eval('.villageName [href*=newdid]', x => {
+          const url = x.getAttribute('href') ?? '';
+
+          return /newdid=(\d+)/.exec(url)?.[1];
+        });
+
+        if (!nodeVillageId) {
+          throw new Error('Failed to parse village id');
+        }
+
+        if (nodeVillageId !== villageId) {
+          continue;
+        }
+
+        const { tribe } = village;
+
+        const getTroopAtIndex = async (index: number): Promise<number> =>
+          villageRow.$eval(`td:nth-child(${index + 1})`,
+            x => +(
+              x.textContent ?? 0
+            ),
+          );
+
+        village.units.resetCounts();
+
+        for (const index of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
+          const unitIndex = (tribe - 1) * 10 + index;
+          const troopsAmount = await getTroopAtIndex(index);
+
+          village.units.addCount(unitIndex, troopsAmount);
+        }
+
+        success = true;
+
+        return;
+      }
+
+      if (!success) {
+        throw new Error('Failed to find village troop stats in plus account overview');
+      }
+    }
   }
 
-  village.units.resetCounts();
+  let success = false;
 
-  details
-    .filter((d) => d.originVillageId === village.id)
-    .forEach((detail) => {
-      detail.unitAmounts.forEach((unitAmount) => {
-        village.units.addCount(unitAmount.unitIndex, unitAmount.amount);
+  do {
+    await ensureBuildingSpotPage(rallyPoint.fieldId, BuildingType.RallyPoint, { index: 1, name: 'tt' });
+
+    const page = await browserManager.getPage();
+    const detailNodes = await page.$$('table.troop_details');
+
+    const details: TroopDetail[] = [];
+
+    for (const detailNode of detailNodes) {
+      const firstBodyRow = await detailNode.$('tbody.units tr');
+
+      if (!firstBodyRow) {
+        throw new Error('Table has no rows');
+      }
+
+      const originX = await parseCoordinate(firstBodyRow, '.coordinateX');
+      const originY = await parseCoordinate(firstBodyRow, '.coordinateY');
+
+      if (!originX || !originY) {
+        continue;
+      }
+
+      const originVillage = AccountContext.getContext().villageService.villageByCoords(
+        new Coords({ x: originX, y: originY }),
+      );
+
+      if (!originVillage) {
+        //  not from this account's village
+        continue;
+      }
+
+      const detailClass = await detailNode.evaluate((x) => x.className);
+      const match = /troop_details$|troop_details ([^ ]+)/.exec(detailClass);
+
+      if (!match) {
+        throw new Error('Detail does not have a detail class');
+      }
+
+      const movementType = mapMovementType(match[1]);
+
+      const unitAmounts = await parseUnitAmounts(detailNode);
+
+      const detail: TroopDetail = {
+        movementType,
+        originVillageId: originVillage.id,
+        unitAmounts,
+      };
+
+      details.push(detail);
+    }
+
+    const activeVillageId = await parseActiveVillageId();
+
+    if (villageId !== activeVillageId) {
+      await ensureVillageSelected(villageId);
+
+      continue;
+    }
+
+    village.units.resetCounts();
+
+    details
+      .filter((d) => d.originVillageId === village.id)
+      .forEach((detail) => {
+        detail.unitAmounts.forEach((unitAmount) => {
+          village.units.addCount(unitAmount.unitIndex, unitAmount.amount);
+        });
       });
-    });
+
+    success = true;
+  } while (!success);
 };

@@ -3,7 +3,7 @@ import { BuildingType } from 'shared/enums/BuildingType.js';
 import type { UnitResearchPrerequisite } from '../unitResearchPrerequisites.js';
 
 export const romanUnitResearchPrerequisites: ReadonlyMap<number, ReadonlyArray<UnitResearchPrerequisite>> = new Map<number, ReadonlyArray<UnitResearchPrerequisite>>([
-  //  Legionnaire
+  //  Praetorian
   [2, [
     { building: BuildingType.Smithy, level: 1 },
     { building: BuildingType.Academy, level: 1 },

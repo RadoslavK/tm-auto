@@ -66,7 +66,7 @@ export class AutoUnitsTask implements VillageBotTaskWithCoolDown {
   public coolDown = (): CoolDown => this.settings().coolDown;
 
   public execute = async (): Promise<BotTaskWithCoolDownResult | void> => {
-    await updateUnitsInformation();
+    await updateUnitsInformation(this._village.id);
     await this.analyzeQueueAndBuildUnits(BuildingType.Barracks);
     await this.analyzeQueueAndBuildUnits(BuildingType.Stable);
     await this.analyzeQueueAndBuildUnits(BuildingType.Workshop);

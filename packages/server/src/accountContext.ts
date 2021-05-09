@@ -8,7 +8,13 @@ import { NextExecutionService } from './services/nextExecutionService.js';
 import { SettingsService } from './services/settings';
 import { VillageService } from './services/villageService.js';
 
+type Plus = {
+  readonly isActive: boolean;
+  readonly lastCheckTimestamp: number;
+};
+
 export class AccountContext {
+  public static plus: Plus | null = null;
   private static _context: AccountContext | null = null;
 
   public static resetContext = (): void => {
