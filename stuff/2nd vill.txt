@@ -1,0 +1,85 @@
+-> premenovat dedinu
+-> obcas random kliknut niekde
+-> preventivne NPC keby nieco preteka
+-> send hero adventure all the time
+-> pick daily + quest rewards
+-> turn silver into gold
+-> sell items on auction
+-> hero attributes all resources
+-> use NPC with extra hero resources if needed -> prefer crop and iron
+
+-> a pouzit tak aby to pokrilo co najviac budov, ktore su v queue
+
+1. Disable contextual
+2. click buy gold -> advantages -> activate all resources
+3. MB2+3 -> gold
+4. WH + Granary -> gold
+market + cranny
+embassy + wall
+5. Granary 2 + 3 -> gold
+warehouse 2 + 3 -> gold
+clay 2 + iron 1 -> gold
+iron 2 + w1 -> gold
+w1 x2 -> gold
+c1 x2 -> gold
+c1 i1 -> gold
+2x i1 -> gold
+5x c1
+c2 x2 -> gold
+c2 w2 -> gold
+w2 x2 -> gold
+i2 x2 -> gold
+i2 + c2 -> gold
+4x c2
+MB4+5 -> gold
+MB6+7 -> gold
+c3 c4 -> gold
+w3 w4 -> gold
+i3 i4 -> gold
+c3 c4 -> gold
+cranny 2 + 3 -> gold
+market 2 + 3 -> gold
+wall 2 + 3 -> gold
+barracks 1 + 2 -> gold
+barracks 3 + cranny 4 -> gold
+akad + cranny 5 -> gold
+cranny 6 + clay 3 -> gold
+clay 3 x2 -> gold
+wood 3 x2 -> gold
+wood 3 iron 3 -> gold
+iron 3 x2 -> gold
+crop 3 x2 -> gold
+crop 3 x2 -> gold
+crop3 clay 4 -> gold
+.. ostane 30 zlatych = 10 NPC.. pouzit extra NPC a auto dokoncenie len ked ostane 30 gold
+clay 4 x2
+wood 4 x3
+granary 7
+warehouse 7
+cranny 10
+cranny 3 x8
+academy 7
+warehouse 8
+granary 8
+academy 10
+workshop 1
+MB 10
+townhall
+-> parties
+residence
+3 settlers
+-> 2nd parties
+
+
+3 settler, 2x party, rezid 6,7,8,9,10 pouzit NPC.. alebo
+
+
+
+
+Embassy - 1275
+Academy 11 - 1204
+MB 16 - 1285
+Market 11 - 1336
+Stables 4 - 1510
+granary 14 - 3342
+warehouse 13 - 4065

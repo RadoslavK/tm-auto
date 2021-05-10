@@ -1,0 +1,31 @@
+{
+  "name": "gold",
+  "version": "1.0.0",
+  "author": "Buckyx",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build-dev": "node build.js",
+    "start-dev": "node dist-dev/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --cache src/**/*"
+  },
+  "peerDependencies": {
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint-plugin-modules-newline": "^0.0.6",
+    "eslint-plugin-simple-import-sort": "^7.0.0"
+  },
+  "dependencies": {
+    "ini": "^2.0.0",
+    "make-promises-safe": "^5.1.0",
+    "puppeteer-core": "^9.1.1",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-stealth": "^2.7.8"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^5.4.3",
+    "esbuild": "^0.11.18",
+    "eslint": "^7.23.0",
+    "typescript": "^4.2.3"
+  }
+}

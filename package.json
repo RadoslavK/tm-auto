@@ -16,6 +16,7 @@
     "server": "yarn workspace server",
     "renderer": "yarn workspace renderer",
     "shared": "yarn workspace shared",
+    "gold": "yarn workspace gold",
     "nexus": "yarn server nexus",
     "relay": "yarn renderer relay",
     "postinstall": "electron-builder install-app-deps",

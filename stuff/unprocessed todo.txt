@@ -1,0 +1,194 @@
+Real Game essentials
+
+-pouzit zlatky na konkretnu budovu a mozno sposobom tak ze nasetri aj na druhu automaticky
+-pocka na knihu a spravi reset a nastavi hero atributy
+-new village development mode, ze bude posielat surky a automaticky stavat pole atd.. zalozim asi manualne a nech sa stara sam potom
+-autofarm oazy minimalne. tie nemaju ziadnu narocnost v BP
+-2nd village builder
+-aukcny alert
+
+
+
+INVALID URL VIDEO FEATURE
+
+zachytit 
+Invalid url. Expected one of: [ dorf1.php ]. Received: dorf2.php?reload=auto
+
+lebo mohol sa nejaky timer automaticky prebit s navigaciou
+
+
+
+
+
+
+
+
+
+SERVER CRASH RECOVERY
+
+ked sa server pokazi a restartuje pocas otvoreneho UIka tak sa cele graphql zresetuje a odhlasi
+
+pri pomalom pripojeni sa casto nacita iba kusok stranky a pootm to casto pada
+
+
+
+
+
+
+
+
+
+SIGN OUT
+
+nedobre clearuje cache. sice nastavi NONE a odhlasi ale existujuce query vyhodia error a po prihlaseni na iny ucet tie query maju stare data
+
+
+
+
+
+
+UX
+
+pri prvom prepnuti dediny alebo building spot tabu do  divne blika
+--tam kde je query loader tak initial query podla default url/tabu!??
+
+
+
+
+
+
+
+
+
+
+galskeho osadnika nedokaze postavit
+ale rimanskeho ano..
+
+otestovat ci vie budovat jednotky inych narodov
+
+
+
+
+
+
+
+
+
+
+
+
+auto oasis farm
+-hero
+-units
+-simulation for loses and min/max troops?
+-distance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+opravit task collecting.. napr all crop fields to 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pridat unhandledrejection handler na process
+
+
+
+
+
+
+
+
+nemat tam function properties ako buildings(), ale spravit get buildings() propery, normalny getter co sa nevola ako funkcia
+
+
+
+
+
+
+
+
+ nomultilevel dialogy atd prepisat z dialogu na popper a principy material UI, krajsie uiko spravit. pouzvat car a paper a tak
+ 
+ 
+ 
+ nemat cele  importy z vlastnych packagov. proste bude import priamo z packagu a je jedno v akej zlozke
+ 
+ 
+ 
+ 
+enqueue moznost napr all of this type
+
+specialna queued building.. napr keby chceme prikaz ze postav vsetky wood fieldy na lvl1 tak to nehodi lvl1 x krat do queue ale da to do queue ten command a pre command bude overenie ci uz je splneny atd a podla toho stavat.. no tu bude problem s presunom budov (nejak poriesit)
+
+queue volny rezim - napr moze reprezentovat dedinu jak mapu - fieldId, a tam list queue proste a bude volit vzdy z nejakeho field id.
+
+alebo free queue ked neni res na tu prvu tam a respektovat bloky
+
+smart enqueue search.. napr pre konkretnu dedinu zoradi mozne budovy s konkretnym lvl zoradene podla KB/res alebo dokonca ROI v surovinach
+
+
+kalkulator kedy sa oplati upgradovat
+
+napr pret, lvl1 - 710. lvl 2 - 1240
+
+(X+Y/Z)*D1=X*D2
+
+X - count
+Y - research cost
+Z - unit cost
+D1 - current def value
+D2 - new def value
+
+oplati sa ked je aktualny count >= X
+
+preti 3 - 1700
+4 - 2150
+
+
+
+
+
+2nd vill tips
+-nepouzivat gold na fieldy lvl 1-2, mozno na 3 ano
+-pouzivat castejsie NPC a goldovat budovy co dlho trvaju
+-sklad a sypka asi vyssie nez treba
+-fieldy na drevo lvl4 urcite
+-zalozit vlastnu ali nech neotravuju pre druhu dedinu
+-mat rozne CD v roznych stadiach
+-oplati sa minimalne 4x4 wood, asi aj clay a ked uz tak potom 4x vsetko a 5x wood a vyssie sklady
+-extend BP
+-click gold production
+-turn off context hepl
+-delete acc
+-sell items on auctions
+-equip hero
+-hrdina 2 off body max
+
+adventure + auto horse + attributes
+
+lvl 4, jeden bod off
+
